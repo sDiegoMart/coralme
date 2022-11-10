@@ -22,8 +22,8 @@ coralME was tested with the following package versions:
 
 - Python versions 3.7, 3.8, 3.9, or 3.10
 - COBRApy version 0.25.0
-- Linux is recommended.
 - GUROBIpy version 9.5.2
+- Linux is recommended.
 
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
