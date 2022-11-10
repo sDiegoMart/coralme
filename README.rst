@@ -9,6 +9,8 @@ coralME has four main objectives:
 3. **Build** a working ME-model
 4. **Inform** the user about necessary steps to curate the ME-model.
 
+For more information on coralME's inputs, arquitecture and usage, see coralME's readthedocs_.
+
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
 .. _ECOLIme: https://github.com/SBRG/ecolime
