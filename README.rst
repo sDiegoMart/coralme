@@ -11,6 +11,11 @@ coralME has four main objectives:
 
 For more information on coralME's inputs, arquitecture and usage, see coralME's `readthedocs`_.
 
+Installation
+------------
+
+1. run ``pip install coralme``
+
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
 .. _ECOLIme: https://github.com/SBRG/ecolime
