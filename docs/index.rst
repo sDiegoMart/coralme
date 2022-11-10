@@ -32,6 +32,8 @@ Content
 
    BasicInputs
    coralMEArquitecture
+   HowToBuild
+   ManualCuration
 
 Indices and tables
 ~~~~~~~~~~~~~~~~~~
