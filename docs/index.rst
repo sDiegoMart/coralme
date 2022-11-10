@@ -7,20 +7,25 @@ Documentation for coralME
 Description
 ~~~~~~~~~~~
 
-The COmprehensive Reconstruction ALgorithm for ME-models (coralME) is an automatic pipeline for the reconstruction of ME-models. coralME integrates existing ME- modeling packages `COBRAme`_, `ECOLIme`_, and `solveME`_, generalizes their functions, and enables the automatic generation of a working ME-model from 2 required inputs:
+The **COmprehensive Reconstruction ALgorithm for ME-models (coralME)** is an automatic pipeline for the reconstruction of ME-models. coralME integrates existing ME-modeling packages `COBRAme`_, `ECOLIme`_, and `solveME`_, generalizes their functions for implementation on any prokaryote, and processes readily available organism-specific inputs for the automatic generation of a working ME-model.
+
+Inputs
+~~~~~~~~~~~
+
+Required
+########
 
 1. Genome file (genome.gb)
-
 2. M-model (m_model.json)
 
-and 4 optional inputs downloadable from an existing BioCyc database:
+Optional
+########
+
+Downloadable from an existing BioCyc database:
 
 3. genes.txt
-
 4. RNAs.txt
-
 5. proteins.txt
-
 6. TUs.txt. 
 
 Objectives
@@ -29,11 +34,8 @@ Objectives
 coralME has four main objectives:
 
 1. **Synchronize** input files to minimize contradictory entries.
-
 2. **Complement** input files from homology with a template organism to complete the E-matrix.
-
 3. **Build** a working ME-model
-
 4. **Inform** the user about necessary steps to curate the ME-model.
 
 This resource is intended to:
