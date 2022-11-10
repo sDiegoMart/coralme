@@ -4,9 +4,6 @@
 coralME
 *************************
 
-Description
-~~~~~~~~~~~
-
 The **COmprehensive Reconstruction ALgorithm for ME-models (coralME)** is an automatic pipeline for the reconstruction of ME-models. coralME integrates existing ME-modeling packages `COBRAme`_, `ECOLIme`_, and `solveME`_, generalizes their functions for implementation on any prokaryote, and processes readily available organism-specific inputs for the automatic generation of a working ME-model.
 
 coralME has four main objectives:
