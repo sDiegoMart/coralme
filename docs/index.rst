@@ -33,8 +33,6 @@ Content
    BasicInputs
    coralMEArquitecture
 
-
-
 Indices and tables
 ~~~~~~~~~~~~~~~~~~
 
