@@ -9,7 +9,6 @@ import coralme
 from coralme.minisolvemepy import qwarmLP, warmLP
 
 # from solvemepy.me1
-import time
 from sympy import lambdify, Basic, Symbol
 
 # Modified from solvemepy.me2
@@ -56,28 +55,7 @@ class ME_NLP:
         self.init_solver_opts()
 
         # from solvemepy.me1
-        self.substitution_dict = {
-#                            "growth_rate_in_per_hour": 1.0,
-                            "mRNA_mean_lifetime_minutes":5.0,
-                            "lol_efficiency_in_per_second":0.9,
-                            "bam_efficiency_in_per_second":0.0267,
-                            "tat_translocation_efficiency_per_second":0.0125,
-                            "secA_translocation_efficiency_aa_per_second":4.0,
-                            "proportion_of_rna_that_is_mrna":0.02,
-                            "proportion_of_rna_that_is_trna":0.12,
-                            "proportion_of_rna_that_is_rrna":0.86,
-                            "average_rna_nt_mw":324.,
-                            "average_aa_mw":109.,
-                            "mass_rrna_per_ribosome":1700.*1000,
-                            "average_trna_mw":25000.,
-                            "enzyme_efficiency_scaling": 1.0,
-                            "percent_nadh_dehydrogenase_that_ndh1": 0.5,
-                            "unmodeled_protein_proportion_of_proteome": 0.36,
-                            "gam_value" : 34.98,
-                            "proportion_of_inner_membrane_sa_that_is_protein":0.75,
-                            "proportion_of_outer_membrane_sa_that_is_protein":0.75,
-                            "ngam_value":1.}
-        self.substitution_dict[self.me.mu] = 1.0
+        self.substitution_dict = { self.me.mu: 1. }
         # Initially have None for compiled_expressions
         self.compiled_expressions = None
 
@@ -302,39 +280,37 @@ class ME_NLP:
         f = lambdify(self.subs_keys_ordered, expr)
         return f
 
-    def compile_expressions(self, verbosity=0):
+    def compile_expressions(self):
         """
         Compile expressions for ME 1.0.
         Use format consistent with cobrame:
         (met_index, rxn_index): stoichiometry, (None, rxn_index): (lower_bound, upper_bound)
         (met_index, None): (met_bound, met_constraint_sense)
         """
-        tic = time.time()
+
         expressions = {}
         me = self.me
-        for i, r in enumerate(me.reactions):
-            for met, stoic in r._metabolites.items():
-                if isinstance(stoic, Basic):
-                    expressions[(me.metabolites.index(met), i)] = self.compile_expr(stoic)
-            # If lower or upper bound symbolic:
-            if isinstance(r.lower_bound, Basic) or isinstance(r.upper_bound, Basic):
-                expressions[(None,i)] = (self.compile_expr(r.lower_bound),
-                                         self.compile_expr(r.upper_bound))
-        # Metabolite bound
-        for i, metabolite in enumerate(me.metabolites):
-            if isinstance(metabolite._bound, Basic):
-                expressions[(i, None)] = (self.compile_expr(metabolite._bound),
-                        metabolite._constraint_sense)
 
-        toc = time.time() - tic
-        #if verbosity > 0:
-            #print('Finished compiling expressions in %f seconds' % toc)
+        # Reaction bounds
+        for idx, rxn in enumerate(me.reactions):
+            for met, stoic in rxn._metabolites.items():
+                if isinstance(stoic, Basic):
+                    expressions[(me.metabolites.index(met), idx)] = self.compile_expr(stoic)
+
+            # If lower or upper bound symbolic:
+            if isinstance(rxn.lower_bound, Basic) or isinstance(rxn.upper_bound, Basic):
+                expressions[(None, idx)] = (self.compile_expr(rxn.lower_bound), self.compile_expr(rxn.upper_bound))
+
+        # Metabolite bound
+        for idx, metabolite in enumerate(me.metabolites):
+            if isinstance(metabolite._bound, Basic):
+                expressions[(idx, None)] = (self.compile_expr(metabolite._bound), metabolite._constraint_sense)
 
         return expressions
 
-    def make_lp(self, mu_fix, compiled_expressions=None, verbosity=0):
+    def make_lp(self, mu_fix, compiled_expressions = None):
         """
-        Construct LP problem for qMINOS or MINOS. For ME 1.0.
+        Construct LP problem for qMINOS or MINOS
         """
 
         me = self.me
@@ -342,35 +318,29 @@ class ME_NLP:
             # 16 Sep 2016: [LY] should update ordered keys, too, in case the reason
             # compiled_expressions is None is because new symbols were added
             self.subs_keys_ordered = self.substitution_dict.keys()
-            self.compiled_expressions = self.compile_expressions(verbosity=verbosity)
-        compiled_expressions = self.compiled_expressions
+            self.compiled_expressions = self.compile_expressions()
 
         self.substitution_dict[self.me.mu] = mu_fix
-        # Substitution keys need to be the same as when the lambdas were originally
-        # compiled
-        #
+        # Substitution keys need to be the same as when the lambdas were originally compiled
+
         # Get the subtitution values in the right order for lambdify
         sub_vals = [self.substitution_dict[k] for k in self.subs_keys_ordered]
-        #print(sub_vals)
 
         # Initialize S, lb, ub, b
         S = scipy.sparse.dok_matrix((len(me.metabolites), len(me.reactions)))
         xl = numpy.matrix([r.lower_bound for r in me.reactions]).transpose()
         xu = numpy.matrix([r.upper_bound for r in me.reactions]).transpose()
         b = [0. for m in me.metabolites]
+
         # Fill in all matrix & constraint rhs entries (incl. not mu-dependent)
-        tic = time.time()
-        #getcontext().prec = self.sig_digs      # from cdecimal
         for mind,met in enumerate(me.metabolites):
             # Fill in constraint bounds: MOSTLY just float
             if hasattr(met._bound, 'subs'):
                 expr = self.compiled_expressions[(mind,None)]
                 b[mind] = float(expr[0](*sub_vals))
-                # Decimal() for backwards compat with ME 1.0
-                #b[mind] = float(Decimal(expr[0](*sub_vals)).normalize())   # decimal reallly?
-                #b[mind] = float(Decimal(expr[0](*sub_vals)))  # slower than normalize?
             else:
                 b[mind] = met._bound
+
             # Fill in stoichiometries: MOSTLY symbolic, or float? Hard to say.
             for rxn in met.reactions:
                 rind = me.reactions.index(rxn)
@@ -387,50 +357,30 @@ class ME_NLP:
                         print('stoich=', rxn.metabolites[met])
                         raise Exception('Failed to convert symbolic stoichiometry to float')
 
-                        #print('Trying float(Decimal())')
-                        #s = float(Decimal(expr(*sub_vals)).normalize())
-
-                    #****************************************
-                    # Decimal() for backwards compat with ME 1.0
-                    #s = float(Decimal(expr(*sub_vals)).normalize())
-                    #s = float(Decimal(expr(*sub_vals)))
                     if not numpy.isinf(s):
                         S[mind, rind] = s
                 else:
                     S[mind,rind] = rxn.metabolites[met]
+
         # Fill in var bounds: MOSTLY just float
         for rind,rxn in enumerate(me.reactions):
             if hasattr(rxn.lower_bound, 'subs'):
                 # Then, there must be a compiled expression
                 expr = self.compiled_expressions[(None,rind)]
                 xl[rind] = float(expr[0](*sub_vals))
-                # Decimal() for backwards compat with ME 1.0
-                #xl[rind] = float(Decimal(expr[0](*sub_vals)).normalize())
-                #xl[rind] = float(Decimal(expr[0](*sub_vals)))
             else:
                 xl[rind] = rxn.lower_bound
+
             if hasattr(rxn.upper_bound, 'subs'):
                 expr = self.compiled_expressions[(None,rind)]
                 xu[rind] = float(expr[1](*sub_vals))
-                # Using Decimal for sig_digs, even if slower
-                # Decimal() for backwards compat with ME 1.0
-                #xu[rind] = float(Decimal(expr[1](*sub_vals)).normalize())
-                #xu[rind] = float(Decimal(expr[1](*sub_vals)))
             else:
                 xu[rind] = rxn.upper_bound
-        toc = time.time() - tic
-
-        #if verbosity > 0:
-            #print('Finished substituting S,lb,ub in %f seconds' % toc)
 
         c = [r.objective_coefficient for r in me.reactions]
         csense = [m._constraint_sense for m in me.metabolites]
-        tic = time.time()
-        J, ne, P, I, V, bl, bu = self.makeME_LP(S,b,c,xl,xu,csense)
 
-        toc = time.time()-tic
-        #if verbosity > 0:
-            #print('Finished makeME_LP in %f seconds' % toc)
+        J, ne, P, I, V, bl, bu = self.makeME_LP(S, b, c, xl, xu, csense)
 
         # Solve a single LP
         m,n = J.shape
