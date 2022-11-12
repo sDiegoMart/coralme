@@ -378,7 +378,7 @@ class ME_NLP:
                 xu[rind] = rxn.upper_bound
 
         c = [r.objective_coefficient for r in me.reactions]
-        csense = [m._constraint_sense for m in me.metabolites]
+        csense = ['E' for m in me.metabolites]
 
         J, ne, P, I, V, bl, bu = self.makeME_LP(S, b, c, xl, xu, csense)
 
