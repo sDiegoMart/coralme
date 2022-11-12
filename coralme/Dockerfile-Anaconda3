@@ -1,0 +1,58 @@
+# Use the anaconda3 image as parent image
+FROM continuumio/anaconda3
+
+# set shell
+RUN export SHELL=/bin/bash
+
+# Update
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN apt-get update
+RUN apt-get install -y dialog apt-utils
+RUN apt-get upgrade -y
+RUN apt-get install -y htop git gcc nano
+RUN apt-get install -y libgfortran5
+
+# Install ZenglerLab coralme software stack
+# RUN python -m pip install pip -U
+RUN python -m pip install wheel
+RUN python -m pip install cython
+RUN python -m pip install cpython
+RUN python -m pip install numpy
+RUN python -m pip install scipy
+RUN python -m pip install sympy
+RUN python -m pip install pandas
+RUN python -m pip install biopython
+RUN python -m pip install jsonschema
+RUN python -m pip install ipykernel
+RUN python -m pip install matplotlib
+RUN python -m pip install tqdm
+RUN python -m pip install cobra==0.25.0
+RUN python -m pip install gurobipy
+
+RUN python -m pip uninstall optlang -y
+RUN python -m pip install git+https://github.com/glucksfall/optlang.git
+
+# Install jupyter notebook extensions
+RUN python3 -m pip install jupyter_nbextensions_configurator nbserverproxy
+
+# Download the coralme tutorial
+# RUN mkdir -p /opt/notebooks/coralme-tutorial
+# WORKDIR /opt/notebooks/coralme-tutorial
+# RUN git init
+# RUN git remote add -f origin https://github.com/ZenglerLab/coralme
+# RUN git config core.sparseCheckout true
+# RUN echo "tutorial" >> .git/info/sparse-checkout
+# RUN git pull origin master
+# RUN mv tutorial/* .
+# RUN rm -rf tutorial .git
+
+# Set the working directory
+WORKDIR /opt/notebooks
+
+# Set jupyter configuration
+RUN jupyter notebook --generate-config
+# RUN wget https://raw.githubusercontent.com/glucksfall/zenglerlab/master/jupyter_notebook_config.json --directory-prefix=/root/.jupyter
+COPY ./jupyter_notebook_config.json /root/.jupyter/jupyter_notebook_config.json
+
+# Initiate jupyter server at runtime
+CMD ["jupyter", "notebook", "--notebook-dir=/opt/notebooks", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
