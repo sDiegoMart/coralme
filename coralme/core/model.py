@@ -1,8 +1,6 @@
 import re
 import typing
 import logging
-import multiprocessing
-from multiprocessing.pool import ThreadPool
 
 # install by the user
 import tqdm
@@ -209,12 +207,6 @@ class MEModel(cobra.core.model.Model):
 		protein
 		"""
 		self._unmodeled_protein_fraction = self.global_info['me.unmodeled_protein_fraction'] # default value
-
-		# TODO: override solver interface because Constraint objetcs are expensive to create
-		self.solver = 'gurobi'
-
-	#def solver(self):
-		#return None
 
 	def add_boundary(
 		self,
@@ -782,15 +774,7 @@ class MEModel(cobra.core.model.Model):
 	# me.update() cannot be paralelized without considering new constraints being added into the model.
 	# New constraints must have a different name, so me.update() fails if two reactions are changed to add the same constraint:
 	# ContainerAlreadyContains: Container '<optlang.container.Container object at 0x...>' already contains an object with name 'Name'.
-	def parallel_update(self):
-		new = []
-		for r in self.reactions:
-			if hasattr(r, 'update'):
-				new.append(r)
-
-		with ThreadPool(processes = multiprocessing.cpu_count()-1) as pool:
-			pool.map(_update, new)
-
+	def _parallel_update(self):
 		return None
 
 	def get(self, x: typing.Union[cobra.core.object.Object, str]) -> cobra.core.object.Object:
@@ -865,7 +849,7 @@ class MEModel(cobra.core.model.Model):
 
 		me = self
 
-		from coralme.minisolvemepy.solver import ME_NLP
+		from coralme.solver.solver import ME_NLP
 		me_nlp = ME_NLP(me)
 		muopt, hs, xopt, cache = me_nlp.bisectmu(
 				mumax = max_mu, mumin = min_mu,

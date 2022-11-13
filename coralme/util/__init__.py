@@ -20,4 +20,3 @@ else:
 import coralme.util.building
 import coralme.util.dogma
 import coralme.util.massbalance
-import coralme.util.me_model_interface

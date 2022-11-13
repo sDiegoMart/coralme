@@ -17,35 +17,31 @@ RUN apt-get install -y libgfortran5
 RUN python -m pip install wheel
 RUN python -m pip install cython
 RUN python -m pip install cpython
-RUN python -m pip install numpy==1.21.6
+RUN python -m pip install numpy==1.23.0
 RUN python -m pip install scipy
 RUN python -m pip install sympy
-RUN python -m pip install pandas==1.5.1
-RUN python -m pip install openpyxl
+RUN python -m pip install pandas
 RUN python -m pip install biopython
 RUN python -m pip install jsonschema
 RUN python -m pip install ipykernel
 RUN python -m pip install matplotlib
 RUN python -m pip install tqdm
 RUN python -m pip install cobra==0.25.0
-RUN python -m pip install gurobipy
-
-RUN python -m pip uninstall optlang -y
-RUN python -m pip install git+https://github.com/glucksfall/optlang.git
+RUN python -m pip install python-libsbml
 
 # Install jupyter notebook extensions
 RUN python3 -m pip install jupyter_nbextensions_configurator nbserverproxy
 
 # Download the coralme tutorial
-# RUN mkdir -p /opt/notebooks/coralme-tutorial
-# WORKDIR /opt/notebooks/coralme-tutorial
-# RUN git init
-# RUN git remote add -f origin https://github.com/ZenglerLab/coralme
-# RUN git config core.sparseCheckout true
-# RUN echo "tutorial" >> .git/info/sparse-checkout
-# RUN git pull origin master
-# RUN mv tutorial/* .
-# RUN rm -rf tutorial .git
+RUN mkdir -p /opt/notebooks/coralme-tutorial
+WORKDIR /opt/notebooks/coralme-tutorial
+RUN git init
+RUN git remote add -f origin https://github.com/ZenglerLab/coralme
+RUN git config core.sparseCheckout true
+RUN echo "tutorial" >> .git/info/sparse-checkout
+RUN git pull origin master
+RUN mv tutorial/* .
+RUN rm -rf tutorial .git
 
 # Set the working directory
 WORKDIR /opt/notebooks
