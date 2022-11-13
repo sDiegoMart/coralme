@@ -823,7 +823,7 @@ class MEModel(cobra.core.model.Model):
 			return res
 
 	# Originally developed by JDTB@UCSD, 2022
-	def optimize(self,
+	def _optimize(self,
 		max_mu = 1., min_mu = 0., fixed_mu: float = False,
 		precision = 1e-6, solver_precision = 'quad', maxIter = 100,
 		verbosity = False):
@@ -849,6 +849,25 @@ class MEModel(cobra.core.model.Model):
 			me_nlp = ME_NLP1(me, growth_key = self.mu)
 			# Use bisection for now (until the NLP formulation is worked out)
 			muopt, hs, xopt, cache = me_nlp.bisectmu(
+				mumax = max_mu, mumin = min_mu,
+				precision = precision, solver_precision = solver_precision, maxIter = maxIter,
+				verbosity = verbosity)
+
+		if me.solution:
+			return True
+		else:
+			return False
+
+	def optimize(self,
+		max_mu = 1., min_mu = 0., fixed_mu: float = False,
+		precision = 1e-6, solver_precision = 'quad', maxIter = 100,
+		verbosity = False):
+
+		me = self
+
+		from coralme.minisolvemepy.solver import ME_NLP
+		me_nlp = ME_NLP(me)
+		muopt, hs, xopt, cache = me_nlp.bisectmu(
 				mumax = max_mu, mumin = min_mu,
 				precision = precision, solver_precision = solver_precision, maxIter = maxIter,
 				verbosity = verbosity)

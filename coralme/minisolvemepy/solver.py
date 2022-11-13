@@ -251,26 +251,6 @@ class ME_NLP:
 
         return J, ne, P, I, V, bl, bu
 
-    # from solvemepy.me2
-    def construct_S(self, growth_rate):
-        """
-        From cobrame--in case me does not have construct_S
-        """
-        me = self.me
-        growth_key = self.me.mu
-
-        # intialize to 0
-        S = scipy.sparse.dok_matrix((len(me.metabolites), len(me.reactions)))
-        # populate with stoichiometry
-        for i, r in enumerate(me.reactions):
-            for met, value in r._metabolites.items():
-                met_index = me.metabolites.index(met)
-                if hasattr(value, "subs"):
-                    S[met_index, i] = float(value.subs(growth_key, growth_rate))
-                else:
-                    S[met_index, i] = float(value)
-        return S
-
     # from solvemepy.me1
     def compile_expr(self, expr):
         """Compile expressions with all parameter keys in ME 1.0"""
@@ -280,6 +260,7 @@ class ME_NLP:
         f = lambdify(self.subs_keys_ordered, expr)
         return f
 
+    # from solvemepy.me1
     def compile_expressions(self):
         """
         Compile expressions for ME 1.0.
@@ -304,10 +285,11 @@ class ME_NLP:
         # Metabolite bound
         for idx, metabolite in enumerate(me.metabolites):
             if isinstance(metabolite._bound, Basic):
-                expressions[(idx, None)] = (self.compile_expr(metabolite._bound), metabolite._constraint_sense)
+                expressions[(idx, None)] = (self.compile_expr(metabolite._bound), 'E')
 
         return expressions
 
+    # from solvemepy.me1
     def make_lp(self, mu_fix, compiled_expressions = None):
         """
         Construct LP problem for qMINOS or MINOS
@@ -333,10 +315,10 @@ class ME_NLP:
         b = [0. for m in me.metabolites]
 
         # Fill in all matrix & constraint rhs entries (incl. not mu-dependent)
-        for mind,met in enumerate(me.metabolites):
+        for mind, met in enumerate(me.metabolites):
             # Fill in constraint bounds: MOSTLY just float
             if hasattr(met._bound, 'subs'):
-                expr = self.compiled_expressions[(mind,None)]
+                expr = self.compiled_expressions[(mind, None)]
                 b[mind] = float(expr[0](*sub_vals))
             else:
                 b[mind] = met._bound
@@ -346,8 +328,7 @@ class ME_NLP:
                 rind = me.reactions.index(rxn)
                 if (mind, rind) in self.compiled_expressions:
                     expr = self.compiled_expressions[(mind,rind)]
-                    #****************************************
-                    # DEBUG
+
                     try:
                         s = float(expr(*sub_vals))
                     except TypeError as e:
@@ -360,30 +341,31 @@ class ME_NLP:
                     if not numpy.isinf(s):
                         S[mind, rind] = s
                 else:
-                    S[mind,rind] = rxn.metabolites[met]
+                    S[mind, rind] = rxn.metabolites[met]
 
         # Fill in var bounds: MOSTLY just float
-        for rind,rxn in enumerate(me.reactions):
+        for rind, rxn in enumerate(me.reactions):
             if hasattr(rxn.lower_bound, 'subs'):
                 # Then, there must be a compiled expression
-                expr = self.compiled_expressions[(None,rind)]
+                expr = self.compiled_expressions[(None, rind)]
                 xl[rind] = float(expr[0](*sub_vals))
             else:
                 xl[rind] = rxn.lower_bound
 
             if hasattr(rxn.upper_bound, 'subs'):
-                expr = self.compiled_expressions[(None,rind)]
+                expr = self.compiled_expressions[(None, rind)]
                 xu[rind] = float(expr[1](*sub_vals))
             else:
                 xu[rind] = rxn.upper_bound
 
         c = [r.objective_coefficient for r in me.reactions]
         csense = ['E' for m in me.metabolites]
+        #csense = [m._constraint_sense for m in me.metabolites]
 
         J, ne, P, I, V, bl, bu = self.makeME_LP(S, b, c, xl, xu, csense)
 
         # Solve a single LP
-        m,n = J.shape
+        m, n = J.shape
         ha = I
         ka = P
         ad = V
@@ -391,7 +373,28 @@ class ME_NLP:
         bud = [bi for bi in bu.flat]
         nb = m + n
         hs = numpy.zeros(nb, numpy.dtype('i4'))
+
         return m, n, ha, ka, ad, bld, bud, hs
+
+    # from solvemepy.me2
+    def construct_S(self, growth_rate):
+        """
+        From cobrame--in case me does not have construct_S
+        """
+        me = self.me
+        growth_key = self.me.mu
+
+        # intialize to 0
+        S = scipy.sparse.dok_matrix((len(me.metabolites), len(me.reactions)))
+        # populate with stoichiometry
+        for i, r in enumerate(me.reactions):
+            for met, value in r._metabolites.items():
+                met_index = me.metabolites.index(met)
+                if hasattr(value, "subs"):
+                    S[met_index, i] = float(value.subs(growth_key, growth_rate))
+                else:
+                    S[met_index, i] = float(value)
+        return S
 
     # from solvemepy.me2
     #def make_lp(self, mu_fix):
@@ -433,6 +436,7 @@ class ME_NLP:
         #bud = [ bi for bi in bu.flat ]
         #nb = m + n
         #hs = numpy.zeros(nb, numpy.dtype('i4'))
+
         #return m, n, ha, ka, ad, bld, bud, hs
 
     def solvelp(self, muf, basis = None, precision = 'quad'):
