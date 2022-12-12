@@ -163,9 +163,9 @@ class MEModel(cobra.core.model.Model):
 				],
 
 			'compartments' : {
-				'c'    : 'Cytoplasm',
-				'e'    : 'Extracellular',
-				'p'    : 'Periplasm',
+				'c'	: 'Cytoplasm',
+				'e'	: 'Extracellular',
+				'p'	: 'Periplasm',
 				'mc'   : 'ME-Model Constraint'
 				},
 
@@ -175,9 +175,9 @@ class MEModel(cobra.core.model.Model):
 			'genome_mods' : {},
 			'trna_misacylation' : {},
 
-			'me.gam' : 45.,
-			'me.ngam' : 1.,
-			'me.unmodeled_protein_fraction' : 0.36
+			'gam' : 45.,
+			'ngam' : 1.,
+			'unmodeled_protein_fraction' : 0.36
 			}
 
 		self.process_data = cobra.core.dictlist.DictList()
@@ -198,126 +198,15 @@ class MEModel(cobra.core.model.Model):
 		self._biomass_dilution.lower_bound = self.mu
 
 		# Maintenance energy
-		self._gam = self.global_info['me.gam'] # default value
-		self._ngam = self.global_info['me.ngam'] # default value
+		self._gam = self.global_info['gam'] # default value
+		self._ngam = self.global_info['ngam'] # default value
 
 		"""
 		Unmodeled protein is handled by converting protein_biomass to
 		biomass, and requiring production of the appropriate amount of dummy
 		protein
 		"""
-		self._unmodeled_protein_fraction = self.global_info['me.unmodeled_protein_fraction'] # default value
-
-	def add_boundary(
-		self,
-		metabolite,
-		type="exchange",
-		reaction_id=None,
-		lb=None,
-		ub=None,
-		sbo_term=None,
-	):
-		"""
-		Add a boundary reaction for a given metabolite.
-
-		There are three different types of pre-defined boundary reactions:
-		exchange, demand, and sink reactions.
-		An exchange reaction is a reversible, unbalanced reaction that adds
-		to or removes an extracellular metabolite from the extracellular
-		compartment.
-		A demand reaction is an irreversible reaction that consumes an
-		intracellular metabolite.
-		A sink is similar to an exchange but specifically for intracellular
-		metabolites, i.e., a reversible reaction that adds or removes an
-		intracellular metabolite.
-
-		If you set the reaction `type` to something else, you must specify the
-		desired identifier of the created reaction along with its upper and
-		lower bound. The name will be given by the metabolite name and the
-		given `type`.
-
-		Parameters
-		----------
-		metabolite : cobra.Metabolite
-			Any given metabolite. The compartment is not checked but you are
-			encouraged to stick to the definition of exchanges and sinks.
-		type : str, {"exchange", "demand", "sink"}
-			Using one of the pre-defined reaction types is easiest. If you
-			want to create your own kind of boundary reaction choose
-			any other string, e.g., 'my-boundary'.
-		reaction_id : str, optional
-			The ID of the resulting reaction. This takes precedence over the
-			auto-generated identifiers but beware that it might make boundary
-			reactions harder to identify afterwards when using `model.boundary`
-			or specifically `model.exchanges` etc.
-		lb : float, optional
-			The lower bound of the resulting reaction.
-		ub : float, optional
-			The upper bound of the resulting reaction.
-		sbo_term : str, optional
-			A correct SBO term is set for the available types. If a custom
-			type is chosen, a suitable SBO term should also be set.
-
-		Returns
-		-------
-		cobra.Reaction
-			The created boundary reaction.
-
-		Examples
-		--------
-		>>> from cobra.io load_model
-		>>> model = load_model("textbook")
-		>>> demand = model.add_boundary(model.metabolites.atp_c, type="demand")
-		>>> demand.id
-		'DM_atp_c'
-		>>> demand.name
-		'ATP demand'
-		>>> demand.bounds
-		(0, 1000.0)
-		>>> demand.build_reaction_string()
-		'atp_c --> '
-
-		"""
-		ub = +1000 if ub is None else ub
-		lb = -1000 if lb is None else lb
-		types = {
-			"exchange": ("EX", lb, ub, sbo_terms["exchange"]),
-			"demand": ("DM", 0, ub, sbo_terms["demand"]),
-			"sink": ("SK", lb, ub, sbo_terms["sink"]),
-		}
-		if type == "exchange":
-			external = find_external_compartment(self)
-			if metabolite.compartment != external:
-				raise ValueError(
-					"The metabolite is not an external metabolite"
-					" (compartment is `%s` but should be `%s`). "
-					"Did you mean to add a demand or sink? "
-					"If not, either change its compartment or "
-					"rename the model compartments to fix this."
-					% (metabolite.compartment, external)
-				)
-		if type in types:
-			prefix, lb, ub, default_term = types[type]
-			if reaction_id is None:
-				reaction_id = "{}_{}".format(prefix, metabolite.id)
-			if sbo_term is None:
-				sbo_term = default_term
-		if reaction_id is None:
-			raise ValueError(
-				"Custom types of boundary reactions require a custom "
-				"identifier. Please set the `reaction_id`."
-			)
-		if reaction_id in self.reactions:
-			raise ValueError(
-				"Boundary reaction '{}' already exists.".format(reaction_id)
-			)
-		name = "{} {}".format(metabolite.name, type)
-		rxn = cobra.core.reaction.Reaction(id=reaction_id, name=name, lower_bound=lb, upper_bound=ub)
-		rxn.add_metabolites({metabolite: -1})
-		if sbo_term:
-			rxn.annotation["sbo"] = sbo_term
-		cobra.core.model.Model.add_reactions(self, [rxn])
-		return rxn
+		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default value
 
 	def add_reactions(self, reaction_list):
 		"""Add reactions to the model.
@@ -423,6 +312,7 @@ class MEModel(cobra.core.model.Model):
 			logging.warning('Adding GAM (ATP requirement for growth) reaction into the ME-Model.')
 			self.add_reactions([coralme.core.reaction.SummaryVariable('GAM')])
 			self.reactions.GAM.lower_bound = self.mu
+			self.reactions.GAM.upper_bound = self.mu
 		#atp_hydrolysis = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'h_c': 1, 'pi_c': 1} # charges: -4, 0 => -3, +1, -2
 		atp_hydrolysis = self.process_data.get_by_id('atp_hydrolysis').stoichiometry
 		for met, coeff in atp_hydrolysis.items():
@@ -442,6 +332,7 @@ class MEModel(cobra.core.model.Model):
 			self.add_reactions([coralme.core.reaction.SummaryVariable('ATPM')])
 			self.reactions.ATPM.add_metabolites(atp_hydrolysis)
 		self.reactions.ATPM.lower_bound = value
+		self.reactions.ATPM.upper_bound = value
 		self._ngam = value
 
 	# data types generators:
@@ -501,7 +392,7 @@ class MEModel(cobra.core.model.Model):
 			if isinstance(data, coralme.core.processdata.SubreactionData):
 				yield data
 
-	# MEModel methods
+	# ME-Model methods
 	def get_metabolic_flux(self, solution = None):
 		"""Extract the flux state for Metabolic reactions."""
 		if solution is None:
@@ -559,7 +450,7 @@ class MEModel(cobra.core.model.Model):
 		s_matrix = scipy.sparse.dok_matrix((len(self.metabolites), len(self.reactions)))
 		# populate with stoichiometry
 		for idx, rxn in tqdm.tqdm(enumerate(self.reactions), bar_format = bar_format):
-			for met, value in rxn._metabolites.items():
+			for met, value in rxn.metabolites.items():
 				met_index = self.metabolites.index(met)
 				if hasattr(value, 'subs'):
 					s_matrix[met_index, idx] = float(value.subs(self.mu, growth_rate))
@@ -775,7 +666,7 @@ class MEModel(cobra.core.model.Model):
 	# New constraints must have a different name, so me.update() fails if two reactions are changed to add the same constraint:
 	# ContainerAlreadyContains: Container '<optlang.container.Container object at 0x...>' already contains an object with name 'Name'.
 	def _parallel_update(self):
-		return None
+		return NotImplemented
 
 	def get(self, x: typing.Union[cobra.core.object.Object, str]) -> cobra.core.object.Object:
 		"""
@@ -806,61 +697,144 @@ class MEModel(cobra.core.model.Model):
 		else:
 			return res
 
-	# Originally developed by JDTB@UCSD, 2022
-	def _optimize(self,
-		max_mu = 1., min_mu = 0., fixed_mu: float = False,
-		precision = 1e-6, solver_precision = 'quad', maxIter = 100,
-		verbosity = False):
-		"""
-		Optimize the ME-Model using flux balance analysis.
-		"""
+	def construct_lp_problem(self, keys = False):
+		# populate empty dictionaries with stoichiometry
+		Sf = dict()
+		Se = dict()
 
-		me = self
-		# "repair"
-		for met in me.metabolites:
-			met._constraint_sense = 'E'
+		#types = (sympy.core.add.Add, sympy.core.mul.Mul)
 
-		if fixed_mu:
-			from qminospy.me2 import ME_NLP
-			me_nlp = ME_NLP(me)
-			x, status, hs = me_nlp.solvelp(fixed_mu)
-			me.solution.status = status
-			me.solution.x_dict = { r:f for r,f in zip(me.reactions, x) }
+		# check how many variables are in the ME-Model
+		atoms = set()
 
-		else:
-			from qminospy.me1 import ME_NLP1
-			# The object containing solveME methods--composite that uses a ME model object
-			me_nlp = ME_NLP1(me, growth_key = self.mu)
-			# Use bisection for now (until the NLP formulation is worked out)
-			muopt, hs, xopt, cache = me_nlp.bisectmu(
-				mumax = max_mu, mumin = min_mu,
-				precision = precision, solver_precision = solver_precision, maxIter = maxIter,
-				verbosity = verbosity)
+		for idx, rxn in enumerate(self.reactions):
+			for met, value in rxn.metabolites.items():
+				met_index = self.metabolites.index(met)
+				if hasattr(value, 'subs'):
+					atoms.add(list(value.free_symbols)[0])
+					Se[met_index, idx] = value
+				else:
+					Sf[met_index, idx] = value
 
-		if me.solution:
-			return True
-		else:
-			return False
+		lb, ub = zip(*[ rxn.bounds for rxn in self.reactions ])
+		b = [ m._bound for m in self.metabolites ] # accumulation
+		#c = [ r.objective_coefficient for r in self.reactions ]
+		c = [ 0 for r in self.reactions ]
+		# constraint sense eventually be in the metabolite...
+		cs = [ 'E' for m in self.metabolites ]
+
+		if keys:
+			# replace symbols before calling the solver
+			Se = { k:float(x.xreplace(keys)) if hasattr(x, 'subs') else x for k,x in Se.items() }
+			lb = [ float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in lb ]
+			ub = [ float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in ub ]
+
+			Sf.update(Se)
+
+		return Sf, Se, lb, ub, b, c, cs, atoms
 
 	def optimize(self,
-		max_mu = 1., min_mu = 0., fixed_mu: float = False,
-		precision = 1e-6, solver_precision = 'quad', maxIter = 100,
-		verbosity = False):
+		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
+		tolerance = 1e-6, precision = 'quad', verbose = False):
 
-		me = self
+		# check options
+		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
+		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+
+		# populate with stoichiometry, no replacement of mu's
+		Sf, Se, lb, ub, b, c, cs, atoms = self.construct_lp_problem()
+
+		if len(atoms) > 1:
+			print('Use `me_model.map_feasibility()` to obtain the boundary of feasibility solutions.')
+			print('Optimization will proceed replacing all growth keys with the same value.')
+
+		if lambdify:
+			fn = numpy.vectorize(lambda x: sympy.lambdify(list(atoms), x))
+			lambdas = { k:v for k,v in zip(Se.keys(), fn(list(Se.values()))) }
+		else:
+			lambdas = None
 
 		from coralme.solver.solver import ME_NLP
-		me_nlp = ME_NLP(me)
-		muopt, hs, xopt, cache = me_nlp.bisectmu(
-				mumax = max_mu, mumin = min_mu,
-				precision = precision, solver_precision = solver_precision, maxIter = maxIter,
-				verbosity = verbosity)
+		#me_nlp = ME_NLP(me)
+		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
+		muopt, xopt, yopt, basis, stat = me_nlp.bisectmu(
+				mumax = max_mu,
+				mumin = min_mu,
+				maxIter = maxIter,
+				tolerance = tolerance,
+				precision = precision,
+				verbose = verbose)
 
-		if me.solution:
+		#f = sum([ rxn.objective_coefficient * xopt[idx] for idx, rxn in enumerate(self.reactions) ])
+		x_primal = xopt[ 0:len(self.reactions) ]   # The remainder are the slacks
+		x_dict = { rxn.id : xopt[idx] for idx, rxn in enumerate(self.reactions) }
+		#y = pi
+		# J = [S; c]
+		y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
+		#y_dict['linear_objective'] = y[len(y)-1]
+
+		if stat == 'optimal':
+			#self.me.solution = Solution(f, x_primal, x_dict, y, y_dict, 'qminos', time_elapsed, status)
+			self.solution = cobra.core.Solution(
+				objective_value = muopt,
+				status = stat,
+				fluxes = x_dict, # x_primal is a numpy.array with only fluxes info
+				reduced_costs = None,
+				shadow_prices = None,
+				)
 			return True
 		else:
 			return False
 
+	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 1. }, tolerance = 1e-6, precision = 'quad', **kwargs):
+		# check options
+		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
+		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+		for key in list(keys.keys()):
+			if isinstance(key, sympy.Symbol):
+				pass
+			else:
+				keys[sympy.Symbol(key, positive = True)] = keys.pop(key)
+
+		# populate with stoichiometry with replacement of mu's
+		Sf, Se, lb, ub, b, c, cs, atoms = kwargs.get('lp', self.construct_lp_problem(keys = keys))
+
+		from coralme.solver.solver import ME_NLP
+		#me_nlp = ME_NLP(me)
+		me_nlp = ME_NLP(Sf, dict(), b, c, lb, ub, cs, set(keys.keys()), None)
+		muopt, xopt, yopt, basis, stat = me_nlp.bisectmu(
+				mumax = 1., # mu was already replaced and maxIter is one, so a value here doesn't matter
+				mumin = 0.,
+				maxIter = 1,
+				tolerance = tolerance,
+				precision = precision,
+				verbose = False)
+
+		#f = sum([ rxn.objective_coefficient * xopt[idx] for idx, rxn in enumerate(self.reactions) ])
+		x_primal = xopt[ 0:len(self.reactions) ]   # The remainder are the slacks
+		x_dict = { rxn.id : xopt[idx] for idx, rxn in enumerate(self.reactions) }
+		#y = pi
+		# J = [S; c]
+		y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
+		#y_dict['linear_objective'] = y[len(y)-1]
+
+		if stat == 'optimal':
+			#self.me.solution = Solution(f, x_primal, x_dict, y, y_dict, 'qminos', time_elapsed, status)
+			self.solution = cobra.core.Solution(
+				objective_value = list(keys.values())[0],
+				status = stat,
+				fluxes = x_dict, # x_primal is a numpy.array with only fluxes info
+				reduced_costs = None,
+				shadow_prices = None,
+				)
+			return True
+		else:
+			return False
+
+	def map_feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 1. }, tolerance = 1e-6, precision = 'quad'):
+		return NotImplemented
+
+	# Originally developed by JDTB@UCSD, 2022
 	def relax_bounds(self):
 		for rxn in self.reactions:
 			if rxn.id == 'biomass_dilution':

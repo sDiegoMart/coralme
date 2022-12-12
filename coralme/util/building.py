@@ -110,7 +110,7 @@ def add_translation_reaction(me_model, locus_id, dna_sequence, update = False):
 
 	Parameters
 	----------
-	me_model : :class:`cobra.core.model.MEModel`
+	me_model : :class:`coralme.core.model.MEModel`
 		The MEModel object to which the reaction will be added
 
 	locus_id : str
@@ -154,7 +154,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, verbose 
 
 	Parameters
 	----------
-	me_model : :class:`cobra.core.model.MEModel`
+	me_model : :class:`coralme.core.model.MEModel`
 		The MEModel object to which the reaction will be added
 
 	trna_aa : dict
@@ -514,7 +514,7 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 	me_model : :class:`coralme.core.model.MEModel`
 		The MEModel object to which the content will be added
 
-	m_model : :class:`cobra.core.model.Model`
+	m_model : :class:`coralme.core.model.Model`
 		The m_model which will act as the source of metabolic content for
 		MEModel
 
@@ -528,10 +528,10 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 			new_met = coralme.core.component.Complex(met.id)
 		elif met.id.startswith('RNA_'):
 			#raise ValueError('Processed M-model should not contain RNAs ({:s})'.format(met.id))
-			new_met = met
-			logging.warning('Added TranscribedGene \'{:s}\'. Highly probable the ME-Model is unfeasible.'.format(met.id))
+			new_met = me_model.metabolites(met.id)
+			logging.warning('Added TranscribedGene \'{:s}\'. It is highly probable the ME-Model is not feasible.'.format(met.id))
 		elif met.id.startswith('generic_tRNA'):
-			new_met = met
+			new_met = coralme.core.component.GenerictRNA(met.id)
 		else:
 			new_met = coralme.core.component.Metabolite(met.id)
 
@@ -553,7 +553,7 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 			new_reaction.lower_bound = reaction.lower_bound
 			new_reaction.upper_bound = reaction.upper_bound
 			for met, stoichiometry in reaction.metabolites.items():
-				new_reaction.add_metabolites({me_model.metabolites.get_by_id(met.id): stoichiometry})
+				new_reaction.add_metabolites({ me_model.metabolites.get_by_id(met.id): stoichiometry })
 
 		else:
 			reaction_data = coralme.core.processdata.StoichiometricData(reaction.id, me_model)

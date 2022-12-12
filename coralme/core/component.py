@@ -3,7 +3,7 @@ import coralme
 
 class MEComponent(cobra.core.metabolite.Metabolite):
 	"""
-	COBRAme component representation. Inherits from
+	coralme component representation. Inherits from
 	:class:`cobra.core.metabolite.Metabolite`
 
 	Parameters
@@ -14,11 +14,11 @@ class MEComponent(cobra.core.metabolite.Metabolite):
 
 	"""
 	def __init__(self, id):
-		cobra.Metabolite.__init__(self, id)
+		cobra.core.metabolite.Metabolite.__init__(self, id)
 
 	def remove_from_me_model(self, method = 'subtractive'):
 		"""
-		Remove metabolite from me model along with any relevant
+		Remove metabolite from ME-Model along with any relevant
 		:class:`coralme.core.processdata.ProcessData`
 
 		Parameters
@@ -45,7 +45,7 @@ class MEComponent(cobra.core.metabolite.Metabolite):
 
 class Metabolite(MEComponent):
 	"""
-	COBRAme metabolite representation
+	coralme metabolite representation
 
 	Parameters
 	----------
@@ -108,7 +108,7 @@ class TranscribedGene(MEComponent):
 		"""
 		seq = self.nucleotide_sequence
 		counts = {i: seq.count(i) for i in ("A", "T", "G", "C")}
-		monophosphate_counts = {coralme.util.dogma.transcription_table[k].replace("tp_c", "mp_c"): v for k, v in counts.items()}
+		monophosphate_counts = { coralme.util.dogma.transcription_table[k].replace("tp_c", "mp_c"): v for k, v in counts.items() }
 		return monophosphate_counts
 
 class TranslatedGene(MEComponent):
@@ -256,6 +256,20 @@ class Ribosome(Complex):
 	def __init__(self, id):
 		Complex.__init__(self, id)
 
+class RNAP(Complex):
+	"""
+	Metabolite class for RNA polymerase complexes. Inherits from
+	:class:`coralme.core.component.Complex`
+
+	Parameters
+	----------
+	id : str
+		Identifier of the RNA Polymerase.
+	"""
+
+	def __init__(self, id):
+		Complex.__init__(self, id)
+
 class GenericComponent(MEComponent):
 	"""
 	Metabolite class for generic components created from
@@ -285,20 +299,6 @@ class GenerictRNA(MEComponent):
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
 
-class RNAP(Complex):
-	"""
-	Metabolite class for RNA polymerase complexes. Inherits from
-	:class:`coralme.core.component.Complex`
-
-	Parameters
-	----------
-	id : str
-		Identifier of the RNA Polymerase.
-	"""
-
-	def __init__(self, id):
-		Complex.__init__(self, id)
-
 class Constraint(MEComponent):
 	"""
 	Metabolite class for global constraints such as biomass
@@ -314,7 +314,7 @@ class Constraint(MEComponent):
 def create_component(component_id, default_type = MEComponent, rnap_set = set()):
 	"""creates a component and attempts to set the correct type"""
 	if not isinstance(component_id, str):
-		raise TypeError("Component ID \'{:s}\' must be a str, not \'{:s}\'".format(repr(component_id), str(type(component_id))))
+		raise TypeError("Component ID \'{:s}\' must be a str, not \'{:s}\'.".format(repr(component_id), str(type(component_id))))
 	if component_id.startswith("protein_"):
 		return TranslatedGene(component_id)
 	elif component_id.startswith("RNA_"):
@@ -330,7 +330,7 @@ def create_component(component_id, default_type = MEComponent, rnap_set = set())
 	elif component_id.startswith("generic_tRNA"):
 		return GenerictRNA(component_id)
 	elif component_id.endswith('_c'):
-		return cobra.core.metabolite.Metabolite(component_id)
+		return Metabolite(component_id)
 	elif component_id.startswith('generic_'):
 		return GenericComponent(component_id)
 	else:

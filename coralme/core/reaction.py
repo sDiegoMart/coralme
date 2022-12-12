@@ -27,7 +27,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 
 	"""
 	def __init__(self, id = None, name = ''):
-		cobra.core.Reaction.__init__(self, id, name)
+		cobra.core.reaction.Reaction.__init__(self, id, name)
 		self._objective_coefficient = 0.
 
 	@property
@@ -183,6 +183,32 @@ class MEReaction(cobra.core.reaction.Reaction):
 			self.add_metabolites({metabolite: 0}, combine = False)
 
 	# overwrite methods from cobrapy
+	def _set_id_with_model(self, value: str) -> None:
+		"""Set Reaction id in model, check that it doesn't already exist.
+
+		The function will rebuild the model reaction index.
+
+		Parameters
+		----------
+		value: str
+			A string that represents the id.
+
+		Raises
+		------
+		ValueError
+			If the model already contains a reaction with the id value.
+		"""
+		if value in self.model.reactions:
+			raise ValueError(
+				f"The model already contains a reaction with the id: {value}"
+			)
+		#forward_variable = self.forward_variable
+		#reverse_variable = self.reverse_variable
+		self._id = value
+		self.model.reactions._generate_index()
+		#forward_variable.name = self.id
+		#reverse_variable.name = self.reverse_id
+
 	def _check_bounds(self, lb, ub):
 		#logging.warning('New cobraME \'_check_bounds\' method superseeds \'_check_bounds\' from cobrapy')
 		if isinstance(lb, float) and isinstance(ub, float):

@@ -88,9 +88,10 @@ def main():
 			'Biopython',
 			'tqdm',
 			'scipy',
-			'pandas',
+			'pandas==1.5.1',
 			'sympy',
-			'jsonschema'
+			'jsonschema',
+			'anyconfig'
 			],
 
 		# WARNING: seems to be bdist_wheel only

@@ -205,7 +205,7 @@
                                                 }
                                             },
                                             "keff": {"type": "number"},
-                                            "length_dependent_energy": {"type": "boolean"}
+                                            "length_dependent_energy": {"type": ["boolean", "string"]}
                                         }
                                     }
                                 }
