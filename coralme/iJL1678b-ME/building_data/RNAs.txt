@@ -1,0 +1,171 @@
+(All-tRNAs RNAs Misc-RNAs rRNAs)	Common-Name	Gene
+b4413	sRNA antisense regulator blocking mokC, and hence hokC, translation	b4413
+b4577	sRNA antisense regulator destabilzes ptsG mRNA, Hfq-dependent; regulated by sgrR	b4577
+b4414	novel sRNA, function unknown	b4414
+b0201	16S ribosomal RNA of rrnH operon	b0201
+b0202	tRNA-Ile	b0202
+b0203	tRNA-Ala	b0203
+b0204	23S ribosomal RNA of rrnH operon	b0204
+b0205	5S ribosomal RNA of rrnH operon	b0205
+b0206	tRNA-Asp	b0206
+b0216	tRNA-Asp	b0216
+b0244	tRNA-Thr	b0244
+b4690	novel sRNA, function unknown, CP4-6 propahge	b4690
+b0455	4.5S sRNA component of Signal Recognition Particle (SRP)	b0455
+b4585	sRNA antisense regulator of OM chitoporin ChiP(YbfM), Hfq-dependent	b4585
+b0536	tRNA-Arg	b0536
+b4700	sRNA at remnant mokE/hokE locus	b4700
+b0664	tRNA-Gln	b0664
+b0665	tRNA-Gln	b0665
+b0666	tRNA-Met	b0666
+b0668	tRNA-Gln	b0668
+b0670	tRNA-Gln	b0670
+b0672	tRNA-Leu	b0672
+b0673	tRNA-Met	b0673
+b0743	tRNA-Lys	b0743
+b0744	tRNA-Val	b0744
+b0745	tRNA-Lys	b0745
+b0746	tRNA-Val	b0746
+b0747	tRNA-Lys	b0747
+b0748	tRNA-Lys	b0748
+b0749	tRNA-Lys	b0749
+b4417	sRNA antisense regulator of ompC and ompW mRNA instability, Hfq-dependent	b4417
+b0883	tRNA-Ser	b0883
+b0971	tRNA-Ser	b0971
+b1032	tRNA-Ser	b1032
+b4418	novel Novel sRNA, function unknown	b4418
+b4420	sRNA antisense regulator affects LdrA translation; proposed addiction module in LDR-A repeat, with toxic peptide LdrA	b4420
+b4422	sRNA antisense regulator affects LdrB translation; proposed addiction module in LDR-B repeat, with toxic peptide LdrB	b4422
+b4424	sRNA antisense regulator affects LdrC translation; proposed addiction module in LDR-C repeat, with toxic peptide LdrC	b4424
+b4425	rtT sRNA, processed from tyrT transcript	b4425
+b1230	tRNA-Tyr	b1230
+b1231	tRNA-Tyr	b1231
+b4426	motility and biofilm regulator sRNA	b4426
+b4699	FNR-activated anaerobic sRNA antisense regulator down regulates cydDC, metE, sodA, sodB, Hfq-dependent; mediates negative FNR regulation	b4699
+b4427	sRNA antisense regulator of OmpC translation, Hfq-dependent	b4427
+b4597	sRNA antisense regulator of yejABEF, Hfq-dependent; over-expression causes a thermosensitive growth phenotype on minimal glycerol, maltose, or ribose media	b4597
+b4429	sRNA antisense regulator blocking mokB, and hence hokB, translation	b4429
+b4698	sRNA antisense regulator down regulates YgdQ and EptB, PhoPQ-regulated, Hfq-dependent; affects sensitivity to antimicrobial peptides	b4698
+b1574	sRNA antisense regulator, inhibits ftsZ, Hfq-dependent; Qin prophage	b1574
+b1665	tRNA-Val	b1665
+b1666	tRNA-Val	b1666
+b4430	novel sRNA, function unknown	b4430
+b4431	sRNA antisense activator for RpoS translation, Hfq-dependent	b4431
+b4432	novel sRNA, function unknown	b4432
+b4433	novel sRNA, function unknown	b4433
+b1909	tRNA-Leu	b1909
+b1910	tRNA-Cys	b1910
+b1911	tRNA-Gly	b1911
+b1954	sRNA antisense regulator enhances translation of RpoS, Hfq-dependent	b1954
+b4603	sRNA antisense regulator of ompA and ompC translation, Hfq-dependent	b4603
+b1975	tRNA-Ser	b1975
+b1977	tRNA-Asn	b1977
+b1984	tRNA-Asn	b1984
+b1986	tRNA-Asn	b1986
+b1989	tRNA-Asn	b1989
+b4435	novel sRNA, CP4-44; putative prophage remnant	b4435
+b4436	sRNA antisense regulator of toxic IbsA protein	b4436
+b4437	sRNA antisense regulator of toxic IbsB protein	b4437
+b4438	sRNA antisense regulator of ompX mRNA instability, Hfq-dependent, cAMP-induced	b4438
+b2189	tRNA-Pro	b2189
+b4439	sRNA antisense regulator affecting ompF expression, Hfq-dependent	b4439
+b2348	tRNA-Arg	b2348
+b2396	tRNA-Ala	b2396
+b2397	tRNA-Ala	b2397
+b2401	tRNA-Val	b2401
+b2402	tRNA-Val	b2402
+b2403	tRNA-Val	b2403
+b2404	tRNA-Lys	b2404
+b4440	novel sRNA, function unknown	b4440
+b4441	sRNA activator of glmS mRNA, glmZ processing antagonist	b4441
+b4608	sRNA antisense regulator of shoB toxin	b4608
+b2588	5S ribosomal RNA of rrnG operon	b2588
+b2589	23S ribosomal RNA of rrnG operon	b2589
+b2590	tRNA-Glu	b2590
+b2591	16S ribosomal RNA of rrnG operon	b2591
+b4609	novel sRNA, function unknown	b4609
+b2652	tRNA-Ile	b2652
+b4442	sRNA antisense regulator of ompA, lamB, ompX, and phoP; Hfq-dependent	b4442
+b2691	tRNA-Arg	b2691
+b2692	tRNA-Arg	b2692
+b2693	tRNA-Arg	b2693
+b2694	tRNA-Arg	b2694
+b2695	tRNA-Ser	b2695
+b4701	sok-related sRNA, function unknown	b4701
+b4408	CsrA-binding sRNA, antagonizing CsrA regulation	b4408
+b4443	sRNA antisense regulator represses oppA, dppA, gltI and livJ expression, Hfq-dependent	b4443
+b2814	tRNA-Met	b2814
+b2815	tRNA-Met	b2815
+b2816	tRNA-Met	b2816
+b4444	sRNA antisense regulator downregulates OM proteins and curli; positively regulated by OmpR/EnvZ, Hfq-dependent	b4444
+b4445	sRNA antisense regulator downregulates OM proteins and curli; positively regulated by OmpR/EnvZ, Hfq-dependent	b4445
+b2864	tRNA-Gly	b2864
+b2911	6S RNA inhibits RNA polymerase promoter binding	b2911
+b4446	sRNA antisense regulator of toxic IbsC protein	b4446
+b2967	tRNA-Phe	b2967
+b4447	sRNA antisense regulator of toxic IbsD protein	b4447
+b4611	sRNA antisense regulator of toxic IbsE protein	b4611
+b3069	tRNA-Ile	b3069
+b3123	RNase P, M1 RNA component	b3123
+b4449	novel sRNA, function unknown	b4449
+b3171	tRNA-Met	b3171
+b3174	tRNA-Leu	b3174
+b4450	sRNA positive antisense regulator of rpoS; binds Hfq	b4450
+b3272	5S ribosomal RNA of rrnD operon	b3272
+b3273	tRNA-Thr	b3273
+b3274	5S ribosomal RNA of rrnD operon	b3274
+b3275	23S ribosomal RNA of rrnD operon	b3275
+b3276	tRNA-Ala	b3276
+b3277	tRNA-Ile	b3277
+b3278	16S ribosomal RNA of rrnD operon	b3278
+b4451	sRNA antisense regulator mediating positive Fur regulon response, Hfq-dependent; global iron regulator	b4451
+b4704	antisense sRNA ArrS, function unknown	b4704
+b4452	sRNA antisense regulator of gadAB transcriptional activator GadX mRNA, Hfq-dependent	b4452
+b4454	sRNA antisense regulator affects LdrD translation; proposed addiction module in LDR-D repeat, with toxic peptide LdrD	b4454
+b3545	tRNA-Pro	b3545
+b3658	tRNA-Sec	b3658
+b4616	sRNA antisense regulators IstR-1 and IstR-2, affectr tisB, Hfq-dependent	b4616
+b3756	16S ribosomal RNA of rrnC operon	b3756
+b3757	tRNA-Glu	b3757
+b3758	23S ribosomal RNA of rrnC operon	b3758
+b3759	5S ribosomal RNA of rrnC operon	b3759
+b3760	tRNA-Asp	b3760
+b3761	tRNA-Trp	b3761
+b3796	tRNA-Arg	b3796
+b3797	tRNA-His	b3797
+b3798	tRNA-Leu	b3798
+b3799	tRNA-Pro	b3799
+b4456	sRNA antisense activator of glmS mRNA, Hfq-dependent	b4456
+b4707	essential sRNA of unknown function	b4707
+b3851	16S ribosomal RNA of rrnA operon	b3851
+b3852	tRNA-Ile	b3852
+b3853	tRNA-Ala	b3853
+b3854	23S ribosomal RNA of rrnA operon	b3854
+b3855	5S ribosomal RNA of rrnA operon	b3855
+b3864	Spot 42 sRNA antisense regulator of galK translation, Hfq-dependent	b3864
+b4457	CsrC sRNA sequesters CsrA, a carbon flux regulator	b4457
+b4458	sRNA antisense regulator activates genes that detoxify oxidative damage, Hfq-dependent	b4458
+b3968	16S ribosomal RNA of rrnB operon	b3968
+b3969	tRNA-Glu	b3969
+b3970	23S ribosomal RNA of rrnB operon	b3970
+b3971	5S ribosomal RNA of rrnB operon	b3971
+b3976	tRNA-Thr	b3976
+b3977	tRNA-Tyr	b3977
+b3978	tRNA-Gly	b3978
+b3979	tRNA-Thr	b3979
+b4691	novel sRNA, function unknown	b4691
+b4007	16S ribosomal RNA of rrnE operon	b4007
+b4008	tRNA-Glu	b4008
+b4009	23S ribosomal RNA of rrnE operon	b4009
+b4010	5S ribosomal RNA of rrnE operon	b4010
+b4459	novel sRNA, function unknown	b4459
+b4134	tRNA-Phe	b4134
+b4163	tRNA-Gly	b4163
+b4164	tRNA-Gly	b4164
+b4165	tRNA-Gly	b4165
+b4270	tRNA-Leu	b4270
+b4624	novel sRNA, function unknown	b4624
+b4625	sRNA antisense regulator destabilizing divergent and overlapping symE mRNA	b4625
+b4368	tRNA-Leu	b4368
+b4369	tRNA-Leu	b4369
+b4370	tRNA-Leu	b4370
