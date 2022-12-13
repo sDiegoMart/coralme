@@ -38,20 +38,21 @@ class Homology(object):
 
 		self.get_mutual_hits(evalue = evalue)
 
-	def get_top_hits(df, evalue = False):
-		top_hits = {}
-		for g in df.index.unique():
-			hits = df.loc[g]
-			if isinstance(hits, pandas.DataFrame):
-				top_hit = hits.sort_values(by = 'evalue').iloc[0]
-			else:
-				top_hit = hits
-			if evalue and top_hit['evalue'] > evalue:
-				continue
-			top_hits[g] = top_hit
-		return top_hits
+	def get_mutual_hits(self, evalue = False, verbose = False):
+		# to not import from coralme.builder.homology
+		def get_top_hits(df, evalue = False):
+			top_hits = {}
+			for g in df.index.unique():
+				hits = df.loc[g]
+				if isinstance(hits, pandas.DataFrame):
+					top_hit = hits.sort_values(by = 'evalue').iloc[0]
+				else:
+					top_hit = hits
+				if evalue and top_hit['evalue'] > evalue:
+					continue
+				top_hits[g] = top_hit
+			return top_hits
 
-	def get_mutual_hits(self, evalue = False):
 		org_df = self.org_df
 		ref_df = self.ref_df
 
@@ -130,7 +131,7 @@ class Homology(object):
 								})
 						not_annotated_candidates.add(rc)
 
-		not_annotated_candidates = not_annotated_candidates.difference(set(ref_cplx_homolog.keys())
+		not_annotated_candidates = not_annotated_candidates.difference(set(ref_cplx_homolog.keys()))
 		print('{} complexes were mapped successfully'.format(len(org_cplx_homolog)))
 
 		if warn_candidates:

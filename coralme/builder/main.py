@@ -72,9 +72,10 @@ class MEBuilder(object):
 		self.prepare_model()
 
 		# ## Homology with reference
-		# Curation note: Check which locus tag field in the genbank agrees with those in the biocyc files. Make sure you have specified that field in the beginning of this notebook.
+		# Curation note: Check which locus tag field in the genbank agrees with those in the biocyc files.
+		# Make sure you have specified that field in the beginning of this notebook.
 		# Reference
-		if config.get('ref_genbank', None) is not None:
+		if bool(config.get('dev_reference', False)) or bool(config.get('user_reference', False)):
 			print("{} Reading reference {}".format(sep, sep))
 			#with open(org_files_dir + ref + '/parameters.txt') as rf:
 				#ref_parameters = rf.read()
@@ -85,8 +86,8 @@ class MEBuilder(object):
 
 			if bool(config['run_bbh_blast']):
 				print("{} Running BLAST {}".format(sep, sep))
-				self.org.gb_to_faa('org',element_types={'CDS'},outdir=self.org.directory)
-				self.ref.gb_to_faa('ref',element_types={'CDS'},outdir=self.org.directory)
+				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.directory)
+				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.directory)
 
 				def execute(cmd):
 					cmd = re.findall(r'(?:[^\s,"]|"+(?:=|\\.|[^"])*"+)+', cmd)
@@ -1066,7 +1067,7 @@ class MEBuilder(object):
 
 		defined_t_paths = set()
 		for t in self.org.translocation_pathways.keys():
-			defined_t_paths.add(dictionaries.pathway_to_abbreviation[t])
+			defined_t_paths.add(coralme.builder.dictionaries.pathway_to_abbreviation[t])
 		missing_pathways = file_t_paths - defined_t_paths
 		if missing_pathways:
 			self.org.curation_notes['check'].append({

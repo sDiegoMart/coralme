@@ -35,20 +35,39 @@ class Organism(object):
 		RNAs.txt, and TUs.txt can be generated from the genbank file,
 		though some information might be lost. Set this parameter to
 		True if minimal files are not available.
-
-
 	"""
+
 	def __init__(self, config, is_reference):
-		self.id = config['model_id']
+		if is_reference:
+			if bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
+				self.id = 'iJL1678b-'
+			elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
+				self.id = config['user_reference']
+			elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
+				print('The \'dev_reference\' and \'user-reference\' options are mutually exclusive.')
+				self.id = 'iJL1678b-'
+			else:
+				self.id = 'iJL1678b-'
+		else:
+			self.id = config['model_id'] + '-'
+
 		self.is_reference = is_reference
-		self.create_minimal_files = config['minimal_files']
+		self.create_minimal_files = config['create_files']
 		self.curation_notes = defaultdict(list)
 		self.config = config
 		self.get_organism()
 
 	@property
 	def directory(self):
-		return self.id + "/building_data/"
+		if self.is_reference and self.id == 'iJL1678b-':
+			try:
+				from importlib.resources import files
+			except ImportError:
+				from importlib_resources import files
+			return str(files("coralme") / self.id) + "ME/building_data/"
+		else:
+			return self.config.get('out_directory', self.id) + "/building_data/"
+		#return self.id + "/building_data/"
 
 	@property
 	def _complexes_df(self):
@@ -659,7 +678,7 @@ class Organism(object):
 
 	def get_organism(self):
 		sep = "~~~~~~~~~~~~~~~~~"
-		print("Getting {}".format(self.id))
+		print("Getting {}".format(self.id[:-1]))
 		print("Checking minimal necessary files")
 		self.check_minimal_files()
 		print("{} Loading M-model {}".format(sep, sep))
@@ -774,7 +793,10 @@ class Organism(object):
 		self.get_peptide_release_factors()
 
 	def get_genbank(self):
-		gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
+		if self.is_reference:
+			gb_file = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
+		else:
+			gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
 		full_seq = []
 		genbank = []
 		pos = 0
@@ -904,7 +926,7 @@ class Organism(object):
 				"Genes of transcription unit": gene_id,
 				"Direction": "+" if feature["strand"] == 1 else "-",
 			}
-			if "RNA" in feature["type"]:
+			if "RNA" in feature["type"] and feature.get('pseudo', None) is None:
 				rnas[gene_id] = {"Common-Name": feature["product"][0], "Gene": gene_id}
 			if feature["type"] == "CDS":
 				proteins[gene_id + "-MONOMER"] = {
@@ -957,6 +979,7 @@ class Organism(object):
 			## Sync files
 			if 'RNA' in product_type and product not in RNA_df.index:
 				print('Adding {} ({}) to RNAs'.format(gene_id,product))
+				"""
 				RNA_df = RNA_df.append(
 						pandas.DataFrame.from_dict(
 							{
@@ -967,6 +990,10 @@ class Organism(object):
 							}
 						).T
 					)
+				"""
+				tmp = pandas.DataFrame.from_dict({ "{}".format(product) : { "Common-Name": product, "Gene": gene_id }}).T
+				RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+
 			elif product_type == 'MONOMER' and product not in complexes_df.index:
 				print('Adding {} ({}) to complexes'.format(gene_id,product))
 				complexes_df = complexes_df.append(
@@ -2078,7 +2105,7 @@ class Organism(object):
 	def generate_curation_notes(self):
 		import json
 		curation_notes = self.curation_notes
-		filename = self.directory + '../curation_notes.txt'
+		filename = self.directory + '/curation_notes.txt'
 		file = open(filename,'w')
 		for k,v in curation_notes.items():
 			file.write('\n')
