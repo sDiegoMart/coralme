@@ -540,6 +540,7 @@ class MEBuilder(object):
 			enz_rxn_assoc_df = enz_rxn_assoc_df.replace(
 				"", np.nan
 			).dropna()  # Remove empty rules
+
 		enz_rxn_assoc_df.index.name = "Reaction"
 		self.org.enz_rxn_assoc_df = enz_rxn_assoc_df
 		self.org.complexes_df = org_complexes_df
@@ -665,6 +666,7 @@ class MEBuilder(object):
 							protein_location.loc[
 								c, "translocase_pathway"
 							] = ref_info["translocase_pathway"][ref_c]
+
 		self.org.protein_location = protein_location
 
 	def update_translocation_multipliers(self):
