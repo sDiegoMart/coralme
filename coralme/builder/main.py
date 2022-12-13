@@ -31,13 +31,16 @@ class MEBuilder(object):
 	----------
 
 	"""
-	def __init__(self, *args):
+	def __init__(self, *args, **kwargs):
 		import anyconfig
 
 		config = {}
 		for input_file in args:
 			with open(input_file, 'r') as infile:
 				config.update(anyconfig.load(infile))
+
+		if kwargs:
+			config.update(kwargs)
 
 		self.me_model = coralme.core.model.MEModel(config['model_id'], config.get('growth_key', 'mu'))
 		self.configuration = config
@@ -629,24 +632,35 @@ class MEBuilder(object):
 								continue
 							# Check if already in protein location, if not add.
 							if not protein_location.any().any() or not protein_location['Protein'].eq(gene_string).any():
-								protein_location = protein_location.append(
-									pandas.DataFrame.from_dict(
-										{
-											c: {
-												"Complex_compartment": ref_info[
-													"Complex_compartment"
-												][ref_c],
-												"Protein": gene_string,
-												"Protein_compartment": ref_info[
-													"Protein_compartment"
-												][ref_c],
-												"translocase_pathway": ref_info[
-													"translocase_pathway"
-												][ref_c],
-											}
+								#protein_location = protein_location.append(
+									#pandas.DataFrame.from_dict(
+										#{
+											#c: {
+												#"Complex_compartment": ref_info[
+													#"Complex_compartment"
+												#][ref_c],
+												#"Protein": gene_string,
+												#"Protein_compartment": ref_info[
+													#"Protein_compartment"
+												#][ref_c],
+												#"translocase_pathway": ref_info[
+													#"translocase_pathway"
+												#][ref_c],
+											#}
+										#}
+									#).T
+								#)
+
+								tmp = pandas.DataFrame.from_dict(
+									{ c: {
+										"Complex_compartment": ref_info["Complex_compartment"][ref_c],
+										"Protein": gene_string,
+										"Protein_compartment": ref_info["Protein_compartment"][ref_c],
+										"translocase_pathway": ref_info["translocase_pathway"][ref_c],
 										}
-									).T
-								)
+									}).T
+
+								protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
 							# Update translocase pathway with homology
 							protein_location.loc[
 								c, "translocase_pathway"
