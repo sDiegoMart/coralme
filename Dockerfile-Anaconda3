@@ -1,5 +1,5 @@
-# Use the python3 official image as parent image
-FROM python:3.7
+# Use the anaconda3 image as parent image
+FROM continuumio/anaconda3
 
 # set shell
 RUN export SHELL=/bin/bash
@@ -20,7 +20,7 @@ RUN python -m pip install cpython
 RUN python -m pip install numpy==1.23.0
 RUN python -m pip install scipy
 RUN python -m pip install sympy
-RUN python -m pip install pandas
+RUN python -m pip install pandas==1.5.1
 RUN python -m pip install biopython
 RUN python -m pip install jsonschema
 RUN python -m pip install ipykernel
