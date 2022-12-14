@@ -2,7 +2,10 @@
 import numpy
 import pandas
 import warnings
-warnings.simplefilter(action = 'ignore', category = pandas.errors.SettingWithCopyWarning)
+try:
+    warnings.simplefilter(action = 'ignore', category = pandas.errors.SettingWithCopyWarning)
+except:
+    warnings.warn("This pandas version does not allow for correct warning handling. Pandas 1.5.1 is suggested.")
 
 def correct_input(df):
 	# correct Gene Locus ID to reflect if they are proteins or RNAs

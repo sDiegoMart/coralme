@@ -88,7 +88,7 @@ def main():
 			'Biopython',
 			'tqdm',
 			'scipy',
-			'pandas==1.5.1',
+			'pandas',
 			'sympy',
 			'jsonschema',
 			'anyconfig'
