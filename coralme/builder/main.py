@@ -764,7 +764,7 @@ class MEBuilder(object):
 			df = df.reset_index()
 			m_to_me_mets = m_to_me_mets.reset_index(drop=True)
 			#m_to_me_mets = m_to_me_mets.append(df)
-			m_to_me_mets = m_to_me_mets.concat([m_to_me_mets, df], axis = 0, join = 'outer')
+			m_to_me_mets = pandas.concat([m_to_me_mets, df], axis = 0, join = 'outer')
 			m_to_me_mets = m_to_me_mets.set_index("m_name")
 			self.org.m_to_me_mets = m_to_me_mets
 		# Warnings
