@@ -41,14 +41,14 @@ class Organism(object):
     def __init__(self, config, is_reference):
         if is_reference:
             if bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
-                self.id = 'iJL1678b-'
+                self.id = 'iJL1678b'
             elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 self.id = config['user_reference']
             elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 print('The \'dev_reference\' and \'user-reference\' options are mutually exclusive.')
-                self.id = 'iJL1678b-'
+                self.id = 'iJL1678b'
             else:
-                self.id = 'iJL1678b-'
+                self.id = 'iJL1678b'
         else:
             self.id = config['model_id']
 
@@ -56,7 +56,7 @@ class Organism(object):
         self.create_minimal_files = bool(config['create_files'])
         self.curation_notes = defaultdict(list)
         self.config = config
-        
+
         data = \
             'code,interpretation,gram\n' \
             'CCI-CW-BAC-POS-GP,Cell_Wall,pos\n' \
@@ -66,20 +66,27 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data))
-        
+
         self.get_organism()
 
     @property
     def directory(self):
-        if self.is_reference and self.id == 'iJL1678b-':
+        if self.is_reference and self.id == 'iJL1678b':
             try:
                 from importlib.resources import files
             except ImportError:
                 from importlib_resources import files
-            return str(files("coralme") / self.id) + "ME/building_data/"
+            return str(files("coralme") / self.id) + "-ME/building_data/"
         else:
             return self.config.get('out_directory', self.id) + "/building_data/"
         #return self.id + "/building_data/"
+
+    @property
+    def blast_directory(self):
+        if self.is_reference:
+            pass
+        else:
+            return self.config.get('out_directory', self.id) + "/blast_files_and_results/"
 
     @property
     def _complexes_df(self):
@@ -689,9 +696,10 @@ class Organism(object):
 
     def get_organism(self):
         sep = " "*5
-        print("Getting {}".format(self.id[:-1]))
-        print("Checking minimal necessary files")
-        self.check_minimal_files()
+        print("Getting {}".format(self.id))
+        if self.id != 'iJL1678b':
+            print("Checking minimal necessary files")
+            self.check_minimal_files()
         print("{} Loading M-model {}".format(sep, sep))
         self.m_model = self._m_model
         print("{} Checking M-model {}".format(sep, sep))
@@ -853,6 +861,9 @@ class Organism(object):
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
             print("{} directory was created.".format(self.directory))
+        if not os.path.isdir(self.blast_directory):
+            os.makedirs(self.blast_directory)
+            print("{} directory was created.".format(self.blast_directory))
         #if not os.path.isfile(self.directory + "genome.gb"):
             #raise IOError("{} file is required".format(self.directory + "genome.gb"))
         if not os.path.isfile(self.directory + "genes.txt"):
@@ -990,8 +1001,8 @@ class Organism(object):
                     warn_genes.append(gene_id)
                     continue
 
-            if ' ' in product or ('RNA' not in product and 'MONOMER' not in product): 
-                ## Correct product. Likely product is a description and not an actual 
+            if ' ' in product or ('RNA' not in product and 'MONOMER' not in product):
+                ## Correct product. Likely product is a description and not an actual
                 ## product ID like GENE-MONOMER or GENE-tRNA
                 product = '{}-{}'.format(gene_name,product_type)
                 gene_dictionary.loc[gene_name,'Product'] = product
@@ -1262,7 +1273,7 @@ class Organism(object):
             return
         complexes_df = self.complexes_df
         ribo_df = complexes_df.loc[
-            complexes_df["name"].str.contains("ribosomal.*(subunit)?.* protein", regex=True)
+            complexes_df["name"].str.contains("ribosomal.*(?:subunit)?.* protein", regex=True)
         ]
         ribosome_stoich = self.ribosome_stoich
         warn_proteins = []
@@ -1414,7 +1425,7 @@ class Organism(object):
         proteins_df = self.proteins_df["Common-Name"].dropna()
         trna_ligases = proteins_df[
             proteins_df.str.contains(
-                "tRNA [-]{,2}(synthetase|ligase)(?!.*subunit.*)", regex=True
+                "tRNA [-]{,2}(?:synthetase|ligase)(?!.*subunit.*)", regex=True
             )
         ].to_dict()
         warn_ligases = []
@@ -1465,9 +1476,9 @@ class Organism(object):
         gb_file = self.gb_file
 
         if not outdir:
-            outdir = self.directory
-            
-        outdir += "blast_files_and_results/"
+            outdir = self.blast_directory
+
+        #outdir += "blast_files_and_results/"
         FASTA_file = outdir + "{}.faa".format(org_id)
 #         FASTA_file = "{}.faa".format(org_id)
 
@@ -1545,7 +1556,7 @@ class Organism(object):
             RNAP = force_RNAP_as
         else:
             complexes_df = self.complexes_df
-            rnap_regex = "(RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
+            rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
             RNAP = complexes_df[
                 complexes_df["name"].str.contains(rnap_regex, regex=True)
             ].index.to_list()
@@ -2044,20 +2055,27 @@ class Organism(object):
                         continue
                     met = m_to_me.loc[metabolite.id, "me_name"]
                 coefficient = rxn.get_coefficient(metabolite)
-                df = df.append(
-                    pandas.DataFrame.from_dict(
-                        {
-                            rxn.id: {
-                                "Metabolites": met,
-                                "Compartment": compartment,
-                                "Stoichiometry": coefficient,
-                            }
-                        }
-                    ).T
-                )
+                #df = df.append(
+                    #pandas.DataFrame.from_dict(
+                        #{
+                            #rxn.id: {
+                                #"Metabolites": met,
+                                #"Compartment": compartment,
+                                #"Stoichiometry": coefficient,
+                            #}
+                        #}
+                    #).T
+                #)
+                tmp = pandas.DataFrame.from_dict({
+                    rxn.id: {
+                        "Metabolites": met,
+                        "Compartment": compartment,
+                        "Stoichiometry": coefficient,
+                        }}).T
+                df = pandas.concat([df, tmp], axis = 0, join = 'outer')
         df.index.name = "Reaction"
         self.reaction_matrix = df
-        
+
         df.to_csv(self.directory + 'reaction_matrix.txt')
         # Warnings
         if warn_rxns:

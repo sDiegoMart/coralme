@@ -91,21 +91,21 @@ class MEBuilder(object):
 
 			if bool(config.get('run_bbh_blast', False)):
 				print("{} Running BLAST {}".format(sep, sep))
-				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.directory)
-				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.directory)
+				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.blast_directory)
+				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
 
 				def execute(cmd):
 					cmd = re.findall(r'(?:[^\s,"]|"+(?:=|\\.|[^"])*"+)+', cmd)
 					out, err = subprocess.Popen(cmd, shell = False, stdout = subprocess.PIPE, stderr = subprocess.PIPE).communicate()
 
 				# make blast databases
-				folder = self.org.directory + 'blast_files_and_results'
-				execute('makeblastdb -in org.faa -dbtype prot -out {:s}/org'.format(folder))
-				execute('makeblastdb -in ref.faa -dbtype prot -out {:s}/ref'.format(folder))
+				folder = self.org.blast_directory
+				execute('makeblastdb -in {:s}/org.faa -dbtype prot -out {:s}/org'.format(folder, folder))
+				execute('makeblastdb -in {:s}/ref.faa -dbtype prot -out {:s}/ref'.format(folder, folder))
 
 				# bidirectional blast
-				execute('blastp -db {:s}/org -query {:s}/ref.faa -num_threads 4 -out {:s}/org_as_db.txt -outfmt 6'.format(folder, folder))
-				execute('blastp -db {:s}/ref -query {:s}/org.faa -num_threads 4 -out {:s}/ref_as_db.txt -outfmt 6'.format(folder, folder))
+				execute('blastp -db {:s}/org -query {:s}/ref.faa -num_threads 4 -out {:s}/org_as_db.txt -outfmt 6'.format(folder, folder, folder))
+				execute('blastp -db {:s}/ref -query {:s}/org.faa -num_threads 4 -out {:s}/ref_as_db.txt -outfmt 6'.format(folder, folder, folder))
 
 				#os.system('{}/auto_blast.sh {}'.format(self.directory,self.org.directory))
 
@@ -532,19 +532,26 @@ class MEBuilder(object):
 					elif cplx_id not in org_complexes_df.index:
 						# New cplx not found in BioCyc files
 						print("Adding {} to complexes from m_model".format(cplx_id))
-						org_complexes_df = org_complexes_df.append(
-							pandas.DataFrame.from_dict(
-								{
-									cplx_id: {
-										"name": str(rxn.name),
-										"genes": " AND ".join(
-											["{}()".format(g) for g in rule.split(' and ')]
-										),
-										"source": "{}({})".format(m_model.id, rxn.id),
-									}
-								}
-							).T
-						)
+						#org_complexes_df = org_complexes_df.append(
+							#pandas.DataFrame.from_dict(
+								#{
+									#cplx_id: {
+										#"name": str(rxn.name),
+										#"genes": " AND ".join(
+											#["{}()".format(g) for g in rule.split(' and ')]
+										#),
+										#"source": "{}({})".format(m_model.id, rxn.id),
+									#}
+								#}
+							#).T
+						#)
+						tmp = pandas.DataFrame.from_dict({
+							cplx_id: {
+								"name": str(rxn.name),
+								"genes": " AND ".join(["{}()".format(g) for g in rule.split(' and ')]),
+								"source": "{}({})".format(m_model.id, rxn.id),
+								}}).T
+						org_complexes_df = pandas.concat([org_complexes_df, tmp], axis = 0, join = 'outer')
 				enz_rxn_assoc_dict[rxn.id] = generified_rule
 			enz_rxn_assoc_df = pandas.DataFrame.from_dict({"Complexes": enz_rxn_assoc_dict})
 			enz_rxn_assoc_df = enz_rxn_assoc_df.replace(
@@ -756,7 +763,8 @@ class MEBuilder(object):
 			df.index.name = "m_name"
 			df = df.reset_index()
 			m_to_me_mets = m_to_me_mets.reset_index(drop=True)
-			m_to_me_mets = m_to_me_mets.append(df)
+			#m_to_me_mets = m_to_me_mets.append(df)
+			m_to_me_mets = m_to_me_mets.concat([m_to_me_mets, df], axis = 0, join = 'outer')
 			m_to_me_mets = m_to_me_mets.set_index("m_name")
 			self.org.m_to_me_mets = m_to_me_mets
 		# Warnings

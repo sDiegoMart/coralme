@@ -33,8 +33,8 @@ class Homology(object):
 		self.ref = ref
 
 		column_names = 'qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore'.split('\t')
-		self.org_df = pandas.read_csv(self.org.directory + 'blast_files_and_results/org_as_db.txt', sep = '\t', index_col = 0, names = column_names)
-		self.ref_df = pandas.read_csv(self.org.directory + 'blast_files_and_results/ref_as_db.txt', sep = '\t', index_col = 0, names = column_names)
+		self.org_df = pandas.read_csv(self.org.blast_directory + '/org_as_db.txt', sep = '\t', index_col = 0, names = column_names)
+		self.ref_df = pandas.read_csv(self.org.blast_directory + '/ref_as_db.txt', sep = '\t', index_col = 0, names = column_names)
 
 		self.get_mutual_hits(evalue = evalue)
 
