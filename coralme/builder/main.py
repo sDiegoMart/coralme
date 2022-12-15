@@ -1108,7 +1108,8 @@ class MEBuilder(object):
 		floats = {}
 		dataframes = {}
 		for i in dir(self.org):
-			if i[0] == '_':continue
+			if i[0] == '_':
+				continue
 			attr = getattr(self.org,i)
 			for c in include:
 				if isinstance(attr,c):
@@ -1142,7 +1143,7 @@ class MEReconstruction(object):
 
 		return None
 
-	def input_data(self):
+	def input_data(self, m_model):
 		config = self.configuration
 
 		def read(filename, columns = []):
@@ -1182,8 +1183,8 @@ class MEReconstruction(object):
 		if pathlib.Path(filename).is_file():
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
-			# TODO: generate a minimal dataframe from genbank and m-model
-			self.df_data = pandas.DataFrame()
+			# generate a minimal dataframe from genbank and m-model
+			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(config['genbank-path'], m_model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
 		return coralme.builder.preprocess_inputs.get_df_input_from_excel(self.df_data, self.df_rxns)
@@ -1193,13 +1194,6 @@ class MEReconstruction(object):
 
 		model = config.get('model_id', 'coralME')
 		directory = config.get('log_directory', './')
-
-		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self)
-
-		df_tus = self.df_tus
-		df_rmsc = self.df_rmsc
-		df_subs = self.df_subs
-		df_mets = self.df_mets
 
 		# ## Part 1: Create a minimum solveable ME-Model
 		logging.basicConfig(filename = '{:s}/step1-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
@@ -1225,6 +1219,20 @@ class MEReconstruction(object):
 		# Define ME-model compartments
 		me.compartments = me.global_info['compartments']
 
+		# Define M-Model
+		if me.global_info['m-model-path'].endswith('.json'):
+			me.gem = cobra.io.load_json_model(me.global_info['m-model-path'])
+		else:
+			me.gem = cobra.io.read_sbml_model(me.global_info['m-model-path'])
+
+		# Read user inputs
+		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem)
+
+		df_tus = self.df_tus
+		df_rmsc = self.df_rmsc
+		df_subs = self.df_subs
+		df_mets = self.df_mets
+
 		# Remove default ME-Model SubReactions that are not mapped in the organism-specific matrix
 		subrxns = set(df_data[df_data['ME-Model SubReaction'].notnull()]['ME-Model SubReaction'])
 
@@ -1242,12 +1250,7 @@ class MEReconstruction(object):
 		#
 		# Different metabolite types have different properties in a ME-Model, so complexes are added to the model as a *ComplexData*, not as a *Metabolite*. Components in the M-Model that are actually *Complexes* are compiled in the *cplx_lst* variable.
 
-		# Define M-Model
-		if me.global_info['m-model-path'].endswith('.json'):
-			me.gem = cobra.io.load_json_model(me.global_info['m-model-path'])
-		else:
-			me.gem = cobra.io.read_sbml_model(me.global_info['m-model-path'])
-
+		# Modify M-Model
 		m_model = coralme.builder.flat_files.process_m_model(
 			m_model = me.gem,
 			rxns_data = df_rxns, # metadata of new reactions
@@ -1681,12 +1684,12 @@ class MEReconstruction(object):
 		lipid_modifications = me.global_info['lipid_modifications']
 		lipoprotein_precursors = me.global_info['lipoprotein_precursors']
 
-		# coralme.translocation.add_lipoprotein_formation(
+		# TODO: coralme.translocation.add_lipoprotein_formation(
 		# me, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = True)
 
 		# ### 2. Correct complex formation IDs if they contain lipoproteins
 
-		# for gene in tqdm.tqdm(coralme.translocation.lipoprotein_precursors.values()):
+		# TODO: for gene in tqdm.tqdm(coralme.translocation.lipoprotein_precursors.values()):
 		#	 compartment = compartment_dict.get(gene)
 		#	 for rxn in me.metabolites.get_by_id('protein_' + gene + '_' + compartment).reactions:
 		#		 if isinstance(rxn, coralme.core.reaction.ComplexFormation):

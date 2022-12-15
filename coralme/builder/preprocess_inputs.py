@@ -1,11 +1,100 @@
 #!/usr/bin/python3
 import numpy
+import pathlib
 import pandas
 import warnings
+from Bio import SeqIO
+
 try:
-    warnings.simplefilter(action = 'ignore', category = pandas.errors.SettingWithCopyWarning)
+	warnings.simplefilter(action = 'ignore', category = pandas.errors.SettingWithCopyWarning)
 except:
-    warnings.warn("This pandas version does not allow for correct warning handling. Pandas 1.5.1 is suggested.")
+	warnings.warn("This pandas version does not allow for correct warning handling. Pandas 1.5.1 is suggested.")
+
+def generate_organism_specific_matrix(genbank, m_model, output):
+	contigs = []
+	for contig in SeqIO.parse(genbank, 'genbank'):
+		contigs.append(contig)
+
+	# get all features
+	lst = [ x for y in [ x.features for x in contigs ] for x in y ]
+	lst = [ x for x in lst if x.type in [ 'CDS', 'ncRNA', 'tRNA', 'rRNA', 'tmRNA' ] ]
+
+	# create a pandas DataFrame with organism-specific information to be completed with the builder data
+	df = pandas.DataFrame(columns = [
+		'Gene Locus ID',
+		'Reference BBH',
+		'Definition',
+		'Feature Type',
+		'Complex Name',
+		'Complex ID',
+		'Cofactors in Modified Complex',
+		'Generic Complex ID',
+		'MetaComplex ID',
+		'ME-Model SubReaction',
+		'M-Model Reaction ID',
+		'Reaction Name',
+		'Reversibility',
+		'GroEL_dependent_folding',
+		'DnaK_dependent_folding',
+		'N_terminal_methionine_cleavage',
+		'RNA mods/enzyme',
+		'Complex Location',
+		'Subunit Location',
+		'Translocation Pathway',
+		'Translocation Multiplier'
+	])
+
+	def get_reaction(x):
+		try:
+			return [ x.id for x in m_model.genes.get_by_id(x).reactions ]
+		except:
+			return None
+
+	def get_reaction_name(x):
+		if x is not None:
+			try:
+				return m_model.reactions.get_by_id(x).name
+			except:
+				return None
+		else:
+			return None
+
+	def get_reversibility(x):
+		if x is not None:
+			try:
+				return 'TRUE' if m_model.reactions.get_by_id(x).reversibility else None
+			except:
+				return None
+		else:
+			return None
+
+	def get_spontaneous(x):
+		if x is not None:
+			if 'spontaneous' in m_model.reactions.get_by_id(x).name:
+				return 'TRUE'
+			else:
+				return None
+		else:
+			return None
+
+	df['Gene Locus ID'] = [ x.qualifiers['locus_tag'][0] for x in lst ]
+	df['Definition'] = [ x.qualifiers['product'][0] for x in lst ]
+	df['Feature Type'] = [ x.type if x.qualifiers.get('pseudo') is None else 'pseudo' for x in lst ]
+	df['M-Model Reaction ID'] = df['Gene Locus ID'].apply(get_reaction)
+	df = df.explode('M-Model Reaction ID')
+	df['Reaction Name'] = df['M-Model Reaction ID'].apply(get_reaction_name)
+	df['Reversibility'] = df['M-Model Reaction ID'].apply(get_reversibility)
+	# df['Spontaneous'] = df['M-Model Reaction ID'].apply(get_spontaneous)
+
+	# df.set_index(['Gene Locus ID', 'Definition', 'Feature type'], inplace = True)
+	df = df.sort_values(['M-Model Reaction ID', 'Gene Locus ID'])
+
+	if pathlib.Path(output).is_file():
+		pass
+	else:
+		df.to_excel(output, index = False)
+
+	return df
 
 def correct_input(df):
 	# correct Gene Locus ID to reflect if they are proteins or RNAs
