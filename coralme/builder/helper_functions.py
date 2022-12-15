@@ -105,6 +105,29 @@ def _expand_gpr(l_gpr):
 		else:
 			return ' and '.join(get_chain(l_gpr))
 
+def generify_gpr(l_gpr,rxn_id,d={}):
+	if isinstance(l_gpr,str):
+		name = l_gpr
+		return name,d
+	elif isinstance(l_gpr,list):
+		l = []
+		for i in l_gpr:
+			n,d = generify_gpr(i,rxn_id,d=d)
+			l.append(n)
+		base_name = 'generic_{}'.format(rxn_id)
+		name = '{}_{}'.format(base_name,len([i for i in d if base_name in i]))
+		d[name] = ' or '.join(l)
+		return name,d
+	elif isinstance(l_gpr,tuple):
+		l = []
+		for i in l_gpr:
+			n,d = generify_gpr(i,rxn_id,d=d)
+			l.append(n)
+		base_name = 'CPLX_{}'.format(rxn_id)
+		name = '{}-{}'.format(base_name,len([i for i in d if base_name in i]))
+		d[name] = ' and '.join(l)
+		return name,d
+
 def print_check(i,l_gpr,T):
 	print(i)
 	print(l_gpr)
