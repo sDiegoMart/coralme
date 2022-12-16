@@ -21,20 +21,23 @@ def add_iron_sulfur_modifications(me_model):
 				rxn.add_metabolites({ name + '_mod_' + fes + '(1)': -1, fes + '_c': 1, name: 1 })
 
 	# add fes transfer enzymes to proper modification data
-	mod_2fe2s = me_model.process_data.mod_2fe2s_c
-	mod_2fe2s.enzyme = 'generic_2fe2s_transfer_complex'
-	mod_2fe2s.stoichiometry = { '2fe2s_c': -1 }
-	mod_2fe2s._element_contribution = { 'Fe': 2, 'S': 2 }
+	if me_model.process_data.has_id('mod_2fe2s_c'):
+		mod_2fe2s = me_model.process_data.mod_2fe2s_c
+		mod_2fe2s.enzyme = 'generic_2fe2s_transfer_complex'
+		mod_2fe2s.stoichiometry = { '2fe2s_c': -1 }
+		mod_2fe2s._element_contribution = { 'Fe': 2, 'S': 2 }
 
-	mod_4fe4s = me_model.process_data.mod_4fe4s_c
-	mod_4fe4s.enzyme = 'generic_4fe4s_transfer_complex'
-	mod_4fe4s.stoichiometry = { '4fe4s_c': -1 }
-	mod_4fe4s._element_contribution = { 'Fe': 4, 'S': 4 }
+	if me_model.process_data.has_id('mod_4fe4s_c'):
+		mod_4fe4s = me_model.process_data.mod_4fe4s_c
+		mod_4fe4s.enzyme = 'generic_4fe4s_transfer_complex'
+		mod_4fe4s.stoichiometry = { '4fe4s_c': -1 }
+		mod_4fe4s._element_contribution = { 'Fe': 4, 'S': 4 }
 
-	mod_3fe4s = me_model.process_data.mod_3fe4s_c
-	mod_3fe4s.enzyme = 'generic_4fe4s_transfer_complex'
-	mod_3fe4s.stoichiometry = { '4fe4s_c': -1, 'fe2_c': 1 }
-	mod_3fe4s._element_contribution = { 'Fe': 3, 'S': 4 }
+	if me_model.process_data.has_id('mod_3fe4s_c'):
+		mod_3fe4s = me_model.process_data.mod_3fe4s_c
+		mod_3fe4s.enzyme = 'generic_4fe4s_transfer_complex'
+		mod_3fe4s.stoichiometry = { '4fe4s_c': -1, 'fe2_c': 1 }
+		mod_3fe4s._element_contribution = { 'Fe': 3, 'S': 4 }
 
 	fes_chaperones = me_model.global_info['complex_cofactors']['fes_chaperones']
 	for chaperone in set(fes_chaperones.values()):

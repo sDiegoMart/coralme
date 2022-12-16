@@ -106,45 +106,49 @@ def add_translocation_pathways(model, pathways_df, abbreviation_to_pathway, memb
 			add_translocation_data_and_reaction(
 				model, pathways_alt, preprocessed_id, processed_id, compartment, peptide_data, membrane_constraints, alt = True)
 
-# add_lipoprotein_formation helper function
-def add_lipoprotein_data_and_reaction(first_lipid, second_lipid, update):
-
-	# Add PostTranslation Data, modifications and surface area
-	data = PostTranslationData(reaction_prefix + '_' + second_lipid, model, processed_id, preprocessed_id)
-	data.subreactions['mod_' + first_lipid] = 1
-	data.subreactions['mod2_' + second_lipid + '_p'] = 1
-	data.biomass_type = 'lipid_biomass'
-
-	if membrane_constraints:
-		thickness_dict = model.global_info['membrane_thickness']
-		thickness = thickness_dict['Outer_Membrane']
-
-		# From Liu et al. x2 for each to account for each leaflet
-		protein_SA = 1.21 / thickness * 2 * mass * mmol / nm2_per_m2
-		data.surface_area = {
-			'SA_protein_' + compartment: -protein_SA,
-			'SA_lipoprotein': 1. * mmol / nm2_per_m2
-			}
-
-	# Add Reaction to model and associated it with its data
-	rxn = PostTranslationReaction(reaction_prefix + '_' + second_lipid)
-	model.add_reaction(rxn)
-	rxn.posttranslation_data = data
-
-	if update:
-		rxn.update()
-
 def add_lipoprotein_formation(model, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = True):
+	# add_lipoprotein_formation helper function
+	def add_lipoprotein_data_and_reaction(first_lipid, second_lipid, update):
+
+		# Add PostTranslation Data, modifications and surface area
+		data = PostTranslationData(reaction_prefix + '_' + second_lipid, model, processed_id, preprocessed_id)
+		data.subreactions['mod_' + first_lipid] = 1
+		data.subreactions['mod2_' + second_lipid + '_p'] = 1
+		data.biomass_type = 'lipid_biomass'
+
+		if membrane_constraints:
+			thickness_dict = model.global_info['membrane_thickness']
+			thickness = thickness_dict['Outer_Membrane']
+
+			# From Liu et al. x2 for each to account for each leaflet
+			protein_SA = 1.21 / thickness * 2 * mass * mmol / nm2_per_m2
+			data.surface_area = {
+				'SA_protein_' + compartment: -protein_SA,
+				'SA_lipoprotein': 1. * mmol / nm2_per_m2
+				}
+
+		# Add Reaction to model and associated it with its data
+		rxn = PostTranslationReaction(reaction_prefix + '_' + second_lipid)
+		model.add_reaction(rxn)
+		rxn.posttranslation_data = data
+
+		if update:
+			rxn.update()
+
 	# loop through all proteins which need lipid modifications (lipoproteins)
 	for protein in lipoprotein_precursors.values():
 		compartment = compartment_dict.get(protein)
-		protein_met = model.metabolites.get_by_id('protein_' + protein)
-		mass = protein_met.formula_weight / 1000.  # in kDa
+		if model.metabolites.has_id('protein_' + protein):
+			print(compartment, protein)
+			protein_met = model.metabolites.get_by_id('protein_' + protein)
+			mass = protein_met.formula_weight / 1000.  # in kDa
 
-		processed_id = 'protein_' + protein + '_lipoprotein_' + compartment
-		preprocessed_id = 'protein_' + protein + '_' + compartment
+			processed_id = 'protein_' + protein + '_lipoprotein_' + compartment
+			preprocessed_id = 'protein_' + protein + '_' + compartment
 
-		for mod in lipid_modifications:
-			reaction_prefix = protein + '_lipid_modification_' + mod
-			add_lipoprotein_data_and_reaction(mod, 'pg160', update = update)
-			add_lipoprotein_data_and_reaction(mod, 'pe160', update = update)
+			for mod in lipid_modifications:
+				reaction_prefix = protein + '_lipid_modification_' + mod
+				add_lipoprotein_data_and_reaction(mod, 'pg160', update = update)
+				add_lipoprotein_data_and_reaction(mod, 'pe160', update = update)
+		else:
+			print('problem with', 'protein_' + protein)

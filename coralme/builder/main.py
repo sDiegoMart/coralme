@@ -1136,15 +1136,28 @@ class MEBuilder(object):
 		for k,v in dataframes.items():
 			v.to_csv(directory + k + '.csv')
 
+	def build_me_model(self):
+		coralme.builder.main.MEReconstruction(self).build_me_model()
+
+	def troubleshoot(self, growth_key_and_value = None):
+		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
+
 class MEReconstruction(object):
 	"""
-	MEReconstruction class for reconstructing a ME-Model from user/automated input
+	MEReconstruction class for reconstructing a ME-model from user/automated input
 
 	Parameters
 	----------
 
 	"""
 	def __init__(self, builder):
+		try:
+			# only if builder.generate_files() was before builder.build_me_model()
+			self.org = builder.org
+			self.homology = builder.homology
+		except:
+			pass
+
 		self.me_model = builder.me_model
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
@@ -1153,6 +1166,33 @@ class MEReconstruction(object):
 
 	def input_data(self, m_model):
 		config = self.configuration
+
+		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
+		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
+			config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
+
+			# replace IDs
+			for name, rnap in config['rna_polymerases'].items():
+				for key, value in rnap.items():
+					config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
+
+		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
+			config['lipid_modifications'] = self.org.lipids
+
+		if config.get('lipoprotein_precursors', None) is None or len(config.get('lipoprotein_precursors')) == 0:
+			config['lipoprotein_precursors'] = self.org.lipoprotein_precursors
+
+		# modify options to not run again blast
+		config['create_files'] = False
+		config['run_bbh_blast'] = False
+		config['dev_reference'] = False
+
+		with open('coralme-config.json', 'w') as outfile:
+			anyconfig.dump(config, outfile)
+		with open('coralme-config.yaml', 'w') as outfile:
+			anyconfig.dump(config, outfile)
+		#with open('automated.toml', 'w') as outfile:
+			#anyconfig.dump(config, outfile)
 
 		def read(filename, columns = []):
 			if pathlib.Path(filename).is_file():
@@ -1192,7 +1232,9 @@ class MEReconstruction(object):
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
 			# generate a minimal dataframe from genbank and m-model
-			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(config['genbank-path'], m_model = m_model, output = filename)
+			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(config['genbank-path'], model = m_model)
+			# complete minimal dataframe with automated info
+			self.df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, self.df_data, model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
 		return coralme.builder.preprocess_inputs.get_df_input_from_excel(self.df_data, self.df_rxns)
@@ -1203,11 +1245,11 @@ class MEReconstruction(object):
 		model = config.get('model_id', 'coralME')
 		directory = config.get('log_directory', './')
 
-		# ## Part 1: Create a minimum solveable ME-Model
+		# ## Part 1: Create a minimum solveable ME-model
 		logging.basicConfig(filename = '{:s}/step1-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
 		logging.captureWarnings(True)
 
-		# This will include the bare minimum representations of that still produce a working ME-Model:
+		# This will include the bare minimum representations of that still produce a working ME-model:
 		# - Metabolic Reactions
 		# - Transcription Reactions
 		# - Translation Reactions
@@ -1241,7 +1283,7 @@ class MEReconstruction(object):
 		df_subs = self.df_subs
 		df_mets = self.df_mets
 
-		# Remove default ME-Model SubReactions that are not mapped in the organism-specific matrix
+		# Remove default ME-model SubReactions that are not mapped in the organism-specific matrix
 		subrxns = set(df_data[df_data['ME-Model SubReaction'].notnull()]['ME-Model SubReaction'])
 
 		# list of subreactions
@@ -1254,9 +1296,9 @@ class MEReconstruction(object):
 
 		# ### 2) Load metabolites and build Metabolic reactions
 		#
-		# It creates a new M-Model, then incorporates it into the ME-Model using the *add_m_model_content* function. Reactions are added directly and metabolites are added as *StoichiometricData* (*me.stoichiometric_data*).
+		# It creates a new M-Model, then incorporates it into the ME-model using the *add_m_model_content* function. Reactions are added directly and metabolites are added as *StoichiometricData* (*me.stoichiometric_data*).
 		#
-		# Different metabolite types have different properties in a ME-Model, so complexes are added to the model as a *ComplexData*, not as a *Metabolite*. Components in the M-Model that are actually *Complexes* are compiled in the *cplx_lst* variable.
+		# Different metabolite types have different properties in a ME-model, so complexes are added to the model as a *ComplexData*, not as a *Metabolite*. Components in the M-Model that are actually *Complexes* are compiled in the *cplx_lst* variable.
 
 		# Modify M-Model
 		m_model = coralme.builder.flat_files.process_m_model(
@@ -1316,7 +1358,7 @@ class MEReconstruction(object):
 			complex_mods = df_ptms,
 			compartments = { v:k for k,v in me._compartments.items() })
 
-		# Add complexes into the ME-Model as coralme.core.processdata.ComplexData objects.
+		# Add complexes into the ME-model as coralme.core.processdata.ComplexData objects.
 		# Modifications are added as SubReactions
 		coralme.util.building.add_model_complexes(me, cplx_dct, mods_dct)
 
@@ -1325,7 +1367,7 @@ class MEReconstruction(object):
 			data.subreactions = {}
 
 		# Add ComplexFormation reactions for each of the ComplexData
-		for data in tqdm.tqdm(list(me.complex_data), 'Adding ComplexFormation into the ME-Model...', bar_format = bar_format):
+		for data in tqdm.tqdm(list(me.complex_data), 'Adding ComplexFormation into the ME-model...', bar_format = bar_format):
 			formation = data.formation
 			if formation:
 				formation.update()
@@ -1341,7 +1383,7 @@ class MEReconstruction(object):
 		# This step was originally in the second part of the builder process, and was moved here to be able to use generics in enzymes associated to metabolic reactions.
 
 		generics = coralme.builder.preprocess_inputs.get_generics(df_data)
-		for generic, components in tqdm.tqdm(generics, 'Adding Generic(s) into the ME-Model...', bar_format = bar_format):
+		for generic, components in tqdm.tqdm(generics, 'Adding Generic(s) into the ME-model...', bar_format = bar_format):
 			coralme.core.processdata.GenericData(generic, me, components).create_reactions()
 
 		# ### 6) Add dummy reactions to model and the *unmodeled_protein_fraction* constraint
@@ -1358,9 +1400,9 @@ class MEReconstruction(object):
 		met = coralme.core.component.Constraint('unmodeled_protein_biomass')
 		rxn.add_metabolites({'protein_biomass': -mass, 'protein_dummy': -1, met: mass})
 
-		# ### 7) Associate Complex(es) to Metabolic reactions and build the ME-Model metabolic network
+		# ### 7) Associate Complex(es) to Metabolic reactions and build the ME-model metabolic network
 
-		# Associate a reaction id with the ME-Model complex id (including modifications)
+		# Associate a reaction id with the ME-model complex id (including modifications)
 		rxn_to_cplx_dict = coralme.builder.flat_files.get_reaction_to_complex(m_model, df_enz2rxn)
 		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'] == True].index.values)
 
@@ -1438,13 +1480,13 @@ class MEReconstruction(object):
 		dna_replication.lower_bound = dna_demand_bound
 		dna_replication.upper_bound = dna_demand_bound
 
-		# ### 9) Save ME-Model as a pickle file
+		# ### 9) Save ME-model as a pickle file
 
 		import pickle
 		with open('MEModel-step1-{:s}.pkl'.format(model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		print('ME-Model was saved as MEModel-step1-{:s}.pkl'.format(model))
+		print('ME-model was saved as MEModel-step1-{:s}.pkl'.format(model))
 
 		# ## Part 2: Add metastructures to solving ME-model
 		logging.basicConfig(filename = '{:s}/step2-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
@@ -1476,13 +1518,13 @@ class MEReconstruction(object):
 		# The tRNA charging reactions were automatically added when loading the genome from the GenBank file. However, the charging reactions still need to be made aware of the tRNA synthetases which are responsible. Generic charged tRNAs are added to translation reactions via *SubreactionData* below.
 
 		aa_synthetase_dict = coralme.builder.preprocess_inputs.aa_synthetase_dict(df_data)
-		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-Model...', bar_format = bar_format):
+		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-model...', bar_format = bar_format):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
 		special_trna_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Special_tRNA')
 		coralme.builder.translation.add_charged_trna_subreactions(me, translation_stop_dict = me.global_info['translation_stop_dict'])
 
-		# ### 4) Add tRNA modifications into the ME-Model and asocciate them with tRNA charging reactions
+		# ### 4) Add tRNA modifications into the ME-model and asocciate them with tRNA charging reactions
 
 		# Add tRNA modifications to ME-model
 		df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['16S_rRNAs', '23S_rRNAs'])]
@@ -1494,7 +1536,7 @@ class MEReconstruction(object):
 			for data in me.process_data.query(trna['bnum']):
 				data.subreactions = trna_modifications[trna['bnum']]
 
-		# ### 5) Add translation SubReactions into the ME-Model and associate them with Translation reactions
+		# ### 5) Add translation SubReactions into the ME-model and associate them with Translation reactions
 
 		initiation_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_initiation')
 		elongation_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_elongation')
@@ -1508,10 +1550,10 @@ class MEReconstruction(object):
 
 		# ### 6) Add Transcription Metacomplexes: RNA Polymerase(s)
 
-		rna_polymerases = me.global_info['rna_polymerases']
+		rna_polymerases = me.global_info.get('rna_polymerases', {})
 
 		# Create polymerase "metabolites"
-		for rnap in tqdm.tqdm(rna_polymerases.keys(), 'Adding RNA Polymerase(s) into the ME-Model...', bar_format = bar_format):
+		for rnap in tqdm.tqdm(rna_polymerases.keys(), 'Adding RNA Polymerase(s) into the ME-model...', bar_format = bar_format):
 			rnap_obj = coralme.core.component.RNAP(rnap)
 			me.add_metabolites(rnap_obj)
 
@@ -1561,22 +1603,27 @@ class MEReconstruction(object):
 			complex_mods = df_ptms,
 			compartments = { v:k for k,v in me._compartments.items() })
 
-		for complex_id, info in tqdm.tqdm(mods_dct.items(), 'Processing ComplexData in ME-Model...', bar_format = bar_format):
+		for complex_id, info in tqdm.tqdm(mods_dct.items(), 'Processing ComplexData in ME-model...', bar_format = bar_format):
 			modifications = {}
 			for mod, value in info['modifications'].items():
 				# stoichiometry of modification determined in subreaction_data.stoichiometry
 				modifications['mod_' + mod] = abs(value)
 			me.process_data.get_by_id(complex_id).subreactions = modifications
 
-		# TODO: check if the modification is set in the configuration file
-		#coralme.builder.modifications.add_biotin_modifications(me)
-		#coralme.builder.modifications.add_lipoate_modifications(me)
-		#coralme.builder.modifications.add_iron_sulfur_modifications(me)
-		#coralme.builder.modifications.add_FeFe_and_NiFe_modifications(me)
-		#coralme.builder.modifications.add_bmocogdp_modifications(me)
+		# Check if the modification is set on any component in the organism-specific matrix
+		if me.process_data.has_id('mod_btn_c'):
+			coralme.builder.modifications.add_biotin_modifications(me)
+		if me.process_data.has_id('mod_lipoyl_c'):
+			coralme.builder.modifications.add_lipoate_modifications(me)
+		if me.process_data.has_id('mod_3fe4s_c') or me.process_data.has_id('mod_4fe4s_c') or me.process_data.has_id('mod_2fe2s_c'):
+			coralme.builder.modifications.add_iron_sulfur_modifications(me)
+		if me.process_data.has_id('mod_FeFe_cofactor_c') or me.process_data.has_id('mod_NiFe_cofactor_c'):
+			coralme.builder.modifications.add_FeFe_and_NiFe_modifications(me)
+		if me.process_data.has_id('mod_bmocogdp_c'):
+			coralme.builder.modifications.add_bmocogdp_modifications(me)
 
 		# add formation reactions for each of the ComplexData
-		for data in tqdm.tqdm(list(me.complex_data), 'Adding ComplexFormation into the ME-Model...', bar_format = bar_format):
+		for data in tqdm.tqdm(list(me.complex_data), 'Adding ComplexFormation into the ME-model...', bar_format = bar_format):
 			formation = data.formation
 			if formation:
 				formation.update()
@@ -1595,7 +1642,7 @@ class MEReconstruction(object):
 			]
 		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k]]['Gene Locus ID'].tolist() for k in processing_pathways }
 
-		# Add the translation subreaction data objects to the ME-Model
+		# Add the translation subreaction data objects to the ME-model
 		coralme.builder.translation.add_subreactions_to_model(
 			me, [initiation_subreactions, elongation_subreactions, termination_subreactions, processing_subreactions])
 
@@ -1689,22 +1736,28 @@ class MEReconstruction(object):
 		for idx, compartment in df_protloc.set_index('Protein').Protein_compartment.to_dict().items():
 			compartment_dict[idx] = compartment
 
-		lipid_modifications = me.global_info['lipid_modifications']
-		lipoprotein_precursors = me.global_info['lipoprotein_precursors']
+		lipid_modifications = me.global_info.get('lipid_modifications')
+		lipoprotein_precursors = me.global_info.get('lipoprotein_precursors')
 
-		# TODO: coralme.translocation.add_lipoprotein_formation(
-		# me, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = True)
+		print(lipoprotein_precursors)
+
+		# TODO:
+		# DONT FORGET TO CHANGE UPDATE TO TRUE
+		coralme.builder.translocation.add_lipoprotein_formation(
+			me, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = False)
 
 		# ### 2. Correct complex formation IDs if they contain lipoproteins
 
-		# TODO: for gene in tqdm.tqdm(coralme.translocation.lipoprotein_precursors.values()):
-		#	 compartment = compartment_dict.get(gene)
-		#	 for rxn in me.metabolites.get_by_id('protein_' + gene + '_' + compartment).reactions:
-		#		 if isinstance(rxn, coralme.core.reaction.ComplexFormation):
-		#			 data = me.process_data.get_by_id(rxn.complex_data_id)
-		#			 value = data.stoichiometry.pop('protein_' + gene + '_' + compartment)
-		#			 data.stoichiometry['protein_' + gene + '_lipoprotein' + '_' + compartment] = value
-		#			 rxn.update()
+		# TODO:
+		#for gene in tqdm.tqdm(coralme.builder.translocation.lipoprotein_precursors.values()):
+		for gene in tqdm.tqdm(lipoprotein_precursors.values()):
+			compartment = compartment_dict.get(gene)
+			for rxn in me.metabolites.get_by_id('protein_' + gene + '_' + compartment).reactions:
+				if isinstance(rxn, coralme.core.reaction.ComplexFormation):
+					data = me.process_data.get_by_id(rxn.complex_data_id)
+					value = data.stoichiometry.pop('protein_' + gene + '_' + compartment)
+					data.stoichiometry['protein_' + gene + '_lipoprotein' + '_' + compartment] = value
+					rxn.update()
 
 		# ### 3. Braun's lipoprotein demand
 		# Metabolites and coefficients as defined in [Liu et al 2014](http://bmcsystbiol.biomedcentral.com/articles/10.1186/s12918-014-0110-6)
@@ -1736,8 +1789,8 @@ class MEReconstruction(object):
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
 
-		# Add reaction subsystems from M-Model to ME-Model
-		for rxn in tqdm.tqdm(me.gem.reactions, 'Adding reaction subsystems from M-Model into the ME-Model...', bar_format = bar_format):
+		# Add reaction subsystems from M-Model to ME-model
+		for rxn in tqdm.tqdm(me.gem.reactions, 'Adding reaction subsystems from M-Model into the ME-model...', bar_format = bar_format):
 			if rxn.id in me.process_data:
 				data = me.process_data.get_by_id(rxn.id)
 			else:
@@ -1749,7 +1802,7 @@ class MEReconstruction(object):
 		# ### 2. Add enzymatic coupling for "carriers"
 		# These are enzyme complexes that act as metabolites in a metabolic reaction.
 
-		for data in tqdm.tqdm(list(me.stoichiometric_data), 'Processing StoichiometricData in ME-Model...', bar_format = bar_format):
+		for data in tqdm.tqdm(list(me.stoichiometric_data), 'Processing StoichiometricData in ME-model...', bar_format = bar_format):
 			if data.id == 'dummy_reaction':
 				continue
 
@@ -1764,7 +1817,7 @@ class MEReconstruction(object):
 
 				data.subreactions[subreaction_id] = abs(value)
 
-		# ### 3. Add remaining complex formulas and compartments to the ME-Model
+		# ### 3. Add remaining complex formulas and compartments to the ME-model
 
 		# Update a second time to incorporate all of the metabolite formulas correctly
 		for r in tqdm.tqdm(me.reactions.query('formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
@@ -1797,11 +1850,11 @@ class MEReconstruction(object):
 		with open('MEModel-step2-{:s}.pkl'.format(model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		print('ME-Model was saved as MEModel-step2-{:s}.pkl'.format(model))
+		print('ME-model was saved as MEModel-step2-{:s}.pkl'.format(model))
 
 		n_genes = len(me.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')))
 		new_genes = n_genes * 100. / len(me.gem.genes) - 100
-		print('Done. Number of genes in the ME-Model {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
+		print('Done. Number of genes in the ME-model {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
 
 		self.me_model = me
 
@@ -1809,9 +1862,9 @@ class MEReconstruction(object):
 
 class METroubleshooter(object):
 	"""
-	METroubleshooter class for troubleshooting growth in a ME-Model
+	METroubleshooter class for troubleshooting growth in a ME-model
 
-	This class contains methods to identify gaps and obtain a feasible ME-Model.
+	This class contains methods to identify gaps and obtain a feasible ME-model.
 
 	Parameters
 	----------
@@ -1828,7 +1881,7 @@ class METroubleshooter(object):
 		print('  '*5 + 'Finding gaps from the M-Model only...')
 		m_gaps = coralme.builder.helper_functions.find_gaps(self.me_model.gem)
 
-		print('  '*5 + 'Finding gaps in the ME-Model...')
+		print('  '*5 + 'Finding gaps in the ME-model...')
 		me_gaps = coralme.builder.helper_functions.find_gaps(self.me_model, growth_key = self.me_model.mu)
 
 		idx = list(set(me_gaps.index) - set(m_gaps.index))
@@ -1855,14 +1908,14 @@ class METroubleshooter(object):
 			print('  '*5 + 'Empty set of deadends metabolites to test.')
 			return None
 
-		print('  '*5 + 'Optimizing gapfilled ME-Model...', end = '')
+		print('  '*5 + 'Optimizing gapfilled ME-model...', end = '')
 
 		if self.me_model.feasibility(keys = growth_key_and_value):
-			print(' The ME-Model is feasible.')
-			print('  '*5 + 'Gapfilled ME-Model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
+			print(' The ME-model is feasible.')
+			print('  '*5 + 'Gapfilled ME-model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
 			return True
 		else:
-			print(' The ME-Model is not feasible.')
+			print(' The ME-model is not feasible.')
 			print('  '*5 + 'Provided set of sink reactions for deadend metabolites does not allow growth.')
 			return False
 
@@ -1913,16 +1966,16 @@ class METroubleshooter(object):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		print('~ '*1 + 'Troubleshooting started...')
-		print('  '*1 + 'Checking if the ME-Model can simulate growth without gapfilling reactions...', end = '')
+		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...', end = '')
 		if self.me_model.feasibility(keys = growth_key_and_value):
-			print('  '*5 + '\nOriginal ME-Model is feasible with a tested growth rate of {:f} 1/h'.format(list(keys.values)[0]))
+			print('  '*5 + '\nOriginal ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(keys.values)[0]))
 			return None
 		else:
 			print(' FALSE.')
 			works = False
 
 		# Step 1. Find topological gaps
-		print('~ '*1 + 'Step 1. Find topological gaps in the ME-Model.')
+		print('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 		deadends = self.gap_find()
 
 		if len(deadends) != 0:
@@ -1934,12 +1987,12 @@ class METroubleshooter(object):
 
 		# Step 2. Test feasibility adding all topological gaps
 		if len(deadends) != 0:
-			print('~ '*1 + 'Step 2. Solve gap-filled ME-Model with all identified deadend metabolites.')
+			print('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
 			print('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
 			works = self.gap_fill(deadends = deadends, growth_key_and_value = growth_key_and_value)
 
 		if len(deadends) == 0 and works == False:
-			print('~ '*1 + 'Step 2. Solve gap-filled ME-Model with provided sink reactions for deadend metabolites.')
+			print('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
 		if works == False:
 			met_type = 'Metabolite'
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
@@ -1983,14 +2036,14 @@ class METroubleshooter(object):
 				if rxn.lower_bound == 0 and rxn.upper_bound == 0:
 					self.me_model.remove_reactions([rxn])
 
-			print('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-Model...')
+			print('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
 			self.me_model.optimize(max_mu = 3.0, precision = 1e-6)
-			print('  '*1 + 'Gapfilled ME-Model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
+			print('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
 
 			with open('MEModel-step3-{:s}-TS.pkl'.format(self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
-			print('\nME-Model was saved as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.me_model.id))
+			print('\nME-model was saved as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.me_model.id))
 		else:
 			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
 

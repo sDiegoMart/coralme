@@ -10,7 +10,7 @@ try:
 except:
 	warnings.warn("This pandas version does not allow for correct warning handling. Pandas 1.5.1 is suggested.")
 
-def generate_organism_specific_matrix(genbank, m_model, output):
+def generate_organism_specific_matrix(genbank, model):
 	contigs = []
 	for contig in SeqIO.parse(genbank, 'genbank'):
 		contigs.append(contig)
@@ -46,14 +46,14 @@ def generate_organism_specific_matrix(genbank, m_model, output):
 
 	def get_reaction(x):
 		try:
-			return [ x.id for x in m_model.genes.get_by_id(x).reactions ]
+			return [ x.id for x in model.genes.get_by_id(x).reactions ]
 		except:
 			return None
 
 	def get_reaction_name(x):
 		if x is not None:
 			try:
-				return m_model.reactions.get_by_id(x).name
+				return model.reactions.get_by_id(x).name
 			except:
 				return None
 		else:
@@ -62,7 +62,7 @@ def generate_organism_specific_matrix(genbank, m_model, output):
 	def get_reversibility(x):
 		if x is not None:
 			try:
-				return 'TRUE' if m_model.reactions.get_by_id(x).reversibility else None
+				return 'TRUE' if model.reactions.get_by_id(x).reversibility else None
 			except:
 				return None
 		else:
@@ -70,31 +70,286 @@ def generate_organism_specific_matrix(genbank, m_model, output):
 
 	def get_spontaneous(x):
 		if x is not None:
-			if 'spontaneous' in m_model.reactions.get_by_id(x).name:
+			if 'spontaneous' in model.reactions.get_by_id(x).name:
 				return 'TRUE'
 			else:
 				return None
 		else:
 			return None
 
-	df['Gene Locus ID'] = [ x.qualifiers['locus_tag'][0] for x in lst ]
-	df['Definition'] = [ x.qualifiers['product'][0] for x in lst ]
+	df['Gene Locus ID'] = [ x.qualifiers['locus_tag'][0] if x.qualifiers.get('locus_tag', None) is not None else None for x in lst ]
+	df['Old Locus ID'] = [ x.qualifiers['old_locus_tag'][0] if x.qualifiers.get('old_locus_tag', None) is not None else None for x in lst ]
+	df['Definition'] = [ x.qualifiers['product'][0] if x.qualifiers.get('product', None) is not None else None for x in lst ]
 	df['Feature Type'] = [ x.type if x.qualifiers.get('pseudo') is None else 'pseudo' for x in lst ]
-	df['M-Model Reaction ID'] = df['Gene Locus ID'].apply(get_reaction)
+
+	df['M-Model Reaction ID'] = df['Old Locus ID'].apply(lambda x: get_reaction(x))
+	df['M-Model Reaction ID'].update(df['Gene Locus ID'].apply(lambda x: get_reaction(x)))
 	df = df.explode('M-Model Reaction ID')
-	df['Reaction Name'] = df['M-Model Reaction ID'].apply(get_reaction_name)
-	df['Reversibility'] = df['M-Model Reaction ID'].apply(get_reversibility)
-	# df['Spontaneous'] = df['M-Model Reaction ID'].apply(get_spontaneous)
+
+	df['Reaction Name'] = df['M-Model Reaction ID'].apply(lambda x: get_reaction_name(x))
+	df['Reversibility'] = df['M-Model Reaction ID'].apply(lambda x: get_reversibility(x))
 
 	# df.set_index(['Gene Locus ID', 'Definition', 'Feature type'], inplace = True)
-	df = df.sort_values(['M-Model Reaction ID', 'Gene Locus ID'])
+	return df.sort_values(['M-Model Reaction ID', 'Gene Locus ID'])
+
+def complete_organism_specific_matrix(builder, data, model, output):
+	def bbh(x, builder):
+		return builder.homology.mutual_hits.get(x, None)
+
+	def monomers(x, builder):
+		cplxID = builder.homology.org_cplx_homolog.get(x + '-MONOMER', None)
+		if cplxID is None:
+			return cplxID
+		else:
+			return cplxID + ':1'
+
+	def complexes(x, df):
+		cplxID = df[df['genes'].str.contains(x)]
+		if len(cplxID) == 0:
+			return None
+		else:
+			return cplxID.index.to_list()
+
+	def cofactors(x, builder):
+		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
+		mods = dct.get(x + '-MONOMER', None)
+		if mods is None:
+			return mods
+		else:
+			return ' AND '.join([ x if '(' in x else x + '(1)' for x in mods.split('_mod_')[1:] ])
+
+	def generics_from_gene(name, builder):
+		lst = []
+		for key, value in builder.org.generic_dict.items():
+			values = [ x.split('_mod_')[0] for x in value['enzymes'] ]
+			if name + '-MONOMER' in values:
+				lst.append(key.replace('generic_', ''))
+			if 'RNA_' + name in values:
+				lst.append(key.replace('generic_', ''))
+
+		if len(lst) >= 1:
+			return lst
+
+	def rnapol(x, builder):
+		lst = [ x.replace('-MONOMER', '') for x in builder.org.RNAP ]
+		if x['Gene Locus ID'] in lst:
+			return 'RNAP'
+
+	def ribosome(x, builder):
+		lst = [ builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']]
+		lst = [ x for y in lst for x in y ]
+
+		if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+			return 'ribosome:1'
+
+	def degradosome(x, builder):
+		lst = builder.org.rna_degradosome['rna_degradosome']['enzymes']
+		lst = [ x.split('_mod_')[0] for x in lst ]
+		if x['Gene Locus ID'] + '-MONOMER' in lst:
+			return 'RNA_degradosome:1'
+		else:
+			None
+
+	def excision(x, builder):
+		dct = builder.org.excision_machinery
+		subrxns = []
+		for key in dct.keys():
+			lst = [ x.split('_mod_')[0] for x in dct[key]['enzymes'] ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				subrxns.append(key + ':1')
+		if len(subrxns) == 0:
+			return None
+		else:
+			return subrxns
+
+	def sigmas(x, builder):
+		lst = builder.org.sigmas.index
+		if x['Gene Locus ID'] + '-MONOMER' in lst:
+			return 'RNAP'
+
+	def transpaths(x, builder):
+		# simplified
+		dct = { k:v['enzymes'] for k,v in builder.org.translocation_pathways.items() }
+		pathways = []
+		for key, value in dct.items():
+			lst = value.keys()
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				pathways.append('translocation_pathway_' + key)
+
+		if len(pathways) != 0:
+			return pathways
+		else:
+			return None
+
+	def ribosome_subrxns(x, builder):
+		for key, value in builder.org.ribosome_subreactions.items():
+			lst = [value['enzyme']]
+			lst = [ x.split('_mod_')[0] for x in lst ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				return 'Ribosome_' + key
+
+	def translation_subrxns(x, builder):
+		for key, value in builder.org.initiation_subreactions.items():
+			lst = value['enzymes']
+			lst = [ x.split('_mod_')[0] for x in lst ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				if 'InfA' in key or 'InfC' in key:
+					return key
+				elif key == 'Translation_gtp_initiation_factor_InfB':
+					return 'Translation_initiation_gtp_factor_InfB'
+				else:
+					return 'Translation_initiation_' + key
+		for key, value in builder.org.elongation_subreactions.items():
+			lst = value['enzymes']
+			lst = [ x.split('_mod_')[0] for x in lst ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				if key == 'FusA_mono_elongation':
+					return 'Translation_elongation_FusA_mono'
+				else:
+					return 'Translation_elongation_' + key
+		for key, value in builder.org.termination_subreactions.items():
+			lst = value['enzymes']
+			lst = [ x.split('_mod_')[0] for x in lst ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				if key in ['N_terminal_methionine_cleavage', 'DnaK_dependent_folding', 'GroEL_dependent_folding']:
+					return 'Protein_processing_' + key
+				elif key == 'PrfA_mono_mediated_termination':
+					return 'Translation_termination_PrfA_mono_mediated'
+				elif key == 'PrfB_mono_mediated_termination':
+					return 'Translation_termination_PrfB_mono_mediated'
+				elif key == 'generic_RF_mediated_termination':
+					return 'Translation_termination_generic_RF_mediated'
+				else:
+					return 'Translation_termination_' + key
+
+	def transcription_subrxns(x, builder):
+		subrxns = []
+		for key, value in builder.org.transcription_subreactions.items():
+			lst = value['enzymes']
+			lst = [ x.split('_mod_')[0] for x in lst ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst:
+				subrxns.append(key)
+		if len(subrxns) == 0:
+			return None
+		else:
+			return subrxns
+
+	def groel(x, builder):
+		if x in builder.org.folding_dict['GroEL_dependent_folding']['enzymes']:
+			return 'TRUE'
+
+	def dnak(x, builder):
+		if x in builder.org.folding_dict['DnaK_dependent_folding']['enzymes']:
+			return 'TRUE'
+
+	def ntmeth(x, builder):
+		if x in builder.org.cleaved_methionine:
+			return 'TRUE'
+
+	def location(x, builder):
+		df = builder.org.protein_location.dropna(how = 'all', subset = ['Complex_compartment', 'Protein', 'Protein_compartment'])
+		res = df[df['Protein'].str.match(x)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
+		if len(res) == 0:
+			return (None, None, None)
+		else:
+			return res[0]
+
+	def generics_from_complex(name, builder):
+		if name is not None:
+			name = name.split(':')[0]
+			lst = []
+			for key, value in builder.org.generic_dict.items():
+				values = [ x.split('_mod_')[0] for x in value['enzymes'] ]
+
+				if name in values:
+					lst.append(key.replace('generic_', ''))
+
+			if len(lst) >= 1:
+				return lst
+
+	def generics_in_complex(name, df):
+		tmp = df[df['genes'].str.contains('generic')]
+		if name is not None:
+			lst = []
+			if name in tmp.index:
+				for generic in tmp['genes'][name]:
+					lst.append('{:s}({:s})'.format(name, generic.replace('generic_', '').split('(')[0]))
+
+			if len(lst) >= 1:
+				return lst
+
+	data['Reference BBH'] = data['Gene Locus ID'].apply(lambda x: bbh(x, builder))
+
+	df = builder.org.complexes_df
+	df = df[~df.index.str.contains('MONOMER')]
+	df['genes'] = df['genes'].str.split(' AND ')
+	df = df.explode('genes')
+	df['stoich'] = df['genes'].apply(lambda x: '1' if x.split('(')[1][:-1] == '' else str(x.split('(')[1][:-1]))
+	df.index = df.index + ':' + df['stoich']
+
+	data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
+	data['Complex ID'].update(data['Gene Locus ID'].apply(lambda x: complexes(x, df)))
+
+	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(x, builder))
+	data = data.explode('Complex ID')
+
+	data['Generic Complex ID'] = data['Gene Locus ID'].apply(lambda x: generics_from_gene(x, builder))
+	data = data.explode('Generic Complex ID')
+
+	data['MetaComplex ID'] = data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: rnapol(x, builder), axis = 1)
+	data['MetaComplex ID'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: ribosome(x, builder), axis = 1))
+	data['MetaComplex ID'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: degradosome(x, builder), axis = 1))
+	data['MetaComplex ID'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: excision(x, builder), axis = 1))
+	data['MetaComplex ID'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: sigmas(x, builder), axis = 1))
+	data['MetaComplex ID'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: transpaths(x, builder), axis = 1))
+	data = data.explode('MetaComplex ID')
+
+	data['ME-Model SubReaction'] = data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: ribosome_subrxns(x, builder), axis = 1)
+	data['ME-Model SubReaction'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: translation_subrxns(x, builder), axis = 1))
+	data['ME-Model SubReaction'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: transcription_subrxns(x, builder), axis = 1))
+	data = data.explode('ME-Model SubReaction')
+
+	data['GroEL_dependent_folding'] = data['Gene Locus ID'].apply(lambda x: groel(x, builder))
+	data['DnaK_dependent_folding'] = data['Gene Locus ID'].apply(lambda x: dnak(x, builder))
+	data['N_terminal_methionine_cleavage'] = data['Gene Locus ID'].apply(lambda x: ntmeth(x, builder))
+
+	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = \
+		zip(*data['Gene Locus ID'].apply(lambda x: location(x, builder)))
+	data = data.explode('Complex Location')
+
+	data['Generic Complex ID'].update(data['Complex ID'].apply(lambda x: generics_from_complex(x, builder)))
+	data = data.explode('Generic Complex ID')
+
+	data['Complex ID'].update(data['Complex ID'].apply(lambda x: generics_in_complex(x, df)))
+	data = data.explode('Complex ID')
 
 	if pathlib.Path(output).is_file():
 		pass
 	else:
-		df.to_excel(output, index = False)
+		if output.endswith('xlsx'):
+			pass
+		else:
+			output = '.'.join(output.split('.')[:-1]) + 'xlsx'
 
-	return df
+		with open(output, 'wb') as outfile:
+			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
+			data.to_excel(writer, index = False, freeze_panes = (1, 1))
+			(max_row, max_col) = data.shape
+
+			# Get the xlsxwriter workbook and worksheet objects.
+			workbook  = writer.book
+			worksheet = writer.sheets['Sheet1']
+
+			# Set the autofilter.
+			worksheet.autofilter(0, 0, max_row, max_col - 1)
+
+			# Make the columns wider for clarity.
+			worksheet.set_column_pixels(0,  max_col - 1, 96)
+
+			# Close the Pandas Excel writer and output the Excel file.
+			writer.save()
+
+	return data
 
 def correct_input(df):
 	# correct Gene Locus ID to reflect if they are proteins or RNAs
