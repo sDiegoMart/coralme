@@ -20,6 +20,7 @@ amino_acids = {
 	'Y': 'tyr__L_c',
 	'V': 'val__L_c',
 	'U': 'ser__L_c',  # precursor to selenocysteine
+	'X': 'gly_c'
 	}
 
 amino_acids_3letters = {
@@ -70,30 +71,31 @@ amino_acids_fullname = {
 	'U': 'Selenocysteine'
 	}
 
-codon_table = {
-	'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
-	'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-	'TAT': 'Y', 'TAC': 'Y', 'TAA': '*', 'TAG': '*',
-	'TGT': 'C', 'TGC': 'C', 'TGA': '*', 'TGG': 'W',
-	'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
-	'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
-	'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
-	'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
-	'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
-	'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
-	'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
-	'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
-	'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
-	'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
-	'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
-	'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
-	}
+# We use now Biopython to get the codon table specific for the organism
+#codon_table = {
+	#'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
+	#'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
+	#'TAT': 'Y', 'TAC': 'Y', 'TAA': '*', 'TAG': '*',
+	#'TGT': 'C', 'TGC': 'C', 'TGA': '*', 'TGG': 'W',
+	#'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
+	#'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+	#'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+	#'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+	#'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
+	#'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
+	#'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
+	#'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
+	#'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
+	#'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+	#'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+	#'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
+	#}
 
-codon_table_3letters = {
-	k:amino_acids[v].split('_')[0].capitalize()
-	if v != '*' else 'STOP'
-	for k,v in codon_table.items()
-	}
+#codon_table_3letters = {
+	#k:amino_acids[v].split('_')[0].capitalize()
+	#if v != '*' else 'STOP'
+	#for k,v in codon_table.items()
+	#}
 
 transcription_table = {
 	'A': 'utp_c',
@@ -101,6 +103,23 @@ transcription_table = {
 	'C': 'gtp_c',
 	'G': 'ctp_c'
 	}
+
+import random
+ambiguous_nucleotides = {
+	'N': transcription_table[random.choice(['A', 'T', 'G', 'C'])],
+	'R': transcription_table[random.choice(['A', 'G'])],
+	'Y': transcription_table[random.choice(['T', 'C'])],
+	'K': transcription_table[random.choice(['G', 'T'])],
+	'M': transcription_table[random.choice(['T', 'C'])],
+	'S': transcription_table[random.choice(['C', 'G'])],
+	'W': transcription_table[random.choice(['A', 'T'])],
+	'B': transcription_table[random.choice(['C', 'G', 'T'])],
+	'D': transcription_table[random.choice(['A', 'G', 'T'])],
+	'H': transcription_table[random.choice(['A', 'C', 'T'])],
+	'V': transcription_table[random.choice(['A', 'C', 'G'])]
+	}
+
+transcription_table.update(ambiguous_nucleotides)
 
 base_pairs = {
 	'A': 'T',
