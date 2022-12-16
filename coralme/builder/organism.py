@@ -970,6 +970,9 @@ class Organism(object):
         warn_genes = []
         for gene_name,row in gene_dictionary.iterrows():
             gene_id = row['Accession-1']
+            if not gene_name or isinstance(gene_name,float):
+                warn_genes.append(gene_id)
+                continue
             product = row['Product'].split(' // ')[0]
             ### Try to get product type from gene id of type LOCUST_TAG-RNA
             product_type = ''
@@ -1088,7 +1091,7 @@ class Organism(object):
                 print('Adding {} to genbank file as {}'.format(gene_id,product_type))
                 d = {
                     'type' : product_type,
-                    locus_tag : [gene_id],
+                    'locus_tag' : [gene_id],
                     'strand' : 1,
                     'location' : [{'start':int(row['Left-End-Position']),'end':int(row['Right-End-Position'])}],
                     'start' : int(row['Left-End-Position']),
@@ -1176,7 +1179,7 @@ class Organism(object):
 
     def read_gene_dictionary(self):
         filename = self.directory + "genes.txt"
-        gene_dictionary = pandas.read_csv(filename, index_col=0, sep="\t")
+        gene_dictionary = pandas.read_csv(filename, sep="\t").set_index('Gene Name',inplace=False)
         warn_genes = []
         if not self.is_reference:
             warn_start = list(gene_dictionary[gene_dictionary['Left-End-Position'].isna()].index)
@@ -1608,6 +1611,7 @@ class Organism(object):
         TUs = self.TUs
         gene_dictionary = self.gene_dictionary
         genes_to_TU = {}
+        TU_to_genes = {}
         for tu, row in TUs.iterrows():
             genes = row["Genes of transcription unit"]
             if not genes:
@@ -1616,7 +1620,12 @@ class Organism(object):
                 if g not in gene_dictionary["Accession-1"]:
                     continue
                 genes_to_TU[gene_dictionary["Accession-1"][g]] = tu
-        return genes_to_TU
+                
+                if tu not in TU_to_genes:
+                    TU_to_genes[tu] = []
+                TU_to_genes[tu].append(g)
+        self.genes_to_TU = genes_to_TU
+        self.TU_to_genes = TU_to_genes
 
     def get_TU_df(self):
         TUs = self.TUs

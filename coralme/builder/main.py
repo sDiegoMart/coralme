@@ -18,6 +18,7 @@ import pandas
 import cobra
 import coralme
 import anyconfig
+from coralme.builder.helper_functions import expand_gpr,listify_gpr,generify_gpr
 
 
 # configuration
@@ -82,6 +83,7 @@ class MEBuilder(object):
         # Curation note: Check which locus tag field in the genbank agrees with those in the biocyc files.
         # Make sure you have specified that field in the beginning of this notebook.
         # Reference
+        folder = self.org.directory + 'blast_files_and_results'
         if bool(config.get('dev_reference', False)) or bool(config.get('user_reference', False)):
             print("{} Reading reference {}".format(sep, sep))
             #with open(org_files_dir + ref + '/parameters.txt') as rf:
@@ -101,7 +103,6 @@ class MEBuilder(object):
                     out, err = subprocess.Popen(cmd, shell = False, stdout = subprocess.PIPE, stderr = subprocess.PIPE).communicate()
 
                 # make blast databases
-                folder = self.org.directory + 'blast_files_and_results'
                 execute('makeblastdb -in {:s}/org.faa -dbtype prot -out {:s}/org'.format(folder,folder))
                 execute('makeblastdb -in {:s}/ref.faa -dbtype prot -out {:s}/ref'.format(folder,folder))
 
@@ -551,6 +552,7 @@ class MEBuilder(object):
         self.org.protein_mod = protein_mod
 
     def update_TU_df(self):
+        org_TU_to_genes = self.org.TU_to_genes
         org_TUs = self.org.TUs
         org_sigmas = self.org.sigmas
         org_complexes_df = self.org.complexes_df
@@ -569,9 +571,7 @@ class MEBuilder(object):
             tu = tu_id.split("_from_")[0]
             rho_dependent = True
             sigma = rpod
-            genes = []
-            for g in org_TUs["Genes of transcription unit"][tu].split(" // "):
-                genes.append(gene_dictionary["Accession-1"][g])
+            genes = org_TU_to_genes[tu]
             if set(genes).issubset(mutual_hits):
                 ref_TU = [
                     ref_genes_to_TU[mutual_hits[g]]
@@ -615,62 +615,36 @@ class MEBuilder(object):
 
     def protein_location_from_homology(self):
         protein_location = self.org.protein_location
-        org_complexes_df = self.org.complexes_df
-        org_proteins_df = self.org.proteins_df
-        org_cplx_homolog = self.homology.org_cplx_homolog
+        complexes_df = self.org.complexes_df
+        gene_dictionary = self.org.gene_dictionary
         mutual_hits = self.homology.mutual_hits
         ref_protein_location = self.ref.protein_location
-
-        for c, row in org_proteins_df.iterrows():
-            if isinstance(ref_protein_location, pandas.DataFrame):
-                if c in org_cplx_homolog:
-                    ref_c = org_cplx_homolog[c]
-                    if ref_c in ref_protein_location.index:
-                        for gene_string in org_complexes_df["genes"][c].split(' AND '):
-                            gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
-                            ref_info = ref_protein_location[
-                                ref_protein_location["Protein"].str.contains(
-                                    mutual_hits[gene]
-                                )
-                            ]
-                            if ref_c not in ref_info.index:
-                                continue
-                            # Check if already in protein location, if not add.
-                            if not protein_location.any().any() or not protein_location['Protein'].eq(gene_string).any():
-                                #protein_location = protein_location.append(
-                                    #pandas.DataFrame.from_dict(
-                                        #{
-                                            #c: {
-                                                #"Complex_compartment": ref_info[
-                                                    #"Complex_compartment"
-                                                #][ref_c],
-                                                #"Protein": gene_string,
-                                                #"Protein_compartment": ref_info[
-                                                    #"Protein_compartment"
-                                                #][ref_c],
-                                                #"translocase_pathway": ref_info[
-                                                    #"translocase_pathway"
-                                                #][ref_c],
-                                            #}
-                                        #}
-                                    #).T
-                                #)
-
-                                tmp = pandas.DataFrame.from_dict(
-                                    { c: {
-                                        "Complex_compartment": ref_info["Complex_compartment"][ref_c],
-                                        "Protein": gene_string,
-                                        "Protein_compartment": ref_info["Protein_compartment"][ref_c],
-                                        "translocase_pathway": ref_info["translocase_pathway"][ref_c],
-                                        }
-                                    }).T
-
-                                protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
-                            # Update translocase pathway with homology
-                            protein_location.loc[
-                                c, "translocase_pathway"
-                            ] = ref_info["translocase_pathway"][ref_c]
-
+        if not isinstance(ref_protein_location, pandas.DataFrame):
+            return
+        for rc,row in ref_protein_location.iterrows():
+            ref_gene = re.findall('.*(?=\(.*\))', row['Protein'])[0]
+            if ref_gene not in mutual_hits:
+                continue
+            org_gene = mutual_hits[ref_gene]
+            ref_info = ref_protein_location[ref_protein_location['Protein'].str.contains(ref_gene)]
+            gene_string = '{}\('.format(org_gene)
+            org_cplxs = complexes_df[complexes_df['genes'].str.contains(gene_string)].index
+            for org_cplx in org_cplxs:
+                if protein_location.any().any() and \
+                    org_cplx in protein_location.index and \
+                    protein_location.loc[[org_cplx]]['Protein'].str.contains(gene_string).any().any():
+                    # Check if already in protein location, if not add.
+                    pass
+                else:
+                    tmp = pandas.DataFrame.from_dict(
+                        { org_cplx: {
+                            "Complex_compartment": ref_info["Complex_compartment"].values[0],
+                            "Protein": '{}()'.format(org_gene),
+                            "Protein_compartment": ref_info["Protein_compartment"].values[0],
+                            "translocase_pathway": ref_info["translocase_pathway"].values[0],
+                            }
+                        }).T
+                    protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
         self.org.protein_location = protein_location
 
     def update_translocation_multipliers(self):

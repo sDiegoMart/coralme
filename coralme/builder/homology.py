@@ -101,7 +101,7 @@ class Homology(object):
 		warn_candidates = []
 
 		for c, row in org_complexes_df.iterrows():
-			if isinstance(row['genes'], float):
+			if isinstance(row['genes'], float) or not row['genes']:
 				continue
 
 			genes = [re.findall('.*(?=\(\d*\))', g)[0] for g in row['genes'].split(' AND ')]
