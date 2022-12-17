@@ -641,7 +641,7 @@ class MEBuilder(object):
 			org_gene = mutual_hits[ref_gene]
 			ref_info = ref_protein_location[ref_protein_location['Protein'].str.contains(ref_gene)]
 			gene_string = '{}\('.format(org_gene)
-			org_cplxs = complexes_df[complexes_df['genes'].str.contains(gene_string)].index
+			org_cplxs = org_complexes_df[org_complexes_df['genes'].str.contains(gene_string)].index
 			for org_cplx in org_cplxs:
 				if protein_location.any().any() and \
 					org_cplx in protein_location.index and \
