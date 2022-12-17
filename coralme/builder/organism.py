@@ -758,7 +758,7 @@ class Organism(object):
         self.transcription_subreactions = self._transcription_subreactions
         print("{} Generating transcription units dataframe {}".format(sep, sep))
         self.TU_df = self._TU_df
-        self.genes_to_TU = self.get_TU_genes()
+        self.get_TU_genes()
         #print("{} Calculating codon usage from genbank file {}".format(sep, sep))
         #self.codon_usage = self.codon_usage_from_genbank()
         #print("{} Generating tRNA to codon dictionary {}".format(sep, sep))
@@ -1631,7 +1631,7 @@ class Organism(object):
                 if g not in gene_dictionary["Accession-1"]:
                     continue
                 genes_to_TU[gene_dictionary["Accession-1"][g]] = tu
-                
+
                 if tu not in TU_to_genes:
                     TU_to_genes[tu] = []
                 TU_to_genes[tu].append(g)

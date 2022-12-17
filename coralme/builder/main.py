@@ -627,7 +627,7 @@ class MEBuilder(object):
 
 	def protein_location_from_homology(self):
 		protein_location = self.org.protein_location
-		org_complexes_df = self.org.complexes_df
+		complexes_df = self.org.complexes_df
 		org_proteins_df = self.org.proteins_df
 		org_cplx_homolog = self.homology.org_cplx_homolog
 		mutual_hits = self.homology.mutual_hits
@@ -1110,8 +1110,8 @@ class MEBuilder(object):
 		for k,v in dataframes.items():
 			v.to_csv(directory + k + '.csv')
 
-	def build_me_model(self):
-		coralme.builder.main.MEReconstruction(self).build_me_model()
+	def build_me_model(self, overwrite = False):
+		coralme.builder.main.MEReconstruction(self).build_me_model(overwrite = overwrite)
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
@@ -1138,7 +1138,7 @@ class MEReconstruction(object):
 
 		return None
 
-	def input_data(self, m_model):
+	def input_data(self, m_model, overwrite = False):
 		config = self.configuration
 
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
@@ -1211,7 +1211,7 @@ class MEReconstruction(object):
 		# step2a: generics, dnap stoichiometry, ribosome stoichiometry, degradosome stoichiometry, tRNA ligases, RNA modifications
 		# step2b: folding pathways (DnaK, GroEL), N-terminal Methionine Processing, translocation pathways
 		filename = config.get('df_gene_cplxs_mods_rxns', '')
-		if pathlib.Path(filename).is_file():
+		if pathlib.Path(filename).is_file() or overwrite == False:
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
 			# generate a minimal dataframe from genbank and m-model
@@ -1222,7 +1222,7 @@ class MEReconstruction(object):
 		# All other inputs and remove unnecessary genes from df_data
 		return coralme.builder.preprocess_inputs.get_df_input_from_excel(self.df_data, self.df_rxns)
 
-	def build_me_model(self):
+	def build_me_model(self, overwrite = False):
 		config = self.configuration
 
 		model = config.get('model_id', 'coralME')
@@ -1317,9 +1317,10 @@ class MEReconstruction(object):
 
 		# ### 3) Add Transcription and Translation reactions
 		#
-		# To construct the bare minimimum components of a transcription and translation reactions. For example, transcription reactions at this point include nucleotides and the synthesized RNAs.
+		# To construct the bare minimimum components of a transcription and translation reactions.
+		# For example, transcription reactions at this point include nucleotides and the synthesized RNAs.
 
-		lst = df_data['Gene Locus ID'].str.replace('protein_', '').str.replace('RNA_', '').tolist()
+		lst = set(df_data['Gene Locus ID'].str.replace('protein_', '').str.replace('RNA_', '').tolist())
 
 		coralme.util.building.build_reactions_from_genbank(
 			me_model = me, gb_filename = me.global_info['genbank-path'],
@@ -1842,7 +1843,7 @@ class MEReconstruction(object):
 
 		n_genes = len(me.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')))
 		new_genes = n_genes * 100. / len(me.gem.genes) - 100
-		print('Done. Number of genes in the ME-model {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
+		print('Done. Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
 
 		self.me_model = me
 
