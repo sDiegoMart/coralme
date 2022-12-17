@@ -177,7 +177,12 @@ class MEModel(cobra.core.model.Model):
 
 			'gam' : 45.,
 			'ngam' : 1.,
-			'unmodeled_protein_fraction' : 0.36
+			'unmodeled_protein_fraction' : 0.36,
+
+			'braun\'s_lipoprotein' : [],
+			'braun\'s_lipid_mod' : 'murein5px4p_p',
+			'braun\'s_lpp_flux' : -0.0,
+			'braun\'s_murein_flux' : -0.0,
 			}
 
 		self.process_data = cobra.core.dictlist.DictList()
@@ -193,7 +198,8 @@ class MEModel(cobra.core.model.Model):
 		self.add_reactions([self._biomass_dilution])
 
 		# cobra/core/reaction.py:328 Cannot convert expression to float
-		# Override method: solved to check if variable type is sympy.core.symbol.Symbol or float
+		# Solved: Check if variable type is sympy.core.symbol.Symbol or float
+		# Solved: Removed _populate_solver from reactions -> no need to modify optlang
 		self._biomass_dilution.upper_bound = self.mu
 		self._biomass_dilution.lower_bound = self.mu
 
