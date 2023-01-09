@@ -1042,7 +1042,7 @@ class Organism(object):
                             }
                         ).T
                     )
-        self.gene_dictionary = gene_dictionary[pd.notnull(gene_dictionary.index)]
+        self.gene_dictionary = gene_dictionary[pandas.notnull(gene_dictionary.index)]
         self.RNA_df = RNA_df
         self.complexes_df = complexes_df
         self.product_types = product_types
