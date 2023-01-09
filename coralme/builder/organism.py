@@ -2129,10 +2129,32 @@ class Organism(object):
 
     def check_for_duplicates(self):
         from coralme.builder.helper_functions import change_reaction_id
-        cplxs = set(self.complexes_df.index)
-        rnas = set(self.RNA_df.index)
-        genes = set(self.gene_dictionary.index)
-        rxns = set([i.id for i in self.m_model.reactions])
+        import collections
+        # Duplicates within datasets
+        info = {
+            'complexes_df' : list(self.complexes_df.index),
+            'RNA_df' : list(self.RNA_df.index),
+            'gene_dictionary' : list(self.gene_dictionary.index),
+            'reactions' : list([i.id for i in self.m_model.reactions]),
+            'Accession-1' : list(self.gene_dictionary['Accession-1'].values)
+        }
+        warn_dups = {}
+        for k,v in info.items():
+            if len(v) != len(set(v)):
+                warn_dups[k] = [item for item, count in collections.Counter(v).items() if count > 1]
+            
+        if warn_dups:
+            self.curation_notes['org.check_for_duplicates'].append({
+                'msg':'Some datasets contain duplicate indices or Accession IDs.',
+                'triggered_by' : warn_dups,
+                'importance':'critical',
+                'to_do':'Remove or fix duplicates.'})
+            
+        # Duplicates between different datasets
+        cplxs = set(info['complexes_df'])
+        rnas = set(info['RNA_df'])
+        genes = set(info['gene_dictionary'])
+        rxns = set(info['reactions'])
         occ = {}
         for i in cplxs|rnas|genes|rxns:
             occ[i] = {'proteins':0,'RNAs':0,'genes':0,'reactions':0}
