@@ -1870,20 +1870,21 @@ class Organism(object):
                 continue
             for gene_string in complexes_df["genes"][c].split(' AND '):
                 gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
-                gene = gene_dictionary.loc[gene]["Gene Name"]
-                if gene in gene_location:
-                    protein_location = protein_location.append(
-                        pandas.DataFrame.from_dict(
-                            {
-                                c: {
-                                    "Complex_compartment": c_loc,
-                                    "Protein": gene_string,
-                                    "Protein_compartment": gene_location[gene],
-                                    "translocase_pathway": "s",
+                gene = gene_dictionary.loc[[gene]]["Gene Name"]
+                for gene_ in gene: # In case of duplicates
+                    if gene_ in gene_location:
+                        protein_location = protein_location.append(
+                            pd.DataFrame.from_dict(
+                                {
+                                    c: {
+                                        "Complex_compartment": c_loc,
+                                        "Protein": gene_string,
+                                        "Protein_compartment": gene_location[gene_],
+                                        "translocase_pathway": "s",
+                                    }
                                 }
-                            }
-                        ).T
-                    )
+                            ).T
+                        )
         protein_location.index.name = "Complex"
         return protein_location
 
