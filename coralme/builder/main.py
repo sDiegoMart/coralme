@@ -646,10 +646,10 @@ class MEBuilder(object):
 				if protein_location.any().any() and \
 					org_cplx in protein_location.index and \
 					protein_location.loc[[org_cplx]]['Protein'].str.contains(gene_string).any().any():
-							# Check if already in protein location, if not add.
 					pass
+					# Check if already in protein location, if not add.
 				else:
-								tmp = pandas.DataFrame.from_dict(
+					tmp = pandas.DataFrame.from_dict(
 						{ org_cplx: {
 							"Complex_compartment": ref_info["Complex_compartment"].values[0],
 							"Protein": '{}()'.format(org_gene),
@@ -657,7 +657,7 @@ class MEBuilder(object):
 							"translocase_pathway": ref_info["translocase_pathway"].values[0],
 										}
 									}).T
-								protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+					protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
 		self.org.protein_location = protein_location
 
 	def update_translocation_multipliers(self):
