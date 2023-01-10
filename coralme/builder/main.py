@@ -1921,25 +1921,25 @@ class METroubleshooter(object):
 				if filter1 and not filter2 and not filter3 and not filter4:
 					mets.append(met.id)
 
-		if met_types == 'Metabolite':
-			# remove metabolites that are fed into the model through transport reactions
-			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
-			mets = set(mets).difference(medium)
+# 		if met_types == 'Metabolite':
+# 			# remove metabolites that are fed into the model through transport reactions
+# 			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
+# 			mets = set(mets).difference(medium)
 
-			# filter out manually
-			mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
-			mets = set(mets).difference(set(['ade_c']))
-			mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
-			mets = set(mets).difference(set(['cdp_c', 'cmp_c', 'ctp_c']))
-			mets = set(mets).difference(set(['gdp_c', 'gmp_c', 'gtp_c']))
-			mets = set(mets).difference(set(['udp_c', 'ump_c', 'utp_c']))
-			mets = set(mets).difference(set(['dadp_c', 'dcdp_c', 'dgdp_c', 'dtdp_c', 'dudp_c']))
-			mets = set(mets).difference(set(['damp_c', 'dcmp_c', 'dgmp_c', 'dtmp_c', 'dump_c']))
-			mets = set(mets).difference(set(['datp_c', 'dctp_c', 'dgtp_c', 'dttp_c', 'dutp_c']))
-			mets = set(mets).difference(set(['nad_c', 'nadh_c', 'nadp_c', 'nadph_c']))
-			mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
-			mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
-			mets = set(mets).difference(set(['coa_c']))
+# 			# filter out manually
+# 			mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
+# 			mets = set(mets).difference(set(['ade_c']))
+# 			mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
+# 			mets = set(mets).difference(set(['cdp_c', 'cmp_c', 'ctp_c']))
+# 			mets = set(mets).difference(set(['gdp_c', 'gmp_c', 'gtp_c']))
+# 			mets = set(mets).difference(set(['udp_c', 'ump_c', 'utp_c']))
+# 			mets = set(mets).difference(set(['dadp_c', 'dcdp_c', 'dgdp_c', 'dtdp_c', 'dudp_c']))
+# 			mets = set(mets).difference(set(['damp_c', 'dcmp_c', 'dgmp_c', 'dtmp_c', 'dump_c']))
+# 			mets = set(mets).difference(set(['datp_c', 'dctp_c', 'dgtp_c', 'dttp_c', 'dutp_c']))
+# 			mets = set(mets).difference(set(['nad_c', 'nadh_c', 'nadp_c', 'nadph_c']))
+# 			mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
+# 			mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
+# 			mets = set(mets).difference(set(['coa_c']))
 
 		bf_gaps = coralme.builder.helper_functions.brute_force_check(self.me_model, mets, growth_key_and_value)
 		if self.me_model.feasibility(keys = growth_key_and_value):
