@@ -77,7 +77,7 @@ class MEBuilder(object):
 			'CCI-PM-BAC-POS-GP,Plasma_Membrane,pos\n' \
 			'CCO-MEMBRANE,Membrane,'
 
-		self.location_interpreter = pandas.read_csv(io.StringIO(data))
+		self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col = 0)
 
 		return None
 

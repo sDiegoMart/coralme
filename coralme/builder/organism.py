@@ -65,7 +65,7 @@ class Organism(object):
             'CCI-PM-BAC-POS-GP,Plasma_Membrane,pos\n' \
             'CCO-MEMBRANE,Membrane,'
 
-        self.location_interpreter = pandas.read_csv(io.StringIO(data),index_col=0)
+        self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
 
         self.get_organism()
 
@@ -2166,14 +2166,14 @@ class Organism(object):
         for k,v in info.items():
             if len(v) != len(set(v)):
                 warn_dups[k] = [item for item, count in collections.Counter(v).items() if count > 1]
-            
+
         if warn_dups:
             self.curation_notes['org.check_for_duplicates'].append({
                 'msg':'Some datasets contain duplicate indices or Accession IDs.',
                 'triggered_by' : warn_dups,
                 'importance':'critical',
                 'to_do':'Remove or fix duplicates.'})
-            
+
         # Duplicates between different datasets
         cplxs = set(info['complexes_df'])
         rnas = set(info['RNA_df'])
