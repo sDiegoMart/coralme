@@ -38,8 +38,9 @@ def get_reaction_matrix_dict(matrix_df, compartments = {}, complex_set = set()) 
 	"""Return dictionary representation of the metabolic reaction matrix.
 	Updates metabolite id with compartment if not contained in complex_list
 	"""
-	matrix_df.columns = ['Reaction', 'Metabolites', 'Compartment', 'Stoichiometry']
-	matrix_df.replace({'No_Compartment': 'Cytoplasm'}, inplace = True)
+	#matrix_df.columns = ['Reaction', 'Metabolites', 'Compartment', 'Stoichiometry']
+	matrix_df.columns = ['Reaction', 'Metabolites', 'Stoichiometry']
+	#matrix_df.replace({'No_Compartment': 'Cytoplasm'}, inplace = True)
 
 	# old code; replaced to get compartments from the me-model object
 	#compartments = {'Cytosol': 'c', 'Periplasm': 'p', 'Extra-organism': 'e'}
@@ -48,14 +49,14 @@ def get_reaction_matrix_dict(matrix_df, compartments = {}, complex_set = set()) 
 		reaction = fix_id(row['Reaction'])
 		metabolite = fix_id(row['Metabolites'])
 		stoichiometry = row['Stoichiometry']
-		if compartments.get(row['Compartment']) is None:
-			compartment_id = ''
-		else:
-			compartment_id = '_{:s}'.format(compartments.get(row['Compartment']))
+		#if compartments.get(row['Compartment']) is None:
+			#compartment_id = ''
+		#else:
+			#compartment_id = '_{:s}'.format(compartments.get(row['Compartment']))
 
 		# use compartment to append appropriate suffix
-		if metabolite.split('_mod_')[0] not in complex_set:
-			metabolite += compartment_id
+		#if metabolite.split('_mod_')[0] not in complex_set:
+			#metabolite += compartment_id
 		metabolic_reaction_dict[reaction][metabolite] = float(stoichiometry)
 
 	return metabolic_reaction_dict
@@ -145,13 +146,14 @@ def process_m_model(
 		##if rxn.id not in reaction_matrix_dict.keys() or rxn.id in defer_to_rxn_matrix:
 		#if rxn.id in defer_to_rxn_matrix:
 			#rxn.remove_from_model(remove_orphans = True)
-			#logging.warning('The MetabolicReaction \'{:s}\' (using \'defer_to_rxn_matrix\') was removed from the M-Model metabolic network.'.format(rxn.id))
+			#logging.warning('The MetabolicReaction \'{:s}\' (using \'defer_to_rxn_matrix\') was removed from the M-model metabolic network.'.format(rxn.id))
 
 	m_model.remove_reactions([ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix ])
 
 	# met_data DataFrame
 	mets_data = mets_data[mets_data['type'].isin(['ADD', 'REPLACE'])]
-	mets_data.columns = ['me_id', 'name', 'formula', 'compartment', 'type']
+	#mets_data.columns = ['me_id', 'name', 'formula', 'compartment', 'type']
+	mets_data.columns = ['me_id', 'name', 'formula', 'type']
 	mets_data.rename(lambda x: x.replace('_DASH_', '__'), inplace = True)
 
 	# process protein_complex DataFrame, and...
@@ -161,10 +163,10 @@ def process_m_model(
 
 	for rxn_id in reaction_matrix_dict:
 		if rxn_id in m_model.reactions:
-			logging.warning('The MetabolicReaction \'{:s}\' (using \'reaction_matrix.txt\') is already present in the M-Model and won\'t be replaced.'.format(rxn_id))
+			logging.warning('The MetabolicReaction \'{:s}\' (using \'reaction_matrix.txt\') is already present in the M-model and won\'t be replaced.'.format(rxn_id))
 			continue
 
-		# Metabolites need to be added into the M-Model first
+		# Metabolites need to be added into the M-model first
 		rxn_stoichiometry = reaction_matrix_dict[rxn_id]
 		for met in rxn_stoichiometry:
 			try:
@@ -183,7 +185,7 @@ def process_m_model(
 				met_obj.name = mets_data.loc[met_id, 'name']
 				met_obj.formula = mets_data.loc[met_id, 'formula']
 
-		# Add new reactions into the M-Model
+		# Add new reactions into the M-model
 		rxn = coralme.core.reaction.MEReaction(rxn_id)
 		m_model.add_reactions([rxn])
 		rxn.add_metabolites(rxn_stoichiometry)
@@ -193,7 +195,7 @@ def process_m_model(
 			reversible = True
 			logging.warning('Unable to determine MetabolicReaction \'{:s}\' reversibility. Default value is \'True\'.'.format(rxn_id))
 		rxn.lower_bound = -1000 if reversible else 0
-		logging.warning('The MetabolicReaction \'{:s}\' was created into the M-Model (using \'reaction_matrix.txt\').'.format(rxn_id))
+		logging.warning('The MetabolicReaction \'{:s}\' was created into the M-model (using \'reaction_matrix.txt\').'.format(rxn_id))
 
 	# m_to_me_map DataFrame
 	#m_to_me_map.columns = ['me_name']
@@ -208,7 +210,7 @@ def process_m_model(
 		# old code. mets_data contains all the metabolites (m+me)
 		#if met_id not in mets_data.index and met_id in m_to_me_map.index:
 		#if met_id in mets_data.index:
-			# old code. m_to_me_map contains the new metabolite ID that maps the M-Model metabolite
+			# old code. m_to_me_map contains the new metabolite ID that maps the M-model metabolite
 			#met_id = m_to_me_map.loc[met.id, 'me_name']
 		#if mets_data.loc[met_id, 'me_id'] != '' and mets_data.loc[met_id, 'me_id'] != 'N/A':
 		for met, coeff in rxn.metabolites.items():
@@ -225,7 +227,7 @@ def process_m_model(
 
 	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REPLACE')].index ])
 
-	# Add new metabolites (ME-metabolites) with properties into the "M-Model"
+	# Add new metabolites (ME-metabolites) with properties into the "M-model"
 	for m_met_id in m_to_me_map.index:
 		me_met_id = m_to_me_map.loc[m_met_id, 'me_id']
 		if m_model.metabolites.has_id(me_met_id):
@@ -245,7 +247,7 @@ def process_m_model(
 	return m_model
 
 def get_m_model(
-	modelID = 'M-Model-from-ME-Model',
+	modelID = 'M-model-from-ME-model',
 	metabolites = 'metabolites.txt',
 	reactions = 'reactions.txt',
 	reaction_matrix = 'reaction_matrix.txt',
@@ -257,7 +259,7 @@ def get_m_model(
 
 	m = cobra.core.model.Model(modelID)
 
-	# match compartments in ME-Model
+	# match compartments in ME-model
 	m.compartments = compartments
 	compartment_lookup = {v:k for k,v in m.compartments.items()}
 

@@ -108,7 +108,7 @@ def load_json_me_model(file_name):
 def save_reduced_json_me_model(me0, file_name):
 	"""
 	Save a stripped-down JSON version of the ME-model. This will exclude all of
-	ME-Model information except the reaction stoichiometry information and the
+	ME-model information except the reaction stoichiometry information and the
 	reaction bounds. Saving/loading a model in this format will thus occur much
 	quicker, but limit the ability to edit the model and use most of its
 	features.
@@ -143,7 +143,7 @@ def save_reduced_json_me_model(me0, file_name):
 def load_reduced_json_me_model(file_name):
 	"""
 	Load a stripped-down JSON version of the ME-model. This will exclude all of
-	ME-Model information except the reaction stoichiometry information and the
+	ME-model information except the reaction stoichiometry information and the
 	reaction bounds. Saving/loading a model in this format will thus occur much
 	quicker, but limit the ability to edit the model and use most of its
 	features.

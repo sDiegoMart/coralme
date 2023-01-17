@@ -6,11 +6,12 @@ import logging
 import coralme
 
 # read genbank and extract sequences and data
-from Bio import SeqIO, Seq, SeqFeature, Data, SeqUtils
+import Bio
+from Bio import SeqIO, Seq, SeqFeature, SeqUtils
 
-def add_transcription_reaction(me_model, tu_name, locus_ids, sequence, update = True):
+def add_transcription_reaction(me_model, tu_name, locus_ids, sequence, organelle = None, update = True):
 	"""
-	Create TranscriptionReaction object and add it to ME-Model.
+	Create TranscriptionReaction object and add it to ME-model.
 	This includes the necessary transcription data.
 
 	Parameters
@@ -43,8 +44,10 @@ def add_transcription_reaction(me_model, tu_name, locus_ids, sequence, update = 
 	transcription.transcription_data = coralme.core.processdata.TranscriptionData(tu_name, me_model)
 	transcription.transcription_data.nucleotide_sequence = sequence
 	transcription.transcription_data.RNA_products = {'RNA_' + i for i in locus_ids}
+	# Necessary for eukaryotes where transcription can occur in the nucleus, mitochondria or chloroplasts
+	transcription.transcription_data.organelle = organelle
 
-	me_model.add_reaction(transcription)
+	me_model.add_reactions([transcription])
 	if update:
 		transcription.update()
 	return transcription
@@ -100,7 +103,7 @@ def create_transcribed_gene(me_model, locus_id, rna_type, seq, left_pos = None, 
 
 	return None
 
-def add_translation_reaction(me_model, locus_id, dna_sequence, update = False):
+def add_translation_reaction(me_model, locus_id, dna_sequence, prot_sequence = '', organelle = None, transl_table = 1, update = False):
 	"""
 	Creates and adds a TranslationReaction to the ME-model as well as the
 	associated TranslationData
@@ -131,16 +134,19 @@ def add_translation_reaction(me_model, locus_id, dna_sequence, update = False):
 	# Create TranslationData
 	translation_data = coralme.core.processdata.TranslationData(locus_id, me_model, 'RNA_' + locus_id, 'protein_' + locus_id)
 	translation_data.nucleotide_sequence = dna_sequence
+	translation_data.organelle = organelle
+	translation_data.translation = prot_sequence
+	translation_data.transl_table = Bio.Data.CodonTable.generic_by_id[transl_table]
 
 	# Add RNA to model if it doesn't exist
 	if 'RNA_' + locus_id not in me_model.metabolites:
-		logging.warning('RNA_{:s} not present in model. Adding it now.'.format(locus_id))
+		logging.warning('RNA_{:s} not present in ME-model and it was created.'.format(locus_id))
 		rna = coralme.core.component.TranscribedGene('RNA_' + locus_id, 'mRNA', dna_sequence)
 		me_model.add_metabolites(rna)
 
 	# Create and add TranslationReaction with TranslationData
 	translation_reaction = coralme.core.reaction.TranslationReaction('translation_' + locus_id)
-	me_model.add_reaction(translation_reaction)
+	me_model.add_reactions([translation_reaction])
 	translation_reaction.translation_data = translation_data
 
 	if update:
@@ -148,7 +154,7 @@ def add_translation_reaction(me_model, locus_id, dna_sequence, update = False):
 
 	return None
 
-def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, verbose = True):
+def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organelle, verbose = True):
 	"""
 	Adds tRNA charging reactions for all tRNAs in ME-model
 
@@ -173,7 +179,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, verbose 
 		model and were thus added when creating charging reactions
 	"""
 
-	# remove "other" tRNAs: Avoid RuntimeError: dictionary changed size during iteration
+	# remove "other" tRNAs: This avoids a RuntimeError: dictionary changed size during iteration using pop
 	trna_aa = { k:v for k,v in trna_aa.items() if v.lower() != 'other' }
 
 	# convert amino acid 3 letter codes to metabolites
@@ -184,11 +190,14 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, verbose 
 			#trna_aa.pop(tRNA) # RuntimeError: dictionary changed size during iteration
 		elif aa.lower() == 'sec':
 			# Charge with precursor to selenocysteine
-			trna_aa[tRNA] = me_model.metabolites.get_by_id('ser__L_c')
+			trna_aa[tRNA] = me_model.metabolites.get_by_id('ser__L_' + organelle)
 		elif aa.lower() == 'gly':
-			trna_aa[tRNA] = me_model.metabolites.get_by_id('gly_c')
+			trna_aa[tRNA] = me_model.metabolites.get_by_id('gly_' + organelle)
 		else:
-			trna_aa[tRNA] = me_model.metabolites.get_by_id(aa.lower() + '__L_c')
+			if me_model.metabolites.has_id(aa.lower() + '__L_' + organelle):
+				trna_aa[tRNA] = me_model.metabolites.get_by_id(aa.lower() + '__L_' + organelle)
+			else:
+				logging.warning('The \'{:s}\' metabolite does not exist in the ME-model.'.format(aa.lower() + '__L_' + organelle))
 
 	# check trna_to_codon for START codon
 	start = False
@@ -196,17 +205,24 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, verbose 
 		if 'START' in codon:
 			start = True
 	if not start:
-		logging.warning('Associate at least one tRNA-Met gene with the \'START\' keyword or add manually a \'tRNAChargingReaction\'.')
+		logging.warning('Associate at least one tRNA-Met/tRNA-fMet gene with the \'START\' keyword or add manually a \'tRNAChargingReaction\'.')
 
 	# add in all the tRNA charging reactions
 	for tRNA, aa in trna_aa.items():
+		if tRNA not in trna_to_codon.keys() or isinstance(aa, str): # trna_to_codon contains all the tRNAs found in the organism, not per organelle
+			continue
+
+		if not me_model.metabolites.has_id(aa.id):
+			continue
+
 		for codon in trna_to_codon[tRNA]:
 			codon = codon.replace('T', 'U') if codon != 'START' else codon
 			trna_data = coralme.core.processdata.tRNAData('tRNA_{:s}_{:s}'.format(tRNA, codon), me_model, aa.id, 'RNA_' + tRNA, codon)
 			charging_reaction = coralme.core.reaction.tRNAChargingReaction('charging_tRNA_{:s}_{:s}'.format(tRNA, codon))
 			charging_reaction.tRNA_data = trna_data
+			charging_reaction.organelle = organelle
 
-			me_model.add_reaction(charging_reaction)
+			me_model.add_reactions([charging_reaction])
 			charging_reaction.update(verbose = verbose)
 
 	return None
@@ -219,8 +235,7 @@ def build_reactions_from_genbank(
 
 	"""Creates and adds transcription and translation reactions using genomic
 	 information from the organism's genbank file. Adds in the basic
-	 requirements for these reactions. Organism specific components are added
-	 ...
+	 requirements for these reactions. Organism specific components are added.
 
 	Parameters
 	----------
@@ -329,11 +344,12 @@ def build_reactions_from_genbank(
 
 	# Create transcription reactions for each TU and DNA sequence.
 	# RNA_products will be added so no need to update now
-	for tu_id in tqdm.tqdm(tu_frame.index, 'Adding Transcriptional Units into the ME-Model...', bar_format = bar_format):
+	for tu_id in tqdm.tqdm(tu_frame.index, 'Adding Transcriptional Units into the ME-model...', bar_format = bar_format):
 		if any(x in tu_frame.genes[tu_id].split(',') for x in genes_to_add):
 			start = tu_frame.start[tu_id]
 			stop = tu_frame.stop[tu_id]
 			strand = 1 if tu_frame.strand[tu_id] == '+' else -1
+			organelle = tu_frame.organelle[tu_id]
 
 			if len(start.split(',')) > 1:
 				locations = []
@@ -354,18 +370,27 @@ def build_reactions_from_genbank(
 
 			seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
 			if len(seq) == 0:
-				logging.warning('The knockouts dictionary instructed to completely delete \'{:s}\' from the ME-Model.'.format(tu_id))
+				logging.warning('The knockouts dictionary instructed to completely delete \'{:s}\' from the ME-model.'.format(tu_id))
 			else:
-				add_transcription_reaction(me_model, tu_id, set(), str(seq), update = False)
+				add_transcription_reaction(me_model, tu_id, set(), str(seq), organelle, update = False)
 
 	# Dictionary of tRNA locus ID to the model.metabolite object
 	trna_aa = {}
 
-	# Dictionary of tRNA locus ID to amino acid
-	aa2trna = {}
+	# Dictionary of tRNA locus ID to amino acid, per organelle type
+	aa2trna = {
+		'c' : {}, # prokaryotes and eukaryotes
+		'm' : {}, # mitochondria
+		'h' : {}, # plastids
+		}
 
-	# Set of start and stop codons, and the translation table
-	transl_table = set()
+	transl_tables = {
+		'c' : set(), # prokaryotes and eukaryotes
+		'm' : set(), # mitochondria
+		'h' : set(), # plastids
+		}
+
+	# Set of start and stop codons
 	start_codons = set()
 	stop_codons = set()
 
@@ -375,7 +400,11 @@ def build_reactions_from_genbank(
 
 	# Associate each feature (RNA_product) with a TU and add translation reactions and demands
 	for contig in contigs:
-		for feature in tqdm.tqdm(contig.features, 'Adding features from contig {:s} into the ME-Model...'.format(contig.id), bar_format = bar_format):
+		for feature in tqdm.tqdm(contig.features, 'Adding features from contig {:s} into the ME-model...'.format(contig.id), bar_format = bar_format):
+			# Find organelle in source
+			if feature.type == 'source':
+				organelle = feature.qualifiers.get('organelle', [None])[0]
+
 			# Skip if not a gene used in ME construction
 			if (feature.type not in feature_types) or ('pseudo' in feature.qualifiers) or (feature.qualifiers['locus_tag'][0] in knockouts) or (feature.qualifiers['locus_tag'][0] not in genes_to_add):
 				continue
@@ -394,7 +423,7 @@ def build_reactions_from_genbank(
 
 			seq = feature.extract(contig).seq.ungap() # using Biopython is better
 			if len(seq) == 0:
-				logging.warning('The genomic modification deleted \'{:s}\' from the ME-Model that is not present in the knockouts list.'.format(bnum))
+				logging.warning('The genomic modification deleted \'{:s}\' from the ME-model that is not present in the knockouts list.'.format(bnum))
 				continue
 
 			# old code uses a dictionary setting the frameshifts.
@@ -413,32 +442,73 @@ def build_reactions_from_genbank(
 
 			# Add translation reaction for mRNA
 			if rna_type == 'mRNA' and len(seq) % 3 == 0: # if the genomic modification is not paired correctly with the knockouts list
-				add_translation_reaction(me_model, bnum, dna_sequence = str(seq), update = False)
+				# Add the translation table
+				prot = feature.qualifiers.get('translation', [''])[0]
+				transl_table = feature.qualifiers.get('transl_table', ['1'])[0]
+				add_translation_reaction(me_model, bnum, dna_sequence = str(seq), prot_sequence = str(prot), organelle = organelle, transl_table = int(transl_table), update = False)
 
-				# Add the start codon to start_codons set
+				# Add the start codon to the start_codons set
 				start_codons.add(str(seq[:3]).replace('T', 'U'))
+				# Add the stop codon to the stop_codons sets
 				stop_codons.add(str(seq[-3:]).replace('T', 'U'))
+
+				# Add the translation table (eukaryotes)
+				if organelle is None:
+					transl_tables['c'].add(int(transl_table))
+					if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+						logging.warning('Contig \'{:s}\' does not report an organelle type.'.format(contig.id))
+				elif organelle.lower() in ['mitochondria', 'mitochondrion']:
+					transl_tables['m'].add(int(transl_table))
+				elif organelle.lower() in ['chloroplast', 'plastid']:
+					transl_tables['h'].add(int(transl_table))
+				else:
+					continue
 
 				# Add the codon usage
 				codons = [ str(seq[pos:pos+3]) for pos in range(0, len(seq), 3) ]
 				codon_usage.update(Counter(codons))
 
-				# Add the translation table
-				transl_table.add(feature.qualifiers['transl_table'][0])
+			me_model.global_info['transl_tables'] = transl_tables
+			me_model.global_info['start_codons'] = start_codons
+			me_model.global_info['stop_codons'] = stop_codons
+			me_model.global_info['codon_usage'] = codon_usage
 
 			# Create dict to use for adding tRNAChargingReactions later
 			# tRNA_aa = {'tRNA':'amino_acid'}
-			msg = 'From tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-Model.'
+			msg = 'From tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
 			if rna_type == 'tRNA':
 				aa = feature.qualifiers['product'][0].split('-')[1]
+
+				# misacylation of glutamate/aspartate occurs in archaea, Gram-positive eubacteria, mitochondria, and chloroplasts
 				if aa in trna_misacylation.keys():
-					trna_aa[bnum] = trna_misacylation[aa]
-					logging.warning(msg.format(trna_misacylation[aa], aa, aa, aa))
+					# misacylation only in mitochondria and chloroplasts
+					filter1a = me_model.global_info['domain'].lower() in ['eukarya', 'eukaryote']
+					filter1b = str(organelle).lower() in ['mitochondria', 'mitochondrion', 'chloroplast', 'plastid']
+					# misacylation in the cytoplasm of Gram-positive eubacteria (and other bacteria such as cyanobacteria)
+					filter2 = me_model.global_info['domain'].lower() in ['bacteria', 'prokaryote']
+
+					if filter1a and filter1b or filter2:
+						trna_aa[bnum] = trna_misacylation[aa]
+						logging.warning(msg.format(trna_misacylation[aa], aa, aa, aa))
+					else:
+						# misacylation is not valid in the compartment x domain
+						trna_aa[bnum] = aa
 				else:
 					trna_aa[bnum] = aa
-				aa2trna[bnum] = aa # original tRNA<->Amino acid association to be used later in trna_to_codon
+
+				#aa2trna[bnum] = aa # original tRNA<->Amino acid association to be used later in trna_to_codon
+
+				if organelle is None:
+					aa2trna['c'][bnum] = aa
+				elif organelle.lower() in ['mitochondria', 'mitochondrion']:
+					aa2trna['m'][bnum] = aa
+				elif organelle.lower() in ['chloroplast', 'plastid']:
+					aa2trna['h'][bnum] = aa
 				#old code
 				#trna_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
+
+			trna_aa = { k:v.replace('fMet', 'Met') for k,v in trna_aa.items() }
+			me_model.global_info['trna_to_aa'] = trna_aa
 
 			## Associate the TranscribedGene to TU(s)
 			# old code does not consider that a gene can start at the "end" of the genome and finish at the "start" of it
@@ -448,43 +518,59 @@ def build_reactions_from_genbank(
 			if len(parent_tu) == 0:
 				tu_id = 'TU_' + bnum
 				parent_tu = [tu_id]
-				add_transcription_reaction(me_model, tu_id, set(), str(seq), update = False)
+				add_transcription_reaction(me_model, tu_id, set(), str(seq), organelle, update = False)
 				logging.warning('No Trancriptional Unit found for {:s} {:s}. Created a dummy TU_{:s}.'.format(rna_type, bnum, bnum))
 
 			for TU_id in parent_tu:
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
 
-	codon_table = Data.CodonTable.generic_by_id[me_model.global_info.get('translation_table', 11)]
-	dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
-	aa2codons = pandas.DataFrame(data = [dct.keys(), dct.values()]).T.groupby(1).agg({0: lambda x: x.tolist()})
+	# DataFrame mapping tRNAs (list) and the encoded aminoacid (index), per organelle
+	for organelle, aa2trna_dct in aa2trna.items():
+		aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
+		aa2trna_dct = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
+		aa2trna_dct = aa2trna_dct.groupby(0).agg({1: lambda x: x.tolist()})
+		if 'fMet' in aa2trna_dct.index:
+			aa2trna_dct.loc['Met'] = aa2trna_dct.loc['fMet'] + aa2trna_dct.loc['Met']
 
-	if me_model.global_info.get('translation_table', None) is None:
-		me_model.global_info['translation_table'] = int(list(transl_table)[0]) if len(transl_table) == 1 else 11
-		logging.warning('Translation table was set to {:d} (See more https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG{:d}).'.format(me_model.global_info['translation_table'], me_model.global_info['translation_table']))
+		aa2trna[organelle] = aa2trna_dct
 
-	if me_model.global_info['translation_table'] == 11:
-		aa2codons.loc['Sec'] = [['UGA']] # an internal UGA encodes selenocysteine
+		# assign START tRNAs to every fMet-tRNA (Met-tRNA if not) and check if at least one tRNA was identified
+		if 'fMet' in aa2trna_dct.index:
+			if len(me_model.global_info['START_tRNA']) == 0:
+				me_model.global_info['START_tRNA'] = list(aa2trna_dct.loc['fMet'])[0]
+		if len(me_model.global_info['START_tRNA']) == 0:
+			me_model.global_info['START_tRNA'] = list(aa2trna_dct.loc['Met'])[0]
+		if len(me_model.global_info['START_tRNA']) == 0:
+			logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
 
-	aa2trna = { k:v.capitalize().split('_')[0] for k,v in aa2trna.items() }
-	aa2trna = pandas.DataFrame(data = [aa2trna.values(), aa2trna.keys()]).T
-	aa2trna = aa2trna.groupby(0).agg({1: lambda x: x.tolist()})
+	me_model.global_info['aa2trna'] = aa2trna
 
-	# assign START tRNAs to every Met-tRNA and check if at least one was identified
-	if len(me_model.global_info['START_tRNA']) == 0:
-		me_model.global_info['START_tRNA'] = list(aa2trna.loc['Met'])[0]
-	if len(me_model.global_info['START_tRNA']) == 0:
-		logging.warning('Unable to identify at least one \'tRNA-Met\' annotation from the \'Definition\' column in the organism-specific matrix.')
+	# add charging tRNA reactions per organelle
+	for organelle, transl_table in transl_tables.items():
+		if len(transl_table) == 0:
+			continue
 
-	df = pandas.concat([aa2codons, aa2trna], axis = 1).dropna(how = 'any').explode(1)
-	trna_to_codon = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
+		#codon_table = Bio.Data.CodonTable.generic_by_id[me_model.global_info.get('translation_table', 11)]
+		#me_model.global_info['codon_table'] = codon_table
+		codon_table = Bio.Data.CodonTable.generic_by_id[list(transl_table)[0]]
 
-	convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, verbose = verbose)
+		dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
+		aa2codons = pandas.DataFrame(data = [dct.keys(), dct.values()]).T.groupby(1).agg({0: lambda x: x.tolist()})
 
-	me_model.global_info['codon_table'] = codon_table
-	me_model.global_info['stop_codons'] = stop_codons
-	me_model.global_info['codon_usage'] = codon_usage
-	me_model.global_info['start_codons'] = start_codons
-	me_model.global_info['trna_to_codon'] = trna_to_codon
+		#if me_model.global_info.get('translation_table', None) is None:
+			#me_model.global_info['translation_table'] = int(list(transl_table)[0]) if len(transl_table) == 1 else 11
+			#logging.warning('Translation table was set to {:d} (See more https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG{:d}).'.format(me_model.global_info['translation_table'], me_model.global_info['translation_table']))
+
+		#if me_model.global_info['translation_table'] == 11:
+		if list(transl_table)[0] == 11:
+			aa2codons.loc['Sec'] = [['UGA']] # an internal UGA encodes selenocysteine
+
+		df = pandas.concat([aa2codons, aa2trna[organelle]], axis = 1).dropna(how = 'any').explode(1)
+
+		trna_to_codon = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
+		me_model.global_info['trna_to_codon'][organelle] = trna_to_codon
+
+		convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organelle, verbose = verbose)
 
 	if update:
 		# Update all newly added reactions
@@ -523,13 +609,13 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 		matrix, but should be treated as complexes.
 
 	"""
-	for met in tqdm.tqdm(m_model.metabolites, 'Adding Metabolites from M-Model into the ME-Model...', bar_format = bar_format):
+	for met in tqdm.tqdm(m_model.metabolites, 'Adding Metabolites from M-model into the ME-model...', bar_format = bar_format):
 		if met.id in complex_metabolite_ids:
 			new_met = coralme.core.component.Complex(met.id)
 		elif met.id.startswith('RNA_'):
 			#raise ValueError('Processed M-model should not contain RNAs ({:s})'.format(met.id))
 			new_met = me_model.metabolites(met.id)
-			logging.warning('Added TranscribedGene \'{:s}\'. It is highly probable the ME-Model is not feasible.'.format(met.id))
+			logging.warning('Added TranscribedGene \'{:s}\'. It is highly probable the ME-model is not feasible.'.format(met.id))
 		elif met.id.startswith('generic_tRNA'):
 			new_met = coralme.core.component.GenerictRNA(met.id)
 		else:
@@ -543,13 +629,13 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 		new_met.notes = met.notes
 		me_model.add_metabolites(new_met)
 
-	for reaction in tqdm.tqdm(m_model.reactions, 'Adding Reactions from M-Model into the ME-Model...', bar_format = bar_format):
+	for reaction in tqdm.tqdm(m_model.reactions, 'Adding Reactions from M-model into the ME-model...', bar_format = bar_format):
 		if reaction.id.startswith('BIOMASS_'):
 			continue
 
 		if reaction.id.startswith('EX_') or reaction.id.startswith('DM_') or reaction.id.startswith('SK_'):
 			new_reaction = coralme.core.reaction.MEReaction(reaction.id)
-			me_model.add_reaction(new_reaction)
+			me_model.add_reactions([new_reaction])
 			new_reaction.lower_bound = reaction.lower_bound
 			new_reaction.upper_bound = reaction.upper_bound
 			for met, stoichiometry in reaction.metabolites.items():
@@ -614,7 +700,7 @@ def add_dummy_reactions(me_model, update = True):
 	try:
 		complex_data = coralme.core.processdata.ComplexData('CPLX_dummy', me_model)
 	except ValueError:
-		logging.warning('Complex \'CPLX_dummy\' already present in the ME-Model.')
+		logging.warning('Complex \'CPLX_dummy\' already present in the ME-model.')
 		complex_data = me_model.process_data.get_by_id('CPLX_dummy')
 	complex_data.stoichiometry = {'protein_dummy': 1}
 
@@ -673,7 +759,7 @@ def add_subreaction_data(me_model, modification_id, modification_stoichiometry, 
 
 	if modification_id in me_model.process_data:
 		#if verbose:
-		logging.warning('SubReaction \'{:s}\' is already in the ME-Model and its stoichiometry was modified on your request.'.format(modification_id))
+		logging.warning('SubReaction \'{:s}\' is already in the ME-model and its stoichiometry was modified on your request.'.format(modification_id))
 		me_model.process_data.get_by_id(modification_id).stoichiometry = modification_stoichiometry
 		#else:
 			#pass
@@ -772,7 +858,7 @@ def add_metabolic_reaction_to_model(me_model, stoichiometric_data_id, directiona
 	try:
 		stoichiometric_data = me_model.process_data.get_by_id(stoichiometric_data_id)
 	except KeyError:
-		raise Exception('StoichiometricData for \'{:s}\' has not been added to ME-Model.'.format(stoichiometric_data_id))
+		raise Exception('StoichiometricData for \'{:s}\' has not been added to ME-model.'.format(stoichiometric_data_id))
 
 	# Get complex data and id based on arguments passed into function
 	if isinstance(complex_id, str) and complex_id != 'dummy_MONOMER':
@@ -802,7 +888,7 @@ def add_metabolic_reaction_to_model(me_model, stoichiometric_data_id, directiona
 		raise NameError('Reaction direction must be \'forward\' or \'reverse\'.')
 
 	r = coralme.core.reaction.MetabolicReaction(''.join([stoichiometric_data_id, direction, complex_id]))
-	me_model.add_reaction(r)
+	me_model.add_reactions([r])
 	r.keff = keff
 	r.stoichiometric_data = stoichiometric_data
 	r.reverse = reverse_flag
@@ -839,7 +925,7 @@ def add_reactions_from_stoichiometric_data(
 		metabolic reaction matrix as well as whether the reaction is
 		spontaneous
 	"""
-	for reaction_data in tqdm.tqdm(list(me_model.stoichiometric_data), 'Processing StoichiometricData in ME-Model...', bar_format = bar_format):
+	for reaction_data in tqdm.tqdm(list(me_model.stoichiometric_data), 'Processing StoichiometricData in ME-model...', bar_format = bar_format):
 		#try:
 			#spontaneous_flag = rxn_info_frame.is_spontaneous[reaction_data.id]
 		#except KeyError:

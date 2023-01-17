@@ -5,7 +5,6 @@ import os
 import re
 import pickle
 import pathlib
-import logging
 import warnings
 import collections
 import subprocess
@@ -27,9 +26,25 @@ try:
 except:
 	warnings.warn("This pandas version does not allow for correct warning handling. Pandas >=1.5.1 is suggested.")
 
+import logging
+#https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
+#Here is a naive, non thread-safe implementation:
+# Inherit from logging.Handler
+class ListHandler(logging.Handler):
+	def __init__(self, log_list):
+		# run the regular Handler __init__
+		logging.Handler.__init__(self)
+		# Our custom argument
+		self.level = logging.WARNING
+		self.formatter = log_format
+		self.log_list = log_list
+	def emit(self, record):
+		# record.message is the log message
+		self.log_list.append((record.asctime, record.message))
+
 class MEBuilder(object):
 	"""
-	MEBuilder class to construct input data from protein homology.
+	MEBuilder class to obtain input data from protein homology.
 
 	Parameters
 	----------
@@ -47,6 +62,12 @@ class MEBuilder(object):
 		self.me_model = coralme.core.model.MEModel(config.get('model_id', 'coralME'), config.get('growth_key', 'mu'))
 		self.configuration = config
 		self.curation_notes = { 'troubleshoot' : [] }
+		self.logger = {
+			'MEBuilder' : coralme.builder.main.ListHandler([]),
+			'MEReconstruction-step1' : coralme.builder.main.ListHandler([]),
+			'MEReconstruction-step2' : coralme.builder.main.ListHandler([]),
+			'METroubleshooter' : coralme.builder.main.ListHandler([])
+			}
 
 		data = \
 			'code,interpretation,gram\n' \
@@ -284,7 +305,6 @@ class MEBuilder(object):
 				if info["gene_reaction_rule"]:
 					if info["gene_reaction_rule"] == "no_gene":
 						rxn.gene_reaction_rule = ""
-						rxn.name = str(rxn.name) + ', spontaneous'
 					else:
 						rxn.gene_reaction_rule = info["gene_reaction_rule"]
 				if info["name"]:
@@ -642,15 +662,15 @@ class MEBuilder(object):
 			org_gene = mutual_hits[ref_gene]
 			ref_info = ref_protein_location[ref_protein_location['Protein'].str.contains(ref_gene)]
 			gene_string = '{}\('.format(org_gene)
-			org_cplxs = org_complexes_df[org_complexes_df['genes'].str.contains(gene_string)].index
+			org_cplxs = complexes_df[complexes_df['genes'].str.contains(gene_string)].index
 			for org_cplx in org_cplxs:
 				if protein_location.any().any() and \
 					org_cplx in protein_location.index and \
 					protein_location.loc[[org_cplx]]['Protein'].str.contains(gene_string).any().any():
+							# Check if already in protein location, if not add.
 					pass
-					# Check if already in protein location, if not add.
 				else:
-					tmp = pandas.DataFrame.from_dict(
+								tmp = pandas.DataFrame.from_dict(
 						{ org_cplx: {
 							"Complex_compartment": ref_info["Complex_compartment"].values[0],
 							"Protein": '{}()'.format(org_gene),
@@ -658,7 +678,7 @@ class MEBuilder(object):
 							"translocase_pathway": ref_info["translocase_pathway"].values[0],
 										}
 									}).T
-					protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+								protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
 		self.org.protein_location = protein_location
 
 	def update_translocation_multipliers(self):
@@ -1127,12 +1147,13 @@ class MEReconstruction(object):
 	"""
 	def __init__(self, builder):
 		try:
-			# only if builder.generate_files() was before builder.build_me_model()
+			# only if builder.generate_files() was run before builder.build_me_model()
 			self.org = builder.org
 			self.homology = builder.homology
 		except:
 			pass
 
+		self.logger = builder.logger
 		self.me_model = builder.me_model
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
@@ -1144,24 +1165,35 @@ class MEReconstruction(object):
 
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
-			config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
+			if hasattr(self, 'org'):
+				logging.warning('RNA Polymerases (core enzyme and sigma factors) was set from homology data.')
+				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
 
 			# replace IDs
 			for name, rnap in config['rna_polymerases'].items():
-				for key, value in rnap.items():
-					config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
+				if hasattr(self, 'org'):
+					for key, value in rnap.items():
+						config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
 
 		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
-			config['lipid_modifications'] = [ x for x in self.org.lipids if x.endswith('_p') and (x.startswith('pg') or x.startswith('pe')) and not x.startswith('pgp') ]
+			if hasattr(self, 'org'):
+				logging.warning('Lipid modifications were set from M-model metabolites.')
+				config['lipid_modifications'] = [ x for x in self.org.lipids if x.endswith('_p') and (x.startswith('pg') or x.startswith('pe')) and not x.startswith('pgp') ]
 
 		if config.get('lipoprotein_precursors', None) is None or len(config.get('lipoprotein_precursors')) == 0:
-			config['lipoprotein_precursors'] = self.org.lipoprotein_precursors
+			if hasattr(self, 'org'):
+				logging.warning('Lipoprotein precursors were set from homology data.')
+				config['lipoprotein_precursors'] = self.org.lipoprotein_precursors
 
 		if config.get('ngam', None) is None:
-			config['ngam'] = self.org.NGAM
+			if hasattr(self, 'org'):
+				logging.warning('ATPM (ATP requirement for maintenance) was set from the M-model.')
+				config['ngam'] = self.org.NGAM
 
 		if config.get('gam', None) is None:
-			config['gam'] = self.org.GAM
+			if hasattr(self, 'org'):
+				logging.warning('GAM (ATP requirement for growth).')
+				config['gam'] = self.org.GAM
 
 		# modify options to not run again blast
 		config['create_files'] = False
@@ -1171,12 +1203,14 @@ class MEReconstruction(object):
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
 
-		with open('coralme-config.json', 'w') as outfile:
-			anyconfig.dump(config, outfile)
-		with open('coralme-config.yaml', 'w') as outfile:
-			anyconfig.dump(config, outfile)
-		#with open('automated.toml', 'w') as outfile:
-			#anyconfig.dump(config, outfile)
+		if overwrite:
+			logging.warning('New configuration file was written with inferred options.')
+			#with open('coralme-config.json', 'w') as outfile:
+				#anyconfig.dump(config, outfile)
+			with open('coralme-config.yaml', 'w') as outfile:
+				anyconfig.dump(config, outfile)
+			#with open('automated.toml', 'w') as outfile:
+				#anyconfig.dump(config, outfile)
 
 		def read(filename, columns = []):
 			if pathlib.Path(filename).is_file():
@@ -1186,7 +1220,7 @@ class MEReconstruction(object):
 				else:
 					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
 			else:
-				logging.warning('File \'{:s}\' does not exist.'.format(filename))
+				logging.warning('Input file \'{:s}\' does not exist.'.format(filename))
 				return pandas.DataFrame(columns = columns)
 
 		# INPUTS: We capture if the file exists or if it is empty
@@ -1196,23 +1230,26 @@ class MEReconstruction(object):
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
 		filename = config.get('df_matrix_stoichiometry', '')
-		self.df_rmsc = read(filename, ['Reaction', 'Metabolites', 'Compartment', 'Stoichiometry'])
+		self.df_rmsc = read(filename, ['Reaction', 'Metabolites', 'Stoichiometry'])
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficientes
 		filename = config.get('df_matrix_subrxn_stoich', '')
-		self.df_subs = read(filename, ['Reaction', 'Metabolites', 'Compartment', 'Stoichiometry'])
+		self.df_subs = read(filename, ['Reaction', 'Metabolites', 'Stoichiometry'])
 		# Orphan and Spontaneous reaction metadata
 		filename = config.get('df_metadata_orphan_rxns', '')
 		self.df_rxns = read(filename, ['name', 'description', 'is_reversible', 'is_spontaneous']).set_index('name', inplace = False)
 		# Metabolites metadata
 		filename = config.get('df_metadata_metabolites', '')
-		self.df_mets = read(filename, ['id', 'me_id', 'name', 'formula', 'compartment', 'type']).set_index('id', inplace = False)
+		self.df_mets = read(filename, ['id', 'me_id', 'name', 'formula', 'type']).set_index('id', inplace = False)
 
 		# Drop-in replacement of input files:
 		# step1: reactions, complexes, modification of complexes, enzyme-to-reaction mapping
 		# step2a: generics, dnap stoichiometry, ribosome stoichiometry, degradosome stoichiometry, tRNA ligases, RNA modifications
 		# step2b: folding pathways (DnaK, GroEL), N-terminal Methionine Processing, translocation pathways
 		filename = config.get('df_gene_cplxs_mods_rxns', '')
-		if pathlib.Path(filename).is_file() or overwrite == False:
+		if overwrite:
+			pathlib.Path(filename).unlink(missing_ok = True)
+
+		if pathlib.Path(filename).is_file():
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
 			# generate a minimal dataframe from genbank and m-model
@@ -1227,10 +1264,17 @@ class MEReconstruction(object):
 		config = self.configuration
 
 		model = config.get('model_id', 'coralME')
-		directory = config.get('log_directory', './')
+		directory = config.get('log_directory', '.')
 
 		# ## Part 1: Create a minimum solveable ME-model
-		logging.basicConfig(filename = '{:s}/step1-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		# set logger
+		log = logging.getLogger() # root logger
+		for hdlr in log.handlers[:]: # remove all old handlers
+			log.removeHandler(hdlr)
+
+		# Old code works in a separate script; but it works if we remove the old handler
+		logging.basicConfig(filename = '{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		log.addHandler(self.logger['MEReconstruction-step1'])
 		logging.captureWarnings(True)
 
 		# This will include the bare minimum representations of that still produce a working ME-model:
@@ -1251,16 +1295,19 @@ class MEReconstruction(object):
 		me.add_biomass_constraints_to_model(me.global_info['biomass_constraints'])
 
 		# Define ME-model compartments
-		me.compartments = me.global_info['compartments']
+		me._compartments = me.global_info.get('compartments', {})
+		if 'mc' not in me._compartments.keys():
+			me._compartments['mc'] = 'ME-model Constraint'
+			logging.warning('Pseudo-compartment \'mc\' was added into the ME-model.')
 
-		# Define M-Model
+		# Define M-model
 		if me.global_info['m-model-path'].endswith('.json'):
 			me.gem = cobra.io.load_json_model(me.global_info['m-model-path'])
 		else:
 			me.gem = cobra.io.read_sbml_model(me.global_info['m-model-path'])
 
 		# Read user inputs
-		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem)
+		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
 
 		# update default options with missing, automated-defined values
 		me.global_info.update(self.configuration)
@@ -1271,7 +1318,7 @@ class MEReconstruction(object):
 		df_mets = self.df_mets
 
 		# Remove default ME-model SubReactions that are not mapped in the organism-specific matrix
-		subrxns = set(df_data[df_data['ME-Model SubReaction'].notnull()]['ME-Model SubReaction'])
+		subrxns = set(df_data[df_data['ME-model SubReaction'].notnull()]['ME-model SubReaction'])
 
 		# list of subreactions
 		for key in ['peptide_processing_subreactions']:
@@ -1283,11 +1330,11 @@ class MEReconstruction(object):
 
 		# ### 2) Load metabolites and build Metabolic reactions
 		#
-		# It creates a new M-Model, then incorporates it into the ME-model using the *add_m_model_content* function. Reactions are added directly and metabolites are added as *StoichiometricData* (*me.stoichiometric_data*).
+		# It creates a new M-model, then incorporates it into the ME-model using the *add_m_model_content* function. Reactions are added directly and metabolites are added as *StoichiometricData* (*me.stoichiometric_data*).
 		#
-		# Different metabolite types have different properties in a ME-model, so complexes are added to the model as a *ComplexData*, not as a *Metabolite*. Components in the M-Model that are actually *Complexes* are compiled in the *cplx_lst* variable.
+		# Different metabolite types have different properties in a ME-model, so complexes are added to the model as a *ComplexData*, not as a *Metabolite*. Components in the M-model that are actually *Complexes* are compiled in the *cplx_lst* variable.
 
-		# Modify M-Model
+		# Modify M-model
 		m_model = coralme.builder.flat_files.process_m_model(
 			m_model = me.gem,
 			rxns_data = df_rxns, # metadata of new reactions
@@ -1298,7 +1345,7 @@ class MEReconstruction(object):
 			me_compartments = { v:k for k,v in me._compartments.items() }, repair = True,
 			defer_to_rxn_matrix = me.global_info['defer_to_rxn_matrix'])
 
-		# Some of the 'metabolites' in the M-Model are actually complexes.
+		# Some of the 'metabolites' in the M-model are actually complexes.
 		# We pass those in so they get created as complexes, not metabolites.
 		cplx_dct = coralme.builder.flat_files.get_complex_subunit_stoichiometry(df_cplxs)
 		cplx_lst = [ i.id for i in m_model.metabolites if i.id.split('_mod_')[0] in cplx_dct.keys() ]
@@ -1403,7 +1450,7 @@ class MEReconstruction(object):
 		# 1. have no mechanistic function in the model (e.g., *glycogen*)
 		# 2. are cofactors that are regenerated (e.g., *nad*)
 		#
-		# Applies demands and coefficients from the biomass objective function from the M-Model.
+		# Applies demands and coefficients from the biomass objective function from the M-model.
 
 		for key in [ 'gam', 'ngam', 'unmodeled_protein_fraction' ]:
 			if key in me.global_info:
@@ -1435,7 +1482,7 @@ class MEReconstruction(object):
 				rxn.lower_bound = me.mu # coralme.util.mu
 				rxn.upper_bound = 1000. # coralme.util.mu?
 			except:
-				msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-Model or the \'metabolites.txt\' metadata file.'
+				msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
 				logging.warning(msg.format(met))
 
 		# ### 3. DNA Demand Requirements
@@ -1477,7 +1524,14 @@ class MEReconstruction(object):
 		print('ME-model was saved as MEModel-step1-{:s}.pkl'.format(model))
 
 		# ## Part 2: Add metastructures to solving ME-model
-		logging.basicConfig(filename = '{:s}/step2-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		# set logger
+		log = logging.getLogger() # root logger
+		for hdlr in log.handlers[:]: # remove all old handlers
+			log.removeHandler(hdlr)
+
+		# Old code works in a separate script; but it works if we remove the old handler
+		logging.basicConfig(filename = '{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		log.addHandler(self.logger['MEReconstruction-step2'])
 		logging.captureWarnings(True)
 
 		# ### 1) Add *GenericData* and its reactions
@@ -1505,17 +1559,30 @@ class MEReconstruction(object):
 
 		# The tRNA charging reactions were automatically added when loading the genome from the GenBank file. However, the charging reactions still need to be made aware of the tRNA synthetases which are responsible. Generic charged tRNAs are added to translation reactions via *SubreactionData* below.
 
+		# TODO: tRNA synthetases per organelle
 		aa_synthetase_dict = coralme.builder.preprocess_inputs.aa_synthetase_dict(df_data)
 		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-model...', bar_format = bar_format):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
 		special_trna_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Special_tRNA')
-		coralme.builder.translation.add_charged_trna_subreactions(me, translation_stop_dict = me.global_info['translation_stop_dict'])
+
+		# TODO: charged tRNAs per organelle
+		for organelle, transl_table in me.global_info['transl_tables'].items():
+			if len(transl_table) == 0:
+				continue
+
+			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'])
 
 		# ### 4) Add tRNA modifications into the ME-model and asocciate them with tRNA charging reactions
 
 		# Add tRNA modifications to ME-model
-		df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['16S_rRNAs', '23S_rRNAs'])]
+		if me.global_info['domain'].lower() in ['prokaryote', 'bacteria']:
+			df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['16S_rRNAs', '23S_rRNAs'])]
+		elif me.global_info['domain'].lower() in ['eukarya', 'eukaryote']:
+			df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['18S_rRNAs', '25S_rRNAs', '28S_rRNAs'])]
+		else:
+			logging.warning('The \'domain\' property is not valid. A valid value is \'Prokaryote\', \'Bacteria\', \'Eukarya\', or \'Eukaryote\'.')
+
 		coralme.builder.trna_charging.add_trna_modification_procedures(me, df_trna_mods)
 
 		# Associate tRNA modifications to tRNAs
@@ -1658,7 +1725,10 @@ class MEReconstruction(object):
 			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, False)
 			rho = 'dependent' if rho_dependent else 'independent'
 			stable = 'stable' if transcription_data.codes_stable_rna else 'normal'
-			transcription_data.subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
+			if 'Transcription_{:s}_rho_{:s}'.format(stable, rho) in me.global_info['transcription_subreactions']:
+				transcription_data.subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
+			else:
+				logging.warning('The SubReaction \'Transcription_{:s}_rho_{:s}\' is not defined in the organism-specific matrix.'.format(stable, rho))
 
 		# ## Part 5: Add in Translocation reactions
 
@@ -1779,8 +1849,8 @@ class MEReconstruction(object):
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
 
-		# Add reaction subsystems from M-Model to ME-model
-		for rxn in tqdm.tqdm(me.gem.reactions, 'Adding reaction subsystems from M-Model into the ME-model...', bar_format = bar_format):
+		# Add reaction subsystems from M-model to ME-model
+		for rxn in tqdm.tqdm(me.gem.reactions, 'Adding reaction subsystems from M-model into the ME-model...', bar_format = bar_format):
 			if rxn.id in me.process_data:
 				data = me.process_data.get_by_id(rxn.id)
 			else:
@@ -1829,14 +1899,11 @@ class MEReconstruction(object):
 		# add metabolite compartments
 		coralme.builder.compartments.add_compartments_to_model(me)
 
-		# ## Part 9: Save
+		# ## Part 9: Update ME-model, prune reactions and save
+		me.update()
+		me.prune()
 
 		import pickle
-
-		# 26.5 seconds without constraints
-		me.update() # ~15 mins without prefilter
-		me.prune() # ~3.5 mins without prefilter
-
 		with open('MEModel-step2-{:s}.pkl'.format(model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
@@ -1847,6 +1914,17 @@ class MEReconstruction(object):
 		print('Done. Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
 
 		self.me_model = me
+
+		with open('{:s}/MEReconstruction-{:s}.log'.format(directory, model), 'w') as outfile:
+			pathlib.Path('{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model)).unlink(missing_ok = True)
+			pathlib.Path('{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model)).unlink(missing_ok = True)
+
+			logger = self.logger['MEReconstruction-step1'].log_list
+			logger += self.logger['MEReconstruction-step2'].log_list
+
+			tmp = pandas.DataFrame(logger)
+			for idx, data in tmp.drop_duplicates(subset = 1).iterrows():
+				outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
 
 		return None
 
@@ -1868,7 +1946,7 @@ class METroubleshooter(object):
 
 	def gap_find(self):
 		#from draft_coralme.util.helper_functions import find_gaps
-		print('  '*5 + 'Finding gaps from the M-Model only...')
+		print('  '*5 + 'Finding gaps from the M-model only...')
 		m_gaps = coralme.builder.helper_functions.find_gaps(self.me_model.gem)
 
 		print('  '*5 + 'Finding gaps in the ME-model...')
@@ -1887,7 +1965,7 @@ class METroubleshooter(object):
 		print('  '*5 + '{:d} metabolites were identified as deadends.'.format(len(deadends)))
 		for met in deadends:
 			name = self.me_model.metabolites.get_by_id(met).name
-			print('  '*6 + '{:s}: {:s}'.format(met, 'Missing metabolite in the M-Model.' if name == '' else name))
+			print('  '*6 + '{:s}: {:s}'.format(met, 'Missing metabolite in the M-model.' if name == '' else name))
 		return deadends
 
 	def gap_fill(self, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.01 }, met_types = 'Metabolite'):
@@ -1923,25 +2001,25 @@ class METroubleshooter(object):
 				if filter1 and not filter2 and not filter3 and not filter4:
 					mets.append(met.id)
 
-# 		if met_types == 'Metabolite':
-# 			# remove metabolites that are fed into the model through transport reactions
-# 			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
-# 			mets = set(mets).difference(medium)
+		if met_types == 'Metabolite':
+			# remove metabolites that are fed into the model through transport reactions
+			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
+			mets = set(mets).difference(medium)
 
-# 			# filter out manually
-# 			mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
-# 			mets = set(mets).difference(set(['ade_c']))
-# 			mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
-# 			mets = set(mets).difference(set(['cdp_c', 'cmp_c', 'ctp_c']))
-# 			mets = set(mets).difference(set(['gdp_c', 'gmp_c', 'gtp_c']))
-# 			mets = set(mets).difference(set(['udp_c', 'ump_c', 'utp_c']))
-# 			mets = set(mets).difference(set(['dadp_c', 'dcdp_c', 'dgdp_c', 'dtdp_c', 'dudp_c']))
-# 			mets = set(mets).difference(set(['damp_c', 'dcmp_c', 'dgmp_c', 'dtmp_c', 'dump_c']))
-# 			mets = set(mets).difference(set(['datp_c', 'dctp_c', 'dgtp_c', 'dttp_c', 'dutp_c']))
-# 			mets = set(mets).difference(set(['nad_c', 'nadh_c', 'nadp_c', 'nadph_c']))
-# 			mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
-# 			mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
-# 			mets = set(mets).difference(set(['coa_c']))
+			# filter out manually
+			mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
+			mets = set(mets).difference(set(['ade_c']))
+			mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
+			mets = set(mets).difference(set(['cdp_c', 'cmp_c', 'ctp_c']))
+			mets = set(mets).difference(set(['gdp_c', 'gmp_c', 'gtp_c']))
+			mets = set(mets).difference(set(['udp_c', 'ump_c', 'utp_c']))
+			mets = set(mets).difference(set(['dadp_c', 'dcdp_c', 'dgdp_c', 'dtdp_c', 'dudp_c']))
+			mets = set(mets).difference(set(['damp_c', 'dcmp_c', 'dgmp_c', 'dtmp_c', 'dump_c']))
+			mets = set(mets).difference(set(['datp_c', 'dctp_c', 'dgtp_c', 'dttp_c', 'dutp_c']))
+			mets = set(mets).difference(set(['nad_c', 'nadh_c', 'nadp_c', 'nadph_c']))
+			mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
+			mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
+			mets = set(mets).difference(set(['coa_c']))
 
 		bf_gaps = coralme.builder.helper_functions.brute_force_check(self.me_model, mets, growth_key_and_value)
 		if self.me_model.feasibility(keys = growth_key_and_value):
@@ -1988,7 +2066,7 @@ class METroubleshooter(object):
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
 			bf_gaps, works = self.brute_check(growth_key_and_value, met_types = met_type)
 
-			if len(bf_gaps) != 0:
+			if len(bf_gaps) != 0 or bf_gaps[0]:
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Additional deadends were identified',
 					'triggered_by':bf_gaps,
@@ -2003,7 +2081,7 @@ class METroubleshooter(object):
 			met_types = [ 'Complex', 'GenerictRNA', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
 
 			for met_type in met_types:
-				print('  '*5 + 'Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(mt))
+				print('  '*5 + 'Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(met_type))
 
 				self.me_model.relax_bounds()
 				self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production

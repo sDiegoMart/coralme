@@ -30,8 +30,8 @@ def generate_organism_specific_matrix(genbank, model):
 		'Cofactors in Modified Complex',
 		'Generic Complex ID',
 		'MetaComplex ID',
-		'ME-Model SubReaction',
-		'M-Model Reaction ID',
+		'ME-model SubReaction',
+		'M-model Reaction ID',
 		'Reaction Name',
 		'Reversibility',
 		'GroEL_dependent_folding',
@@ -82,15 +82,15 @@ def generate_organism_specific_matrix(genbank, model):
 	df['Definition'] = [ x.qualifiers['product'][0] if x.qualifiers.get('product', None) is not None else None for x in lst ]
 	df['Feature Type'] = [ x.type if x.qualifiers.get('pseudo') is None else 'pseudo' for x in lst ]
 
-	df['M-Model Reaction ID'] = df['Old Locus ID'].apply(lambda x: get_reaction(x))
-	df['M-Model Reaction ID'].update(df['Gene Locus ID'].apply(lambda x: get_reaction(x)))
-	df = df.explode('M-Model Reaction ID')
+	df['M-model Reaction ID'] = df['Old Locus ID'].apply(lambda x: get_reaction(x))
+	df['M-model Reaction ID'].update(df['Gene Locus ID'].apply(lambda x: get_reaction(x)))
+	df = df.explode('M-model Reaction ID')
 
-	df['Reaction Name'] = df['M-Model Reaction ID'].apply(lambda x: get_reaction_name(x))
-	df['Reversibility'] = df['M-Model Reaction ID'].apply(lambda x: get_reversibility(x))
+	df['Reaction Name'] = df['M-model Reaction ID'].apply(lambda x: get_reaction_name(x))
+	df['Reversibility'] = df['M-model Reaction ID'].apply(lambda x: get_reversibility(x))
 
 	# df.set_index(['Gene Locus ID', 'Definition', 'Feature type'], inplace = True)
-	return df.sort_values(['M-Model Reaction ID', 'Gene Locus ID'])
+	return df.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
 
 def complete_organism_specific_matrix(builder, data, model, output):
 	def bbh(x, builder):
@@ -163,7 +163,13 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			return subrxns
 
 	def sigmas(x, builder):
-		lst = builder.org.sigmas.index
+		if isinstance(builder.org.RNAP, list):
+			RNAP_components = builder.org.RNAP
+		else:
+			RNAP_components = [builder.org.RNAP]
+
+		# combine
+		lst = list(builder.org.sigmas.index) + RNAP_components
 		if x['Gene Locus ID'] + '-MONOMER' in lst:
 			return 'RNAP'
 
@@ -304,10 +310,10 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data['MetaComplex ID'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: transpaths(x, builder), axis = 1))
 	data = data.explode('MetaComplex ID')
 
-	data['ME-Model SubReaction'] = data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: ribosome_subrxns(x, builder), axis = 1)
-	data['ME-Model SubReaction'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: translation_subrxns(x, builder), axis = 1))
-	data['ME-Model SubReaction'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: transcription_subrxns(x, builder), axis = 1))
-	data = data.explode('ME-Model SubReaction')
+	data['ME-model SubReaction'] = data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: ribosome_subrxns(x, builder), axis = 1)
+	data['ME-model SubReaction'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: translation_subrxns(x, builder), axis = 1))
+	data['ME-model SubReaction'].update(data[['Gene Locus ID', 'Generic Complex ID']].apply(lambda x: transcription_subrxns(x, builder), axis = 1))
+	data = data.explode('ME-model SubReaction')
 
 	data['GroEL_dependent_folding'] = data['Gene Locus ID'].apply(lambda x: groel(x, builder))
 	data['DnaK_dependent_folding'] = data['Gene Locus ID'].apply(lambda x: dnak(x, builder))
@@ -347,7 +353,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			worksheet.set_column_pixels(0,  max_col - 1, 96)
 
 			# Close the Pandas Excel writer and output the Excel file.
-			writer.save()
+			writer.close()
 
 	return data
 
@@ -455,7 +461,7 @@ def aa_synthetase_dict(df):
 def get_subreactions(df, key: str):
 	tmp = df[~df['Feature Type'].isin(['pseudo'])]
 	tmp = correct_input(tmp)
-	tmp = tmp[tmp['ME-Model SubReaction'].notna()]
+	tmp = tmp[tmp['ME-model SubReaction'].notna()]
 
 	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}_cplx'.format(x))
 	tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
@@ -468,14 +474,14 @@ def get_subreactions(df, key: str):
 	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
-	tmp = tmp.groupby(['ME-Model SubReaction']).agg({'Gene Locus ID': lambda x: x.tolist()})
+	tmp = tmp.groupby(['ME-model SubReaction']).agg({'Gene Locus ID': lambda x: x.tolist()})
 	return { k : {'enzymes' : list(set(v)), 'stoich': {}, 'element_contribution' : {}, 'keff' : []}
 		for k,v in zip(tmp.index, tmp['Gene Locus ID']) if k.startswith(key) }
 
 def get_df_rxns(df):
 	tmp = df[~df['Feature Type'].isin(['pseudo'])]
-	tmp = tmp[tmp['M-Model Reaction ID'].notna()]
-	tmp = tmp[['M-Model Reaction ID', 'Reaction Name', 'Reversibility']]
+	tmp = tmp[tmp['M-model Reaction ID'].notna()]
+	tmp = tmp[['M-model Reaction ID', 'Reaction Name', 'Reversibility']]
 	tmp.columns = ['name', 'description', 'is_reversible']
 	tmp = tmp.dropna().drop_duplicates('name', keep = 'first').set_index('name')
 
@@ -528,7 +534,7 @@ def get_df_ptms(df):
 
 def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp = df[~df['Feature Type'].isin(['pseudo'])]
-	tmp = tmp[tmp['M-Model Reaction ID'].notna()]
+	tmp = tmp[tmp['M-model Reaction ID'].notna()]
 
 	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}_MONOMER'.format(x))
 	tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
@@ -541,7 +547,7 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
-	tmp = tmp.groupby(['M-Model Reaction ID']).agg({'Gene Locus ID': lambda x: ' OR '.join(sorted(set(x.tolist())))})
+	tmp = tmp.groupby(['M-model Reaction ID']).agg({'Gene Locus ID': lambda x: ' OR '.join(sorted(set(x.tolist())))})
 	return tmp
 
 def get_df_rna_enzs(df, filter_in = set(), generics = False):
@@ -638,8 +644,8 @@ def get_df_input_from_excel(df, df_rxns):
 		'Cofactors in Modified Complex',
 		'Generic Complex ID',
 		'MetaComplex ID',
-		'ME-Model SubReaction',
-		'M-Model Reaction ID',
+		'ME-model SubReaction',
+		'M-model Reaction ID',
 		'RNA mods/enzyme'
 		]
 

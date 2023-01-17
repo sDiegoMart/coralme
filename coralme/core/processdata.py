@@ -1,9 +1,9 @@
+import Bio
 import cobra
 import coralme
 
 import logging
-from collections import defaultdict, Counter
-from Bio import Seq
+import collections
 
 class ProcessData(object):
 	"""Generic class for storing information about a process
@@ -112,7 +112,7 @@ class StoichiometricData(ProcessData):
 	def __init__(self, id, model):
 		ProcessData.__init__(self, id, model)
 		self._stoichiometry = {}
-		self.subreactions = defaultdict(int)
+		self.subreactions = collections.defaultdict(int)
 		self.lower_bound = 0.
 		self.upper_bound = 1000.
 
@@ -228,7 +228,7 @@ class SubreactionData(ProcessData):
 			Dictionary of {element: net_number_of_contributions}
 
 		"""
-		elements = defaultdict(int)
+		elements = collections.defaultdict(int)
 		for met, coefficient in self.stoichiometry.items():
 			met_obj = self._model.metabolites.get_by_id(met)
 			# elements lost in conversion are added to complex, protein, etc.
@@ -323,7 +323,7 @@ class ComplexData(ProcessData):
 	def __init__(self, id, model):
 		ProcessData.__init__(self, id, model)
 		# {Component.id: stoichiometry}
-		self.stoichiometry = defaultdict(float)
+		self.stoichiometry = collections.defaultdict(float)
 		# {SubreactionData.id : number}
 		# Forming some metacomplexes occur in multiple steps
 		self.subreactions = {}
@@ -391,11 +391,11 @@ class ComplexData(ProcessData):
 		"""
 		formation_id = 'formation_' + self.id
 		if formation_id in self._model.reactions:
-			raise ValueError('Reaction \'{:s}\' already in the ME-Model.'.format(formation_id))
+			raise ValueError('Reaction \'{:s}\' already in the ME-model.'.format(formation_id))
 		formation = coralme.core.reaction.ComplexFormation(formation_id)
 		formation.complex_data_id = self.id
 		formation._complex_id = self.complex_id
-		self._model.add_reaction(formation)
+		self._model.add_reactions([formation])
 		formation.update(verbose = verbose)
 
 class TranscriptionData(ProcessData):
@@ -438,7 +438,7 @@ class TranscriptionData(ProcessData):
 		self.RNA_products = rna_products
 		self.RNA_polymerase = ''
 		# {SubreactionData.id : number}
-		self.subreactions = defaultdict(int)
+		self.subreactions = collections.defaultdict(int)
 
 	@property
 	def nucleotide_count(self):
@@ -451,8 +451,21 @@ class TranscriptionData(ProcessData):
 			{nuclotide_id: number_of_occurances}
 
 		"""
-		#return {coralme.util.dogma.transcription_table[i]: self.nucleotide_sequence.count(i) for i in ['A', 'T', 'G', 'C']}
-		return { coralme.util.dogma.transcription_table[k]:v for k,v in Counter(self.nucleotide_sequence).items() }
+		#return { coralme.util.dogma.transcription_table[i]: self.nucleotide_sequence.count(i) for i in ['A', 'T', 'G', 'C'] }
+		#return { coralme.util.dogma.transcription_table[k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
+		if self.organelle is None:
+			if self._model.global_info['domain'].lower() in ['prokaryote', 'bacteria']:
+				return { coralme.util.dogma.transcription_table['c'][k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
+			if self._model.global_info['domain'].lower() in ['eukarya', 'eukaryote']:
+				return { coralme.util.dogma.transcription_table['n'][k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
+			#return { coralme.util.dogma.transcription_table['n'][k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
+		elif self.organelle.lower() in ['mitochondria', 'mitochondrion']:
+			return { coralme.util.dogma.transcription_table['m'][k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
+		elif self.organelle.lower() in ['chloroplast', 'plastid']:
+			return { coralme.util.dogma.transcription_table['h'][k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
+		else:
+			logging.warning('The \'organelle\' property of the feature \'{:s}\' is not \'mitochondria\' or \'chloroplast\'.'.format(self.id))
+			return { coralme.util.dogma.transcription_table['n'][k]:v for k,v in collections.Counter(self.nucleotide_sequence).items() }
 
 	@property
 	def RNA_types(self):
@@ -503,7 +516,7 @@ class TranscriptionData(ProcessData):
 		# Get dictionary of all nucleotide counts for TU
 		seq = self.nucleotide_sequence
 		#counts = { i: seq.count(i) for i in ('A', 'T', 'G', 'C') }
-		counts = Counter(seq)
+		counts = collections.Counter(seq)
 
 		# Subtract bases contained in RNA_product from dictionary
 		metabolites = self._model.metabolites
@@ -511,12 +524,13 @@ class TranscriptionData(ProcessData):
 			gene_seq = metabolites.get_by_id(product_id).nucleotide_sequence
 			#for b in ('A', 'T', 'G', 'C'):
 				#counts[b] -= gene_seq.count(b)
-			counts.subtract(Counter(gene_seq)) # inplace
+			counts.subtract(collections.Counter(gene_seq)) # inplace
 
 		# First base being a triphosphate will be handled by the reaction
 		# producing an extra ppi during transcription. But generally, we add
 		# triphosphate bases when transcribing, but excise monophosphate bases.
-		monophosphate_counts = { coralme.util.dogma.transcription_table[k].replace('tp_c', 'mp_c'):v for k,v in counts.items() }
+		#monophosphate_counts = { coralme.util.dogma.transcription_table[k].replace('tp_c', 'mp_c'):v for k,v in counts.items() }
+		monophosphate_counts = { coralme.util.dogma.transcription_table['c'][k].replace('tp_c', 'mp_c'):v for k,v in counts.items() }
 
 		return monophosphate_counts
 
@@ -625,7 +639,7 @@ class GenericData(ProcessData):
 				reaction = model.reactions.get_by_id(reaction_id)
 			except KeyError:
 				reaction = coralme.core.reaction.GenericFormationReaction(reaction_id)
-				model.add_reaction(reaction)
+				model.add_reactions([reaction])
 			stoic = {
 				generic_metabolite: 1,
 				model.metabolites.get_by_id(c_id): -1
@@ -672,7 +686,7 @@ class TranslationData(ProcessData):
 		ProcessData.__init__(self, id, model)
 		self.mRNA = mrna
 		self.protein = protein
-		self.subreactions = defaultdict(int)
+		self.subreactions = collections.defaultdict(int)
 		self.nucleotide_sequence = ''
 
 	@property
@@ -688,13 +702,19 @@ class TranslationData(ProcessData):
 		"""
 		#codons = (self.nucleotide_sequence[i: i + 3] for i in range(0, (len(self.nucleotide_sequence)), 3))
 		#amino_acid_sequence = ''.join(coralme.util.dogma.codon_table[i] for i in codons)
-		amino_acid_sequence = str(Seq.Seq(self.nucleotide_sequence).translate(self._model.global_info['codon_table']))
+		#amino_acid_sequence = str(Bio.Seq.Seq(self.nucleotide_sequence).translate(self._model.global_info['codon_table']))
+		amino_acid_sequence = str(Bio.Seq.Seq(self.nucleotide_sequence).translate(self.transl_table))
 		amino_acid_sequence = amino_acid_sequence.rstrip('*')
+		if self.id != 'dummy':
+			if amino_acid_sequence != self.translation:
+				logging.warning('Protein sequence for \'{:s}\' from the GenBank file differs from the inferred from nucleotide sequence and translation table.'.format(self.id))
 		if not amino_acid_sequence.startswith('M'):
 			# alternate start codons translated as methionine
 			amino_acid_sequence = 'M' + ''.join(amino_acid_sequence[1:])
 		if '*' in amino_acid_sequence:
-			amino_acid_sequence = amino_acid_sequence.replace('*', 'C') # Cysteine?
+			#amino_acid_sequence = amino_acid_sequence.replace('*', 'C') # Cysteine?
+			amino_acid_sequence = amino_acid_sequence.replace('*', 'S') # Ser-tRNA is the precursor of Sec-tRNA
+
 		return amino_acid_sequence
 
 	@property
@@ -742,7 +762,7 @@ class TranslationData(ProcessData):
 
 		"""
 		codons = (self.nucleotide_sequence[i: i + 3] for i in range(0, len(self.nucleotide_sequence), 3))
-		codon_count = defaultdict(int)
+		codon_count = collections.defaultdict(int)
 		for i in codons:
 			codon_count[i.replace('T', 'U')] += 1
 
@@ -758,11 +778,20 @@ class TranslationData(ProcessData):
 			{amino_acid_id: number_of_occurrences}
 		"""
 
-		#aa_count = defaultdict(int)
+		#aa_count = collections.defaultdict(int)
 		#for i in self.amino_acid_sequence:
 			#aa_count[coralme.util.dogma.amino_acids[i]] += 1
 		#return aa_count
-		return { coralme.util.dogma.amino_acids[k]:v for k,v in Counter(self.amino_acid_sequence).items() }
+
+		# Set compartment
+		if self.organelle is None:
+			compartment = '_c'
+		elif self.organelle.lower() in ['mitochondria', 'mitochondrion']:
+			compartment = '_m'
+		elif self.organelle.lower() in ['chloroplast', 'plastid']:
+			compartment = '_h'
+
+		return { coralme.util.dogma.amino_acids[k] + compartment:v for k,v in collections.Counter(self.amino_acid_sequence).items() }
 
 	@property
 	def subreactions_from_sequence(self):
@@ -780,7 +809,7 @@ class TranslationData(ProcessData):
 		"""
 		subreactions = {}
 
-		table = self._model.global_info['translation_table']
+		#table = self._model.global_info['translation_table']
 		# Trip first and last codon. Not translated during elongation
 		codon_count = self.codon_count
 		codon_count[self.first_codon] -= 1
@@ -791,12 +820,14 @@ class TranslationData(ProcessData):
 				continue
 
 			codon = codon.replace('U', 'T')
-			if codon == 'TGA' and table == 11:
+			#if codon == 'TGA' and table == 11:
+			if codon == 'TGA' and self.transl_table == 11:
 				logging.warning('Adding selenocystein for \'{:s}\', following translation table {:d} (See more https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG{:d}).'.format(self.id, table, table))
 				aa = 'sec'
 			else:
 				#abbreviated_aa = coralme.util.dogma.codon_table[codon]
-				abbreviated_aa = Seq.Seq(codon).translate(self._model.global_info['codon_table'])
+				#abbreviated_aa = Bio.Seq.Seq(codon).translate(self._model.global_info['codon_table'])
+				abbreviated_aa = Bio.Seq.Seq(codon).translate(self.transl_table)
 				if abbreviated_aa == '*':
 					break
 				# Filter out the compartment and stereochemistry from aa id
@@ -806,11 +837,11 @@ class TranslationData(ProcessData):
 			#try:
 				#self._model.process_data.get_by_id(subreaction_id)
 			#except KeyError:
-				#logging.warning('The tRNA SubReaction \'{:s}\' is not in the ME-Model.'.format(subreaction_id))
+				#logging.warning('The tRNA SubReaction \'{:s}\' is not in the ME-model.'.format(subreaction_id))
 			if self._model.process_data.has_id(subreaction_id):
 				subreactions[subreaction_id] = count
 			else:
-				logging.warning('The tRNA SubReaction \'{:s}\' is not in the ME-Model.'.format(subreaction_id))
+				logging.warning('The tRNA SubReaction \'{:s}\' is not in the ME-model.'.format(subreaction_id))
 
 		return subreactions
 
@@ -842,7 +873,7 @@ class TranslationData(ProcessData):
 			try:
 				self._model.process_data.get_by_id(subreaction_id)
 			except KeyError:
-				logging.warning('Elongation SubReaction \'{:s}\' not in ME-Model. However, it can be added later.'.format(subreaction_id))
+				logging.warning('Elongation SubReaction \'{:s}\' not in ME-model. However, it can be added later.'.format(subreaction_id))
 			else:
 				# No elongation subreactions needed for start codon
 				self.subreactions[subreaction_id] = len(self.amino_acid_sequence) - 1.
@@ -872,7 +903,7 @@ class TranslationData(ProcessData):
 			try:
 				self._model.process_data.get_by_id(subreaction_id)
 			except KeyError:
-				logging.warning('Initiation SubReaction \'{:s}\' is not in the ME-Model. However, it can be added later.'.format(subreaction_id))
+				logging.warning('Initiation SubReaction \'{:s}\' is not in the ME-model. However, it can be added later.'.format(subreaction_id))
 			else:
 				self.subreactions[subreaction_id] = 1
 
@@ -896,7 +927,7 @@ class TranslationData(ProcessData):
 			try:
 				self._model.process_data.get_by_id(termination_subreaction_id)
 			except KeyError:
-				logging.warning('Termination subreaction \'{:s}\' not in ME-Model. However, it can be added later.'.format(termination_subreaction_id))
+				logging.warning('Termination subreaction \'{:s}\' not in ME-model. However, it can be added later.'.format(termination_subreaction_id))
 			else:
 				self.subreactions[termination_subreaction_id] = 1
 		else:
@@ -944,9 +975,10 @@ class tRNAData(ProcessData):
 		self.codon = codon
 		self.amino_acid = amino_acid
 		self.RNA = rna
-		self.subreactions = defaultdict(int)
+		self.subreactions = collections.defaultdict(int)
 		self.synthetase = None
 		self.synthetase_keff = 65.
+		self.organelle = None
 
 class TranslocationData(ProcessData):
 	"""
@@ -1067,7 +1099,7 @@ class PostTranslationData(ProcessData):
 		self.surface_area = {}
 
 		# For post translation modifications
-		self.subreactions = defaultdict(float)
+		self.subreactions = collections.defaultdict(float)
 		self.biomass_type = ''
 
 		# For protein folding reactions (FoldME)

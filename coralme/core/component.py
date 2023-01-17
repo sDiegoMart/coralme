@@ -18,7 +18,7 @@ class MEComponent(cobra.core.metabolite.Metabolite):
 
 	def remove_from_me_model(self, method = 'subtractive'):
 		"""
-		Remove metabolite from ME-Model along with any relevant
+		Remove metabolite from ME-model along with any relevant
 		:class:`coralme.core.processdata.ProcessData`
 
 		Parameters
@@ -108,7 +108,8 @@ class TranscribedGene(MEComponent):
 		"""
 		seq = self.nucleotide_sequence
 		counts = {i: seq.count(i) for i in ("A", "T", "G", "C")}
-		monophosphate_counts = { coralme.util.dogma.transcription_table[k].replace("tp_c", "mp_c"): v for k, v in counts.items() }
+		#monophosphate_counts = { coralme.util.dogma.transcription_table[k].replace("tp_c", "mp_c"): v for k, v in counts.items() }
+		monophosphate_counts = { coralme.util.dogma.transcription_table['c'][k].replace("tp_c", "mp_c"):v for k,v in counts.items() }
 		return monophosphate_counts
 
 class TranslatedGene(MEComponent):

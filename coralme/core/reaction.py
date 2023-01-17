@@ -13,7 +13,7 @@ from operator import attrgetter
 class MEReaction(cobra.core.reaction.Reaction):
 	# TODO set _upper and _lower bounds as a property
 	"""
-	MEReaction is a general reaction class from which all ME-Model reactions
+	MEReaction is a general reaction class from which all ME-model reactions
 	will inherit.
 
 	This class contains functionality that can be used by all ME-model
@@ -145,7 +145,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 			except KeyError:
 				new_met = coralme.core.component.create_component(key, default_type = default_type)
 				if verbose:
-					#logging.warning('Metabolite created \'{:s}\' in ME-Model \'{:s}\'.'.format(repr(new_met), repr(self)))
+					#logging.warning('Metabolite created \'{:s}\' in ME-model \'{:s}\'.'.format(repr(new_met), repr(self)))
 					logging.warning('Metabolite \'{:s}\' created in Reaction \'{:s}\''.format(new_met.id, self.id))
 				object_stoichiometry[new_met] = value
 				self._model.add_metabolites([new_met])
@@ -312,20 +312,22 @@ class MEReaction(cobra.core.reaction.Reaction):
 			gpr = cobra.util.util.format_long_string(self.gene_reaction_rule, 500)
 			lower = self.lower_bound
 			upper = self.upper_bound
+			rxn_type = repr(type(self))
 
 			return f"""
 			<table>
 				<tr><td><strong>Reaction identifier</strong></td><td>{rxn}</td></tr>
 				<tr><td><strong>Name</strong></td><td>{name}</td></tr>
 				<tr><td><strong>Memory address</strong></td><td>{f'{id(self):#x}'}</td></tr>
-				<tr><td><strong>Stoichiometry</strong></td><td>
+				<tr><td><strong>Stoichiometry</strong>
+				</td><td>
 					<p style='text-align:right'>{subs}</p>
 					<p style='text-align:right'>{prod}</p>
 				</td></tr>
 				<tr><td><strong>GPR</strong></td><td>{gpr}</td></tr>
 				<tr><td><strong>Lower bound</strong></td><td>{lower}</td></tr>
 				<tr><td><strong>Upper bound</strong></td><td>{upper}</td></tr>
-				<tr><td><strong>Type</strong></td><td>{f'{repr(self):s}'}</td></tr>
+				<tr><td><strong>Type</strong></td><td>{rxn_type}</td></tr>
 			</table>
 		"""
 
@@ -454,7 +456,7 @@ class MetabolicReaction(MEReaction):
 		try:
 			self.add_metabolites(object_stoichiometry)
 		except:
-			print('core/reaction.py:422 ' + str(object_stoichiometry))
+			print('core/reaction.py:459 ' + str(object_stoichiometry))
 
 		# Set the bounds
 		if self.reverse:
@@ -778,7 +780,7 @@ class PostTranslationReaction(MEReaction):
 				try:
 					sa_constraint = metabolites.get_by_id(SA)
 				except KeyError:
-					logging.warning('Constraint \'{:s}\' added to ME-Model.'.format(SA))
+					logging.warning('Constraint \'{:s}\' added to ME-model.'.format(SA))
 					sa_constraint = coralme.Constraint(SA)
 					self._model.add_metabolites([sa_constraint])
 
@@ -888,7 +890,7 @@ class TranscriptionReaction(MEReaction):
 		demand_reaction_id = 'DM_' + transcript.id
 		if demand_reaction_id not in self._model.reactions:
 			demand_reaction = MEReaction(demand_reaction_id)
-			self._model.add_reaction(demand_reaction)
+			self._model.add_reactions([demand_reaction])
 			demand_reaction.add_metabolites({transcript.id: -1})
 		else:
 			demand_reaction = self._model.reactions.get_by_id(demand_reaction_id)
@@ -906,7 +908,7 @@ class TranscriptionReaction(MEReaction):
 		elif transcript.RNA_type == 'tmRNA':
 			demand_reaction.add_metabolites({metabolites.tmRNA_biomass: -mass_in_kda}, combine = False)
 		else:
-			logging.warning('Gene locus ID has an invalid RNA type (Valid types are mRNA, rRNA, tRNA, ncRNA, and tmRNA).')
+			logging.warning('Gene locus ID \'{:s}\' has an invalid RNA type (Valid types are mRNA, rRNA, tRNA, ncRNA, and tmRNA)'.format(transcript.id))
 
 	def update(self, verbose = True):
 		"""
@@ -975,9 +977,10 @@ class TranscriptionReaction(MEReaction):
 		# transcription reaction
 		for transcript_id in self.transcription_data.RNA_products:
 			if transcript_id not in metabolites:
-				raise UserWarning('Transcript \'{:s}\' not found in the ME-Model.'.format(transcript_id))
+				raise UserWarning('Transcript \'{:s}\' not found in the ME-model.'.format(transcript_id))
 			else:
 				transcript = self._model.metabolites.get_by_id(transcript_id)
+
 			stoichiometry[transcript.id] += 1
 
 			try:
@@ -992,15 +995,18 @@ class TranscriptionReaction(MEReaction):
 		for base, count in base_counts.items():
 			stoichiometry[base] -= count
 
+		# RNA transcription from nucleus, mitochondria, and plastids
+		compartment_suffix = list(set([ k[-2:] for k,v in stoichiometry.items() if k[:-2] in ['atp', 'ctp', 'gtp', 'utp'] ]))
+		assert len(compartment_suffix) == 1
+
 		for base, count in self.transcription_data.excised_bases.items():
 			stoichiometry[base] += count
-			stoichiometry['h2o_c'] -= count
-			stoichiometry['h_c'] += count
+			stoichiometry['h2o' + compartment_suffix[0]] -= count
+			stoichiometry['h' + compartment_suffix[0]] += count
 
-		stoichiometry['ppi_c'] += tu_length
+		stoichiometry['ppi' + compartment_suffix[0]] += tu_length
 
 		new_stoich = self.get_components_from_ids(stoichiometry, verbose = verbose, default_type = coralme.core.component.TranscribedGene)
-
 		self.add_metabolites(new_stoich, combine = False)
 
 		# add biomass constraints for RNA products
@@ -1180,6 +1186,18 @@ class TranslationReaction(MEReaction):
 		mrna_id = translation_data.mRNA
 		protein_length = len(translation_data.amino_acid_sequence)
 		nucleotide_sequence = translation_data.nucleotide_sequence
+		transl_table = translation_data.transl_table
+
+		organelle = translation_data.organelle
+		if organelle is None:
+			if self._model.global_info['domain'] in ['bacteria', 'prokaryote']:
+				organelle = 'c'
+			else:
+				organelle = 'n'
+		elif organelle.lower() in ['mitochondrion']:
+			organelle = 'm'
+		elif organelle.lower() in ['chloroplast', 'plastid']:
+			organelle = 'h'
 
 		# Set Parameters
 		kt = self._model.global_info['kt']
@@ -1201,26 +1219,26 @@ class TranslationReaction(MEReaction):
 
 		# -----------------Add Amino Acids----------------------------------
 		for aa, value in translation_data.amino_acid_count.items():
-			if aa.replace('__L_c', '') in [ x.lower() for x in trna_misacylation.keys() ]:
+			if aa.replace('__L_' + organelle, '') in [ x.lower() for x in trna_misacylation.keys() ]:
 				new_stoichiometry[aa] = 0
-				aa = trna_misacylation[aa.replace('__L_c', '').capitalize()] + '__L_c'
+				aa = trna_misacylation[aa.replace('__L_' + organelle, '').capitalize()] + '__L_' + organelle
 				aa = aa[0].lower() + aa[1:]
 				new_stoichiometry[aa] -= value
-				new_stoichiometry['h2o_c'] += value
+				new_stoichiometry['h2o_' + organelle] += value
 				continue
 
 			new_stoichiometry[aa] -= value
-			new_stoichiometry['h2o_c'] += value
+			new_stoichiometry['h2o_' + organelle] += value
 
 		# Length protein - 1 dehydration reactions
-		new_stoichiometry['h2o_c'] -= 1.
+		new_stoichiometry['h2o_' + organelle] -= 1.
 
 		# -----------------Add Ribosome Coupling----------------------------
 		try:
 			ribosome = metabolites.get_by_id(ribosome_id)
 		except KeyError:
 			if verbose:
-				logging.warning('The \'{:s}\' component not found in the ME-Model. Coupling coefficient not added to \'{:s}\'.'.format(ribosome_id, protein_id))
+				logging.warning('The \'{:s}\' component not found in the ME-model. Coupling coefficient not added to \'{:s}\'.'.format(ribosome_id, protein_id))
 		else:
 			num = self._model.mu * c_ribo * kt
 			den = self._model.mu + kt * r0
@@ -1235,7 +1253,7 @@ class TranslationReaction(MEReaction):
 			# If transcript not found add to the model as the mRNA_id
 			transcript = coralme.core.component.TranscribedGene(mrna_id, mrna_id, nucleotide_sequence)
 			model.add_metabolites(transcript)
-			logging.warning('Transcript \'{:s}\' not found in ME-Model. Added into the ME-Model.'.format(mrna_id))
+			logging.warning('Transcript \'{:s}\' not found in ME-model. Added into the ME-model.'.format(mrna_id))
 
 		# Calculate coupling constraints for mRNA and degradation
 		num = self._model.mu * c_mrna * kt
@@ -1250,6 +1268,8 @@ class TranslationReaction(MEReaction):
 		# ---------------Add Degradation Requirements -------------------------
 		# Add degraded nucleotides to stoichiometry
 		for nucleotide, count in transcript.nucleotide_count.items():
+			# correct organelle
+			nucleotide = nucleotide.replace('_c', '_' + organelle)
 			new_stoichiometry[nucleotide] += count * deg_amount
 
 		# ATP hydrolysis required for cleaving
@@ -1260,7 +1280,10 @@ class TranslationReaction(MEReaction):
 		# old code; now set as a global_info
 		#atp_hydrolysis = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'pi_c': 1, 'h_c': 1}
 		atp_hydrolysis = self._model.process_data.get_by_id('atp_hydrolysis').stoichiometry
+
 		for metabolite, value in atp_hydrolysis.items():
+			# correct organelle
+			metabolite = metabolite.replace('_c', '_' + organelle)
 			new_stoichiometry[metabolite] += hydrolysis_amount * value
 
 		# Add degradosome coupling, if known
@@ -1268,7 +1291,7 @@ class TranslationReaction(MEReaction):
 			rna_degradosome = metabolites.get_by_id(degradosome_id)
 		except KeyError:
 			if verbose:
-				logging.warning('The \'{:s}\' component not found in the ME-Model. Coupling coefficient not added to \'{:s}\'.'.format(degradosome_id, protein_id))
+				logging.warning('The \'{:s}\' component not found in the ME-model. Coupling coefficient not added to \'{:s}\'.'.format(degradosome_id, protein_id))
 		else:
 			deg_coupling = -deg_amount * self._model.mu / 65. / 3600  # keff of degradosome
 			new_stoichiometry[rna_degradosome.id] = deg_coupling
@@ -1439,7 +1462,7 @@ class SummaryVariable(MEReaction):
 				dnap = metabolites.get_by_id(dnapol_id)
 			except KeyError:
 				if verbose:
-					logging.warning('The \'{:s}\' component not found in the ME-Model. Coupling coefficient not added to \'{:s}\'.'.format(dnapol_id, self.id))
+					logging.warning('The \'{:s}\' component not found in the ME-model. Coupling coefficient not added to \'{:s}\'.'.format(dnapol_id, self.id))
 			else:
 				#num = self._model.mu * c_ribo * kt
 				#den = self._model.mu + kt * r0

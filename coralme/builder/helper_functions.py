@@ -288,7 +288,7 @@ def process_model(model, growth_key = sympy.Symbol('mu', positive = True)):
 
 				lb, ub = rxn.lower_bound, rxn.upper_bound
 
-				# Replace 'growth_key' if model is a ME-Model
+				# Replace 'growth_key' if model is a ME-model
 				if hasattr(lb, 'subs'):
 					lb = lb.subs(growth_key, 1.)
 				if hasattr(ub, 'subs'):
@@ -345,7 +345,7 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 	if me.feasibility(keys = growth_key_and_value):
 		pass
 	else:
-		return False
+		return [False]
 
 	rxns = []
 	for idx, flux in me.solution.fluxes.items():
@@ -365,7 +365,7 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 	Sf, Se, lb, ub, b, c, cs, atoms = me.construct_lp_problem(keys = growth_key_and_value)
 
 	res = []
-	msg = 'Processed: {:s}/{:d}, Gaps: {:d}. The ME-Model is {:s}feasible if {:s} is closed.'
+	msg = 'Processed: {:s}/{:d}, Gaps: {:d}. The ME-model is {:s}feasible if {:s} is closed.'
 	for idx, (rxn, pos) in enumerate(ridx.items()):
 		lb[pos] = 0
 		ub[pos] = 0

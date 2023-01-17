@@ -1,26 +1,26 @@
 amino_acids = {
-	'A': 'ala__L_c',
-	'R': 'arg__L_c',
-	'N': 'asn__L_c',
-	'D': 'asp__L_c',
-	'C': 'cys__L_c',
-	'E': 'glu__L_c',
-	'Q': 'gln__L_c',
-	'G': 'gly_c',
-	'H': 'his__L_c',
-	'I': 'ile__L_c',
-	'L': 'leu__L_c',
-	'K': 'lys__L_c',
-	'M': 'met__L_c',
-	'F': 'phe__L_c',
-	'P': 'pro__L_c',
-	'S': 'ser__L_c',
-	'T': 'thr__L_c',
-	'W': 'trp__L_c',
-	'Y': 'tyr__L_c',
-	'V': 'val__L_c',
-	'U': 'ser__L_c',  # precursor to selenocysteine
-	'X': 'gly_c'
+	'A': 'ala__L',
+	'R': 'arg__L',
+	'N': 'asn__L',
+	'D': 'asp__L',
+	'C': 'cys__L',
+	'E': 'glu__L',
+	'Q': 'gln__L',
+	'G': 'gly',
+	'H': 'his__L',
+	'I': 'ile__L',
+	'L': 'leu__L',
+	'K': 'lys__L',
+	'M': 'met__L',
+	'F': 'phe__L',
+	'P': 'pro__L',
+	'S': 'ser__L',
+	'T': 'thr__L',
+	'W': 'trp__L',
+	'Y': 'tyr__L',
+	'V': 'val__L',
+	'U': 'ser__L',  # precursor to selenocysteine
+	'X': 'gly'
 	}
 
 amino_acids_3letters = {
@@ -97,29 +97,55 @@ amino_acids_fullname = {
 	#for k,v in codon_table.items()
 	#}
 
+#transcription_table = {
+	#'A': 'utp_c',
+	#'T': 'atp_c',
+	#'C': 'gtp_c',
+	#'G': 'ctp_c'
+	#}
+
+#import random
+#ambiguous_nucleotides = {
+	#'N': transcription_table[random.choice(['A', 'T', 'G', 'C'])],
+	#'R': transcription_table[random.choice(['A', 'G'])],
+	#'Y': transcription_table[random.choice(['T', 'C'])],
+	#'K': transcription_table[random.choice(['G', 'T'])],
+	#'M': transcription_table[random.choice(['T', 'C'])],
+	#'S': transcription_table[random.choice(['C', 'G'])],
+	#'W': transcription_table[random.choice(['A', 'T'])],
+	#'B': transcription_table[random.choice(['C', 'G', 'T'])],
+	#'D': transcription_table[random.choice(['A', 'G', 'T'])],
+	#'H': transcription_table[random.choice(['A', 'C', 'T'])],
+	#'V': transcription_table[random.choice(['A', 'C', 'G'])]
+	#}
+
+#transcription_table.update(ambiguous_nucleotides)
+
 transcription_table = {
-	'A': 'utp_c',
-	'T': 'atp_c',
-	'C': 'gtp_c',
-	'G': 'ctp_c'
+	'c' : { 'A': 'utp_c', 'T': 'atp_c', 'C': 'gtp_c', 'G': 'ctp_c' }, # cytosol
+	'n' : { 'A': 'utp_n', 'T': 'atp_n', 'C': 'gtp_n', 'G': 'ctp_n' }, # nucleus
+	'm' : { 'A': 'utp_m', 'T': 'atp_m', 'C': 'gtp_m', 'G': 'ctp_m' }, # mitochondria
+	'h' : { 'A': 'utp_h', 'T': 'atp_h', 'C': 'gtp_h', 'G': 'ctp_h' }, # chloroplast
 	}
 
 import random
-ambiguous_nucleotides = {
-	'N': transcription_table[random.choice(['A', 'T', 'G', 'C'])],
-	'R': transcription_table[random.choice(['A', 'G'])],
-	'Y': transcription_table[random.choice(['T', 'C'])],
-	'K': transcription_table[random.choice(['G', 'T'])],
-	'M': transcription_table[random.choice(['T', 'C'])],
-	'S': transcription_table[random.choice(['C', 'G'])],
-	'W': transcription_table[random.choice(['A', 'T'])],
-	'B': transcription_table[random.choice(['C', 'G', 'T'])],
-	'D': transcription_table[random.choice(['A', 'G', 'T'])],
-	'H': transcription_table[random.choice(['A', 'C', 'T'])],
-	'V': transcription_table[random.choice(['A', 'C', 'G'])]
-	}
+def ambiguous_nucleotides(compartment):
+	return {
+		'N': transcription_table[compartment][random.choice(['A', 'T', 'G', 'C'])],
+		'R': transcription_table[compartment][random.choice(['A', 'G'])],
+		'Y': transcription_table[compartment][random.choice(['T', 'C'])],
+		'K': transcription_table[compartment][random.choice(['G', 'T'])],
+		'M': transcription_table[compartment][random.choice(['T', 'C'])],
+		'S': transcription_table[compartment][random.choice(['C', 'G'])],
+		'W': transcription_table[compartment][random.choice(['A', 'T'])],
+		'B': transcription_table[compartment][random.choice(['C', 'G', 'T'])],
+		'D': transcription_table[compartment][random.choice(['A', 'G', 'T'])],
+		'H': transcription_table[compartment][random.choice(['A', 'C', 'T'])],
+		'V': transcription_table[compartment][random.choice(['A', 'C', 'G'])]
+		}
 
-transcription_table.update(ambiguous_nucleotides)
+for key, value in transcription_table.items():
+	transcription_table[key].update(ambiguous_nucleotides(key))
 
 base_pairs = {
 	'A': 'T',

@@ -1315,32 +1315,40 @@ class Organism(object):
             if not gene_id:
                 continue
             gene_id = gene_id[0]
-            if not gene_dictionary["Accession-1"].str.contains(gene_id).any():
+            if not gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)')).any():
                 print("Adding {} to genes from genbank".format(gene_id))
                 feature_type = feature["type"]
                 if feature_type == 'CDS':
                     feature_type = 'MONOMER'
-                gene_dictionary = gene_dictionary.append(
-                    pandas.DataFrame.from_dict(
-                        {
+                #gene_dictionary = gene_dictionary.append(
+                    #pandas.DataFrame.from_dict(
+                        #{
+                            #gene_id: {
+                                #"Accession-1": gene_id,
+                                #"Left-End-Position": int(feature["start"]),
+                                #"Right-End-Position": int(feature["end"]),
+                                #"Product": "{}-{}".format(gene_id,feature_type),
+                            #}
+                        #}
+                    #).T
+                #)
+                tmp = pandas.DataFrame.from_dict({
                             gene_id: {
                                 "Accession-1": gene_id,
                                 "Left-End-Position": int(feature["start"]),
                                 "Right-End-Position": int(feature["end"]),
-                                "Product": "{}-{}".format(gene_id,feature_type),
-                            }
-                        }
-                    ).T
-                )
+                        "Product": "{}-{}".format(gene_id,feature_type)
+                        }}).T
+                gene_dictionary = pandas.concat([gene_dictionary, tmp], axis = 0, join = 'outer')
             else:
                 accession = gene_dictionary[
-                    gene_dictionary["Accession-1"].str.contains(gene_id)
+                    gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)'))
                 ].index.values[0]
 
                 gene_dictionary.loc[accession, "Left-End-Position"] = int(feature["start"])
                 gene_dictionary.loc[accession, "Right-End-Position"] = int(feature["end"])
 
-            gene_name = gene_dictionary[gene_dictionary["Accession-1"].str.contains(gene_id)].index[0]
+            gene_name = gene_dictionary[gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)'))].index[0]
             if 'product' in feature:
                 name_annotation = feature["product"][0]
             else:
@@ -1349,24 +1357,40 @@ class Organism(object):
                 product = gene_name + '-MONOMER'
                 if not complexes_df["genes"].str.contains(gene_id).any():
                     print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
-                    complexes_df = complexes_df.append(
-                        pandas.DataFrame.from_dict(
-                            {
+                    #complexes_df = complexes_df.append(
+                        #pandas.DataFrame.from_dict(
+                            #{
+                                #product: {
+                                    #"name": name_annotation,
+                                    #"genes": "{}()".format(gene_id),
+                                    #"source": "GenBank",
+                                #}
+                            #}
+                        #).T
+                    #)
+                    tmp = pandas.DataFrame.from_dict({
                                 product: {
                                     "name": name_annotation,
                                     "genes": "{}()".format(gene_id),
                                     "source": "GenBank",
-                                }
-                            }
-                        ).T
-                    )
+                            }}).T
+                    complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
 
             else: # It's not CDS, but an RNA
                 product = "{}-{}".format(gene_name,feature['type'])
-                if not RNA_df["Gene"].str.contains(gene_name).any():
+                if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
                     print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
-                    RNA_df = RNA_df.append(
-                        pandas.DataFrame.from_dict(
+                    #RNA_df = RNA_df.append(
+                        #pandas.DataFrame.from_dict(
+                            #{
+                               #product : {
+                                    #"Common-Name": name_annotation,
+                                    #"Gene": gene_name
+                                #}
+                            #}
+                        #).T
+                    #)
+                    tmp = pandas.DataFrame.from_dict(
                             {
                                product : {
                                     "Common-Name": name_annotation,
@@ -1374,7 +1398,7 @@ class Organism(object):
                                 }
                             }
                         ).T
-                    )
+                    RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
             gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
         self.complexes_df = complexes_df
         gene_dictionary.index.name = "Gene Name"
@@ -1874,7 +1898,7 @@ class Organism(object):
                 for gene_ in gene: # In case of duplicates
                     if gene_ in gene_location:
                         protein_location = protein_location.append(
-                            pd.DataFrame.from_dict(
+                        pandas.DataFrame.from_dict(
                                 {
                                     c: {
                                         "Complex_compartment": c_loc,

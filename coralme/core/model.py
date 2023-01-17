@@ -9,8 +9,6 @@ import numpy
 import scipy
 import sympy
 import cobra
-from cobra.medium import find_boundary_types, find_external_compartment, sbo_terms
-
 import coralme
 
 def _update(MEReaction):
@@ -23,6 +21,8 @@ class MEModel(cobra.core.model.Model):
 		cobra.Model.__init__(self, name)
 
 		self.global_info = {
+			'domain' : 'Prokaryote',
+
 			'kt' : 4.5,
 			'r0' : 0.087,
 			'k_deg' : 12,
@@ -163,10 +163,10 @@ class MEModel(cobra.core.model.Model):
 				],
 
 			'compartments' : {
-				'c'	: 'Cytoplasm',
-				'e'	: 'Extracellular',
-				'p'	: 'Periplasm',
-				'mc'   : 'ME-Model Constraint'
+				'c' : 'Cytoplasm',
+				'e' : 'Extracellular',
+				'p' : 'Periplasm',
+				'mc': 'ME-model Constraint'
 				},
 
 			'START_tRNA' : [],
@@ -174,6 +174,7 @@ class MEModel(cobra.core.model.Model):
 			'knockouts' : [],
 			'genome_mods' : {},
 			'trna_misacylation' : {},
+			'trna_to_codon' : {},
 
 			'gam' : 45.,
 			'ngam' : 1.,
@@ -273,7 +274,7 @@ class MEModel(cobra.core.model.Model):
 		#self._populate_solver(pruned)
 
 	def add_biomass_constraints_to_model(self, biomass_types):
-		for biomass_type in tqdm.tqdm(biomass_types, 'Adding biomass constraint(s) into the ME-Model...', bar_format = bar_format):
+		for biomass_type in tqdm.tqdm(biomass_types, 'Adding biomass constraint(s) into the ME-model...', bar_format = bar_format):
 			if '_biomass' not in biomass_type:
 				raise ValueError('Biomass types should be suffixed with \'_biomass\'.')
 			constraint_obj = coralme.core.component.Constraint(biomass_type)
@@ -315,7 +316,7 @@ class MEModel(cobra.core.model.Model):
 	@gam.setter
 	def gam(self, value):
 		if 'GAM' not in self.reactions:
-			logging.warning('Adding GAM (ATP requirement for growth) reaction into the ME-Model.')
+			logging.warning('Adding GAM (ATP requirement for growth) reaction into the ME-model.')
 			self.add_reactions([coralme.core.reaction.SummaryVariable('GAM')])
 			self.reactions.GAM.lower_bound = self.mu
 			self.reactions.GAM.upper_bound = self.mu
@@ -325,6 +326,10 @@ class MEModel(cobra.core.model.Model):
 			self.reactions.GAM.add_metabolites({met: value * coeff}, combine = False)
 		self._gam = value
 
+		# check stoichiometry
+		if self.reactions.GAM.check_mass_balance() == {'charge': -1.0, 'H': -1.0}:
+			self.reactions.GAM._metabolites.update({self.metabolites.h_c : +1})
+
 	@property
 	def ngam(self):
 		return self._ngam
@@ -332,7 +337,7 @@ class MEModel(cobra.core.model.Model):
 	@ngam.setter
 	def ngam(self, value):
 		if 'ATPM' not in self.reactions:
-			logging.warning('Adding ATPM (ATP requirement for maintenance) reaction into the ME-Model.')
+			logging.warning('Adding ATPM (ATP requirement for maintenance) reaction into the ME-model.')
 			#atp_hydrolysis = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'h_c': 1, 'pi_c': 1} # charges: -4, 0 => -3, +1, -2
 			atp_hydrolysis = self.process_data.get_by_id('atp_hydrolysis').stoichiometry
 			self.add_reactions([coralme.core.reaction.SummaryVariable('ATPM')])
@@ -340,6 +345,10 @@ class MEModel(cobra.core.model.Model):
 		self.reactions.ATPM.lower_bound = value
 		self.reactions.ATPM.upper_bound = value
 		self._ngam = value
+
+		# check stoichiometry
+		if self.reactions.ATPM.check_mass_balance() == {'charge': -1.0, 'H': -1.0}:
+			self.reactions.ATPM._metabolites.update({self.metabolites.h_c : +1})
 
 	# data types generators:
 	# StoichiometricData, ComplexData, TranslationData, TranscriptionData,
@@ -398,7 +407,7 @@ class MEModel(cobra.core.model.Model):
 			if isinstance(data, coralme.core.processdata.SubreactionData):
 				yield data
 
-	# ME-Model methods
+	# ME-model methods
 	def get_metabolic_flux(self, solution = None):
 		"""Extract the flux state for Metabolic reactions."""
 		if solution is None:
@@ -406,14 +415,14 @@ class MEModel(cobra.core.model.Model):
 		if solution.status != 'optimal':
 			raise ValueError('Solution status \'{:s}\' is not \'optimal\'.'.format(solution.status))
 		flux_dict = {r.id: 0 for r in tqdm.tqdm(list(self.stoichiometric_data), 'Building reaction dictionary...', bar_format = bar_format)}
-		for reaction in tqdm.tqdm(self.reactions, 'Processing ME-Model Reactions...', bar_format = bar_format):
+		for reaction in tqdm.tqdm(self.reactions, 'Processing ME-model Reactions...', bar_format = bar_format):
 			if isinstance(reaction, coralme.core.reaction.MetabolicReaction):
 				m_reaction_id = reaction.stoichiometric_data.id
 				if reaction.reverse:
 					flux_dict[m_reaction_id] -= solution.fluxes[reaction.id]
 				else:
 					flux_dict[m_reaction_id] += solution.fluxes[reaction.id]
-			# SummaryVariable in M-Model
+			# SummaryVariable in M-model
 			elif reaction.id == 'ATPM':
 				flux_dict[reaction.id] = solution.fluxes[reaction.id]
 			# Exchange, Demand, and Sink reactions
@@ -428,7 +437,7 @@ class MEModel(cobra.core.model.Model):
 		if solution.status != 'optimal':
 			raise ValueError('Solution status \'{:s}\' is not \'optimal\'.'.format(solution.status))
 		flux_dict = {}
-		for reaction in tqdm.tqdm(self.reactions, 'Processing ME-Model Reactions...', bar_format = bar_format):
+		for reaction in tqdm.tqdm(self.reactions, 'Processing ME-model Reactions...', bar_format = bar_format):
 			if isinstance(reaction, coralme.core.reaction.TranscriptionReaction):
 				for rna_id in reaction.transcription_data.RNA_products:
 					locus_id = rna_id.replace('RNA_', '', 1)
@@ -444,7 +453,7 @@ class MEModel(cobra.core.model.Model):
 		if solution.status != 'optimal':
 			raise ValueError('Solution status \'{:s}\' is not \'optimal\'.'.format(solution.status))
 		flux_dict = {r.id: 0 for r in tqdm.tqdm(list(self.translation_data), 'Building reaction dictionary...', bar_format = bar_format)}
-		for reaction in tqdm.tqdm(self.reactions, 'Processing ME-Model Reactions...', bar_format = bar_format):
+		for reaction in tqdm.tqdm(self.reactions, 'Processing ME-model Reactions...', bar_format = bar_format):
 			if isinstance(reaction, coralme.core.reaction.TranslationReaction):
 				protein_id = reaction.translation_data.id
 				flux_dict[protein_id] += solution.fluxes[reaction.id]
@@ -596,12 +605,12 @@ class MEModel(cobra.core.model.Model):
 		return None
 
 	def remove_genes_from_model(self, gene_list):
-		for gene in tqdm.tqdm(gene_list, 'Removing gene(s) from ME-Model...', bar_format = bar_format):
+		for gene in tqdm.tqdm(gene_list, 'Removing gene(s) from ME-model...', bar_format = bar_format):
 			# defaults to subtractive when removing model
 			self.metabolites.get_by_id('RNA_' + gene).remove_from_model()
 			protein = self.metabolites.get_by_id('protein_'+gene)
 			for cplx in protein.complexes:
-				print('Complex \'{:s}\' removed from ME-Model.'.format(cplx.id))
+				print('Complex \'{:s}\' removed from ME-model.'.format(cplx.id))
 				for rxn in cplx.metabolic_reactions:
 					try:
 						self.process_data.remove(rxn.id.split('_')[0])
@@ -664,7 +673,7 @@ class MEModel(cobra.core.model.Model):
 		for r in self.reactions:
 			if hasattr(r, 'update'):
 				new.append(r)
-		for r in tqdm.tqdm(new, 'Updating ME-Model Reactions...', bar_format = bar_format):
+		for r in tqdm.tqdm(new, 'Updating ME-model Reactions...', bar_format = bar_format):
 			_update(r)
 		return None
 
@@ -710,7 +719,7 @@ class MEModel(cobra.core.model.Model):
 
 		#types = (sympy.core.add.Add, sympy.core.mul.Mul)
 
-		# check how many variables are in the ME-Model
+		# check how many variables are in the ME-model
 		atoms = set()
 
 		for idx, rxn in enumerate(self.reactions):
