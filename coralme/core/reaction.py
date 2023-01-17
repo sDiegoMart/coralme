@@ -1190,9 +1190,10 @@ class TranslationReaction(MEReaction):
 
 		organelle = translation_data.organelle
 		if organelle is None:
-			if self._model.global_info['domain'] in ['bacteria', 'prokaryote']:
+			if self._model.global_info['domain'].lower() in ['bacteria', 'prokaryote']:
 				organelle = 'c'
 			else:
+				print('here', translation_data.__dict__)
 				organelle = 'n'
 		elif organelle.lower() in ['mitochondrion']:
 			organelle = 'm'
