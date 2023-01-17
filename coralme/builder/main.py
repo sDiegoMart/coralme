@@ -284,6 +284,7 @@ class MEBuilder(object):
 				if info["gene_reaction_rule"]:
 					if info["gene_reaction_rule"] == "no_gene":
 						rxn.gene_reaction_rule = ""
+						rxn.name = str(rxn.name) + ', spontaneous'
 					else:
 						rxn.gene_reaction_rule = info["gene_reaction_rule"]
 				if info["name"]:
