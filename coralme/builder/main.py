@@ -1256,10 +1256,11 @@ class MEReconstruction(object):
 		if pathlib.Path(filename).is_file():
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
-			# generate a minimal dataframe from genbank and m-model
+			# generate a minimal dataframe from genbank and m-model files
 			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(config['genbank-path'], model = m_model)
-			# complete minimal dataframe with automated info
-			self.df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, self.df_data, model = m_model, output = filename)
+			# complete minimal dataframe with automated info from homology
+			if hasattr(self, 'homology'):
+				self.df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, self.df_data, model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
 		return coralme.builder.preprocess_inputs.get_df_input_from_excel(self.df_data, self.df_rxns)
@@ -1302,7 +1303,7 @@ class MEReconstruction(object):
 		me._compartments = me.global_info.get('compartments', {})
 		if 'mc' not in me._compartments.keys():
 			me._compartments['mc'] = 'ME-model Constraint'
-			logging.warning('Pseudo-compartment \'mc\' was added into the ME-model.')
+			logging.warning('Pseudo-compartment \'mc\' (\'ME-model Constraint\') was added into the ME-model.')
 
 		# Define M-model
 		if me.global_info['m-model-path'].endswith('.json'):
@@ -1569,6 +1570,19 @@ class MEReconstruction(object):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
 		special_trna_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Special_tRNA')
+
+		# Correct 'translation_stop_dict' if PrfA and/or PrfB are not identified
+		print(me.global_info['translation_stop_dict'])
+
+		if not me.metabolites.has_id('PrfA_mono'):
+			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy'
+		if not me.metabolites.has_id('PrfB_mono'):
+			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy'
+
+		if me.global_info['translation_stop_dict']['UAG'] == 'CPLX_dummy' and me.global_info['translation_stop_dict']['UGA'] == 'CPLX_dummy':
+			me.global_info['translation_stop_dict']['UAA'] = 'CPLX_dummy'
+
+		print(me.global_info['translation_stop_dict'])
 
 		# TODO: charged tRNAs per organelle
 		for organelle, transl_table in me.global_info['transl_tables'].items():
