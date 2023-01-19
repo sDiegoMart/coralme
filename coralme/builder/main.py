@@ -1247,7 +1247,11 @@ class MEReconstruction(object):
 		# step2b: folding pathways (DnaK, GroEL), N-terminal Methionine Processing, translocation pathways
 		filename = config.get('df_gene_cplxs_mods_rxns', '')
 		if overwrite:
-			pathlib.Path(filename).unlink(missing_ok = True)
+			try:
+				pathlib.Path(filename).unlink(missing_ok = True) # python>=3.8
+			except:
+				if pathlib.Path(filename).exists():
+					pathlib.Path(filename).unlink() # python==3.7
 
 		if pathlib.Path(filename).is_file():
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
