@@ -1,7 +1,24 @@
 import numpy
 import sympy
-import cobra
 import logging
+
+from typing import (
+	TYPE_CHECKING,
+	AnyStr,
+	Dict,
+	FrozenSet,
+	Iterable,
+	Iterator,
+	List,
+	Optional,
+	Sequence,
+	Set,
+	Tuple,
+	Union,
+)
+
+import cobra
+from cobra.util.context import get_context, resettable
 
 import coralme
 # use this because recursive import leads to a parcial import and an error
@@ -209,6 +226,139 @@ class MEReaction(cobra.core.reaction.Reaction):
 		#forward_variable.name = self.id
 		#reverse_variable.name = self.reverse_id
 
+	def remove_from_model(self, remove_orphans: bool = False) -> None:
+		"""Remove the reaction from a model.
+
+		This removes all associations between a reaction the associated
+		model, metabolites and genes.
+
+		The change is reverted upon exit when using the model as a context.
+
+		Parameters
+		----------
+		remove_orphans : bool
+			Remove orphaned genes and metabolites from the model as well (default
+			False).
+		"""
+		self._model.remove_reactions([self], remove_orphans=remove_orphans)
+
+	def delete(self, remove_orphans: bool = False) -> None:
+		"""Remove the reaction from a model.
+
+		This removes all associations between a reaction the associated
+		model, metabolites and genes.
+
+		The change is reverted upon exit when using the model as a context.
+
+		.. deprecated ::
+		use `reaction.remove_from_model` instead.
+
+		Parameters
+		----------
+		remove_orphans : bool
+			Remove orphaned genes and metabolites from the model as well (default
+			False).
+		"""
+
+		self.remove_from_model(remove_orphans=remove_orphans)
+
+	def add_metabolites(
+		self,
+		metabolites_to_add: Dict[Metabolite, float],
+		combine: bool = True,
+		reversibly: bool = True,
+	) -> None:
+		"""Add metabolites and stoichiometric coefficients to the reaction.
+
+		If the final coefficient for a metabolite is 0 then it is removed
+		from the reaction.
+
+		The change is reverted upon exit when using the model as a context.
+
+		Parameters
+		----------
+		metabolites_to_add : dict
+			Dictionary with metabolite objects or metabolite identifiers as
+			keys and coefficients as values. If keys are strings (name of a
+			metabolite) the reaction must already be part of a model and a
+			metabolite with the given name must exist in the model.
+
+		combine : bool
+			Describes behavior if a metabolite already exists in the reaction (default
+			True).
+			True causes the coefficients to be added.
+			False causes the coefficient to be replaced.
+
+		reversibly : bool
+			Whether to add the change to the context to make the change
+			reversibly or not (primarily intended for internal use). Default is True.
+
+		Raises
+		------
+		KeyError
+			If the metabolite string id is not in the model.
+		ValueError
+			If the metabolite key in the dictionary is a string, and there is no model
+			for the reaction.
+		"""
+		old_coefficients = self.metabolites
+		new_metabolites = []
+		_id_to_metabolites = dict([(x.id, x) for x in self._metabolites])
+
+		for metabolite, coefficient in metabolites_to_add.items():
+			# Make sure metabolites being added belong to the same model, or
+			# else copy them.
+			if isinstance(metabolite, Metabolite):
+				if (metabolite.model is not None) and (
+					metabolite.model is not self._model
+				):
+					metabolite = metabolite.copy()
+
+			met_id = str(metabolite)
+			# If a metabolite already exists in the reaction then
+			# just add them.
+			if met_id in _id_to_metabolites:
+				reaction_metabolite = _id_to_metabolites[met_id]
+				if combine:
+					self._metabolites[reaction_metabolite] += coefficient
+				else:
+					self._metabolites[reaction_metabolite] = coefficient
+			else:
+				# If the reaction is in a model, ensure we aren't using
+				# a duplicate metabolite.
+				if self._model:
+					try:
+						metabolite = self._model.metabolites.get_by_id(met_id)
+					except KeyError as e:
+						if isinstance(metabolite, Metabolite) or isinstance(metabolite, coralme.core.component.Constraint):
+							new_metabolites.append(metabolite)
+						else:
+							# do we want to handle creation here?
+							raise e
+				elif isinstance(metabolite, str):
+					# if we want to handle creation, this should be changed
+					raise ValueError(
+						f"Reaction '{self.id}' does not belong to a model. "
+						f"Either add the reaction to a model or use Metabolite objects "
+						f"instead of strings as keys."
+					)
+				self._metabolites[metabolite] = coefficient
+				# make the metabolite aware that it is involved in this
+				# reaction
+				metabolite._reaction.add(self)
+
+		# from cameo ...
+		model = self.model
+		if model is not None:
+			model.add_metabolites(new_metabolites)
+
+		for metabolite, the_coefficient in list(self._metabolites.items()):
+			if the_coefficient == 0:
+				# make the metabolite aware that it no longer participates
+				# in this reaction
+				metabolite._reaction.remove(self)
+				self._metabolites.pop(metabolite)
+
 	def _check_bounds(self, lb, ub):
 		#logging.warning('New cobraME \'_check_bounds\' method superseeds \'_check_bounds\' from cobrapy')
 		if isinstance(lb, float) and isinstance(ub, float):
@@ -246,6 +396,155 @@ class MEReaction(cobra.core.reaction.Reaction):
 			else:
 				self.forward_variable.set_bounds(lb = 0, ub = None if numpy.isinf(self.upper_bound) else +self.upper_bound)
 				self.reverse_variable.set_bounds(lb = 0, ub = None if numpy.isinf(self.lower_bound) else -self.lower_bound)
+
+	@property
+	def lower_bound(self) -> float:
+		"""Get the lower bound.
+
+		Returns
+		-------
+		float
+			The lower bound of the reaction.
+		"""
+		return self._lower_bound
+
+	@lower_bound.setter
+	#@resettable
+	def lower_bound(self, value: float) -> None:
+		"""Set the lower bound.
+
+		Parameters
+		----------
+		value: float
+			The value to set the lower bound.
+
+		Setting the lower bound (float) will also adjust the associated optlang
+		variables associated with the reaction.
+
+		When using a `HistoryManager` context, this attribute can be set
+		temporarily, reversed when the exiting the context.
+
+		Raises
+		------
+		ValueError
+			If lower bound higher than the current upper bound. via _check_bounds.
+
+		See Also
+		--------
+		_check_bounds
+		"""
+		# Validate bounds before setting them.
+		self._check_bounds(value, self._upper_bound)
+		self._lower_bound = value
+		#self.update_variable_bounds()
+
+	@property
+	def upper_bound(self) -> float:
+		"""Get the upper bound.
+
+		Returns
+		-------
+		float
+			The upper bound of the reaction.
+		"""
+		return self._upper_bound
+
+	@upper_bound.setter
+	#@resettable
+	def upper_bound(self, value: float) -> None:
+		"""Set the upper bound.
+
+		Parameters
+		----------
+		value: float
+			The value to set the upper bound.
+
+		Setting the upper bound (float) will also adjust the associated optlang
+		variables associated with the reaction.
+
+		When using a `HistoryManager` context, this attribute can be set
+		temporarily, reversed when the exiting the context.
+
+		Raises
+		------
+		ValueError
+			If upper bound lower than the current upper bound. via _check_bounds.
+
+		See Also
+		--------
+		_check_bounds
+		"""
+		# Validate bounds before setting them.
+		self._check_bounds(self._lower_bound, value)
+		self._upper_bound = value
+		#self.update_variable_bounds()
+
+	@property
+	def bounds(self) -> Tuple[float, float]:
+		"""Get or the bounds.
+
+		Returns
+		-------
+		tuple: lower_bound, upper_bound
+			A tuple of floats, representing the lower and upper bound.
+		"""
+		return self.lower_bound, self.upper_bound
+
+	@bounds.setter
+	#@resettable
+	def bounds(self, value: Union[Tuple[float, float], Sequence[float]]) -> None:
+		"""Set the bounds directly, using a tuple or list.
+
+		Parameters
+		----------
+		value: tuple or sequence
+			The lower bound and upper bound. Invalid bounds will raise ValueError.
+
+		When using a `HistoryManager` context, this attribute can be set
+		temporarily, reversed when the exiting the context.
+
+		Raises
+		------
+		ValueError
+			If lower bound higher than upper bound, via _check_bounds.
+
+		"""
+		lower, upper = value
+		# Validate bounds before setting them.
+		self._check_bounds(lower, upper)
+		self._lower_bound = lower
+		self._upper_bound = upper
+		#self.update_variable_bounds()
+
+	@property
+	def forward_variable(self) -> Optional["Variable"]:
+		"""Get an optlang variable representing the forward flux.
+
+		Returns
+		-------
+		optlang.interface.Variable, optional
+			An optlang variable for the forward flux or None if reaction is
+			not associated with a model.
+		"""
+		if self.model is not None:
+			return self.model.variables[self.id]
+		else:
+			return None
+
+	@property
+	def reverse_variable(self) -> Optional["Variable"]:
+		"""Get an optlang variable representing the reverse flux.
+
+		Returns
+		-------
+		optlang.interface.Variable, optional
+			An optlang variable for the reverse flux or None if reaction is
+			not associated with a model.
+		"""
+		if self.model is not None:
+			return self.model.variables[self.reverse_id]
+		else:
+			return None
 
 	def build_reaction_string(self, use_metabolite_names: bool = False) -> str:
 		"""Generate a human readable reaction str.

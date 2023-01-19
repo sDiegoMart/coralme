@@ -273,6 +273,53 @@ class MEModel(cobra.core.model.Model):
 		# from cameo ...
 		#self._populate_solver(pruned)
 
+	def remove_reactions(self, reactions, remove_orphans=False):
+		"""Remove reactions from the model.
+
+		Parameters
+		----------
+		reactions : list
+			A list with reactions (`cobra.Reaction`), or their id's, to remove
+
+		remove_orphans : bool
+			Remove orphaned genes and metabolites from the model as well
+
+		"""
+		if isinstance(reactions, str) or hasattr(reactions, "id"):
+			reactions = [reactions]
+
+		for reaction in reactions:
+			# Make sure the reaction is in the model
+			try:
+				reaction = self.reactions[self.reactions.index(reaction)]
+			except ValueError:
+				logging.warning("%s not in %s" % (reaction, self))
+
+			else:
+				#forward = reaction.forward_variable
+				#reverse = reaction.reverse_variable
+
+				#self.remove_cons_vars([forward, reverse])
+				self.reactions.remove(reaction)
+				reaction._model = None
+
+				for met in reaction._metabolites:
+					if reaction in met._reaction:
+						met._reaction.remove(reaction)
+						if remove_orphans and len(met._reaction) == 0:
+							self.remove_metabolites(met)
+
+				for gene in reaction._genes:
+					if reaction in gene._reaction:
+						gene._reaction.remove(reaction)
+						if remove_orphans and len(gene._reaction) == 0:
+							self.genes.remove(gene)
+
+				# remove reference to the reaction in all groups
+				associated_groups = self.get_associated_groups(reaction)
+				for group in associated_groups:
+					group.remove_members(reaction)
+
 	def add_biomass_constraints_to_model(self, biomass_types):
 		for biomass_type in tqdm.tqdm(biomass_types, 'Adding biomass constraint(s) into the ME-model...', bar_format = bar_format):
 			if '_biomass' not in biomass_type:
