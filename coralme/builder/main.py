@@ -111,7 +111,7 @@ class MEBuilder(object):
 			self.ref = coralme.builder.organism.Organism(config, is_reference = True)
 
 			folder = self.org.blast_directory
-			if bool(config.get('run_bbh_blast', False)):
+			if bool(config.get('run_bbh_blast', True)):
 				print("{} Running BLAST {}".format(sep, sep))
 				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.blast_directory)
 				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
@@ -1205,11 +1205,11 @@ class MEReconstruction(object):
 
 		if overwrite:
 			logging.warning('New configuration file was written with inferred options.')
-			#with open('coralme-config.json', 'w') as outfile:
+			#with open('{:s}/coralme-config.json'.format(config['out_directory']), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
-			with open('coralme-config.yaml', 'w') as outfile:
+			with open('{:s}/coralme-config.yaml'.format(config['out_directory']), 'w') as outfile:
 				anyconfig.dump(config, outfile)
-			#with open('automated.toml', 'w') as outfile:
+			#with open('{:s}/automated.toml'.format(config['out_directory']), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
 
 		def read(filename, columns = []):
@@ -1800,24 +1800,26 @@ class MEReconstruction(object):
 		# TODO: associate subreactions of lipid modifications with enzyme
 
 		# Step2: add reactions of lipoprotein formation
-		coralme.builder.translocation.add_lipoprotein_formation(
-			me, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = True)
+		if bool(config.get('add_lipoproteins', False)):
+			coralme.builder.translocation.add_lipoprotein_formation(
+				me, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = True)
 
 		# ### 2. Correct complex formation IDs if they contain lipoproteins
 
 		# TODO:
 		#for gene in tqdm.tqdm(coralme.builder.translocation.lipoprotein_precursors.values()):
-		for gene in tqdm.tqdm(lipoprotein_precursors.values(), 'Adding lipid precursors and lipoproteins...', bar_format = bar_format):
-			compartment = compartment_dict.get(gene)
-			if compartment is None:
-				pass
-			else:
-				for rxn in me.metabolites.get_by_id('protein_' + gene + '_' + compartment).reactions:
-					if isinstance(rxn, coralme.core.reaction.ComplexFormation):
-						data = me.process_data.get_by_id(rxn.complex_data_id)
-						value = data.stoichiometry.pop('protein_' + gene + '_' + compartment)
-						data.stoichiometry['protein_' + gene + '_lipoprotein' + '_' + compartment] = value
-						rxn.update()
+		if bool(config.get('add_lipoproteins', False)):
+			for gene in tqdm.tqdm(lipoprotein_precursors.values(), 'Adding lipid precursors and lipoproteins...', bar_format = bar_format):
+				compartment = compartment_dict.get(gene)
+				if compartment is None:
+					pass
+				else:
+					for rxn in me.metabolites.get_by_id('protein_' + gene + '_' + compartment).reactions:
+						if isinstance(rxn, coralme.core.reaction.ComplexFormation):
+							data = me.process_data.get_by_id(rxn.complex_data_id)
+							value = data.stoichiometry.pop('protein_' + gene + '_' + compartment)
+							data.stoichiometry['protein_' + gene + '_lipoprotein' + '_' + compartment] = value
+							rxn.update()
 
 		# ### 3. Braun's lipoprotein demand
 		# Metabolites and coefficients as defined in [Liu et al 2014](http://bmcsystbiol.biomedcentral.com/articles/10.1186/s12918-014-0110-6)

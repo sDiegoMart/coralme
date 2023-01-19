@@ -53,7 +53,7 @@ class Organism(object):
             self.id = config['model_id']
 
         self.is_reference = is_reference
-        self.create_minimal_files = bool(config['create_files'])
+        self.create_minimal_files = bool(config.get('create_files', True))
         self.curation_notes = defaultdict(list)
         self.config = config
 
