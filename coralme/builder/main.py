@@ -81,7 +81,7 @@ class MEBuilder(object):
 
 		return None
 
-	def generate_files(self):
+	def generate_files(self, overwrite):
 		sep = ""
 		config = self.configuration
 
@@ -187,6 +187,9 @@ class MEBuilder(object):
 		# Update notes
 		print("{} Generating curation notes {}".format(sep, sep))
 		self.org.generate_curation_notes()
+
+		print("{} Generating new configuration file {}".format(sep, sep))
+		self.input_data(self.org.m_model, overwrite)
 
 	def prepare_model(self):
 		m_model = self.org.m_model
@@ -1131,11 +1134,15 @@ class MEBuilder(object):
 		for k,v in dataframes.items():
 			v.to_csv(directory + k + '.csv')
 
+	# shortcuts to methods in the MEReconstruction and METroubleshooter classes
 	def build_me_model(self, overwrite = False):
 		coralme.builder.main.MEReconstruction(self).build_me_model(overwrite = overwrite)
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
+
+	def input_data(self, gem, overwrite):
+		coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
 
 class MEReconstruction(object):
 	"""
@@ -1169,11 +1176,12 @@ class MEReconstruction(object):
 				logging.warning('RNA Polymerases (core enzyme and sigma factors) was set from homology data.')
 				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
 
-			# replace IDs
+			## replace IDs
 			for name, rnap in config['rna_polymerases'].items():
 				if hasattr(self, 'org'):
 					for key, value in rnap.items():
-						config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
+						config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value)
+						#config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
 
 		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
 			if hasattr(self, 'org'):
@@ -1199,6 +1207,8 @@ class MEReconstruction(object):
 		config['create_files'] = False
 		config['run_bbh_blast'] = False
 		config['dev_reference'] = False
+		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
+			config['defer_to_rxn_matrix'] = [self.org.biomass]
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -1270,6 +1280,8 @@ class MEReconstruction(object):
 
 		model = config.get('model_id', 'coralME')
 		directory = config.get('log_directory', '.')
+		if not os.path.exists(directory):
+			os.mkdir(directory)
 
 		# ## Part 1: Create a minimum solveable ME-model
 		# set logger
@@ -1572,17 +1584,18 @@ class MEReconstruction(object):
 		special_trna_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Special_tRNA')
 
 		# Correct 'translation_stop_dict' if PrfA and/or PrfB are not identified
-		print(me.global_info['translation_stop_dict'])
-
-		if not me.metabolites.has_id('PrfA_mono'):
-			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy'
-		if not me.metabolites.has_id('PrfB_mono'):
-			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy'
+		if me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
+			me.global_info['translation_stop_dict']['UGA'] = 'PrfA_mono' # originally assigned to PrfB_mono
+			me.global_info['translation_stop_dict']['UAA'] = 'PrfA_mono' # originally assinged to generic_RF
+		if not me.metabolites.has_id('PrfA_mono') and me.metabolites.has_id('PrfB_mono'):
+			me.global_info['translation_stop_dict']['UAG'] = 'PrfB_mono' # originally assigned to PrfA_mono
+			me.global_info['translation_stop_dict']['UAA'] = 'PrfB_mono' # originally assinged to generic_RF
+		if not me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
+			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy' # originally assigned to PrfA_mono
+			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy' # originally assigned to PrfB_mono
 
 		if me.global_info['translation_stop_dict']['UAG'] == 'CPLX_dummy' and me.global_info['translation_stop_dict']['UGA'] == 'CPLX_dummy':
 			me.global_info['translation_stop_dict']['UAA'] = 'CPLX_dummy'
-
-		print(me.global_info['translation_stop_dict'])
 
 		# TODO: charged tRNAs per organelle
 		for organelle, transl_table in me.global_info['transl_tables'].items():

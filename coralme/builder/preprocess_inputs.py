@@ -286,13 +286,15 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	data['Reference BBH'] = data['Gene Locus ID'].apply(lambda x: bbh(x, builder))
 
-	df = builder.org.complexes_df
-	df = df[~df.index.str.contains('MONOMER')]
+	df = builder.org.complexes_df.copy(deep = True)
+	#df = df[~df.index.str.contains('MONOMER')]
+	df = df[df['genes'].str.contains('\(')]
 	df['genes'] = df['genes'].str.split(' AND ')
 	df = df.explode('genes')
 	df['stoich'] = df['genes'].apply(lambda x: '1' if x.split('(')[1][:-1] == '' else str(x.split('(')[1][:-1]))
 	df.index = df.index + ':' + df['stoich']
 
+	# This overwrites the
 	data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
 	data['Complex ID'].update(data['Gene Locus ID'].apply(lambda x: complexes(x, df)))
 
@@ -505,7 +507,7 @@ def get_df_cplxs(df, generics = False):
 	fn = lambda x: '{:s}({:s})'.format(x['Gene Locus ID'], x['Complex ID'].split(':')[1].split('(')[0]) if ':' in x['Complex ID'] else '{:s}(1)'.format(x['Gene Locus ID'])
 	tmp['Gene Locus ID'] = tmp[['Gene Locus ID', 'Complex ID']].apply(fn, axis = 1)
 
-	fn = lambda x: '{:s}_MONOMER'.format(x['Gene Locus ID'].split('(')[0]) if x['Complex ID'] == '' else x['Complex ID'].split('(')[0].split(':')[0]
+	fn = lambda x: '{:s}-MONOMER'.format(x['Gene Locus ID'].split('(')[0]) if x['Complex ID'] == '' else x['Complex ID'].split('(')[0].split(':')[0]
 	tmp['Complex ID'] = tmp[['Gene Locus ID', 'Complex ID']].apply(fn, axis = 1)
 
 	fn = lambda x: x[0] if isinstance(x, list) else x.tolist()[0]
@@ -536,7 +538,7 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp = df[~df['Feature Type'].isin(['pseudo'])]
 	tmp = tmp[tmp['M-model Reaction ID'].notna()]
 
-	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}_MONOMER'.format(x))
+	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}-MONOMER'.format(x))
 	tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
 	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
@@ -562,7 +564,7 @@ def get_df_rna_enzs(df, filter_in = set(), generics = False):
 		tmp['modification'] = tmp['RNA mods/enzyme'].apply(lambda x: x.split('_at_')[0])
 		tmp['positions'] = tmp['RNA mods/enzyme'].apply(lambda x: x.split('_at_')[1])
 
-		tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}_MONOMER'.format(x))
+		tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}-MONOMER'.format(x))
 		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
 		fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
@@ -608,7 +610,7 @@ def get_df_protloc(df, filter_in = set(), generics = False):
 
 	if not tmp.empty:
 		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
-		tmp['Monomer ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}_MONOMER'.format(x))
+		tmp['Monomer ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}-MONOMER'.format(x))
 
 		# collapse
 		tmp['Monomer ID'].update(tmp['Complex ID']) # inplace
