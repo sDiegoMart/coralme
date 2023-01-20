@@ -429,12 +429,7 @@ class MEBuilder(object):
 						{
 							mod_complex: {
 								"Core_enzyme": new_complex,
-								"Modifications": " AND ".join(
-									"{}({})".format(cof, coeff)
-									for cof, coeff in ast.literal_eval(
-										info["mod"]
-									).items()
-								),
+								"Modifications": info["mod"],
 								"Source": "Manual",
 							}
 						}

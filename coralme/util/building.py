@@ -640,7 +640,6 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 			new_reaction.upper_bound = reaction.upper_bound
 			for met, stoichiometry in reaction.metabolites.items():
 				new_reaction.add_metabolites({ me_model.metabolites.get_by_id(met.id): stoichiometry })
-
 		else:
 			reaction_data = coralme.core.processdata.StoichiometricData(reaction.id, me_model)
 			reaction_data.lower_bound = reaction.lower_bound
