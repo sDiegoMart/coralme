@@ -274,7 +274,7 @@ class MEBuilder(object):
 		try:
 			new_reactions_dict = (
 				pandas.read_csv(filename, index_col=0)
-				.fillna({"gene_reaction_rule": "", "notes": "", "reaction": ""})
+				.fillna({"gene_reaction_rule": "", "notes": "", "reaction": "","name":""})
 				.T.to_dict()
 			)
 		except:
