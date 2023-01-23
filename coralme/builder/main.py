@@ -244,6 +244,7 @@ class MEBuilder(object):
 		for r in NGAMs:
 			if r in m_model.reactions:
 				rxn = m_model.reactions.get_by_id(r)
+				if rxn.lower_bound <= 0:continue
 				self.org.NGAM = rxn.lower_bound
 				print('{} was identified as NGAM with value {}'.format(r,self.org.NGAM))
 				break
@@ -252,7 +253,7 @@ class MEBuilder(object):
 			self.org.curation_notes['prepare_model'].append({
 				'msg':'NGAM could not be identified in M-model, setting a standard value of 1.',
 				'importance':'high',
-				'to_do':'Manually define NGAM with me_builder.org.NGAM = NGAM_value'})
+				'to_do':'Manually define NGAM with me_builder.org.NGAM = NGAM_value. Check if a reaction with identifier NGAM or ATPM has a zero or negative lower bound.'})
 		elif self.org.NGAM == 0:
 			self.org.NGAM = 1.
 			self.org.curation_notes['prepare_model'].append({
