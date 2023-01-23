@@ -22,6 +22,9 @@ def generate_organism_specific_matrix(genbank, model):
 	# create a pandas DataFrame with organism-specific information to be completed with the builder data
 	df = pandas.DataFrame(columns = [
 		'Gene Locus ID',
+		'Gene Names',
+		'Old Locus Tags',
+		'BioCyc',
 		'Reference BBH',
 		'Definition',
 		'Feature Type',
@@ -45,10 +48,20 @@ def generate_organism_specific_matrix(genbank, model):
 	])
 
 	def get_reaction(x):
-		try:
-			return [ x.id for x in model.genes.get_by_id(x).reactions ]
-		except:
+		if x is None:
 			return None
+		else:
+			lst = []
+			for gene in x.split(';'):
+				if model.genes.has_id(gene):
+					lst.append([ x.id for x in model.genes.get_by_id(gene).reactions ])
+
+			# A (old)locustag/gene name can be associated to many reactions
+			lst = [ x for y in lst for x in y ]
+			if lst == []:
+				return None
+			else:
+				return lst
 
 	def get_reaction_name(x):
 		if x is not None:
@@ -77,12 +90,18 @@ def generate_organism_specific_matrix(genbank, model):
 		else:
 			return None
 
-	df['Gene Locus ID'] = [ x.qualifiers['locus_tag'][0] if x.qualifiers.get('locus_tag', None) is not None else None for x in lst ]
-	df['Old Locus ID'] = [ x.qualifiers['old_locus_tag'][0] if x.qualifiers.get('old_locus_tag', None) is not None else None for x in lst ]
-	df['Definition'] = [ x.qualifiers['product'][0] if x.qualifiers.get('product', None) is not None else None for x in lst ]
+	df['Gene Locus ID'] = [ x.qualifiers.get('locus_tag', None)[0] for x in lst ]
+	df['Definition'] = [ x.qualifiers.get('product', None)[0] for x in lst ]
 	df['Feature Type'] = [ x.type if x.qualifiers.get('pseudo') is None else 'pseudo' for x in lst ]
 
-	df['M-model Reaction ID'] = df['Old Locus ID'].apply(lambda x: get_reaction(x))
+	tmp = [ x.qualifiers.get('gene', None) for x in lst ]
+	df['Gene Names'] = [ ';'.join(x) if x is not None else None for x in tmp ]
+
+	tmp = [ x.qualifiers['old_locus_tag'] if x.qualifiers.get('old_locus_tag', None) is not None else None for x in lst ]
+	df['Old Locus Tags'] = [ ';'.join(x) if x is not None else None for x in tmp ]
+
+	df['M-model Reaction ID'] = df['Old Locus Tags'].apply(lambda x: get_reaction(x))
+	df['M-model Reaction ID'].update(df['Gene Names'].apply(lambda x: get_reaction(x)))
 	df['M-model Reaction ID'].update(df['Gene Locus ID'].apply(lambda x: get_reaction(x)))
 	df = df.explode('M-model Reaction ID')
 
@@ -94,7 +113,16 @@ def generate_organism_specific_matrix(genbank, model):
 
 def complete_organism_specific_matrix(builder, data, model, output):
 	def bbh(x, builder):
-		return builder.homology.mutual_hits.get(x, None)
+		if x is None:
+			return None
+		else:
+			lst = []
+			for gene in x.split(';'):
+				lst.append(builder.homology.mutual_hits.get(gene, None))
+			if set(lst) == set([None]):
+				return None
+			else:
+				return [ x for x in lst if x is not None ][0]
 
 	def monomers(x, builder):
 		cplxID = builder.homology.org_cplx_homolog.get(x + '-MONOMER', None)
@@ -108,7 +136,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		if len(cplxID) == 0:
 			return None
 		else:
-			return cplxID.index.to_list()
+			return ';'.join(cplxID.index.to_list())
 
 	def cofactors(x, builder):
 		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
@@ -284,7 +312,26 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			if len(lst) >= 1:
 				return lst
 
-	data['Reference BBH'] = data['Gene Locus ID'].apply(lambda x: bbh(x, builder))
+	data['Reference BBH'] = data['Old Locus Tags'].apply(lambda x: bbh(x, builder))
+	data['Reference BBH'].update(data['Gene Names'].apply(lambda x: bbh(x, builder)))
+	data['Reference BBH'].update(data['Gene Locus ID'].apply(lambda x: bbh(x, builder)))
+
+	dct = { v['Accession-1']:k for k,v in builder.org.gene_dictionary.iterrows() }
+
+	def biocyc(x, builder):
+		if x is None:
+			return None
+		else:
+			lst = []
+			for gene in x.split(';'):
+				lst.append(dct.get(gene, None))
+			if set(lst) == set([None]):
+				return None
+			else:
+				return [ x for x in lst if x is not None ][0]
+
+	data['BioCyc'] = data['Old Locus Tags'].apply(lambda x: biocyc(x, builder))
+	data['BioCyc'].update(data['Gene Names'].apply(lambda x: biocyc(x, builder)))
 
 	df = builder.org.complexes_df.copy(deep = True)
 	#df = df[~df.index.str.contains('MONOMER')]
@@ -294,9 +341,25 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	df['stoich'] = df['genes'].apply(lambda x: '1' if x.split('(')[1][:-1] == '' else str(x.split('(')[1][:-1]))
 	df.index = df.index + ':' + df['stoich']
 
-	# This overwrites the
-	data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
-	data['Complex ID'].update(data['Gene Locus ID'].apply(lambda x: complexes(x, df)))
+	# This overwrites the 'monomers' names with 'complexes' names
+	#data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
+	#data['Complex ID'].update(data['Gene Locus ID'].apply(lambda x: complexes(x, df)))
+
+	data['monomers'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
+	data['complexes'] = data['Gene Locus ID'].apply(lambda x: complexes(x, df))
+
+	def _combine(x):
+		lst = [] if x['monomers'] is None else [x['monomers']]
+		if x['complexes'] is None:
+			pass
+		else:
+			for complex_name in x['complexes'].split(';'):
+				lst.append(complex_name)
+		return lst
+
+	data['Complex ID'] = data[['monomers', 'complexes']].apply(lambda x: _combine(x), axis = 1)
+	#data.drop('monomers', axis = 1, inplace = True)
+	#data.drop('complexes', axis = 1, inplace = True)
 
 	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(x, builder))
 	data = data.explode('Complex ID')
@@ -321,15 +384,14 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data['DnaK_dependent_folding'] = data['Gene Locus ID'].apply(lambda x: dnak(x, builder))
 	data['N_terminal_methionine_cleavage'] = data['Gene Locus ID'].apply(lambda x: ntmeth(x, builder))
 
-	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = \
-		zip(*data['Gene Locus ID'].apply(lambda x: location(x, builder)))
+	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data['Gene Locus ID'].apply(lambda x: location(x, builder)))
 	data = data.explode('Complex Location')
 
-	data['Generic Complex ID'].update(data['Complex ID'].apply(lambda x: generics_from_complex(x, builder)))
-	data = data.explode('Generic Complex ID')
+	#data['Generic Complex ID'].update(data['Complex ID'].apply(lambda x: generics_from_complex(x, builder)))
+	#data = data.explode('Generic Complex ID')
 
-	data['Complex ID'].update(data['Complex ID'].apply(lambda x: generics_in_complex(x, df)))
-	data = data.explode('Complex ID')
+	#data['Complex ID'].update(data['Complex ID'].apply(lambda x: generics_in_complex(x, df)))
+	#data = data.explode('Complex ID')
 
 	if pathlib.Path(output).is_file():
 		pass
@@ -341,7 +403,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 		with open(output, 'wb') as outfile:
 			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
-			data.to_excel(writer, index = False, freeze_panes = (1, 1))
+			data.to_excel(writer, index = False, freeze_panes = (1, 2))
 			(max_row, max_col) = data.shape
 
 			# Get the xlsxwriter workbook and worksheet objects.
