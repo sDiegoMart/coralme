@@ -95,7 +95,7 @@ def create_transcribed_gene(me_model, locus_id, rna_type, seq, left_pos = None, 
 	gene.right_pos = right_pos.split(',') if right_pos is not None else None
 	gene.strand = strand
 
-	if len(me_model.metabolites.query('RNA_' + locus_id)) != 0:
+	if len(me_model.metabolites.query('^RNA_{:s}$'.format(locus_id))) != 0:
 		me_model.metabolites._replace_on_id(gene)
 		logging.warning('TranscribedGene \'{:s}\' was replaced.'.format(gene.id))
 
@@ -405,7 +405,7 @@ def build_reactions_from_genbank(
 			if feature.type == 'source':
 				organelle = feature.qualifiers.get('organelle', [None])[0]
 
-			# Skip if not a gene used in ME construction
+			# Skip feature if it is not a gene used in the ME construction
 			if (feature.type not in feature_types) or ('pseudo' in feature.qualifiers) or (feature.qualifiers['locus_tag'][0] in knockouts) or (feature.qualifiers['locus_tag'][0] not in genes_to_add):
 				continue
 
@@ -525,6 +525,8 @@ def build_reactions_from_genbank(
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
 
 	# DataFrame mapping tRNAs (list) and the encoded aminoacid (index), per organelle
+	me_model.global_info['aa2trna'] = aa2trna
+
 	for organelle, aa2trna_dct in aa2trna.items():
 		aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
 		aa2trna_dct = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
@@ -542,8 +544,6 @@ def build_reactions_from_genbank(
 			me_model.global_info['START_tRNA'] = list(aa2trna_dct.loc['Met'])[0]
 		if len(me_model.global_info['START_tRNA']) == 0:
 			logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
-
-	me_model.global_info['aa2trna'] = aa2trna
 
 	# add charging tRNA reactions per organelle
 	for organelle, transl_table in transl_tables.items():

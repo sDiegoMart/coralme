@@ -81,7 +81,7 @@ class MEBuilder(object):
 
 		return None
 
-	def generate_files(self, overwrite):
+	def generate_files(self, overwrite = False):
 		sep = ""
 		config = self.configuration
 
@@ -244,7 +244,8 @@ class MEBuilder(object):
 		for r in NGAMs:
 			if r in m_model.reactions:
 				rxn = m_model.reactions.get_by_id(r)
-				if rxn.lower_bound <= 0:continue
+				if rxn.lower_bound <= 0:
+					continue
 				self.org.NGAM = rxn.lower_bound
 				print('{} was identified as NGAM with value {}'.format(r,self.org.NGAM))
 				break
@@ -1381,7 +1382,8 @@ class MEReconstruction(object):
 		# To construct the bare minimimum components of a transcription and translation reactions.
 		# For example, transcription reactions at this point include nucleotides and the synthesized RNAs.
 
-		lst = set(df_data['Gene Locus ID'].str.replace('protein_', '').str.replace('RNA_', '').tolist())
+		# RNA and protein names are prefixed in the ME-model following then the locus tag
+		lst = set(df_data['Gene Locus ID'].str.replace('^protein_', '', regex = True).str.replace('^RNA_', '', regex = True).tolist())
 
 		coralme.util.building.build_reactions_from_genbank(
 			me_model = me, gb_filename = me.global_info['genbank-path'],
