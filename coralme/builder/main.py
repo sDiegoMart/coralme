@@ -1170,7 +1170,7 @@ class MEReconstruction(object):
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
 			if hasattr(self, 'org'):
-				logging.warning('RNA Polymerases (core enzyme and sigma factors) was set from homology data.')
+				logging.warning('RNA Polymerases (core enzyme and sigma factors) information was set from homology data.')
 				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
 
 			## replace IDs
