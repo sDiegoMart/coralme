@@ -835,26 +835,11 @@ class Organism(object):
                 d["end"] = max([i["end"] for i in d["location"]])
                 for f, v in feature.qualifiers.items():
                     d[f] = v
-                #if 'locus_tag' in d:
-                    #if locus_tag not in d:
-                        #warn_genes.append(d['locus_tag'][0])
-                    #else:
-                        #d['locus_tag'] = d[locus_tag] # Overwrite locus_tag with desired locus_tag classification (e.g. old_locus_tag)
 
                 genbank.append(d)
             pos += len(record.seq)  # Appending features from sequential records
-        #self.locus_tag = 'locus_tag' # Override locus_tag preference now that it has been overwritten
         self.gb_file = genbank
         self.full_seq = full_seq
-
-        # Warnings
-        #if locus_tag != 'locus_tag' and warn_genes:
-            #self.curation_notes['org.get_genbank'].append({
-                            #'msg':'Some features are missing field {} in genome.gb'.format(locus_tag),
-                            #'triggered_by':warn_genes,
-                            #'importance':'medium',
-                            #'to_do':'Check whether locus_tag is consistent with the other files and the m_model. If not, provide the {} for these genes'.format(locus_tag)
-            #})
 
 
     def check_minimal_files(self):
