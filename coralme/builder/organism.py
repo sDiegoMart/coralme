@@ -156,48 +156,6 @@ class Organism(object):
         return self.get_rpod()
 
     @property
-    def _full_seq(self):
-        filename = self.directory + "sequence.fasta"
-        if os.path.isfile(filename):
-            file = open(filename)
-            print("Found sequence file, reading full DNA sequence from it...")
-            full_seq = "".join(
-                [l.replace("\n", "") for l in file.readlines() if ">" not in l]
-            )
-
-        else:
-            print("Reading full DNA sequence from GB file...")
-            "".join([str(i) for i in self.full_seq])
-            try:
-                full_seq = "".join([str(i) for i in self.full_seq])
-            except ValueError:
-                print(
-                    "There is something wrong with the genome sequence in the GB file"
-                )
-        ## Replacing nonstandard code according to https://www.cottongen.org/help/nomenclature/IUPAC_nt
-
-        replace_dict = {
-            "N": ["A", "T", "G", "C"],
-            "R": ["A", "G"],
-            "Y": ["T", "C"],
-            "K": ["G", "T"],
-            "M": ["T", "C"],
-            "S": ["C", "G"],
-            "W": ["A", "T"],
-            "B": ["C", "G", "T"],
-            "D": ["A", "G", "T"],
-            "H": ["A", "C", "T"],
-            "V": ["A", "C", "G"],
-        }
-        correct_seq = ""
-        for i in full_seq:
-            if i in ["A", "T", "G", "C"]:
-                correct_seq += i
-            else:
-                correct_seq += random.choice(replace_dict[i])
-        return correct_seq
-
-    @property
     def _m_to_me_mets(self):
         filename = self.directory + "m_to_me_mets.csv"
         if os.path.isfile(filename):
@@ -708,8 +666,6 @@ class Organism(object):
         self.m_to_me_mets = self._m_to_me_mets
         print("{} Loading genbank file {}".format(sep, sep))
         self.get_genbank()
-        print("{} Loading full genomic sequence {}".format(sep, sep))
-        self.full_seq = self._full_seq
         if self.create_minimal_files:
             print("{} Generating minimal files from genbank {}".format(sep, sep))
             self.generate_minimal_files()
@@ -812,12 +768,10 @@ class Organism(object):
             gb_file = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
         else:
             gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
-        full_seq = []
         genbank = []
         pos = 0
         warn_genes = []
         for record in gb_file.records:
-            full_seq.append(record.seq)
             for feature in record.features:
                 d = {}
                 d["type"] = feature.type
@@ -835,7 +789,6 @@ class Organism(object):
                 genbank.append(d)
             pos += len(record.seq)  # Appending features from sequential records
         self.gb_file = genbank
-        self.full_seq = full_seq
 
 
     def check_minimal_files(self):
