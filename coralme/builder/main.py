@@ -1533,7 +1533,7 @@ class MEReconstruction(object):
 		# ### 9) Save ME-model as a pickle file
 
 		import pickle
-		with open('MEModel-step1-{:s}.pkl'.format(model), 'wb') as outfile:
+		with open(config['out_directory'] + 'MEModel-step1-{:s}.pkl'.format(model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
 		print('ME-model was saved as MEModel-step1-{:s}.pkl'.format(model))
@@ -1935,7 +1935,7 @@ class MEReconstruction(object):
 		me.prune()
 
 		import pickle
-		with open('MEModel-step2-{:s}.pkl'.format(model), 'wb') as outfile:
+		with open(config['out_directory'] + 'MEModel-step2-{:s}.pkl'.format(model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
 		print('ME-model was saved as MEModel-step2-{:s}.pkl'.format(model))
@@ -2139,7 +2139,7 @@ class METroubleshooter(object):
 			self.me_model.optimize(max_mu = 3.0, precision = 1e-6)
 			print('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
 
-			with open('MEModel-step3-{:s}-TS.pkl'.format(self.me_model.id), 'wb') as outfile:
+			with open(config['out_directory'] + 'MEModel-step3-{:s}-TS.pkl'.format(self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
 			print('\nME-model was saved as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.me_model.id))
