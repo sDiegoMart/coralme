@@ -770,6 +770,7 @@ class Organism(object):
             gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
         genbank = []
         pos = 0
+        
         warn_genes = []
         for record in gb_file.records:
             for feature in record.features:
