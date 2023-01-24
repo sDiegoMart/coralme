@@ -808,7 +808,7 @@ class MEModel(cobra.core.model.Model):
 		Sf, Se, lb, ub, b, c, cs, atoms = self.construct_lp_problem()
 
 		if len(atoms) > 1:
-			print('Use `me_model.map_feasibility()` to obtain the boundary of feasibility solutions.')
+			print('Use `me_model.map_feasibility()` to obtain the boundary of feasible solutions.')
 			print('Optimization will proceed replacing all growth keys with the same value.')
 
 		if lambdify:

@@ -275,7 +275,7 @@ def build_reactions_from_genbank(
 	#if not trna_to_codon:
 		#trna_to_codon = {}
 
-	metabolites = me_model.metabolites
+	#metabolites = me_model.metabolites
 
 	# Load genbank file and extract DNA sequence
 	#try:
@@ -410,7 +410,7 @@ def build_reactions_from_genbank(
 			if not me_model.global_info['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
 				continue
 
-			# Add features based on their type
+			# Add only features based on their type
 			if feature.type not in feature_types:
 				continue
 

@@ -382,31 +382,37 @@ class ME_NLP:
             print('Iteration\t Solution to check\tSolver Status')
             print('---------\t------------------\t-------------')
 
-        for idx in range(1, maxIter + 1):
-            # Just a sequence of feasibility checks
-            muf = (mumin + mumax) / 2.
-            # Retrieve evaluation from cache if it exists: golden section advantage
-            #xopt, yopt, basis, stat = self.checkmu(muf, basis, precision)
-            x_new, y_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
+        # test mumax
+        x_new, y_new, stat_new, hs_new = self.solvelp(mumax, basis, precision)
+        if stat_new == 'optimal':
+            return mumax, x_new, y_new, basis, stat_new
 
-            if stat_new == 'optimal':
-                basis = hs_new
-                mumin = muf
-            else:
-                mumax = muf
+        else:
+            for idx in range(1, maxIter + 1):
+                # Just a sequence of feasibility checks
+                muf = (mumin + mumax) / 2.
+                # Retrieve evaluation from cache if it exists: golden section advantage
+                #xopt, yopt, basis, stat = self.checkmu(muf, basis, precision)
+                x_new, y_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
 
-            if verbose:
-                #print('{:s}\t{:.16f}\t{:.16f}\t{:s}'.format(
-                print('{:s}\t{:.16f}\t{:s}'.format(
-                    str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
+                if stat_new == 'optimal':
+                    basis = hs_new
+                    mumin = muf
+                else:
+                    mumax = muf
 
-            if abs(mumax - mumin) <= tolerance and stat_new == 'optimal':
-                break
+                if verbose:
+                    #print('{:s}\t{:.16f}\t{:.16f}\t{:s}'.format(
+                    print('{:s}\t{:.16f}\t{:s}'.format(
+                        str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
 
-            if mumax <= tolerance:
-                break
+                if abs(mumax - mumin) <= tolerance and stat_new == 'optimal':
+                    break
 
-        # Save feasible basis
-        self.feas_basis = basis
+                if mumax <= tolerance:
+                    break
 
-        return muf, x_new, y_new, basis, stat_new
+            # Save feasible basis
+            self.feas_basis = basis
+
+            return muf, x_new, y_new, basis, stat_new
