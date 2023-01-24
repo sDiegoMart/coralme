@@ -765,31 +765,9 @@ class Organism(object):
 
     def get_genbank(self):
         if self.is_reference:
-            gb_file = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
+            self.gb_file = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
         else:
-            gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
-        genbank = []
-        pos = 0
-        
-        warn_genes = []
-        for record in gb_file.records:
-            for feature in record.features:
-                d = {}
-                d["type"] = feature.type
-                d["location"] = []
-                d["location"] = [
-                    {"start": i.start + pos, "end": i.end + pos}
-                    for i in feature.location.parts
-                ]
-                d["strand"] = feature.location.strand
-                d["start"] = min([i["start"] for i in d["location"]])
-                d["end"] = max([i["end"] for i in d["location"]])
-                for f, v in feature.qualifiers.items():
-                    d[f] = v
-
-                genbank.append(d)
-            pos += len(record.seq)  # Appending features from sequential records
-        self.gb_file = genbank
+            self.gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
 
 
     def check_minimal_files(self):
@@ -866,32 +844,29 @@ class Organism(object):
         proteins = {}
         rnas = {}
         tus = {}
-        for feature in gb_file:
-            if feature["type"] not in {"CDS", "rRNA", "tRNA", "ncRNA", "misc_RNA"}:
-                continue
-            gene_id = feature['locus_tag'][0]
-            genes[gene_id] = {
-                "Accession-1": gene_id,
-                "Left-End-Position": int(feature["start"]),
-                "Right-End-Position": int(feature["end"]),
-                "Product": gene_id + "-MONOMER"
-                if feature["type"] == "CDS"
-                else gene_id + "-{}".format(feature["type"]),
-            }
-            tus["TU_{}".format(gene_id)] = {
-                "Genes of transcription unit": gene_id,
-                "Direction": "+" if feature["strand"] == 1 else "-",
-            }
-            if "RNA" in feature["type"] and feature.get('pseudo', None) is None:
-                rnas[gene_id] = {"Common-Name": feature["product"][0], "Gene": gene_id}
-            if feature["type"] == "CDS":
-                proteins[gene_id + "-MONOMER"] = {
-    #					 "Accession-1": gene_id,
-                    "Common-Name": feature["product"][0] if 'product' in feature else gene_id + "-MONOMER",
-                    "Genes of polypeptide, complex, or RNA": gene_id,
-                    "Locations": "",
-    #					 "Gene": gene_id,
+        for record in gb_file.records:
+            for feature in record.features:
+                if feature.type not in {"CDS", "rRNA", "tRNA", "ncRNA", "misc_RNA"}:
+                    continue
+                gene_id = feature.qualifiers['locus_tag'][0]
+                genes[gene_id] = {
+                    "Accession-1": gene_id,
+                    "Product": gene_id + "-MONOMER"
+                    if feature.type == "CDS"
+                    else gene_id + "-{}".format(feature.type),
                 }
+                tus["TU_{}".format(gene_id)] = {
+                    "Genes of transcription unit": gene_id,
+                    "Direction": "+" if feature.location.strand == 1 else "-",
+                }
+                if "RNA" in feature.type:
+                    rnas[gene_id] = {"Common-Name": feature.qualifiers["product"][0], "Gene": gene_id}
+                if feature.type == "CDS":
+                    proteins[gene_id + "-MONOMER"] = {
+                        "Common-Name": feature.qualifiers["product"][0] if 'product' in feature.qualifiers else gene_id + "-MONOMER",
+                        "Genes of polypeptide, complex, or RNA": gene_id,
+                        "Locations": "",
+                    }
         genes = pandas.DataFrame.from_dict(genes).T
         genes.index.name = "Gene Name"
         genes.to_csv(self.directory + "genes.txt", sep="\t")
