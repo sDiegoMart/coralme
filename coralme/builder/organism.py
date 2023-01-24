@@ -759,10 +759,6 @@ class Organism(object):
         print("{} Generating transcription units dataframe {}".format(sep, sep))
         self.TU_df = self._TU_df
         self.get_TU_genes()
-        #print("{} Calculating codon usage from genbank file {}".format(sep, sep))
-        #self.codon_usage = self.codon_usage_from_genbank()
-        #print("{} Generating tRNA to codon dictionary {}".format(sep, sep))
-        #self.get_trna_to_codon()
         print("{} Getting protein location from BioCyc {}".format(sep, sep))
         self.protein_location = self._protein_location
         print("{} Reading ribosomal proteins{}".format(sep, sep))
@@ -849,8 +845,7 @@ class Organism(object):
         if not os.path.isdir(self.blast_directory):
             os.makedirs(self.blast_directory)
             print("{} directory was created.".format(self.blast_directory))
-        #if not os.path.isfile(self.directory + "genome.gb"):
-            #raise IOError("{} file is required".format(self.directory + "genome.gb"))
+
         if not os.path.isfile(self.directory + "genes.txt"):
             self.curation_notes['org.check_minimal_files'].append({
                 'msg':"genes.txt file not found",
@@ -1663,83 +1658,6 @@ class Organism(object):
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
         return df
 
-    def get_trna_to_codon(self):
-        if self.is_reference:
-            return "NA"
-
-        RNA_df = self.RNA_df
-        codon_usage = self.codon_usage
-        gene_dictionary = self.gene_dictionary
-
-        def get_aa_to_codon(codon_usage):
-            aa_to_codon = {}
-            for aa, row in codon_usage.iterrows():
-                dna_codon = row["codon"]
-                rna_codon = Bio.Seq.transcribe(dna_codon)
-                if aa not in aa_to_codon:
-                    aa_to_codon[aa] = []
-                aa_to_codon[aa].append(rna_codon)
-            return aa_to_codon
-
-        aa_to_codon = get_aa_to_codon(codon_usage)
-        trna_to_codon = {}
-        trna_to_aa = {}
-        warn_aas = []
-
-        for trna_name, row in RNA_df.iterrows():
-            common_name = row["Common-Name"]
-            if isinstance(common_name,float) or not re.search("^tRNA[-]{1,2}[a-zA-Z]{3}", common_name):
-                continue
-            if '--' in common_name: # In case that -- (e.g. tRNA--Ala) is in name instead of - (tRNA-Ala)
-                common_name = common_name.replace('--','-')
-            gene = gene_dictionary["Accession-1"][row["Gene"]]
-            aa = re.findall("(?<=tRNA-)[a-zA-Z]{3}", common_name)[0]
-            aa = aa[0].upper() + aa[1:].lower() # Force capital first letter.
-            if aa not in aa_to_codon:
-                if aa == "Sec":
-                    # Warning
-                    self.curation_notes['org.get_trna_to_codon'].append({
-                        'msg':"{} codon was assumed as UGA".format(aa),
-                        'importance':'medium',
-                        'to_do':'UGA is the standard codon for Sec. If this is not correct for your model, change me_builder.org.trna_to_codon and .trna_to_aa accordingly.'})
-                    aa_to_codon[aa] = ["UGA"]
-                else:
-                    warn_aas.append({
-                            'amino_acid': aa,
-                            'trna_name' : trna_name,
-                            'common_name': common_name
-                            })
-                    continue
-            codon = aa_to_codon[aa]
-            if aa == 'Met' and 'START' not in codon:
-                codon.append('START')
-            trna_to_codon[gene] = codon.copy()
-            trna_to_aa[gene] = aa
-        if not trna_to_codon:
-            self.curation_notes['org.get_trna_to_codon'].append({
-                'msg':'me_builder.org.trna_to_codon is empty',
-                'importance':'critical',
-                'to_do':'Check that the names of tRNAs in RNAs.txt follow the convention tRNA-AA or fill them in me_builder.org.trna_to_codon and .trna_to_aa manually'})
-        self.trna_to_codon = trna_to_codon
-        self.trna_to_aa = trna_to_aa
-
-        # Warnings
-        if warn_aas:
-            self.curation_notes['org.get_trna_to_codon'].append({
-                'msg':'Some amino acids annotated in RNAs.txt for tRNAs are not in codon_usage.csv',
-                'triggered_by':warn_aas,
-                'importance':'high',
-                'to_do':'Fix codon_usage.csv so that it includes missing amino acids. Ignore wrongly called tRNA-AA associations.'})
-        return trna_to_codon
-
-    #		 # Save as matrix
-    #		 d = {}
-    #		 for trna,codon_list in trna_to_codon.items():
-    #			 d[trna] = {}
-    #			 for codon in codon_list:
-    #				 d[trna][codon] = 1
-    #		 return pandas.DataFrame.from_dict(d).fillna(0).astype(int)
-
     def extract_gene_sequence(self, feature):
         seq = ""
         CDS_strand = "+" if feature["strand"] == 1 else "-"
@@ -1754,52 +1672,7 @@ class Organism(object):
             )
         return seq
 
-    def codon_usage_from_genbank(self):
-        if self.is_reference:
-            return
-
-        codon_usage = (
-            self._builder.standard_codon_usage.reset_index().set_index("codon").copy()
-        )
-        gb_file = self.gb_file
-        full_seq = self.full_seq
-        usage = {}
-        warn_genes = []
-        for feature in gb_file:
-            if feature["type"] == "CDS":
-                seq = self.extract_gene_sequence(feature)
-                if len(seq) % 3:
-                    warn_genes.append(feature[self.locus_tag][0])
-                codons = [
-                    str(seq[i : i + 3])
-                    for i in range(len(seq))
-                    if not i % 3 and i < len(seq) - 2
-                ]
-                for c in codons:
-                    if c not in usage:
-                        usage[c] = 0
-                    usage[c] += 1
-        count_df = pandas.DataFrame.from_dict({"count": usage})
-        per_1000 = count_df.div(count_df.sum())
-        for c, count in per_1000.iterrows():
-            codon_usage.loc[c, "per_1000"] = count["count"] * 1000.0
-            codon_usage.loc[c, "total"] = usage[c]
-        codon_usage = codon_usage.dropna()
-        for aa in codon_usage["amino_acid"].unique():
-            df = codon_usage[codon_usage["amino_acid"].str.contains(aa)]
-            for c, row in df.iterrows():
-                codon_usage.loc[c, "fraction"] = (
-                    codon_usage.loc[c, "per_1000"] / df["per_1000"].sum()
-                )
-
-        # Warnings
-        if warn_genes:
-            self.curation_notes['org.codon_usage_from_genbank'].append({
-                'msg':'The sequence of some genes is not divisible by 3',
-                'triggered_by':warn_genes,
-                'importance':'high',
-                'to_do':'Correct the positions of these genes or correct the expression in genome.gb so that it correctly expresses frameshifts'})
-        return codon_usage.dropna().reset_index().set_index("amino_acid")
+  
 
     def get_protein_location(self):
         def process_location_dict(location, location_interpreter):
