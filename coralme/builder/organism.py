@@ -1097,7 +1097,7 @@ class Organism(object):
                     product_name = complexes_df.loc[product]['name']
                 else:
                     product_name = product
-
+                
                 if not row['Left-End-Position'] or not row['Right-End-Position']:
                     warn_position.append(gene_id)
                     continue
@@ -1308,9 +1308,6 @@ class Organism(object):
         for feature in gb_file:
             if feature["type"] not in element_types:
                 continue
-            #if locus_tag not in feature:
-                #warn_locus.append(feature)
-                #continue
             gene_id = feature['locus_tag']
             if not gene_id:
                 continue
@@ -1320,18 +1317,6 @@ class Organism(object):
                 feature_type = feature["type"]
                 if feature_type == 'CDS':
                     feature_type = 'MONOMER'
-                #gene_dictionary = gene_dictionary.append(
-                    #pandas.DataFrame.from_dict(
-                        #{
-                            #gene_id: {
-                                #"Accession-1": gene_id,
-                                #"Left-End-Position": int(feature["start"]),
-                                #"Right-End-Position": int(feature["end"]),
-                                #"Product": "{}-{}".format(gene_id,feature_type),
-                            #}
-                        #}
-                    #).T
-                #)
                 tmp = pandas.DataFrame.from_dict({
                             gene_id: {
                                 "Accession-1": gene_id,
@@ -1357,17 +1342,6 @@ class Organism(object):
                 product = gene_name + '-MONOMER'
                 if not complexes_df["genes"].str.contains(gene_id).any():
                     print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
-                    #complexes_df = complexes_df.append(
-                        #pandas.DataFrame.from_dict(
-                            #{
-                                #product: {
-                                    #"name": name_annotation,
-                                    #"genes": "{}()".format(gene_id),
-                                    #"source": "GenBank",
-                                #}
-                            #}
-                        #).T
-                    #)
                     tmp = pandas.DataFrame.from_dict({
                                 product: {
                                     "name": name_annotation,
@@ -1380,16 +1354,6 @@ class Organism(object):
                 product = "{}-{}".format(gene_name,feature['type'])
                 if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
                     print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
-                    #RNA_df = RNA_df.append(
-                        #pandas.DataFrame.from_dict(
-                            #{
-                               #product : {
-                                    #"Common-Name": name_annotation,
-                                    #"Gene": gene_name
-                                #}
-                            #}
-                        #).T
-                    #)
                     tmp = pandas.DataFrame.from_dict(
                             {
                                product : {
