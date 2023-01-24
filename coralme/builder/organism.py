@@ -927,18 +927,6 @@ class Organism(object):
             ## Sync files
             if 'RNA' in product_type and product not in RNA_df.index:
                 print('Adding {} ({}) to RNAs'.format(gene_id,product))
-                """
-                RNA_df = RNA_df.append(
-                        pandas.DataFrame.from_dict(
-                            {
-                                "{}".format(product): {
-                                    "Common-Name": product,
-                                    "Gene": gene_id
-                                }
-                            }
-                        ).T
-                    )
-                """
                 tmp = pandas.DataFrame.from_dict({ "{}".format(product) : { "Common-Name": product, "Gene": gene_id }}).T
                 RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
 
