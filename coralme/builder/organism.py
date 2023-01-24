@@ -1912,17 +1912,6 @@ class Organism(object):
                         continue
                     met = m_to_me.loc[metabolite.id, "me_name"]
                 coefficient = rxn.get_coefficient(metabolite)
-                #df = df.append(
-                    #pandas.DataFrame.from_dict(
-                        #{
-                            #rxn.id: {
-                                #"Metabolites": met,
-                                #"Compartment": compartment,
-                                #"Stoichiometry": coefficient,
-                            #}
-                        #}
-                    #).T
-                #)
                 tmp = pandas.DataFrame.from_dict({
                     rxn.id: {
                         "Metabolites": met,
