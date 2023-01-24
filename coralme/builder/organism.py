@@ -665,7 +665,7 @@ class Organism(object):
         print("{} Loading M to ME metabolites dictionary {}".format(sep, sep))
         self.m_to_me_mets = self._m_to_me_mets
         print("{} Loading genbank file {}".format(sep, sep))
-        self.get_genbank()
+        self.get_genbank_contigs()
         if self.create_minimal_files:
             print("{} Generating minimal files from genbank {}".format(sep, sep))
             self.generate_minimal_files()
@@ -681,13 +681,14 @@ class Organism(object):
         )
         print("{} Generating complexes dataframe {}".format(sep, sep))
         self.complexes_df = self._complexes_df
+        print("{} Syncing files {}".format(sep, sep))
+        self.sync_files()
         return
         print('{} Completing genbank with provided files {}'.format(sep, sep))
         self.update_genbank_from_files()
         print("{} Updating genes and complexes from genbank {}".format(sep, sep))
         self.update_complexes_genes_with_genbank()
-        print("{} Syncing files {}".format(sep, sep))
-        self.sync_files()
+
         print("{} Purging genes in M-model {}".format(sep,sep))
         self.purge_genes_in_model()
 
@@ -765,11 +766,13 @@ class Organism(object):
         print("{} Updating peptide release factors with BioCyc {}".format(sep, sep))
         self.get_peptide_release_factors()
 
-    def get_genbank(self):
+    def get_genbank_contigs(self):
         if self.is_reference:
-            self.gb_file = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
+            gb_it= Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
         else:
-            self.gb_file = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
+            gb_it = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
+        self.contigs = [i for i in gb_it]
+            
 
 
     def check_minimal_files(self):
@@ -841,12 +844,12 @@ class Organism(object):
                 'to_do':'Make sure the subsystems of these reactions are correct'})
 
     def generate_minimal_files(self):
-        gb_file = self.gb_file
+        contigs = self.contigs
         genes = {}
         proteins = {}
         rnas = {}
         tus = {}
-        for record in gb_file.records:
+        for record in contigs:
             for feature in record.features:
                 if feature.type not in {"CDS", "rRNA", "tRNA", "ncRNA", "misc_RNA"}:
                     continue
@@ -964,7 +967,7 @@ class Organism(object):
         if self.is_reference:
             return
 
-        gb_file = self.gb_file
+        contigs = self.contigs
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
         complexes_df = self.complexes_df
@@ -974,8 +977,12 @@ class Organism(object):
         warn_position = []
         
         # Identify genes in genbank
-        all_genes_in_gb = [i['locus_tag'][0] for i in gb_file if 'locus_tag' in i]
-        
+        all_genes_in_gb = []
+        for record in contigs:
+            for feature in record.features:
+                if 'locus_tag' not in feature.qualifiers:
+                    continue
+                all_genes_in_gb.append(feature.qualifiers['locus_tag'])
         # Add new genes
         for _,row in gene_dictionary.iterrows():
             gene_id = row['Accession-1']
@@ -1214,7 +1221,7 @@ class Organism(object):
         gene_dictionary['replicon'] = ''
         
         warn_locus = []
-        for record in self.gb_file.records:
+        for record in self.contigs:
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
