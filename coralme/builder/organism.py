@@ -851,6 +851,8 @@ class Organism(object):
                 gene_id = feature.qualifiers['locus_tag'][0]
                 genes[gene_id] = {
                     "Accession-1": gene_id,
+                    "Left-End-Position": min([i["start"] for i in d["location"]]),
+                    "Right-End-Position": max([i["end"] for i in d["location"]]),
                     "Product": gene_id + "-MONOMER"
                     if feature.type == "CDS"
                     else gene_id + "-{}".format(feature.type),
@@ -863,9 +865,11 @@ class Organism(object):
                     rnas[gene_id] = {"Common-Name": feature.qualifiers["product"][0], "Gene": gene_id}
                 if feature.type == "CDS":
                     proteins[gene_id + "-MONOMER"] = {
+        #					 "Accession-1": gene_id,
                         "Common-Name": feature.qualifiers["product"][0] if 'product' in feature.qualifiers else gene_id + "-MONOMER",
                         "Genes of polypeptide, complex, or RNA": gene_id,
                         "Locations": "",
+        #					 "Gene": gene_id,
                     }
         genes = pandas.DataFrame.from_dict(genes).T
         genes.index.name = "Gene Name"
@@ -1103,6 +1107,21 @@ class Organism(object):
         gene_dictionary = pandas.read_csv(filename, sep="\t").set_index('Gene Name',inplace=False)
         warn_genes = []
         if not self.is_reference:
+            warn_start = list(gene_dictionary[gene_dictionary['Left-End-Position'].isna()].index)
+            warn_end = list(gene_dictionary[gene_dictionary['Right-End-Position'].isna()].index)
+            if warn_start:
+                self.curation_notes['org.read_gene_dictionary'].append({
+                            'msg':'Some genes are missing start positions in genes.txt',
+                            'triggered_by':warn_start,
+                            'importance':'medium',
+                            'to_do':'Complete start positions in genes.txt if those genes are important.'})
+            if warn_end:
+                self.curation_notes['org.read_gene_dictionary'].append({
+                            'msg':'Some genes are missing end positions in genes.txt',
+                            'triggered_by':warn_end,
+                            'importance':'medium',
+                            'to_do':'Complete end positions in genes.txt if those genes are important.'})
+
             for g, row in gene_dictionary.iterrows():
                 if isinstance(row["Accession-1"],float):
                     gene_dictionary.loc[g, "Accession-1"] = g
