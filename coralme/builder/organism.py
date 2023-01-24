@@ -1656,23 +1656,7 @@ class Organism(object):
                         'triggered_by':warn_tus,
                         'importance':'medium',
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
-        return df
-
-    def extract_gene_sequence(self, feature):
-        seq = ""
-        CDS_strand = "+" if feature["strand"] == 1 else "-"
-        for location in feature["location"]:
-            CDS_left_pos = int(location["start"])
-            CDS_right_pos = int(location["end"])
-            seq = (
-                dogma.extract_sequence(
-                    self.full_seq, CDS_left_pos, CDS_right_pos, CDS_strand
-                )
-                + seq
-            )
-        return seq
-
-  
+        return df  
 
     def get_protein_location(self):
         def process_location_dict(location, location_interpreter):
