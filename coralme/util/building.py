@@ -404,9 +404,20 @@ def build_reactions_from_genbank(
 			# Find organelle in source
 			if feature.type == 'source':
 				organelle = feature.qualifiers.get('organelle', [None])[0]
+				continue
 
-			# Skip feature if it is not a gene used in the ME construction
-			if (feature.type not in feature_types) or ('pseudo' in feature.qualifiers) or (feature.qualifiers['locus_tag'][0] in knockouts) or (feature.qualifiers['locus_tag'][0] not in genes_to_add):
+			# Optionally add pseudo genes into the ME-model
+			if not me_model.global_info['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
+				continue
+
+			# Add features based on their type
+			if feature.type not in feature_types:
+				continue
+
+			# Skip feature if it is not a gene used in the ME-model reconstruction
+			filter1 = feature.qualifiers['locus_tag'][0] in knockouts
+			filter2 = feature.qualifiers['locus_tag'][0] not in genes_to_add
+			if filter1 or filter2:
 				continue
 
 			# Assign values for all important gene attributes

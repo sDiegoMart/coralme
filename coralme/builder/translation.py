@@ -37,7 +37,7 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 	for codon in me_model.global_info['stop_codons']:
 		#if coralme.util.dogma.codon_table[codon] == '*':
 		stop_codon = codon.replace('T', 'U')
-		stop_enzyme = translation_stop_dict.get(stop_codon)
+		stop_enzyme = translation_stop_dict.get(stop_codon, 'CPLX_dummy')
 		me_model.add_metabolites([coralme.core.component.Complex(stop_enzyme)])
 		subreaction_data = coralme.core.processdata.SubreactionData(stop_codon + '_' + stop_enzyme + '_mediated_termination_' + organelle, me_model)
 		subreaction_data.enzyme = stop_enzyme

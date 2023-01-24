@@ -523,7 +523,8 @@ def aa_synthetase_dict(df):
 	return { (k[:3]+'__L_c').replace('gly__L_c', 'gly_c'):v for k,v in tmp.items() }
 
 def get_subreactions(df, key: str):
-	tmp = df[~df['Feature Type'].isin(['pseudo'])]
+	tmp = df.copy(deep = True)
+	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
 	tmp = correct_input(tmp)
 	tmp = tmp[tmp['ME-model SubReaction'].notna()]
 
@@ -543,7 +544,8 @@ def get_subreactions(df, key: str):
 		for k,v in zip(tmp.index, tmp['Gene Locus ID']) if k.startswith(key) }
 
 def get_df_rxns(df):
-	tmp = df[~df['Feature Type'].isin(['pseudo'])]
+	tmp = df.copy(deep = True)
+	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
 	tmp = tmp[tmp['M-model Reaction ID'].notna()]
 	tmp = tmp[['M-model Reaction ID', 'Reaction Name', 'Reversibility']]
 	tmp.columns = ['name', 'description', 'is_reversible']
@@ -552,7 +554,7 @@ def get_df_rxns(df):
 	return tmp
 
 def get_df_cplxs(df, generics = False):
-	tmp = df[df['Feature Type'].isin(['CDS'])].fillna('')
+	tmp = df[df['Feature Type'].isin(['CDS', 'pseudo'])].fillna('')
 
 	# get enzymatic complexes with generics subunits
 	df_generics = df[df['Feature Type'].isin(['CDS'])].fillna('')
@@ -579,8 +581,9 @@ def get_df_cplxs(df, generics = False):
 	return tmp
 
 def get_df_ptms(df):
-	tmp = df[~df['Feature Type'].isin(['pseudo'])]
-	tmp = df[df['Cofactors in Modified Complex'].notna()]
+	tmp = df.copy(deep = True)
+	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
+	tmp = tmp[tmp['Cofactors in Modified Complex'].notna()]
 
 	if not tmp.empty:
 		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split('(')[0].split(':')[0] if isinstance(x, str) else x)
@@ -597,7 +600,8 @@ def get_df_ptms(df):
 		return pandas.DataFrame(columns = ['Modified Complex', 'Complex ID', 'Cofactors in Modified Complex'])
 
 def get_df_enz2rxn(df, filter_in = set(), generics = False):
-	tmp = df[~df['Feature Type'].isin(['pseudo'])]
+	tmp = df.copy(deep = True)
+	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
 	tmp = tmp[tmp['M-model Reaction ID'].notna()]
 
 	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}-MONOMER'.format(x))
@@ -667,7 +671,8 @@ def get_df_rna_ptms(df, filter_in = set(), generics = False):
 		return pandas.DataFrame(columns = ['bnum', 'modification', 'positions'])
 
 def get_df_protloc(df, filter_in = set(), generics = False):
-	tmp = df[~df['Feature Type'].isin(['pseudo'])]
+	tmp = df.copy(deep = True)
+	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
 	tmp = tmp[tmp['Complex Location'].notna()]
 
 	if not tmp.empty:
@@ -714,7 +719,7 @@ def get_df_input_from_excel(df, df_rxns):
 		]
 
 	tmp1 = df[df['Feature Type'].str.match('CDS')].dropna(subset = lst, how = 'all', axis = 0)
-	tmp2 = df[df['Feature Type'].isin(['rRNA', 'tRNA', 'ncRNA', 'tmRNA'])]
+	tmp2 = df[df['Feature Type'].isin(['rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'pseudo'])]
 	df = pandas.concat([tmp1, tmp2], axis = 0).drop_duplicates()
 	df = df.fillna({
 		'Reversibility' : False,

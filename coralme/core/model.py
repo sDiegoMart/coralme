@@ -43,6 +43,7 @@ class MEModel(cobra.core.model.Model):
 			'mg2_per_ribosome' : 171,
 			'amino_acid_loader' : 'generic_Tuf',
 			'feature_types' : [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA' ],
+			'include_pseudo_genes' : False,
 
 			'translation_stop_dict' : {
 				'UAG': 'PrfA_mono',
