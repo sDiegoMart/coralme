@@ -1115,28 +1115,27 @@ class Organism(object):
                 gb_file.append(d)
 
         # Warnings
-        if warn_rnas or warn_proteins or warn_position:
-            if warn_rnas:
-                self.curation_notes['org.update_genbank_from_files'].append({
-                                    'msg':'Some genes were identified as RNA from its locus_tag, but it is not present in RNAs.txt',
-                                    'triggered_by':warn_rnas,
-                                    'importance':'medium',
-                                    'to_do':'Check whether you should add these genes to RNAs.txt or fix its product value in genes.txt'
-                })
-            if warn_proteins:
-                self.curation_notes['org.update_genbank_from_files'].append({
-                                    'msg':'Some genes were identified as CDS from its locus_tag, but it is not present in proteins.txt',
-                                    'triggered_by':warn_proteins,
-                                    'importance':'medium',
-                                    'to_do':'Check whether you should add these genes to proteins.txt or fix its product value in genes.txt'
-                })
-            if warn_position:
-                self.curation_notes['org.update_genbank_from_files'].append({
-                                    'msg':'Could not add some genes in genes.txt to genbank.gb since they lack position information',
-                                    'triggered_by':warn_position,
-                                    'importance':'medium',
-                                    'to_do':'Fill in position information in genes.txt'
-                })
+        if warn_rnas:
+            self.curation_notes['org.update_genbank_from_files'].append({
+                                'msg':'Some genes were identified as RNA from its locus_tag, but it is not present in RNAs.txt',
+                                'triggered_by':warn_rnas,
+                                'importance':'medium',
+                                'to_do':'Check whether you should add these genes to RNAs.txt or fix its product value in genes.txt'
+            })
+        if warn_proteins:
+            self.curation_notes['org.update_genbank_from_files'].append({
+                                'msg':'Some genes were identified as CDS from its locus_tag, but it is not present in proteins.txt',
+                                'triggered_by':warn_proteins,
+                                'importance':'medium',
+                                'to_do':'Check whether you should add these genes to proteins.txt or fix its product value in genes.txt'
+            })
+        if warn_position:
+            self.curation_notes['org.update_genbank_from_files'].append({
+                                'msg':'Could not add some genes in genes.txt to genbank.gb since they lack position information',
+                                'triggered_by':warn_position,
+                                'importance':'medium',
+                                'to_do':'Fill in position information in genes.txt'
+            })
     def str_to_dict(self,
                     d):
         regex = ":(?=[-]?\d+(?:$|\.))"
