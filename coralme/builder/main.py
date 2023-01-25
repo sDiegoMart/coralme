@@ -1233,7 +1233,7 @@ class MEReconstruction(object):
 		# INPUTS: We capture if the file exists or if it is empty
 		# Transcriptional Units
 		filename = config.get('df_TranscriptionalUnits', '')
-		self.df_tus = read(filename, ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'dnapol']).set_index('TU_id', inplace = False)
+		self.df_tus = read(filename, ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']).set_index('TU_id', inplace = False)
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
 		filename = config.get('df_matrix_stoichiometry', '')
@@ -1533,10 +1533,10 @@ class MEReconstruction(object):
 		# ### 9) Save ME-model as a pickle file
 
 		import pickle
-		with open(config['out_directory'] + 'MEModel-step1-{:s}.pkl'.format(model), 'wb') as outfile:
+		with open('{:s}/MEModel-step1-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		print('ME-model was saved as MEModel-step1-{:s}.pkl'.format(model))
+		print('ME-model was saved in {:s} as MEModel-step1-{:s}.pkl'.format(config['out_directory'], model))
 
 		# ## Part 2: Add metastructures to solving ME-model
 		# set logger
@@ -1637,9 +1637,15 @@ class MEReconstruction(object):
 		rna_polymerases = me.global_info.get('rna_polymerases', {})
 
 		# Create polymerase "metabolites"
-		for rnap in tqdm.tqdm(rna_polymerases.keys(), 'Adding RNA Polymerase(s) into the ME-model...', bar_format = bar_format):
-			rnap_obj = coralme.core.component.RNAP(rnap)
-			me.add_metabolites(rnap_obj)
+		for rnap, components in tqdm.tqdm(rna_polymerases.items(), 'Adding RNA Polymerase(s) into the ME-model...', bar_format = bar_format):
+			if me.metabolites.has_id(components['sigma_factor']) and me.metabolites.has_id(components['polymerase']):
+				rnap_obj = coralme.core.component.RNAP(rnap)
+				me.add_metabolites(rnap_obj)
+			else:
+				if not me.metabolites.has_id(components['sigma_factor']):
+					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['sigma_factor']))
+				if not me.metabolites.has_id(components['polymerase']):
+					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['polymerase']))
 
 		# Add polymerase complexes in the model
 		coralme.builder.transcription.add_rna_polymerase_complexes(me, rna_polymerases, verbose = False)
@@ -1935,10 +1941,10 @@ class MEReconstruction(object):
 		me.prune()
 
 		import pickle
-		with open(config['out_directory'] + 'MEModel-step2-{:s}.pkl'.format(model), 'wb') as outfile:
+		with open('{:s}/MEModel-step2-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		print('ME-model was saved as MEModel-step2-{:s}.pkl'.format(model))
+		print('ME-model was saved in {:s} as MEModel-step2-{:s}.pkl'.format(config['out_directory'], model))
 
 		n_genes = len(me.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')))
 		new_genes = n_genes * 100. / len(me.gem.genes) - 100
@@ -2139,10 +2145,10 @@ class METroubleshooter(object):
 			self.me_model.optimize(max_mu = 3.0, precision = 1e-6)
 			print('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
 
-			with open(config['out_directory'] + 'MEModel-step3-{:s}-TS.pkl'.format(self.me_model.id), 'wb') as outfile:
+			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(self.configuration['out_directory'], self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
-			print('\nME-model was saved as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.me_model.id))
+			print('\nME-model was saved in {:s} as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.configuration['out_directory'], self.me_model.id))
 		else:
 			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
 
