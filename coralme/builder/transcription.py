@@ -14,15 +14,16 @@ def add_subreactions_to_model(me_model, subreactions):
 
 def add_rna_polymerase_complexes(me_model, rna_polymerase_id_by_sigma_factor, verbose = True):
 	for cplx, components in rna_polymerase_id_by_sigma_factor.items():
-		rnap_complex = coralme.core.processdata.ComplexData(cplx, me_model)
-		sigma_factor = components['sigma_factor']
-		polymerase = components['polymerase']
+		if me_model.metabolites.has_id(components['sigma_factor']) and me_model.metabolites.has_id(components['polymerase']):
+			rnap_complex = coralme.core.processdata.ComplexData(cplx, me_model)
+			sigma_factor = components['sigma_factor']
+			polymerase = components['polymerase']
 
-		rnap_components = rnap_complex.stoichiometry
-		rnap_components[sigma_factor] = 1
-		rnap_components[polymerase] = 1
+			rnap_components = rnap_complex.stoichiometry
+			rnap_components[sigma_factor] = 1
+			rnap_components[polymerase] = 1
 
-		rnap_complex.create_complex_formation(verbose = verbose)
+			rnap_complex.create_complex_formation(verbose = verbose)
 
 def add_rna_excision_machinery(me_model, excision_type, stoichiometry):
 	#for excision_type in excision_machinery:

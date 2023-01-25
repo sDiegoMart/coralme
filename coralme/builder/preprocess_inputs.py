@@ -56,10 +56,10 @@ def generate_organism_specific_matrix(genbank, model):
 				if model.genes.has_id(gene):
 					lst.append([ x.id for x in model.genes.get_by_id(gene).reactions ])
 
-			# A (old)locustag/gene name can be associated to many reactions
+			# (An)A (old)locustag/gene name can be associated to many reactions
 			lst = [ x for y in lst for x in y ]
 			if lst == []:
-				return None
+				return []
 			else:
 				return lst
 
@@ -101,8 +101,8 @@ def generate_organism_specific_matrix(genbank, model):
 	df['Old Locus Tags'] = [ ';'.join(x) if x is not None else None for x in tmp ]
 
 	df['M-model Reaction ID'] = df['Old Locus Tags'].apply(lambda x: get_reaction(x))
-	df['M-model Reaction ID'].update(df['Gene Names'].apply(lambda x: get_reaction(x)))
-	df['M-model Reaction ID'].update(df['Gene Locus ID'].apply(lambda x: get_reaction(x)))
+	df['M-model Reaction ID'] += df['Gene Names'].apply(lambda x: get_reaction(x))
+	df['M-model Reaction ID'] += df['Gene Locus ID'].apply(lambda x: get_reaction(x))
 	df = df.explode('M-model Reaction ID')
 
 	df['Reaction Name'] = df['M-model Reaction ID'].apply(lambda x: get_reaction_name(x))
@@ -125,18 +125,27 @@ def complete_organism_specific_matrix(builder, data, model, output):
 				return [ x for x in lst if x is not None ][0]
 
 	def monomers(x, builder):
-		cplxID = builder.homology.org_cplx_homolog.get(x + '-MONOMER', None)
-		if cplxID is None:
-			return cplxID
+		if x is None:
+			return []
 		else:
-			return cplxID + ':1'
+			cplxID = builder.homology.org_cplx_homolog.get(x + '-MONOMER', None)
+			if cplxID is None:
+				return []
+			else:
+				return [cplxID + ':1']
 
 	def complexes(x, df):
-		cplxID = df[df['genes'].str.contains(x)]
-		if len(cplxID) == 0:
-			return None
+		if x is None:
+			return []
 		else:
-			return ';'.join(cplxID.index.to_list())
+			lst = []
+			for gene in x.split(';'):
+				cplxID = df[df['genes'].str.contains(gene)]
+				if len(cplxID) == 0:
+					lst.append([])
+				else:
+					lst.append(cplxID.index.to_list())
+			return [ x for y in lst for x in y ]
 
 	def cofactors(x, builder):
 		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
@@ -339,27 +348,31 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	df['genes'] = df['genes'].str.split(' AND ')
 	df = df.explode('genes')
 	df['stoich'] = df['genes'].apply(lambda x: '1' if x.split('(')[1][:-1] == '' else str(x.split('(')[1][:-1]))
+	df['genes'] = df['genes'].apply(lambda x: x[:-2])
 	df.index = df.index + ':' + df['stoich']
 
 	# This overwrites the 'monomers' names with 'complexes' names
 	#data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
 	#data['Complex ID'].update(data['Gene Locus ID'].apply(lambda x: complexes(x, df)))
 
-	data['monomers'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
-	data['complexes'] = data['Gene Locus ID'].apply(lambda x: complexes(x, df))
+	# Do this instead to get complexes based on any ID defined from genbank+biocyc data
+	data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
+	data['Complex ID'] += data['Gene Locus ID'].apply(lambda x: complexes(x, df))
+	data['Complex ID'] += data['Gene Names'].apply(lambda x: monomers(x, builder))
+	data['Complex ID'] += data['Gene Names'].apply(lambda x: complexes(x, df))
+	data['Complex ID'] += data['Old Locus Tags'].apply(lambda x: complexes(x, df))
+	data = data.explode('Complex ID')
 
-	def _combine(x):
-		lst = [] if x['monomers'] is None else [x['monomers']]
-		if x['complexes'] is None:
-			pass
-		else:
-			for complex_name in x['complexes'].split(';'):
-				lst.append(complex_name)
-		return lst
+	#def _combine(x):
+		#lst = [] if x['monomers'] is None else [x['monomers']]
+		#if x['complexes'] is None:
+			#pass
+		#else:
+			#for complex_name in x['complexes'].split(';'):
+				#lst.append(complex_name)
+		#return lst
 
-	data['Complex ID'] = data[['monomers', 'complexes']].apply(lambda x: _combine(x), axis = 1)
-	#data.drop('monomers', axis = 1, inplace = True)
-	#data.drop('complexes', axis = 1, inplace = True)
+	#data['Complex ID'] = data['Complex ID'].apply(lambda x: _combine(x), axis = 1)
 
 	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(x, builder))
 	data = data.explode('Complex ID')
