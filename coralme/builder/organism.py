@@ -695,7 +695,6 @@ class Organism(object):
         self.complexes_df = self._complexes_df
         print("{} Syncing files {}".format(sep, sep))
         self.sync_files()
-        return
         print('{} Completing genbank with provided files {}'.format(sep, sep))
         self.update_genbank_from_files()
         print("{} Updating genes and complexes from genbank {}".format(sep, sep))
@@ -996,7 +995,7 @@ class Organism(object):
             for feature in record.features:
                 if 'locus_tag' not in feature.qualifiers:
                     continue
-                all_genes_in_gb.append(feature.qualifiers['locus_tag'])
+                all_genes_in_gb.append(feature.qualifiers['locus_tag'][0])
         # Add new genes
         for _,row in gene_dictionary.iterrows():
             gene_id = row['Accession-1']
@@ -1057,7 +1056,10 @@ class Organism(object):
                 
                 new_contig.features = [feature0] + [feature1]
                 contigs.append(new_contig)
-
+                
+        with open(self.directory + 'genome_modified.gb', 'w') as outfile:
+            for contig in contigs:
+                Bio.SeqIO.write(contig, outfile, 'genbank')
         # Warnings
         if warn_rnas:
             self.curation_notes['org.update_genbank_from_files'].append({
@@ -1255,7 +1257,7 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
-                gene_id = feature.qualifiers['locus_tag']
+                gene_id = feature.qualifiers['locus_tag'][0]
                 if not gene_id:
                     continue
                 gene_id = gene_id[0]
