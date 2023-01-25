@@ -1257,7 +1257,7 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
-                gene_id = feature.qualifiers['locus_tag'][0]
+                gene_id = feature.qualifiers['locus_tag']
                 if not gene_id:
                     continue
                 gene_id = gene_id[0]
@@ -1312,9 +1312,9 @@ class Organism(object):
                             ).T
                         RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
                 gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
-                gene_dictionary.loc[gene_name, "Left-End-Position"] = left_end
-                gene_dictionary.loc[gene_name, "Right-End-Position"] = right_end
-                gene_dictionary.loc[gene_name, "replicon"] = record.id
+                gene_dictionary.loc[gene_name]["Left-End-Position"] = left_end
+                gene_dictionary.loc[gene_name]["Right-End-Position"] = right_end
+                gene_dictionary.loc[gene_name]["replicon"] = record.id
         self.complexes_df = complexes_df
         gene_dictionary.index.name = "Gene Name"
         self.gene_dictionary = gene_dictionary
