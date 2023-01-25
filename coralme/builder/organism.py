@@ -114,6 +114,17 @@ class Organism(object):
                     "Source": {},
                 }
             ).set_index("Modified_enzyme")
+        
+    @property
+    def _gene_sequences(self):
+        filename = self.directory + "sequences.fasta"
+        if os.path.isfile(filename):
+            d = {}
+            for i in Bio.SeqIO.parse(filename,'fasta'):
+                for g in i.id.split('|'):
+                    d[g] = i
+            return d
+        return {}
 
     @property
     def _manual_complexes(self):
@@ -671,6 +682,7 @@ class Organism(object):
             self.generate_minimal_files()
         print("{} Loading gene dictionary {}".format(sep, sep))
         self.gene_dictionary = self.read_gene_dictionary()
+        self.gene_sequences = self._gene_sequences
         print("{} Getting proteins from BioCyc {}".format(sep, sep))
         self.proteins_df = pandas.read_csv(
             self.directory + "proteins.txt", index_col=0, sep="\t"
@@ -966,12 +978,14 @@ class Organism(object):
     def update_genbank_from_files(self):
         if self.is_reference:
             return
-
+        
         contigs = self.contigs
+        gene_sequences = self.gene_sequences
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
         complexes_df = self.complexes_df
         product_types = self.product_types
+        
         warn_rnas = []
         warn_proteins = []
         warn_position = []
@@ -1016,6 +1030,7 @@ class Organism(object):
                     warn_position.append(gene_id)
                     continue
                 print('Adding {} to genbank file as {}'.format(gene_id,product_type))
+                
                 d = {
                     'type' : product_type,
                     'locus_tag' : [gene_id],
