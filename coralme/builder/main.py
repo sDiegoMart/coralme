@@ -1175,7 +1175,7 @@ class MEReconstruction(object):
 
 			## replace IDs
 			for name, rnap in config['rna_polymerases'].items():
-				if hasattr(self, 'org'):
+				if hasattr(self, 'homology'):
 					for key, value in rnap.items():
 						config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value)
 						#config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
