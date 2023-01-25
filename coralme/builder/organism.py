@@ -114,7 +114,7 @@ class Organism(object):
                     "Source": {},
                 }
             ).set_index("Modified_enzyme")
-        
+
     @property
     def _gene_sequences(self):
         filename = self.directory + "sequences.fasta"
@@ -783,7 +783,7 @@ class Organism(object):
         else:
             gb_it = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
         self.contigs = [i for i in gb_it]
-            
+
 
     def check_minimal_files(self):
         if not os.path.isdir(self.directory):
@@ -876,7 +876,7 @@ class Organism(object):
                     "Genes of transcription unit": gene_id,
                     "Direction": "+" if feature.location.strand == 1 else "-",
                 }
-                if "RNA" in feature.type:
+                if "RNA" in feature.type and feature.qualifiers.get('product', False):
                     rnas[gene_id] = {"Common-Name": feature.qualifiers["product"][0], "Gene": gene_id}
                 if feature.type == "CDS":
                     proteins[gene_id + "-MONOMER"] = {
@@ -984,11 +984,11 @@ class Organism(object):
         RNA_df = self.RNA_df
         complexes_df = self.complexes_df
         product_types = self.product_types
-        
+
         warn_rnas = []
         warn_proteins = []
         warn_position = []
-        
+
         # Identify genes in genbank
         all_genes_in_gb = []
         for record in contigs:
@@ -1024,11 +1024,11 @@ class Organism(object):
                     product_name = complexes_df.loc[product]['name']
                 else:
                     product_name = product
-                
+
                 if not row['Left-End-Position'] or not row['Right-End-Position']:
                     warn_position.append(gene_id)
                     continue
-                    
+
                 print('Adding {} to genbank file as {}'.format(gene_id,product_type))
                 gene_seq = gene_sequences[gene_id]
                 gene_left = int(row['Left-End-Position'])
@@ -1040,7 +1040,7 @@ class Organism(object):
                                       annotations = {
                                           'molecule_type' : 'DNA'
                                       })
-                
+
                 feature0 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
                                       type='source',
                                       id = 'contig-{}'.format(gene_id),
@@ -1053,10 +1053,10 @@ class Organism(object):
                                           'locus_tag':[gene_id],
                                           'product':[product_name]
                                       })
-                
+
                 new_contig.features = [feature0] + [feature1]
                 contigs.append(new_contig)
-                
+
         with open(self.directory + 'genome_modified.gb', 'w') as outfile:
             for contig in contigs:
                 Bio.SeqIO.write(contig, outfile, 'genbank')
@@ -1249,9 +1249,9 @@ class Organism(object):
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
-        
+
         gene_dictionary['replicon'] = ''
-        
+
         warn_locus = []
         for record in self.contigs:
             for feature in record.features:
@@ -1428,7 +1428,7 @@ class Organism(object):
         file = open(FASTA_file, "w")
         for contig in contigs:
             for feature in contig.features:
-                if feature.type not in element_types or "translation" not in feature:
+                if feature.type not in element_types or "translation" not in feature.qualifiers:
                     continue
                 file.write(
                     ">{}\n".format(feature.qualifiers['locus_tag'][0])
@@ -1631,7 +1631,7 @@ class Organism(object):
                         'triggered_by':warn_tus,
                         'importance':'medium',
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
-        return df  
+        return df
 
     def get_protein_location(self):
         def process_location_dict(location, location_interpreter):

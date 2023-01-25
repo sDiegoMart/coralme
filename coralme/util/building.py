@@ -361,10 +361,17 @@ def build_reactions_from_genbank(
 				for start, stop in zip(start.split(','), stop.split(',')):
 					locations.append(SeqFeature.FeatureLocation(
 						SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
+
+					# Simplified to this in Bipython 1.81. TODO: TEST
+					#locations.append(SeqFeature.SimpleLocation(int(start)-1, int(stop), strand = strand))
+
 				seq = SeqFeature.SeqFeature(SeqFeature.CompoundLocation(locations, 'join'))
 			else:
 				seq = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(
 					SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
+
+				# Simplified to this in Bipython 1.81. TODO: TEST
+				#seq = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand)
 
 			#sequence = coralme.util.dogma.extract_sequence(
 				#full_seqs[tu_frame.replicon[tu_id]],

@@ -85,7 +85,7 @@ def main():
 		install_requires=[
 			'cobra==0.25.0',
 			'libsbml',
-			'Biopython',
+			'Biopython==1.80',
 			'tqdm',
 			'scipy',
 			'pandas',

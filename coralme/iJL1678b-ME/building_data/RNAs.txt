@@ -11,9 +11,11 @@ b0206	tRNA-Asp	b0206
 b0216	tRNA-Asp	b0216
 b0244	tRNA-Thr	b0244
 b4690	novel sRNA, function unknown, CP4-6 propahge	b4690
+b4629	tRNA-OTHER	b4629
 b0455	4.5S sRNA component of Signal Recognition Particle (SRP)	b0455
 b4585	sRNA antisense regulator of OM chitoporin ChiP(YbfM), Hfq-dependent	b4585
 b0536	tRNA-Arg	b0536
+b4635	tRNA-OTHER	b4635
 b4700	sRNA at remnant mokE/hokE locus	b4700
 b0664	tRNA-Gln	b0664
 b0665	tRNA-Gln	b0665
@@ -70,6 +72,7 @@ b4438	sRNA antisense regulator of ompX mRNA instability, Hfq-dependent, cAMP-ind
 b2189	tRNA-Pro	b2189
 b4439	sRNA antisense regulator affecting ompF expression, Hfq-dependent	b4439
 b2348	tRNA-Arg	b2348
+b4643	tRNA-OTHER	b4643
 b2396	tRNA-Ala	b2396
 b2397	tRNA-Ala	b2397
 b2401	tRNA-Val	b2401
