@@ -1257,6 +1257,8 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
+                if 'locus_tag' not in feature.qualifiers:
+                    warn_locus.append(feature.qualifiers)
                 gene_id = feature.qualifiers['locus_tag']
                 if not gene_id:
                     continue
