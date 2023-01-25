@@ -1008,7 +1008,7 @@ class Organism(object):
                     product_type = product_types[gene_id]
                 else:
                     # Skip those genes whose product type was not identified
-                    continue
+                    product_type = 'gene'
 
                 ### Retrieve values to sync with genbank
                 if 'RNA' in product_type:
@@ -1589,6 +1589,7 @@ class Organism(object):
         for tu, row in TUs.iterrows():
             sites = []
             genes = []
+            replicons = []
             for g in row["Genes of transcription unit"].split(" // "):
                 if g not in gene_dictionary["Accession-1"]:
                     warn_genes.append(g)
@@ -1596,6 +1597,7 @@ class Organism(object):
                 genes.append(gene_dictionary["Accession-1"][g])
                 sites.append(int(gene_dictionary["Left-End-Position"][g]))
                 sites.append(int(gene_dictionary["Right-End-Position"][g]))
+                replicons.append(gene_dictionary["replicon"][g])
             if not genes:
                 warn_tus.append(tu)
                 continue
@@ -1604,13 +1606,14 @@ class Organism(object):
             tu_name = "{}_from_{}".format(tu, sigma)
             TU_dict[tu_name] = {}
             TU_dict[tu_name]["rho_dependent"] = rho_dependent
-            TU_dict[tu_name]["sigma"] = sigma
+            TU_dict[tu_name]["rnapol"] = sigma
             TU_dict[tu_name]["tss"] = None
             TU_dict[tu_name]["strand"] = row["Direction"] if row["Direction"] else '+'
             TU_dict[tu_name]["start"] = int(min(sites))
             TU_dict[tu_name]["stop"] = int(max(sites))
+            TU_dict[tu_name]["replicon"] = replicons[0]
         df = pandas.DataFrame.from_dict(TU_dict).T[
-            ["start", "stop", "tss", "strand", "rho_dependent", "sigma"]
+            ["start", "stop", "tss", "strand", "rho_dependent", "rnapol","replicon"]
         ]
         df.index.name = "TU_id"
 
