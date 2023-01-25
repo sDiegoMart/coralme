@@ -786,7 +786,6 @@ class Organism(object):
         self.contigs = [i for i in gb_it]
             
 
-
     def check_minimal_files(self):
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
@@ -976,9 +975,10 @@ class Organism(object):
             })
 
     def update_genbank_from_files(self):
+        from Bio.SeqFeature import SeqFeature, CompoundLocation, ExactPosition, FeatureLocation, SimpleLocation
+        from Bio.SeqRecord import SeqRecord
         if self.is_reference:
             return
-        
         contigs = self.contigs
         gene_sequences = self.gene_sequences
         gene_dictionary = self.gene_dictionary
@@ -1029,19 +1029,34 @@ class Organism(object):
                 if not row['Left-End-Position'] or not row['Right-End-Position']:
                     warn_position.append(gene_id)
                     continue
+                    
                 print('Adding {} to genbank file as {}'.format(gene_id,product_type))
+                gene_seq = gene_sequences[gene_id]
+                gene_left = int(row['Left-End-Position'])
+                gene_right = int(row['Right-End-Position'])
+                new_contig = SeqRecord(seq=gene_seq.seq,
+                                      id = 'contig-{}'.format(gene_id),
+                                      name = gene_seq.name,
+                                      description = gene_seq.description,
+                                      annotations = {
+                                          'molecule_type' : 'DNA'
+                                      })
                 
-                d = {
-                    'type' : product_type,
-                    'locus_tag' : [gene_id],
-                    'strand' : 1,
-                    'location' : [{'start':int(row['Left-End-Position']),'end':int(row['Right-End-Position'])}],
-                    'start' : int(row['Left-End-Position']),
-                    'end' : int(row['Right-End-Position']),
-                    'product' : [product_name],
-                    'note' : 'Added from BioCyc files'
-                }
-                gb_file.append(d)
+                feature0 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
+                                      type='source',
+                                      id = 'contig-{}'.format(gene_id),
+                                      qualifiers = {'note':'Added from BioCyc'})
+                feature1 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
+                                      type=product_type,
+                                      id = gene_id,
+                                      strand = 1 if gene_left < gene_right else -1,
+                                      qualifiers = {
+                                          'locus_tag':[gene_id],
+                                          'product':[product_name]
+                                      })
+                
+                new_contig.features = [feature0] + [feature1]
+                contigs.append(new_contig)
 
         # Warnings
         if warn_rnas:
@@ -1399,7 +1414,7 @@ class Organism(object):
 
     def gb_to_faa(self, org_id, outdir = False, element_types = {"CDS"}):
         ## Create FASTA file with AA sequences for BLAST
-        gb_file = self.gb_file
+        contigs = self.contigs
 
         if not outdir:
             outdir = self.blast_directory
@@ -1409,13 +1424,14 @@ class Organism(object):
 #         FASTA_file = "{}.faa".format(org_id)
 
         file = open(FASTA_file, "w")
-        for feature in gb_file:
-            if feature["type"] not in element_types or "translation" not in feature:
-                continue
-            file.write(
-                ">{}\n".format(feature['locus_tag'][0])
-            )  # Some way to identify which qualifier meets regular expression?
-            file.write("{}\n".format(feature["translation"][0]))
+        for contig in contigs:
+            for feature in contig.features:
+                if feature.type not in element_types or "translation" not in feature:
+                    continue
+                file.write(
+                    ">{}\n".format(feature.qualifiers['locus_tag'][0])
+                )  # Some way to identify which qualifier meets regular expression?
+                file.write("{}\n".format(feature.qualifiers["translation"][0]))
 
     def get_sigma_factors(self):
         complexes_df = self.complexes_df
@@ -1873,23 +1889,24 @@ class Organism(object):
         if self.is_reference:
             return None
 
-        gb_file = self.gb_file
+        contigs = self.contigs
         generic_dict = self.generic_dict
         warn_generics = []
-        for feature in gb_file:
-            if "rRNA" in feature["type"]:
-                gene = "RNA_" + feature["locus_tag"][0]
-                if any("5S" in i for i in feature["product"]):
-                    cat = "generic_5s_rRNAs"
-                elif any("16S" in i for i in feature["product"]):
-                    cat = "generic_16s_rRNAs"
-                elif any("23S" in i for i in feature["product"]):
-                    cat = "generic_23s_rRNAs"
-                else:
-                    cat = 0
-                if cat:
-                    print("{} to {}".format(gene, cat))
-                    generic_dict[cat]['enzymes'].append(gene)
+        for contig in contigs:
+            for feature in contig.features:
+                if "rRNA" in feature.type:
+                    gene = "RNA_" + feature.qualifiers["locus_tag"][0]
+                    if any("5S" in i for i in feature.qualifiers["product"]):
+                        cat = "generic_5s_rRNAs"
+                    elif any("16S" in i for i in feature.qualifiers["product"]):
+                        cat = "generic_16s_rRNAs"
+                    elif any("23S" in i for i in feature.qualifiers["product"]):
+                        cat = "generic_23s_rRNAs"
+                    else:
+                        cat = 0
+                    if cat:
+                        print("{} to {}".format(gene, cat))
+                        generic_dict[cat]['enzymes'].append(gene)
         for k, v in generic_dict.items():
             if not v:
                 warn_generics.append(k)
