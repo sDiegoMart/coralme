@@ -1259,6 +1259,7 @@ class Organism(object):
                     continue
                 if 'locus_tag' not in feature.qualifiers:
                     warn_locus.append(feature.qualifiers)
+                    continue
                 gene_id = feature.qualifiers['locus_tag']
                 if not gene_id:
                     continue
