@@ -997,7 +997,7 @@ class Organism(object):
                     continue
                 all_genes_in_gb.append(feature.qualifiers['locus_tag'][0])
         # Add new genes
-        for _,row in gene_dictionary.iterrows():
+        for gene_name,row in gene_dictionary.iterrows():
             gene_id = row['Accession-1']
 
             if gene_id not in all_genes_in_gb:
@@ -1030,7 +1030,7 @@ class Organism(object):
                     continue
 
                 print('Adding {} to genbank file as {}'.format(gene_id,product_type))
-                gene_seq = gene_sequences[gene_id]
+                gene_seq = gene_sequences[gene_name]
                 gene_left = int(row['Left-End-Position'])
                 gene_right = int(row['Right-End-Position'])
                 new_contig = SeqRecord(seq=gene_seq.seq,
