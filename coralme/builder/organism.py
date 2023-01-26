@@ -117,7 +117,7 @@ class Organism(object):
 
     @property
     def _gene_sequences(self):
-        filename = self.directory + "sequences.fasta"
+        filename = self.config.get('biocyc.seqs', self.directory + "sequences.fasta")
         if os.path.isfile(filename):
             d = {}
             for i in Bio.SeqIO.parse(filename,'fasta'):
@@ -144,11 +144,9 @@ class Organism(object):
 
     @property
     def _TU_df(self):
-        filename = self.directory + "TUs_from_biocyc.txt"
+        filename = self.config.get('biocyc.TUs', self.directory + "TUs_from_biocyc.txt")
         if os.path.isfile(filename):
-            return pandas.read_csv(
-                filename, index_col=0, sep="\t"
-            )
+            return pandas.read_csv(filename, index_col = 0, sep = "\t")
         else:
             return self.get_TU_df()
 
@@ -390,8 +388,6 @@ class Organism(object):
 
     @property
     def _termination_subreactions(self):
-        from pandas import isnull
-
         filename = self.directory + "termination_subreactions.csv"
         if os.path.isfile(filename):
             d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
@@ -408,7 +404,7 @@ class Organism(object):
                 'to_do':'Fill termination_subreactions.csv'})
             df = pandas.DataFrame.from_dict(dictionaries.termination_subreactions).T
             df[["element_contribution"]] = df[["element_contribution"]].applymap(
-                lambda x: {} if isnull(x) else x
+                lambda x: {} if pandas.isnull(x) else x
             )
             df_save = df.copy()
             for r, row in df_save.iterrows():
@@ -503,8 +499,6 @@ class Organism(object):
 
     @property
     def _trna_modification(self):
-        from pandas import isnull
-
         filename = self.directory + "trna_modification.csv"
         if os.path.isfile(filename):
             d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
@@ -521,7 +515,7 @@ class Organism(object):
                 'to_do':'Fill trna_modification.csv'})
             df = pandas.DataFrame.from_dict(dictionaries.trna_modification).T
             df[["carriers"]] = df[["carriers"]].applymap(
-                lambda x: {} if isnull(x) else x
+                lambda x: {} if pandas.isnull(x) else x
             )
             df_save = df.copy()
             for r, row in df_save.iterrows():
@@ -635,19 +629,20 @@ class Organism(object):
     def _protein_location(self):
         filename = self.directory + "peptide_compartment_and_pathways.csv"
         if os.path.isfile(filename):
-            return pandas.read_csv(filename, index_col=0, delimiter="\t")
+            return pandas.read_csv(filename, index_col = 0, delimiter = "\t")
         else:
             self.curation_notes['org._protein_location'].append({
                 'msg':"No peptide_compartment_and_pathways.csv file found",
                 'importance':'low',
                 'to_do':'Fill peptide_compartment_and_pathways.csv'})
-            columns = ['Complex',
-                       'Complex_compartment',
-                       'Protein',
-                       'Protein_compartment',
-                       'translocase_pathway'
-            ]
-            pandas.DataFrame(columns=columns).set_index('Complex').to_csv(filename, sep="\t")
+            columns = [
+                'Complex',
+                'Complex_compartment',
+                'Protein',
+                'Protein_compartment',
+                'translocase_pathway',
+                ]
+            pandas.DataFrame(columns = columns).set_index('Complex').to_csv(filename, sep = "\t")
             return self.get_protein_location()
 
     @property
@@ -685,11 +680,11 @@ class Organism(object):
         self.gene_sequences = self._gene_sequences
         print("{} Getting proteins from BioCyc {}".format(sep, sep))
         self.proteins_df = pandas.read_csv(
-            self.directory + "proteins.txt", index_col=0, sep="\t"
+            self.config.get('biocyc.prots', self.directory + "proteins.txt"), index_col=0, sep="\t"
         )
         print("{} Getting RNAs from BioCyc {}".format(sep, sep))
         self.RNA_df = pandas.read_csv(
-            self.directory + "RNAs.txt", index_col=0, sep="\t"
+            self.config.get('biocyc.RNAs', self.directory + "RNAs.txt"), index_col=0, sep="\t"
         )
         print("{} Generating complexes dataframe {}".format(sep, sep))
         self.complexes_df = self._complexes_df
@@ -710,7 +705,7 @@ class Organism(object):
         print("{} Looking for duplicates in provided files {}".format(sep, sep))
         self.check_for_duplicates()
         print("{} Getting transcription units from BioCyc {}".format(sep, sep))
-        self.TUs = pandas.read_csv(self.directory + "TUs.txt", index_col=0, sep="\t").fillna('')
+        self.TUs = pandas.read_csv(self.config.get('biocyc.TUs', self.directory + "TUs.txt"), index_col=0, sep="\t").fillna('')
         print("{} Getting sigma factors from BioCyc {}".format(sep, sep))
         self.sigmas = self._sigmas
         self.rpod = self._rpod
@@ -779,10 +774,10 @@ class Organism(object):
 
     def get_genbank_contigs(self):
         if self.is_reference:
-            gb_it= Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
+            gb_it = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
         else:
             gb_it = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
-        self.contigs = [i for i in gb_it]
+        self.contigs = [ i for i in gb_it ]
 
 
     def check_minimal_files(self):
@@ -793,22 +788,22 @@ class Organism(object):
             os.makedirs(self.blast_directory)
             print("{} directory was created.".format(self.blast_directory))
 
-        if not os.path.isfile(self.directory + "genes.txt"):
+        if not os.path.isfile(self.config.get('biocyc.genes', self.directory + "genes.txt")):
             self.curation_notes['org.check_minimal_files'].append({
                 'msg':"genes.txt file not found",
                 'importance':'high',
                 'to_do':'genes.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide genes.txt'})
-        if not os.path.isfile(self.directory + "proteins.txt"):
+        if not os.path.isfile(self.config.get('biocyc.prots', self.directory + "proteins.txt")):
             self.curation_notes['org.check_minimal_files'].append({
                 'msg':"proteins.txt file not found",
                 'importance':'high',
                 'to_do':'proteins.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide proteins.txt'})
-        if not os.path.isfile(self.directory + "RNAs.txt"):
+        if not os.path.isfile(self.config.get('biocyc.RNAs', self.directory + "RNAs.txt")):
             self.curation_notes['org.check_minimal_files'].append({
                 'msg':"RNAs.txt file not found",
                 'importance':'high',
                 'to_do':'RNAs.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide RNAs.txt'})
-        if not os.path.isfile(self.directory + "TUs.txt"):
+        if not os.path.isfile(self.config.get('biocyc.TUs', self.directory + "TUs.txt")):
             self.curation_notes['org.check_minimal_files'].append({
                 'msg':"TUs.txt file not found",
                 'importance':'high',
@@ -947,17 +942,24 @@ class Organism(object):
 
             elif product_type == 'MONOMER' and product not in complexes_df.index:
                 print('Adding {} ({}) to complexes'.format(gene_id,product))
-                complexes_df = complexes_df.append(
-                        pandas.DataFrame.from_dict(
-                            {
-                                product: {
-                                    "name": product,
-                                    "genes": '{}()'.format(gene_id),
-                                    "source": "Synced",
-                                }
-                            }
-                        ).T
-                    )
+                #complexes_df = complexes_df.append(
+                        #pandas.DataFrame.from_dict(
+                            #{
+                                #product: {
+                                    #"name": product,
+                                    #"genes": '{}()'.format(gene_id),
+                                    #"source": "Synced",
+                                #}
+                            #}
+                        #).T
+                    #)
+                tmp = pandas.DataFrame.from_dict({
+                    product: {
+                        "name": product,
+                        "genes": '{}()'.format(gene_id),
+                        "source": "Synced",
+                        }}).T
+                complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
 
         self.gene_dictionary = gene_dictionary[pandas.notnull(gene_dictionary.index)]
         self.RNA_df = RNA_df
