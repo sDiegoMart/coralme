@@ -382,6 +382,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	#data['Complex ID'] = data['Complex ID'].apply(lambda x: _combine(x), axis = 1)
 
 	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(x, builder))
+	data['Cofactors in Modified Complex'].update(data['BioCyc'].apply(lambda x: cofactors(x, builder)))
 	data = data.explode('Complex ID')
 
 	data['Generic Complex ID'] = data['Gene Locus ID'].apply(lambda x: generics_from_gene(x, builder))
