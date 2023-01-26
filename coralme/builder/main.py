@@ -1198,7 +1198,7 @@ class MEReconstruction(object):
 
 		if config.get('gam', None) is None:
 			if hasattr(self, 'org'):
-				logging.warning('GAM (ATP requirement for growth).')
+				logging.warning('GAM (ATP requirement for growth) was set from the M-model or default value.')
 				config['gam'] = self.org.GAM
 
 		# modify options to not run again blast
