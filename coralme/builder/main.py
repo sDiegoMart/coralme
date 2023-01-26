@@ -1222,7 +1222,7 @@ class MEReconstruction(object):
 			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
 
-		def read(filename, columns = []):
+		def read(filename, input_type, filename_if_empty, columns = []):
 			if pathlib.Path(filename).is_file():
 				df = coralme.builder.flat_files.read(filename)
 				if sorted(df.columns) == sorted(columns):
@@ -1230,26 +1230,36 @@ class MEReconstruction(object):
 				else:
 					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
 			else:
-				logging.warning('Input file \'{:s}\' does not exist.'.format(filename))
-				return pandas.DataFrame(columns = columns)
+				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty file \'{:s}\' was created.'.format(input_type, filename, filename_if_empty))
+				tmp = pandas.DataFrame(columns = columns)
+				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
+				return tmp
 
 		# INPUTS: We capture if the file exists or if it is empty
 		# Transcriptional Units
 		filename = config.get('df_TranscriptionalUnits', '')
-		self.df_tus = read(filename, ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']).set_index('TU_id', inplace = False)
+		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
+		self.df_tus = read(filename, 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
 		filename = config.get('df_matrix_stoichiometry', '')
-		self.df_rmsc = read(filename, ['Reaction', 'Metabolites', 'Stoichiometry'])
+		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
+		self.df_rmsc = read(filename, 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
+
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficientes
 		filename = config.get('df_matrix_subrxn_stoich', '')
-		self.df_subs = read(filename, ['Reaction', 'Metabolites', 'Stoichiometry'])
+		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
+		self.df_subs = read(filename, 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
+
 		# Orphan and Spontaneous reaction metadata
 		filename = config.get('df_metadata_orphan_rxns', '')
-		self.df_rxns = read(filename, ['name', 'description', 'is_reversible', 'is_spontaneous']).set_index('name', inplace = False)
+		cols = ['name', 'description', 'is_reversible', 'is_spontaneous']
+		self.df_rxns = read(filename, 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
+
 		# Metabolites metadata
 		filename = config.get('df_metadata_metabolites', '')
-		self.df_mets = read(filename, ['id', 'me_id', 'name', 'formula', 'type']).set_index('id', inplace = False)
+		cols = ['id', 'me_id', 'name', 'formula', 'type']
+		self.df_mets = read(filename, 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
 
 		# Drop-in replacement of input files:
 		# step1: reactions, complexes, modification of complexes, enzyme-to-reaction mapping
@@ -1392,8 +1402,13 @@ class MEReconstruction(object):
 		# RNA and protein names are prefixed in the ME-model following then the locus tag
 		lst = set(df_data['Gene Locus ID'].str.replace('^protein_', '', regex = True).str.replace('^RNA_', '', regex = True).tolist())
 
+		# detect if the genbank file was modified using biocyc data
+		gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
+		gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
+
 		coralme.util.building.build_reactions_from_genbank(
-			me_model = me, gb_filename = me.global_info['genbank-path'],
+			#me_model = me, gb_filename = me.global_info['genbank-path'],
+			me_model = me, gb_filename = gb,
 			tu_frame = df_tus, genes_to_add = lst, update = True, verbose = True,
 			feature_types = me.global_info['feature_types'],
 			trna_misacylation = me.global_info['trna_misacylation'],

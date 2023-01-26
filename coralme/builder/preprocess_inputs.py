@@ -149,7 +149,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	def cofactors(x, builder):
 		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
-		mods = dct.get(x + '-MONOMER', None)
+		mods = x if x is None else dct.get(x + '-MONOMER', None)
 		if mods is None:
 			return mods
 		else:
@@ -181,13 +181,13 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		lst = [ builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']]
 		lst = [ x for y in lst for x in y ]
 
-		if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+		if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 			return 'ribosome:1'
 
 	def degradosome(x, builder):
 		lst = builder.org.rna_degradosome['rna_degradosome']['enzymes']
 		lst = [ x.split('_mod_')[0] for x in lst ]
-		if x['Gene Locus ID'] + '-MONOMER' in lst or x['BioCyc'] + '-MONOMER' in lst:
+		if x['Gene Locus ID'] + '-MONOMER' in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 			return 'RNA_degradosome:1'
 		else:
 			None
@@ -197,7 +197,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		subrxns = []
 		for key in dct.keys():
 			lst = [ x.split('_mod_')[0] for x in dct[key]['enzymes'] ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				subrxns.append(key + ':1')
 		if len(subrxns) == 0:
 			return None
@@ -212,7 +212,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 		# combine
 		lst = list(builder.org.sigmas.index) + RNAP_components
-		if x['Gene Locus ID'] + '-MONOMER' in lst or x['BioCyc'] + '-MONOMER' in lst:
+		if x['Gene Locus ID'] + '-MONOMER' in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 			return 'RNAP'
 
 	def transpaths(x, builder):
@@ -221,7 +221,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		pathways = []
 		for key, value in dct.items():
 			lst = value.keys()
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				pathways.append('translocation_pathway_' + key)
 
 		if len(pathways) != 0:
@@ -233,14 +233,14 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		for key, value in builder.org.ribosome_subreactions.items():
 			lst = [value['enzyme']]
 			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				return 'Ribosome_' + key
 
 	def translation_subrxns(x, builder):
 		for key, value in builder.org.initiation_subreactions.items():
 			lst = value['enzymes']
 			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				if 'InfA' in key or 'InfC' in key:
 					return key
 				elif key == 'Translation_gtp_initiation_factor_InfB':
@@ -250,7 +250,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		for key, value in builder.org.elongation_subreactions.items():
 			lst = value['enzymes']
 			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				if key == 'FusA_mono_elongation':
 					return 'Translation_elongation_FusA_mono'
 				else:
@@ -258,7 +258,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		for key, value in builder.org.termination_subreactions.items():
 			lst = value['enzymes']
 			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				if key in ['N_terminal_methionine_cleavage', 'DnaK_dependent_folding', 'GroEL_dependent_folding']:
 					return 'Protein_processing_' + key
 				elif key == 'PrfA_mono_mediated_termination':
@@ -275,7 +275,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		for key, value in builder.org.transcription_subreactions.items():
 			lst = value['enzymes']
 			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or x['BioCyc'] + '-MONOMER' in lst:
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
 				subrxns.append(key)
 		if len(subrxns) == 0:
 			return None

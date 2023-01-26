@@ -45,10 +45,11 @@ def add_iron_sulfur_modifications(me_model):
 		new_mod.enzyme = [ chaperone, 'generic_2fe2s_transfer_complex' ]
 		new_mod.stoichiometry = { '2fe2s_c': -1 }
 
-	for cplx_data in me_model.process_data.get_by_id('mod_2fe2s_c').get_complex_data():
-		cplx_id = cplx_data.id.split('_mod')[0]
-		if cplx_id in fes_chaperones:
-			cplx_data.subreactions[ 'mod_2fe2s_c_' + fes_chaperones[cplx_id] ] = cplx_data.subreactions.pop('mod_2fe2s_c')
+	if me_model.process_data.has_id('mod_2fe2s_c'):
+		for cplx_data in me_model.process_data.get_by_id('mod_2fe2s_c').get_complex_data():
+			cplx_id = cplx_data.id.split('_mod')[0]
+			if cplx_id in fes_chaperones:
+				cplx_data.subreactions[ 'mod_2fe2s_c_' + fes_chaperones[cplx_id] ] = cplx_data.subreactions.pop('mod_2fe2s_c')
 
 	return None
 
