@@ -1572,7 +1572,7 @@ class Organism(object):
             if not genes:
                 continue
             for g in genes.split(" // "):
-                if g not in gene_dictionary["Accession-1"]:
+                if g not in gene_dictionary.index:
                     continue
                 genes_to_TU[gene_dictionary["Accession-1"][g]] = tu
 
@@ -1594,7 +1594,7 @@ class Organism(object):
             genes = []
             replicons = []
             for g in row["Genes of transcription unit"].split(" // "):
-                if g not in gene_dictionary["Accession-1"]:
+                if g not in gene_dictionary.index:
                     warn_genes.append(g)
                     continue
                 genes.append(gene_dictionary["Accession-1"][g])
