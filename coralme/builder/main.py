@@ -1267,9 +1267,8 @@ class MEReconstruction(object):
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
 			# detect if the genbank file was modified using biocyc data
-			gb = '{:s}/genome_modified.gb'.format(config.get('out_directory', './'))
+			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
 			gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
-			print(gb)
 
 			# generate a minimal dataframe from genbank and m-model files
 			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
