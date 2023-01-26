@@ -1138,7 +1138,7 @@ class Organism(object):
         return complexes_df.fillna({"name": ""})
 
     def read_gene_dictionary(self):
-        filename = self.directory + "genes.txt"
+        filename = self.config.get('biocyc.genes', self.directory + "genes.txt")
         gene_dictionary = pandas.read_csv(filename, sep="\t").set_index('Gene Name',inplace=False)
         warn_genes = []
         if not self.is_reference:
@@ -1574,7 +1574,7 @@ class Organism(object):
             if not genes:
                 continue
             for g in genes.split(" // "):
-                if g not in gene_dictionary.index:
+                if g not in gene_dictionary["Accession-1"]:
                     continue
                 genes_to_TU[gene_dictionary["Accession-1"][g]] = tu
 
@@ -1596,7 +1596,7 @@ class Organism(object):
             genes = []
             replicons = []
             for g in row["Genes of transcription unit"].split(" // "):
-                if g not in gene_dictionary.index:
+                if g not in gene_dictionary["Accession-1"]:
                     warn_genes.append(g)
                     continue
                 genes.append(gene_dictionary["Accession-1"][g])
@@ -1683,18 +1683,26 @@ class Organism(object):
                 gene = gene_dictionary.loc[[gene]]["Gene Name"]
                 for gene_ in gene: # In case of duplicates
                     if gene_ in gene_location:
-                        protein_location = protein_location.append(
-                        pandas.DataFrame.from_dict(
-                                {
-                                    c: {
-                                        "Complex_compartment": c_loc,
-                                        "Protein": gene_string,
-                                        "Protein_compartment": gene_location[gene_],
-                                        "translocase_pathway": "s",
-                                    }
-                                }
-                            ).T
-                        )
+                        #protein_location = protein_location.append(
+                        #pandas.DataFrame.from_dict(
+                                #{
+                                    #c: {
+                                        #"Complex_compartment": c_loc,
+                                        #"Protein": gene_string,
+                                        #"Protein_compartment": gene_location[gene_],
+                                        #"translocase_pathway": "s",
+                                    #}
+                                #}
+                            #).T
+                        #)
+                        tmp = pandas.DataFrame.from_dict({
+                            c: {
+                                "Complex_compartment": c_loc,
+                                "Protein": gene_string,
+                                "Protein_compartment": gene_location[gene_],
+                                "translocase_pathway": "s",
+                                }}).T
+                        protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
         protein_location.index.name = "Complex"
         return protein_location
 

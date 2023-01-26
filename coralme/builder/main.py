@@ -1216,7 +1216,7 @@ class MEReconstruction(object):
 			yaml = new if new.endswith('.yaml') else '{:s}.yaml'.format(new)
 			with open('{:s}/{:s}'.format(config['out_directory'], yaml), 'w') as outfile:
 				anyconfig.dump(config, outfile)
-			logging.warning('New configuration file \'{:s}.yaml\' was written with inferred options.'.format(new))
+			logging.warning('New configuration file \'{:s}\' was written with inferred options.'.format(yaml))
 			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
 			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
@@ -1266,8 +1266,13 @@ class MEReconstruction(object):
 		if pathlib.Path(filename).is_file():
 			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
+			# detect if the genbank file was modified using biocyc data
+			gb = '{:s}/genome_modified.gb'.format(config.get('out_directory', './'))
+			gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
+			print(gb)
+
 			# generate a minimal dataframe from genbank and m-model files
-			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(config['genbank-path'], model = m_model)
+			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
 			# complete minimal dataframe with automated info from homology
 			if hasattr(self, 'homology'):
 				self.df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, self.df_data, model = m_model, output = filename)
@@ -1953,8 +1958,12 @@ class MEReconstruction(object):
 		self.me_model = me
 
 		with open('{:s}/MEReconstruction-{:s}.log'.format(directory, model), 'w') as outfile:
-			pathlib.Path('{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model)).unlink(missing_ok = True)
-			pathlib.Path('{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model)).unlink(missing_ok = True)
+			for filename in [ '{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model), '{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model) ]:
+				try:
+					pathlib.Path(filename).unlink(missing_ok = True) # python>=3.8
+				except:
+					if pathlib.Path(filename).exists():
+						pathlib.Path(filename).unlink() # python==3.7
 
 			logger = self.logger['MEReconstruction-step1'].log_list
 			logger += self.logger['MEReconstruction-step2'].log_list
