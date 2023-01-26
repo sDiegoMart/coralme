@@ -8,7 +8,7 @@ from Bio import SeqIO
 try:
 	warnings.simplefilter(action = 'ignore', category = pandas.errors.SettingWithCopyWarning)
 except:
-	warnings.warn("This pandas version does not allow for correct warning handling. Pandas 1.5.1 is suggested.")
+	warnings.warn("This pandas version does not allow for correct warning handling. Pandas >=1.5.1 is suggested.")
 
 def generate_organism_specific_matrix(genbank, model):
 	contigs = []
@@ -49,7 +49,7 @@ def generate_organism_specific_matrix(genbank, model):
 
 	def get_reaction(x):
 		if x is None:
-			return None
+			return []
 		else:
 			lst = []
 			for gene in x.split(';'):
@@ -416,7 +416,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 		with open(output, 'wb') as outfile:
 			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
-			data.to_excel(writer, index = False, freeze_panes = (1, 2))
+			data.to_excel(writer, index = False, freeze_panes = (1, 7))
 			(max_row, max_col) = data.shape
 
 			# Get the xlsxwriter workbook and worksheet objects.

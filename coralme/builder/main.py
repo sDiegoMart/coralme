@@ -12,6 +12,7 @@ import subprocess
 # third party imports
 import tqdm
 import sympy
+import numpy
 import pandas
 import anyconfig
 
@@ -81,7 +82,7 @@ class MEBuilder(object):
 
 		return None
 
-	def generate_files(self, overwrite = False):
+	def generate_files(self, overwrite = True):
 		sep = ""
 		config = self.configuration
 
@@ -269,31 +270,32 @@ class MEBuilder(object):
 				'importance':'medium',
 				'to_do':'Check whether the compartment is correct. If not, change it in the reaction ID in the m_model.'})
 
-	def modify_metabolic_reactions(self,
-								   filename):
+	def modify_metabolic_reactions(self, filename):
 		m_model = self.org.m_model
 		filename = self.org.directory + filename
+
 		try:
 			new_reactions_dict = (
-				pandas.read_csv(filename, index_col=0)
+				pandas.read_csv(filename, index_col = 0)
 				.fillna({"gene_reaction_rule": "", "notes": "", "reaction": "","name":""})
 				.T.to_dict()
 			)
 		except:
 			new_reactions_dict = {}
+
 			self.org.curation_notes['modify_metabolic_reactions'].append({
 				'msg':'No {} file, creating one.'.format(filename),
 				'importance':'low',
 				'to_do':'Fill {}'.format(filename)})
-			pandas.DataFrame.from_dict(
-				{
-					"reaction_id": {},
-					"name": {},
-					"gene_reaction_rule": {},
-					"reaction": {},
-					"notes": {},
-				}
-			).set_index("reaction_id").to_csv(filename)
+
+			pandas.DataFrame.from_dict({
+				"reaction_id": {},
+				"name": {},
+				"gene_reaction_rule": {},
+				"reaction": {},
+				"notes": {},
+				}).set_index("reaction_id").to_csv(filename)
+
 		for rxn_id, info in new_reactions_dict.items():
 			if info["reaction"] == "eliminate":
 				m_model.reactions.get_by_id(rxn_id).remove_from_model()
@@ -458,7 +460,6 @@ class MEBuilder(object):
 					'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
 
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
-		import numpy as np
 		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
 
 		m_model = self.org.m_model
@@ -576,7 +577,7 @@ class MEBuilder(object):
 				enz_rxn_assoc_dict[rxn.id] = generified_rule
 			enz_rxn_assoc_df = pandas.DataFrame.from_dict({"Complexes": enz_rxn_assoc_dict})
 			enz_rxn_assoc_df = enz_rxn_assoc_df.replace(
-				"", np.nan
+				"", numpy.nan
 			).dropna()  # Remove empty rules
 
 		enz_rxn_assoc_df.index.name = "Reaction"
@@ -1211,12 +1212,14 @@ class MEReconstruction(object):
 		self.configuration.update(config)
 
 		if overwrite:
-			logging.warning('New configuration file was written with inferred options.')
-			#with open('{:s}/coralme-config.json'.format(config['out_directory']), 'w') as outfile:
-				#anyconfig.dump(config, outfile)
-			with open('{:s}/coralme-config.yaml'.format(config['out_directory']), 'w') as outfile:
+			new = config.get('new_config_file', 'coralme-config.yaml')
+			yaml = new if new.endswith('.yaml') else '{:s}.yaml'.format(new)
+			with open('{:s}/{:s}'.format(config['out_directory'], yaml), 'w') as outfile:
 				anyconfig.dump(config, outfile)
-			#with open('{:s}/automated.toml'.format(config['out_directory']), 'w') as outfile:
+			logging.warning('New configuration file \'{:s}.yaml\' was written with inferred options.'.format(new))
+			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
+				#anyconfig.dump(config, outfile)
+			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
 
 		def read(filename, columns = []):
@@ -1531,8 +1534,6 @@ class MEReconstruction(object):
 		dna_replication.upper_bound = dna_demand_bound
 
 		# ### 9) Save ME-model as a pickle file
-
-		import pickle
 		with open('{:s}/MEModel-step1-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
@@ -1940,7 +1941,6 @@ class MEReconstruction(object):
 		me.update()
 		me.prune()
 
-		import pickle
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
