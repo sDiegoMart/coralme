@@ -729,9 +729,9 @@ def get_df_transpaths(df, filter_in = set(), generics = False):
 
 def get_df_input_from_excel(df, df_rxns):
 	lst = [
-		'Complex Name',
-		'Complex ID',
-		'Cofactors in Modified Complex',
+		#'Complex Name',
+		#'Complex ID',
+		#'Cofactors in Modified Complex',
 		'Generic Complex ID',
 		'MetaComplex ID',
 		'ME-model SubReaction',
