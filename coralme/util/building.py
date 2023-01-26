@@ -288,12 +288,7 @@ def build_reactions_from_genbank(
 	for infile in gb_filename:
 		for contig in SeqIO.parse(infile, 'gb'):
 			contigs.append(contig)
-	if me_model.global_info.get('sequence-path', None):
-		full_seqs = {}
-		for record in Bio.SeqIO.parse(me_model.global_info['sequence-path'], 'fasta'):
-			full_seqs[record.id] = record.seq
-	else:
-		full_seqs = { x.id:x.seq for x in contigs }
+	full_seqs = { x.id:x.seq for x in contigs }
 
 	# GC Content
 	if me_model.global_info.get('GC_fraction', None) is None:
