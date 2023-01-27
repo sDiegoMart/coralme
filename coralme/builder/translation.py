@@ -29,6 +29,11 @@ def add_subreactions_to_model(me_model, subreactions):
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'FMETTRS', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
+	if not me_model.process_data.has_id('atp_hydrolysis_groel'):
+		stoichiometry = {'atp_c': -7, 'h2o_c': -7, 'adp_c': +7, 'pi_c': +7}
+		coralme.util.building.add_subreaction_data(
+			me_model, modification_id = 'atp_hydrolysis_groel', modification_stoichiometry = stoichiometry, modification_enzyme = None)
+
 	# add subreactions associated with translation initiation, elongation, termination and postprocessing
 	for subreaction in subreactions:
 		for rxn, info in subreaction.items():
