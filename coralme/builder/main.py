@@ -1207,6 +1207,8 @@ class MEReconstruction(object):
 		config['dev_reference'] = False
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass]
+		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
+			config['defer_to_rxn_matrix'].append('FMETTRS')
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)

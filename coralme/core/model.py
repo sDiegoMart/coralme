@@ -61,7 +61,7 @@ class MEModel(cobra.core.model.Model):
 			'translation_subreactions' : {
 				'Translation_initiation_factor_InfA' : '',
 				'Translation_initiation_factor_InfC' : '',
-				'Translation_initiation_fmet_addition_at_START' : 'FMETTRS-MEModel',
+				'Translation_initiation_fmet_addition_at_START' : 'FMETTRS',
 				'Translation_initiation_gtp_factor_InfB' : 'atp_hydrolysis',
 				'Translation_elongation_FusA_mono' : 'atp_hydrolysis',
 				'Translation_elongation_Tuf_gtp_regeneration' : '',

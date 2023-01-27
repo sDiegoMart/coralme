@@ -20,14 +20,14 @@ def add_subreactions_to_model(me_model, subreactions):
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'MAP', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
-	if not me_model.process_data.has_id('FMETTRS-MEModel'):
+	if not me_model.process_data.has_id('FMETTRS'):
 		stoichiometry = {
 			'generic_tRNA_START_met__L_c': -1,
 			me_model.metabolites.query('^10fthf')[0].id: -1,
 			me_model.metabolites.query('^thf')[0].id: +1
 			}
 		coralme.util.building.add_subreaction_data(
-			me_model, modification_id = 'FMETTRS-MEModel', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+			me_model, modification_id = 'FMETTRS', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
 	# add subreactions associated with translation initiation, elongation, termination and postprocessing
 	for subreaction in subreactions:

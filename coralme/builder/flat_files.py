@@ -148,7 +148,9 @@ def process_m_model(
 			#rxn.remove_from_model(remove_orphans = True)
 			#logging.warning('The MetabolicReaction \'{:s}\' (using \'defer_to_rxn_matrix\') was removed from the M-model metabolic network.'.format(rxn.id))
 
-	m_model.remove_reactions([ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix ])
+	#m_model.remove_reactions([ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix ])
+	rxns_to_remove = [ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix if m_model.reactions.has_id(rxn) ]
+	m_model.remove_reactions(rxns_to_remove)
 
 	# met_data DataFrame
 	mets_data = mets_data[mets_data['type'].isin(['ADD', 'REPLACE'])]
