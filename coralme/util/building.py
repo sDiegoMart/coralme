@@ -495,7 +495,10 @@ def build_reactions_from_genbank(
 			# tRNA_aa = {'tRNA':'amino_acid'}
 			msg = 'From tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
 			if rna_type == 'tRNA':
-				aa = feature.qualifiers['product'][0].split('-')[1]
+				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
+				if not aa in ['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'fMet', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']:
+					logging.warning('The tRNA {:s} is not associated to a valid product name (tRNA-Aa)'.format(bnum))
+					continue
 
 				# misacylation of glutamate/aspartate occurs in archaea, Gram-positive eubacteria, mitochondria, and chloroplasts
 				if aa in trna_misacylation.keys():
