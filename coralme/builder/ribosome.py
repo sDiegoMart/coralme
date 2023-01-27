@@ -6,7 +6,7 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 	lst = ['generic_Era', 'generic_RbfA', 'generic_RimM']
 	for ComplexData in lst:
 		if len(me_model.process_data.query(ComplexData)) == 0:
-			logging.warning('ComplexData \'{:s}\' not in the ME-model. The ME-model will be unfeasible.'.format(ComplexData))
+			logging.warning('ComplexData \'{:s}\' not in the ME-model. The ME-model would be unfeasible.'.format(ComplexData))
 			logging.warning('Check if the behavior is correct or if \'{:s}\' is present in the \'Generic Complex ID\' column of the organism-specific matrix.'.format(ComplexData.replace('generic_', '')))
 
 	ribosome_complex = coralme.core.processdata.ComplexData(me_model.global_info['ribosome_id'], me_model)
@@ -31,6 +31,11 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 			ribosome_complex.subreactions[rrna_mod.id] = 1
 
 	for subreaction_id in ribosome_subreactions:
+		if not me_model.process_data.has_id('gtp_hydrolysis_era'):
+			stoichiometry = {'gtp_c': -2, 'h2o_c': -2, 'gdp_c': 2, 'pi_c': 2}
+			coralme.util.building.add_subreaction_data(
+				me_model, modification_id = 'gtp_hydrolysis_era', modification_stoichiometry = stoichiometry, modification_enzyme = None)
+
 		# add subreaction to model
 		subreaction = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
 		#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']

@@ -1,6 +1,11 @@
 import coralme
 
 def add_subreactions_to_model(me_model, subreactions):
+	if not me_model.process_data.has_id('atp_hydrolysis_rho'):
+		stoichiometry = {'atp_c': -3, 'h2o_c': -3, 'adp_c': 3, 'ppi_c': 3}
+		coralme.util.building.add_subreaction_data(
+			me_model, modification_id = 'atp_hydrolysis_rho', modification_stoichiometry = stoichiometry, modification_enzyme = None)
+
 	# add subreactions associated with transcription termination
 	for subreaction in subreactions:
 		for rxn, info in subreaction.items():

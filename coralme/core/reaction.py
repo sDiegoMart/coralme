@@ -1576,8 +1576,12 @@ class TranslationReaction(MEReaction):
 
 		# .25 ATP required per nucleotide hydrolysis
 		hydrolysis_amount = (nucleotide_length - 1) / 4. * deg_amount
-		# old code; now set as a global_info
+		# old code; now set as a global_info and a subreaction
 		#atp_hydrolysis = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'pi_c': 1, 'h_c': 1}
+		if not self._model.process_data.has_id('atp_hydrolysis'):
+			stoichiometry = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'pi_c': 1}
+			coralme.util.building.add_subreaction_data(self._model, modification_id = 'atp_hydrolysis', modification_stoichiometry = stoichiometry, modification_enzyme = None)
+
 		atp_hydrolysis = self._model.process_data.get_by_id('atp_hydrolysis').stoichiometry
 
 		for metabolite, value in atp_hydrolysis.items():
@@ -1617,7 +1621,7 @@ class TranslationReaction(MEReaction):
 		self._add_formula_to_protein(translation_data, protein)
 
 		# ------------------ Add biomass constraints --------------------------
-		# add biomass constraint for protein translated¨
+		# add biomass constraint for protein translated
 		protein_mass = protein.formula_weight / 1000.  # kDa
 		self.add_metabolites({metabolites.protein_biomass: protein_mass}, combine = False)
 

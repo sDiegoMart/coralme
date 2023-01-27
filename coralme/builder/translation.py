@@ -10,6 +10,25 @@ import coralme
 from collections import Counter
 
 def add_subreactions_to_model(me_model, subreactions):
+	if not me_model.process_data.has_id('DEF'):
+		stoichiometry = {'h2o_c': -1, 'for_c': +1}
+		coralme.util.building.add_subreaction_data(
+			me_model, modification_id = 'DEF', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+
+	if not me_model.process_data.has_id('MAP'):
+		stoichiometry = {'h2o_c': -1, 'met__L_c': +1}
+		coralme.util.building.add_subreaction_data(
+			me_model, modification_id = 'MAP', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+
+	if not me_model.process_data.has_id('FMETTRS-MEModel'):
+		stoichiometry = {
+			'generic_tRNA_START_met__L_c': -1,
+			me_model.metabolites.query('^10fthf')[0].id: -1,
+			me_model.metabolites.query('^thf')[0].id: +1
+			}
+		coralme.util.building.add_subreaction_data(
+			me_model, modification_id = 'FMETTRS-MEModel', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+
 	# add subreactions associated with translation initiation, elongation, termination and postprocessing
 	for subreaction in subreactions:
 		for rxn, info in subreaction.items():
@@ -48,6 +67,16 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 
 	#for codon, aa in {k:v for k,v in me_model.global_info['codon_table'].forward_table.items() if 'U' not in k}.items():
 	for codon, aa in {k:v for k,v in codon_table.forward_table.items() if 'U' not in k}.items():
+		if not me_model.process_data.has_id('atp_hydrolysis_trna_loading'):
+			stoichiometry = {'atp_c': -1, 'h2o_c': -1, 'amp_c': 1, 'ppi_c': 1}
+			coralme.util.building.add_subreaction_data(
+				me_model, modification_id = 'atp_hydrolysis_trna_loading', modification_stoichiometry = stoichiometry, modification_enzyme = None)
+
+		if not me_model.process_data.has_id('gtp_hydrolysis'):
+			stoichiometry = {'gtp_c': -1, 'h2o_c': -1, 'gdp_c': 1, 'pi_c': 1}
+			coralme.util.building.add_subreaction_data(
+				me_model, modification_id = 'gtp_hydrolysis', modification_stoichiometry = stoichiometry, modification_enzyme = None)
+
 		#full_aa = coralme.util.dogma.amino_acids[coralme.util.dogma.codon_table[codon]]
 		full_aa = coralme.util.dogma.amino_acids[aa]
 

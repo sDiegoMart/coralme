@@ -61,7 +61,7 @@ class MEModel(cobra.core.model.Model):
 			'translation_subreactions' : {
 				'Translation_initiation_factor_InfA' : '',
 				'Translation_initiation_factor_InfC' : '',
-				'Translation_initiation_fmet_addition_at_START' : 'FMETTRS',
+				'Translation_initiation_fmet_addition_at_START' : 'FMETTRS-MEModel',
 				'Translation_initiation_gtp_factor_InfB' : 'atp_hydrolysis',
 				'Translation_elongation_FusA_mono' : 'atp_hydrolysis',
 				'Translation_elongation_Tuf_gtp_regeneration' : '',
@@ -80,8 +80,8 @@ class MEModel(cobra.core.model.Model):
 				},
 
 			'peptide_processing_subreactions' : [
-				'Translation_termination_peptide_chain_release',
 				'Translation_termination_peptide_deformylase_processing',
+				'Translation_termination_peptide_chain_release',
 				'Translation_termination_ribosome_recycler'
 				],
 
@@ -121,7 +121,7 @@ class MEModel(cobra.core.model.Model):
 					'keff' : 20.000,
 					'length_dependent_energy' : 'False',
 					'stoichiometry' : 'gtp_hydrolysis_srp_pathway',
-					'FtsY' : 'FtsY_MONOMER'
+					'FtsY' : 'FtsY-MONOMER'
 					},
 				'srp_yidC' : {
 					'abbrev' : 'p',
@@ -206,16 +206,17 @@ class MEModel(cobra.core.model.Model):
 		self._biomass_dilution.lower_bound = self.mu
 
 		# Maintenance energy
-		self._gam = self.global_info['gam'] # default value
-		self._ngam = self.global_info['ngam'] # default value
+		self._gam = self.global_info['gam'] # default/user value
+		self._ngam = self.global_info['ngam'] # default/user value
 
 		"""
 		Unmodeled protein is handled by converting protein_biomass to
 		biomass, and requiring production of the appropriate amount of dummy
 		protein
 		"""
-		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default value
+		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default/user value
 
+	# This function comes from cobrapy, modified to NOT create variables in the solver
 	def add_reactions(self, reaction_list):
 		"""Add reactions to the model.
 
@@ -274,6 +275,7 @@ class MEModel(cobra.core.model.Model):
 		# from cameo ...
 		#self._populate_solver(pruned)
 
+	# This function comes from cobrapy, modified to NOT get variables from the solver
 	def remove_reactions(self, reactions, remove_orphans=False):
 		"""Remove reactions from the model.
 
