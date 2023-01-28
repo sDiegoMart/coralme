@@ -176,6 +176,7 @@ class MEModel(cobra.core.model.Model):
 			'genome_mods' : {},
 			'trna_misacylation' : {},
 			'trna_to_codon' : {},
+			'aa2codons' : {},
 
 			'gam' : 45.,
 			'ngam' : 1.,

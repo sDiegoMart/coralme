@@ -154,7 +154,7 @@ def add_translation_reaction(me_model, locus_id, dna_sequence, prot_sequence = '
 
 	return None
 
-def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organelle, verbose = True):
+def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organelle, verbose = True):
 	"""
 	Adds tRNA charging reactions for all tRNAs in ME-model
 
@@ -163,7 +163,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organell
 	me_model : :class:`coralme.core.model.MEModel`
 		The MEModel object to which the reaction will be added
 
-	trna_aa : dict
+	trna_to_aa : dict
 		Dictionary of tRNA locus ID to 3 letter codes of the amino acid
 		that the tRNA contributes
 
@@ -180,22 +180,22 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organell
 	"""
 
 	# remove "other" tRNAs: This avoids a RuntimeError: dictionary changed size during iteration using pop
-	trna_aa = { k:v for k,v in trna_aa.items() if v.lower() != 'other' }
+	trna_to_aa = { k:v for k,v in trna_to_aa.items() if v.lower() != 'other' }
 
 	# convert amino acid 3 letter codes to metabolites
-	#for tRNA, aa in list(iteritems(trna_aa)):
-	for tRNA, aa in trna_aa.items():
+	#for tRNA, aa in list(iteritems(trna_to_aa)):
+	for tRNA, aa in trna_to_aa.items():
 		if aa.lower() == 'other':
 			pass
-			#trna_aa.pop(tRNA) # RuntimeError: dictionary changed size during iteration
+			#trna_to_aa.pop(tRNA) # RuntimeError: dictionary changed size during iteration
 		elif aa.lower() == 'sec':
 			# Charge with precursor to selenocysteine
-			trna_aa[tRNA] = me_model.metabolites.get_by_id('ser__L_' + organelle)
+			trna_to_aa[tRNA] = me_model.metabolites.get_by_id('ser__L_' + organelle)
 		elif aa.lower() == 'gly':
-			trna_aa[tRNA] = me_model.metabolites.get_by_id('gly_' + organelle)
+			trna_to_aa[tRNA] = me_model.metabolites.get_by_id('gly_' + organelle)
 		else:
 			if me_model.metabolites.has_id(aa.lower() + '__L_' + organelle):
-				trna_aa[tRNA] = me_model.metabolites.get_by_id(aa.lower() + '__L_' + organelle)
+				trna_to_aa[tRNA] = me_model.metabolites.get_by_id(aa.lower() + '__L_' + organelle)
 			else:
 				logging.warning('The \'{:s}\' metabolite does not exist in the ME-model.'.format(aa.lower() + '__L_' + organelle))
 
@@ -208,8 +208,9 @@ def convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organell
 		logging.warning('Associate at least one tRNA-Met/tRNA-fMet gene with the \'START\' keyword or add manually a \'tRNAChargingReaction\'.')
 
 	# add in all the tRNA charging reactions
-	for tRNA, aa in trna_aa.items():
-		if tRNA not in trna_to_codon.keys() or isinstance(aa, str): # trna_to_codon contains all the tRNAs found in the organism, not per organelle
+	for tRNA, aa in trna_to_aa.items():
+		# trna_to_codon contains all the tRNAs found in the organism, not per organelle
+		if tRNA not in trna_to_codon.keys() or isinstance(aa, str):
 			continue
 
 		if not me_model.metabolites.has_id(aa.id):
@@ -382,7 +383,7 @@ def build_reactions_from_genbank(
 				add_transcription_reaction(me_model, tu_id, set(), str(seq), organelle, update = False)
 
 	# Dictionary of tRNA locus ID to the model.metabolite object
-	trna_aa = {}
+	trna_to_aa = {}
 
 	# Dictionary of tRNA locus ID to amino acid, per organelle type
 	aa2trna = {
@@ -493,17 +494,28 @@ def build_reactions_from_genbank(
 
 			# Create dict to use for adding tRNAChargingReactions later
 			# tRNA_aa = {'tRNA':'amino_acid'}
-			msg = 'From tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
+			msg1 = 'From the tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
+			msg2 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). No further modification needs to take place.'
+
 			if rna_type == 'tRNA':
 				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
-				if not aa in ['Ala', 'Arg', 'Asn', 'Asp', 'Asx', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'fMet', 'Phe', 'Pro', 'Sec', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']:
-					logging.warning('The tRNA \'{:s}\' is not associated to a valid product name (tRNA-Aa)'.format(bnum))
+				if aa in ['Ala', 'Arg', 'Asn', 'Asp', 'Asx', 'Cys', 'Gln', 'Glu', 'Glx', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'fMet', 'Phe', 'Pro', 'Sec', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']:
+					pass
+				else:
+					logging.warning('The tRNA \'{:s}\' is not associated to a valid product name (tRNA-Amino acid 3 letters code)'.format(bnum))
 					continue
 
-				# TODO: This is not correct... I think... Maybe...
-				# Special tRNA that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.23??), then to tRNA-Asn (EC 6.3.5.6)
+				# TODO: Check if this is correct... I think it is...
+				# Special tRNAs that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
+				msg = 'The tRNA \'{:s}\' is associated to two amino acids. The \'trna_misacylation\' dictionary to attempt load the correct amino acid.'
 				if aa == 'Asx':
-					aa == 'Asn' # use the misacylation dictionary to set asx to asp
+					logging.warning(msg.format(bnum))
+					trna_misacylation['Asx'] = 'Asp'
+
+				# Special tRNAs that can be loaded with Gln (EC 6.1.1.18) or Glu (EC 6.1.1.17)
+				if aa == 'Glx':
+					logging.warning(msg.format(bnum))
+					trna_misacylation['Glx'] = 'Glu'
 
 				# misacylation of glutamate/aspartate occurs in archaea, Gram-positive eubacteria, mitochondria, and chloroplasts
 				if aa in trna_misacylation.keys():
@@ -514,27 +526,30 @@ def build_reactions_from_genbank(
 					filter2 = me_model.global_info['domain'].lower() in ['bacteria', 'prokaryote']
 
 					if filter1a and filter1b or filter2:
-						trna_aa[bnum] = trna_misacylation[aa]
-						logging.warning(msg.format(trna_misacylation[aa], aa, aa, aa))
+						trna_to_aa[bnum] = trna_misacylation[aa]
+						if aa.endswith('x'):
+							logging.warning(msg2.format(bnum, aa, trna_misacylation[aa], aa))
+						else:
+							logging.warning(msg1.format(trna_misacylation[aa], aa, aa, aa))
 					else:
 						# misacylation is not valid in the compartment x domain
-						trna_aa[bnum] = aa
+						trna_to_aa[bnum] = aa
 				else:
-					trna_aa[bnum] = aa
+					trna_to_aa[bnum] = aa
 
 				#aa2trna[bnum] = aa # original tRNA<->Amino acid association to be used later in trna_to_codon
 
 				if organelle is None:
-					aa2trna['c'][bnum] = aa
+					aa2trna['c'][bnum] = trna_to_aa[bnum]
 				elif organelle.lower() in ['mitochondria', 'mitochondrion']:
-					aa2trna['m'][bnum] = aa
+					aa2trna['m'][bnum] = trna_to_aa[bnum]
 				elif organelle.lower() in ['chloroplast', 'plastid']:
-					aa2trna['h'][bnum] = aa
+					aa2trna['h'][bnum] = trna_to_aa[bnum]
 				#old code
-				#trna_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
+				#trna_to_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
 
-			trna_aa = { k:v.replace('fMet', 'Met') for k,v in trna_aa.items() }
-			me_model.global_info['trna_to_aa'] = trna_aa
+			trna_to_aa = { k:v.replace('fMet', 'Met') for k,v in trna_to_aa.items() }
+			me_model.global_info['trna_to_aa'] = trna_to_aa
 
 			## Associate the TranscribedGene to TU(s)
 			# old code does not consider that a gene can start at the "end" of the genome and finish at the "start" of it
@@ -549,9 +564,6 @@ def build_reactions_from_genbank(
 
 			for TU_id in parent_tu:
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
-
-	# DataFrame mapping tRNAs (list) and the encoded aminoacid (index), per organelle
-	me_model.global_info['aa2trna'] = aa2trna
 
 	for organelle, aa2trna_dct in aa2trna.items():
 		aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
@@ -571,6 +583,9 @@ def build_reactions_from_genbank(
 		if len(me_model.global_info['START_tRNA']) == 0:
 			logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
 
+	# DataFrame mapping tRNAs (list) and the encoded aminoacid (index), per organelle
+	me_model.global_info['aa2trna'] = aa2trna
+
 	# add charging tRNA reactions per organelle
 	for organelle, transl_table in transl_tables.items():
 		if len(transl_table) == 0:
@@ -582,6 +597,7 @@ def build_reactions_from_genbank(
 
 		dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
 		aa2codons = pandas.DataFrame(data = [dct.keys(), dct.values()]).T.groupby(1).agg({0: lambda x: x.tolist()})
+		me_model.global_info['aa2codons'][organelle] = aa2codons
 
 		#if me_model.global_info.get('translation_table', None) is None:
 			#me_model.global_info['translation_table'] = int(list(transl_table)[0]) if len(transl_table) == 1 else 11
@@ -596,7 +612,7 @@ def build_reactions_from_genbank(
 		trna_to_codon = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 		me_model.global_info['trna_to_codon'][organelle] = trna_to_codon
 
-		convert_aa_codes_and_add_charging(me_model, trna_aa, trna_to_codon, organelle, verbose = verbose)
+		convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organelle, verbose = verbose)
 
 	if update:
 		# Update all newly added reactions
