@@ -230,12 +230,19 @@ class SubreactionData(ProcessData):
 		"""
 		elements = collections.defaultdict(int)
 		for met, coefficient in self.stoichiometry.items():
-			met_obj = self._model.metabolites.get_by_id(met)
+			if self._model.metabolites.has_id(met):
+				met_obj = self._model.metabolites.get_by_id(met)
+			else:
+				logging.warning('The metabolite \'{:s}\' does not exist in the ME-model.'.format(met))
+				continue
+
 			# elements lost in conversion are added to complex, protein, etc.
 			if not met_obj.elements and not isinstance(met_obj, coralme.core.component.GenerictRNA):
 				logging.warning('Metabolite \'{:s}\' does not have formula. Please set a formula in metabolites.txt input.'.format(met_obj.id))
+
 			for e, n in met_obj.elements.items():
 				elements[e] -= n * coefficient
+
 		return elements
 
 	def calculate_biomass_contribution(self):

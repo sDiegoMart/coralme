@@ -496,9 +496,14 @@ def build_reactions_from_genbank(
 			msg = 'From tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
 			if rna_type == 'tRNA':
 				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
-				if not aa in ['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'fMet', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']:
-					logging.warning('The tRNA {:s} is not associated to a valid product name (tRNA-Aa)'.format(bnum))
+				if not aa in ['Ala', 'Arg', 'Asn', 'Asp', 'Asx', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'fMet', 'Phe', 'Pro', 'Sec', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']:
+					logging.warning('The tRNA \'{:s}\' is not associated to a valid product name (tRNA-Aa)'.format(bnum))
 					continue
+
+				# TODO: This is not correct... I think... Maybe...
+				# Special tRNA that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.23??), then to tRNA-Asn (EC 6.3.5.6)
+				if aa == 'Asx':
+					aa == 'Asn' # use the misacylation dictionary to set asx to asp
 
 				# misacylation of glutamate/aspartate occurs in archaea, Gram-positive eubacteria, mitochondria, and chloroplasts
 				if aa in trna_misacylation.keys():
