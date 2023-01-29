@@ -996,6 +996,7 @@ class Organism(object):
         warn_rnas = []
         warn_proteins = []
         warn_position = []
+        warn_sequence = []
 
         # Identify genes in genbank
         all_genes_in_gb = []
@@ -1038,6 +1039,9 @@ class Organism(object):
                     continue
 
                 print('Adding {} to genbank file as {}'.format(gene_id,product_type))
+                if gene_name not in gene_sequences:
+                    warn_sequence.append(gene_name)
+                    continue
                 gene_seq = gene_sequences[gene_name]
                 gene_left = int(row['Left-End-Position'])
                 gene_right = int(row['Right-End-Position'])
@@ -1091,6 +1095,13 @@ class Organism(object):
                                 'triggered_by':warn_position,
                                 'importance':'medium',
                                 'to_do':'Fill in position information in genes.txt'
+            })
+        if warn_sequence:
+            self.curation_notes['org.update_genbank_from_files'].append({
+                                'msg':'Could not add some genes in genes.txt to genbank.gb since they lack sequence information. Are your BioCyc files from the same database version?',
+                                'triggered_by':warn_position,
+                                'importance':'medium',
+                                'to_do':'Add gene sequence in sequences.fasta. Check whether you downloaded the database files from the same BioCyc version.'
             })
     def str_to_dict(self,
                     d):
