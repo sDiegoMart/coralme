@@ -233,7 +233,7 @@ class SubreactionData(ProcessData):
 			if self._model.metabolites.has_id(met):
 				met_obj = self._model.metabolites.get_by_id(met)
 			else:
-				logging.warning('To calculate the element contribution the metabolite \'{:s}\' must exist in the ME-model.'.format(met))
+				logging.warning('The metabolite \'{:s}\' must exist in the ME-model to calculate the element contribution.'.format(met))
 				continue
 
 			# elements lost in conversion are added to complex, protein, etc.

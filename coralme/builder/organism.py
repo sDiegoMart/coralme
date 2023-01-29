@@ -12,6 +12,12 @@ import pandas
 
 from coralme.builder import dictionaries
 
+import warnings
+try:
+	warnings.simplefilter(action = 'ignore', category = Bio.BiopythonWarning)
+except:
+	warnings.warn("This biopython version does not allow for correct warning handling. Biopython >=1.80 is suggested.")
+
 class Organism(object):
     """Organism class for storing information about an organism
 
@@ -1036,7 +1042,8 @@ class Organism(object):
                 gene_left = int(row['Left-End-Position'])
                 gene_right = int(row['Right-End-Position'])
                 new_contig = SeqRecord(seq=gene_seq.seq,
-                                      id = 'contig-{}'.format(gene_id),
+                                      #id = 'contig-{}'.format(gene_id),
+                                      id = '{}'.format(gene_id),
                                       name = gene_seq.name,
                                       description = gene_seq.description,
                                       annotations = {
@@ -1045,12 +1052,13 @@ class Organism(object):
 
                 feature0 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
                                       type='source',
-                                      id = 'contig-{}'.format(gene_id),
+                                      #id = 'contig-{}'.format(gene_id),
+                                      id = '{}'.format(gene_id),
                                       qualifiers = {'note':'Added from BioCyc'})
-                feature1 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
+                feature1 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq)),strand = 1 if gene_left < gene_right else -1),
                                       type=product_type,
                                       id = gene_id,
-                                      strand = 1 if gene_left < gene_right else -1,
+                                      #strand = 1 if gene_left < gene_right else -1,
                                       qualifiers = {
                                           'locus_tag':[gene_id],
                                           'product':[product_name]

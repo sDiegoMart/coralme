@@ -163,7 +163,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 				new_met = coralme.core.component.create_component(key, default_type = default_type)
 				if verbose:
 					#logging.warning('Metabolite created \'{:s}\' in ME-model \'{:s}\'.'.format(repr(new_met), repr(self)))
-					logging.warning('Metabolite \'{:s}\' created in Reaction \'{:s}\''.format(new_met.id, self.id))
+					logging.warning('Metabolite \'{:s}\' created in Reaction \'{:s}\'. No further actions must be taken.'.format(new_met.id, self.id))
 				object_stoichiometry[new_met] = value
 				self._model.add_metabolites([new_met])
 		return object_stoichiometry
@@ -755,7 +755,7 @@ class MetabolicReaction(MEReaction):
 		try:
 			self.add_metabolites(object_stoichiometry)
 		except:
-			print('core/reaction.py:459 ' + str(object_stoichiometry))
+			print('core/reaction.py:756 ' + str(object_stoichiometry))
 
 		# Set the bounds
 		if self.reverse:

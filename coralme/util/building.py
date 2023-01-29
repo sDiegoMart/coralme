@@ -293,9 +293,11 @@ def build_reactions_from_genbank(
 
 	# GC Content
 	if me_model.global_info.get('GC_fraction', None) is None:
-		me_model.global_info['GC_fraction'] = SeqUtils.GC(''.join([ str(x) for x in full_seqs.values()]))
+		# Deprecated in Biopython 1.80
+		#me_model.global_info['GC_fraction'] = SeqUtils.GC(''.join([ str(x) for x in full_seqs.values()]))
+		me_model.global_info['GC_fraction'] = SeqUtils.gc_fraction(''.join([ str(x) for x in full_seqs.values()]))
 
-	# modify sequence(s) using genome_mods dictionary
+	# modify sequence(s) using the genome_mods dictionary
 	for replicon, coords in genome_mods.items():
 		new = full_seqs[replicon]
 		for segment in coords.split(';'):
@@ -376,7 +378,9 @@ def build_reactions_from_genbank(
 				#tu_frame.strand[tu_id],
 				#)
 
-			seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
+			# Deprecated in Biopython 1.80
+			#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
+			seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).replace('-', '')
 			if len(seq) == 0:
 				logging.warning('The knockouts dictionary instructed to completely delete \'{:s}\' from the ME-model.'.format(tu_id))
 			else:
@@ -440,7 +444,9 @@ def build_reactions_from_genbank(
 			# old code uses a cannon to hit a nail
 			#seq = coralme.util.dogma.extract_sequence(full_seqs[contig.id], left_pos, right_pos, strand)
 
-			seq = feature.extract(contig).seq.ungap() # using Biopython is better
+			# Deprecated in Biopython 1.80
+			#seq = feature.extract(contig).seq.ungap() # using Biopython is better
+			seq = feature.extract(contig).seq.replace('-', '')
 			if len(seq) == 0:
 				logging.warning('The genomic modification deleted \'{:s}\' from the ME-model that is not present in the knockouts list.'.format(bnum))
 				continue

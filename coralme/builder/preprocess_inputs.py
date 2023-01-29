@@ -149,11 +149,14 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	def cofactors(x, builder):
 		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
-		mods = x if x is None else dct.get(x + '-MONOMER', None)
-		if mods is None:
-			return mods
+		cofactors = x if x is None else dct.get(x + '-MONOMER', None)
+		if cofactors is None:
+			return None
 		else:
-			return ' AND '.join([ x if '(' in x else x + '(1)' for x in mods.split('_mod_')[1:] ])
+			cofactors = [ x if '(' in x else x + '(1)' for x in cofactors.split('_mod_')[1:] ]
+			cofactors = [ x for x in cofactors if not x.startswith('Oxidized') and not x.startswith('3hocta') ]
+			cofactors = ' AND '.join(cofactors)
+			return cofactors
 
 	def generics_from_gene(name, builder):
 		lst = []
