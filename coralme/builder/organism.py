@@ -684,6 +684,8 @@ class Organism(object):
         print("{} Loading gene dictionary {}".format(sep, sep))
         self.gene_dictionary = self.read_gene_dictionary()
         self.gene_sequences = self._gene_sequences
+        print("{} Checking gene overlap {}".format(sep, sep))
+        self.check_gene_overlap()
         print("{} Getting proteins from BioCyc {}".format(sep, sep))
         self.proteins_df = pandas.read_csv(
             self.config.get('biocyc.prots', self.directory + "proteins.txt"), index_col=0, sep="\t"
@@ -992,19 +994,14 @@ class Organism(object):
         RNA_df = self.RNA_df
         complexes_df = self.complexes_df
         product_types = self.product_types
+        all_genes_in_gb = self. all_genes_in_gb
 
         warn_rnas = []
         warn_proteins = []
         warn_position = []
         warn_sequence = []
 
-        # Identify genes in genbank
-        all_genes_in_gb = []
-        for record in contigs:
-            for feature in record.features:
-                if 'locus_tag' not in feature.qualifiers:
-                    continue
-                all_genes_in_gb.append(feature.qualifiers['locus_tag'][0])
+
         # Add new genes
         for gene_name,row in gene_dictionary.iterrows():
             gene_id = row['Accession-1']
@@ -1180,6 +1177,7 @@ class Organism(object):
                 if isinstance(row["Accession-1"],float):
                     gene_dictionary.loc[g, "Accession-1"] = g
                     warn_genes.append(g)
+
         if warn_genes:
             self.curation_notes['org.read_gene_dictionary'].append({
                         'msg':'Some genes are missing Accession-1 IDs in genes.txt',
@@ -1238,6 +1236,59 @@ class Organism(object):
             "assemble_ribosome_subunits": {"stoich": {"gtp_c": 1}},
         }
         return ribosome_stoich
+    
+    def check_gene_overlap(self):
+        if self.is_reference:
+            return
+        
+        def get_severity(o):
+            if o < 50 :
+                return 'critical'
+            elif o < 60 :
+                return 'high'
+            elif o < 70 :
+                return 'medium'
+            elif o < 80 :
+                return 'low'
+            else:
+                return 0
+        
+        m_model_genes = set([g.id for g in self.m_model.genes])
+        file_genes = set(self.gene_dictionary['Accession-1'].values)
+        all_genes_in_gb = []
+        for record in self.contigs:
+            for feature in record.features:
+                if 'locus_tag' not in feature.qualifiers:
+                    continue
+                all_genes_in_gb.append(feature.qualifiers['locus_tag'][0])
+        self.all_genes_in_gb = all_genes_in_gb
+        genbank_genes = set(all_genes_in_gb)
+
+        # Overlaps
+        file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
+        gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
+        print('There is a gene overlap of {}% between M-model and optional files'.format(file_overlap))
+        print('There is a gene overlap of {}% between M-model and Genbank'.format(gb_overlap))
+        if file_overlap < 1:
+            print(file_overlap)
+            raise ValueError('Overlap of M-model genes with optional files is too low ({}%)'.format(file_overlap))
+        if gb_overlap < 1:
+            raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
+        
+        fs = get_severity(file_overlap)
+        gs = get_severity(gb_overlap)
+        
+        if fs:
+            self.curation_notes['org.check_gene_overlap'].append({
+                'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
+                'importance':fs,
+                'to_do':'Check whether optional files where downloaded correctly.'})
+        if gs:
+            self.curation_notes['org.check_gene_overlap'].append({
+                'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
+                'importance':gs,
+                'to_do':'Check whether genbank was downloaded correctly.'})
+        
 
     def update_ribosome_stoich(self):
         if self.is_reference:
