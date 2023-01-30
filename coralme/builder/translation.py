@@ -83,17 +83,17 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 				me_model, modification_id = 'gtp_hydrolysis', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
 		#full_aa = coralme.util.dogma.amino_acids[coralme.util.dogma.codon_table[codon]]
-		full_aa = coralme.util.dogma.amino_acids[aa]
+		full_aa = coralme.util.dogma.amino_acids[aa] # now without the compartment code (e.g., gly; not gly_c)
 
 		if not me_model.metabolites.has_id(full_aa + '_' + organelle):
 			continue
 
-		full_aa = full_aa.split('_')[0]
-		subreaction_id = full_aa + '_addition_at_' + codon.replace('T', 'U')
+		#full_aa = full_aa.split('_')[0]
+		subreaction_id = full_aa.split('_')[0] + '_addition_at_' + codon.replace('T', 'U')
 		#subreaction_id = full_aa + '_' + organelle + '_addition_at_' + codon.replace('T', 'U')
 
 		subreaction_data = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
-		trna = 'generic_tRNA_' + codon.replace('T', 'U') + '_' + full_aa #+ '_' + organelle
+		trna = 'generic_tRNA_' + codon.replace('T', 'U') + '_' + full_aa + '_' + organelle
 		# Default AA loader enzyme
 		subreaction_data.enzyme = me_model.global_info['amino_acid_loader']
 		# Accounts for GTP hydrolyzed by EF-TU and the ATP hydrolysis to AMP required to add the amino acid to the tRNA

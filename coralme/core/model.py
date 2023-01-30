@@ -42,7 +42,7 @@ class MEModel(cobra.core.model.Model):
 			'degradosome_id' : 'RNA_degradosome',
 			'mg2_per_ribosome' : 171,
 			'amino_acid_loader' : 'generic_Tuf',
-			'feature_types' : [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA' ],
+			'feature_types' : [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'misc_RNA' ],
 			'include_pseudo_genes' : False,
 
 			'translation_stop_dict' : {
