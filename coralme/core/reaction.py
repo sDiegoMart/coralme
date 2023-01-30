@@ -1264,7 +1264,7 @@ class TranscriptionReaction(MEReaction):
 			rnap = self._model.metabolites.get_by_id(rna_polymerase)
 		except KeyError:
 			if verbose:
-				logging.warning('The \'RNA_polymerase\' Component not found for {:s}.'.format(tu_id))
+				logging.warning('The \'RNA_polymerase\' component not found for {:s}.'.format(tu_id))
 		else:
 			num = self._model.mu * c_ribo * kt
 			den = self._model.mu + kt * r0

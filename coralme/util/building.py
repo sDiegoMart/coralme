@@ -360,7 +360,7 @@ def build_reactions_from_genbank(
 					locations.append(SeqFeature.FeatureLocation(
 						SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
-					# Simplified to this in Bipython 1.81. TODO: TEST
+					# Simplified to this in Bipython >1.80. TODO: TEST
 					#locations.append(SeqFeature.SimpleLocation(int(start)-1, int(stop), strand = strand))
 
 				seq = SeqFeature.SeqFeature(SeqFeature.CompoundLocation(locations, 'join'))
@@ -368,7 +368,7 @@ def build_reactions_from_genbank(
 				seq = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(
 					SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
-				# Simplified to this in Bipython 1.81. TODO: TEST
+				# Simplified to this in Bipython >1.80. TODO: TEST
 				#seq = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand)
 
 			#sequence = coralme.util.dogma.extract_sequence(
@@ -503,25 +503,28 @@ def build_reactions_from_genbank(
 			msg1 = 'From the tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
 			msg2 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). No further modification needs to take place.'
 
+			canonical_aa = ['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']
 			if rna_type == 'tRNA':
 				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
-				if aa in ['Ala', 'Arg', 'Asn', 'Asp', 'Asx', 'Cys', 'Gln', 'Glu', 'Glx', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'fMet', 'Phe', 'Pro', 'Sec', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']:
+				if aa in canonical_aa + ['Asx', 'Glx', 'fMet', 'Sec']:
 					pass
 				else:
 					logging.warning('The tRNA \'{:s}\' is not associated to a valid product name (tRNA-Amino acid 3 letters code)'.format(bnum))
 					continue
 
 				# TODO: Check if this is correct... I think it is...
-				# Special tRNAs that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
-				msg = 'The tRNA \'{:s}\' is associated to two amino acids. The \'trna_misacylation\' dictionary to attempt load the correct amino acid.'
+				# Special tRNA(Asx) that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
+				msg = 'The tRNA \'{:s}\' is associated to two amino acids. The \'trna_misacylation\' dictionary was modified to attempt load the correct amino acid.'
 				if aa == 'Asx':
-					logging.warning(msg.format(bnum))
 					trna_misacylation['Asx'] = 'Asp'
-
-				# Special tRNAs that can be loaded with Gln (EC 6.1.1.18) or Glu (EC 6.1.1.17)
-				if aa == 'Glx':
 					logging.warning(msg.format(bnum))
+
+				# Special tRNA(Glx) that can be loaded with Gln (EC 6.1.1.18) or Glu (EC 6.1.1.17)
+				if aa == 'Glx':
 					trna_misacylation['Glx'] = 'Glu'
+					logging.warning(msg.format(bnum))
+
+				me_model.global_info['trna_misacylation'] = trna_misacylation
 
 				# misacylation of glutamate/aspartate occurs in archaea, Gram-positive eubacteria, mitochondria, and chloroplasts
 				if aa in trna_misacylation.keys():
@@ -614,6 +617,13 @@ def build_reactions_from_genbank(
 			aa2codons.loc['Sec'] = [['UGA']] # an internal UGA encodes selenocysteine
 
 		df = pandas.concat([aa2codons, aa2trna[organelle]], axis = 1).dropna(how = 'any').explode(1)
+
+		# Check amino acids
+		for aa in canonical_aa:
+			if aa in aa2trna[organelle].index:
+				pass
+			else:
+				logging.warning('At least one tRNA-{:s} gene is missing in the genbank file. A \'generic_tRNA_triplet_aa\' metabolite will be created to account for the related aminoacyl tRNA synthetase expression.'.format(aa))
 
 		trna_to_codon = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 		me_model.global_info['trna_to_codon'][organelle] = trna_to_codon
