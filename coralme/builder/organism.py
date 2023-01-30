@@ -1238,15 +1238,17 @@ class Organism(object):
         return ribosome_stoich
     
     def check_gene_overlap(self):
+        if self.is_reference:
+            return
         
         def get_severity(o):
-            if o < 0.5 :
+            if o < 50 :
                 return 'critical'
-            elif o < 0.6 :
+            elif o < 60 :
                 return 'high'
-            elif o < 0.7 :
+            elif o < 70 :
                 return 'medium'
-            elif o < 0.8 :
+            elif o < 80 :
                 return 'low'
             else:
                 return 0
@@ -1263,15 +1265,15 @@ class Organism(object):
         genbank_genes = set(all_genes_in_gb)
 
         # Overlaps
-        file_overlap = len(file_genes & m_model_genes) / len(m_model_genes)
-        gb_overlap = len(genbank_genes & m_model_genes) / len(m_model_genes)
-        print('There is a gene overlap of {}% between M-model and optional files'.format(int(file_overlap*100)))
-        print('There is a gene overlap of {}% between M-model and Genbank'.format(int(gb_overlap*100)))
-        
-#         if file_overlap == 0:
-#             raise ValueError('Overlap of M-model genes with optional files is 0%.')
-#         if gb_overlap == 0:
-#             raise ValueError('Overlap of M-model genes with genbank is 0%.')
+        file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
+        gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
+        print('There is a gene overlap of {}% between M-model and optional files'.format(file_overlap))
+        print('There is a gene overlap of {}% between M-model and Genbank'.format(gb_overlap))
+        if file_overlap < 1:
+            print(file_overlap)
+            raise ValueError('Overlap of M-model genes with optional files is too low ({}%)'.format(file_overlap))
+        if gb_overlap < 1:
+            raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
         
         fs = get_severity(file_overlap)
         gs = get_severity(gb_overlap)
