@@ -1210,6 +1210,43 @@ class MEReconstruction(object):
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
 
+		def read(filecode, input_type, filename_if_empty, columns = []):
+			filename = config.get(filecode, '')
+			if pathlib.Path(filename).is_file():
+				df = coralme.builder.flat_files.read(filename)
+				if sorted(df.columns) == sorted(columns):
+					return df
+				else:
+					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
+			else:
+				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty file \'{:s}\' was created.'.format(input_type, filename, filename_if_empty))
+				config[filecode] = filename_if_empty
+
+				tmp = pandas.DataFrame(columns = columns)
+				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
+				return tmp
+
+		# INPUTS: We capture if the file exists or if it is empty
+		# Transcriptional Units
+		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
+		self.df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
+
+		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
+		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
+		self.df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
+
+		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficientes
+		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
+		self.df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
+
+		# Orphan and Spontaneous reaction metadata
+		cols = ['name', 'description', 'is_reversible', 'is_spontaneous']
+		self.df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
+
+		# Metabolites metadata
+		cols = ['id', 'me_id', 'name', 'formula', 'type']
+		self.df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
+
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
 
@@ -1223,45 +1260,6 @@ class MEReconstruction(object):
 				#anyconfig.dump(config, outfile)
 			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
-
-		def read(filename, input_type, filename_if_empty, columns = []):
-			if pathlib.Path(filename).is_file():
-				df = coralme.builder.flat_files.read(filename)
-				if sorted(df.columns) == sorted(columns):
-					return df
-				else:
-					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
-			else:
-				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty file \'{:s}\' was created.'.format(input_type, filename, filename_if_empty))
-				tmp = pandas.DataFrame(columns = columns)
-				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
-				return tmp
-
-		# INPUTS: We capture if the file exists or if it is empty
-		# Transcriptional Units
-		filename = config.get('df_TranscriptionalUnits', '')
-		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
-		self.df_tus = read(filename, 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
-
-		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
-		filename = config.get('df_matrix_stoichiometry', '')
-		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		self.df_rmsc = read(filename, 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
-
-		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficientes
-		filename = config.get('df_matrix_subrxn_stoich', '')
-		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		self.df_subs = read(filename, 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
-
-		# Orphan and Spontaneous reaction metadata
-		filename = config.get('df_metadata_orphan_rxns', '')
-		cols = ['name', 'description', 'is_reversible', 'is_spontaneous']
-		self.df_rxns = read(filename, 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
-
-		# Metabolites metadata
-		filename = config.get('df_metadata_metabolites', '')
-		cols = ['id', 'me_id', 'name', 'formula', 'type']
-		self.df_mets = read(filename, 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
 
 		# Drop-in replacement of input files:
 		# step1: reactions, complexes, modification of complexes, enzyme-to-reaction mapping
@@ -1377,6 +1375,8 @@ class MEReconstruction(object):
 
 			me_compartments = { v:k for k,v in me._compartments.items() }, repair = True,
 			defer_to_rxn_matrix = me.global_info['defer_to_rxn_matrix'])
+
+		me.processed_m_model = m_model
 
 		# Some of the 'metabolites' in the M-model are actually complexes.
 		# We pass those in so they get created as complexes, not metabolites.

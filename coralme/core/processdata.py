@@ -238,7 +238,7 @@ class SubreactionData(ProcessData):
 
 			# elements lost in conversion are added to complex, protein, etc.
 			if not met_obj.elements and not isinstance(met_obj, coralme.core.component.GenerictRNA):
-				logging.warning('Metabolite \'{:s}\' does not have formula. Please set a formula in metabolites.txt input.'.format(met_obj.id))
+				logging.warning('Metabolite \'{:s}\' does not have a formula. Please set a formula in metabolites.txt input.'.format(met_obj.id))
 
 			for e, n in met_obj.elements.items():
 				elements[e] -= n * coefficient
@@ -880,7 +880,7 @@ class TranslationData(ProcessData):
 			try:
 				self._model.process_data.get_by_id(subreaction_id)
 			except KeyError:
-				logging.warning('Elongation SubReaction \'{:s}\' not in ME-model. However, it can be added later.'.format(subreaction_id))
+				logging.warning('Elongation SubReaction \'{:s}\' is not in ME-model. However, it can be added later.'.format(subreaction_id))
 			else:
 				# No elongation subreactions needed for start codon
 				self.subreactions[subreaction_id] = len(self.amino_acid_sequence) - 1.
@@ -934,7 +934,7 @@ class TranslationData(ProcessData):
 			try:
 				self._model.process_data.get_by_id(termination_subreaction_id)
 			except KeyError:
-				logging.warning('Termination subreaction \'{:s}\' not in ME-model. However, it can be added later.'.format(termination_subreaction_id))
+				logging.warning('Termination SubReaction \'{:s}\' is not in ME-model. However, it can be added later.'.format(termination_subreaction_id))
 			else:
 				self.subreactions[termination_subreaction_id] = 1
 		else:

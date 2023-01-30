@@ -97,7 +97,7 @@ def create_transcribed_gene(me_model, locus_id, rna_type, seq, left_pos = None, 
 
 	if len(me_model.metabolites.query('^RNA_{:s}$'.format(locus_id))) != 0:
 		me_model.metabolites._replace_on_id(gene)
-		logging.warning('TranscribedGene \'{:s}\' was replaced.'.format(gene.id))
+		logging.warning('A coralme.Metabolite component with ID \'RNA_{:s}\' was replaced with a coralme.TranscribedGene component \'{:s}\'.'.format(locus_id, gene.id))
 
 	me_model.add_metabolites([gene])
 
@@ -140,8 +140,8 @@ def add_translation_reaction(me_model, locus_id, dna_sequence, prot_sequence = '
 
 	# Add RNA to model if it doesn't exist
 	if 'RNA_' + locus_id not in me_model.metabolites:
-		logging.warning('RNA_{:s} not present in ME-model and it was created.'.format(locus_id))
 		rna = coralme.core.component.TranscribedGene('RNA_' + locus_id, 'mRNA', dna_sequence)
+		logging.warning('The \'RNA_{:s}\' component was not present in ME-model and it was created.'.format(locus_id))
 		me_model.add_metabolites(rna)
 
 	# Create and add TranslationReaction with TranslationData
@@ -569,7 +569,7 @@ def build_reactions_from_genbank(
 				tu_id = 'TU_' + bnum
 				parent_tu = [tu_id]
 				add_transcription_reaction(me_model, tu_id, set(), str(seq), organelle, update = False)
-				logging.warning('No Trancriptional Unit found for {:s} {:s}. Created a dummy TU_{:s}.'.format(rna_type, bnum, bnum))
+				logging.warning('No Trancriptional Unit found for {:s} {:s}. Created a dummy TU_{:s} component.'.format(rna_type, bnum, bnum))
 
 			for TU_id in parent_tu:
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
@@ -671,9 +671,10 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 		if met.id in complex_metabolite_ids:
 			new_met = coralme.core.component.Complex(met.id)
 		elif met.id.startswith('RNA_'):
-			#raise ValueError('Processed M-model should not contain RNAs ({:s})'.format(met.id))
-			new_met = me_model.metabolites.get_by_id(met.id)
-			logging.warning('Added TranscribedGene \'{:s}\'. It is highly probable the ME-model is not feasible.'.format(met.id))
+			logging.warning('A metabolite with an invalid name (\'{:s}\') was added from the M-model or the \'reaction_matrix\' file. Please review it and correct it using the M-model or the \'me_metabolites\' file if necessary.'.format(met.id))
+			new_met = coralme.core.component.Metabolite(met.id)
+			##raise ValueError('Processed M-model should not contain RNAs ({:s})'.format(met.id))
+			#new_met = me_model.metabolites.get_by_id(met.id)
 		elif met.id.startswith('generic_tRNA'):
 			new_met = coralme.core.component.GenerictRNA(met.id)
 		else:

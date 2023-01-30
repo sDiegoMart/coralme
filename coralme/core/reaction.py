@@ -1264,7 +1264,7 @@ class TranscriptionReaction(MEReaction):
 			rnap = self._model.metabolites.get_by_id(rna_polymerase)
 		except KeyError:
 			if verbose:
-				logging.warning('The \'RNA_polymerase\' component not found for {:s}.'.format(tu_id))
+				logging.warning('The \'RNA_polymerase\' component was not found for {:s}.'.format(tu_id))
 		else:
 			num = self._model.mu * c_ribo * kt
 			den = self._model.mu + kt * r0
@@ -1276,7 +1276,7 @@ class TranscriptionReaction(MEReaction):
 		# transcription reaction
 		for transcript_id in self.transcription_data.RNA_products:
 			if transcript_id not in metabolites:
-				raise UserWarning('Transcript \'{:s}\' not found in the ME-model.'.format(transcript_id))
+				raise UserWarning('The transcript \'{:s}\' was not found in the ME-model.'.format(transcript_id))
 			else:
 				transcript = self._model.metabolites.get_by_id(transcript_id)
 
@@ -1537,7 +1537,7 @@ class TranslationReaction(MEReaction):
 			ribosome = metabolites.get_by_id(ribosome_id)
 		except KeyError:
 			if verbose:
-				logging.warning('The \'{:s}\' component not found in the ME-model. Coupling coefficient not added to \'{:s}\'.'.format(ribosome_id, protein_id))
+				logging.warning('The \'{:s}\' component was not found in the ME-model. A coupling coefficient was not added to \'{:s}\'.'.format(ribosome_id, protein_id))
 		else:
 			num = self._model.mu * c_ribo * kt
 			den = self._model.mu + kt * r0
@@ -1594,7 +1594,7 @@ class TranslationReaction(MEReaction):
 			rna_degradosome = metabolites.get_by_id(degradosome_id)
 		except KeyError:
 			if verbose:
-				logging.warning('The \'{:s}\' component not found in the ME-model. Coupling coefficient not added to \'{:s}\'.'.format(degradosome_id, protein_id))
+				logging.warning('The \'{:s}\' component was not found in the ME-model. A coupling coefficient was not added to \'{:s}\'.'.format(degradosome_id, protein_id))
 		else:
 			deg_coupling = -deg_amount * self._model.mu / 65. / 3600  # keff of degradosome
 			new_stoichiometry[rna_degradosome.id] = deg_coupling
@@ -1765,7 +1765,7 @@ class SummaryVariable(MEReaction):
 				dnap = metabolites.get_by_id(dnapol_id)
 			except KeyError:
 				if verbose:
-					logging.warning('The \'{:s}\' component not found in the ME-model. Coupling coefficient not added to \'{:s}\'.'.format(dnapol_id, self.id))
+					logging.warning('The \'{:s}\' component was not found in the ME-model. A coupling coefficient was not added to \'{:s}\'.'.format(dnapol_id, self.id))
 			else:
 				#num = self._model.mu * c_ribo * kt
 				#den = self._model.mu + kt * r0
