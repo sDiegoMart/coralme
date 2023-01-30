@@ -1267,13 +1267,15 @@ class Organism(object):
         # Overlaps
         file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
         gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
-        print('There is a gene overlap of {}% between M-model and optional files'.format(file_overlap))
+        
         print('There is a gene overlap of {}% between M-model and Genbank'.format(gb_overlap))
-        if file_overlap < 1:
-            print(file_overlap)
-            raise ValueError('Overlap of M-model genes with optional files is too low ({}%)'.format(file_overlap))
+        print('There is a gene overlap of {}% between M-model and optional files'.format(file_overlap))
+        
         if gb_overlap < 1:
             raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
+        if file_overlap < 1:
+            raise ValueError('Overlap of M-model genes with optional files is too low ({}%)'.format(file_overlap))
+        
         
         fs = get_severity(file_overlap)
         gs = get_severity(gb_overlap)
