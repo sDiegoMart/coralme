@@ -662,7 +662,7 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 			new_met = coralme.core.component.Complex(met.id)
 		elif met.id.startswith('RNA_'):
 			#raise ValueError('Processed M-model should not contain RNAs ({:s})'.format(met.id))
-			new_met = me_model.metabolites(met.id)
+			new_met = me_model.metabolites.get_by_id(met.id)
 			logging.warning('Added TranscribedGene \'{:s}\'. It is highly probable the ME-model is not feasible.'.format(met.id))
 		elif met.id.startswith('generic_tRNA'):
 			new_met = coralme.core.component.GenerictRNA(met.id)
