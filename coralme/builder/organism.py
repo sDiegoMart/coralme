@@ -1268,10 +1268,10 @@ class Organism(object):
         print('There is a gene overlap of {}% between M-model and optional files'.format(int(file_overlap*100)))
         print('There is a gene overlap of {}% between M-model and Genbank'.format(int(gb_overlap*100)))
         
-        if file_overlap == 0:
-            raise ValueError('Overlap of M-model genes with optional files is 0%.')
-        if gb_overlap == 0:
-            raise ValueError('Overlap of M-model genes with genbank is 0%.')
+#         if file_overlap == 0:
+#             raise ValueError('Overlap of M-model genes with optional files is 0%.')
+#         if gb_overlap == 0:
+#             raise ValueError('Overlap of M-model genes with genbank is 0%.')
         
         fs = get_severity(file_overlap)
         gs = get_severity(gb_overlap)
