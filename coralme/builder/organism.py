@@ -866,6 +866,7 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in {"CDS", "rRNA", "tRNA", "ncRNA", "misc_RNA"}:
                     continue
+                if 'locus_tag' not in feature.qualifiers: continue
                 gene_id = feature.qualifiers['locus_tag'][0]
                 genes[gene_id] = {
                     "Accession-1": gene_id,
