@@ -158,17 +158,20 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			cofactors = ' AND '.join(cofactors)
 			return cofactors
 
-	def generics_from_gene(name, builder):
-		lst = []
-		for key, value in builder.org.generic_dict.items():
-			values = [ x.split('_mod_')[0] for x in value['enzymes'] ]
-			if name + '-MONOMER' in values:
-				lst.append(key.replace('generic_', ''))
-			if 'RNA_' + name in values:
-				lst.append(key.replace('generic_', ''))
+	def generics_from_gene(x, builder):
+		if x is not None:
+			lst = []
+			for key, value in builder.org.generic_dict.items():
+				values = [ x.split('_mod_')[0] for x in value['enzymes'] ]
+				if x + '-MONOMER' in values:
+					lst.append(key.replace('generic_', ''))
+				if 'RNA_' + x in values:
+					lst.append(key.replace('generic_', ''))
 
-		if len(lst) >= 1:
-			return lst
+			if len(lst) >= 1:
+				return lst
+		else:
+			return None
 
 	def rnapol(x, builder):
 		if isinstance(builder.org.RNAP, list):
@@ -181,109 +184,133 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			return 'RNAP'
 
 	def ribosome(x, builder):
-		lst = [ builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']]
-		lst = [ x for y in lst for x in y ]
+		if x['Gene Locus ID'] is not None:
+			lst = [ builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']]
+			lst = [ x for y in lst for x in y ]
 
-		if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-			return 'ribosome:1'
+			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+				return 'ribosome:1'
+		else:
+			return None
 
 	def degradosome(x, builder):
-		lst = builder.org.rna_degradosome['rna_degradosome']['enzymes']
-		lst = [ x.split('_mod_')[0] for x in lst ]
-		if x['Gene Locus ID'] + '-MONOMER' in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-			return 'RNA_degradosome:1'
+		if x['Gene Locus ID'] is not None:
+			lst = builder.org.rna_degradosome['rna_degradosome']['enzymes']
+			lst = [ x.split('_mod_')[0] for x in lst ]
+			if x['Gene Locus ID'] + '-MONOMER' in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+				return 'RNA_degradosome:1'
+			else:
+				return None
 		else:
-			None
+			return None
 
 	def excision(x, builder):
-		dct = builder.org.excision_machinery
-		subrxns = []
-		for key in dct.keys():
-			lst = [ x.split('_mod_')[0] for x in dct[key]['enzymes'] ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				subrxns.append(key + ':1')
-		if len(subrxns) == 0:
-			return None
+		if x['Gene Locus ID'] is not None:
+			dct = builder.org.excision_machinery
+			subrxns = []
+			for key in dct.keys():
+				lst = [ x.split('_mod_')[0] for x in dct[key]['enzymes'] ]
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					subrxns.append(key + ':1')
+			if len(subrxns) == 0:
+				return None
+			else:
+				return subrxns
 		else:
-			return subrxns
+			return None
 
 	def sigmas(x, builder):
-		if isinstance(builder.org.RNAP, list):
-			RNAP_components = builder.org.RNAP
-		else:
-			RNAP_components = [builder.org.RNAP]
+		if x['Gene Locus ID'] is not None:
+			if isinstance(builder.org.RNAP, list):
+				RNAP_components = builder.org.RNAP
+			else:
+				RNAP_components = [builder.org.RNAP]
 
-		# combine
-		lst = list(builder.org.sigmas.index) + RNAP_components
-		if x['Gene Locus ID'] + '-MONOMER' in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-			return 'RNAP'
+			# combine
+			lst = list(builder.org.sigmas.index) + RNAP_components
+			if x['Gene Locus ID'] + '-MONOMER' in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+				return 'RNAP'
+		else:
+			return None
 
 	def transpaths(x, builder):
-		# simplified
-		dct = { k:v['enzymes'] for k,v in builder.org.translocation_pathways.items() }
-		pathways = []
-		for key, value in dct.items():
-			lst = value.keys()
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				pathways.append('translocation_pathway_' + key)
+		if x['Gene Locus ID'] is not None:
+			# simplified
+			dct = { k:v['enzymes'] for k,v in builder.org.translocation_pathways.items() }
+			pathways = []
+			for key, value in dct.items():
+				lst = value.keys()
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					pathways.append('translocation_pathway_' + key)
 
-		if len(pathways) != 0:
-			return pathways
+			if len(pathways) != 0:
+				return pathways
+			else:
+				return None
 		else:
 			return None
 
 	def ribosome_subrxns(x, builder):
-		for key, value in builder.org.ribosome_subreactions.items():
-			lst = [value['enzyme']]
-			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				return 'Ribosome_' + key
+		if x['Gene Locus ID'] is not None:
+			for key, value in builder.org.ribosome_subreactions.items():
+				lst = [value['enzyme']]
+				lst = [ x.split('_mod_')[0] for x in lst ]
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					return 'Ribosome_' + key
+		else:
+			return None
 
 	def translation_subrxns(x, builder):
-		for key, value in builder.org.initiation_subreactions.items():
-			lst = value['enzymes']
-			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				if 'InfA' in key or 'InfC' in key:
-					return key
-				elif key == 'Translation_gtp_initiation_factor_InfB':
-					return 'Translation_initiation_gtp_factor_InfB'
-				else:
-					return 'Translation_initiation_' + key
-		for key, value in builder.org.elongation_subreactions.items():
-			lst = value['enzymes']
-			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				if key == 'FusA_mono_elongation':
-					return 'Translation_elongation_FusA_mono'
-				else:
-					return 'Translation_elongation_' + key
-		for key, value in builder.org.termination_subreactions.items():
-			lst = value['enzymes']
-			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				if key in ['N_terminal_methionine_cleavage', 'DnaK_dependent_folding', 'GroEL_dependent_folding']:
-					return 'Protein_processing_' + key
-				elif key == 'PrfA_mono_mediated_termination':
-					return 'Translation_termination_PrfA_mono_mediated'
-				elif key == 'PrfB_mono_mediated_termination':
-					return 'Translation_termination_PrfB_mono_mediated'
-				elif key == 'generic_RF_mediated_termination':
-					return 'Translation_termination_generic_RF_mediated'
-				else:
-					return 'Translation_termination_' + key
+		if x['Gene Locus ID'] is not None:
+			for key, value in builder.org.initiation_subreactions.items():
+				lst = value['enzymes']
+				lst = [ x.split('_mod_')[0] for x in lst ]
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					if 'InfA' in key or 'InfC' in key:
+						return key
+					elif key == 'Translation_gtp_initiation_factor_InfB':
+						return 'Translation_initiation_gtp_factor_InfB'
+					else:
+						return 'Translation_initiation_' + key
+			for key, value in builder.org.elongation_subreactions.items():
+				lst = value['enzymes']
+				lst = [ x.split('_mod_')[0] for x in lst ]
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					if key == 'FusA_mono_elongation':
+						return 'Translation_elongation_FusA_mono'
+					else:
+						return 'Translation_elongation_' + key
+			for key, value in builder.org.termination_subreactions.items():
+				lst = value['enzymes']
+				lst = [ x.split('_mod_')[0] for x in lst ]
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					if key in ['N_terminal_methionine_cleavage', 'DnaK_dependent_folding', 'GroEL_dependent_folding']:
+						return 'Protein_processing_' + key
+					elif key == 'PrfA_mono_mediated_termination':
+						return 'Translation_termination_PrfA_mono_mediated'
+					elif key == 'PrfB_mono_mediated_termination':
+						return 'Translation_termination_PrfB_mono_mediated'
+					elif key == 'generic_RF_mediated_termination':
+						return 'Translation_termination_generic_RF_mediated'
+					else:
+						return 'Translation_termination_' + key
+		else:
+			return None
 
 	def transcription_subrxns(x, builder):
-		subrxns = []
-		for key, value in builder.org.transcription_subreactions.items():
-			lst = value['enzymes']
-			lst = [ x.split('_mod_')[0] for x in lst ]
-			if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
-				subrxns.append(key)
-		if len(subrxns) == 0:
-			return None
+		if x['Gene Locus ID'] is not None:
+			subrxns = []
+			for key, value in builder.org.transcription_subreactions.items():
+				lst = value['enzymes']
+				lst = [ x.split('_mod_')[0] for x in lst ]
+				if x['Gene Locus ID'] + '-MONOMER' in lst or 'generic_' + str(x['Generic Complex ID']) in lst or str(x['BioCyc']) + '-MONOMER' in lst:
+					subrxns.append(key)
+			if len(subrxns) == 0:
+				return None
+			else:
+				return subrxns
 		else:
-			return subrxns
+			return None
 
 	def groel(x, builder):
 		if x in builder.org.folding_dict['GroEL_dependent_folding']['enzymes']:
@@ -298,12 +325,15 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			return 'TRUE'
 
 	def location(x, builder):
-		df = builder.org.protein_location.dropna(how = 'all', subset = ['Complex_compartment', 'Protein', 'Protein_compartment'])
-		res = df[df['Protein'].str.match(x)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
-		if len(res) == 0:
-			return (None, None, None)
+		if x is not None:
+			df = builder.org.protein_location.dropna(how = 'all', subset = ['Complex_compartment', 'Protein', 'Protein_compartment'])
+			res = df[df['Protein'].str.match(x)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
+			if len(res) == 0:
+				return (None, None, None)
+			else:
+				return res[0]
 		else:
-			return res[0]
+			return (None, None, None)
 
 	def generics_from_complex(name, builder):
 		if name is not None:
@@ -743,11 +773,12 @@ def get_df_input_from_excel(df, df_rxns):
 		]
 
 	tmp1 = df[df['Feature Type'].str.match('CDS')].dropna(subset = lst, how = 'all', axis = 0)
-	tmp2 = df[df['Feature Type'].isin(['rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'pseudo'])]
+	tmp2 = df[df['Feature Type'].isin(['rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'misc_RNA', 'pseudo'])]
 	df = pandas.concat([tmp1, tmp2], axis = 0).drop_duplicates()
 	df = df.fillna({
+		'Gene Locus ID' : '',
 		'Reversibility' : False,
-		'Spontaneous' : False,
+		#'Spontaneous' : False, # see reactions.txt input file
 		'GroEL_dependent_folding' : False,
 		'DnaK_dependent_folding' : False,
 		'N_terminal_methionine_cleavage' : False

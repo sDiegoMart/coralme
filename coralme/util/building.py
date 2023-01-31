@@ -426,6 +426,11 @@ def build_reactions_from_genbank(
 			if feature.type not in feature_types:
 				continue
 
+			# Some features might lack a locus tag
+			if not feature.qualifiers.get('locus_tag', False):
+				logging.warning('The feature of type \'{:s}\', located at \'{:s}\' misses a locus tag. The gene is ignored from the reconstruction.'.format(feature.type, str(feature.location)))
+				continue
+
 			# Skip feature if it is not a gene used in the ME-model reconstruction
 			filter1 = feature.qualifiers['locus_tag'][0] in knockouts
 			filter2 = feature.qualifiers['locus_tag'][0] not in genes_to_add
@@ -574,25 +579,35 @@ def build_reactions_from_genbank(
 			for TU_id in parent_tu:
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
 
+	# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
+	me_model.global_info['aa2trna'] = aa2trna
+
 	for organelle, aa2trna_dct in aa2trna.items():
 		aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
-		aa2trna_dct = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
-		aa2trna_dct = aa2trna_dct.groupby(0).agg({1: lambda x: x.tolist()})
-		if 'fMet' in aa2trna_dct.index:
-			aa2trna_dct.loc['Met'] = aa2trna_dct.loc['fMet'] + aa2trna_dct.loc['Met']
+		aa2trna_df = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
+		aa2trna_df = aa2trna_df.groupby(0).agg({1: lambda x: x.tolist()})
+		if 'fMet' in aa2trna_df.index:
+			aa2trna_df.loc['Met'] = aa2trna_df.loc['fMet'] + aa2trna_df.loc['Met']
 
-		aa2trna[organelle] = aa2trna_dct
+		aa2trna[organelle] = aa2trna_df
 
-		# assign START tRNAs to every fMet-tRNA (Met-tRNA if not) and check if at least one tRNA was identified
-		if 'fMet' in aa2trna_dct.index:
+		if not aa2trna_df.empty:
+			# assign START tRNAs to every fMet-tRNA (Met-tRNA if not) and check if at least one tRNA was identified
+			if 'fMet' in aa2trna_df.index:
+				if len(me_model.global_info['START_tRNA']) == 0:
+					me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['fMet'])[0]
+
+			if 'Met' in aa2trna_df.index:
+				if len(me_model.global_info['START_tRNA']) == 0:
+					me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['Met'])[0]
+
+			# final check
 			if len(me_model.global_info['START_tRNA']) == 0:
-				me_model.global_info['START_tRNA'] = list(aa2trna_dct.loc['fMet'])[0]
-		if len(me_model.global_info['START_tRNA']) == 0:
-			me_model.global_info['START_tRNA'] = list(aa2trna_dct.loc['Met'])[0]
-		if len(me_model.global_info['START_tRNA']) == 0:
-			logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
+				logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
+		else:
+			logging.warning('No tRNA genes were identified from their locus tags. The ME-model would be unfeasible.')
 
-	# DataFrame mapping tRNAs (list) and the encoded aminoacid (index), per organelle
+	# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
 	me_model.global_info['aa2trna'] = aa2trna
 
 	# add charging tRNA reactions per organelle

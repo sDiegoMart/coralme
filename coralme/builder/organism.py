@@ -1590,7 +1590,8 @@ class Organism(object):
                     'importance':'high',
                     'to_do':'Check whether you need to correct RNAP by running me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
             else:
-                rnap_regex = "(RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
+                #rnap_regex = "(RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
+                rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
                 RNAP_genes = complexes_df[
                     complexes_df["name"].str.contains(rnap_regex, regex=True)
                 ].index.to_list()
@@ -2023,6 +2024,7 @@ class Organism(object):
         for k,v in info.items():
             if len(v) != len(set(v)):
                 warn_dups[k] = [item for item, count in collections.Counter(v).items() if count > 1]
+
         if warn_dups:
             self.curation_notes['org.check_for_duplicates'].append({
                 'msg':'Some datasets contain duplicate indices or Accession IDs.',

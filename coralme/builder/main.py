@@ -70,6 +70,8 @@ class MEBuilder(object):
 			'METroubleshooter' : coralme.builder.main.ListHandler([])
 			}
 
+		self.df_data = pandas.DataFrame()
+
 		data = \
 			'code,interpretation,gram\n' \
 			'CCI-CW-BAC-POS-GP,Cell_Wall,pos\n' \
@@ -1163,6 +1165,8 @@ class MEReconstruction(object):
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
 
+		self.df_data = builder.df_data
+
 		return None
 
 	def input_data(self, m_model, overwrite = False):
@@ -1250,6 +1254,10 @@ class MEReconstruction(object):
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
 
+		# detect if the genbank file was modified using biocyc data
+		gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
+		config['genbank-path'] = gb if pathlib.Path(gb).exists() else config['genbank-path']
+
 		if overwrite:
 			new = config.get('new_config_file', 'coralme-config.yaml')
 			yaml = new if new.endswith('.yaml') else '{:s}.yaml'.format(new)
@@ -1291,8 +1299,8 @@ class MEReconstruction(object):
 
 	def build_me_model(self, overwrite = False):
 		config = self.configuration
-
 		model = config.get('model_id', 'coralME')
+
 		directory = config.get('log_directory', '.')
 		if not os.path.exists(directory):
 			os.mkdir(directory)
@@ -1331,17 +1339,24 @@ class MEReconstruction(object):
 			me._compartments['mc'] = 'ME-model Constraint'
 			logging.warning('Pseudo-compartment \'mc\' (\'ME-model Constraint\') was added into the ME-model.')
 
-		# Define M-model
-		if me.global_info['m-model-path'].endswith('.json'):
-			me.gem = cobra.io.load_json_model(me.global_info['m-model-path'])
+		# Define M-model; from MEBuilder with modifications or the original
+		if hasattr(self, 'org'):
+			me.gem = self.org.m_model
+			filename = '{:s}/building_data/m_model_modified.json'.format(config.get('out_directory', './'))
+			with open(filename, 'w') as outfile:
+				cobra.io.save_json_model(me.gem, outfile)
+			config['m-model-path'] = filename
 		else:
-			me.gem = cobra.io.read_sbml_model(me.global_info['m-model-path'])
-
-		# Read user inputs
-		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
+			if me.global_info['m-model-path'].endswith('.json'):
+				me.gem = cobra.io.load_json_model(me.global_info['m-model-path'])
+			else:
+				me.gem = cobra.io.read_sbml_model(me.global_info['m-model-path'])
 
 		# update default options with missing, automated-defined values
 		me.global_info.update(self.configuration)
+
+		# Read user inputs
+		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
 
 		df_tus = self.df_tus
 		df_rmsc = self.df_rmsc
