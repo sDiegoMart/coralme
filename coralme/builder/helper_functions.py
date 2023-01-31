@@ -61,6 +61,7 @@ def change_reaction_id(model,old_id,new_id):
 	rxn.name = old_rxn.name
 	rxn.subsystem = old_rxn.subsystem
 	rxn.notes = old_rxn.notes
+	rxn.gene_reaction_rule = old_rxn.gene_reaction_rule
 	model.remove_reactions([old_rxn])
 
 def listify_gpr(expr,level = 0):
