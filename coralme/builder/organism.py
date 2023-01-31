@@ -2029,8 +2029,9 @@ class Organism(object):
                 'triggered_by' : [warn_dups],
                 'importance':'critical',
                 'to_do':'Remove or fix duplicates. If duplicates are in Accession-1, they are processed as different possibilities to get the same enzyme, so they are added as generic complexes. Check!'})
-            if 'Accession-1' in warn_dups:
+            if 'Accession-1' in warn_dups and not self.is_reference:
                 for d in warn_dups['Accession-1']:
+                    if not d: continue
                     dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].str.contains(d)]
                     self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
                 
