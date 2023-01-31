@@ -2023,14 +2023,17 @@ class Organism(object):
         for k,v in info.items():
             if len(v) != len(set(v)):
                 warn_dups[k] = [item for item, count in collections.Counter(v).items() if count > 1]
-
         if warn_dups:
             self.curation_notes['org.check_for_duplicates'].append({
                 'msg':'Some datasets contain duplicate indices or Accession IDs.',
-                'triggered_by' : warn_dups,
+                'triggered_by' : [warn_dups],
                 'importance':'critical',
-                'to_do':'Remove or fix duplicates.'})
-
+                'to_do':'Remove or fix duplicates. If duplicates are in Accession-1, they are processed as different possibilities to get the same enzyme, so they are added as generic complexes. Check!'})
+            
+            for d in warn_dups['Accession-1']:
+                dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].str.contains(d)]
+                self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
+                
         # Duplicates between different datasets
         cplxs = set(info['complexes_df'])
         rnas = set(info['RNA_df'])
