@@ -173,6 +173,19 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		else:
 			return None
 
+	def generics_from_complex(x, builder):
+		if isinstance(x, str):
+			name = x.split(':')[0]
+			lst = []
+			for key, value in builder.org.generic_dict.items():
+				values = [ x.split('_mod_')[0] for x in value['enzymes'] ]
+
+				if name in values:
+					lst.append(key.replace('generic_', ''))
+
+			if len(lst) >= 1:
+				return lst
+
 	def rnapol(x, builder):
 		if isinstance(builder.org.RNAP, list):
 			RNAP_components = builder.org.RNAP
@@ -335,19 +348,6 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		else:
 			return (None, None, None)
 
-	def generics_from_complex(name, builder):
-		if name is not None:
-			name = name.split(':')[0]
-			lst = []
-			for key, value in builder.org.generic_dict.items():
-				values = [ x.split('_mod_')[0] for x in value['enzymes'] ]
-
-				if name in values:
-					lst.append(key.replace('generic_', ''))
-
-			if len(lst) >= 1:
-				return lst
-
 	def generics_in_complex(name, df):
 		tmp = df[df['genes'].str.contains('generic')]
 		if name is not None:
@@ -419,6 +419,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data = data.explode('Complex ID')
 
 	data['Generic Complex ID'] = data['Gene Locus ID'].apply(lambda x: generics_from_gene(x, builder))
+	data['Generic Complex ID'].update(data['BioCyc'].apply(lambda x: generics_from_gene(x, builder)))
 	data = data.explode('Generic Complex ID')
 
 	data['MetaComplex ID'] = data.apply(lambda x: rnapol(x, builder), axis = 1)
@@ -441,8 +442,8 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data['Gene Locus ID'].apply(lambda x: location(x, builder)))
 	data = data.explode('Complex Location')
 
-	#data['Generic Complex ID'].update(data['Complex ID'].apply(lambda x: generics_from_complex(x, builder)))
-	#data = data.explode('Generic Complex ID')
+	data['Generic Complex ID'].update(data['Complex ID'].apply(lambda x: generics_from_complex(x, builder)))
+	data = data.explode('Generic Complex ID')
 
 	#data['Complex ID'].update(data['Complex ID'].apply(lambda x: generics_in_complex(x, df)))
 	#data = data.explode('Complex ID')
