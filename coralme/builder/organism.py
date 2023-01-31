@@ -658,6 +658,8 @@ class Organism(object):
             return cobra.io.load_json_model(model)
         elif model.endswith('.xml'):
             return cobra.io.read_sbml_model(model)
+        else:
+            print('M-model input file must be json or xml format.')
 
     @property
     def rna_components(self):
@@ -1237,11 +1239,11 @@ class Organism(object):
             "assemble_ribosome_subunits": {"stoich": {"gtp_c": 1}},
         }
         return ribosome_stoich
-    
+
     def check_gene_overlap(self):
         if self.is_reference:
             return
-        
+
         def get_severity(o):
             if o < 50 :
                 return 'critical'
@@ -1253,7 +1255,7 @@ class Organism(object):
                 return 'low'
             else:
                 return 0
-        
+
         m_model_genes = set([g.id for g in self.m_model.genes])
         file_genes = set(self.gene_dictionary['Accession-1'].values)
         all_genes_in_gb = []
@@ -1268,19 +1270,19 @@ class Organism(object):
         # Overlaps
         file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
         gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
-        
+
         print('There is a gene overlap of {}% between M-model and Genbank'.format(gb_overlap))
         print('There is a gene overlap of {}% between M-model and optional files'.format(file_overlap))
-        
+
         if gb_overlap < 1:
             raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
         if file_overlap < 1:
             raise ValueError('Overlap of M-model genes with optional files is too low ({}%)'.format(file_overlap))
-        
-        
+
+
         fs = get_severity(file_overlap)
         gs = get_severity(gb_overlap)
-        
+
         if fs:
             self.curation_notes['org.check_gene_overlap'].append({
                 'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
@@ -1291,7 +1293,7 @@ class Organism(object):
                 'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
                 'importance':gs,
                 'to_do':'Check whether genbank was downloaded correctly.'})
-        
+
 
     def update_ribosome_stoich(self):
         if self.is_reference:
@@ -2036,7 +2038,7 @@ class Organism(object):
                     if not d: continue
                     dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].str.contains(d)]
                     self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
-                
+
         # Duplicates between different datasets
         cplxs = set(info['complexes_df'])
         rnas = set(info['RNA_df'])

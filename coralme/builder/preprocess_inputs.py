@@ -147,17 +147,6 @@ def complete_organism_specific_matrix(builder, data, model, output):
 					lst.append(cplxID.index.to_list())
 			return [ x for y in lst for x in y ]
 
-	def cofactors(x, builder):
-		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
-		cofactors = x if x is None else dct.get(x + '-MONOMER', None)
-		if cofactors is None:
-			return None
-		else:
-			cofactors = [ x if '(' in x else x + '(1)' for x in cofactors.split('_mod_')[1:] ]
-			cofactors = [ x for x in cofactors if not x.startswith('Oxidized') and not x.startswith('3hocta') ]
-			cofactors = ' AND '.join(cofactors)
-			return cofactors
-
 	def generics_from_gene(x, builder):
 		if x is not None:
 			lst = []
@@ -414,8 +403,22 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	#data['Complex ID'] = data['Complex ID'].apply(lambda x: _combine(x), axis = 1)
 
-	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(x, builder))
-	data['Cofactors in Modified Complex'].update(data['BioCyc'].apply(lambda x: cofactors(x, builder)))
+	def cofactors(x, builder):
+		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
+		cofactors = x if x is None else dct.get(x, None)
+		if cofactors is None:
+			return None
+		else:
+			cofactors = [ x if '(' in x else x + '(1)' for x in cofactors.split('_mod_')[1:] ]
+			cofactors = [ x.replace('lipo', 'lipoate') for x in cofactors if not x.startswith('Oxidized') and not x.startswith('3hocta') ]
+			cofactors = ' AND '.join(cofactors)
+			if cofactors == '':
+				print(x, dct.get(x, None))
+			return cofactors
+
+	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(str(x) + '-MONOMER', builder))
+	data['Cofactors in Modified Complex'].update(data['BioCyc'].apply(lambda x: cofactors(str(x) + '-MONOMER', builder)))
+	data['Cofactors in Modified Complex'].update(data['Complex ID'].apply(lambda x: cofactors(str(x).split(':')[0], builder)))
 	data = data.explode('Complex ID')
 
 	data['Generic Complex ID'] = data['Gene Locus ID'].apply(lambda x: generics_from_gene(x, builder))

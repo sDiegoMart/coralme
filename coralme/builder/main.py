@@ -62,15 +62,13 @@ class MEBuilder(object):
 
 		self.me_model = coralme.core.model.MEModel(config.get('model_id', 'coralME'), config.get('growth_key', 'mu'))
 		self.configuration = config
-		self.curation_notes = { 'troubleshoot' : [] }
+		self.curation_notes = { 'builder' : [], 'reconstruction' : [], 'troubleshoot' : [] }
 		self.logger = {
 			'MEBuilder' : coralme.builder.main.ListHandler([]),
 			'MEReconstruction-step1' : coralme.builder.main.ListHandler([]),
 			'MEReconstruction-step2' : coralme.builder.main.ListHandler([]),
 			'METroubleshooter' : coralme.builder.main.ListHandler([])
 			}
-
-		self.df_data = pandas.DataFrame()
 
 		data = \
 			'code,interpretation,gram\n' \
@@ -1142,7 +1140,8 @@ class MEBuilder(object):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
 
 	def input_data(self, gem, overwrite):
-		coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
+		tmp = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
+		self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths = tmp
 
 class MEReconstruction(object):
 	"""
@@ -1164,8 +1163,6 @@ class MEReconstruction(object):
 		self.me_model = builder.me_model
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
-
-		self.df_data = builder.df_data
 
 		return None
 
@@ -1357,6 +1354,8 @@ class MEReconstruction(object):
 
 		# Read user inputs
 		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
+
+		self.df_data = df_data
 
 		df_tus = self.df_tus
 		df_rmsc = self.df_rmsc
@@ -1573,7 +1572,7 @@ class MEReconstruction(object):
 		with open('{:s}/MEModel-step1-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		print('ME-model was saved in {:s} as MEModel-step1-{:s}.pkl'.format(config['out_directory'], model))
+		print('ME-model was saved in the {:s} directory as MEModel-step1-{:s}.pkl'.format(config['out_directory'], model))
 
 		# ## Part 2: Add metastructures to solving ME-model
 		# set logger
@@ -1594,7 +1593,9 @@ class MEReconstruction(object):
 		# ### 2) Add DNA polymerase and the ribosome and its rRNAs modifications
 		# ~~This uses the ribosome composition and subreaction definitions in **coralme/ribosome.py**~~
 
-		# WARNING: EXPERIMENTAL
+		# WARNING: EXPERIMENTAL, not included in the original cobrame paper.
+		# 1) Is the coupling coefficient dependent on the lenght of the DNA?
+		# 2) Do we need to modify the DNA replication to have one reaction per replicon?
 		# dnapol_id = me.global_info['dnapol_id']
 
 		# me.add_metabolites([cobrame.core.component.Complex(dnapol_id)])
@@ -1980,13 +1981,11 @@ class MEReconstruction(object):
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		print('ME-model was saved in {:s} as MEModel-step2-{:s}.pkl'.format(config['out_directory'], model))
+		print('ME-model was saved in the {:s} directory as MEModel-step2-{:s}.pkl'.format(config['out_directory'], model))
 
 		n_genes = len(me.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')))
 		new_genes = n_genes * 100. / len(me.gem.genes) - 100
 		print('Done. Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
-
-		self.me_model = me
 
 		with open('{:s}/MEReconstruction-{:s}.log'.format(directory, model), 'w') as outfile:
 			for filename in [ '{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model), '{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model) ]:
@@ -2188,7 +2187,7 @@ class METroubleshooter(object):
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(self.configuration['out_directory'], self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
-			print('\nME-model was saved in {:s} as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.configuration['out_directory'], self.me_model.id))
+			print('\nME-model was saved in the {:s} directory as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.configuration['out_directory'], self.me_model.id))
 		else:
 			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
 
