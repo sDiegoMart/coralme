@@ -710,8 +710,6 @@ class Organism(object):
         self.protein_mod = self._protein_mod
         print("{} Loading manually added complexes {}".format(sep, sep))
         self.manual_complexes = self._manual_complexes
-        print("{} Looking for duplicates in provided files {}".format(sep, sep))
-        self.check_for_duplicates()
         print("{} Getting transcription units from BioCyc {}".format(sep, sep))
         self.TUs = pandas.read_csv(self.config.get('biocyc.TUs', self.directory + "TUs.txt"), index_col=0, sep="\t").fillna('')
         print("{} Getting sigma factors from BioCyc {}".format(sep, sep))
@@ -721,6 +719,8 @@ class Organism(object):
         self.get_rna_polymerase()
         print("{} Loading generics {}".format(sep, sep))
         self.generic_dict = self._generic_dict
+        print("{} Looking for duplicates in provided files {}".format(sep, sep))
+        self.check_for_duplicates()
         print("{} Updating generics with genbank {}".format(sep, sep))
         self.get_generics_from_genbank()
         print("{} Loading RNA degradosome {}".format(sep, sep))
