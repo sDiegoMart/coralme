@@ -144,26 +144,9 @@ class MEBuilder(object):
 			# #### Update model info with homology
 			print("{} Updating from homology {}".format(sep, sep))
 			self.update_from_homology()
-
         #  TODO: Add flag for overwrite
-			filename = self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt")
-			filename = self.org.directory + "TUs_from_biocyc.txt" if filename == '' else filename
-
-			df = self.org.TU_df
-			df = df.sort_index(inplace = False)
-
-			if overwrite:
-				with open(filename, 'w') as outfile:
-					self.org.TU_df.to_csv(outfile, sep = '\t')
-					logging.warning('The BioCyc transcriptional data file was processed and overwritten into the {:s} file.'.format(filename))
-			else:
-				if pathlib.Path(filename).exists():
-					logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
-				else:
-					with open(filename, 'w') as outfile:
-						self.org.TU_df.to_csv(outfile, sep = '\t')
-						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
-			self.configuration['df_TranscriptionalUnits'] = filename
+# 		self.org.TU_df.to_csv(
+# 		self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt"),sep='\t')
 
 		# #### Manual curation
 		print("{} Integrating manual curation of complexes {}".format(sep, sep))
@@ -609,7 +592,7 @@ class MEBuilder(object):
 					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
 					if not TU_hit.empty:
 						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
-						ref_sigma = TU_hit["sigma"].tolist()[0]
+						ref_sigma = TU_hit["rnapol"].tolist()[0]
 						if ref_sigma in ref_cplx_homolog:
 							sigma = ref_cplx_homolog[ref_sigma]
 							if sigma not in org_sigmas.index:
@@ -633,7 +616,7 @@ class MEBuilder(object):
 					TU_df.loc[tu_name]["stop"] = int(row["stop"])
 					TU_df.loc[tu_name]["tss"] = None
 				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
-				TU_df.loc[tu_name]["sigma"] = sigma
+				TU_df.loc[tu_name]["rnapol"] = sigma
 		self.org.TU_df = TU_df
 		org_sigmas.index.name = "sigma"
 		self.org.sigmas = org_sigmas
@@ -1131,10 +1114,8 @@ class MEBuilder(object):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
 
 	def input_data(self, gem, overwrite):
-		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
-		self.df_tus, self.df_rmsc, self.df_subs, self.df_mets = tmp1
-		self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths = tmp2
-		return tmp1, tmp2
+		tmp = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
+		self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths = tmp
 
 class MEReconstruction(object):
 	"""
@@ -1223,23 +1204,23 @@ class MEReconstruction(object):
 		# INPUTS: We capture if the file exists or if it is empty
 		# Transcriptional Units
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
-		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
+		self.df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
+		self.df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
 
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficientes
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
+		self.df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
 
 		# Orphan and Spontaneous reaction metadata
 		cols = ['name', 'description', 'is_reversible', 'is_spontaneous']
-		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
+		self.df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
 
 		# Metabolites metadata
 		cols = ['id', 'me_id', 'name', 'formula', 'type']
-		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
+		self.df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -1272,20 +1253,20 @@ class MEReconstruction(object):
 					pathlib.Path(filename).unlink() # python==3.7
 
 		if pathlib.Path(filename).is_file():
-			df_data = pandas.read_excel(filename).dropna(how = 'all')
+			self.df_data = pandas.read_excel(filename).dropna(how = 'all')
 		else:
 			# detect if the genbank file was modified using biocyc data
 			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
 			gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
 
 			# generate a minimal dataframe from genbank and m-model files
-			df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
+			self.df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
 			# complete minimal dataframe with automated info from homology
 			if hasattr(self, 'homology'):
-				df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
+				self.df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, self.df_data, model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
-		return (df_tus, df_rmsc, df_subs, df_mets), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
+		return coralme.builder.preprocess_inputs.get_df_input_from_excel(self.df_data, self.df_rxns)
 
 	def build_me_model(self, overwrite = False):
 		config = self.configuration
@@ -1346,9 +1327,14 @@ class MEReconstruction(object):
 		me.global_info.update(self.configuration)
 
 		# Read user inputs
-		tmp1, tmp2 = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
-		df_tus, df_rmsc, df_subs, df_mets = tmp1
-		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = tmp2
+		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
+
+		self.df_data = df_data
+
+		df_tus = self.df_tus
+		df_rmsc = self.df_rmsc
+		df_subs = self.df_subs
+		df_mets = self.df_mets
 
 		# Remove default ME-model SubReactions that are not mapped in the organism-specific matrix
 		subrxns = set(df_data[df_data['ME-model SubReaction'].notnull()]['ME-model SubReaction'])
