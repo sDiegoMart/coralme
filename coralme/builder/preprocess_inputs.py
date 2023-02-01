@@ -412,8 +412,6 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			cofactors = [ x if '(' in x else x + '(1)' for x in cofactors.split('_mod_')[1:] ]
 			cofactors = [ x.replace('lipo', 'lipoate') for x in cofactors if not x.startswith('Oxidized') and not x.startswith('3hocta') ]
 			cofactors = ' AND '.join(cofactors)
-			if cofactors == '':
-				print(x, dct.get(x, None))
 			return cofactors
 
 	data['Cofactors in Modified Complex'] = data['Gene Locus ID'].apply(lambda x: cofactors(str(x) + '-MONOMER', builder))
