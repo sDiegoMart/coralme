@@ -151,7 +151,7 @@ class Organism(object):
     @property
     def _TU_df(self):
         filename = self.config.get('df_TranscriptionalUnits', self.directory + "TUs_from_biocyc.txt")
-        if os.path.isfile(filename):
+        if os.path.isfile(filename) and self.config.get('overwrite', False):
             return pandas.read_csv(filename, index_col = 0, sep = "\t")
         else:
             return self.get_TU_df()
@@ -1668,6 +1668,8 @@ class Organism(object):
         warn_tus = []
         for tu, row in TUs.iterrows():
             sites = []
+            start = []
+            end = []
             genes = []
             replicons = []
             for g in row["Genes of transcription unit"].split(" // "):
@@ -1675,8 +1677,10 @@ class Organism(object):
                     warn_genes.append(g)
                     continue
                 genes.append(gene_dictionary["Accession-1"][g])
-                sites.append(int(gene_dictionary["Left-End-Position"][g]))
-                sites.append(int(gene_dictionary["Right-End-Position"][g]))
+                #sites.append(int(gene_dictionary["Left-End-Position"][g]))
+                #sites.append(int(gene_dictionary["Right-End-Position"][g]))
+                start.append(int(gene_dictionary["Left-End-Position"][g]))
+                end.append(int(gene_dictionary["Right-End-Position"][g]))
                 replicons.append(gene_dictionary["replicon"][g])
             if not genes:
                 warn_tus.append(tu)
@@ -1690,9 +1694,11 @@ class Organism(object):
             TU_dict[tu_name]["rnapol"] = sigma
             TU_dict[tu_name]["tss"] = None
             TU_dict[tu_name]["strand"] = row["Direction"] if row["Direction"] else '+'
-            TU_dict[tu_name]["start"] = int(min(sites))+1
-            TU_dict[tu_name]["stop"] = int(max(sites))
-            TU_dict[tu_name]["replicon"] = replicons[0]
+            #TU_dict[tu_name]["start"] = int(min(sites))+1
+            TU_dict[tu_name]["start"] = ','.join([ str(x+1) for x in start ])
+            #TU_dict[tu_name]["stop"] = int(max(sites))
+            TU_dict[tu_name]["stop"] = ','.join([ str(x) for x in end ])
+            TU_dict[tu_name]["replicon"] = ','.join(replicons)
         df = pandas.DataFrame.from_dict(TU_dict).T[
             #["start", "stop", "tss", "strand", "rho_dependent", "rnapol","replicon"]
             ['replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
