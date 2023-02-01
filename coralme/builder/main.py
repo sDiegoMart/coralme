@@ -144,6 +144,9 @@ class MEBuilder(object):
 			# #### Update model info with homology
 			print("{} Updating from homology {}".format(sep, sep))
 			self.update_from_homology()
+        #  TODO: Add flag for overwrite
+# 		self.org.TU_df.to_csv(
+# 		self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt"),sep='\t')
 
 		# #### Manual curation
 		print("{} Integrating manual curation of complexes {}".format(sep, sep))

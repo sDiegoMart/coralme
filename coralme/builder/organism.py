@@ -150,7 +150,7 @@ class Organism(object):
 
     @property
     def _TU_df(self):
-        filename = self.config.get('biocyc.TUs', self.directory + "TUs_from_biocyc.txt")
+        filename = self.config.get('df_TranscriptionalUnits', self.directory + "TUs_from_biocyc.txt")
         if os.path.isfile(filename):
             return pandas.read_csv(filename, index_col = 0, sep = "\t")
         else:
@@ -1159,6 +1159,7 @@ class Organism(object):
     def read_gene_dictionary(self):
         filename = self.config.get('biocyc.genes', self.directory + "genes.txt")
         gene_dictionary = pandas.read_csv(filename, sep="\t").set_index('Gene Name',inplace=False)
+        gene_dictionary['replicon'] = ''
         warn_genes = []
         if not self.is_reference:
             warn_start = list(gene_dictionary[gene_dictionary['Left-End-Position'].isna()].index)
@@ -1326,8 +1327,6 @@ class Organism(object):
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
-
-        gene_dictionary['replicon'] = ''
 
         warn_locus = []
         for record in self.contigs:
@@ -1650,7 +1649,7 @@ class Organism(object):
             if not genes:
                 continue
             for g in genes.split(" // "):
-                if g not in gene_dictionary["Accession-1"]:
+                if g not in gene_dictionary.index:
                     continue
                 genes_to_TU[gene_dictionary["Accession-1"][g]] = tu
 
@@ -1672,7 +1671,7 @@ class Organism(object):
             genes = []
             replicons = []
             for g in row["Genes of transcription unit"].split(" // "):
-                if g not in gene_dictionary["Accession-1"]:
+                if g not in gene_dictionary.index:
                     warn_genes.append(g)
                     continue
                 genes.append(gene_dictionary["Accession-1"][g])
