@@ -151,7 +151,7 @@ class Organism(object):
     @property
     def _TU_df(self):
         filename = self.config.get('df_TranscriptionalUnits', self.directory + "TUs_from_biocyc.txt")
-        if os.path.isfile(filename) and self.config.get('overwrite', False):
+        if os.path.isfile(filename) and not self.config.get('overwrite', True):
             return pandas.read_csv(filename, index_col = 0, sep = "\t")
         else:
             return self.get_TU_df()
