@@ -474,6 +474,7 @@ class MEBuilder(object):
 		)
 		generic_dict = self.org.generic_dict
 		enz_rxn_assoc_dict = {}
+		new_generics = {}
 
 		for rxn in m_model.reactions:
 			unnamed_counter = 0
@@ -519,7 +520,7 @@ class MEBuilder(object):
 			else:
 				print('{} contains a GPR rule that has {} possible gene combinations. Generifying it.'.format(rxn.id,len(rule_list)))
 				listified_gpr = coralme.builder.helper_functions.listify_gpr(rule)
-				n,rule_dict = coralme.builder.helper_functions.generify_gpr(listified_gpr,rxn.id,d={})
+				n,rule_dict = coralme.builder.helper_functions.generify_gpr(listified_gpr,rxn.id,d={},generic_gene_dict=new_generics)
 				if not rule_dict: # n in gene_dictionary.index:
 					product = gene_dictionary.loc[n,'Product']
 					rule_dict[product] = n
@@ -531,12 +532,13 @@ class MEBuilder(object):
 						cplx_id = cplx.split('_mod_')[0]
 					else:
 						cplx_id = cplx
-					if 'generic' in cplx_id:
+					if 'generic' in cplx_id and cplx_id not in generic_dict:
 						print("Adding {} to generics from m_model".format(cplx_id))
+						new_generics[cplx_id] = rule.split(' or ')
 						generic_dict[cplx_id] = {
 							'enzymes':[gene_dictionary.loc[i,'Product'] if i in gene_dictionary.index else i for i in rule.split(' or ')]
 						}
-					elif cplx_id not in org_complexes_df.index:
+					elif 'generic' not in cplx_id and cplx_id not in org_complexes_df.index:
 						# New cplx not found in BioCyc files
 						print("Adding {} to complexes from m_model".format(cplx_id))
 						tmp = pandas.DataFrame.from_dict({

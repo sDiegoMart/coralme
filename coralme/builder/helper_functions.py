@@ -106,28 +106,28 @@ def _expand_gpr(l_gpr):
 		else:
 			return ' and '.join(get_chain(l_gpr))
 
-def generify_gpr(l_gpr,rxn_id,d={}):
-	if isinstance(l_gpr,str):
-		name = l_gpr
-		return name,d
-	elif isinstance(l_gpr,list):
-		l = []
-		for i in l_gpr:
-			n,d = generify_gpr(i,rxn_id,d=d)
-			l.append(n)
-		base_name = 'generic_{}'.format(rxn_id)
-		name = '{}_{}'.format(base_name,len([i for i in d if base_name in i]))
-		d[name] = ' or '.join(l)
-		return name,d
-	elif isinstance(l_gpr,tuple):
-		l = []
-		for i in l_gpr:
-			n,d = generify_gpr(i,rxn_id,d=d)
-			l.append(n)
-		base_name = 'CPLX_{}'.format(rxn_id)
-		name = '{}-{}'.format(base_name,len([i for i in d if base_name in i]))
-		d[name] = ' and '.join(l)
-		return name,d
+# def generify_gpr(l_gpr,rxn_id,d={}):
+# 	if isinstance(l_gpr,str):
+# 		name = l_gpr
+# 		return name,d
+# 	elif isinstance(l_gpr,list):
+# 		l = []
+# 		for i in l_gpr:
+# 			n,d = generify_gpr(i,rxn_id,d=d)
+# 			l.append(n)
+# 		base_name = 'generic_{}'.format(rxn_id)
+# 		name = '{}_{}'.format(base_name,len([i for i in d if base_name in i]))
+# 		d[name] = ' or '.join(l)
+# 		return name,d
+# 	elif isinstance(l_gpr,tuple):
+# 		l = []
+# 		for i in l_gpr:
+# 			n,d = generify_gpr(i,rxn_id,d=d)
+# 			l.append(n)
+# 		base_name = 'CPLX_{}'.format(rxn_id)
+# 		name = '{}-{}'.format(base_name,len([i for i in d if base_name in i]))
+# 		d[name] = ' and '.join(l)
+# 		return name,d
 
 def print_check(i,l_gpr,T):
 	print(i)
@@ -205,23 +205,27 @@ def expand_gpr(rule):
 	G = get_graph(T,G={})
 	return traverse_graph(G,L=[],C=[])[1]
 
-def generify_gpr(l_gpr,rxn_id,d={}):
+def generify_gpr(l_gpr,rxn_id,d={},generic_gene_dict={}):
 	if isinstance(l_gpr,str):
 		name = l_gpr
 		return name,d
 	elif isinstance(l_gpr,list):
 		l = []
 		for i in l_gpr:
-			n,d = generify_gpr(i,rxn_id,d=d)
+			n,d = generify_gpr(i,rxn_id,d=d,generic_gene_dict=generic_gene_dict)
 			l.append(n)
-		base_name = 'generic_{}'.format(rxn_id)
-		name = '{}_{}'.format(base_name,len([i for i in d if base_name in i]))
+		existing_generic = find_match(generic_gene_dict,l)
+		if existing_generic:
+			name = existing_generic
+		else:
+			base_name = 'generic_{}'.format(rxn_id)
+			name = '{}_{}'.format(base_name,len([i for i in d if base_name in i]))
 		d[name] = ' or '.join(l)
 		return name,d
 	elif isinstance(l_gpr,tuple):
 		l = []
 		for i in l_gpr:
-			n,d = generify_gpr(i,rxn_id,d=d)
+			n,d = generify_gpr(i,rxn_id,d=d,generic_gene_dict=generic_gene_dict)
 			l.append(n)
 		base_name = 'CPLX_{}'.format(rxn_id)
 		name = '{}-{}'.format(base_name,len([i for i in d if base_name in i]))
@@ -264,12 +268,13 @@ def process_rule_dict(n,rule_dict,gene_dict,protein_mod):
 	return corrected_ids[n],corrected_rule_dict
 
 def find_match(d,items):
-	for c, cg in d.items():
-		if not cg: continue
-		cg = [re.findall('.*(?=\(\d*\))', g)[0] for g in cg.split(' AND ')]
-		if set(cg) == set(items):
-			return c
-	return 0
+    for c, cg in d.items():
+        if not cg: continue
+        if isinstance(cg,str):
+            cg = [re.findall('.*(?=\(\d*\))', g)[0] for g in cg.split(' AND ')]
+        if set(cg) == set(items):
+            return c
+    return 0
 
 # Originally developed by JDTB@UCSD, 2022
 # Modified by RSP@UCSD, 2022
