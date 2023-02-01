@@ -498,19 +498,6 @@ class MEBuilder(object):
 							cplx_id = "{}-MONOMER".format(gene_dictionary.loc[gene]['Gene Name'])
 						if cplx_id not in org_complexes_df.index:
 							print("Adding {} to complexes from m_model".format(cplx_id))
-							#org_complexes_df = org_complexes_df.append(
-								#pandas.DataFrame.from_dict(
-									#{
-										#cplx_id: {
-											#"name": str(rxn.name),
-											#"genes": " AND ".join(
-												#["{}()".format(g) for g in identified_genes]
-											#),
-											#"source": "{}({})".format(m_model.id, rxn.id),
-										#}
-									#}
-								#).T
-							#)
 							tmp = pandas.DataFrame.from_dict({
 								cplx_id: {
 									"name": str(rxn.name),
@@ -536,11 +523,6 @@ class MEBuilder(object):
 					n = product
 				n,rule_dict = coralme.builder.helper_functions.process_rule_dict(n,rule_dict,org_complexes_df["genes"].to_dict(),protein_mod)
 				generified_rule = n
-				#print(rxn.id)
-				#print(rxn.gene_reaction_rule)
-				#print(rule_dict)
-				#print(generified_rule)
-				#print()
 				for cplx,rule in rule_dict.items():
 					if 'mod' in cplx:
 						cplx_id = cplx.split('_mod_')[0]
@@ -554,19 +536,6 @@ class MEBuilder(object):
 					elif cplx_id not in org_complexes_df.index:
 						# New cplx not found in BioCyc files
 						print("Adding {} to complexes from m_model".format(cplx_id))
-						#org_complexes_df = org_complexes_df.append(
-							#pandas.DataFrame.from_dict(
-								#{
-									#cplx_id: {
-										#"name": str(rxn.name),
-										#"genes": " AND ".join(
-											#["{}()".format(g) for g in rule.split(' and ')]
-										#),
-										#"source": "{}({})".format(m_model.id, rxn.id),
-									#}
-								#}
-							#).T
-						#)
 						tmp = pandas.DataFrame.from_dict({
 							cplx_id: {
 								"name": str(rxn.name),
