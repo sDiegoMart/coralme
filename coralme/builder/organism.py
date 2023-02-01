@@ -1685,15 +1685,17 @@ class Organism(object):
             rho_dependent = True  # Default True
             tu_name = "{}_from_{}".format(tu, sigma)
             TU_dict[tu_name] = {}
+            TU_dict[tu_name]["genes"] =  ','.join(genes)
             TU_dict[tu_name]["rho_dependent"] = rho_dependent
             TU_dict[tu_name]["rnapol"] = sigma
             TU_dict[tu_name]["tss"] = None
             TU_dict[tu_name]["strand"] = row["Direction"] if row["Direction"] else '+'
-            TU_dict[tu_name]["start"] = int(min(sites))
+            TU_dict[tu_name]["start"] = int(min(sites))+1
             TU_dict[tu_name]["stop"] = int(max(sites))
             TU_dict[tu_name]["replicon"] = replicons[0]
         df = pandas.DataFrame.from_dict(TU_dict).T[
-            ["start", "stop", "tss", "strand", "rho_dependent", "rnapol","replicon"]
+            #["start", "stop", "tss", "strand", "rho_dependent", "rnapol","replicon"]
+            ['replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
         ]
         df.index.name = "TU_id"
 

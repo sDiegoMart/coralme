@@ -352,9 +352,9 @@ def build_reactions_from_genbank(
 			start = tu_frame.start[tu_id]
 			stop = tu_frame.stop[tu_id]
 			strand = 1 if tu_frame.strand[tu_id] == '+' else -1
-			organelle = tu_frame.organelle[tu_id]
+			organelle = tu_frame.organelle[tu_id] if 'organelle' in tu_frame.columns else 'c'
 
-			if len(start.split(',')) > 1:
+			if len(str(start).split(',')) > 1:
 				locations = []
 				for start, stop in zip(start.split(','), stop.split(',')):
 					locations.append(SeqFeature.FeatureLocation(
