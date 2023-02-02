@@ -689,21 +689,23 @@ class Organism(object):
         self.m_to_me_mets = self._m_to_me_mets
         print("{} Loading genbank file {}".format(sep, sep))
         self.get_genbank_contigs()
-        if self.create_minimal_files and not self.is_reference:
-            print("{} Generating minimal files from genbank {}".format(sep, sep))
-            self.generate_minimal_files()
+#         if self.create_minimal_files and not self.is_reference:
+#             print("{} Generating minimal files from genbank {}".format(sep, sep))
+#             self.generate_minimal_files()
         print("{} Loading gene dictionary {}".format(sep, sep))
-        self.gene_dictionary = self.read_gene_dictionary()
+        self.gene_dictionary = self.read_gene_dictionary(
+            self.config.get('biocyc.genes', self.directory + "genes.txt")
+        )
         self.gene_sequences = self._gene_sequences
         print("{} Checking gene overlap {}".format(sep, sep))
         self.check_gene_overlap()
         print("{} Getting proteins from BioCyc {}".format(sep, sep))
-        self.proteins_df = pandas.read_csv(
-            self.config.get('biocyc.prots', self.directory + "proteins.txt"), index_col=0, sep="\t"
+        self.proteins_df = self.read_proteins_df(
+            self.config.get('biocyc.prots', self.directory + "proteins.txt")
         )
         print("{} Getting RNAs from BioCyc {}".format(sep, sep))
-        self.RNA_df = pandas.read_csv(
-            self.config.get('biocyc.RNAs', self.directory + "RNAs.txt"), index_col=0, sep="\t"
+        self.RNA_df = self.read_RNA_df(
+            self.config.get('biocyc.RNAs', self.directory + "RNAs.txt")
         )
         print("{} Generating complexes dataframe {}".format(sep, sep))
         self.complexes_df = self._complexes_df
@@ -722,7 +724,9 @@ class Organism(object):
         print("{} Loading manually added complexes {}".format(sep, sep))
         self.manual_complexes = self._manual_complexes
         print("{} Getting transcription units from BioCyc {}".format(sep, sep))
-        self.TUs = pandas.read_csv(self.config.get('biocyc.TUs', self.directory + "TUs.txt"), index_col=0, sep="\t").fillna('')
+        self.TUs = self.read_TU_df(
+            self.config.get('biocyc.TUs', self.directory + "TUs.txt")
+        )
         print("{} Getting sigma factors from BioCyc {}".format(sep, sep))
         self.sigmas = self._sigmas
         self.rpod = self._rpod
@@ -1164,10 +1168,29 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'Fill genes in proteins.txt'})
         return complexes_df.fillna({"name": ""})
+    
+    def read_optional_file(self,filetype,filename,columns):
+        if os.path.isfile(filename):
+            file = pandas.read_csv(filename, sep="\t", index_col=0)
+        else:
+            self.curation_notes['org.read_optional_file'].append({
+                            'msg':'No {} file was found. Initializing an empty one.'.format(filetype),
+                            'importance':'high',
+                            'to_do':'Download {} from BioCyc if available'.format(filetype)})
+            file = pandas.DataFrame(columns=columns).set_index(columns[0],inplace=False)
+        return file.fillna('')
 
-    def read_gene_dictionary(self):
-        filename = self.config.get('biocyc.genes', self.directory + "genes.txt")
-        gene_dictionary = pandas.read_csv(filename, sep="\t").set_index('Gene Name',inplace=False)
+    def read_gene_dictionary(self,filename):
+        gene_dictionary = self.read_optional_file(
+            'genes',
+            filename,
+            columns=[
+                'Gene Name',
+                'Accession-1',
+                'Left-End-Position',
+                'Right-End-Position',
+                'Product'
+            ])
         gene_dictionary['replicon'] = ''
         warn_genes = []
         if not self.is_reference:
@@ -1198,7 +1221,37 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'Complete Accession-1 IDs in genes.txt if those genes are important.'})
         return gene_dictionary.fillna("").reset_index().set_index("Gene Name")
-
+    def read_proteins_df(self,filename):
+        return self.read_optional_file(
+            'proteins',
+            filename,
+            columns = [
+                'Proteins',
+                'Common-Name',
+                'Genes of polypeptide, complex, or RNA',
+                'Locations'
+            ]
+        )
+    def read_RNA_df(self,filename):
+        return self.read_optional_file(
+            'RNAs',
+            filename,
+            columns = [
+                '(All-tRNAs RNAs Misc-RNAs rRNAs)',
+                'Common-Name',
+                'Gene'
+            ]
+        )
+    def read_TU_df(self,filename):
+        return self.read_optional_file(
+            'TUs',
+            filename,
+            columns = [
+                'Transcription-Units',
+                'Genes of transcription unit',
+                'Direction'
+            ]
+        )
     def read_translocation_pathways(self,
                                     df):
         d = {}
