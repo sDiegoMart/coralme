@@ -1130,6 +1130,17 @@ class Organism(object):
 
     def generate_complexes_df(self):
         proteins_df = self.proteins_df
+        
+        if proteins_df.empty:
+            return pandas.DataFrame(
+                columns = [
+                    'complex',
+                    'name',
+                    'genes',
+                    'source'
+                ]
+            ).set_index('complex')
+        
         gene_dictionary = self.gene_dictionary
         complexes = {}
         protein_complexes_dict = {}
@@ -1159,7 +1170,6 @@ class Organism(object):
             complexes[p]["source"] = "BioCyc"
         complexes_df = pandas.DataFrame.from_dict(complexes).T[["name", "genes", "source"]]
         complexes_df.index.name = "complex"
-
         # Warnings
         if warn_proteins:
             self.curation_notes['org.generate_complexes_df'].append({
@@ -1339,7 +1349,6 @@ class Organism(object):
 
         if gb_overlap < 1:
             raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
-
 
         fs = get_severity(file_overlap)
         gs = get_severity(gb_overlap)
@@ -1728,6 +1737,20 @@ class Organism(object):
         TU_dict = {}
         warn_genes = []
         warn_tus = []
+        if TUs.empty:
+            return pandas.DataFrame(
+                columns = [
+                    'TU_id',
+                    'replicon',
+                    'genes',
+                    'start',
+                    'stop',
+                    'tss',
+                    'strand',
+                    'rho_dependent',
+                    'rnapol'
+                ]
+            ).set_index('TU_id')
         for tu, row in TUs.iterrows():
             sites = []
             start = []
