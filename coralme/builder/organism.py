@@ -35,13 +35,6 @@ class Organism(object):
 
     is_reference : bool
         If True, process as reference organism.
-
-    create_minimal_files : bool
-        False to read minimal files from folder, True to generate minimal
-        files from genome.gb. Minimal files genes.txt, proteins.txt,
-        RNAs.txt, and TUs.txt can be generated from the genbank file,
-        though some information might be lost. Set this parameter to
-        True if minimal files are not available.
     """
 
     def __init__(self, config, is_reference):
@@ -59,7 +52,6 @@ class Organism(object):
             self.id = config['model_id']
 
         self.is_reference = is_reference
-        self.create_minimal_files = bool(config.get('create_files', True))
         self.curation_notes = defaultdict(list)
         self.config = config
         if self.is_reference:
@@ -679,8 +671,8 @@ class Organism(object):
         sep = " "*5
         print("Getting {}".format(self.id))
         if self.id != 'iJL1678b':
-            print("Checking minimal necessary files")
-            self.check_minimal_files()
+            print("Checking folder")
+            self.check_folder()
         print("{} Loading M-model {}".format(sep, sep))
         self.m_model = self._m_model
         print("{} Checking M-model {}".format(sep, sep))
@@ -689,24 +681,10 @@ class Organism(object):
         self.m_to_me_mets = self._m_to_me_mets
         print("{} Loading genbank file {}".format(sep, sep))
         self.get_genbank_contigs()
-#         if self.create_minimal_files and not self.is_reference:
-#             print("{} Generating minimal files from genbank {}".format(sep, sep))
-#             self.generate_minimal_files()
-        print("{} Loading gene dictionary {}".format(sep, sep))
-        self.gene_dictionary = self.read_gene_dictionary(
-            self.config.get('biocyc.genes', self.directory + "genes.txt")
-        )
-        self.gene_sequences = self._gene_sequences
+        print("{} Loading optional files {}".format(sep, sep))
+        self.load_optional_files()
         print("{} Checking gene overlap {}".format(sep, sep))
         self.check_gene_overlap()
-        print("{} Getting proteins from BioCyc {}".format(sep, sep))
-        self.proteins_df = self.read_proteins_df(
-            self.config.get('biocyc.prots', self.directory + "proteins.txt")
-        )
-        print("{} Getting RNAs from BioCyc {}".format(sep, sep))
-        self.RNA_df = self.read_RNA_df(
-            self.config.get('biocyc.RNAs', self.directory + "RNAs.txt")
-        )
         print("{} Generating complexes dataframe {}".format(sep, sep))
         self.complexes_df = self._complexes_df
         print("{} Syncing files {}".format(sep, sep))
@@ -715,18 +693,12 @@ class Organism(object):
         self.update_genbank_from_files()
         print("{} Updating genes and complexes from genbank {}".format(sep, sep))
         self.update_complexes_genes_with_genbank()
-
         print("{} Purging genes in M-model {}".format(sep,sep))
         self.purge_genes_in_model()
-
         print("{} Generating protein modifications dataframe {}".format(sep, sep))
         self.protein_mod = self._protein_mod
         print("{} Loading manually added complexes {}".format(sep, sep))
         self.manual_complexes = self._manual_complexes
-        print("{} Getting transcription units from BioCyc {}".format(sep, sep))
-        self.TUs = self.read_TU_df(
-            self.config.get('biocyc.TUs', self.directory + "TUs.txt")
-        )
         print("{} Getting sigma factors from BioCyc {}".format(sep, sep))
         self.sigmas = self._sigmas
         self.rpod = self._rpod
@@ -803,34 +775,14 @@ class Organism(object):
         self.contigs = [ i for i in gb_it ]
 
 
-    def check_minimal_files(self):
+    def check_folder(self):
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
             print("{} directory was created.".format(self.directory))
         if not os.path.isdir(self.blast_directory):
             os.makedirs(self.blast_directory)
             print("{} directory was created.".format(self.blast_directory))
-
-        if not os.path.isfile(self.config.get('biocyc.genes', self.directory + "genes.txt")):
-            self.curation_notes['org.check_minimal_files'].append({
-                'msg':"genes.txt file not found",
-                'importance':'high',
-                'to_do':'genes.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide genes.txt'})
-        if not os.path.isfile(self.config.get('biocyc.prots', self.directory + "proteins.txt")):
-            self.curation_notes['org.check_minimal_files'].append({
-                'msg':"proteins.txt file not found",
-                'importance':'high',
-                'to_do':'proteins.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide proteins.txt'})
-        if not os.path.isfile(self.config.get('biocyc.RNAs', self.directory + "RNAs.txt")):
-            self.curation_notes['org.check_minimal_files'].append({
-                'msg':"RNAs.txt file not found",
-                'importance':'high',
-                'to_do':'RNAs.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide RNAs.txt'})
-        if not os.path.isfile(self.config.get('biocyc.TUs', self.directory + "TUs.txt")):
-            self.curation_notes['org.check_minimal_files'].append({
-                'msg':"TUs.txt file not found",
-                'importance':'high',
-                'to_do':'TUs.txt will be generated from genome.gb if create_minimal_files is set to True in parameters.txt. If not, provide TUs.txt'})
+        
 
     def check_m_model(self):
         m_model = self.m_model
@@ -871,51 +823,24 @@ class Organism(object):
                 'importance':'high',
                 'to_do':'Make sure the subsystems of these reactions are correct'})
 
-    def generate_minimal_files(self):
-        contigs = self.contigs
-        genes = {}
-        proteins = {}
-        rnas = {}
-        tus = {}
-        for record in contigs:
-            for feature in record.features:
-                if feature.type not in {"CDS", "rRNA", "tRNA", "ncRNA", "misc_RNA"}:
-                    continue
-                if self.locus_tag not in feature.qualifiers: continue
-                gene_id = feature.qualifiers[self.locus_tag][0]
-                genes[gene_id] = {
-                    "Accession-1": gene_id,
-                    "Left-End-Position": min([i.start for i in feature.location.parts]),
-                    "Right-End-Position": max([i.end for i in feature.location.parts]),
-                    "Product": gene_id + "-MONOMER"
-                    if feature.type == "CDS"
-                    else gene_id + "-{}".format(feature.type),
-                }
-                tus["TU_{}".format(gene_id)] = {
-                    "Genes of transcription unit": gene_id,
-                    "Direction": "+" if feature.location.strand == 1 else "-",
-                }
-                if "RNA" in feature.type and feature.qualifiers.get('product', False):
-                    rnas[gene_id] = {"Common-Name": feature.qualifiers["product"][0], "Gene": gene_id}
-                if feature.type == "CDS":
-                    proteins[gene_id + "-MONOMER"] = {
-        #					 "Accession-1": gene_id,
-                        "Common-Name": feature.qualifiers["product"][0] if 'product' in feature.qualifiers else gene_id + "-MONOMER",
-                        "Genes of polypeptide, complex, or RNA": gene_id,
-                        "Locations": "",
-        #					 "Gene": gene_id,
-                    }
-        genes = pandas.DataFrame.from_dict(genes).T
-        genes.index.name = "Gene Name"
-        genes.to_csv(self.directory + "genes.txt", sep="\t")
-        rnas = pandas.DataFrame.from_dict(rnas).T
-        rnas.index.name = "(All-tRNAs RNAs Misc-RNAs rRNAs)"
-        rnas.to_csv(self.directory + "RNAs.txt", sep="\t")
-        proteins = pandas.DataFrame.from_dict(proteins).T
-        proteins.index.name = "Proteins"
-        proteins.to_csv(self.directory + "proteins.txt", sep="\t")
-        tus = pandas.DataFrame.from_dict(tus).T
-        tus.to_csv(self.directory + "TUs.txt", sep="\t")
+    def load_optional_files(self,sep = ''):
+        print("{}Loading gene dictionary{}".format(sep, sep))
+        self.gene_dictionary = self.read_gene_dictionary(
+            self.config.get('biocyc.genes', self.directory + "genes.txt")
+        )
+        self.gene_sequences = self._gene_sequences
+        print("{}Getting proteins from BioCyc{}".format(sep, sep))
+        self.proteins_df = self.read_proteins_df(
+            self.config.get('biocyc.prots', self.directory + "proteins.txt")
+        )
+        print("{}Getting RNAs from BioCyc{}".format(sep, sep))
+        self.RNA_df = self.read_RNA_df(
+            self.config.get('biocyc.RNAs', self.directory + "RNAs.txt")
+        )
+        print("{}Getting transcription units from BioCyc{}".format(sep, sep))
+        self.TUs = self.read_TU_df(
+            self.config.get('biocyc.TUs', self.directory + "TUs.txt")
+        )
 
     def sync_files(self):
         if self.is_reference:
