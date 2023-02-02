@@ -62,7 +62,10 @@ class Organism(object):
         self.create_minimal_files = bool(config.get('create_files', True))
         self.curation_notes = defaultdict(list)
         self.config = config
-        self.locus_tag = config.get('locus_tag','locus_tag')
+        if self.is_reference:
+            self.locus_tag = 'locus_tag'
+        else:
+            self.locus_tag = config.get('locus_tag','locus_tag')
 
         data = \
             'code,interpretation,gram\n' \
