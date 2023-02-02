@@ -118,17 +118,6 @@ class Organism(object):
             ).set_index("Modified_enzyme")
 
     @property
-    def _gene_sequences(self):
-        filename = self.config.get('biocyc.seqs', self.directory + "sequences.fasta")
-        if os.path.isfile(filename):
-            d = {}
-            for i in Bio.SeqIO.parse(filename,'fasta'):
-                for g in i.id.split('|'):
-                    d[g] = i
-            return d
-        return {}
-
-    @property
     def _manual_complexes(self):
         filename = self.directory + "protein_corrections.csv"
         if os.path.isfile(filename):
@@ -822,13 +811,14 @@ class Organism(object):
                 'triggered_by':subsystem_RXNS,
                 'importance':'high',
                 'to_do':'Make sure the subsystems of these reactions are correct'})
-
     def load_optional_files(self,sep = ''):
         print("{}Loading gene dictionary{}".format(sep, sep))
         self.gene_dictionary = self.read_gene_dictionary(
             self.config.get('biocyc.genes', self.directory + "genes.txt")
         )
-        self.gene_sequences = self._gene_sequences
+        self.gene_sequences = self.read_gene_sequences(
+            self.config.get('biocyc.seqs', self.directory + "sequences.fasta")
+        )
         print("{}Getting proteins from BioCyc{}".format(sep, sep))
         self.proteins_df = self.read_proteins_df(
             self.config.get('biocyc.prots', self.directory + "proteins.txt")
@@ -841,7 +831,7 @@ class Organism(object):
         self.TUs = self.read_TU_df(
             self.config.get('biocyc.TUs', self.directory + "TUs.txt")
         )
-
+    
     def sync_files(self):
         if self.is_reference:
             return
@@ -1167,6 +1157,14 @@ class Organism(object):
                 'Locations'
             ]
         )
+    def read_gene_sequences(self,filename):
+        if os.path.isfile(filename):
+            d = {}
+            for i in Bio.SeqIO.parse(filename,'fasta'):
+                for g in i.id.split('|'):
+                    d[g] = i
+            return d
+        return {}
     def read_RNA_df(self,filename):
         return self.read_optional_file(
             'RNAs',
