@@ -62,6 +62,7 @@ class Organism(object):
         self.create_minimal_files = bool(config.get('create_files', True))
         self.curation_notes = defaultdict(list)
         self.config = config
+        self.locus_tag = config.get('locus_tag','locus_tag')
 
         data = \
             'code,interpretation,gram\n' \
@@ -680,7 +681,7 @@ class Organism(object):
         self.m_to_me_mets = self._m_to_me_mets
         print("{} Loading genbank file {}".format(sep, sep))
         self.get_genbank_contigs()
-        if self.create_minimal_files:
+        if self.create_minimal_files and not self.is_reference:
             print("{} Generating minimal files from genbank {}".format(sep, sep))
             self.generate_minimal_files()
         print("{} Loading gene dictionary {}".format(sep, sep))
@@ -868,8 +869,8 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in {"CDS", "rRNA", "tRNA", "ncRNA", "misc_RNA"}:
                     continue
-                if 'locus_tag' not in feature.qualifiers: continue
-                gene_id = feature.qualifiers['locus_tag'][0]
+                if self.locus_tag not in feature.qualifiers: continue
+                gene_id = feature.qualifiers[self.locus_tag][0]
                 genes[gene_id] = {
                     "Accession-1": gene_id,
                     "Left-End-Position": min([i.start for i in feature.location.parts]),
@@ -1064,7 +1065,7 @@ class Organism(object):
                                       id = gene_id,
                                       #strand = 1 if gene_left < gene_right else -1,
                                       qualifiers = {
-                                          'locus_tag':[gene_id],
+                                          self.locus_tag:[gene_id],
                                           'product':[product_name]
                                       })
 
@@ -1262,9 +1263,9 @@ class Organism(object):
         all_genes_in_gb = []
         for record in self.contigs:
             for feature in record.features:
-                if 'locus_tag' not in feature.qualifiers:
+                if self.locus_tag not in feature.qualifiers:
                     continue
-                all_genes_in_gb.append(feature.qualifiers['locus_tag'][0])
+                all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
         self.all_genes_in_gb = all_genes_in_gb
         genbank_genes = set(all_genes_in_gb)
 
@@ -1333,10 +1334,10 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
-                if 'locus_tag' not in feature.qualifiers:
+                if self.locus_tag not in feature.qualifiers:
                     warn_locus.append(feature.qualifiers)
                     continue
-                gene_id = feature.qualifiers['locus_tag']
+                gene_id = feature.qualifiers[self.locus_tag]
                 if not gene_id:
                     continue
                 gene_id = gene_id[0]
@@ -1507,10 +1508,12 @@ class Organism(object):
         file = open(FASTA_file, "w")
         for contig in contigs:
             for feature in contig.features:
-                if feature.type not in element_types or "translation" not in feature.qualifiers:
+                if feature.type not in element_types \
+                    or "translation" not in feature.qualifiers \
+                    or self.locus_tag not in feature.qualifiers:
                     continue
                 file.write(
-                    ">{}\n".format(feature.qualifiers['locus_tag'][0])
+                    ">{}\n".format(feature.qualifiers[self.locus_tag][0])
                 )  # Some way to identify which qualifier meets regular expression?
                 file.write("{}\n".format(feature.qualifiers["translation"][0]))
 
@@ -1989,14 +1992,13 @@ class Organism(object):
     def get_generics_from_genbank(self):
         if self.is_reference:
             return None
-
         contigs = self.contigs
         generic_dict = self.generic_dict
         warn_generics = []
         for contig in contigs:
             for feature in contig.features:
                 if "rRNA" in feature.type:
-                    gene = "RNA_" + feature.qualifiers["locus_tag"][0]
+                    gene = "RNA_" + feature.qualifiers[self.locus_tag][0]
                     if any("5S" in i for i in feature.qualifiers["product"]):
                         cat = "generic_5s_rRNAs"
                     elif any("16S" in i for i in feature.qualifiers["product"]):
