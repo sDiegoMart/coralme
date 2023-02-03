@@ -577,6 +577,7 @@ class MEBuilder(object):
 		self.org.protein_mod = protein_mod
 
 	def update_TU_df(self):
+		return
 		org_TU_to_genes = self.org.TU_to_genes
 		org_TUs = self.org.TUs
 		org_sigmas = self.org.sigmas
