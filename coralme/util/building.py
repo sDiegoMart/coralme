@@ -1,5 +1,6 @@
 import tqdm
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+import numpy
 import pandas
 import logging
 
@@ -349,27 +350,31 @@ def build_reactions_from_genbank(
 	# RNA_products will be added so no need to update now
 	for tu_id in tqdm.tqdm(tu_frame.index, 'Adding Transcriptional Units into the ME-model...', bar_format = bar_format):
 		if any(x in tu_frame.genes[tu_id].split(',') for x in genes_to_add):
-			start = tu_frame.start[tu_id]
-			stop = tu_frame.stop[tu_id]
+			starts = tu_frame.start[tu_id]
+			stops = tu_frame.stop[tu_id]
 			strand = 1 if tu_frame.strand[tu_id] == '+' else -1
 			organelle = tu_frame.organelle[tu_id] if 'organelle' in tu_frame.columns else 'c'
 
-			if len(str(start).split(',')) > 1:
-				locations = []
-				for start, stop in zip(start.split(','), stop.split(',')):
-					locations.append(SeqFeature.FeatureLocation(
-						SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
+			#if len(str(start).split(',')) > 1:
+				#locations = []
+				#for start, stop in zip(start.split(','), stop.split(',')):
+					#locations.append(SeqFeature.FeatureLocation(
+						#SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
 					# Simplified to this in Bipython >1.80. TODO: TEST
 					#locations.append(SeqFeature.SimpleLocation(int(start)-1, int(stop), strand = strand))
 
-				seq = SeqFeature.SeqFeature(SeqFeature.CompoundLocation(locations, 'join'))
-			else:
-				seq = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(
-					SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
+				#seq = SeqFeature.SeqFeature(SeqFeature.CompoundLocation(locations, 'join'))
+			#else:
+				#seq = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(
+					#SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
 				# Simplified to this in Bipython >1.80. TODO: TEST
 				#seq = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand)
+
+			seqs = []
+			for start, stop in zip(starts.split(','), stops.split(',')):
+				seqs.append(SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand))
 
 			#sequence = coralme.util.dogma.extract_sequence(
 				#full_seqs[tu_frame.replicon[tu_id]],
@@ -378,13 +383,19 @@ def build_reactions_from_genbank(
 				#tu_frame.strand[tu_id],
 				#)
 
-			# Deprecated in Biopython 1.80
-			#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
-			seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).replace('-', '')
+			replicons = tu_frame.genes[tu_id] if tu_frame.replicon[tu_id] is numpy.nan else tu_frame.replicon[tu_id]
+			print(tu_id, replicons)
+			dna = ''
+			for replicon_id, seq in zip(replicons.split(','), seqs):
+				print(replicon_id, seq)
+				# Deprecated in Biopython 1.80
+				#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
+				dna += seq.extract(full_seqs[replicon_id]).replace('-', '')
+
 			if len(seq) == 0:
 				logging.warning('The knockouts dictionary instructed to completely delete \'{:s}\' from the ME-model.'.format(tu_id))
 			else:
-				add_transcription_reaction(me_model, tu_id, set(), str(seq), organelle, update = False)
+				add_transcription_reaction(me_model, tu_id, set(), str(dna), organelle, update = False)
 
 	# Dictionary of tRNA locus ID to the model.metabolite object
 	trna_to_aa = {}
