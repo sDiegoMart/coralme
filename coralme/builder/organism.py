@@ -1768,19 +1768,40 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
         return df
-
+    
+    
+    def _process_location_dict(self,
+                               location,
+                               location_interpreter):
+        new_location = {}
+        for k, v in location.items():
+            if isinstance(v, float):
+                continue
+            for loc in v.split(" // "):
+                if loc in location_interpreter.index:
+                    new_location[k] = location_interpreter["interpretation"][loc]
+                    break
+        return new_location
+    
+    def _add_entry_to_protein_location(self,
+                                       gene_string,
+                                       gene_dictionary,
+                                      protein_location):
+        gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
+        gene = gene_dictionary.loc[[gene]]["Gene Name"]
+        for gene_ in gene: # In case of duplicates
+            if gene_ in gene_location:
+                tmp = pandas.DataFrame.from_dict({
+                    c: {
+                        "Complex_compartment": c_loc,
+                        "Protein": gene_string,
+                        "Protein_compartment": gene_location[gene_],
+                        "translocase_pathway": "s",
+                        }}).T
+                protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+        return protein_location
+    
     def get_protein_location(self):
-        def process_location_dict(location, location_interpreter):
-            new_location = {}
-            for k, v in location.items():
-                if isinstance(v, float):
-                    continue
-                for loc in v.split(" // "):
-                    if loc in location_interpreter.index:
-                        new_location[k] = location_interpreter["interpretation"][loc]
-                        break
-            return new_location
-
         complexes_df = self.complexes_df
         proteins_df = self.proteins_df
         gene_dictionary = self.gene_dictionary
@@ -1794,7 +1815,7 @@ class Organism(object):
                 "translocase_pathway": {},
             }
         )
-        gene_location = process_location_dict(
+        gene_location = self._process_location_dict(
             proteins_df.set_index("Genes of polypeptide, complex, or RNA")["Locations"]
             .dropna()
             .to_dict(),
@@ -1810,30 +1831,10 @@ class Organism(object):
             else:
                 continue
             for gene_string in complexes_df["genes"][c].split(' AND '):
-                gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
-                gene = gene_dictionary.loc[[gene]]["Gene Name"]
-                for gene_ in gene: # In case of duplicates
-                    if gene_ in gene_location:
-                        #protein_location = protein_location.append(
-                        #pandas.DataFrame.from_dict(
-                                #{
-                                    #c: {
-                                        #"Complex_compartment": c_loc,
-                                        #"Protein": gene_string,
-                                        #"Protein_compartment": gene_location[gene_],
-                                        #"translocase_pathway": "s",
-                                    #}
-                                #}
-                            #).T
-                        #)
-                        tmp = pandas.DataFrame.from_dict({
-                            c: {
-                                "Complex_compartment": c_loc,
-                                "Protein": gene_string,
-                                "Protein_compartment": gene_location[gene_],
-                                "translocase_pathway": "s",
-                                }}).T
-                        protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+                protein_location = self._add_entry_to_protein_location(gene_string,
+                                                    gene_dictionary,
+                                                    protein_location)
+                
         protein_location.index.name = "Complex"
         return protein_location
 
