@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import re
 import pandas
+import logging
 
 class Homology(object):
 	"""
@@ -57,13 +58,13 @@ class Homology(object):
 		ref_df = self.ref_df
 
 		if verbose:
-			print('Getting top hits...')
+			logging.warning('Getting top hits...')
 
 		org_top_hits = get_top_hits(org_df, evalue = evalue)
 		ref_top_hits = get_top_hits(ref_df, evalue = evalue)
 
 		if verbose:
-			print('Getting reciprocal top hits...')
+			logging.warning('Getting reciprocal top hits...')
 
 		mutual_hits = {}
 		for g, hit in org_top_hits.items():
@@ -83,7 +84,7 @@ class Homology(object):
 				mutual_hits[hit_g]['evalue'] = ref_top_hits[hit_g]['evalue']
 
 		if verbose:
-			print('Done')
+			logging.warning('Done')
 
 		mutual_hits_df = pandas.DataFrame.from_dict(mutual_hits).T.sort_index()
 		self.mutual_hits_df = mutual_hits_df
@@ -132,7 +133,7 @@ class Homology(object):
 						not_annotated_candidates.add(rc)
 
 		not_annotated_candidates = not_annotated_candidates.difference(set(ref_cplx_homolog.keys()))
-		print('{} complexes were mapped successfully'.format(len(org_cplx_homolog)))
+		logging.warning('{} complexes were mapped successfully'.format(len(org_cplx_homolog)))
 
 		if warn_candidates:
 			self.org.curation_notes['org.get_complex_homology'].append({

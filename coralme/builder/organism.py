@@ -9,6 +9,7 @@ from collections import defaultdict
 import Bio
 import cobra
 import pandas
+import tqdm
 
 import coralme
 from coralme.builder import dictionaries
@@ -20,6 +21,7 @@ except:
     warnings.warn("This biopython version does not allow for correct warning handling. Biopython >=1.80 is suggested.")
 
 import logging
+bar_format = coralme.builder.main.bar_format
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
 # Inherit from logging.Handler
@@ -50,7 +52,7 @@ class Organism(object):
             elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 self.id = config['user_reference']
             elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
-                print('The \'dev_reference\' and \'user-reference\' options are mutually exclusive.')
+                logging.warning('The \'dev_reference\' and \'user-reference\' options are mutually exclusive.')
                 self.id = 'iJL1678b'
             else:
                 self.id = 'iJL1678b'
@@ -655,7 +657,7 @@ class Organism(object):
         elif model.endswith('.xml'):
             return cobra.io.read_sbml_model(model)
         else:
-            print('M-model input file must be json or xml format.')
+            raise ValueError('M-model input file must be json or xml format.')
 
     @property
     def rna_components(self):
@@ -663,105 +665,105 @@ class Organism(object):
         return set(g for g,t in product_types.items() if 'RNA' in t)
 
     def get_organism(self):
-        logging.warning(' Testing logger ')
-        sep = " "*5
-        print("Processing files for {}".format(self.id))
+        sep = '~ '*1
+        print("{}Processing files for {}...".format(sep,self.id))
         if self.id != 'iJL1678b':
-            print("Checking folder")
+            logging.warning('Checking folder')
             self.check_folder()
-        print("{} Loading M-model {}".format(sep, sep))
+        logging.warning("Loading M-model")
         self.m_model = self._m_model
-        print("{} Checking M-model {}".format(sep, sep))
+        logging.warning("Checking M-model")
         self.check_m_model()
-        print("{} Loading M to ME metabolites dictionary {}".format(sep, sep))
+        logging.warning("Loading M to ME metabolites dictionary")
         self.m_to_me_mets = self._m_to_me_mets
-        print("{} Loading genbank file {}".format(sep, sep))
+        logging.warning("Loading genbank file")
         self.get_genbank_contigs()
-        print("{} Loading optional files {}".format(sep, sep))
+        logging.warning("Loading optional files")
         self.load_optional_files()
-        print("{} Checking gene overlap {}".format(sep, sep))
+        logging.warning("Checking gene overlap")
         self.check_gene_overlap()
-        print("{} Generating complexes dataframe {}".format(sep, sep))
+        logging.warning("Generating complexes dataframe")
         self.complexes_df = self._complexes_df
-        print("{} Syncing files {}".format(sep, sep))
+        logging.warning("Syncing files")
         self.sync_files()
-        print('{} Completing genbank with provided files {}'.format(sep, sep))
+        logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
-        print("{} Updating genes and complexes from genbank {}".format(sep, sep))
+        logging.warning("Updating genes and complexes from genbank")
         self.update_complexes_genes_with_genbank()
-        print("{} Purging genes in M-model {}".format(sep,sep))
+        logging.warning("Purging genes in M-model")
         self.purge_genes_in_model()
-        print("{} Generating protein modifications dataframe {}".format(sep, sep))
+        logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
-        print("{} Loading manually added complexes {}".format(sep, sep))
+        logging.warning("Loading manually added complexes")
         self.manual_complexes = self._manual_complexes
-        print("{} Getting sigma factors from BioCyc {}".format(sep, sep))
+        logging.warning("Getting sigma factors from BioCyc")
         self.sigmas = self._sigmas
         self.rpod = self._rpod
-        print("{} Getting RNA polymerase from BioCyc {}".format(sep, sep))
+        logging.warning("Getting RNA polymerase from BioCyc")
         self.get_rna_polymerase()
-        print("{} Loading generics {}".format(sep, sep))
+        logging.warning("Loading generics")
         self.generic_dict = self._generic_dict
-        print("{} Looking for duplicates in provided files {}".format(sep, sep))
+        logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
-        print("{} Updating generics with genbank {}".format(sep, sep))
+        logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
-        print("{} Loading RNA degradosome {}".format(sep, sep))
+        logging.warning("Loading RNA degradosome")
         self.rna_degradosome = self._rna_degradosome
-        print("{} Loading RNA excision machinery {}".format(sep, sep))
+        logging.warning("Loading RNA excision machinery")
         self.excision_machinery = self._excision_machinery
-        print("{} Loading transcription subreactions {}".format(sep, sep))
+        logging.warning("Loading transcription subreactions")
         self.transcription_subreactions = self._transcription_subreactions
-        print("{} Generating transcription units dataframe {}".format(sep, sep))
+        logging.warning("Generating transcription units dataframe")
         self.TU_df = self._TU_df
         self.get_TU_genes()
-        print("{} Getting protein location from BioCyc {}".format(sep, sep))
+        logging.warning("Getting protein location from BioCyc")
         self.protein_location = self._protein_location
-        print("{} Reading ribosomal proteins{}".format(sep, sep))
+        logging.warning("Reading ribosomal proteins{}")
         self.ribosome_stoich = self._ribosome_stoich
-        print("{} Updating ribosomal proteins with BioCyc {}".format(sep, sep))
+        logging.warning("Updating ribosomal proteins with BioCyc")
         self.update_ribosome_stoich()
-        print("{} Loading ribosome subreactions {}".format(sep, sep))
+        logging.warning("Loading ribosome subreactions")
         self.ribosome_subreactions = self._ribosome_subreactions
-        print("{} Loading ribosome rrna modifications {}".format(sep, sep))
+        logging.warning("Loading ribosome rrna modifications")
         self.rrna_modifications = self._rrna_modifications
-        print("{} Loading amino acid tRNA synthetases {}".format(sep, sep))
+        logging.warning("Loading amino acid tRNA synthetases")
         self.amino_acid_trna_synthetase = self._amino_acid_trna_synthetase
-        print("{} Loading translation initiation subreactions {}".format(sep, sep))
+        logging.warning("Loading translation initiation subreactions")
         self.initiation_subreactions = self._initiation_subreactions
-        print("{} Loading translation elongation subreactions {}".format(sep, sep))
+        logging.warning("Loading translation elongation subreactions")
         self.elongation_subreactions = self._elongation_subreactions
-        print("{} Loading translation termination subreactions {}".format(sep, sep))
+        logging.warning("Loading translation termination subreactions")
         self.termination_subreactions = self._termination_subreactions
-        print("{} Loading special trna subreactions {}".format(sep, sep))
+        logging.warning("Loading special trna subreactions")
         self.special_trna_subreactions = self._special_trna_subreactions
-        print("{} Updating tRNA synthetases with BioCyc {}".format(sep, sep))
+        logging.warning("Updating tRNA synthetases with BioCyc")
         self.get_trna_synthetase()
-        print("{} Loading trna modifications and targets {}".format(sep, sep))
+        logging.warning("Loading trna modifications and targets")
         self.trna_modification = self._trna_modification
         self.trna_modification_targets = self._trna_modification_targets
-        print("{} Loading special modifications {}".format(sep, sep))
+        logging.warning("Loading special modifications")
         self.special_modifications = self._special_modifications
-        print("{} Loading protein translocation pathways {}".format(sep, sep))
+        logging.warning("Loading protein translocation pathways")
         self.translocation_pathways = self._translocation_pathways
-        print("{} Loading protein translocation multipliers {}".format(sep, sep))
+        logging.warning("Loading protein translocation multipliers")
         self.translocation_multipliers = self.get_translocation_multipliers()
-        print("{} Loading lipoprotein precursors {}".format(sep, sep))
+        logging.warning("Loading lipoprotein precursors")
         self.lipoprotein_precursors = self.get_lipoprotein_precursors()
-        print("{} Loading methionine cleaved proteins {}".format(sep, sep))
+        logging.warning("Loading methionine cleaved proteins")
         self.cleaved_methionine = self.get_cleaved_methionine()
-        print("{} Loading folding information of proteins {}".format(sep, sep))
+        logging.warning("Loading folding information of proteins")
         self.folding_dict = self._folding_dict
-        print("{} Loading subsystem classification for Keffs {}".format(sep, sep))
+        logging.warning("Loading subsystem classification for Keffs")
         self.subsystem_classification = self.get_subsystem_classification()
-        print("{} Getting lipids {}".format(sep, sep))
+        logging.warning("Getting lipids")
         self.lipids = self.get_lipids()
-        print("{} Getting phospholipids {}".format(sep, sep))
+        logging.warning("Getting phospholipids")
         self.phospholipids = self.get_phospholipids()
-        print("{} Loading peptide release factors {}".format(sep, sep))
+        logging.warning("Loading peptide release factors")
         self.peptide_release_factors = self._peptide_release_factors
-        print("{} Updating peptide release factors with BioCyc {}".format(sep, sep))
+        logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
+        print("{}Reading {} done...".format(sep,self.id))
 
     def get_genbank_contigs(self):
         if self.is_reference:
@@ -774,10 +776,10 @@ class Organism(object):
     def check_folder(self):
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
-            print("{} directory was created.".format(self.directory))
+            logging.warning("{} directory was created.".format(self.directory))
         if not os.path.isdir(self.blast_directory):
             os.makedirs(self.blast_directory)
-            print("{} directory was created.".format(self.blast_directory))
+            logging.warning("{} directory was created.".format(self.blast_directory))
         
 
     def check_m_model(self):
@@ -786,7 +788,10 @@ class Organism(object):
         # Metabolites
         RNA_mets = []
         formula_mets = []
-        for m in m_model.metabolites:
+        
+        for m in tqdm.tqdm(m_model.metabolites,
+                           'Checking M-model metabolites...',
+                           bar_format = bar_format):
             if m.id.startswith("RNA"):
                 RNA_mets.append(m)
             if not m.formula:
@@ -794,7 +799,9 @@ class Organism(object):
 
         # Reactions
         subsystem_RXNS = []
-        for r in m_model.reactions:
+        for r in tqdm.tqdm(m_model.reactions,
+                           'Checking M-model reactions...',
+                           bar_format = bar_format):
             if not r.subsystem:
                 subsystem_RXNS.append(r.id)
 
@@ -818,23 +825,24 @@ class Organism(object):
                 'triggered_by':subsystem_RXNS,
                 'importance':'high',
                 'to_do':'Make sure the subsystems of these reactions are correct'})
-    def load_optional_files(self,sep = ''):
-        print("{}Loading gene dictionary{}".format(sep, sep))
+            
+    def load_optional_files(self):
+        logging.warning("Loading gene dictionary")
         self.gene_dictionary = self.read_gene_dictionary(
             self.config.get('biocyc.genes', self.directory + "genes.txt")
         )
         self.gene_sequences = self.read_gene_sequences(
             self.config.get('biocyc.seqs', self.directory + "sequences.fasta")
         )
-        print("{}Getting proteins from BioCyc{}".format(sep, sep))
+        logging.warning("Getting proteins from BioCyc")
         self.proteins_df = self.read_proteins_df(
             self.config.get('biocyc.prots', self.directory + "proteins.txt")
         )
-        print("{}Getting RNAs from BioCyc{}".format(sep, sep))
+        logging.warning("Getting RNAs from BioCyc")
         self.RNA_df = self.read_RNA_df(
             self.config.get('biocyc.RNAs', self.directory + "RNAs.txt")
         )
-        print("{}Getting transcription units from BioCyc{}".format(sep, sep))
+        logging.warning("Getting transcription units from BioCyc")
         self.TUs = self.read_TU_df(
             self.config.get('biocyc.TUs', self.directory + "TUs.txt")
         )
@@ -881,7 +889,7 @@ class Organism(object):
                          gene_id,
                          product,
                          RNA_df):
-        print('Adding {} ({}) to RNAs'.format(gene_id,product))
+        logging.warning('Adding {} ({}) to RNAs'.format(gene_id,product))
         tmp = pandas.DataFrame.from_dict({ "{}".format(product) : { "Common-Name": product, "Gene": gene_id }}).T
         return pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
     
@@ -889,7 +897,7 @@ class Organism(object):
                                gene_id,
                                product,
                                complexes_df):
-        print('Adding {} ({}) to complexes'.format(gene_id,product))
+        logging.warning('Adding {} ({}) to complexes'.format(gene_id,product))
         tmp = pandas.DataFrame.from_dict({
             product: {
                 "name": product,
@@ -907,7 +915,10 @@ class Organism(object):
         complexes_df = self.complexes_df
         product_types = {}
         warn_genes = []
-        for gene_name,row in gene_dictionary.iterrows():
+        for gene_name,row in tqdm.tqdm(gene_dictionary.iterrows(),
+                           'Syncing optional genes file...',
+                           bar_format = bar_format,
+                           total=gene_dictionary.shape[0]):
             gene_id = row['Accession-1']
             if not gene_name or isinstance(gene_name,float):
                 warn_genes.append(gene_id)
@@ -968,7 +979,7 @@ class Organism(object):
                              row,
                              contigs,
                              gene_sequences):
-        print('Adding {} to genbank file as {}'.format(gene_id,product_type))
+        logging.warning('Adding {} to genbank file as {}'.format(gene_id,product_type))
         from Bio.SeqFeature import SeqFeature, CompoundLocation, ExactPosition, FeatureLocation, SimpleLocation
         from Bio.SeqRecord import SeqRecord
         gene_seq = gene_sequences[gene_name]
@@ -1020,7 +1031,10 @@ class Organism(object):
 
 
         # Add new genes
-        for gene_name,row in gene_dictionary.iterrows():
+        for gene_name,row in tqdm.tqdm(gene_dictionary.iterrows(),
+                           'Updating Genbank file with optional files...',
+                           bar_format = bar_format,
+                           total=gene_dictionary.shape[0]):
             gene_id = row['Accession-1']
 
             if gene_id not in all_genes_in_gb:
@@ -1126,7 +1140,10 @@ class Organism(object):
         complexes = {}
         protein_complexes_dict = {}
         warn_proteins = []
-        for p, row in proteins_df.iterrows():
+        for p, row in tqdm.tqdm(proteins_df.iterrows(),
+                           'Generating complexes dataframe from optional proteins file...',
+                           bar_format = bar_format,
+                           total=proteins_df.shape[0]):
             stoich = ""  # No info in BioCyc
             if "dimer" in str(row["Common-Name"]):
                 stoich = 2
@@ -1333,8 +1350,8 @@ class Organism(object):
         file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
         gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
         
-        print('Gene overlap between M-model and Genbank : {}%'.format(gb_overlap))
-        print('Gene overlap between M-model and optional files : {}%'.format(file_overlap))
+        logging.warning('Gene overlap between M-model and Genbank : {}%'.format(gb_overlap))
+        logging.warning('Gene overlap between M-model and optional files : {}%'.format(file_overlap))
 
         if gb_overlap < 1:
             raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
@@ -1363,7 +1380,10 @@ class Organism(object):
         ]
         ribosome_stoich = self.ribosome_stoich
         warn_proteins = []
-        for p, row in ribo_df.iterrows():
+        for p, row in tqdm.tqdm(ribo_df.iterrows(),
+                           'Gathering ribosome stoichiometry...',
+                           bar_format = bar_format,
+                           total=ribo_df.shape[0]):
             if "30S" in row["name"]:
                 ribosome_stoich["30_S_assembly"]["stoich"][p] = 1
             elif "50S" in row["name"]:
@@ -1384,7 +1404,7 @@ class Organism(object):
                                 feature,
                                 left_end,
                                 right_end):
-        print("Adding {} to genes from genbank".format(gene_id))
+        logging.warning("Adding {} to genes from genbank".format(gene_id))
         feature_type = feature.type
         if feature_type == 'CDS':
             feature_type = 'MONOMER'
@@ -1411,7 +1431,7 @@ class Organism(object):
         if feature.type == 'CDS':
             product = gene_name + '-MONOMER'
             if not complexes_df["genes"].str.contains(gene_id).any():
-                print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
+                logging.warning("Adding {} ({}) to complexes from genbank".format(gene_id,product))
                 tmp = pandas.DataFrame.from_dict({
                             product: {
                                 "name": name_annotation,
@@ -1423,7 +1443,7 @@ class Organism(object):
         else: # It's not CDS, but an RNA
             product = "{}-{}".format(gene_name,feature.type)
             if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
-                print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
+                logging.warning("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
                 tmp = pandas.DataFrame.from_dict(
                         {
                            product : {
@@ -1477,7 +1497,9 @@ class Organism(object):
         RNA_df = self.RNA_df
 
         warn_locus = []
-        for record in self.contigs:
+        for record in tqdm.tqdm(self.contigs,
+                           'Syncing optional files with genbank contigs...',
+                           bar_format = bar_format):
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
@@ -1510,7 +1532,9 @@ class Organism(object):
         m_model = self.m_model
         gene_dictionary = self.gene_dictionary
         gene_list = []
-        for g in m_model.genes:
+        for g in tqdm.tqdm(m_model.genes,
+                           'Purging M-model genes...',
+                           bar_format = bar_format):
             if g.id not in gene_dictionary['Accession-1'].values:
                 gene_list.append(g)
         remove_genes(m_model, gene_list, remove_reactions=False)
@@ -1605,7 +1629,9 @@ class Organism(object):
 #         FASTA_file = "{}.faa".format(org_id)
 
         file = open(FASTA_file, "w")
-        for contig in contigs:
+        for contig in tqdm.tqdm(contigs,
+                           'Converting Genbank contigs to FASTA for BLAST...',
+                           bar_format = bar_format):
             for feature in contig.features:
                 if feature.type not in element_types \
                     or "translation" not in feature.qualifiers \
@@ -1644,7 +1670,10 @@ class Organism(object):
             return "RNAP_" + name
         # Find RpoD to add as default sigma
         sigmas = {}
-        for s, row in sigma_df.iterrows():
+        for s, row in tqdm.tqdm(sigma_df.iterrows(),
+                           'Getting sigma factors...',
+                           bar_format = bar_format,
+                           total=sigma_df.shape[0]):
             sigmas[s] = {}
             sigmas[s]["complex"] = process_sigma_name(s, row)
             sigmas[s]["genes"] = row["genes"]
@@ -1755,7 +1784,10 @@ class Organism(object):
         gene_dictionary = self.gene_dictionary
         genes_to_TU = {}
         TU_to_genes = {}
-        for tu, row in TUs.iterrows():
+        for tu, row in tqdm.tqdm(TUs.iterrows(),
+                           'Getting TU-gene associations from optional TUs file...',
+                           bar_format = bar_format,
+                           total=TUs.shape[0]):
             genes = row["Genes of transcription unit"]
             if not genes:
                 continue
@@ -1791,7 +1823,10 @@ class Organism(object):
                     'rnapol'
                 ]
             ).set_index('TU_id')
-        for tu, row in TUs.iterrows():
+        for tu, row in tqdm.tqdm(TUs.iterrows(),
+                           'Processing optional TUs file...',
+                           bar_format = bar_format,
+                           total=TUs.shape[0]):
             sites = []
             start = []
             stop = []
@@ -1902,7 +1937,10 @@ class Organism(object):
             proteins_df["Locations"].dropna().to_dict(), location_interpreter
         )
         gene_dictionary = gene_dictionary.reset_index().set_index("Accession-1")
-        for c, row in complexes_df.iterrows():
+        for c, row in tqdm.tqdm(complexes_df.iterrows(),
+                           'Adding protein location...',
+                           bar_format = bar_format,
+                           total=complexes_df.shape[0]):
             if c in cplx_location:
                 c_loc = cplx_location[c]
             else:
@@ -1995,7 +2033,10 @@ class Organism(object):
             "secondary": 2.5,
             "other": 65,
         }
-        for reaction, row in enz_rxn_assoc_df.iterrows():
+        for reaction, row in tqdm.tqdm(enz_rxn_assoc_df.iterrows(),
+                           'Getting reaction Keffs...',
+                           bar_format = bar_format,
+                           total=enz_rxn_assoc_df.shape[0]):
             r = m_model.reactions.get_by_id(reaction)
             subsystem = r.subsystem
             if subsystem in subsystem_classification:
@@ -2028,7 +2069,9 @@ class Organism(object):
         m_model = self.m_model
         d = {}
         seen = set()
-        for m in m_model.metabolites:
+        for m in tqdm.tqdm(m_model.metabolites,
+                           'Saving M-model metabolites...',
+                           bar_format = bar_format):
             if m in seen:
                 continue
             m_root = m.id[:-2]
@@ -2058,7 +2101,9 @@ class Organism(object):
 
         m_model = self.m_model
         d = {}
-        for r in m_model.reactions:
+        for r in tqdm.tqdm(m_model.reactions,
+                           'Saving M-model reactions...',
+                           bar_format = bar_format):
             d[r.id] = {
                 "description": r.name,
                 "is_reversible": int(r.reversibility),
@@ -2076,7 +2121,9 @@ class Organism(object):
             {"Reaction": {}, "Metabolites": {}, "Compartment": {}, "Stoichiometry": {}}
         ).set_index("Reaction")
         warn_rxns = []
-        for rxn in m_model.reactions:
+        for rxn in tqdm.tqdm(m_model.reactions,
+                           'Creating M-model reaction matrix...',
+                           bar_format = bar_format):
             if set(
                 [
                     m_to_me.loc[met.id, "me_name"]
@@ -2119,7 +2166,9 @@ class Organism(object):
         contigs = self.contigs
         generic_dict = self.generic_dict
         warn_generics = []
-        for contig in contigs:
+        for contig in tqdm.tqdm(contigs,
+                           'Getting generics from Genbank contigs...',
+                           bar_format = bar_format):
             for feature in contig.features:
                 if "rRNA" in feature.type:
                     gene = "RNA_" + feature.qualifiers[self.locus_tag][0]
@@ -2132,7 +2181,7 @@ class Organism(object):
                     else:
                         cat = 0
                     if cat:
-                        print("{} to {}".format(gene, cat))
+                        logging.warning("Setting {} to {}".format(gene, cat))
                         generic_dict[cat]['enzymes'].append(gene)
         for k, v in generic_dict.items():
             if not v:
@@ -2156,7 +2205,10 @@ class Organism(object):
             'Accession-1' : list(self.gene_dictionary['Accession-1'].values)
         }
         warn_dups = {}
-        for k,v in info.items():
+        for k,v in tqdm.tqdm(info.items(),
+                           'Looking for duplicates within datasets...',
+                           bar_format = bar_format,
+                           total = len(info)):
             if len(v) != len(set(v)):
                 warn_dups[k] = [item for item, count in collections.Counter(v).items() if count > 1]
 
@@ -2178,7 +2230,9 @@ class Organism(object):
         genes = set(info['gene_dictionary'])
         rxns = set(info['reactions'])
         occ = {}
-        for i in cplxs|rnas|genes|rxns:
+        for i in tqdm.tqdm(cplxs|rnas|genes|rxns,
+                           'Gathering ID occurrences across datasets...',
+                           bar_format = bar_format):
             occ[i] = {'proteins':0,'RNAs':0,'genes':0,'reactions':0}
             if i in cplxs:
                 occ[i]['proteins'] += 1
@@ -2191,10 +2245,13 @@ class Organism(object):
         df = pandas.DataFrame.from_dict(occ).T
         df = df[df['reactions'] == 1]
         dup_df = df[df.sum(1)>1]
-        for c,row in dup_df.iterrows():
+        for c,row in tqdm.tqdm(dup_df.iterrows(),
+                           'Asessing duplicates across datasets...',
+                           bar_format = bar_format,
+                           total=dup_df.shape[0]):
             if row['reactions']:
                 change_reaction_id(self.m_model,c,c+'_rxn')
-                print('Changed reaction ID from {} to {} to prevent the conflict between: {}'.format(c,c+'_rxn',' and '.join([j for j,k in row.items() if k])))
+                logging.warning('Changed reaction ID from {} to {} to prevent the conflict between: {}'.format(c,c+'_rxn',' and '.join([j for j,k in row.items() if k])))
             else:
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
 
@@ -2203,7 +2260,10 @@ class Organism(object):
         curation_notes = self.curation_notes
         filename = self.directory + '/curation_notes.txt'
         file = open(filename,'w')
-        for k,v in curation_notes.items():
+        for k,v in tqdm.tqdm(curation_notes.items(),
+                           'Syncing optional genes file...',
+                           bar_format = bar_format,
+                           total=len(curation_notes)):
             file.write('\n')
             for w in v:
                 file.write('{} {}@{} {}\n'.format('#'*20,w['importance'],k,'#'*20))

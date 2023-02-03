@@ -83,7 +83,8 @@ class MEBuilder(object):
 		return None
 
 	def generate_files(self, overwrite = True):
-		sep = ""
+		sep = ''
+		print("{}Initiating file processing...".format(sep))
 		config = self.configuration
 		log = logging.getLogger() # root logger
 		for hdlr in log.handlers[:]: # remove all old handlers
@@ -99,8 +100,6 @@ class MEBuilder(object):
 		log.addHandler(self.logger['MEBuilder'])
 		logging.captureWarnings(True)
 
-		print("{}Reading organism{}".format(sep, sep))
-
 		# Read organism
 		self.org = coralme.builder.organism.Organism(config,
 													 is_reference = False)
@@ -108,7 +107,7 @@ class MEBuilder(object):
 		# self.org.rpod = ''
 		# self.org.get_rna_polymerase(force_RNAP_as='')
 
-		print("{} Modifying and preparing M-model {}".format(sep, sep))
+		logging.warning("Modifying and preparing M-model")
 		self.modify_metabolic_reactions('reaction_corrections.csv')
 		self.prepare_model()
 
@@ -117,7 +116,7 @@ class MEBuilder(object):
 		# Make sure you have specified that field in the beginning of this notebook.
 		# Reference
 		if bool(config.get('dev_reference', False)) or bool(config.get('user_reference', False)):
-			print("{} Reading reference {}".format(sep, sep))
+			logging.warning("Reading reference")
 			#with open(org_files_dir + ref + '/parameters.txt') as rf:
 				#ref_parameters = rf.read()
 			#ref_parameters = ast.literal_eval(ref_parameters)
@@ -128,7 +127,7 @@ class MEBuilder(object):
 
 			folder = self.org.blast_directory
 			if bool(config.get('run_bbh_blast', True)):
-				print("{} Running BLAST {}".format(sep, sep))
+				logging.warning("Running BLAST")
 				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.blast_directory)
 				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
 
@@ -147,7 +146,7 @@ class MEBuilder(object):
 				#os.system('{}/auto_blast.sh {}'.format(self.directory,self.org.directory))
 
 			# #### Reciprocal hits
-			print("{} Getting homologs {}".format(sep, sep))
+			logging.warning("Getting homologs")
 
 			self.get_homology(evalue = 1e-10)
 			self.homology.mutual_hits_df.to_csv('{:s}/mutual_hits.csv'.format(folder))
@@ -157,7 +156,7 @@ class MEBuilder(object):
 			self.homology.get_complex_homology()
 
 			# #### Update model info with homology
-			print("{} Updating from homology {}".format(sep, sep))
+			logging.warning("Updating from homology")
 			self.update_from_homology()
 
         #  TODO: Add flag for overwrite
@@ -181,28 +180,28 @@ class MEBuilder(object):
 			self.configuration['df_TranscriptionalUnits'] = filename
 
 		# #### Manual curation
-		print("{} Integrating manual curation of complexes {}".format(sep, sep))
+		logging.warning("Integrating manual curation of complexes")
 		self.add_manual_complexes()
 
 		# ## enzyme_reaction_association.txt
-		print("{} Getting enzyme-reaction association {}".format(sep, sep))
+		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
 
 		# ## Keffs
-		print("{} Setting reaction Keffs {}".format(sep, sep))
+		logging.warning("Setting reaction Keffs")
 		self.org.get_reaction_keffs()
 
 		# ## Files from model
 		# #### Metabolites
-		print("{} Generating metabolites file {}".format(sep, sep))
+		logging.warning("Generating metabolites file")
 		self.org.generate_metabolites_file()
 
 		# #### Reactions
-		print("{} Generating reactions file {}".format(sep, sep))
+		logging.warning("Generating reactions file")
 		self.org.generate_reactions_file()
 
 		# #### Reaction matrix
-		print("{} Generating reaction matrix file {}".format(sep, sep))
+		logging.warning("Generating reaction matrix file")
 		self.org.generate_reaction_matrix()
 
 		# #### Biomass constituents
@@ -212,7 +211,7 @@ class MEBuilder(object):
 		#print("{} Filling files with CPLX_dummy {}".format(sep, sep))
 		#self.fill()
 		# Final checks of builder
-		print("{} Performing final checks of files {}".format(sep, sep))
+		logging.warning("Performing final checks of files")
 		self.check()
 		# Save builder
 		#print("{} Saving builder {}".format(sep, sep))
@@ -221,18 +220,22 @@ class MEBuilder(object):
 		#print("{} Saving builder info {}".format(sep, sep))
 		#self.save_builder_info()
 		# Update notes
-		print("{} Generating curation notes {}".format(sep, sep))
+		logging.warning("Generating curation notes")
 		self.org.generate_curation_notes()
 
-		print("{} Generating new configuration file {}".format(sep, sep))
+		logging.warning("Generating new configuration file")
 		self.input_data(self.org.m_model, overwrite)
+		print("{}File processing done...".format(sep))
 
 	def prepare_model(self):
 		m_model = self.org.m_model
 		target_compartments = {"c": "Cytosol", "e": "Extra-organism", "p": "Periplasm"}
 		new_dict = {}
 		warn_compartments = []
-		for k,v in m_model.compartments.items():
+		for k,v in tqdm.tqdm(m_model.compartments.items(),
+						'Gathering M-model compartments...',
+						bar_format = bar_format,
+						total=len(m_model.compartments)):
 			if k in target_compartments:
 				new_dict[k] = target_compartments[k]
 			else:
@@ -240,13 +243,17 @@ class MEBuilder(object):
 				new_dict[k] = k
 		m_model.compartments = new_dict
 		gene_list = []
-		for m in m_model.metabolites:
+		for m in tqdm.tqdm(m_model.metabolites,
+						'Fixing compartments in M-model metabolites...',
+						bar_format = bar_format):
 			if not m.compartment:
-				print("Fixing compartment for metabolite {}".format(m.id))
+				logging.warning("Fixing compartment for metabolite {}".format(m.id))
 				m.compartment = m.id[-1]
-		for r in m_model.reactions:
+		for r in tqdm.tqdm(m_model.reactions,
+						'Fixing missing names in M-model reactions...',
+						bar_format = bar_format):
 			if not r.name or isinstance(r.name, float):
-				print("Fixing name for reaction {}".format(r.id))
+				logging.warning("Fixing name for reaction {}".format(r.id))
 				r.name = r.id
 
 		# Solve m_model
@@ -259,7 +266,7 @@ class MEBuilder(object):
 
 		self.org.biomass = str(m_model.objective.expression.as_two_terms()[0]).split('*')[1]
 		biomass_rxn = m_model.reactions.get_by_id(self.org.biomass)
-		print('{} was identified as the biomass reaction'.format(biomass_rxn.id))
+		logging.warning('{} was identified as the biomass reaction'.format(biomass_rxn.id))
 
 
 		adp = m_model.metabolites.adp_c
@@ -267,7 +274,7 @@ class MEBuilder(object):
 		self.org.GAM = None
 		if adp in biomass_rxn.metabolites:
 			self.org.GAM = biomass_rxn.metabolites[adp]
-			print('GAM identified with value {}'.format(self.org.GAM))
+			logging.warning('GAM identified with value {}'.format(self.org.GAM))
 		else:
 			self.org.GAM = 45.
 			self.org.curation_notes['prepare_model'].append({
@@ -283,7 +290,7 @@ class MEBuilder(object):
 				if rxn.lower_bound <= 0:
 					continue
 				self.org.NGAM = rxn.lower_bound
-				print('{} was identified as NGAM with value {}'.format(r,self.org.NGAM))
+				logging.warning('{} was identified as NGAM with value {}'.format(r,self.org.NGAM))
 				break
 		if self.org.NGAM == None:
 			self.org.NGAM = 1.
@@ -331,7 +338,10 @@ class MEBuilder(object):
 				"notes": {},
 				}).set_index("reaction_id").to_csv(filename)
 
-		for rxn_id, info in new_reactions_dict.items():
+		for rxn_id, info in tqdm.tqdm(new_reactions_dict.items(),
+							'Modifying metabolic reactions with manual curation...',
+							bar_format = bar_format,
+							total=len(new_reactions_dict)):
 			if info["reaction"] == "eliminate":
 				m_model.reactions.get_by_id(rxn_id).remove_from_model()
 			else:
@@ -433,7 +443,10 @@ class MEBuilder(object):
 		protein_mod = self.org.protein_mod
 		warn_manual_mod = []
 		warn_replace = []
-		for new_complex, info in manual_complexes.iterrows():
+		for new_complex, info in tqdm.tqdm(manual_complexes.iterrows(),
+					'Adding manual curation of complexes...',
+					bar_format = bar_format,
+					total=manual_complexes.shape[0]):
 			if info["genes"]:
 				if new_complex not in complexes_df:
 					complexes_df = complexes_df.append(
@@ -508,7 +521,9 @@ class MEBuilder(object):
 		enz_rxn_assoc_dict = {}
 		new_generics = {}
 
-		for rxn in m_model.reactions:
+		for rxn in tqdm.tqdm(m_model.reactions,
+					'Getting enzyme - reaction associations...',
+					bar_format = bar_format):
 			unnamed_counter = 0
 			rule = str(rxn.gene_reaction_rule)
 			if not rule:
@@ -533,7 +548,7 @@ class MEBuilder(object):
 							gene = identified_genes[0]
 							cplx_id = "{}-MONOMER".format(gene_dictionary.loc[gene]['Gene Name'])
 						if cplx_id not in org_complexes_df.index:
-							print("Adding {} to complexes from m_model".format(cplx_id))
+							logging.warning("Adding {} to complexes from m_model".format(cplx_id))
 							tmp = pandas.DataFrame.from_dict({
 								cplx_id: {
 									"name": str(rxn.name),
@@ -550,7 +565,7 @@ class MEBuilder(object):
 					reaction_cplx_list.append(cplx_id)
 				enz_rxn_assoc_dict[rxn.id] = " OR ".join(reaction_cplx_list)
 			else:
-				print('{} contains a GPR rule that has {} possible gene combinations. Generifying it.'.format(rxn.id,len(rule_list)))
+				logging.warning('{} contains a GPR rule that has {} possible gene combinations. Generifying it.'.format(rxn.id,len(rule_list)))
 				listified_gpr = coralme.builder.helper_functions.listify_gpr(rule)
 				n,rule_dict = coralme.builder.helper_functions.generify_gpr(listified_gpr,rxn.id,d={},generic_gene_dict=new_generics)
 				if not rule_dict: # n in gene_dictionary.index:
@@ -565,14 +580,14 @@ class MEBuilder(object):
 					else:
 						cplx_id = cplx
 					if 'generic' in cplx_id and cplx_id not in generic_dict:
-						print("Adding {} to generics from m_model".format(cplx_id))
+						logging.warning("Adding {} to generics from m_model".format(cplx_id))
 						new_generics[cplx_id] = rule.split(' or ')
 						generic_dict[cplx_id] = {
 							'enzymes':[gene_dictionary.loc[i,'Product'] if i in gene_dictionary.index else i for i in rule.split(' or ')]
 						}
 					elif 'generic' not in cplx_id and cplx_id not in org_complexes_df.index:
 						# New cplx not found in BioCyc files
-						print("Adding {} to complexes from m_model".format(cplx_id))
+						logging.warning("Adding {} to complexes from m_model".format(cplx_id))
 						tmp = pandas.DataFrame.from_dict({
 							cplx_id: {
 								"name": str(rxn.name),
@@ -608,7 +623,10 @@ class MEBuilder(object):
 		TU_df = self.org.TU_df
 		remove_TUs = []
 		TU_dict = {}
-		for tu_id, row in TU_df.iterrows():
+		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
+					'Updating TUs from homology...',
+					bar_format = bar_format,
+					total=TU_df.shape[0]):
 			tu = tu_id.split("_from_")[0]
 			rho_dependent = True
 			sigma = rpod
@@ -663,7 +681,10 @@ class MEBuilder(object):
 		ref_protein_location = self.ref.protein_location
 		if not isinstance(ref_protein_location, pandas.DataFrame):
 			return
-		for rc,row in ref_protein_location.iterrows():
+		for rc,row in tqdm.tqdm(ref_protein_location.iterrows(),
+					'Updating protein location from homology...',
+					bar_format = bar_format,
+					total=ref_protein_location.shape[0]):
 			ref_gene = re.findall('.*(?=\(.*\))', row['Protein'])[0]
 			if ref_gene not in mutual_hits:
 								continue
@@ -694,7 +715,10 @@ class MEBuilder(object):
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		mutual_hits = self.homology.mutual_hits
 		multipliers = {}
-		for ref_cplx, genes in ref_multipliers.items():
+		for ref_cplx, genes in tqdm.tqdm(ref_multipliers.items(),
+					'Updating translocation multipliers from homology...',
+					bar_format = bar_format,
+					total=len(ref_multipliers)):
 			if ref_cplx not in ref_cplx_homolog:
 				continue
 			org_cplx = ref_cplx_homolog[ref_cplx]
@@ -714,7 +738,10 @@ class MEBuilder(object):
 		ref_lipoprotein_precursors = self.ref.lipoprotein_precursors
 		mutual_hits = self.homology.mutual_hits
 		lipoprotein_precursors = {}
-		for c, g in ref_lipoprotein_precursors.items():
+		for c, g in tqdm.tqdm(ref_lipoprotein_precursors.items(),
+					'Updating lipoprotein precursors from homology...',
+					bar_format = bar_format,
+					total=len(ref_lipoprotein_precursors)):
 			if g in mutual_hits:
 				og = mutual_hits[g]
 				lipoprotein_precursors[c] = og
@@ -724,7 +751,9 @@ class MEBuilder(object):
 		cleaved_methionine = self.org.cleaved_methionine
 		ref_cleaved_methionine = self.ref.cleaved_methionine
 		mutual_hits = self.homology.mutual_hits
-		for g in ref_cleaved_methionine:
+		for g in tqdm.tqdm(ref_cleaved_methionine,
+					'Updating cleaved-methionine proteins from homology...',
+					bar_format = bar_format):
 			if g not in mutual_hits:
 				continue
 			cleaved_methionine.append(mutual_hits[g])
@@ -740,7 +769,10 @@ class MEBuilder(object):
 		warn_skip = []
 		warn_found = []
 		warn_skip_2 = []
-		for ref_m, row in ref_m_to_me_mets.iterrows():
+		for ref_m, row in tqdm.tqdm(ref_m_to_me_mets.iterrows(),
+					'Mapping M-metabolites to E-metabolites...',
+					bar_format = bar_format,
+					total=ref_m_to_me_mets.shape[0]):
 			if ref_m not in m_model.metabolites:
 				if "__" in ref_m:
 					ref_m = ref_m.replace("__", "_")
@@ -788,7 +820,10 @@ class MEBuilder(object):
 		generic_dict = self.org.generic_dict
 		ref_generic_dict = self.ref.generic_dict
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_generic_dict.items():
+		for k, v in tqdm.tqdm(ref_generic_dict.items(),
+					'Updating generics from homology...',
+					bar_format = bar_format,
+					total=len(ref_generic_dict)):
 			ref_cplxs = v['enzymes']
 			for i in ref_cplxs:
 				if i in ref_cplx_homolog:
@@ -800,7 +835,10 @@ class MEBuilder(object):
 		org_folding_dict = self.org.folding_dict
 		ref_folding_dict = self.ref.folding_dict
 		mutual_hits = self.homology.mutual_hits
-		for k, v in ref_folding_dict.items():
+		for k, v in tqdm.tqdm(ref_folding_dict.items(),
+					'Updating folding from homology...',
+					bar_format = bar_format,
+					total=len(ref_folding_dict)):
 			ref_cplxs = v['enzymes']
 			for i in ref_cplxs:
 				if i in mutual_hits:
@@ -813,7 +851,10 @@ class MEBuilder(object):
 		org_ribosome_subreactions = self.org.ribosome_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		warn_proteins = []
-		for k, v in ref_ribosome_subreactions.items():
+		for k, v in tqdm.tqdm(ref_ribosome_subreactions.items(),
+					'Updating ribosome subreaction machinery from homology...',
+					bar_format = bar_format,
+					total=len(ref_ribosome_subreactions)):
 			ref_cplx = v["enzyme"]
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[v["enzyme"]]
@@ -838,7 +879,10 @@ class MEBuilder(object):
 		org_rrna_modifications = self.org.rrna_modifications
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		warn_proteins = []
-		for k, v in ref_rrna_modifications.items():
+		for k, v in tqdm.tqdm(ref_rrna_modifications.items(),
+					'Updating rRNA modifications from homology...',
+					bar_format = bar_format,
+					total=len(ref_rrna_modifications)):
 			ref_cplx = v["machine"]
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[v["machine"]]
@@ -863,7 +907,10 @@ class MEBuilder(object):
 		org_amino_acid_trna_synthetase = self.org.amino_acid_trna_synthetase
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		warn_proteins = []
-		for k, v in ref_amino_acid_trna_synthetase.items():
+		for k, v in tqdm.tqdm(ref_amino_acid_trna_synthetase.items(),
+					'Updating tRNA synthetases from homology...',
+					bar_format = bar_format,
+					total=len(ref_amino_acid_trna_synthetase)):
 			ref_cplx = v
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[v]
@@ -888,7 +935,10 @@ class MEBuilder(object):
 		org_peptide_release_factors = self.org.peptide_release_factors
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		warn_proteins = []
-		for k, v in ref_peptide_release_factors.items():
+		for k, v in tqdm.tqdm(ref_peptide_release_factors.items(),
+					'Updating peptide release factors from homology...',
+					bar_format = bar_format,
+					total=len(ref_peptide_release_factors)):
 			ref_cplx = v['enzyme']
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[ref_cplx]
@@ -912,7 +962,10 @@ class MEBuilder(object):
 		ref_initiation_subreactions = self.ref.initiation_subreactions
 		org_initiation_subreactions = self.org.initiation_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_initiation_subreactions.items():
+		for k, v in tqdm.tqdm(ref_initiation_subreactions.items(),
+					'Updating translation initiation subsreactions from homology...',
+					bar_format = bar_format,
+					total=len(ref_initiation_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_initiation_subreactions[k]["enzymes"]
 			org_cplxs = [
@@ -926,7 +979,10 @@ class MEBuilder(object):
 		ref_elongation_subreactions = self.ref.elongation_subreactions
 		org_elongation_subreactions = self.org.elongation_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_elongation_subreactions.items():
+		for k, v in tqdm.tqdm(ref_elongation_subreactions.items(),
+					'Updating translation elongation subsreactions from homology...',
+					bar_format = bar_format,
+					total=len(ref_elongation_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_elongation_subreactions[k]["enzymes"]
 			org_cplxs = [
@@ -940,7 +996,10 @@ class MEBuilder(object):
 		ref_termination_subreactions = self.ref.termination_subreactions
 		org_termination_subreactions = self.org.termination_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_termination_subreactions.items():
+		for k, v in tqdm.tqdm(ref_termination_subreactions.items(),
+					'Updating translation termination subsreactions from homology...',
+					bar_format = bar_format,
+					total=len(ref_termination_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_termination_subreactions[k]["enzymes"]
 			org_cplxs = [
@@ -954,7 +1013,10 @@ class MEBuilder(object):
 		ref_special_trna_subreactions = self.ref.special_trna_subreactions
 		org_special_trna_subreactions = self.org.special_trna_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_special_trna_subreactions.items():
+		for k, v in tqdm.tqdm(ref_special_trna_subreactions.items(),
+					'Updating special tRNA subreactions from homology...',
+					bar_format = bar_format,
+					total=len(ref_special_trna_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_special_trna_subreactions[k]["enzymes"]
 			org_cplxs = [
@@ -968,7 +1030,10 @@ class MEBuilder(object):
 		ref_rna_degradosome = self.ref.rna_degradosome
 		org_rna_degradosome = self.org.rna_degradosome
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_rna_degradosome.items():
+		for k, v in tqdm.tqdm(ref_rna_degradosome.items(),
+					'Updating RNA degradosome composition from homology...',
+					bar_format = bar_format,
+					total=len(ref_rna_degradosome)):
 			ref_cplxs = v['enzymes']
 			defined_cplxs = org_rna_degradosome[k]['enzymes']
 			org_cplxs = [
@@ -982,7 +1047,10 @@ class MEBuilder(object):
 		ref_excision_machinery = self.ref.excision_machinery
 		org_excision_machinery = self.org.excision_machinery
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_excision_machinery.items():
+		for k, v in tqdm.tqdm(ref_excision_machinery.items(),
+					'Updating excision machinery from homology...',
+					bar_format = bar_format,
+					total=len(ref_excision_machinery)):
 			ref_cplxs = v['enzymes']
 			defined_cplxs = org_excision_machinery[k]['enzymes']
 			org_cplxs = [
@@ -996,7 +1064,10 @@ class MEBuilder(object):
 		ref_special_trna_subreactions = self.ref.special_modifications
 		org_special_trna_subreactions = self.org.special_modifications
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_special_trna_subreactions.items():
+		for k, v in tqdm.tqdm(ref_special_trna_subreactions.items(),
+					'Updating tRNA subreactions from homology...',
+					bar_format = bar_format,
+					total=len(ref_special_trna_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_special_trna_subreactions[k]["enzymes"]
 			org_cplxs = [
@@ -1012,7 +1083,10 @@ class MEBuilder(object):
 		ref_trna_modification = self.ref.trna_modification
 		org_trna_modification = self.org.trna_modification
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_trna_modification.items():
+		for k, v in tqdm.tqdm(ref_trna_modification.items(),
+					'Updating tRNA modification machinery from homology...',
+					bar_format = bar_format,
+					total=len(ref_trna_modification)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_trna_modification[k]["enzymes"]
 			org_cplxs = [
@@ -1028,7 +1102,10 @@ class MEBuilder(object):
 		ref_transcription_subreactions = self.ref.transcription_subreactions
 		org_transcription_subreactions = self.org.transcription_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_transcription_subreactions.items():
+		for k, v in tqdm.tqdm(ref_transcription_subreactions.items(),
+					'Updating transcription subreactions machinery from homology...',
+					bar_format = bar_format,
+					total=len(ref_transcription_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_transcription_subreactions[k]["enzymes"]
 			org_cplxs = [
@@ -1042,7 +1119,10 @@ class MEBuilder(object):
 		ref_translocation_pathways = self.ref.translocation_pathways
 		org_translocation_pathways = self.org.translocation_pathways
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in ref_translocation_pathways.items():
+		for k, v in tqdm.tqdm(ref_translocation_pathways.items(),
+					'Updating translocation machinery from homology...',
+					bar_format = bar_format,
+					total=len(ref_translocation_pathways)):
 			if k not in org_translocation_pathways:
 				org_translocation_pathways[k] = v.copy()
 			org_translocation_pathways[k]["enzymes"] = {}
@@ -1056,7 +1136,9 @@ class MEBuilder(object):
 		org_model = self.org.m_model
 		ref_model = self.ref.m_model
 
-		for m in org_model.metabolites:
+		for m in tqdm.tqdm(org_model.metabolites,
+					'Fixing M-model metabolites with homology...',
+					bar_format = bar_format):
 			if m.id not in ref_model.metabolites:
 				continue
 			ref_m = ref_model.metabolites.get_by_id(m.id)
@@ -1103,7 +1185,9 @@ class MEBuilder(object):
 				file_t_paths.add(i)
 
 		defined_t_paths = set()
-		for t in self.org.translocation_pathways.keys():
+		for t in tqdm.tqdm(self.org.translocation_pathways.keys(),
+					'Checking defined translocation pathways...',
+					bar_format = bar_format):
 			defined_t_paths.add(coralme.builder.dictionaries.pathway_to_abbreviation[t])
 		missing_pathways = file_t_paths - defined_t_paths
 		if missing_pathways:
