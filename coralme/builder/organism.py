@@ -20,8 +20,6 @@ except:
     warnings.warn("This biopython version does not allow for correct warning handling. Biopython >=1.80 is suggested.")
 
 import logging
-log_format = coralme.builder.main.log_format
-bar_format = coralme.builder.main.bar_format
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
 # Inherit from logging.Handler
@@ -45,7 +43,7 @@ class Organism(object):
         If True, process as reference organism.
     """
 
-    def __init__(self, config, is_reference,logger):
+    def __init__(self, config, is_reference):
         if is_reference:
             if bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 self.id = 'iJL1678b'
@@ -58,7 +56,6 @@ class Organism(object):
                 self.id = 'iJL1678b'
         else:
             self.id = config['model_id']
-        
         
         
         self.is_reference = is_reference
@@ -78,7 +75,6 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
-        self.logger = logger
         self.get_organism()
 
     @property
@@ -667,24 +663,9 @@ class Organism(object):
         return set(g for g,t in product_types.items() if 'RNA' in t)
 
     def get_organism(self):
-        log = logging.getLogger() # root logger
-        for hdlr in log.handlers[:]: # remove all old handlers
-            log.removeHandler(hdlr)
-
-        # Old code works in a separate script; but it works if we remove the old handler
-        logging.basicConfig(
-            filename = '{:s}/FileProcessing-{:s}.log'.format(
-                self.config.get('log_directory','.'),
-                self.config.get('model_id','coralME')),
-            filemode = 'w',
-            level = logging.WARNING,
-            format = log_format)
-        log.addHandler(self.logger['MEBuilder'])
-        logging.captureWarnings(True)
-        
-        
+        logging.warning(' Testing logger ')
         sep = " "*5
-        print("Getting {}".format(self.id))
+        print("Processing files for {}".format(self.id))
         if self.id != 'iJL1678b':
             print("Checking folder")
             self.check_folder()
