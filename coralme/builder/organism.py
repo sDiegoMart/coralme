@@ -868,6 +868,7 @@ class Organism(object):
         ## product ID like GENE-MONOMER or GENE-tRNA
         product = '{}-{}'.format(gene_name,product_type)
         gene_dictionary.loc[gene_name,'Product'] = product
+        return product
     
     def _add_entry_to_rna(self,
                          gene_id,
@@ -915,7 +916,8 @@ class Organism(object):
             if not product:
                 continue
             if ' ' in product or ('RNA' not in product and 'MONOMER' not in product):
-                self._correct_product(
+                product = \
+                    self._correct_product(
                         gene_name,
                         product_type,
                         gene_dictionary)
@@ -950,10 +952,50 @@ class Organism(object):
                                 'importance':'medium',
                                 'to_do':'Manually fill the products (with types) of these genes in genes.txt'
             })
-
-    def update_genbank_from_files(self):
+    
+    def _add_entry_to_genbank(self,
+                             gene_id,
+                             gene_name,
+                             product_type,
+                             product_name,
+                             row,
+                             contigs,
+                             gene_sequences):
+        print('Adding {} to genbank file as {}'.format(gene_id,product_type))
         from Bio.SeqFeature import SeqFeature, CompoundLocation, ExactPosition, FeatureLocation, SimpleLocation
         from Bio.SeqRecord import SeqRecord
+        gene_seq = gene_sequences[gene_name]
+        gene_left = int(row['Left-End-Position'])
+        gene_right = int(row['Right-End-Position'])
+        new_contig = SeqRecord(seq=gene_seq.seq,
+                              #id = 'contig-{}'.format(gene_id),
+                              id = '{}'.format(gene_id),
+                              name = gene_seq.name,
+                              description = gene_seq.description,
+                              annotations = {
+                                  'molecule_type' : 'DNA'
+                              })
+
+        feature0 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
+                              type='source',
+                              #id = 'contig-{}'.format(gene_id),
+                              id = '{}'.format(gene_id),
+                              qualifiers = {'note':'Added from BioCyc'})
+        feature1 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq)),strand = 1 if gene_left < gene_right else -1),
+                              type=product_type,
+                              id = gene_id,
+                              #strand = 1 if gene_left < gene_right else -1,
+                              qualifiers = {
+                                  self.locus_tag:[gene_id],
+                                  'product':[product_name]
+                              })
+
+        new_contig.features = [feature0] + [feature1]
+        contigs.append(new_contig)
+        
+    
+    def update_genbank_from_files(self):
+        
         if self.is_reference:
             return
         contigs = self.contigs
@@ -1003,38 +1045,18 @@ class Organism(object):
                     warn_position.append(gene_id)
                     continue
 
-                print('Adding {} to genbank file as {}'.format(gene_id,product_type))
                 if gene_name not in gene_sequences:
                     warn_sequence.append(gene_name)
                     continue
-                gene_seq = gene_sequences[gene_name]
-                gene_left = int(row['Left-End-Position'])
-                gene_right = int(row['Right-End-Position'])
-                new_contig = SeqRecord(seq=gene_seq.seq,
-                                      #id = 'contig-{}'.format(gene_id),
-                                      id = '{}'.format(gene_id),
-                                      name = gene_seq.name,
-                                      description = gene_seq.description,
-                                      annotations = {
-                                          'molecule_type' : 'DNA'
-                                      })
-
-                feature0 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
-                                      type='source',
-                                      #id = 'contig-{}'.format(gene_id),
-                                      id = '{}'.format(gene_id),
-                                      qualifiers = {'note':'Added from BioCyc'})
-                feature1 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq)),strand = 1 if gene_left < gene_right else -1),
-                                      type=product_type,
-                                      id = gene_id,
-                                      #strand = 1 if gene_left < gene_right else -1,
-                                      qualifiers = {
-                                          self.locus_tag:[gene_id],
-                                          'product':[product_name]
-                                      })
-
-                new_contig.features = [feature0] + [feature1]
-                contigs.append(new_contig)
+                    
+                self._add_entry_to_genbank(
+                     gene_id,
+                     gene_name,
+                     product_type,
+                     product_name,
+                     row,
+                     contigs,
+                     gene_sequences)
 
         with open(self.directory + 'genome_modified.gb', 'w') as outfile:
             for contig in contigs:
@@ -1102,7 +1124,7 @@ class Organism(object):
             if "dimer" in str(row["Common-Name"]):
                 stoich = 2
             genes = row["Genes of polypeptide, complex, or RNA"]
-            if isinstance(genes, float):
+            if not genes:
                 warn_proteins.append(p)
                 continue
             genes = [
@@ -1133,7 +1155,7 @@ class Organism(object):
     
     def read_optional_file(self,filetype,filename,columns):
         if os.path.isfile(filename):
-            file = pandas.read_csv(filename, sep="\t", index_col=0)
+            file = pandas.read_csv(filename, sep="\t",index_col=0)
         else:
             self.curation_notes['org.read_optional_file'].append({
                             'msg':'No {} file was found. Initializing an empty one.'.format(filetype),
@@ -1152,7 +1174,7 @@ class Organism(object):
                 'Left-End-Position',
                 'Right-End-Position',
                 'Product'
-            ])
+            ]).reset_index().set_index('Gene Name')
         gene_dictionary['replicon'] = ''
         warn_genes = []
         if not self.is_reference:
@@ -1182,7 +1204,7 @@ class Organism(object):
                         'triggered_by':warn_genes,
                         'importance':'medium',
                         'to_do':'Complete Accession-1 IDs in genes.txt if those genes are important.'})
-        return gene_dictionary.fillna("").reset_index().set_index("Gene Name")
+        return gene_dictionary
     def read_proteins_df(self,filename):
         return self.read_optional_file(
             'proteins',
