@@ -881,17 +881,6 @@ class Organism(object):
 
             elif product_type == 'MONOMER' and product not in complexes_df.index:
                 print('Adding {} ({}) to complexes'.format(gene_id,product))
-                #complexes_df = complexes_df.append(
-                        #pandas.DataFrame.from_dict(
-                            #{
-                                #product: {
-                                    #"name": product,
-                                    #"genes": '{}()'.format(gene_id),
-                                    #"source": "Synced",
-                                #}
-                            #}
-                        #).T
-                    #)
                 tmp = pandas.DataFrame.from_dict({
                     product: {
                         "name": product,
@@ -1268,7 +1257,7 @@ class Organism(object):
         gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
         
         print('Gene overlap between M-model and Genbank : {}%'.format(gb_overlap))
-        print('Gene overlap between M-model and optional files : {}'.format(file_overlap))
+        print('Gene overlap between M-model and optional files : {}%'.format(file_overlap))
 
         if gb_overlap < 1:
             raise ValueError('Overlap of M-model genes with genbank is too low ({}%)'.format(gb_overlap))
@@ -1312,6 +1301,96 @@ class Organism(object):
                 'importance':'high',
                 'to_do':'Classify them in ribosomal_proteins.csv'})
 
+    def _add_entry_to_gene_dictionary(self,
+                                gene_dictionary,
+                                gene_id,
+                                feature,
+                                left_end,
+                                right_end):
+        print("Adding {} to genes from genbank".format(gene_id))
+        feature_type = feature.type
+        if feature_type == 'CDS':
+            feature_type = 'MONOMER'
+        tmp = pandas.DataFrame.from_dict({
+                    gene_id: {
+                        "Accession-1": gene_id,
+                        "Left-End-Position": left_end,
+                        "Right-End-Position": right_end,
+                "Product": "{}-{}".format(gene_id,feature_type)
+                }}).T
+        return pandas.concat([gene_dictionary, tmp], axis = 0, join = 'outer')
+    
+    def _add_entry_to_complexes_or_rna(self,
+                                       complexes_df,
+                                       RNA_df,
+                                       gene_name,
+                                       gene_id,
+                                       feature,
+                                      ):
+        if 'product' in feature.qualifiers:
+            name_annotation = feature.qualifiers["product"][0]
+        else:
+            name_annotation = gene_name
+        if feature.type == 'CDS':
+            product = gene_name + '-MONOMER'
+            if not complexes_df["genes"].str.contains(gene_id).any():
+                print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
+                tmp = pandas.DataFrame.from_dict({
+                            product: {
+                                "name": name_annotation,
+                                "genes": "{}()".format(gene_id),
+                                "source": "GenBank",
+                        }}).T
+                complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
+
+        else: # It's not CDS, but an RNA
+            product = "{}-{}".format(gene_name,feature.type)
+            if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
+                print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
+                tmp = pandas.DataFrame.from_dict(
+                        {
+                           product : {
+                                "Common-Name": name_annotation,
+                                "Gene": gene_name
+                            }
+                        }
+                    ).T
+                RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+        return complexes_df,RNA_df,product
+    
+    def _add_entries_to_optional_files(self,
+                                       gene_dictionary,
+                                       complexes_df,
+                                       RNA_df,
+                                       feature,
+                                       record):
+        gene_id = feature.qualifiers[self.locus_tag][0]
+        left_end = min([i.start for i in feature.location.parts])
+        right_end = max([i.end for i in feature.location.parts])
+        if not gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)')).any():
+            gene_dictionary = \
+                self._add_entry_to_gene_dictionary(
+                        gene_dictionary,
+                        gene_id,
+                        feature,
+                        left_end,
+                        right_end)
+        gene_name = gene_dictionary[gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)'))].index[0]
+
+        complexes_df,RNA_df,product = \
+            self._add_entry_to_complexes_or_rna(
+                               complexes_df,
+                               RNA_df,
+                               gene_name,
+                               gene_id,
+                               feature,
+                              )
+        gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
+        gene_dictionary.loc[gene_name]["Left-End-Position"] = left_end
+        gene_dictionary.loc[gene_name]["Right-End-Position"] = right_end
+        gene_dictionary.loc[gene_name]["replicon"] = record.id
+        return gene_dictionary,complexes_df,RNA_df
+    
     def update_complexes_genes_with_genbank(self):
         if self.is_reference:
             return
@@ -1328,64 +1407,15 @@ class Organism(object):
                 if self.locus_tag not in feature.qualifiers:
                     warn_locus.append(feature.qualifiers)
                     continue
-                gene_id = feature.qualifiers[self.locus_tag]
-                if not gene_id:
-                    continue
-                gene_id = gene_id[0]
-                left_end = min([i.start for i in feature.location.parts])
-                right_end = max([i.end for i in feature.location.parts])
-                if not gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)')).any():
-                    print("Adding {} to genes from genbank".format(gene_id))
-                    feature_type = feature.type
-                    if feature_type == 'CDS':
-                        feature_type = 'MONOMER'
-                    tmp = pandas.DataFrame.from_dict({
-                                gene_id: {
-                                    "Accession-1": gene_id,
-                                    "Left-End-Position": left_end,
-                                    "Right-End-Position": right_end,
-                            "Product": "{}-{}".format(gene_id,feature_type)
-                            }}).T
-                    gene_dictionary = pandas.concat([gene_dictionary, tmp], axis = 0, join = 'outer')
-                else:
-                    accession = gene_dictionary[
-                        gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)'))
-                    ].index.values[0]
-
-                gene_name = gene_dictionary[gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)'))].index[0]
-                if 'product' in feature.qualifiers:
-                    name_annotation = feature.qualifiers["product"][0]
-                else:
-                    name_annotation = gene_name
-                if feature.type == 'CDS':
-                    product = gene_name + '-MONOMER'
-                    if not complexes_df["genes"].str.contains(gene_id).any():
-                        print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
-                        tmp = pandas.DataFrame.from_dict({
-                                    product: {
-                                        "name": name_annotation,
-                                        "genes": "{}()".format(gene_id),
-                                        "source": "GenBank",
-                                }}).T
-                        complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
-
-                else: # It's not CDS, but an RNA
-                    product = "{}-{}".format(gene_name,feature.type)
-                    if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
-                        print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
-                        tmp = pandas.DataFrame.from_dict(
-                                {
-                                   product : {
-                                        "Common-Name": name_annotation,
-                                        "Gene": gene_name
-                                    }
-                                }
-                            ).T
-                        RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
-                gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
-                gene_dictionary.loc[gene_name]["Left-End-Position"] = left_end
-                gene_dictionary.loc[gene_name]["Right-End-Position"] = right_end
-                gene_dictionary.loc[gene_name]["replicon"] = record.id
+                if not feature.qualifiers[self.locus_tag]:
+                    continue     
+                gene_dictionary,complexes_df,RNA_df = \
+                    self._add_entries_to_optional_files(
+                                       gene_dictionary,
+                                       complexes_df,
+                                       RNA_df,
+                                       feature,
+                                       record)
         self.complexes_df = complexes_df
         gene_dictionary.index.name = "Gene Name"
         self.gene_dictionary = gene_dictionary
