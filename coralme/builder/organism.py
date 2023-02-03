@@ -1444,6 +1444,7 @@ class Organism(object):
                 'triggered_by':[g.id for g in gene_list],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, add it to genes.txt'})
+    
     def get_trna_synthetase(self):
         if self.is_reference:
             return
@@ -1596,17 +1597,44 @@ class Organism(object):
                 'importance':'critical',
                 'to_do':'genome.gb does not have a valid annotation for RpoD. A random identified sigma factor in me_builder.org.sigmas was set as RpoD so that the builder can continue running. Set the correct RpoD by running me_builder.org.rpod = correct_rpod'})
         return rpod
-
+    
+    
+    def _get_rna_polymerase_from_complex(self,
+                                        complexes_df):
+        rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
+        return complexes_df[complexes_df["name"].str.contains(rnap_regex, regex=True)].index.to_list()
+    def _get_rna_polymerase_from_subunits(self,
+                                         complexes_df):
+        rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
+        RNAP_genes = complexes_df[
+            complexes_df["name"].str.contains(rnap_regex, regex=True)
+        ].index.to_list()
+        return [
+            g.split("-MONOMER")[0] for g in RNAP_genes if "-MONOMER" in g
+        ]
+    def _add_rna_polymerase_to_complexes(self,
+                                        complexes_df,
+                                        RNAP_genes):
+        return complexes_df.append(
+            pandas.DataFrame.from_dict(
+                {
+                    "RNAP-CPLX": {
+                        "name": "DNA-directed RNA polymerase",
+                        "genes": " AND ".join(
+                            ["{}()".format(g) for g in RNAP_genes]
+                        ),
+                        "source": "GenBank",
+                    }
+                }
+            ).T
+        )
     def get_rna_polymerase(self, force_RNAP_as=""):
         RNAP = ""
         if force_RNAP_as:
             RNAP = force_RNAP_as
         else:
             complexes_df = self.complexes_df
-            rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
-            RNAP = complexes_df[
-                complexes_df["name"].str.contains(rnap_regex, regex=True)
-            ].index.to_list()
+            RNAP = self._get_rna_polymerase_from_complex(complexes_df)
             if RNAP:
                 RNAP = RNAP[0]
                 # Warnings
@@ -1615,29 +1643,11 @@ class Organism(object):
                     'importance':'high',
                     'to_do':'Check whether you need to correct RNAP by running me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
             else:
-                #rnap_regex = "(RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
-                rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
-                RNAP_genes = complexes_df[
-                    complexes_df["name"].str.contains(rnap_regex, regex=True)
-                ].index.to_list()
-                RNAP_genes = [
-                    g.split("-MONOMER")[0] for g in RNAP_genes if "-MONOMER" in g
-                ]
+                RNAP_genes = self._get_rna_polymerase_from_subunits(self,
+                                                                    complexes_df)
                 if RNAP_genes:
-                    RNAP = "RNAP-CPLX"
-                    complexes_df = complexes_df.append(
-                        pandas.DataFrame.from_dict(
-                            {
-                                RNAP: {
-                                    "name": "DNA-directed RNA polymerase",
-                                    "genes": " AND ".join(
-                                        ["{}()".format(g) for g in RNAP_genes]
-                                    ),
-                                    "source": "GenBank",
-                                }
-                            }
-                        ).T
-                    )
+                    complexes_df = self._add_rna_polymerase_to_complexes(complexes_df,
+                                                                        RNAP_genes)
                     self.curation_notes['org.get_rna_polymerase'].append({
                         'msg':"RNAP was identified with subunits {}".format(
                             ", ".join(RNAP_genes)
