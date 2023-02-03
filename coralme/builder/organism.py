@@ -771,7 +771,7 @@ class Organism(object):
         if not os.path.isdir(self.blast_directory):
             os.makedirs(self.blast_directory)
             print("{} directory was created.".format(self.blast_directory))
-        
+
 
     def check_m_model(self):
         m_model = self.m_model
@@ -831,7 +831,7 @@ class Organism(object):
         self.TUs = self.read_TU_df(
             self.config.get('biocyc.TUs', self.directory + "TUs.txt")
         )
-    
+
     def sync_files(self):
         if self.is_reference:
             return
@@ -1034,7 +1034,7 @@ class Organism(object):
 
     def generate_complexes_df(self):
         proteins_df = self.proteins_df
-        
+
         if proteins_df.empty:
             return pandas.DataFrame(
                 columns = [
@@ -1044,7 +1044,7 @@ class Organism(object):
                     'source'
                 ]
             ).set_index('complex')
-        
+
         gene_dictionary = self.gene_dictionary
         complexes = {}
         protein_complexes_dict = {}
@@ -1074,6 +1074,7 @@ class Organism(object):
             complexes[p]["source"] = "BioCyc"
         complexes_df = pandas.DataFrame.from_dict(complexes).T[["name", "genes", "source"]]
         complexes_df.index.name = "complex"
+
         # Warnings
         if warn_proteins:
             self.curation_notes['org.generate_complexes_df'].append({
@@ -1082,7 +1083,7 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'Fill genes in proteins.txt'})
         return complexes_df.fillna({"name": ""})
-    
+
     def read_optional_file(self,filetype,filename,columns):
         if os.path.isfile(filename):
             file = pandas.read_csv(filename, sep="\t", index_col=0)
@@ -1255,7 +1256,7 @@ class Organism(object):
         # Overlaps
         file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
         gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
-        
+
         print('Gene overlap between M-model and Genbank : {}%'.format(gb_overlap))
         print('Gene overlap between M-model and optional files : {}%'.format(file_overlap))
 
@@ -1307,19 +1308,19 @@ class Organism(object):
                                 feature,
                                 left_end,
                                 right_end):
-        print("Adding {} to genes from genbank".format(gene_id))
-        feature_type = feature.type
-        if feature_type == 'CDS':
-            feature_type = 'MONOMER'
-        tmp = pandas.DataFrame.from_dict({
-                    gene_id: {
-                        "Accession-1": gene_id,
-                        "Left-End-Position": left_end,
-                        "Right-End-Position": right_end,
-                "Product": "{}-{}".format(gene_id,feature_type)
-                }}).T
+                    print("Adding {} to genes from genbank".format(gene_id))
+                    feature_type = feature.type
+                    if feature_type == 'CDS':
+                        feature_type = 'MONOMER'
+                    tmp = pandas.DataFrame.from_dict({
+                                gene_id: {
+                                    "Accession-1": gene_id,
+                                    "Left-End-Position": left_end,
+                                    "Right-End-Position": right_end,
+                            "Product": "{}-{}".format(gene_id,feature_type)
+                            }}).T
         return pandas.concat([gene_dictionary, tmp], axis = 0, join = 'outer')
-    
+
     def _add_entry_to_complexes_or_rna(self,
                                        complexes_df,
                                        RNA_df,
@@ -1327,35 +1328,35 @@ class Organism(object):
                                        gene_id,
                                        feature,
                                       ):
-        if 'product' in feature.qualifiers:
-            name_annotation = feature.qualifiers["product"][0]
-        else:
-            name_annotation = gene_name
-        if feature.type == 'CDS':
-            product = gene_name + '-MONOMER'
-            if not complexes_df["genes"].str.contains(gene_id).any():
-                print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
-                tmp = pandas.DataFrame.from_dict({
-                            product: {
-                                "name": name_annotation,
-                                "genes": "{}()".format(gene_id),
-                                "source": "GenBank",
-                        }}).T
-                complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
+                if 'product' in feature.qualifiers:
+                    name_annotation = feature.qualifiers["product"][0]
+                else:
+                    name_annotation = gene_name
+                if feature.type == 'CDS':
+                    product = gene_name + '-MONOMER'
+                    if not complexes_df["genes"].str.contains(gene_id).any():
+                        print("Adding {} ({}) to complexes from genbank".format(gene_id,product))
+                        tmp = pandas.DataFrame.from_dict({
+                                    product: {
+                                        "name": name_annotation,
+                                        "genes": "{}()".format(gene_id),
+                                        "source": "GenBank",
+                                }}).T
+                        complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
 
-        else: # It's not CDS, but an RNA
-            product = "{}-{}".format(gene_name,feature.type)
-            if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
-                print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
-                tmp = pandas.DataFrame.from_dict(
-                        {
-                           product : {
-                                "Common-Name": name_annotation,
-                                "Gene": gene_name
-                            }
-                        }
-                    ).T
-                RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+                else: # It's not CDS, but an RNA
+                    product = "{}-{}".format(gene_name,feature.type)
+                    if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
+                        print("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
+                        tmp = pandas.DataFrame.from_dict(
+                                {
+                                   product : {
+                                        "Common-Name": name_annotation,
+                                        "Gene": gene_name
+                                    }
+                                }
+                            ).T
+                        RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
         return complexes_df,RNA_df,product
     
     def _add_entries_to_optional_files(self,
@@ -1385,10 +1386,10 @@ class Organism(object):
                                gene_id,
                                feature,
                               )
-        gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
-        gene_dictionary.loc[gene_name]["Left-End-Position"] = left_end
-        gene_dictionary.loc[gene_name]["Right-End-Position"] = right_end
-        gene_dictionary.loc[gene_name]["replicon"] = record.id
+                gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
+                gene_dictionary.loc[gene_name]["Left-End-Position"] = left_end
+                gene_dictionary.loc[gene_name]["Right-End-Position"] = right_end
+                gene_dictionary.loc[gene_name]["replicon"] = record.id
         return gene_dictionary,complexes_df,RNA_df
     
     def update_complexes_genes_with_genbank(self):
@@ -1444,7 +1445,6 @@ class Organism(object):
                 'triggered_by':[g.id for g in gene_list],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, add it to genes.txt'})
-    
     def get_trna_synthetase(self):
         if self.is_reference:
             return
@@ -1597,37 +1597,37 @@ class Organism(object):
                 'importance':'critical',
                 'to_do':'genome.gb does not have a valid annotation for RpoD. A random identified sigma factor in me_builder.org.sigmas was set as RpoD so that the builder can continue running. Set the correct RpoD by running me_builder.org.rpod = correct_rpod'})
         return rpod
-    
+
     
     def _get_rna_polymerase_from_complex(self,
                                         complexes_df):
-        rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
+            rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
         return complexes_df[complexes_df["name"].str.contains(rnap_regex, regex=True)].index.to_list()
     def _get_rna_polymerase_from_subunits(self,
                                          complexes_df):
-        rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
-        RNAP_genes = complexes_df[
-            complexes_df["name"].str.contains(rnap_regex, regex=True)
-        ].index.to_list()
+                rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
+                RNAP_genes = complexes_df[
+                    complexes_df["name"].str.contains(rnap_regex, regex=True)
+                ].index.to_list()
         return [
-            g.split("-MONOMER")[0] for g in RNAP_genes if "-MONOMER" in g
-        ]
+                    g.split("-MONOMER")[0] for g in RNAP_genes if "-MONOMER" in g
+                ]
     def _add_rna_polymerase_to_complexes(self,
                                         complexes_df,
                                         RNAP_genes):
         return complexes_df.append(
-            pandas.DataFrame.from_dict(
-                {
+                        pandas.DataFrame.from_dict(
+                            {
                     "RNAP-CPLX": {
-                        "name": "DNA-directed RNA polymerase",
-                        "genes": " AND ".join(
-                            ["{}()".format(g) for g in RNAP_genes]
-                        ),
-                        "source": "GenBank",
-                    }
-                }
-            ).T
-        )
+                                    "name": "DNA-directed RNA polymerase",
+                                    "genes": " AND ".join(
+                                        ["{}()".format(g) for g in RNAP_genes]
+                                    ),
+                                    "source": "GenBank",
+                                }
+                            }
+                        ).T
+                    )
     def get_rna_polymerase(self, force_RNAP_as=""):
         RNAP = ""
         if force_RNAP_as:
@@ -1717,7 +1717,7 @@ class Organism(object):
         for tu, row in TUs.iterrows():
             sites = []
             start = []
-            end = []
+            stop = []
             genes = []
             replicons = []
             for g in row["Genes of transcription unit"].split(" // "):
@@ -1728,7 +1728,7 @@ class Organism(object):
                 #sites.append(int(gene_dictionary["Left-End-Position"][g]))
                 #sites.append(int(gene_dictionary["Right-End-Position"][g]))
                 start.append(int(gene_dictionary["Left-End-Position"][g]))
-                end.append(int(gene_dictionary["Right-End-Position"][g]))
+                stop.append(int(gene_dictionary["Right-End-Position"][g]))
                 replicons.append(gene_dictionary["replicon"][g])
             if not genes:
                 warn_tus.append(tu)
@@ -1737,7 +1737,7 @@ class Organism(object):
             rho_dependent = True  # Default True
             tu_name = "{}_from_{}".format(tu, sigma)
             TU_dict[tu_name] = {}
-            TU_dict[tu_name]["genes"] =  ','.join(genes)
+            TU_dict[tu_name]["genes"] = ','.join(genes)
             TU_dict[tu_name]["rho_dependent"] = rho_dependent
             TU_dict[tu_name]["rnapol"] = sigma
             TU_dict[tu_name]["tss"] = None
@@ -1745,8 +1745,8 @@ class Organism(object):
             #TU_dict[tu_name]["start"] = int(min(sites))+1
             TU_dict[tu_name]["start"] = ','.join([ str(x+1) for x in start ])
             #TU_dict[tu_name]["stop"] = int(max(sites))
-            TU_dict[tu_name]["stop"] = ','.join([ str(x) for x in end ])
-            TU_dict[tu_name]["replicon"] = ','.join(replicons)
+            TU_dict[tu_name]["stop"] = ','.join([ str(x) for x in stop ])
+            TU_dict[tu_name]["replicon"] = ','.join(replicons) if set(replicons) != {''} else None
         df = pandas.DataFrame.from_dict(TU_dict).T[
             #["start", "stop", "tss", "strand", "rho_dependent", "rnapol","replicon"]
             ['replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
@@ -1768,21 +1768,21 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
         return df
-    
+
     
     def _process_location_dict(self,
                                location,
                                location_interpreter):
-        new_location = {}
-        for k, v in location.items():
-            if isinstance(v, float):
-                continue
-            for loc in v.split(" // "):
-                if loc in location_interpreter.index:
-                    new_location[k] = location_interpreter["interpretation"][loc]
-                    break
-        return new_location
-    
+            new_location = {}
+            for k, v in location.items():
+                if isinstance(v, float):
+                    continue
+                for loc in v.split(" // "):
+                    if loc in location_interpreter.index:
+                        new_location[k] = location_interpreter["interpretation"][loc]
+                        break
+            return new_location
+
     def _add_entry_to_protein_location(self,
                                        gene_string,
                                        gene_dictionary,
