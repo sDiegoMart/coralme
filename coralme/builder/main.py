@@ -89,7 +89,9 @@ class MEBuilder(object):
 		print("{}Reading organism{}".format(sep, sep))
 
 		# Read organism
-		self.org = coralme.builder.organism.Organism(config, is_reference = False)
+		self.org = coralme.builder.organism.Organism(config,
+													 is_reference = False,
+													logger=self.logger)
 
 		# self.org.rpod = ''
 		# self.org.get_rna_polymerase(force_RNAP_as='')
@@ -109,7 +111,9 @@ class MEBuilder(object):
 			#ref_parameters = ast.literal_eval(ref_parameters)
 			#self.read_reference(ref, locus_tag=ref_parameters['locus_tag'])
 
-			self.ref = coralme.builder.organism.Organism(config, is_reference = True)
+			self.ref = coralme.builder.organism.Organism(config,
+														 is_reference = True,
+														logger=self.logger)
 
 			folder = self.org.blast_directory
 			if bool(config.get('run_bbh_blast', True)):
@@ -1283,7 +1287,7 @@ class MEReconstruction(object):
 			df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
 			# complete minimal dataframe with automated info from homology
 			if hasattr(self, 'homology'):
-				df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
+				df_data = coralme.buildef buildder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
 		return (df_tus, df_rmsc, df_subs, df_mets), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
