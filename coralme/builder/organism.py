@@ -21,7 +21,8 @@ except:
     warnings.warn("This biopython version does not allow for correct warning handling. Biopython >=1.80 is suggested.")
 
 import logging
-bar_format = coralme.builder.main.bar_format
+bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
 # Inherit from logging.Handler
