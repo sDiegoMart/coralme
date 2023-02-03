@@ -831,6 +831,64 @@ class Organism(object):
         self.TUs = self.read_TU_df(
             self.config.get('biocyc.TUs', self.directory + "TUs.txt")
         )
+        
+    def _get_product_type(self,
+                         row,
+                         complexes_df,
+                         RNA_df,
+                         gene_id,
+                         gene_name,
+                         warn_genes):
+        product = row['Product'].split(' // ')[0]
+        ### Try to get product type from gene id of type LOCUST_TAG-RNA
+        product_type = ''
+        if '-' in product and ' ' not in product:
+            product_type = re.findall('[a-zA-Z]+',product.split('-')[-1])
+            if product_type:product_type = product_type[0]
+        ### Set product type to RNA if it is in ID
+        if not product_type:
+            if 'RNA' in gene_id \
+                    or RNA_df['Gene'].str.match(gene_name).any() \
+                    or product in RNA_df.index:
+                product_type = 'RNA'
+            elif 'MONOMER' in gene_id \
+                    or complexes_df['genes'].str.contains('{}\(\d*\)'.format(gene_id),regex=True).any() \
+                    or product in complexes_df.index:
+                product_type = 'MONOMER'
+            else:
+                warn_genes.append(gene_id)
+                return 0,0
+        return product,product_type
+    
+    def _correct_product(self,
+                        gene_name,
+                        product_type,
+                        gene_dictionary):
+        ## Correct product. Likely product is a description and not an actual
+        ## product ID like GENE-MONOMER or GENE-tRNA
+        product = '{}-{}'.format(gene_name,product_type)
+        gene_dictionary.loc[gene_name,'Product'] = product
+    
+    def _add_entry_to_rna(self,
+                         gene_id,
+                         product,
+                         RNA_df):
+        print('Adding {} ({}) to RNAs'.format(gene_id,product))
+        tmp = pandas.DataFrame.from_dict({ "{}".format(product) : { "Common-Name": product, "Gene": gene_id }}).T
+        return pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+    
+    def _add_entry_to_complexes(self,
+                               gene_id,
+                               product,
+                               complexes_df):
+        print('Adding {} ({}) to complexes'.format(gene_id,product))
+        tmp = pandas.DataFrame.from_dict({
+            product: {
+                "name": product,
+                "genes": '{}()'.format(gene_id),
+                "source": "Synced",
+                }}).T
+        return pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
     
     def sync_files(self):
         if self.is_reference:
@@ -846,48 +904,38 @@ class Organism(object):
             if not gene_name or isinstance(gene_name,float):
                 warn_genes.append(gene_id)
                 continue
-            product = row['Product'].split(' // ')[0]
-            ### Try to get product type from gene id of type LOCUST_TAG-RNA
-            product_type = ''
-            if '-' in product and ' ' not in product:
-                product_type = re.findall('[a-zA-Z]+',product.split('-')[-1])
-                if product_type:product_type = product_type[0]
-            ### Set product type to RNA if it is in ID
-            if not product_type:
-                if 'RNA' in gene_id \
-                        or RNA_df['Gene'].str.match(gene_name).any() \
-                        or product in RNA_df.index:
-                    product_type = 'RNA'
-                elif 'MONOMER' in gene_id \
-                        or complexes_df['genes'].str.contains('{}\(\d*\)'.format(gene_id),regex=True).any() \
-                        or product in complexes_df.index:
-                    product_type = 'MONOMER'
-                else:
-                    warn_genes.append(gene_id)
-                    continue
-
+            
+            product,product_type = \
+                self._get_product_type(row,
+                     complexes_df,
+                     RNA_df,
+                     gene_id,
+                     gene_name,
+                     warn_genes)
+            if not product:
+                continue
             if ' ' in product or ('RNA' not in product and 'MONOMER' not in product):
-                ## Correct product. Likely product is a description and not an actual
-                ## product ID like GENE-MONOMER or GENE-tRNA
-                product = '{}-{}'.format(gene_name,product_type)
-                gene_dictionary.loc[gene_name,'Product'] = product
+                self._correct_product(
+                        gene_name,
+                        product_type,
+                        gene_dictionary)
 
             product_types[gene_id] = product_type
+            
             ## Sync files
             if 'RNA' in product_type and product not in RNA_df.index:
-                print('Adding {} ({}) to RNAs'.format(gene_id,product))
-                tmp = pandas.DataFrame.from_dict({ "{}".format(product) : { "Common-Name": product, "Gene": gene_id }}).T
-                RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+                RNA_df = \
+                    self._add_entry_to_rna(
+                        gene_id,
+                        product,
+                        RNA_df)
 
             elif product_type == 'MONOMER' and product not in complexes_df.index:
-                print('Adding {} ({}) to complexes'.format(gene_id,product))
-                tmp = pandas.DataFrame.from_dict({
-                    product: {
-                        "name": product,
-                        "genes": '{}()'.format(gene_id),
-                        "source": "Synced",
-                        }}).T
-                complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
+                complexes_df = \
+                    self._add_entry_to_complexes(
+                        gene_id,
+                        product,
+                        complexes_df)
 
         self.gene_dictionary = gene_dictionary[pandas.notnull(gene_dictionary.index)]
         self.RNA_df = RNA_df
@@ -1990,7 +2038,8 @@ class Organism(object):
             }
         self.reactions = pandas.DataFrame.from_dict(d).T
         self.reactions.index.name = "name"
-
+    
+    
     def generate_reaction_matrix(self):
         m_model = self.m_model
         m_to_me = self.m_to_me_mets
