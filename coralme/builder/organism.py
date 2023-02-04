@@ -1897,9 +1897,12 @@ class Organism(object):
         return new_location
     
     def _add_entry_to_protein_location(self,
+                                       c,
+                                       c_loc,
                                        gene_string,
                                        gene_dictionary,
-                                      protein_location):
+                                      protein_location,
+                                      gene_location):
         gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
         gene = gene_dictionary.loc[[gene]]["Gene Name"]
         for gene_ in gene: # In case of duplicates
@@ -1947,15 +1950,20 @@ class Organism(object):
             else:
                 continue
             for gene_string in complexes_df["genes"][c].split(' AND '):
-                protein_location = self._add_entry_to_protein_location(gene_string,
+                protein_location = self._add_entry_to_protein_location(
+                                                    c,
+                                                    c_loc,
+                                                    gene_string,
                                                     gene_dictionary,
-                                                    protein_location)
+                                                    protein_location,
+                                                    gene_location)
                 
         protein_location.index.name = "Complex"
         return protein_location
     
     
-    def _get_manual_curation(self,filename,
+    def _get_manual_curation(self,
+                             filename,
                              create_file=None,
                              no_file_return=pandas.DataFrame()):
         filepath = self.directory + filename
