@@ -227,6 +227,14 @@ class MEBuilder(object):
 		self.input_data(self.org.m_model, overwrite)
 		print("{}File processing done...".format(sep))
 
+		# We will remove duplicates entries in the log output
+		with open('{:s}/MEBuilder-{:s}.log'.format(config.get('log_directory', '.'), config.get('model_id', 'coralME')), 'w') as outfile:
+			logger = self.logger['MEBuilder'].log_list
+
+			tmp = pandas.DataFrame(logger)
+			for idx, data in tmp.drop_duplicates(subset = 1).iterrows():
+				outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
+
 	def prepare_model(self):
 		m_model = self.org.m_model
 		target_compartments = {"c": "Cytosol", "e": "Extra-organism", "p": "Periplasm"}
@@ -816,6 +824,7 @@ class MEBuilder(object):
 					'triggered_by':warn_found,
 					'importance':'medium',
 					'to_do':'Confirm these metabolites are correctly defined in m_to_me_mets.csv'})
+
 	def update_generics_from_homology(self):
 		generic_dict = self.org.generic_dict
 		ref_generic_dict = self.ref.generic_dict
@@ -874,6 +883,7 @@ class MEBuilder(object):
 				'triggered_by':warn_proteins,
 				'importance':'medium',
 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.ribosome_subreactions. Curate the inputs in ribosome_subreactions.csv accordingly.'})
+
 	def update_rrna_modifications_from_homology(self):
 		ref_rrna_modifications = self.ref.rrna_modifications
 		org_rrna_modifications = self.org.rrna_modifications
@@ -902,6 +912,7 @@ class MEBuilder(object):
 				'triggered_by':warn_proteins,
 				'importance':'medium',
 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.rrna_modifications. Curate the inputs in rrna_modifications.csv accordingly.'})
+
 	def update_amino_acid_trna_synthetases_from_homology(self):
 		ref_amino_acid_trna_synthetase = self.ref.amino_acid_trna_synthetase
 		org_amino_acid_trna_synthetase = self.org.amino_acid_trna_synthetase
@@ -930,6 +941,7 @@ class MEBuilder(object):
 				'triggered_by':warn_proteins,
 				'importance':'medium',
 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.amino_acid_trna_synthetase. Curate the inputs in amino_acid_trna_synthetase.csv accordingly.'})
+
 	def update_peptide_release_factors_from_homology(self):
 		ref_peptide_release_factors = self.ref.peptide_release_factors
 		org_peptide_release_factors = self.org.peptide_release_factors
@@ -958,6 +970,7 @@ class MEBuilder(object):
 				'triggered_by':warn_proteins,
 				'importance':'medium',
 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.peptide_release_factors. Curate the inputs in peptide_release_factors.csv accordingly.'})
+
 	def update_initiation_subreactions_from_homology(self):
 		ref_initiation_subreactions = self.ref.initiation_subreactions
 		org_initiation_subreactions = self.org.initiation_subreactions
@@ -1269,10 +1282,10 @@ class MEReconstruction(object):
 				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
 
 			## replace IDs
-			for name, rnap in config['rna_polymerases'].items():
-				if hasattr(self, 'homology'):
-					for key, value in rnap.items():
-						config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value)
+			#for name, rnap in config['rna_polymerases'].items():
+				#if hasattr(self, 'homology'):
+					#for key, value in rnap.items():
+						#config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value)
 						#config['rna_polymerases'][name][key] = self.homology.org_cplx_homolog.get(value, value.replace('-MONOMER', '_MONOMER'))
 
 		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
@@ -1307,10 +1320,11 @@ class MEReconstruction(object):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
 			logging.warning('The FMETTRS reaction will be skipped during the ME reconstruction steps.')
 
-		if hasattr(self, 'org') and len(config.get('braun\'s_lipoproteins', [])) == 0:
-			lst = self.org.lipoprotein_precursors['EG10544-MONOMER']
+		if hasattr(self, 'homology') and len(config.get('braun\'s_lipoproteins', [])) == 0:
+			lst = [ k.split('_mod_')[0] for k,v in self.homology.org_cplx_homolog.items() if 'palmitate' in v ]
 			config['braun\'s_lipoproteins'] = lst if isinstance(lst, list) else [lst]
-			logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(str(lst)))
+			if len(lst) != 0:
+				logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(', '.join(lst)))
 
 		def read(filecode, input_type, filename_if_empty, columns = []):
 			filename = config.get(filecode, '')

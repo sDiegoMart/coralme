@@ -113,44 +113,21 @@ def generate_organism_specific_matrix(genbank, model):
 	return df.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
 
 def complete_organism_specific_matrix(builder, data, model, output):
-	def bbh(x, builder):
-		if x is None:
-			return None
-		else:
-			lst = []
-			for gene in x.split(';'):
-				lst.append(builder.homology.mutual_hits.get(gene, None))
-			if set(lst) == set([None]):
-				return None
-			else:
-				return [ x for x in lst if x is not None ][0]
+	# ME-model homology to reference
+	def bbh(x, dct):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
+		tags = [ str(x).split(';') for x in tags ]
 
-	data['Reference BBH'] = data['Old Locus Tag'].apply(lambda x: bbh(x, builder))
-	data['Reference BBH'].update(data['Gene Names'].apply(lambda x: bbh(x, builder)))
-	data['Reference BBH'].update(data['Gene Locus ID'].apply(lambda x: bbh(x, builder)))
+		lst = []
+		for tag in [ x for y in tags for x in y ]:
+			lst.append(dct.get(tag, None))
+		lst = [ x for x in lst if x is not None ]
 
-	def monomers(x, builder):
-		if x is None:
-			return []
-		else:
-			cplxID = builder.homology.org_cplx_homolog.get(x + '-MONOMER', None)
-			if cplxID is None:
-				return []
-			else:
-				return [cplxID + ':1']
+		if len(lst) != 0:
+			return lst[0]
 
-	def complexes(x, df):
-		if x is None:
-			return []
-		else:
-			lst = []
-			for gene in x.split(';'):
-				cplxID = df[df['genes'].str.contains(gene)]
-				if len(cplxID) == 0:
-					lst.append([])
-				else:
-					lst.append(cplxID.index.to_list())
-			return [ x for y in lst for x in y ]
+	dct = builder.homology.mutual_hits
+	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct), axis = 1)
 
 	if builder.configuration.get('biocyc.genes', False):
 		dct = { v['Accession-1']:k for k,v in builder.org.gene_dictionary.iterrows() }
@@ -174,25 +151,29 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	else:
 		data['BioCyc'] = None
 
+	# ME-model complexes: restructure complexes_df to obtain the correct complex stoichiometry from the index
 	df = builder.org.complexes_df.copy(deep = True)
 	#df = df[~df.index.str.contains('MONOMER')]
 	df = df[df['genes'].str.contains('\(')]
 	df['genes'] = df['genes'].str.split(' AND ')
 	df = df.explode('genes')
 	df['stoich'] = df['genes'].apply(lambda x: '1' if x.split('(')[1][:-1] == '' else str(x.split('(')[1][:-1]))
-	df['genes'] = df['genes'].apply(lambda x: x[:-2])
+	df['genes'] = df['genes'].apply(lambda x: x.split('(')[0])
 	df.index = df.index + ':' + df['stoich']
 
-	# This overwrites the 'monomers' names with 'complexes' names
-	#data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
-	#data['Complex ID'].update(data['Gene Locus ID'].apply(lambda x: complexes(x, df)))
+	def complexes(x, builder):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
+		tags = [ str(x).split(';') for x in tags ]
 
-	# Do this instead to get complexes based on any ID defined from genbank+biocyc data
-	data['Complex ID'] = data['Gene Locus ID'].apply(lambda x: monomers(x, builder))
-	data['Complex ID'] += data['Gene Locus ID'].apply(lambda x: complexes(x, df))
-	data['Complex ID'] += data['Gene Names'].apply(lambda x: monomers(x, builder))
-	data['Complex ID'] += data['Gene Names'].apply(lambda x: complexes(x, df))
-	data['Complex ID'] += data['Old Locus Tag'].apply(lambda x: complexes(x, df))
+		cplx = []
+		for tag in [ x for y in tags for x in y ]:
+			res = df[df['genes'].str.fullmatch(tag)].index.to_list()
+			if len(res) != 0:
+				cplx.append(res)
+		if len(cplx) != 0:
+			return cplx[0]
+
+	data['Complex ID'] = data.apply(lambda x: complexes(x, df), axis = 1)
 	data = data.explode('Complex ID')
 
 	# ME-model cofactors
@@ -411,6 +392,19 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	#data['Complex ID'].update(data['Complex ID'].apply(lambda x: generics_in_complex(x, df)))
 	#data = data.explode('Complex ID')
+
+	# Filter out wrong enzyme-reaction associations
+	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda x: x.split('_mod_')[0].split(' OR '))
+	cplxs = [ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ]
+
+	# split df_data in two
+	tmp = data.copy(deep = True).reset_index(drop = True)
+	tmp2 = tmp[tmp['M-model Reaction ID'].isna()]
+	tmp1 = tmp[tmp['M-model Reaction ID'].notna()] # only entries with M-model reactions
+	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs)) & tmp1['Complex ID'].notna() ]
+
+	data = pandas.concat([tmp1, tmp2], axis = 0)
 
 	if pathlib.Path(output).is_file():
 		pass
