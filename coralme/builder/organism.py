@@ -1934,7 +1934,7 @@ class Organism(object):
             .to_dict(),
             location_interpreter,
         )
-        cplx_location = process_location_dict(
+        cplx_location = _process_location_dict(
             proteins_df["Locations"].dropna().to_dict(), location_interpreter
         )
         gene_dictionary = gene_dictionary.reset_index().set_index("Accession-1")
