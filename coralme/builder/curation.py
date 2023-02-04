@@ -22,19 +22,6 @@ class Curation(object):
             return df
 
     @property
-    def _TU_df(self):
-        if self.is_reference:
-            filename = self.directory + "TUs_from_biocyc.txt"
-        else:
-            filename = self.config.get('df_TranscriptionalUnits', self.directory + "TUs_from_biocyc.txt")
-        if os.path.isfile(filename) and (not self.config.get('overwrite', True) or self.is_reference):
-            tmp = pandas.read_csv(filename, index_col = 0, sep = "\t")
-            tmp = tmp.dropna(subset=['start', 'stop'], how = 'any')
-            return tmp
-        else:
-            return self.get_TU_df()
-
-    @property
     def _sigmas(self):
         filename = self.directory + "sigma_factors.csv"
         if os.path.isfile(filename):
@@ -509,25 +496,7 @@ class Curation(object):
             df.to_csv(filename, sep="\t")
             return dict()
 
-    @property
-    def _protein_location(self):
-        filename = self.directory + "peptide_compartment_and_pathways.csv"
-        if os.path.isfile(filename):
-            return pandas.read_csv(filename, index_col = 0, delimiter = "\t")
-        else:
-            self.curation_notes['org._protein_location'].append({
-                'msg':"No peptide_compartment_and_pathways.csv file found",
-                'importance':'low',
-                'to_do':'Fill peptide_compartment_and_pathways.csv'})
-            columns = [
-                'Complex',
-                'Complex_compartment',
-                'Protein',
-                'Protein_compartment',
-                'translocase_pathway',
-                ]
-            pandas.DataFrame(columns = columns).set_index('Complex').to_csv(filename, sep = "\t")
-            return self.get_protein_location()
+
 
     def _get_manual_curation(self,
                                  filename,
@@ -546,6 +515,26 @@ class Curation(object):
             'to_do':'Fill in {}'.format(filepath)
         })
         return no_file_return
+    
+    ## TODO: implement this
+    def get_protein_location(self):
+        filename = self.directory + "peptide_compartment_and_pathways.csv"
+        if os.path.isfile(filename):
+            return pandas.read_csv(filename, index_col = 0, delimiter = "\t")
+        else:
+            self.curation_notes['org._protein_location'].append({
+                'msg':"No peptide_compartment_and_pathways.csv file found",
+                'importance':'low',
+                'to_do':'Fill peptide_compartment_and_pathways.csv'})
+            columns = [
+                'Complex',
+                'Complex_compartment',
+                'Protein',
+                'Protein_compartment',
+                'translocase_pathway',
+                ]
+            pandas.DataFrame(columns = columns).set_index('Complex').to_csv(filename, sep = "\t")
+            return self.get_protein_location()
 
     def get_translocation_multipliers(self):
         return self._get_manual_curation(
