@@ -91,7 +91,7 @@ class MEBuilder(object):
 			log.removeHandler(hdlr)
 
 		logging.basicConfig(
-			filename = '{:s}/FileProcessing-{:s}.log'.format(
+			filename = '{:s}/MEBuilder-{:s}.log'.format(
 				config.get('log_directory','.'),
 				config.get('model_id','coralME')),
 			filemode = 'w',
@@ -1295,14 +1295,22 @@ class MEReconstruction(object):
 				logging.warning('GAM (ATP requirement for growth) was set from the M-model or default value.')
 				config['gam'] = self.org.GAM
 
-		# modify options to not run again blast
-		config['create_files'] = False
+		# modify options
+		#config['create_files'] = False
 		config['run_bbh_blast'] = False
 		config['dev_reference'] = False
+
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass]
+			logging.warning('The biomass reaction {:s} will be skipped during the ME reconstruction steps.'.format(self.org.biomass))
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
+			logging.warning('The FMETTRS reaction will be skipped during the ME reconstruction steps.')
+
+		if hasattr(self, 'org') and len(config.get('braun\'s_lipoproteins', [])) == 0:
+			lst = self.org.lipoprotein_precursors['EG10544-MONOMER']
+			config['braun\'s_lipoproteins'] = lst if isinstance(lst, list) else [lst]
+			logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(str(lst)))
 
 		def read(filecode, input_type, filename_if_empty, columns = []):
 			filename = config.get(filecode, '')
@@ -1313,7 +1321,7 @@ class MEReconstruction(object):
 				else:
 					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
 			else:
-				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty file \'{:s}\' was created.'.format(input_type, filename, filename_if_empty))
+				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty \'{:s}\' file was created.'.format(input_type, filename, filename_if_empty))
 				config[filecode] = filename_if_empty
 
 				tmp = pandas.DataFrame(columns = columns)
@@ -1984,13 +1992,22 @@ class MEReconstruction(object):
 
 		# ### 3. Braun's lipoprotein demand
 		# Metabolites and coefficients as defined in [Liu et al 2014](http://bmcsystbiol.biomedcentral.com/articles/10.1186/s12918-014-0110-6)
+		brauns_lipid_mod = me.global_info['braun\'s_lipid_mod']
 
-		if len(me.global_info['braun\'s_lipoprotein']) >= 1:
-			for Braun_lipoprotein in me.global_info['braun\'s_lipoprotein']:
-				rxn = coralme.core.reaction.SummaryVariable('core_structural_demand_brauns_{:s}'.format(Braun_lipoprotein))
-				murein5px4p = me.metabolites.get_by_id(me.global_info['braun\'s_lipid_mod'])
+		if len(me.global_info['braun\'s_lipoproteins']) >= 1:
+			for brauns_lipoprotein in me.global_info['braun\'s_lipoproteins']:
+				# Perform checks before attempt to incorporate the Braun's lipoproteins
+				if not me.metabolites.has_id(brauns_lipid_mod):
+					logging.warning('The metabolite \'{:s}\' is not present in the ME-model and the Braun\'s lipoprotein demand cannot be set. Please check if it is the correct behavior. . See http://bigg.ucsd.edu/universal/metabolites/murein5px4p for more information.'.format(brauns_lipid_mod))
+					continue
+				if not me.metabolites.has_id('protein_{:s}_lipoprotein_Outer_Membrane'.format(brauns_lipoprotein)):
+					logging.warning('The \'add_lipoproteins\' option is \'False\' or coralme failed to add the correct ME-model component and the Braun\'s lipoprotein demand cannot be set. Please check if it is the correct behavior.')
+					continue
+
+				rxn = coralme.core.reaction.SummaryVariable('core_structural_demand_brauns_{:s}'.format(brauns_lipoprotein))
+				murein5px4p = me.metabolites.get_by_id(brauns_lipid_mod)
 				murein5px4p_mass = murein5px4p.formula_weight / 1000.
-				lipoprotein = me.metabolites.get_by_id('protein_{:s}_lipoprotein_Outer_Membrane'.format(Braun_lipoprotein))
+				lipoprotein = me.metabolites.get_by_id('protein_{:s}_lipoprotein_Outer_Membrane'.format(brauns_lipoprotein))
 				me.add_reactions([rxn])
 
 				# biomass of lipoprotein accounted for in translation and lipid modification
@@ -2002,9 +2019,8 @@ class MEReconstruction(object):
 					combine = False)
 				rxn.lower_bound = me.mu # coralme.util.mu
 				rxn.upper_bound = me.mu # coralme.util.mu
-
 		else:
-			logging.warning('No Braun\'s lipoprotein homolog was set. Please check if it is the correct behavior.')
+			logging.warning('No Braun\'s lipoprotein (lpp gene) homolog was set. Please check if it is the correct behavior.')
 
 		# ## Part 7: Set keffs
 		# Either entirely based on SASA or using fit keffs from [Ebrahim et al 2016](https://www.ncbi.nlm.nih.gov/pubmed/27782110?dopt=Abstract)

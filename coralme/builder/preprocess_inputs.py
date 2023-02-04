@@ -3,6 +3,7 @@ import numpy
 import pathlib
 import pandas
 import warnings
+import logging
 from Bio import SeqIO
 
 try:
@@ -206,9 +207,11 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		cplxs = [ x for x in cplxs if x is not None ]
 		if len(cplxs) != 0:
 			mods = [ x.split('_mod_')[1:] for x in cplxs ][0]
-			mods = [ x for x in mods if not x.startswith('3hocta') ]
-			mods = [ x for x in mods if not x.startswith('Oxidized') ]
-			mods = [ x.replace('lipo', 'lipoate') for x in mods ]
+			mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
+			mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
+			mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
+			mods = [ x.replace('lipo', 'lipoate') for x in mods ] # most models, if not all models, use lipoate as metabolite ID
+			logging.warning('The modification \'lipo\' was renamed to \'lipoate\'. Revert manually to match the M-model metabolite.')
 			mods = [ '{:s}(1)'.format(x) if '(' not in x else x for x in mods ]
 			if len(mods) != 0:
 				return ' AND '.join(mods)

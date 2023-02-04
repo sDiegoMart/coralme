@@ -185,7 +185,7 @@ class MEModel(cobra.core.model.Model):
 			'ngam' : 1.,
 			'unmodeled_protein_fraction' : 0.36,
 
-			'braun\'s_lipoprotein' : [],
+			'braun\'s_lipoproteins' : [],
 			'braun\'s_lipid_mod' : 'murein5px4p_p',
 			'braun\'s_lpp_flux' : -0.0,
 			'braun\'s_murein_flux' : -0.0,
