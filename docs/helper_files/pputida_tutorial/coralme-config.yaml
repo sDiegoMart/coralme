@@ -1,0 +1,170 @@
+model_id: pputida_tutorial
+growth_key: mu1
+complex_cofactors:
+  fes_transfers:
+    erpA: ''
+    iscA: ''
+    sufA: ''
+  biotin_subreactions:
+    mod_btn_c:
+    - biotin_ligase
+  lipoate_subreactions:
+    mod_lipoyl_c:
+    - lipoyl_denovo
+    - lipoyl_scavenging
+  fes_chaperones: {}
+  bmocogdp_chaperones: {}
+  FeFe/NiFe:
+    mod_FeFe_cofactor_c: ''
+    mod_NiFe_cofactor_c: ''
+lipoprotein_precursors:
+  AcrA: PP_1386
+  BamB: PP_0856
+  BamD: PP_0622
+  BamE: PP_4731
+  CusC: PP_1384
+  LolB: PP_0724
+  MetQ: PP_0112
+  MltA: PP_4971
+  MltB: PP_4805
+lipid_modifications:
+- pe120_p
+- pe140_p
+- pe141_p
+- pe160_p
+- pe161_p
+- pe180_p
+- pe181_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg160_p
+- pg161_p
+- pg180_p
+- pg181_p
+ngam: 0.003285
+gam: 25
+unmodeled_protein_fraction: 0.36
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+braun's_lipoprotein: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+defer_to_rxn_matrix:
+- BIOMASS_KT2440_WT3
+- FMETTRS
+m-model-path: ./helper_files/pputida_tutorial/inputs/m_model.json
+genbank-path: ./helper_files/pputida_tutorial/building_data/genome_modified.gb
+biocyc.genes: ./helper_files/pputida_tutorial/inputs/genes.txt
+biocyc.prots: ./helper_files/pputida_tutorial/inputs/proteins.txt
+biocyc.TUs: ./helper_files/pputida_tutorial/inputs/TUs.txt
+biocyc.RNAs: ./helper_files/pputida_tutorial/inputs/RNAs.txt
+biocyc.seqs: ./helper_files/pputida_tutorial/inputs/sequences.fasta
+df_gene_cplxs_mods_rxns: ./helper_files/pputida_tutorial/building_data/automated-org-with-refs.xlsx
+df_TranscriptionalUnits: ./helper_files/pputida_tutorial/building_data/TUs_from_biocyc.txt
+df_matrix_stoichiometry: reaction_matrix.txt
+df_matrix_subrxn_stoich: ./helper_files/pputida_tutorial/inputs/subreaction_matrix.txt
+df_metadata_orphan_rxns: orphan_and_spont_reactions.txt
+df_metadata_metabolites: me_metabolites.txt
+out_directory: ./helper_files/pputida_tutorial
+log_directory: ./helper_files/pputida_tutorial
+run_bbh_blast: false
+dev_reference: false
+include_pseudo_genes: true
+rna_polymerases:
+  RNAP_G1G013282MONOMER:
+    sigma_factor: G1G01-3282-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G01778MONOMER:
+    sigma_factor: G1G01-778-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G014920MONOMER:
+    sigma_factor: G1G01-4920-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_CPLX1G01176:
+    sigma_factor: CPLX1G01-176
+    polymerase: CPLX1G01-105
+  RNAP_G1G012226MONOMER:
+    sigma_factor: G1G01-2226-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_CPLX1G01182:
+    sigma_factor: CPLX1G01-182
+    polymerase: CPLX1G01-105
+  RNAP_CPLX1G01177:
+    sigma_factor: CPLX1G01-177
+    polymerase: CPLX1G01-105
+  RNAP_G1G01386MONOMER:
+    sigma_factor: G1G01-386-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G01739MONOMER:
+    sigma_factor: G1G01-739-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G011026MONOMER:
+    sigma_factor: G1G01-1026-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G014477MONOMER:
+    sigma_factor: G1G01-4477-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G01177MONOMER:
+    sigma_factor: G1G01-177-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G014916MONOMER:
+    sigma_factor: G1G01-4916-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G014517MONOMER:
+    sigma_factor: G1G01-4517-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G015452MONOMER:
+    sigma_factor: G1G01-5452-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G013189MONOMER:
+    sigma_factor: G1G01-3189-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G013068MONOMER:
+    sigma_factor: G1G01-3068-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G013814MONOMER:
+    sigma_factor: G1G01-3814-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G01940MONOMER:
+    sigma_factor: G1G01-940-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G012333MONOMER:
+    sigma_factor: G1G01-2333-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G011081MONOMER:
+    sigma_factor: G1G01-1081-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G011067MONOMER:
+    sigma_factor: G1G01-1067-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G011720MONOMER:
+    sigma_factor: G1G01-1720-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G014619MONOMER:
+    sigma_factor: G1G01-4619-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G01424MONOMER:
+    sigma_factor: G1G01-424-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G014861MONOMER:
+    sigma_factor: G1G01-4861-MONOMER
+    polymerase: CPLX1G01-105
+  RNAP_G1G011519MONOMER:
+    sigma_factor: G1G01-1519-MONOMER
+    polymerase: CPLX1G01-105
+braun's_lipoproteins: []
