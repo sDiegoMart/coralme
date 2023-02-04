@@ -1934,7 +1934,7 @@ class Organism(object):
             .to_dict(),
             location_interpreter,
         )
-        cplx_location = _process_location_dict(
+        cplx_location = self._process_location_dict(
             proteins_df["Locations"].dropna().to_dict(), location_interpreter
         )
         gene_dictionary = gene_dictionary.reset_index().set_index("Accession-1")
@@ -1953,69 +1953,64 @@ class Organism(object):
                 
         protein_location.index.name = "Complex"
         return protein_location
+    
+    
+    def _get_manual_curation(self,filename,
+                             create_file=None,
+                             no_file_return=pandas.DataFrame()):
+        filepath = self.directory + filename
+        if os.path.isfile(filepath):
+            return pandas.read_csv(filepath, index_col=0)
+        
+        if create_file is not None:
+            create_file.to_csv(filepath)
+            
+        self.curation_notes['org._get_manual_curation'].append({
+            'msg':'No {} file found'.format(filename),
+            'importance':'low',
+            'to_do':'Fill in {}'.format(filepath)
+        })
+        return no_file_return
 
     def get_translocation_multipliers(self):
-        filename = self.directory + "translocation_multipliers.csv"
-        try:
-            return pandas.read_csv(filename, index_col=0).to_dict()
-        except:
-            self.curation_notes['org.get_translocation_multipliers'].append({
-                'msg':'No translocation_multipliers.csv file found',
-                'importance':'low',
-                'to_do':'Fill in me_builder.org.translocation_multipliers'})
-            return dict()
+        return self._get_manual_curation(
+             "translocation_multipliers.csv").to_dict()
 
     def get_lipoprotein_precursors(self):
-        filename = self.directory + "lipoprotein_precursors.csv"
-        try:
-            return pandas.read_csv(filename, index_col=0).to_dict()["gene"]
-        except:
-            self.curation_notes['org.get_lipoprotein_precursors'].append({
-                'msg':'No lipoprotein_precursors.csv file found',
-                'importance':'low',
-                'to_do':'Fill in me_builder.org.lipoprotein_precursors'})
-            return dict()
+        return self._get_manual_curation(
+            "lipoprotein_precursors.csv",
+            no_file_return = pandas.DataFrame(columns=['gene'])).to_dict()["gene"]
 
     def get_cleaved_methionine(self):
-        filename = self.directory + "cleaved_methionine.csv"
-        try:
-            return list(pandas.read_csv(filename,index_col=0).index)
-        except:
-            pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes').to_csv(filename)
-            self.curation_notes['org.get_cleaved_methionine'].append({
-                'msg':'No cleaved_methionine.csv file found',
-                'importance':'low',
-                'to_do':'Fill in me_builder.org.cleaved_methionine or cleaved_methionine.csv'})
-            return list()
+        return self._get_manual_curation(
+            "cleaved_methionine.csv",
+            create_file = pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes'),
+            no_file_return = list())
 
     def get_subsystem_classification(self):
         if self.is_reference:
             return None
-
-        filename = self.directory + "subsystem_classification.csv"
+        
+        subsystems = set(r.subsystem for r in self.m_model.reactions if r.subsystem)
+        create_file = {}
+        for s in subsystems:
+            create_file[s] = {}
+            create_file[s]["central_CE"] = 0
+            create_file[s]["central_AFN"] = 0
+            create_file[s]["intermediate"] = 0
+            create_file[s]["secondary"] = 0
+            create_file[s]["other"] = 1
+        create_file = pandas.DataFrame.from_dict(create_file).T
+        
         d = {}
-        try:
-            df = pandas.read_csv(filename, index_col=0)
-            for c in df.columns:
-                for s in df[df.c == 1].index:
-                    d[s] = c
-        except:
-            self.curation_notes['org.get_subsystem_classification'].append({
-                'msg':'No subsystem_classification.csv file found',
-                'importance':'low',
-                'to_do':'Check and correct the generated subsystem_classification.csv'})
-            subsystems = set(r.subsystem for r in self.m_model.reactions if r.subsystem)
-            df = {}
-            for s in subsystems:
-                d[s] = "central_CE"
-                df[s] = {}
-                df[s]["central_CE"] = 0
-                df[s]["central_AFN"] = 0
-                df[s]["intermediate"] = 0
-                df[s]["secondary"] = 0
-                df[s]["other"] = 1
-            df = pandas.DataFrame.from_dict(df).T
-            df.to_csv(filename)
+        df = self._get_manual_curation(
+            "subsystem_classification.csv",
+            create_file = create_file,
+            no_file_return = pandas.DataFrame())
+        
+        for c in df.columns:
+            for s in df[df[c] == 1].index:
+                d[s] = c
         return d
 
     def get_reaction_keffs(self):
