@@ -104,6 +104,7 @@ class MEBuilder(object):
 		self.org = coralme.builder.organism.Organism(config,
 													 is_reference = False)
 
+		self.org.get_organism()
 		# self.org.rpod = ''
 		# self.org.get_rna_polymerase(force_RNAP_as='')
 
@@ -125,6 +126,7 @@ class MEBuilder(object):
 			self.ref = coralme.builder.organism.Organism(config,
 														 is_reference = True)
 
+			self.ref.get_organism()
 			folder = self.org.blast_directory
 			if bool(config.get('run_bbh_blast', True)):
 				logging.warning("Running BLAST")
