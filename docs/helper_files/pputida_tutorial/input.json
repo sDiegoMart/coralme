@@ -1,0 +1,20 @@
+{
+  "m-model-path": "./helper_files/pputida_tutorial/inputs/m_model.json",
+  "genbank-path": "./helper_files/pputida_tutorial/inputs/genome.gb",
+  "biocyc.genes": "./helper_files/pputida_tutorial/inputs/genes.txt",
+  "biocyc.prots": "./helper_files/pputida_tutorial/inputs/proteins.txt",
+  "biocyc.TUs": "./helper_files/pputida_tutorial/inputs/TUs.txt",
+  "biocyc.RNAs": "./helper_files/pputida_tutorial/inputs/RNAs.txt",
+  "biocyc.seqs": "./helper_files/pputida_tutorial/inputs/sequences.fasta",
+  "df_gene_cplxs_mods_rxns": "./helper_files/pputida_tutorial/building_data/automated-org-with-refs.xlsx",
+  "df_TranscriptionalUnits": "",
+  "df_matrix_stoichiometry": "",
+  "df_matrix_subrxn_stoich": "./helper_files/pputida_tutorial/inputs/subreaction_matrix.txt",
+  "df_metadata_orphan_rxns": "",
+  "df_metadata_metabolites": "",
+  "out_directory": "./helper_files/pputida_tutorial",
+  "log_directory": "./helper_files/pputida_tutorial",
+  "run_bbh_blast": true,
+  "dev_reference": true,
+  "include_pseudo_genes": true
+}
