@@ -77,7 +77,7 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
-        self.get_organism()
+#         self.get_organism()
 
     @property
     def directory(self):
