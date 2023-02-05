@@ -646,8 +646,9 @@ class Organism(object):
                 'Protein_compartment',
                 'translocase_pathway',
                 ]
-            pandas.DataFrame(columns = columns).set_index('Complex').to_csv(filename, sep = "\t")
-            return self.get_protein_location()
+            df = pandas.DataFrame(columns = columns).set_index('Complex')
+            df.to_csv(filename, sep = "\t")
+            return df
 
     @property
     def _m_model(self):
@@ -694,32 +695,39 @@ class Organism(object):
         self.purge_genes_in_model()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
+        
         logging.warning("Loading manually added complexes")
         self.manual_complexes = self._manual_complexes
+        
         logging.warning("Getting sigma factors from BioCyc")
         self.sigmas = self._sigmas
         self.rpod = self._rpod
         logging.warning("Getting RNA polymerase from BioCyc")
         self.get_rna_polymerase()
+        
         logging.warning("Loading generics")
         self.generic_dict = self._generic_dict
+        
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
         logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
+        
         logging.warning("Loading RNA degradosome")
         self.rna_degradosome = self._rna_degradosome
         logging.warning("Loading RNA excision machinery")
         self.excision_machinery = self._excision_machinery
         logging.warning("Loading transcription subreactions")
         self.transcription_subreactions = self._transcription_subreactions
+        
         logging.warning("Generating transcription units dataframe")
         self.TU_df = self._TU_df
         self.get_TU_genes()
+        
         logging.warning("Getting protein location from BioCyc")
         self.protein_location = self._protein_location
         logging.warning("Reading ribosomal proteins{}")
-        self.ribosome_stoich = self._ribosome_stoich
+        self.ribosome_stoich = self._ribosome_stoich 
         logging.warning("Updating ribosomal proteins with BioCyc")
         self.update_ribosome_stoich()
         logging.warning("Loading ribosome subreactions")
@@ -736,8 +744,12 @@ class Organism(object):
         self.termination_subreactions = self._termination_subreactions
         logging.warning("Loading special trna subreactions")
         self.special_trna_subreactions = self._special_trna_subreactions
+        
+        logging.warning("Updating protein location with BioCyc")
+        self.get_protein_location()
         logging.warning("Updating tRNA synthetases with BioCyc")
         self.get_trna_synthetase()
+        
         logging.warning("Loading trna modifications and targets")
         self.trna_modification = self._trna_modification
         self.trna_modification_targets = self._trna_modification_targets
@@ -755,12 +767,15 @@ class Organism(object):
         self.folding_dict = self._folding_dict
         logging.warning("Loading subsystem classification for Keffs")
         self.subsystem_classification = self.get_subsystem_classification()
+        
         logging.warning("Getting lipids")
         self.lipids = self.get_lipids()
         logging.warning("Getting phospholipids")
         self.phospholipids = self.get_phospholipids()
+        
         logging.warning("Loading peptide release factors")
         self.peptide_release_factors = self._peptide_release_factors
+        
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
         print("{}Reading {} done...".format(sep,self.id))
@@ -1921,15 +1936,16 @@ class Organism(object):
         proteins_df = self.proteins_df
         gene_dictionary = self.gene_dictionary
         location_interpreter = self.location_interpreter
+        protein_location = self.protein_location
 
-        protein_location = pandas.DataFrame.from_dict(
-            {
-                "Complex_compartment": {},
-                "Protein": {},
-                "Protein_compartment": {},
-                "translocase_pathway": {},
-            }
-        )
+#         protein_location = pandas.DataFrame.from_dict(
+#             {
+#                 "Complex_compartment": {},
+#                 "Protein": {},
+#                 "Protein_compartment": {},
+#                 "translocase_pathway": {},
+#             }
+#         )
         gene_location = self._process_location_dict(
             proteins_df.set_index("Genes of polypeptide, complex, or RNA")["Locations"]
             .dropna()
@@ -1957,8 +1973,8 @@ class Organism(object):
                                                     protein_location,
                                                     gene_location)
                 
-        protein_location.index.name = "Complex"
-        return protein_location
+#         protein_location.index.name = "Complex"
+        self.protein_location = protein_location
     
     
     def _get_manual_curation(self,
