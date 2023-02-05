@@ -1937,15 +1937,6 @@ class Organism(object):
         gene_dictionary = self.gene_dictionary
         location_interpreter = self.location_interpreter
         protein_location = self.protein_location
-
-#         protein_location = pandas.DataFrame.from_dict(
-#             {
-#                 "Complex_compartment": {},
-#                 "Protein": {},
-#                 "Protein_compartment": {},
-#                 "translocase_pathway": {},
-#             }
-#         )
         gene_location = self._process_location_dict(
             proteins_df.set_index("Genes of polypeptide, complex, or RNA")["Locations"]
             .dropna()
@@ -1972,8 +1963,6 @@ class Organism(object):
                                                     gene_dictionary,
                                                     protein_location,
                                                     gene_location)
-                
-#         protein_location.index.name = "Complex"
         self.protein_location = protein_location
     
     
