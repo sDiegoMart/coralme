@@ -2,10 +2,9 @@ import pandas
 
 class MECurator(object):
     
-    def __init__(org,
-                 config):
-        self.org = org
-        self.config = config
+    def __init__(self,
+                 builder):
+        self.builder = builder
     
     @property
     def _manual_complexes(self):

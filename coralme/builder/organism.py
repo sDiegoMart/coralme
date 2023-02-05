@@ -1978,6 +1978,7 @@ class Organism(object):
             'importance':'low',
             'to_do':'Fill in {}'.format(filepath)
         })
+        print(no_file_return)
         return no_file_return
 
     def get_translocation_multipliers(self):
@@ -1987,7 +1988,7 @@ class Organism(object):
     def get_lipoprotein_precursors(self):
         return self._get_manual_curation(
             "lipoprotein_precursors.csv",
-            no_file_return = pandas.DataFrame(columns=['gene'])).to_dict()["gene"]
+            no_file_return = pandas.DataFrame(columns=['gene']),sep=',').to_dict()["gene"]
 
     def get_cleaved_methionine(self):
         return self._get_manual_curation(
