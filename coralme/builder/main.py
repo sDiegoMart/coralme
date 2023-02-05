@@ -530,7 +530,7 @@ class MEBuilder(object):
 		new_generics = {}
 
 		for rxn in tqdm.tqdm(m_model.reactions,
-					'Getting enzyme - reaction associations...',
+					'Getting enzyme-reaction associations...',
 					bar_format = bar_format):
 			unnamed_counter = 0
 			rule = str(rxn.gene_reaction_rule)

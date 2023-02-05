@@ -353,7 +353,7 @@ def build_reactions_from_genbank(
 			starts = tu_frame.start[tu_id]
 			stops = tu_frame.stop[tu_id]
 			strand = 1 if tu_frame.strand[tu_id] == '+' else -1
-			organelle = tu_frame.organelle[tu_id] if 'organelle' in tu_frame.columns else 'c'
+			organelle = tu_frame.organelle[tu_id] if 'organelle' in tu_frame.columns else None
 
 			#if len(str(start).split(',')) > 1:
 				#locations = []
@@ -384,10 +384,10 @@ def build_reactions_from_genbank(
 				#)
 
 			replicons = tu_frame.genes[tu_id] if tu_frame.replicon[tu_id] is numpy.nan else tu_frame.replicon[tu_id]
-			print(tu_id, replicons)
+			#print(tu_id, replicons)
 			dna = ''
 			for replicon_id, seq in zip(replicons.split(','), seqs):
-				print(replicon_id, seq)
+				#print(replicon_id, seq)
 				# Deprecated in Biopython 1.80
 				#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
 				dna += seq.extract(full_seqs[replicon_id]).replace('-', '')
@@ -401,17 +401,14 @@ def build_reactions_from_genbank(
 	trna_to_aa = {}
 
 	# Dictionary of tRNA locus ID to amino acid, per organelle type
-	aa2trna = {
-		'c' : {}, # prokaryotes and eukaryotes
-		'm' : {}, # mitochondria
-		'h' : {}, # plastids
-		}
+	aa2trna = { 'c' : {} } # prokaryotes and eukaryotes
+	if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+		aa2trna.update({'m' : {}, 'h' : {}}) # mitochondria and plastids
 
-	transl_tables = {
-		'c' : set(), # prokaryotes and eukaryotes
-		'm' : set(), # mitochondria
-		'h' : set(), # plastids
-		}
+	# Translation tables, per organelle type
+	transl_tables = { 'c' : set() } # prokaryotes and eukaryotes
+	if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+		transl_tables.update({'m' : set(), 'h' : set()}) # mitochondria and plastids
 
 	# Set of start and stop codons
 	start_codons = set()
@@ -493,7 +490,7 @@ def build_reactions_from_genbank(
 				# Add the stop codon to the stop_codons sets
 				stop_codons.add(str(seq[-3:]).replace('T', 'U'))
 
-				# Add the translation table (eukaryotes)
+				# Add the translation table per organelle
 				if organelle is None:
 					transl_tables['c'].add(int(transl_table))
 					if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
@@ -616,7 +613,7 @@ def build_reactions_from_genbank(
 			if len(me_model.global_info['START_tRNA']) == 0:
 				logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
 		else:
-			logging.warning('No tRNA genes were identified from their locus tags. The ME-model would be unfeasible.')
+			logging.warning('No tRNA genes were identified from their locus tags. Disregard this message if your organism does not posses chloroplasts.')
 
 	# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
 	me_model.global_info['aa2trna'] = aa2trna
