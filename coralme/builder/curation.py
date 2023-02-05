@@ -1,7 +1,9 @@
+import pandas
 
-class Curation(object):
+class MECurator(object):
     
-    def __init__(org,config):
+    def __init__(org,
+                 config):
         self.org = org
         self.config = config
     
@@ -499,16 +501,17 @@ class Curation(object):
 
 
     def _get_manual_curation(self,
-                                 filename,
-                                 create_file=None,
-                                 no_file_return=pandas.DataFrame()):
+                             filename,
+                             create_file=None,
+                             no_file_return=pandas.DataFrame(),
+                             sep = '\t'):
         filepath = self.directory + filename
         if os.path.isfile(filepath):
-            return pandas.read_csv(filepath, index_col=0)
-
+            return pandas.read_csv(filepath, index_col=0,sep=sep)
+        
         if create_file is not None:
             create_file.to_csv(filepath)
-
+            
         self.curation_notes['org._get_manual_curation'].append({
             'msg':'No {} file found'.format(filename),
             'importance':'low',
@@ -517,7 +520,9 @@ class Curation(object):
         return no_file_return
     
     ## TODO: implement this
-    def get_protein_location(self):
+    def load_protein_location(self):
+        return self._get_manual_curation(
+             "peptide_compartment_and_pathways.csv").to_dict() 
         filename = self.directory + "peptide_compartment_and_pathways.csv"
         if os.path.isfile(filename):
             return pandas.read_csv(filename, index_col = 0, delimiter = "\t")
@@ -536,22 +541,22 @@ class Curation(object):
             pandas.DataFrame(columns = columns).set_index('Complex').to_csv(filename, sep = "\t")
             return self.get_protein_location()
 
-    def get_translocation_multipliers(self):
+    def load_translocation_multipliers(self):
         return self._get_manual_curation(
              "translocation_multipliers.csv").to_dict()
 
-    def get_lipoprotein_precursors(self):
+    def load_lipoprotein_precursors(self):
         return self._get_manual_curation(
             "lipoprotein_precursors.csv",
             no_file_return = pandas.DataFrame(columns=['gene'])).to_dict()["gene"]
 
-    def get_cleaved_methionine(self):
+    def load_cleaved_methionine(self):
         return self._get_manual_curation(
             "cleaved_methionine.csv",
             create_file = pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes'),
             no_file_return = list())
 
-    def get_subsystem_classification(self):
+    def load_subsystem_classification(self):
         if self.is_reference:
             return None
 

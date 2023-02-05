@@ -3,6 +3,7 @@ import coralme.builder.main
 import coralme.builder.dictionaries
 import coralme.builder.organism
 import coralme.builder.homology
+import coralme.builder.curation
 import coralme.builder.helper_functions
 
 # 1st step

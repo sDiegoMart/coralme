@@ -38,9 +38,8 @@ class Organism(object):
 
     Parameters
     ----------
-    org : str
-        Identifier of the main organism. Has to be the same as the
-        containing folder name.
+    config : dict
+        Dictionary containing configuration and settings.
 
     is_reference : bool
         If True, process as reference organism.
@@ -1965,10 +1964,11 @@ class Organism(object):
     def _get_manual_curation(self,
                              filename,
                              create_file=None,
-                             no_file_return=pandas.DataFrame()):
+                             no_file_return=pandas.DataFrame(),
+                             sep = '\t'):
         filepath = self.directory + filename
         if os.path.isfile(filepath):
-            return pandas.read_csv(filepath, index_col=0)
+            return pandas.read_csv(filepath, index_col=0,sep=sep)
         
         if create_file is not None:
             create_file.to_csv(filepath)
