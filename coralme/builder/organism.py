@@ -724,12 +724,14 @@ class Organism(object):
         self.TU_df = self._TU_df
         self.get_TU_genes()
         
-        logging.warning("Getting protein location from BioCyc")
+        logging.warning("Loading protein location")
         self.protein_location = self._protein_location
         logging.warning("Reading ribosomal proteins{}")
         self.ribosome_stoich = self._ribosome_stoich 
+        
         logging.warning("Updating ribosomal proteins with BioCyc")
         self.update_ribosome_stoich()
+        
         logging.warning("Loading ribosome subreactions")
         self.ribosome_subreactions = self._ribosome_subreactions
         logging.warning("Loading ribosome rrna modifications")
