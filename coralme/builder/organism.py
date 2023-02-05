@@ -162,11 +162,9 @@ class Organism(object):
                 filename, index_col=0, sep=","
             )
         else:
-            return self.get_sigma_factors()
-
-    @property
-    def _rpod(self):
-        return self.get_rpod()
+            return pandas.DataFrame(columns = [
+                'sigma','complex','genes','name'
+            ]).set_index('sigma')
 
     @property
     def _m_to_me_mets(self):
@@ -698,10 +696,12 @@ class Organism(object):
         
         logging.warning("Loading manually added complexes")
         self.manual_complexes = self._manual_complexes
+        logging.warning("Loading sigma factors")
+        self.sigmas = self._sigmas
         
         logging.warning("Getting sigma factors from BioCyc")
-        self.sigmas = self._sigmas
-        self.rpod = self._rpod
+        self.get_sigma_factors()
+        self.get_rpod()
         logging.warning("Getting RNA polymerase from BioCyc")
         self.get_rna_polymerase()
         
@@ -1674,7 +1674,6 @@ class Organism(object):
                 'to_do':'Manually define sigmas in sigma_factors.csv'})
             random_cplx = random.choice(complexes_df.index)
             sigma_df = complexes_df.loc[[random_cplx]]
-
         ## Get sigmas automatically
         def process_sigma_name(name, row):
             name = name.split("RNA polymerase")[-1]
@@ -1697,7 +1696,7 @@ class Organism(object):
             sigmas[s]["name"] = row["name"]
         sigma_df = pandas.DataFrame.from_dict(sigmas).T
         sigma_df.index.name = "sigma"
-        return sigma_df
+        self.sigmas = pandas.concat([self.sigmas, sigma_df], axis = 0, join = 'outer')
 
     def get_rpod(self):
         sigma_df = self.sigmas
@@ -1708,18 +1707,18 @@ class Organism(object):
         if rpod:
             rpod = rpod[0]
             # Warnings
-            self.curation_notes['org.get_sigma_factors'].append({
+            self.curation_notes['org.get_rpod'].append({
                 'msg':"{} was identified as RpoD. If this is not true, define RpoD!".format(rpod),
                 'importance':'high',
                 'to_do':'Check whether you need to correct RpoD by running me_builder.org.rpod = correct_rpod'})
         else:
             rpod = random.choice(sigma_df.index)
             # Warnings
-            self.curation_notes['org.get_sigma_factors'].append({
+            self.curation_notes['org.get_rpod'].append({
                 'msg':"RpoD randomly assigned to {}".format(rpod),
                 'importance':'critical',
                 'to_do':'genome.gb does not have a valid annotation for RpoD. A random identified sigma factor in me_builder.org.sigmas was set as RpoD so that the builder can continue running. Set the correct RpoD by running me_builder.org.rpod = correct_rpod'})
-        return rpod
+        self.rpod = rpod
     
     
     def _get_rna_polymerase_from_complex(self,
