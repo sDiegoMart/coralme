@@ -203,7 +203,6 @@ class MEBuilder(object):
 		# #### Reaction matrix
 		logging.warning("Generating reaction matrix file")
 		self.org.generate_reaction_matrix()
-		return
 
 		# #### Biomass constituents
 		self.org.biomass_constituents = config.get('flux_of_biomass_constituents', {})
