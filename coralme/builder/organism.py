@@ -1978,7 +1978,6 @@ class Organism(object):
             'importance':'low',
             'to_do':'Fill in {}'.format(filepath)
         })
-        print(no_file_return)
         return no_file_return
 
     def get_translocation_multipliers(self):
