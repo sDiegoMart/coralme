@@ -161,7 +161,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	df['genes'] = df['genes'].apply(lambda x: x.split('(')[0])
 	df.index = df.index + ':' + df['stoich']
 
-	def complexes(x, builder):
+	def complexes(x, df):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
 		tags = [ str(x).split(';') for x in tags ]
 
@@ -378,33 +378,34 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data.apply(lambda x: location(x, df), axis = 1))
 	data = data.explode('Complex Location')
 
-	# TODO: CHECK
-	def generics_in_complex(name, df):
-		tmp = df[df['genes'].str.contains('generic')]
-		if name is not None:
-			lst = []
-			if name in tmp.index:
-				for generic in tmp['genes'][name]:
-					lst.append('{:s}({:s})'.format(name, generic.replace('generic_', '').split('(')[0]))
-
-			if len(lst) >= 1:
-				return lst
-
-	#data['Complex ID'].update(data['Complex ID'].apply(lambda x: generics_in_complex(x, df)))
-	#data = data.explode('Complex ID')
-
 	# Filter out wrong enzyme-reaction associations
 	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda x: x.split('_mod_')[0].split(' OR '))
+	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
 	cplxs = [ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ]
 
-	# split df_data in two
-	tmp = data.copy(deep = True).reset_index(drop = True)
-	tmp2 = tmp[tmp['M-model Reaction ID'].isna()]
-	tmp1 = tmp[tmp['M-model Reaction ID'].notna()] # only entries with M-model reactions
-	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs)) & tmp1['Complex ID'].notna() ]
+	# this dataframe contains only genes associated to a M-model reaction
+	tmp1 = data.copy(deep = True).reset_index(drop = True)
+	tmp1 = tmp1[tmp1['M-model Reaction ID'].notna() & tmp1['Complex ID'].notna()]
+	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs)) ]
 
-	data = pandas.concat([tmp1, tmp2], axis = 0)
+	# this dataframe contains genes associated to generics (correct) and to reactions (incorrect)
+	tmp2 = data.copy(deep = True).reset_index(drop = True)
+	tmp2 = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Complex ID'].notna() & tmp2['Generic Complex ID'].notna()]
+	tmp2 = tmp2[~tmp2['Complex ID'].str.fullmatch('|'.join(cplxs)) ]
+	no_reactions = tmp2.copy(deep = True)
+	no_reactions[['M-model Reaction ID', 'Reaction Name', 'Reversibility']] = None
+	no_generics = tmp2.copy(deep = True)
+	# TODO: Check stoichiometry of generics in complexes
+	no_generics['Complex ID'] = no_generics.apply(lambda x: 'CPLX_{:s}-0:1({:s})'.format(x['M-model Reaction ID'], x['Generic Complex ID']), axis = 1)
+	no_generics['Generic Complex ID'] = None
+	no_generics.drop_duplicates(subset = ['Complex ID'])
+	tmp2 = pandas.concat([no_reactions, no_generics], axis = 0)
+
+	# this dataframe contains genes NOT associated to a M-model reaction
+	tmp3 = data.copy(deep = True).reset_index(drop = True)
+	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
+
+	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
 
 	if pathlib.Path(output).is_file():
 		pass

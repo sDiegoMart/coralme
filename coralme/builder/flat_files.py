@@ -10,7 +10,7 @@ def fix_id(id_str):
 	return id_str.replace('_DASH_', '__')
 
 def read(filename) -> pandas.DataFrame:
-	return pandas.read_csv(filename, sep = '\t', index_col = None, comment = '#', skip_blank_lines = True)
+	return pandas.read_csv(filename, sep = '\t', index_col = None, comment = '#', skip_blank_lines = True, dtype = str)
 
 def get_complex_subunit_stoichiometry(complex_stoichiometry, rna_components = set()) -> dict:
 	"""Returns dictionary of prot/prot, prot/rna complexes: {stoichiometry: {locus_tag: count}}
