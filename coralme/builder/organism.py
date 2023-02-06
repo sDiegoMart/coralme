@@ -14,7 +14,7 @@ import tqdm
 import coralme
 from coralme.builder import dictionaries
 
-from coralme.builder.curation import MECurator
+from coralme.builder.curation import MEManualCuration,MECurator
 
 import warnings
 try:
@@ -297,7 +297,7 @@ class Organism(object):
         )
         
     def load_manual_curation(self):
-        MECurator(self).load_manual_curation()
+        MEManualCuration(self).load_manual_curation()
         
     def _get_product_type(self,
                          row,

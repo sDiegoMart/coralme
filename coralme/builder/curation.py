@@ -3,8 +3,11 @@ import os
 from coralme.builder import dictionaries
 import re
 import logging
+import tqdm
+import cobra 
 
-class MECurator(object):
+bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+class MEManualCuration(object):
     
     def __init__(self,
                  org):
@@ -26,6 +29,8 @@ class MECurator(object):
         self.org.subsystem_classification = self.load_subsystem_classification()
         logging.warning("Loading manually added complexes")
         self.org.manual_complexes = self.load_manual_complexes()
+        logging.warning("Loading reaction corrections")
+        self.org.reaction_corrections = self.load_reaction_corrections()
         logging.warning("Loading sigma factors")
         self.org.sigmas = self.load_sigmas()
         logging.warning("Loading M to ME metabolites dictionary")
@@ -64,7 +69,7 @@ class MECurator(object):
         logging.warning("Loading transcription subreactions")
         self.org.transcription_subreactions = self.load_transcription_subreactions()
         logging.warning("Loading protein translocation pathways")
-        self.org.translocation_pathways = self.load_translocation_pathways()
+        self.org.translocation_pathways = self.load_translocation_pathways()    
     
     def _get_manual_curation(self,
                              filename,
@@ -85,8 +90,22 @@ class MECurator(object):
         })
         return no_file_return
     
+    def load_reaction_corrections(self):
+        create_file = pandas.DataFrame(columns = [
+                'reaction_id',
+                'name',
+                'gene_reaction_rule',
+                'reaction',
+                'notes',
+                ]).set_index('reaction_id')
+        return self._get_manual_curation(
+             "reaction_corrections.csv",
+             create_file = create_file,
+             no_file_return = create_file,
+             sep = ',').T.to_dict()
+    
     def load_protein_location(self):
-        df = pandas.DataFrame(columns = [
+        create_file = pandas.DataFrame(columns = [
                 'Complex',
                 'Complex_compartment',
                 'Protein',
@@ -95,9 +114,8 @@ class MECurator(object):
                 ]).set_index('Complex')
         return self._get_manual_curation(
              "peptide_compartment_and_pathways.csv",
-             create_file = df,
-             no_file_return = df)
-        filename = self.directory + "peptide_compartment_and_pathways.csv"
+             create_file = create_file,
+             no_file_return = create_file)
 
     def load_translocation_multipliers(self):
         create_file = None
@@ -664,3 +682,115 @@ class MECurator(object):
 
     def _dict_to_str(self, d):
         return ",".join(["{}:{}".format(k, v) for k, v in d.items()])
+    
+    
+    
+class MECurator(object):
+    
+    def __init__(self,
+                org):
+        self.org = org
+        
+    def curate(self):
+        logging.warning("Integrating manual metabolic reactions")
+        self.modify_metabolic_reactions()
+        logging.warning("Integrating manual complexes")
+        self.add_manual_complexes()
+        
+    def modify_metabolic_reactions(self):
+        m_model = self.org.m_model
+        new_reactions_dict = self.org.reaction_corrections
+
+        for rxn_id, info in tqdm.tqdm(new_reactions_dict.items(),
+                            'Modifying metabolic reactions with manual curation...',
+                            bar_format = bar_format,
+                            total=len(new_reactions_dict)):
+            if info["reaction"] == "eliminate":
+                m_model.reactions.get_by_id(rxn_id).remove_from_model()
+            else:
+                if rxn_id not in m_model.reactions:
+                    rxn = cobra.Reaction(rxn_id)
+                    m_model.add_reaction(rxn)
+                else:
+                    rxn = m_model.reactions.get_by_id(rxn_id)
+                if info["reaction"]:
+                    rxn.build_reaction_from_string(info["reaction"])
+                    rxn.name = info["name"]
+                    rxn.gene_reaction_rule = info["gene_reaction_rule"]
+                if info["gene_reaction_rule"]:
+                    if info["gene_reaction_rule"] == "no_gene":
+                        rxn.gene_reaction_rule = ""
+                    else:
+                        rxn.gene_reaction_rule = info["gene_reaction_rule"]
+                if info["name"]:
+                    rxn.name = info["name"]
+
+    def add_manual_complexes(self):
+        manual_complexes = self.org.manual_complexes
+        complexes_df = self.org.complexes_df
+        protein_mod = self.org.protein_mod
+        warn_manual_mod = []
+        warn_replace = []
+        for new_complex, info in tqdm.tqdm(manual_complexes.iterrows(),
+                    'Adding manual curation of complexes...',
+                    bar_format = bar_format,
+                    total=manual_complexes.shape[0]):
+            if info["genes"]:
+                if new_complex not in complexes_df:
+                    complexes_df = complexes_df.append(
+                        pandas.DataFrame.from_dict(
+                            {new_complex: {"name": "", "genes": "", "source": "Manual"}}
+                        ).T
+                    )
+                complexes_df.loc[new_complex, "genes"] = info["genes"]
+                complexes_df.loc[new_complex, "name"] = str(info["name"])
+            if info["mod"]:
+                mod_complex = (
+                    new_complex
+                    + "".join(
+                        [
+                            "_mod_{}".format(m)
+                            for m in info['mod'].split(' AND ')
+                        ]
+                    )
+                    if info["mod"]
+                    else new_complex
+                )
+                if mod_complex in protein_mod.index:
+                    warn_manual_mod.append(mod_complex)
+                    continue
+                if info["replace"]:
+                    if info["replace"] in protein_mod.index:
+                        protein_mod = protein_mod.drop(info["replace"])
+                    else:
+                        warn_replace.append(mod_complex)
+                protein_mod = protein_mod.append(
+                    pandas.DataFrame.from_dict(
+                        {
+                            mod_complex: {
+                                "Core_enzyme": new_complex,
+                                "Modifications": info["mod"],
+                                "Source": "Manual",
+                            }
+                        }
+                    ).T
+                )
+        complexes_df.index.name = "complex"
+
+        self.org.complexes_df = complexes_df
+        self.org.protein_mod = protein_mod
+        
+        # Warnings
+        if warn_manual_mod or warn_replace:
+            if warn_manual_mod:
+                self.org.curation_notes['add_manual_complexes'].append({
+                    'msg':'Some modifications in protein_corrections.csv are already in me_builder.org.protein_mod and were skipped.',
+                    'triggered_by':warn_manual_mod,
+                    'importance':'low',
+                    'to_do':'Check whether the protein modification specified in protein_corrections.csv is correct and not duplicated.'})
+            if warn_replace:
+                self.org.curation_notes['add_manual_complexes'].append({
+                    'msg':'Some modified proteins marked for replacement in protein_corrections.csv are not in me_builder.org.protein_mod. Did nothing.',
+                    'triggered_by':warn_replace,
+                    'importance':'low',
+                    'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})

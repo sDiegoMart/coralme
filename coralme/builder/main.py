@@ -109,7 +109,7 @@ class MEBuilder(object):
 		# self.org.get_rna_polymerase(force_RNAP_as='')
 
 		logging.warning("Modifying and preparing M-model")
-		self.modify_metabolic_reactions('reaction_corrections.csv')
+		self.curate()
 		self.prepare_model()
 
 		# ## Homology with reference
@@ -118,10 +118,6 @@ class MEBuilder(object):
 		# Reference
 		if bool(config.get('dev_reference', False)) or bool(config.get('user_reference', False)):
 			logging.warning("Reading reference")
-			#with open(org_files_dir + ref + '/parameters.txt') as rf:
-				#ref_parameters = rf.read()
-			#ref_parameters = ast.literal_eval(ref_parameters)
-			#self.read_reference(ref, locus_tag=ref_parameters['locus_tag'])
 
 			self.ref = coralme.builder.organism.Organism(config,
 														 is_reference = True)
@@ -181,10 +177,6 @@ class MEBuilder(object):
 						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
 			self.configuration['df_TranscriptionalUnits'] = filename
 
-		# #### Manual curation
-		logging.warning("Integrating manual curation of complexes")
-		self.add_manual_complexes()
-
 		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
@@ -215,12 +207,7 @@ class MEBuilder(object):
 		# Final checks of builder
 		logging.warning("Performing final checks of files")
 		self.check()
-		# Save builder
-		#print("{} Saving builder {}".format(sep, sep))
-		#self.save()
-		# Save builer info in human readable form
-		#print("{} Saving builder info {}".format(sep, sep))
-		#self.save_builder_info()
+
 		# Update notes
 		logging.warning("Generating curation notes")
 		self.org.generate_curation_notes()
@@ -322,56 +309,6 @@ class MEBuilder(object):
 				'importance':'medium',
 				'to_do':'Check whether the compartment is correct. If not, change it in the reaction ID in the m_model.'})
 
-	def modify_metabolic_reactions(self, filename):
-		m_model = self.org.m_model
-		filename = self.org.directory + filename
-
-		try:
-			new_reactions_dict = (
-				pandas.read_csv(filename, index_col = 0)
-				.fillna({"gene_reaction_rule": "", "notes": "", "reaction": "","name":""})
-				.T.to_dict()
-			)
-		except:
-			new_reactions_dict = {}
-
-			self.org.curation_notes['modify_metabolic_reactions'].append({
-				'msg':'No {} file, creating one.'.format(filename),
-				'importance':'low',
-				'to_do':'Fill {}'.format(filename)})
-
-			pandas.DataFrame.from_dict({
-				"reaction_id": {},
-				"name": {},
-				"gene_reaction_rule": {},
-				"reaction": {},
-				"notes": {},
-				}).set_index("reaction_id").to_csv(filename)
-
-		for rxn_id, info in tqdm.tqdm(new_reactions_dict.items(),
-							'Modifying metabolic reactions with manual curation...',
-							bar_format = bar_format,
-							total=len(new_reactions_dict)):
-			if info["reaction"] == "eliminate":
-				m_model.reactions.get_by_id(rxn_id).remove_from_model()
-			else:
-				if rxn_id not in m_model.reactions:
-					rxn = cobra.Reaction(rxn_id)
-					m_model.add_reaction(rxn)
-				else:
-					rxn = m_model.reactions.get_by_id(rxn_id)
-				if info["reaction"]:
-					rxn.build_reaction_from_string(info["reaction"])
-					rxn.name = info["name"]
-					rxn.gene_reaction_rule = info["gene_reaction_rule"]
-				if info["gene_reaction_rule"]:
-					if info["gene_reaction_rule"] == "no_gene":
-						rxn.gene_reaction_rule = ""
-					else:
-						rxn.gene_reaction_rule = info["gene_reaction_rule"]
-				if info["name"]:
-					rxn.name = info["name"]
-
 	def get_homology(self, evalue=1e-10):
 		self.homology = coralme.builder.homology.Homology(self.org, self.ref, evalue = evalue)
 
@@ -447,75 +384,78 @@ class MEBuilder(object):
 		protein_mod.index.name = "Modified_enzyme"
 		self.org.protein_mod = pandas.concat([self.org.protein_mod,protein_mod])
 
-	def add_manual_complexes(self):
-		manual_complexes = self.org.manual_complexes
-		complexes_df = self.org.complexes_df
-		protein_mod = self.org.protein_mod
-		warn_manual_mod = []
-		warn_replace = []
-		for new_complex, info in tqdm.tqdm(manual_complexes.iterrows(),
-					'Adding manual curation of complexes...',
-					bar_format = bar_format,
-					total=manual_complexes.shape[0]):
-			if info["genes"]:
-				if new_complex not in complexes_df:
-					complexes_df = complexes_df.append(
-						pandas.DataFrame.from_dict(
-							{new_complex: {"name": "", "genes": "", "source": "Manual"}}
-						).T
-					)
-				complexes_df.loc[new_complex, "genes"] = info["genes"]
-				complexes_df.loc[new_complex, "name"] = str(info["name"])
-			if info["mod"]:
-				mod_complex = (
-					new_complex
-					+ "".join(
-						[
-							"_mod_{}".format(m)
-							for m in info['mod'].split(' AND ')
-						]
-					)
-					if info["mod"]
-					else new_complex
-				)
-				if mod_complex in protein_mod.index:
-					warn_manual_mod.append(mod_complex)
-					continue
-				if info["replace"]:
-					if info["replace"] in protein_mod.index:
-						protein_mod = protein_mod.drop(info["replace"])
-					else:
-						warn_replace.append(mod_complex)
-				protein_mod = protein_mod.append(
-					pandas.DataFrame.from_dict(
-						{
-							mod_complex: {
-								"Core_enzyme": new_complex,
-								"Modifications": info["mod"],
-								"Source": "Manual",
-							}
-						}
-					).T
-				)
-		complexes_df.index.name = "complex"
+# 	def add_manual_complexes(self):
+# 		manual_complexes = self.org.manual_complexes
+# 		complexes_df = self.org.complexes_df
+# 		protein_mod = self.org.protein_mod
+# 		warn_manual_mod = []
+# 		warn_replace = []
+# 		for new_complex, info in tqdm.tqdm(manual_complexes.iterrows(),
+# 					'Adding manual curation of complexes...',
+# 					bar_format = bar_format,
+# 					total=manual_complexes.shape[0]):
+# 			if info["genes"]:
+# 				if new_complex not in complexes_df:
+# 					complexes_df = complexes_df.append(
+# 						pandas.DataFrame.from_dict(
+# 							{new_complex: {"name": "", "genes": "", "source": "Manual"}}
+# 						).T
+# 					)
+# 				complexes_df.loc[new_complex, "genes"] = info["genes"]
+# 				complexes_df.loc[new_complex, "name"] = str(info["name"])
+# 			if info["mod"]:
+# 				mod_complex = (
+# 					new_complex
+# 					+ "".join(
+# 						[
+# 							"_mod_{}".format(m)
+# 							for m in info['mod'].split(' AND ')
+# 						]
+# 					)
+# 					if info["mod"]
+# 					else new_complex
+# 				)
+# 				if mod_complex in protein_mod.index:
+# 					warn_manual_mod.append(mod_complex)
+# 					continue
+# 				if info["replace"]:
+# 					if info["replace"] in protein_mod.index:
+# 						protein_mod = protein_mod.drop(info["replace"])
+# 					else:
+# 						warn_replace.append(mod_complex)
+# 				protein_mod = protein_mod.append(
+# 					pandas.DataFrame.from_dict(
+# 						{
+# 							mod_complex: {
+# 								"Core_enzyme": new_complex,
+# 								"Modifications": info["mod"],
+# 								"Source": "Manual",
+# 							}
+# 						}
+# 					).T
+# 				)
+# 		complexes_df.index.name = "complex"
 
-		self.org.complexes_df = complexes_df
-		self.org.protein_mod = protein_mod
+# 		self.org.complexes_df = complexes_df
+# 		self.org.protein_mod = protein_mod
 
-		# Warnings
-		if warn_manual_mod or warn_replace:
-			if warn_manual_mod:
-				self.org.curation_notes['add_manual_complexes'].append({
-					'msg':'Some modifications in protein_corrections.csv are already in me_builder.org.protein_mod and were skipped.',
-					'triggered_by':warn_manual_mod,
-					'importance':'low',
-					'to_do':'Check whether the protein modification specified in protein_corrections.csv is correct and not duplicated.'})
-			if warn_replace:
-				self.org.curation_notes['add_manual_complexes'].append({
-					'msg':'Some modified proteins marked for replacement in protein_corrections.csv are not in me_builder.org.protein_mod. Did nothing.',
-					'triggered_by':warn_replace,
-					'importance':'low',
-					'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
+# 		# Warnings
+# 		if warn_manual_mod or warn_replace:
+# 			if warn_manual_mod:
+# 				self.org.curation_notes['add_manual_complexes'].append({
+# 					'msg':'Some modifications in protein_corrections.csv are already in me_builder.org.protein_mod and were skipped.',
+# 					'triggered_by':warn_manual_mod,
+# 					'importance':'low',
+# 					'to_do':'Check whether the protein modification specified in protein_corrections.csv is correct and not duplicated.'})
+# 			if warn_replace:
+# 				self.org.curation_notes['add_manual_complexes'].append({
+# 					'msg':'Some modified proteins marked for replacement in protein_corrections.csv are not in me_builder.org.protein_mod. Did nothing.',
+# 					'triggered_by':warn_replace,
+# 					'importance':'low',
+# 					'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
+
+	def curate(self):
+		coralme.builder.curation.MECurator(self.org).curate()
 
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
 		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
@@ -1145,7 +1085,6 @@ class MEBuilder(object):
 				if ref_cplx in ref_cplx_homolog:
 					org_cplx = ref_cplx_homolog[ref_cplx]
 					org_translocation_pathways[k]["enzymes"][org_cplx] = ref_dict.copy()
-
 
 	def update_m_model(self):
 		org_model = self.org.m_model
