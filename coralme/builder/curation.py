@@ -8,6 +8,17 @@ import cobra
 
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
 class MEManualCuration(object):
+    """MEManualCuration class for loading manual curation from files
+
+    This class acts as a loader for all manual curation inputs. It is
+    used by Organism to retrieve manual curation in a coralME-ready
+    format.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+    """
     
     def __init__(self,
                  org):
@@ -686,6 +697,16 @@ class MEManualCuration(object):
     
     
 class MECurator(object):
+    """MECurator class for integrating additional curation.
+
+    This class integrates additional manual curation that was
+    not integrated in Organism.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+    """
     
     def __init__(self,
                 org):
