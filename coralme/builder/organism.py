@@ -38,9 +38,8 @@ class Organism(object):
 
     Parameters
     ----------
-    org : str
-        Identifier of the main organism. Has to be the same as the
-        containing folder name.
+    config : dict
+        Dictionary containing configuration and settings.
 
     is_reference : bool
         If True, process as reference organism.
@@ -78,7 +77,7 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
-        self.get_organism()
+#         self.get_organism()
 
     @property
     def directory(self):
@@ -163,11 +162,9 @@ class Organism(object):
                 filename, index_col=0, sep=","
             )
         else:
-            return self.get_sigma_factors()
-
-    @property
-    def _rpod(self):
-        return self.get_rpod()
+            return pandas.DataFrame(columns = [
+                'sigma','complex','genes','name'
+            ]).set_index('sigma')
 
     @property
     def _m_to_me_mets(self):
@@ -647,8 +644,9 @@ class Organism(object):
                 'Protein_compartment',
                 'translocase_pathway',
                 ]
-            pandas.DataFrame(columns = columns).set_index('Complex').to_csv(filename, sep = "\t")
-            return self.get_protein_location()
+            df = pandas.DataFrame(columns = columns).set_index('Complex')
+            df.to_csv(filename, sep = "\t")
+            return df
 
     @property
     def _m_model(self):
@@ -695,34 +693,45 @@ class Organism(object):
         self.purge_genes_in_model()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
+        
         logging.warning("Loading manually added complexes")
         self.manual_complexes = self._manual_complexes
-        logging.warning("Getting sigma factors from BioCyc")
+        logging.warning("Loading sigma factors")
         self.sigmas = self._sigmas
-        self.rpod = self._rpod
+        
+        logging.warning("Getting sigma factors from BioCyc")
+        self.get_sigma_factors()
+        self.get_rpod()
         logging.warning("Getting RNA polymerase from BioCyc")
         self.get_rna_polymerase()
+        
         logging.warning("Loading generics")
         self.generic_dict = self._generic_dict
+        
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
         logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
+        
         logging.warning("Loading RNA degradosome")
         self.rna_degradosome = self._rna_degradosome
         logging.warning("Loading RNA excision machinery")
         self.excision_machinery = self._excision_machinery
         logging.warning("Loading transcription subreactions")
         self.transcription_subreactions = self._transcription_subreactions
+        
         logging.warning("Generating transcription units dataframe")
         self.TU_df = self._TU_df
         self.get_TU_genes()
-        logging.warning("Getting protein location from BioCyc")
+        
+        logging.warning("Loading protein location")
         self.protein_location = self._protein_location
         logging.warning("Reading ribosomal proteins{}")
-        self.ribosome_stoich = self._ribosome_stoich
+        self.ribosome_stoich = self._ribosome_stoich 
+        
         logging.warning("Updating ribosomal proteins with BioCyc")
         self.update_ribosome_stoich()
+        
         logging.warning("Loading ribosome subreactions")
         self.ribosome_subreactions = self._ribosome_subreactions
         logging.warning("Loading ribosome rrna modifications")
@@ -737,8 +746,12 @@ class Organism(object):
         self.termination_subreactions = self._termination_subreactions
         logging.warning("Loading special trna subreactions")
         self.special_trna_subreactions = self._special_trna_subreactions
+        
+        logging.warning("Updating protein location with BioCyc")
+        self.get_protein_location()
         logging.warning("Updating tRNA synthetases with BioCyc")
         self.get_trna_synthetase()
+        
         logging.warning("Loading trna modifications and targets")
         self.trna_modification = self._trna_modification
         self.trna_modification_targets = self._trna_modification_targets
@@ -756,12 +769,15 @@ class Organism(object):
         self.folding_dict = self._folding_dict
         logging.warning("Loading subsystem classification for Keffs")
         self.subsystem_classification = self.get_subsystem_classification()
+        
         logging.warning("Getting lipids")
         self.lipids = self.get_lipids()
         logging.warning("Getting phospholipids")
         self.phospholipids = self.get_phospholipids()
+        
         logging.warning("Loading peptide release factors")
         self.peptide_release_factors = self._peptide_release_factors
+        
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
         print("{}Reading {} done...".format(sep,self.id))
@@ -1658,7 +1674,6 @@ class Organism(object):
                 'to_do':'Manually define sigmas in sigma_factors.csv'})
             random_cplx = random.choice(complexes_df.index)
             sigma_df = complexes_df.loc[[random_cplx]]
-
         ## Get sigmas automatically
         def process_sigma_name(name, row):
             name = name.split("RNA polymerase")[-1]
@@ -1681,7 +1696,7 @@ class Organism(object):
             sigmas[s]["name"] = row["name"]
         sigma_df = pandas.DataFrame.from_dict(sigmas).T
         sigma_df.index.name = "sigma"
-        return sigma_df
+        self.sigmas = pandas.concat([self.sigmas, sigma_df], axis = 0, join = 'outer')
 
     def get_rpod(self):
         sigma_df = self.sigmas
@@ -1692,18 +1707,18 @@ class Organism(object):
         if rpod:
             rpod = rpod[0]
             # Warnings
-            self.curation_notes['org.get_sigma_factors'].append({
+            self.curation_notes['org.get_rpod'].append({
                 'msg':"{} was identified as RpoD. If this is not true, define RpoD!".format(rpod),
                 'importance':'high',
                 'to_do':'Check whether you need to correct RpoD by running me_builder.org.rpod = correct_rpod'})
         else:
             rpod = random.choice(sigma_df.index)
             # Warnings
-            self.curation_notes['org.get_sigma_factors'].append({
+            self.curation_notes['org.get_rpod'].append({
                 'msg':"RpoD randomly assigned to {}".format(rpod),
                 'importance':'critical',
                 'to_do':'genome.gb does not have a valid annotation for RpoD. A random identified sigma factor in me_builder.org.sigmas was set as RpoD so that the builder can continue running. Set the correct RpoD by running me_builder.org.rpod = correct_rpod'})
-        return rpod
+        self.rpod = rpod
     
     
     def _get_rna_polymerase_from_complex(self,
@@ -1922,15 +1937,7 @@ class Organism(object):
         proteins_df = self.proteins_df
         gene_dictionary = self.gene_dictionary
         location_interpreter = self.location_interpreter
-
-        protein_location = pandas.DataFrame.from_dict(
-            {
-                "Complex_compartment": {},
-                "Protein": {},
-                "Protein_compartment": {},
-                "translocase_pathway": {},
-            }
-        )
+        protein_location = self.protein_location
         gene_location = self._process_location_dict(
             proteins_df.set_index("Genes of polypeptide, complex, or RNA")["Locations"]
             .dropna()
@@ -1957,18 +1964,17 @@ class Organism(object):
                                                     gene_dictionary,
                                                     protein_location,
                                                     gene_location)
-                
-        protein_location.index.name = "Complex"
-        return protein_location
+        self.protein_location = protein_location
     
     
     def _get_manual_curation(self,
                              filename,
                              create_file=None,
-                             no_file_return=pandas.DataFrame()):
+                             no_file_return=pandas.DataFrame(),
+                             sep = '\t'):
         filepath = self.directory + filename
         if os.path.isfile(filepath):
-            return pandas.read_csv(filepath, index_col=0)
+            return pandas.read_csv(filepath, index_col=0,sep=sep)
         
         if create_file is not None:
             create_file.to_csv(filepath)
@@ -1987,7 +1993,7 @@ class Organism(object):
     def get_lipoprotein_precursors(self):
         return self._get_manual_curation(
             "lipoprotein_precursors.csv",
-            no_file_return = pandas.DataFrame(columns=['gene'])).to_dict()["gene"]
+            no_file_return = pandas.DataFrame(columns=['gene']),sep=',').to_dict()["gene"]
 
     def get_cleaved_methionine(self):
         return self._get_manual_curation(
