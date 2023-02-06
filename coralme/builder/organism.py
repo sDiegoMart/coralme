@@ -212,7 +212,7 @@ class Organism(object):
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
         
-        print("{}Reading {} done...".format(sep,self.id))
+        print("Reading {} done...".format(self.id))
 
     def get_genbank_contigs(self):
         if self.is_reference:
