@@ -7,11 +7,38 @@ class MECurator(object):
     
     def __init__(self,
                  builder):
-        self.builder = builder
-        self.directory = builder.org.directory
-        self.curation_notes = builder.org.curation_notes
-        self.is_reference = builder.org.is_reference
+        self.org = self.builder.org
+        self.directory = self.org.directory
+        self.curation_notes = self.org.curation_notes
+        self.is_reference = self.org.is_reference
 
+    def load_manual_curation(self):
+        self.org.protein_location = self.load_protein_location()
+        self.org.translocation_multipliers = self.load_translocation_multipliers()
+        self.org.lipoprotein_precursors = self.load_lipoprotein_precursors()
+        self.org.cleaved_methionine = self.load_cleaved_methionine()
+        self.org.subsystem_classification = self.load_subsystem_classification()
+        self.org.manual_complexes = self.load_manual_complexes()
+        self.org.sigmas = self.load_sigmas()
+        self.org.m_to_me_mets = self.load_m_to_me_mets()
+        self.org.rna_degradosome = self.load_rna_degradosome()
+        self.org.ribosome_stoich = self.load_ribosome_stoich()
+        self.org.ribosome_subreactions = self.load_ribosome_subreactions()
+        self.org.generic_dict = self.load_generic_dict()
+        self.org.rrna_modifications = self.load_rrna_modifications()
+        self.org.amino_acid_trna_synthetase = self.load_amino_acid_trna_synthetase()
+        self.org.peptide_release_factors = self.load_peptide_release_factors()
+        self.org.initiation_subreactions = self.load_initiation_subreactions()
+        self.org.elongation_subreactions = self.load_elongation_subreactions()
+        self.org.special_trna_subreactions = self.load_special_trna_subreactions()
+        self.org.excision_machinery = self.load_excision_machinery()
+        self.org.special_modifications = self.load_special_modifications()
+        self.org.trna_modification = self.load_trna_modification()
+        self.org.trna_modification_targets = self.load_trna_modification_targets()
+        self.org.folding_dict = self.load_folding_dict()
+        self.org.transcription_subreactions = self.load_transcription_subreactions()
+        self.org.translocation_pathways = self.load_translocation_pathways()
+    
     def _get_manual_curation(self,
                              filename,
                              create_file=None,
@@ -74,7 +101,7 @@ class MECurator(object):
         if self.is_reference:
             return None
 
-        subsystems = set(r.subsystem for r in self.builder.org.m_model.reactions if r.subsystem)
+        subsystems = set(r.subsystem for r in self.org.m_model.reactions if r.subsystem)
         create_file = self._create_subsystem_classification(subsystems)
 
         df = self._get_manual_curation(
