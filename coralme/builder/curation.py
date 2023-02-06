@@ -7,13 +7,14 @@ import logging
 class MECurator(object):
     
     def __init__(self,
-                 builder):
-        self.org = builder.org
+                 org):
+        self.org = org
         self.directory = self.org.directory
         self.curation_notes = self.org.curation_notes
         self.is_reference = self.org.is_reference
 
     def load_manual_curation(self):
+        logging.warning("Loading protein location")
         self.org.protein_location = self.load_protein_location()
         logging.warning("Loading protein translocation multipliers")
         self.org.translocation_multipliers = self.load_translocation_multipliers()
@@ -76,7 +77,7 @@ class MECurator(object):
         
         if create_file is not None:
             create_file.to_csv(filepath,sep=sep)
-            
+        
         self.curation_notes['org._get_manual_curation'].append({
             'msg':'No {} file found'.format(filename),
             'importance':'low',
@@ -99,18 +100,25 @@ class MECurator(object):
         filename = self.directory + "peptide_compartment_and_pathways.csv"
 
     def load_translocation_multipliers(self):
+        create_file = None
         return self._get_manual_curation(
-             "translocation_multipliers.csv").to_dict()
+             "translocation_multipliers.csv",
+            create_file=create_file,
+            no_file_return=pandas.DataFrame()).to_dict()
 
     def load_lipoprotein_precursors(self):
+        create_file = pandas.DataFrame(columns=['gene'])
         return self._get_manual_curation(
             "lipoprotein_precursors.csv",
-            no_file_return = pandas.DataFrame(columns=['gene'])).to_dict()["gene"]
+            create_file = create_file,
+            no_file_return = create_file,
+            sep=',').to_dict()["gene"]
 
     def load_cleaved_methionine(self):
+        create_file = pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes')
         return self._get_manual_curation(
             "cleaved_methionine.csv",
-            create_file = pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes'),
+            create_file = create_file,
             no_file_return = list())
 
     def _create_subsystem_classification(self,subsystems):
@@ -294,7 +302,7 @@ class MECurator(object):
                 "amino_acid_trna_synthetase.csv",
                 create_file = create_file,
                 no_file_return = create_file,
-                sep = '\t').to_dict()
+                sep = '\t').to_dict()['enzyme']
     
     def _create_peptide_release_factors(self):
         return pandas.DataFrame.from_dict(dictionaries.translation_stop_dict.copy()).T.rename_axis('release_factor')
@@ -531,8 +539,9 @@ class MECurator(object):
             sep = '\t')
         return self._modify_trna_modification_from_load(df)
 
-    def _process_trna_modification(self,
+    def _process_trna_modification_targets(self,
                                df):
+        df = df.reset_index()
         trna_mod_dict = {}
         for mod in df.iterrows():
             mod = mod[1]
@@ -542,21 +551,20 @@ class MECurator(object):
             trna_mod_dict[mod["bnum"]][mod_loc] = 1
         return trna_mod_dict
     
-    def _create_trna_modification(self):
+    def _create_trna_modification_targets(self):
         return pandas.DataFrame(columns=[
             'bnum',
             'position',
             'modification'
         ]).set_index('bnum')
-    
     def load_trna_modification_targets(self):
-        create_file = self._create_trna_modification()
+        create_file = self._create_trna_modification_targets()
         df = self._get_manual_curation(
             "post_transcriptional_modification_of_tRNA.csv",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
-        return self._process_trna_modification(df)
+        return self._process_trna_modification_targets(df)
 
     def _create_folding_dict(self):
         return pandas.DataFrame.from_dict(dictionaries.folding_dict.copy()).T.rename_axis('mechanism')
@@ -618,7 +626,7 @@ class MECurator(object):
             pdf = df.loc[[p]]
             d[p]["keff"] = pdf["keff"][0]
             d[p]["length_dependent_energy"] = pdf["length_dependent_energy"][0]
-            d[p]["stoichiometry"] = self.str_to_dict(pdf["stoichiometry"][0])
+            d[p]["stoichiometry"] = self._str_to_dict(pdf["stoichiometry"][0])
             d[p]["enzymes"] = {}
             for _, row in pdf.iterrows():
                 d[p]["enzymes"][row["enzyme"]] = {
@@ -644,6 +652,7 @@ class MECurator(object):
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t'))
+    
     def _str_to_dict(self,
                     d):
         regex = ":(?=[-]?\d+(?:$|\.))"

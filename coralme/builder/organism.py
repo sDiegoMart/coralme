@@ -14,6 +14,8 @@ import tqdm
 import coralme
 from coralme.builder import dictionaries
 
+from coralme.builder.curation import MECurator
+
 import warnings
 try:
     warnings.simplefilter(action = 'ignore', category = Bio.BiopythonWarning)
@@ -126,22 +128,6 @@ class Organism(object):
             ).set_index("Modified_enzyme")
 
     @property
-    def _manual_complexes(self):
-        filename = self.directory + "protein_corrections.csv"
-        if os.path.isfile(filename):
-            return pandas.read_csv(filename, index_col=0).fillna("")
-        else:
-            self.curation_notes['org._manual_complexes'].append({
-                'msg':"No manual complexes file, creating one",
-                'importance':'low',
-                'to_do':'Fill manual_complexes.csv'})
-            df = pandas.DataFrame.from_dict(
-                {"complex_id": {}, "name": {}, "genes": {}, "mod": {}, "replace": {}}
-            ).set_index("complex_id")
-            df.to_csv(filename)
-            return df
-
-    @property
     def _TU_df(self):
         if self.is_reference:
             filename = self.directory + "TUs_from_biocyc.txt"
@@ -153,500 +139,6 @@ class Organism(object):
             return tmp
         else:
             return self.get_TU_df()
-
-    @property
-    def _sigmas(self):
-        filename = self.directory + "sigma_factors.csv"
-        if os.path.isfile(filename):
-            return pandas.read_csv(
-                filename, index_col=0, sep=","
-            )
-        else:
-            return pandas.DataFrame(columns = [
-                'sigma','complex','genes','name'
-            ]).set_index('sigma')
-
-    @property
-    def _m_to_me_mets(self):
-        filename = self.directory + "m_to_me_mets.csv"
-        if os.path.isfile(filename):
-            return pandas.read_csv(filename, index_col=0)
-        else:
-            self.curation_notes['org._m_to_me_mets'].append({
-                'msg':"No m_to_me_mets.csv file found",
-                'importance':'low',
-                'to_do':'Fill m_to_me_mets.csv'})
-            df = pandas.DataFrame.from_dict({"m_name": {}, "me_name": {}})
-            df.set_index("m_name")
-            df.to_csv(filename)
-            return df
-
-    @property
-    def _rna_degradosome(self):
-        filename = self.directory + "rna_degradosome.csv"
-        if os.path.isfile(filename):
-            d = (
-                pandas.read_csv(filename, index_col=0, sep="\t")
-                .fillna("").T
-                .to_dict()
-            )
-            for k, v in d.items():
-                d[k] = {}
-                if v['enzymes']:
-                    d[k]['enzymes'] = v['enzymes'].split(",")
-                else:
-                    d[k]['enzymes'] = []
-        else:
-            self.curation_notes['org._rna_degradosome'].append({
-                'msg':"No rna_degradosome.csv file found",
-                'importance':'low',
-                'to_do':'Fill rna_degradosome.csv'})
-            d = {'rna_degradosome':{'enzymes':[]}}
-            df_save = pandas.DataFrame.from_dict(d).T
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df_save.index.name = "name"
-            df_save.to_csv(filename, sep="\t")
-        return d
-
-    @property
-    def _ribosome_stoich(self):
-        filename = self.directory + "ribosomal_proteins.csv"
-        if os.path.isfile(filename):
-            df = pandas.read_csv(filename, sep="\t", index_col=0).fillna('')
-            return self.create_ribosome_stoich(df)
-        else:
-            self.curation_notes['org._ribosomal_proteins'].append({
-                'msg':"No ribosomal_proteins.csv file found",
-                'importance':'low',
-                'to_do':'Fill ribosomal_proteins.csv'})
-            return self.write_ribosome_stoich(filename)
-
-    @property
-    def _ribosome_subreactions(self):
-        filename = self.directory + "ribosome_subreactions.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, sep="\t", index_col=0).fillna("").T.to_dict()
-            for r, row in d.items():
-                d[r]["stoich"] = self.str_to_dict(row["stoich"])
-        else:
-            self.curation_notes['org._ribosome_subreactions'].append({
-                'msg':"No ribosome_subreactions.csv file found",
-                'importance':'low',
-                'to_do':'Fill ribosome_subreactions.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.ribosome_subreactions).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _generic_dict(self):
-        filename = self.directory + "generic_dict.csv"
-        if os.path.isfile(filename):
-            d = (
-                pandas.read_csv(filename, index_col=0, sep="\t")
-                .fillna("").T
-                .to_dict()
-            )
-            for k, v in d.items():
-                d[k] = {}
-                if v['enzymes']:
-                    d[k]['enzymes'] = v['enzymes'].split(",")
-                else:
-                    d[k]['enzymes'] = []
-        else:
-            self.curation_notes['org._generic_dict'].append({
-                'msg':"No generic_dict.csv file found",
-                'importance':'low',
-                'to_do':'Fill generic_dict.csv'})
-            d = dictionaries.generics.copy()
-            df_save = pandas.DataFrame.from_dict(d).T
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df_save.index.name = "generic_component"
-            df_save.to_csv(filename, sep="\t")
-        return d
-
-    @property
-    def _rrna_modifications(self):
-        filename = self.directory + "rrna_modifications.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, sep="\t", index_col=0).fillna("").T.to_dict()
-            for k, v in d.items():
-                v["metabolites"] = self.str_to_dict(v["metabolites"])
-        else:
-            self.curation_notes['org._rrna_modifications'].append({
-                'msg':"No rrna_modifications.csv file found",
-                'importance':'low',
-                'to_do':'Fill rrna_modifications.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.rrna_modifications).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "metabolites"] = self.dict_to_str(row["metabolites"])
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _amino_acid_trna_synthetase(self):
-        filename = self.directory + "amino_acid_trna_synthetase.csv"
-        if os.path.isfile(filename):
-            d = (
-                pandas.read_csv(filename, index_col=0, sep="\t")
-                .fillna("")["enzyme"]
-                .to_dict()
-            )
-        else:
-            self.curation_notes['org._amino_acid_trna_synthetase'].append({
-                'msg':"No amino_acid_trna_synthetase.csv file found",
-                'importance':'low',
-                'to_do':'Fill amino_acid_trna_synthetase.csv'})
-            d = dictionaries.amino_acid_trna_synthetase.copy()
-            pandas.DataFrame.from_dict({"enzyme": d}).to_csv(filename, sep="\t")
-        return d
-
-    @property
-    def _peptide_release_factors(self):
-        filename = self.directory + "peptide_release_factors.csv"
-        if os.path.isfile(filename):
-            d = (
-                pandas.read_csv(filename, index_col=0, sep="\t")
-                .fillna("").T
-                .to_dict()
-            )
-            for k, v in d.items():
-                d[k] = {}
-                if v['enzyme']:
-                    d[k]['enzyme'] = v['enzyme']
-                else:
-                    d[k]['enzyme'] = ''
-        else:
-            self.curation_notes['org._peptide_release_factors'].append({
-                'msg':"No peptide_release_factors.csv file found",
-                'importance':'low',
-                'to_do':'Fill peptide_release_factors.csv'})
-            d = dictionaries.translation_stop_dict.copy()
-            df_save = pandas.DataFrame.from_dict(d).T
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzyme"] = row["enzyme"]
-            df_save.index.name = "codon"
-            df_save.to_csv(filename, sep="\t")
-        return d
-
-    @property
-    def _initiation_subreactions(self):
-        filename = self.directory + "initiation_subreactions.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-                v["element_contribution"] = self.str_to_dict(v["element_contribution"])
-        else:
-            self.curation_notes['org._initiation_subreactions'].append({
-                'msg':"No initiation_subreactions.csv file found",
-                'importance':'low',
-                'to_do':'Fill initiation_subreactions.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.initiation_subreactions).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-                df_save.loc[r, "element_contribution"] = self.dict_to_str(
-                    row["element_contribution"]
-                )
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _elongation_subreactions(self):
-        filename = self.directory + "elongation_subreactions.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-        else:
-            self.curation_notes['org._elongation_subreactions'].append({
-                'msg':"No elongation_subreactions.csv file found",
-                'importance':'low',
-                'to_do':'Fill elongation_subreactions.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.elongation_subreactions).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _termination_subreactions(self):
-        filename = self.directory + "termination_subreactions.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-                v["element_contribution"] = self.str_to_dict(v["element_contribution"])
-        else:
-            self.curation_notes['org._termination_subreactions'].append({
-                'msg':"No termination_subreactions.csv file found",
-                'importance':'low',
-                'to_do':'Fill termination_subreactions.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.termination_subreactions).T
-            df[["element_contribution"]] = df[["element_contribution"]].applymap(
-                lambda x: {} if pandas.isnull(x) else x
-            )
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-                df_save.loc[r, "element_contribution"] = self.dict_to_str(
-                    row["element_contribution"]
-                )
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _special_trna_subreactions(self):
-        filename = self.directory + "special_trna_subreactions.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-                v["element_contribution"] = self.str_to_dict(v["element_contribution"])
-        else:
-            self.curation_notes['org._special_trna_subreactions'].append({
-                'msg':"No special_trna_subreactions.csv file found",
-                'importance':'low',
-                'to_do':'Fill special_trna_subreactions.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.special_trna_subreactions).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-                df_save.loc[r, "element_contribution"] = self.dict_to_str(
-                    row["element_contribution"]
-                )
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _excision_machinery(self):
-        filename = self.directory + "excision_machinery.csv"
-        if os.path.isfile(filename):
-            d = (
-                pandas.read_csv(filename, index_col=0, sep="\t")
-                .fillna("").T
-                .to_dict()
-            )
-            for k, v in d.items():
-                d[k] = {}
-                if v['enzymes']:
-                    d[k]['enzymes'] = v['enzymes'].split(",")
-                else:
-                    d[k]['enzymes'] = []
-        else:
-            self.curation_notes['org._excision_machinery'].append({
-                'msg':"No excision_machinery.csv file found",
-                'importance':'low',
-                'to_do':'Fill excision_machinery.csv'})
-            d = dictionaries.excision_machinery.copy()
-            df_save = pandas.DataFrame.from_dict(d).T
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df_save.index.name = "mechanism"
-            df_save.to_csv(filename, sep="\t")
-        return d
-
-    @property
-    def _special_modifications(self):
-        filename = self.directory + "special_modifications.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-        else:
-            self.curation_notes['org._special_modifications'].append({
-                'msg':"No special_modifications.csv file found",
-                'importance':'low',
-                'to_do':'Fill special_modifications.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.special_modifications).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _trna_modification(self):
-        filename = self.directory + "trna_modification.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-                v["carriers"] = self.str_to_dict(v["carriers"])
-        else:
-            self.curation_notes['org._trna_modification'].append({
-                'msg':"No trna_modification.csv file found",
-                'importance':'low',
-                'to_do':'Fill trna_modification.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.trna_modification).T
-            df[["carriers"]] = df[["carriers"]].applymap(
-                lambda x: {} if pandas.isnull(x) else x
-            )
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-                df_save.loc[r, "carriers"] = self.dict_to_str(row["carriers"])
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _trna_modification_targets(self):
-        filename = self.directory + "post_transcriptional_modification_of_tRNA.csv"
-        if os.path.isfile(filename):
-            df = pandas.read_csv(filename, delimiter="\t")
-        else:
-            self.curation_notes['org._trna_modification_targets'].append({
-                'msg':"No post_transcriptional_modification_of_tRNA.csv file found",
-                'importance':'low',
-                'to_do':'Fill post_transcriptional_modification_of_tRNA.csv'})
-            df = pandas.DataFrame.from_dict(
-                {"bnum": {}, "position": {}, "modification": {}})
-
-            df.to_csv(filename, sep="\t")
-        trna_mod_dict = {}
-        for mod in df.iterrows():
-            mod = mod[1]
-            mod_loc = "%s_at_%s" % (mod["modification"], mod["position"])
-            if mod["bnum"] not in trna_mod_dict:
-                trna_mod_dict[mod["bnum"]] = {}
-            trna_mod_dict[mod["bnum"]][mod_loc] = 1
-        return trna_mod_dict
-
-    @property
-    def _folding_dict(self):
-        filename = self.directory + "folding_dict.csv"
-        if os.path.isfile(filename):
-            d = (
-                pandas.read_csv(filename, index_col=0, sep="\t")
-                .fillna("").T
-                .to_dict()
-            )
-            for k, v in d.items():
-                d[k] = {}
-                if v['enzymes']:
-                    d[k]['enzymes'] = v['enzymes'].split(",")
-                else:
-                    d[k]['enzymes'] = []
-        else:
-            self.curation_notes['org._folding_dict'].append({
-                'msg':"No folding_dict.csv file found",
-                'importance':'low',
-                'to_do':'Fill folding_dict.csv'})
-            d = dictionaries.folding_dict.copy()
-            df_save = pandas.DataFrame.from_dict(d).T
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df_save.index.name = "mechanism"
-            df_save.to_csv(filename, sep="\t")
-        return d
-
-    @property
-    def _transcription_subreactions(self):
-        filename = self.directory + "transcription_subreactions.csv"
-        if os.path.isfile(filename):
-            d = pandas.read_csv(filename, index_col=0, sep="\t").T.fillna("").to_dict()
-            for k, v in d.items():
-                v["enzymes"] = v["enzymes"].split(",")
-                if "" in v["enzymes"]:
-                    v["enzymes"].remove("")
-                v["stoich"] = self.str_to_dict(v["stoich"])
-        else:
-            self.curation_notes['org._transcription_subreactions'].append({
-                'msg':"No transcription_subreactions.csv file found",
-                'importance':'low',
-                'to_do':'Fill transcription_subreactions.csv'})
-            df = pandas.DataFrame.from_dict(dictionaries.transcription_subreactions).T
-            df_save = df.copy()
-            for r, row in df_save.iterrows():
-                df_save.loc[r, "enzymes"] = ",".join(row["enzymes"])
-                df_save.loc[r, "stoich"] = self.dict_to_str(row["stoich"])
-            df_save.to_csv(filename, sep="\t")
-            d = df.T.to_dict()
-        return d
-
-    @property
-    def _translocation_pathways(self):
-        filename = self.directory + "translocation_pathways.csv"
-        if os.path.isfile(filename):
-            df = pandas.read_csv(filename, index_col=0, delimiter="\t").fillna("")
-            return self.read_translocation_pathways(df)
-        else:
-            self.curation_notes['org._translocation_pathways'].append({
-                'msg':"No translocation_pathways.csv file found",
-                'importance':'low',
-                'to_do':'Fill translocation_pathways.csv'})
-            columns = [
-                "keff",
-                "length_dependent_energy",
-                "stoichiometry",
-                "enzyme",
-                "length_dependent",
-                "fixed_keff",
-            ]
-            df = pandas.DataFrame(columns=columns)
-            df.index.name = 'pathway'
-            df.to_csv(filename, sep="\t")
-            return dict()
-
-    @property
-    def _protein_location(self):
-        filename = self.directory + "peptide_compartment_and_pathways.csv"
-        if os.path.isfile(filename):
-            return pandas.read_csv(filename, index_col = 0, delimiter = "\t")
-        else:
-            self.curation_notes['org._protein_location'].append({
-                'msg':"No peptide_compartment_and_pathways.csv file found",
-                'importance':'low',
-                'to_do':'Fill peptide_compartment_and_pathways.csv'})
-            columns = [
-                'Complex',
-                'Complex_compartment',
-                'Protein',
-                'Protein_compartment',
-                'translocase_pathway',
-                ]
-            df = pandas.DataFrame(columns = columns).set_index('Complex')
-            df.to_csv(filename, sep = "\t")
-            return df
 
     @property
     def _m_model(self):
@@ -673,8 +165,6 @@ class Organism(object):
         self.m_model = self._m_model
         logging.warning("Checking M-model")
         self.check_m_model()
-        logging.warning("Loading M to ME metabolites dictionary")
-        self.m_to_me_mets = self._m_to_me_mets
         logging.warning("Loading genbank file")
         self.get_genbank_contigs()
         logging.warning("Loading optional files")
@@ -694,92 +184,34 @@ class Organism(object):
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
         
-        logging.warning("Loading manually added complexes")
-        self.manual_complexes = self._manual_complexes
-        logging.warning("Loading sigma factors")
-        self.sigmas = self._sigmas
+        logging.warning("Loading manual curation")
+        self.load_manual_curation()
         
         logging.warning("Getting sigma factors from BioCyc")
         self.get_sigma_factors()
         self.get_rpod()
         logging.warning("Getting RNA polymerase from BioCyc")
         self.get_rna_polymerase()
-        
-        logging.warning("Loading generics")
-        self.generic_dict = self._generic_dict
-        
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
         logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
-        
-        logging.warning("Loading RNA degradosome")
-        self.rna_degradosome = self._rna_degradosome
-        logging.warning("Loading RNA excision machinery")
-        self.excision_machinery = self._excision_machinery
-        logging.warning("Loading transcription subreactions")
-        self.transcription_subreactions = self._transcription_subreactions
-        
         logging.warning("Generating transcription units dataframe")
         self.TU_df = self._TU_df
         self.get_TU_genes()
-        
-        logging.warning("Loading protein location")
-        self.protein_location = self._protein_location
-        logging.warning("Reading ribosomal proteins{}")
-        self.ribosome_stoich = self._ribosome_stoich 
-        
         logging.warning("Updating ribosomal proteins with BioCyc")
         self.update_ribosome_stoich()
-        
-        logging.warning("Loading ribosome subreactions")
-        self.ribosome_subreactions = self._ribosome_subreactions
-        logging.warning("Loading ribosome rrna modifications")
-        self.rrna_modifications = self._rrna_modifications
-        logging.warning("Loading amino acid tRNA synthetases")
-        self.amino_acid_trna_synthetase = self._amino_acid_trna_synthetase
-        logging.warning("Loading translation initiation subreactions")
-        self.initiation_subreactions = self._initiation_subreactions
-        logging.warning("Loading translation elongation subreactions")
-        self.elongation_subreactions = self._elongation_subreactions
-        logging.warning("Loading translation termination subreactions")
-        self.termination_subreactions = self._termination_subreactions
-        logging.warning("Loading special trna subreactions")
-        self.special_trna_subreactions = self._special_trna_subreactions
-        
         logging.warning("Updating protein location with BioCyc")
         self.get_protein_location()
         logging.warning("Updating tRNA synthetases with BioCyc")
         self.get_trna_synthetase()
-        
-        logging.warning("Loading trna modifications and targets")
-        self.trna_modification = self._trna_modification
-        self.trna_modification_targets = self._trna_modification_targets
-        logging.warning("Loading special modifications")
-        self.special_modifications = self._special_modifications
-        logging.warning("Loading protein translocation pathways")
-        self.translocation_pathways = self._translocation_pathways
-        logging.warning("Loading protein translocation multipliers")
-        self.translocation_multipliers = self.get_translocation_multipliers()
-        logging.warning("Loading lipoprotein precursors")
-        self.lipoprotein_precursors = self.get_lipoprotein_precursors()
-        logging.warning("Loading methionine cleaved proteins")
-        self.cleaved_methionine = self.get_cleaved_methionine()
-        logging.warning("Loading folding information of proteins")
-        self.folding_dict = self._folding_dict
-        logging.warning("Loading subsystem classification for Keffs")
-        self.subsystem_classification = self.get_subsystem_classification()
-        
         logging.warning("Getting lipids")
         self.lipids = self.get_lipids()
         logging.warning("Getting phospholipids")
         self.phospholipids = self.get_phospholipids()
-        
-        logging.warning("Loading peptide release factors")
-        self.peptide_release_factors = self._peptide_release_factors
-        
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
+        
         print("{}Reading {} done...".format(sep,self.id))
 
     def get_genbank_contigs(self):
@@ -863,6 +295,9 @@ class Organism(object):
         self.TUs = self.read_TU_df(
             self.config.get('biocyc.TUs', self.directory + "TUs.txt")
         )
+        
+    def load_manual_curation(self):
+        MECurator(self).load_manual_curation()
         
     def _get_product_type(self,
                          row,
