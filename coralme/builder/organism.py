@@ -1706,7 +1706,7 @@ class Organism(object):
         filename = self.directory + '/curation_notes.txt'
         file = open(filename,'w')
         for k,v in tqdm.tqdm(curation_notes.items(),
-                           'Syncing optional genes file...',
+                           'Generating curation notes...',
                            bar_format = bar_format,
                            total=len(curation_notes)):
             file.write('\n')
