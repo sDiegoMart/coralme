@@ -1605,6 +1605,22 @@ class Organism(object):
                 'importance':'high',
                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.csv'})
 
+    def _map_to_a_generic(self,
+                          feature,
+                          generic_dict):
+        gene = "RNA_" + feature.qualifiers[self.locus_tag][0]
+        if any("5S" in i for i in feature.qualifiers["product"]):
+            cat = "generic_5s_rRNAs"
+        elif any("16S" in i for i in feature.qualifiers["product"]):
+            cat = "generic_16s_rRNAs"
+        elif any("23S" in i for i in feature.qualifiers["product"]):
+            cat = "generic_23s_rRNAs"
+        else:
+            cat = 0
+        if cat:
+            logging.warning("Setting {} to {}".format(gene, cat))
+            generic_dict[cat]['enzymes'].append(gene)
+    
     def get_generics_from_genbank(self):
         if self.is_reference:
             return None
@@ -1616,18 +1632,9 @@ class Organism(object):
                            bar_format = bar_format):
             for feature in contig.features:
                 if "rRNA" in feature.type:
-                    gene = "RNA_" + feature.qualifiers[self.locus_tag][0]
-                    if any("5S" in i for i in feature.qualifiers["product"]):
-                        cat = "generic_5s_rRNAs"
-                    elif any("16S" in i for i in feature.qualifiers["product"]):
-                        cat = "generic_16s_rRNAs"
-                    elif any("23S" in i for i in feature.qualifiers["product"]):
-                        cat = "generic_23s_rRNAs"
-                    else:
-                        cat = 0
-                    if cat:
-                        logging.warning("Setting {} to {}".format(gene, cat))
-                        generic_dict[cat]['enzymes'].append(gene)
+                    self._map_to_a_generic(
+                          feature,
+                          generic_dict)
         for k, v in generic_dict.items():
             if not v:
                 warn_generics.append(k)
