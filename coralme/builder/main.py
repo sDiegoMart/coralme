@@ -760,7 +760,7 @@ class MEBuilder(object):
 		ref_rrna_modifications = self.ref.rrna_modifications
 		org_rrna_modifications = self.org.rrna_modifications
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		warn_proteins = []
+		warn_proteins = [] 
 		for k, v in tqdm.tqdm(ref_rrna_modifications.items(),
 					'Updating rRNA modifications from homology...',
 					bar_format = bar_format,
