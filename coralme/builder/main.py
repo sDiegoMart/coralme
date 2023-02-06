@@ -384,76 +384,6 @@ class MEBuilder(object):
 		protein_mod.index.name = "Modified_enzyme"
 		self.org.protein_mod = pandas.concat([self.org.protein_mod,protein_mod])
 
-# 	def add_manual_complexes(self):
-# 		manual_complexes = self.org.manual_complexes
-# 		complexes_df = self.org.complexes_df
-# 		protein_mod = self.org.protein_mod
-# 		warn_manual_mod = []
-# 		warn_replace = []
-# 		for new_complex, info in tqdm.tqdm(manual_complexes.iterrows(),
-# 					'Adding manual curation of complexes...',
-# 					bar_format = bar_format,
-# 					total=manual_complexes.shape[0]):
-# 			if info["genes"]:
-# 				if new_complex not in complexes_df:
-# 					complexes_df = complexes_df.append(
-# 						pandas.DataFrame.from_dict(
-# 							{new_complex: {"name": "", "genes": "", "source": "Manual"}}
-# 						).T
-# 					)
-# 				complexes_df.loc[new_complex, "genes"] = info["genes"]
-# 				complexes_df.loc[new_complex, "name"] = str(info["name"])
-# 			if info["mod"]:
-# 				mod_complex = (
-# 					new_complex
-# 					+ "".join(
-# 						[
-# 							"_mod_{}".format(m)
-# 							for m in info['mod'].split(' AND ')
-# 						]
-# 					)
-# 					if info["mod"]
-# 					else new_complex
-# 				)
-# 				if mod_complex in protein_mod.index:
-# 					warn_manual_mod.append(mod_complex)
-# 					continue
-# 				if info["replace"]:
-# 					if info["replace"] in protein_mod.index:
-# 						protein_mod = protein_mod.drop(info["replace"])
-# 					else:
-# 						warn_replace.append(mod_complex)
-# 				protein_mod = protein_mod.append(
-# 					pandas.DataFrame.from_dict(
-# 						{
-# 							mod_complex: {
-# 								"Core_enzyme": new_complex,
-# 								"Modifications": info["mod"],
-# 								"Source": "Manual",
-# 							}
-# 						}
-# 					).T
-# 				)
-# 		complexes_df.index.name = "complex"
-
-# 		self.org.complexes_df = complexes_df
-# 		self.org.protein_mod = protein_mod
-
-# 		# Warnings
-# 		if warn_manual_mod or warn_replace:
-# 			if warn_manual_mod:
-# 				self.org.curation_notes['add_manual_complexes'].append({
-# 					'msg':'Some modifications in protein_corrections.csv are already in me_builder.org.protein_mod and were skipped.',
-# 					'triggered_by':warn_manual_mod,
-# 					'importance':'low',
-# 					'to_do':'Check whether the protein modification specified in protein_corrections.csv is correct and not duplicated.'})
-# 			if warn_replace:
-# 				self.org.curation_notes['add_manual_complexes'].append({
-# 					'msg':'Some modified proteins marked for replacement in protein_corrections.csv are not in me_builder.org.protein_mod. Did nothing.',
-# 					'triggered_by':warn_replace,
-# 					'importance':'low',
-# 					'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
-
 	def curate(self):
 		coralme.builder.curation.MECurator(self.org).curate()
 
@@ -918,7 +848,7 @@ class MEBuilder(object):
 		org_initiation_subreactions = self.org.initiation_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		for k, v in tqdm.tqdm(ref_initiation_subreactions.items(),
-					'Updating translation initiation subsreactions from homology...',
+					'Updating translation initiation subreactions from homology...',
 					bar_format = bar_format,
 					total=len(ref_initiation_subreactions)):
 			ref_cplxs = v["enzymes"]
@@ -935,7 +865,7 @@ class MEBuilder(object):
 		org_elongation_subreactions = self.org.elongation_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		for k, v in tqdm.tqdm(ref_elongation_subreactions.items(),
-					'Updating translation elongation subsreactions from homology...',
+					'Updating translation elongation subreactions from homology...',
 					bar_format = bar_format,
 					total=len(ref_elongation_subreactions)):
 			ref_cplxs = v["enzymes"]
@@ -952,7 +882,7 @@ class MEBuilder(object):
 		org_termination_subreactions = self.org.termination_subreactions
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		for k, v in tqdm.tqdm(ref_termination_subreactions.items(),
-					'Updating translation termination subsreactions from homology...',
+					'Updating translation termination subreactions from homology...',
 					bar_format = bar_format,
 					total=len(ref_termination_subreactions)):
 			ref_cplxs = v["enzymes"]
