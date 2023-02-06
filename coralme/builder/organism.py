@@ -1645,17 +1645,10 @@ class Organism(object):
                 'importance':'high',
                 'to_do':'Curate and fill generics in generics.csv or directly in me_builder.org.generic_dict'})
 
-    def check_for_duplicates(self):
-        from coralme.builder.helper_functions import change_reaction_id
+    
+    def _check_for_duplicates_within_datasets(self,
+                                             info):
         import collections
-        # Duplicates within datasets
-        info = {
-            'complexes_df' : list(self.complexes_df.index),
-            'RNA_df' : list(self.RNA_df.index),
-            'gene_dictionary' : list(self.gene_dictionary.index),
-            'reactions' : list([i.id for i in self.m_model.reactions]),
-            'Accession-1' : list(self.gene_dictionary['Accession-1'].values)
-        }
         warn_dups = {}
         for k,v in tqdm.tqdm(info.items(),
                            'Looking for duplicates within datasets...',
@@ -1675,7 +1668,10 @@ class Organism(object):
                     if not d: continue
                     dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].str.contains(d)]
                     self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
-
+        
+        
+    def _check_for_duplicates_between_datasets(self,
+                                               info):
         # Duplicates between different datasets
         cplxs = set(info['complexes_df'])
         rnas = set(info['RNA_df'])
@@ -1697,8 +1693,12 @@ class Organism(object):
         df = pandas.DataFrame.from_dict(occ).T
         df = df[df['reactions'] == 1]
         dup_df = df[df.sum(1)>1]
+        return dup_df
+    
+    def _solve_duplicates_between_datasets(self,
+                                           dup_df):
         for c,row in tqdm.tqdm(dup_df.iterrows(),
-                           'Asessing duplicates across datasets...',
+                           'Solving duplicates across datasets...',
                            bar_format = bar_format,
                            total=dup_df.shape[0]):
             if row['reactions']:
@@ -1706,6 +1706,20 @@ class Organism(object):
                 logging.warning('Changed reaction ID from {} to {} to prevent the conflict between: {}'.format(c,c+'_rxn',' and '.join([j for j,k in row.items() if k])))
             else:
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
+    
+    def check_for_duplicates(self):
+        from coralme.builder.helper_functions import change_reaction_id
+        # Duplicates within datasets
+        info = {
+            'complexes_df' : list(self.complexes_df.index),
+            'RNA_df' : list(self.RNA_df.index),
+            'gene_dictionary' : list(self.gene_dictionary.index),
+            'reactions' : list([i.id for i in self.m_model.reactions]),
+            'Accession-1' : list(self.gene_dictionary['Accession-1'].values)
+        }
+        self._check_for_duplicates_within_datasets(info)
+        dup_df = self._check_for_duplicates_between_datasets(info)
+        self._solve_duplicates_between_datasets(dup_df)
 
     def generate_curation_notes(self):
         import json
