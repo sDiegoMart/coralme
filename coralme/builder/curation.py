@@ -2,41 +2,67 @@ import pandas
 import os
 from coralme.builder import dictionaries
 import re
+import logging
 
 class MECurator(object):
     
     def __init__(self,
                  builder):
-        self.org = self.builder.org
+        self.org = builder.org
         self.directory = self.org.directory
         self.curation_notes = self.org.curation_notes
         self.is_reference = self.org.is_reference
 
     def load_manual_curation(self):
         self.org.protein_location = self.load_protein_location()
+        logging.warning("Loading protein translocation multipliers")
         self.org.translocation_multipliers = self.load_translocation_multipliers()
+        logging.warning("Loading lipoprotein precursors")
         self.org.lipoprotein_precursors = self.load_lipoprotein_precursors()
+        logging.warning("Loading methionine cleaved proteins")
         self.org.cleaved_methionine = self.load_cleaved_methionine()
+        logging.warning("Loading subsystem classification for Keffs")
         self.org.subsystem_classification = self.load_subsystem_classification()
+        logging.warning("Loading manually added complexes")
         self.org.manual_complexes = self.load_manual_complexes()
+        logging.warning("Loading sigma factors")
         self.org.sigmas = self.load_sigmas()
+        logging.warning("Loading M to ME metabolites dictionary")
         self.org.m_to_me_mets = self.load_m_to_me_mets()
+        logging.warning("Loading RNA degradosome")
         self.org.rna_degradosome = self.load_rna_degradosome()
+        logging.warning("Reading ribosomal proteins")
         self.org.ribosome_stoich = self.load_ribosome_stoich()
+        logging.warning("Loading ribosome subreactions")
         self.org.ribosome_subreactions = self.load_ribosome_subreactions()
+        logging.warning("Loading generics")
         self.org.generic_dict = self.load_generic_dict()
+        logging.warning("Loading ribosome rrna modifications")
         self.org.rrna_modifications = self.load_rrna_modifications()
+        logging.warning("Loading amino acid tRNA synthetases")
         self.org.amino_acid_trna_synthetase = self.load_amino_acid_trna_synthetase()
+        logging.warning("Loading peptide release factors")
         self.org.peptide_release_factors = self.load_peptide_release_factors()
+        logging.warning("Loading translation initiation subreactions")
         self.org.initiation_subreactions = self.load_initiation_subreactions()
+        logging.warning("Loading translation elongation subreactions")
         self.org.elongation_subreactions = self.load_elongation_subreactions()
+        logging.warning("Loading translation termination subreactions")
+        self.org.termination_subreactions = self.load_termination_subreactions()
+        logging.warning("Loading special trna subreactions")
         self.org.special_trna_subreactions = self.load_special_trna_subreactions()
+        logging.warning("Loading RNA excision machinery")
         self.org.excision_machinery = self.load_excision_machinery()
+        logging.warning("Loading special modifications")
         self.org.special_modifications = self.load_special_modifications()
+        logging.warning("Loading trna modifications and targets")
         self.org.trna_modification = self.load_trna_modification()
         self.org.trna_modification_targets = self.load_trna_modification_targets()
+        logging.warning("Loading folding information of proteins")
         self.org.folding_dict = self.load_folding_dict()
+        logging.warning("Loading transcription subreactions")
         self.org.transcription_subreactions = self.load_transcription_subreactions()
+        logging.warning("Loading protein translocation pathways")
         self.org.translocation_pathways = self.load_translocation_pathways()
     
     def _get_manual_curation(self,
@@ -325,7 +351,7 @@ class MECurator(object):
             no_file_return = create_file,
             sep = '\t')
         return self._modify_initiation_subreactions_from_load(df)
-
+    
     def _create_elongation_subreactions(self):
         return pandas.DataFrame.from_dict(dictionaries.elongation_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_elongation_subreactions_for_save(self,df):
@@ -351,6 +377,40 @@ class MECurator(object):
             no_file_return = create_file,
             sep = '\t')
         return self._modify_elongation_subreactions_from_load(df)
+    
+    def _create_termination_subreactions(self):
+        df = pandas.DataFrame.from_dict(dictionaries.termination_subreactions.copy()).T.rename_axis('subreaction')
+        df[["element_contribution"]] = df[["element_contribution"]].applymap(
+                lambda x: {} if pandas.isnull(x) else x
+            )
+        return df
+    def _modify_termination_subreactions_for_save(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
+            df.loc[r, "element_contribution"] = self._dict_to_str(
+                row["element_contribution"]
+            )
+        return df
+    def _modify_termination_subreactions_from_load(self,df):
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+            v["stoich"] = self._str_to_dict(v["stoich"])
+            v["element_contribution"] = self._str_to_dict(v["element_contribution"])
+        return d
+    def load_termination_subreactions(self):
+        create_file = self._modify_termination_subreactions_for_save(
+                self._create_termination_subreactions()) 
+        df = self._get_manual_curation(
+            "termination_subreactions.csv",
+            create_file = create_file,
+            no_file_return = create_file,
+            sep = '\t')
+        return self._modify_termination_subreactions_from_load(df)
     
     def _create_special_trna_subreactions(self):
         df = pandas.DataFrame.from_dict(dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
