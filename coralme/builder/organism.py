@@ -563,17 +563,6 @@ class Organism(object):
                                 'importance':'medium',
                                 'to_do':'Add gene sequence in sequences.fasta. Check whether you downloaded the database files from the same BioCyc version.'
             })
-    def str_to_dict(self,
-                    d):
-        regex = ":(?=[-]?\d+(?:$|\.))"
-        return (
-            {re.split(regex, i)[0]: float(re.split(regex, i)[1]) for i in d.split(",")}
-            if d
-            else {}
-        )
-
-    def dict_to_str(self, d):
-        return ",".join(["{}:{}".format(k, v) for k, v in d.items()])
 
     def generate_complexes_df(self):
         proteins_df = self.proteins_df
