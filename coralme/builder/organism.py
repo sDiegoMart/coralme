@@ -720,56 +720,6 @@ class Organism(object):
                 'Direction'
             ]
         )
-    def read_translocation_pathways(self,
-                                    df):
-        d = {}
-        for p in df.index.unique():
-            d[p] = {}
-            pdf = df.loc[[p]]
-            d[p]["keff"] = pdf["keff"][0]
-            d[p]["length_dependent_energy"] = pdf["length_dependent_energy"][0]
-            d[p]["stoichiometry"] = self.str_to_dict(pdf["stoichiometry"][0])
-            d[p]["enzymes"] = {}
-            for _, row in pdf.iterrows():
-                d[p]["enzymes"][row["enzyme"]] = {
-                    "length_dependent": row["length_dependent"],
-                    "fixed_keff": row["fixed_keff"],
-                }
-        return d
-
-    def read_degradosome_stoich(self,
-                                df):
-        return df["stoich"].to_dict()
-
-    def create_ribosome_stoich(self,
-                               df):
-        from copy import deepcopy
-        ribosome_stoich = deepcopy(dictionaries.ribosome_stoich)
-        for s, row in df.iterrows():
-            proteins = row["proteins"]
-            if proteins:
-                proteins = proteins.split(",")
-                for p in proteins:
-                    if s == "30S":
-                        ribosome_stoich["30_S_assembly"]["stoich"][p] = 1
-                    elif s == "50S":
-                        ribosome_stoich["50_S_assembly"]["stoich"][p] = 1
-        return ribosome_stoich
-
-    def write_ribosome_stoich(self, filename):
-        d = {"proteins": {"30S": "", "50S": ""}}
-        df = pandas.DataFrame.from_dict(d)
-        df.index.name = "subunits"
-        df.to_csv(filename, sep="\t")
-
-        ribosome_stoich = {
-            "30_S_assembly": {"stoich": {"generic_16s_rRNAs": 1}},
-            "50_S_assembly": {
-                "stoich": {"generic_23s_rRNAs": 1, "generic_5s_rRNAs": 1}
-            },
-            "assemble_ribosome_subunits": {"stoich": {"gtp_c": 1}},
-        }
-        return ribosome_stoich
 
     def check_gene_overlap(self):
         if self.is_reference:
