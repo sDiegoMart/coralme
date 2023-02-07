@@ -1142,8 +1142,7 @@ class Organism(object):
                     'importance':'high',
                     'to_do':'Check whether you need to correct RNAP by running me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
             else:
-                RNAP_genes = self._get_rna_polymerase_from_subunits(self,
-                                                                    complexes_df)
+                RNAP_genes = self._get_rna_polymerase_from_subunits(complexes_df)
                 if RNAP_genes:
                     complexes_df = self._add_rna_polymerase_to_complexes(complexes_df,
                                                                         RNAP_genes)
