@@ -457,8 +457,6 @@ def build_reactions_from_genbank(
 			# old code uses a cannon to hit a nail
 			#seq = coralme.util.dogma.extract_sequence(full_seqs[contig.id], left_pos, right_pos, strand)
 
-			print(bnum)
-
 			# Deprecated in Biopython 1.80
 			#seq = feature.extract(contig).seq.ungap() # using Biopython is better
 			seq = feature.extract(contig).seq.replace('-', '')
