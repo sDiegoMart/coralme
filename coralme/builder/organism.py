@@ -334,7 +334,7 @@ class Organism(object):
         ## Correct product. Likely product is a description and not an actual
         ## product ID like GENE-MONOMER or GENE-tRNA
         product = '{}-{}'.format(gene_name,product_type)
-        gene_dictionary.loc[gene_name,'Product'] = product
+        gene_dictionary.at[gene_name,'Product'] = product
         return product
     
     def _add_entry_to_rna(self,
@@ -660,7 +660,7 @@ class Organism(object):
 
             for g, row in gene_dictionary.iterrows():
                 if not row["Accession-1"] or isinstance(row["Accession-1"],float):
-                    gene_dictionary.loc[g, "Accession-1"] = g
+                    gene_dictionary.at[g, "Accession-1"] = g
                     warn_genes.append(g)
 
         if warn_genes:
@@ -873,10 +873,12 @@ class Organism(object):
                                gene_id,
                                feature,
                               )
-        gene_dictionary.loc[gene_name]['Product'] = product # Ensuring product is the same.
-        gene_dictionary.loc[gene_name]["Left-End-Position"] = left_end
-        gene_dictionary.loc[gene_name]["Right-End-Position"] = right_end
-        gene_dictionary.loc[gene_name]["replicon"] = record.id
+        
+        gene_dictionary.at[gene_name,'Product'] = product # Ensuring product is the same.
+        gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
+        gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
+        gene_dictionary.at[gene_name,"replicon"] = record.id
+        
         return gene_dictionary,complexes_df,RNA_df
     
     def update_complexes_genes_with_genbank(self):
