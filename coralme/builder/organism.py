@@ -1313,14 +1313,14 @@ class Organism(object):
         gene = gene_dictionary.loc[[gene]]["Gene Name"]
         for gene_ in gene: # In case of duplicates
             if gene_ in gene_location:
-                tmp = pandas.DataFrame.from_dict({
+                tmp = {
                     c: {
                         "Complex_compartment": c_loc,
                         "Protein": gene_string,
                         "Protein_compartment": gene_location[gene_],
                         "translocase_pathway": "s",
-                        }}).T
-                protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+                        }}
+                protein_location = self._add_entry_to_df(protein_location,tmp)
         return protein_location
     
     def get_protein_location(self):
