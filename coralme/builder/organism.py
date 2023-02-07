@@ -610,9 +610,8 @@ class Organism(object):
                            'Generating complexes dataframe from optional proteins file...',
                            bar_format = bar_format,
                            total=proteins_df.shape[0]):
-            stoich = ""  # No info in BioCyc
-            if "dimer" in str(row["Common-Name"]):
-                stoich = 2
+            stoich = "" if "dimer" not in str(row["Common-Name"]) \ 
+                    else "2"
             genes = row["Genes of polypeptide, complex, or RNA"]
             if not genes:
                 warn_proteins.append(p)
