@@ -855,7 +855,7 @@ class Organism(object):
         gene_id = feature.qualifiers[self.locus_tag][0]
         left_end = min([i.start for i in feature.location.parts])
         right_end = max([i.end for i in feature.location.parts])
-        if not gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)')).any():
+        if not gene_dictionary["Accession-1"].eq(gene_id).any():
             gene_dictionary = \
                 self._add_entry_to_gene_dictionary(
                         gene_dictionary,
@@ -863,7 +863,7 @@ class Organism(object):
                         feature,
                         left_end,
                         right_end)
-        gene_name = gene_dictionary[gene_dictionary["Accession-1"].str.contains(gene_id.replace('(', '\(').replace(')', '\)'))].index[0]
+        gene_name = gene_dictionary[gene_dictionary["Accession-1"].eq(gene_id)].index[0]
 
         complexes_df,RNA_df,product = \
             self._add_entry_to_complexes_or_rna(
@@ -873,7 +873,6 @@ class Organism(object):
                                gene_id,
                                feature,
                               )
-        
         gene_dictionary.at[gene_name,'Product'] = product # Ensuring product is the same.
         gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
         gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
