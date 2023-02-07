@@ -883,7 +883,7 @@ class Organism(object):
     def update_complexes_genes_with_genbank(self):
         if self.is_reference:
             return
-        element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA'}
+        element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
