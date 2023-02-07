@@ -114,8 +114,9 @@ def generate_organism_specific_matrix(genbank, model):
 
 def complete_organism_specific_matrix(builder, data, model, output):
 	# ME-model homology to reference
-	def bbh(x, dct):
-		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
+	def bbh(x, dct, keys):
+		#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
+		tags = x[keys].to_list()
 		tags = [ str(x).split(';') for x in tags ]
 
 		lst = []
@@ -127,27 +128,12 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			return lst[0]
 
 	dct = builder.homology.mutual_hits
-	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct), axis = 1)
+	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
 
 	if builder.configuration.get('biocyc.genes', False):
+		# We reuse the bbh function, but changed the dictionary of relationships between IDs
 		dct = { v['Accession-1']:k for k,v in builder.org.gene_dictionary.iterrows() }
-
-		def biocyc(x):
-			if x is None:
-				return None
-			else:
-				lst = []
-				for gene in x.split(';'):
-					lst.append(dct.get(gene, None))
-				if set(lst) == set([None]):
-					return None
-				else:
-					return [ x for x in lst if x is not None ][0]
-
-		# We assume BioCyc IDs are unique
-		data['BioCyc'] = data['Gene Names'].apply(lambda x: biocyc(x))
-		data['BioCyc'].update(data['Old Locus Tag'].apply(lambda x: biocyc(x)))
-		data['BioCyc'].update(data['Gene Locus ID'].apply(lambda x: biocyc(x)))
+		data['BioCyc'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'Gene Names']), axis = 1)
 	else:
 		data['BioCyc'] = None
 
@@ -191,7 +177,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
 			mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
 			mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
-			mods = [ x.replace('lipo', 'lipoate') for x in mods ] # most models, if not all models, use lipoate as metabolite ID
+			mods = [ x.replace('lipo', 'lipoate') for x in mods ] # most models, if not all models, use 'lipoate' as metabolite ID
 			logging.warning('The modification \'lipo\' was renamed to \'lipoate\'. Revert manually to match the M-model metabolite.')
 			mods = [ '{:s}(1)'.format(x) if '(' not in x else x for x in mods ]
 			if len(mods) != 0:
@@ -275,12 +261,16 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	lst = builder.org.RNAP if isinstance(builder.org.RNAP, list) else [builder.org.RNAP]
 	lst += list(builder.org.sigmas.index)
 	data['MetaComplex ID'] = data.apply(lambda x: rnapol(x, lst), axis = 1)
+
 	lst = [ x for y in [builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']] for x in y ]
 	data['MetaComplex ID'].update(data.apply(lambda x: ribosome(x, lst), axis = 1))
+
 	lst = [ x.split('_mod_')[0] for x in builder.org.rna_degradosome['rna_degradosome']['enzymes'] ]
 	data['MetaComplex ID'].update(data.apply(lambda x: degradosome(x, lst), axis = 1))
+
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
 	data['MetaComplex ID'].update(data.apply(lambda x: excision(x, dct), axis = 1))
+
 	dct = { k:list(v['enzymes'].keys()) for k,v in builder.org.translocation_pathways.items() if len(v['enzymes']) != 0 }
 	data['MetaComplex ID'].update(data.apply(lambda x: transpaths(x, dct), axis = 1))
 	data = data.explode('MetaComplex ID')
@@ -334,10 +324,12 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	dct = { k:[ x.split('_mod_')[0] for x in [v['enzyme']] ] for k,v in builder.org.ribosome_subreactions.items() }
 	data['ME-model SubReaction'] = data.apply(lambda x: ribosome_subrxns(x, dct), axis = 1)
+
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.initiation_subreactions.items() }
 	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.elongation_subreactions.items() })
 	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.termination_subreactions.items() })
 	data['ME-model SubReaction'].update(data.apply(lambda x: translation_subrxns(x, dct), axis = 1))
+
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.transcription_subreactions.items() }
 	data['ME-model SubReaction'].update(data.apply(lambda x: transcription_subrxns(x, dct), axis = 1))
 	data = data.explode('ME-model SubReaction')
@@ -411,13 +403,21 @@ def complete_organism_specific_matrix(builder, data, model, output):
 
 	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
 
-	if pathlib.Path(output).is_file():
-		pass
-	else:
-		if output.endswith('xlsx'):
+	# Save file as excel or tsv depending on the size
+	# GPRs expand the model specifications beyond the max size of an excel file (1048576 rows)
+	if data.shape[0] > 1048575: # one less to accommodate the header
+		if output.endswith('.txt'):
 			pass
 		else:
-			output = '.'.join(output.split('.')[:-1]) + 'xlsx'
+			output = '.'.join(output.split('.')[:-1]) + '.txt'
+
+		with open(output, 'w') as outfile:
+			data.to_csv(outfile, index = False, sep = '\t')
+	else:
+		if output.endswith('.xlsx'):
+			pass
+		else:
+			output = '.'.join(output.split('.')[:-1]) + '.xlsx'
 
 		with open(output, 'wb') as outfile:
 			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
