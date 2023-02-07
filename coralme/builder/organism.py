@@ -324,7 +324,7 @@ class Organism(object):
                 product_type = 'MONOMER'
             else:
                 warn_genes.append(gene_id)
-                return 0,0
+                return None,None
         return product,product_type
     
     def _correct_product(self,
@@ -383,7 +383,7 @@ class Organism(object):
                      gene_id,
                      gene_name,
                      warn_genes)
-            if not product:
+            if product is None:
                 continue
             if ' ' in product or ('RNA' not in product and 'MONOMER' not in product):
                 product = \
