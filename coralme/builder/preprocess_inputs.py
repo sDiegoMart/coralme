@@ -402,6 +402,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
 
 	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
+	data = data.drop_duplicates(inplace = False)
 
 	# Save file as excel or tsv depending on the size
 	# GPRs expand the model specifications beyond the max size of an excel file (1048576 rows)
