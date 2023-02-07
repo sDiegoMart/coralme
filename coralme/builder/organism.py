@@ -863,20 +863,24 @@ class Organism(object):
                         feature,
                         left_end,
                         right_end)
-        gene_name = gene_dictionary[gene_dictionary["Accession-1"].eq(gene_id)].index[0]
+            
+        
+        gene_names = gene_dictionary[gene_dictionary["Accession-1"].eq(gene_id)].index
+        for gene_name in gene_names:
+            complexes_df,RNA_df,product = \
+                self._add_entry_to_complexes_or_rna(
+                                   complexes_df,
+                                   RNA_df,
+                                   gene_name,
+                                   gene_id,
+                                   feature,
+                                  )
 
-        complexes_df,RNA_df,product = \
-            self._add_entry_to_complexes_or_rna(
-                               complexes_df,
-                               RNA_df,
-                               gene_name,
-                               gene_id,
-                               feature,
-                              )
-        gene_dictionary.at[gene_name,'Product'] = product # Ensuring product is the same.
-        gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
-        gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
-        gene_dictionary.at[gene_name,"replicon"] = record.id
+
+            gene_dictionary.at[gene_name,'Product'] = product # Ensuring product is the same.
+            gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
+            gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
+            gene_dictionary.at[gene_name,"replicon"] = record.id
         
         return gene_dictionary,complexes_df,RNA_df
     
