@@ -863,7 +863,6 @@ class Organism(object):
                         feature,
                         left_end,
                         right_end)
-            
         
         gene_names = gene_dictionary[gene_dictionary["Accession-1"].eq(gene_id)].index
         for gene_name in gene_names:
@@ -875,8 +874,6 @@ class Organism(object):
                                    gene_id,
                                    feature,
                                   )
-
-
             gene_dictionary.at[gene_name,'Product'] = product # Ensuring product is the same.
             gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
             gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
