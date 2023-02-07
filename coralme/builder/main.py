@@ -186,15 +186,18 @@ class MEBuilder(object):
 		self.org.get_reaction_keffs()
 
 		# ## Files from model
+		# TODO: ARE WE GOING TO USE THIS ANYMORE?
 		# #### Metabolites
 		logging.warning("Generating metabolites file")
 		self.org.generate_metabolites_file()
 
 		# #### Reactions
+		# TODO: ARE WE GOING TO USE THIS ANYMORE?
 		logging.warning("Generating reactions file")
 		self.org.generate_reactions_file()
 
 		# #### Reaction matrix
+		# TODO: ARE WE GOING TO USE THIS ANYMORE?
 		logging.warning("Generating reaction matrix file")
 		self.org.generate_reaction_matrix()
 
