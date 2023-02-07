@@ -883,6 +883,8 @@ class Organism(object):
     def update_complexes_genes_with_genbank(self):
         if self.is_reference:
             return
+        
+        # TODO: DO WE NEED TO FILTER BY ELEMENT_TYPES? WHY NOT PROCESS THEM ALL?
         element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
