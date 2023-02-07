@@ -231,7 +231,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 
 def build_reactions_from_genbank(
 	me_model, gb_filename, tu_frame = pandas.DataFrame(columns = ['genes']), genes_to_add = list(),
-	feature_types = [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA' ], update = True, verbose = True,
+	feature_types = [ 'CDS', 'rRNA', 'tRNA' ], update = True, verbose = True,
 	trna_misacylation = dict(), genome_mods = dict(), knockouts = list()):
 	# trna_to_codon = dict(), frameshift_dict = None, # not needed anymore
 
@@ -457,6 +457,8 @@ def build_reactions_from_genbank(
 			# old code uses a cannon to hit a nail
 			#seq = coralme.util.dogma.extract_sequence(full_seqs[contig.id], left_pos, right_pos, strand)
 
+			print(bnum)
+
 			# Deprecated in Biopython 1.80
 			#seq = feature.extract(contig).seq.ungap() # using Biopython is better
 			seq = feature.extract(contig).seq.replace('-', '')
@@ -576,7 +578,7 @@ def build_reactions_from_genbank(
 			## Associate the TranscribedGene to TU(s)
 			# old code does not consider that a gene can start at the "end" of the genome and finish at the "start" of it
 			#parent_tu = tu_frame[(tu_frame.start - 1 <= left_pos) & (tu_frame.stop >= right_pos) & (tu_frame.strand == strand)].index
-			parent_tu = tu_frame[[ True if bnum in x else False for x in tu_frame.genes.values ]].index
+			parent_tu = tu_frame[[ True if bnum in x.split(',') else False for x in tu_frame.genes.values ]].index
 
 			if len(parent_tu) == 0:
 				tu_id = 'TU_' + bnum
