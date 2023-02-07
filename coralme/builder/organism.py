@@ -659,7 +659,7 @@ class Organism(object):
                             'to_do':'Complete end positions in genes.txt if those genes are important.'})
 
             for g, row in gene_dictionary.iterrows():
-                if isinstance(row["Accession-1"],float):
+                if not row["Accession-1"] or isinstance(row["Accession-1"],float):
                     gene_dictionary.loc[g, "Accession-1"] = g
                     warn_genes.append(g)
 
