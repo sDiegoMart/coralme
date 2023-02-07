@@ -1577,6 +1577,7 @@ class Organism(object):
     
     def _solve_duplicates_between_datasets(self,
                                            dup_df):
+        from coralme.builder.helper_functions import change_reaction_id
         for c,row in tqdm.tqdm(dup_df.iterrows(),
                            'Solving duplicates across datasets...',
                            bar_format = bar_format,
@@ -1588,7 +1589,6 @@ class Organism(object):
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
     
     def check_for_duplicates(self):
-        from coralme.builder.helper_functions import change_reaction_id
         # Duplicates within datasets
         info = {
             'complexes_df' : list(self.complexes_df.index),
