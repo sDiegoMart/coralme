@@ -1113,6 +1113,7 @@ class MEBuilder(object):
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
+		self.org.generate_curation_notes()
 
 	def input_data(self, gem, overwrite):
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
