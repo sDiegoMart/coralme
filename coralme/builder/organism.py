@@ -462,10 +462,24 @@ class Organism(object):
 
         new_contig.features = [feature0] + [feature1]
         contigs.append(new_contig)
-        
     
-    def update_genbank_from_files(self):
+    def _get_product_name_if_present(self,
+                         gene_id,
+                         product,
+                         product_type,
+                         query_types,
+                         dfs,
+                         warns,
+                         columns):
+        for qt,df,warn,col in zip(query_types,dfs,warns,columns):
+            if qt in product_type:
+                if product not in df.index:
+                    warn.append(gene_id)
+                    return None
+                return df.loc[product][col]
+        return product
         
+    def update_genbank_from_files(self):
         if self.is_reference:
             return
         contigs = self.contigs
@@ -481,7 +495,6 @@ class Organism(object):
         warn_position = []
         warn_sequence = []
 
-
         # Add new genes
         for gene_name,row in tqdm.tqdm(gene_dictionary.iterrows(),
                            'Updating Genbank file with optional files...',
@@ -491,33 +504,24 @@ class Organism(object):
 
             if gene_id not in all_genes_in_gb:
                 product = row['Product'].split(' // ')[0]
-
                 ### Try to get product type from gene id of type LOCUST_TAG-RNA
-                if gene_id in product_types:
-                    product_type = product_types[gene_id]
-                else:
-                    # Skip those genes whose product type was not identified
-                    product_type = 'gene'
+                product_type = product_types[gene_id] \
+                        if gene_id in product_types else 'gene'
 
                 ### Retrieve values to sync with genbank
-                if 'RNA' in product_type:
-                    if product not in RNA_df.index:
-                        warn_rnas.append(gene_id)
-                        continue
-                    product_name = RNA_df.loc[product]['Common-Name']
-                elif product_type == 'MONOMER':
-                    product_type = 'CDS'
-                    if product not in complexes_df.index:
-                        warn_proteins.append(gene_id)
-                        continue
-                    product_name = complexes_df.loc[product]['name']
-                else:
-                    product_name = product
-
+                product_name = \
+                    self._get_product_name_if_present(gene_id,
+                                                 product,
+                                                 product_type,
+                                                 ['RNA','MONOMER'],
+                                                 [RNA_df,complexes_df],
+                                                 [warn_rnas,warn_proteins],
+                                                 ['Common-Name','name'])
+                if product_name is None:
+                    continue
                 if not row['Left-End-Position'] or not row['Right-End-Position']:
                     warn_position.append(gene_id)
                     continue
-
                 if gene_name not in gene_sequences:
                     warn_sequence.append(gene_name)
                     continue
@@ -537,14 +541,14 @@ class Organism(object):
         # Warnings
         if warn_rnas:
             self.curation_notes['org.update_genbank_from_files'].append({
-                                'msg':'Some genes were identified as RNA from its locus_tag, but it is not present in RNAs.txt',
+                                'msg':'Some genes were identified as RNA from their locus_tags, but they are not present in RNAs.txt',
                                 'triggered_by':warn_rnas,
                                 'importance':'medium',
                                 'to_do':'Check whether you should add these genes to RNAs.txt or fix its product value in genes.txt'
             })
         if warn_proteins:
             self.curation_notes['org.update_genbank_from_files'].append({
-                                'msg':'Some genes were identified as CDS from its locus_tag, but it is not present in proteins.txt',
+                                'msg':'Some genes were identified as CDS from their locus_tags, but they are not present in proteins.txt',
                                 'triggered_by':warn_proteins,
                                 'importance':'medium',
                                 'to_do':'Check whether you should add these genes to proteins.txt or fix its product value in genes.txt'
