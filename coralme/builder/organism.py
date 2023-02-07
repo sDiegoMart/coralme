@@ -1049,6 +1049,15 @@ class Organism(object):
                 )  # Some way to identify which qualifier meets regular expression?
                 file.write("{}\n".format(feature.qualifiers["translation"][0]))
 
+    def _process_sigma_name(self,name, row):
+        name = name.split("RNA polymerase")[-1]
+        replace_list = ["sigma", "factor", "sup"]
+        for r in replace_list:
+            name = name.replace(r, "")
+        name = "".join(re.findall("[a-zA-Z0-9]{1,}", name))
+        if not name:
+            name = "_".join(row["genes"])
+        return "RNAP_" + name
     def get_sigma_factors(self):
         complexes_df = self.complexes_df
 
@@ -1065,28 +1074,21 @@ class Organism(object):
             random_cplx = random.choice(complexes_df.index)
             sigma_df = complexes_df.loc[[random_cplx]]
         ## Get sigmas automatically
-        def process_sigma_name(name, row):
-            name = name.split("RNA polymerase")[-1]
-            replace_list = ["sigma", "factor", "sup"]
-            for r in replace_list:
-                name = name.replace(r, "")
-            name = "".join(re.findall("[a-zA-Z0-9]{1,}", name))
-            if not name:
-                name = "_".join(row["genes"])
-            return "RNAP_" + name
         # Find RpoD to add as default sigma
         for s, row in tqdm.tqdm(sigma_df.iterrows(),
                            'Getting sigma factors...',
                            bar_format = bar_format,
                            total=sigma_df.shape[0]):
+            
             tmp = {
                 s : {
-                    "complex" : process_sigma_name(s, row),
+                    "complex" : self._process_sigma_name(s, row),
                     "genes" : row["genes"],
                     "name" : row["name"]
                 }
             }
-            self._add_entry_to_df(self.sigmas,tmp)
+            self.sigmas = self._add_entry_to_df(self.sigmas,tmp)
+            
 
     def get_rpod(self):
         sigma_df = self.sigmas
