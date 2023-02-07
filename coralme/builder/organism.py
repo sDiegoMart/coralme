@@ -895,8 +895,8 @@ class Organism(object):
                            'Syncing optional files with genbank contigs...',
                            bar_format = bar_format):
             for feature in record.features:
-                if feature.type not in element_types:
-                    continue
+#                 if feature.type not in element_types:
+#                     continue
                 if self.locus_tag not in feature.qualifiers:
                     warn_locus.append(feature.qualifiers)
                     continue
