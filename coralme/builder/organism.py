@@ -337,6 +337,14 @@ class Organism(object):
         gene_dictionary.at[gene_name,'Product'] = product
         return product
     
+    def _add_entry_to_df(self,
+                         df,
+                         tmp):
+        return pandas.concat([df,
+                              pandas.DataFrame.from_dict(tmp).T],
+                             axis = 0, join = 'outer')
+        
+    
     def _add_entry_to_rna(self,
                          gene_id,
                          name,
@@ -344,12 +352,9 @@ class Organism(object):
                          RNA_df,
                          source):
         logging.warning('Adding {} ({}) to RNAs from {}'.format(gene_id,product,source))
-        tmp = pandas.DataFrame.from_dict({
-            product : {
-                "Common-Name": name,
-                "Gene": gene_id
-            }}).T
-        return pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+        tmp = {product : {"Common-Name": name,
+                          "Gene": gene_id}}
+        return self._add_entry_to_df(RNA_df,tmp)
     
     def _add_entry_to_complexes(self,
                                gene_id,
@@ -358,13 +363,12 @@ class Organism(object):
                                complexes_df,
                                source):
         logging.warning('Adding {} ({}) to complexes from {}'.format(gene_id,product,source))
-        tmp = pandas.DataFrame.from_dict({
-            product: {
+        tmp = {product: {
                 "name": name,
                 "genes": '{}()'.format(gene_id),
                 "source": source,
-                }}).T
-        return pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
+                }}
+        return self._add_entry_to_df(complexes_df,tmp)
     
     def sync_files(self):
         if self.is_reference:
@@ -610,8 +614,7 @@ class Organism(object):
                            'Generating complexes dataframe from optional proteins file...',
                            bar_format = bar_format,
                            total=proteins_df.shape[0]):
-            stoich = "" if "dimer" not in str(row["Common-Name"]) \ 
-                    else "2"
+            stoich = "" if "dimer" not in str(row["Common-Name"]) else "2"
             genes = row["Genes of polypeptide, complex, or RNA"]
             if not genes:
                 warn_proteins.append(p)
@@ -1072,18 +1075,18 @@ class Organism(object):
                 name = "_".join(row["genes"])
             return "RNAP_" + name
         # Find RpoD to add as default sigma
-        sigmas = {}
         for s, row in tqdm.tqdm(sigma_df.iterrows(),
                            'Getting sigma factors...',
                            bar_format = bar_format,
                            total=sigma_df.shape[0]):
-            sigmas[s] = {}
-            sigmas[s]["complex"] = process_sigma_name(s, row)
-            sigmas[s]["genes"] = row["genes"]
-            sigmas[s]["name"] = row["name"]
-        sigma_df = pandas.DataFrame.from_dict(sigmas).T
-        sigma_df.index.name = "sigma"
-        self.sigmas = pandas.concat([self.sigmas, sigma_df], axis = 0, join = 'outer')
+            tmp = {
+                s : {
+                    "complex" : process_sigma_name(s, row),
+                    "genes" : row["genes"],
+                    "name" : row["name"]
+                }
+            }
+            self._add_entry_to_df(self.sigmas,tmp)
 
     def get_rpod(self):
         sigma_df = self.sigmas
