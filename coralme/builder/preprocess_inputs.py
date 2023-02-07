@@ -127,15 +127,15 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		if len(lst) != 0:
 			return lst[0]
 
-	dct = builder.homology.mutual_hits
-	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
-
 	if builder.configuration.get('biocyc.genes', False):
 		# We reuse the bbh function, but changed the dictionary of relationships between IDs
 		dct = { v['Accession-1']:k for k,v in builder.org.gene_dictionary.iterrows() }
 		data['BioCyc'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'Gene Names']), axis = 1)
 	else:
 		data['BioCyc'] = None
+
+	dct = builder.homology.mutual_hits
+	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
 
 	# ME-model complexes: restructure complexes_df to obtain the correct complex stoichiometry from the index
 	df = builder.org.complexes_df.copy(deep = True)

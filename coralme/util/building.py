@@ -349,6 +349,11 @@ def build_reactions_from_genbank(
 	# Create transcription reactions for each TU and DNA sequence.
 	# RNA_products will be added so no need to update now
 	for tu_id in tqdm.tqdm(tu_frame.index, 'Adding Transcriptional Units into the ME-model...', bar_format = bar_format):
+		# in rare cases, transcription units have no genes associated to them
+		if isinstance(tu_frame.genes[tu_id], float):
+			logging.warning('The transcription unit \'{:s}\' has no genes associated to it. Please check if it is the correct behavior.'.format(tu_id))
+			continue
+
 		if any(x in tu_frame.genes[tu_id].split(',') for x in genes_to_add):
 			starts = tu_frame.start[tu_id]
 			stops = tu_frame.stop[tu_id]
@@ -383,10 +388,11 @@ def build_reactions_from_genbank(
 				#tu_frame.strand[tu_id],
 				#)
 
-			replicons = tu_frame.genes[tu_id] if tu_frame.replicon[tu_id] is numpy.nan else tu_frame.replicon[tu_id]
+			#replicons = tu_frame.genes[tu_id] if tu_frame.replicon[tu_id] is numpy.nan else tu_frame.replicon[tu_id]
+			replicons = tu_frame.replicon[tu_id].split(',')
 			#print(tu_id, replicons)
 			dna = ''
-			for replicon_id, seq in zip(replicons.split(','), seqs):
+			for replicon_id, seq in zip(replicons, seqs):
 				#print(replicon_id, seq)
 				# Deprecated in Biopython 1.80
 				#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
@@ -1039,7 +1045,7 @@ def add_reactions_from_stoichiometric_data(
 				directionality_list.append('forward')
 			if reaction_data.upper_bound == 0 and reaction_data.lower_bound == 0:
 				directionality_list.append('forward')
-				logging.warning('Reaction \'{:s}\' cannot carry flux. Check if it is the correct behavior.'.format(reaction_data.id))
+				logging.warning('Reaction \'{:s}\' cannot carry flux. Please check if it is the correct behavior.'.format(reaction_data.id))
 
 			for directionality in directionality_list:
 				add_metabolic_reaction_to_model(
