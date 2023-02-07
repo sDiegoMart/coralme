@@ -339,22 +339,30 @@ class Organism(object):
     
     def _add_entry_to_rna(self,
                          gene_id,
+                         name,
                          product,
-                         RNA_df):
-        logging.warning('Adding {} ({}) to RNAs'.format(gene_id,product))
-        tmp = pandas.DataFrame.from_dict({ "{}".format(product) : { "Common-Name": product, "Gene": gene_id }}).T
+                         RNA_df,
+                         source):
+        logging.warning('Adding {} ({}) to RNAs from {}'.format(gene_id,product,source))
+        tmp = pandas.DataFrame.from_dict({
+            product : {
+                "Common-Name": name,
+                "Gene": gene_id
+            }}).T
         return pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
     
     def _add_entry_to_complexes(self,
                                gene_id,
+                               name,
                                product,
-                               complexes_df):
-        logging.warning('Adding {} ({}) to complexes'.format(gene_id,product))
+                               complexes_df,
+                               source):
+        logging.warning('Adding {} ({}) to complexes from {}'.format(gene_id,product,source))
         tmp = pandas.DataFrame.from_dict({
             product: {
-                "name": product,
+                "name": name,
                 "genes": '{}()'.format(gene_id),
-                "source": "Synced",
+                "source": source,
                 }}).T
         return pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
     
@@ -397,17 +405,19 @@ class Organism(object):
             ## Sync files
             if 'RNA' in product_type and product not in RNA_df.index:
                 RNA_df = \
-                    self._add_entry_to_rna(
-                        gene_id,
-                        product,
-                        RNA_df)
+                    self._add_entry_to_rna(gene_id,
+                                           product,
+                                           product,
+                                           RNA_df,
+                                           "Sync")
 
             elif product_type == 'MONOMER' and product not in complexes_df.index:
                 complexes_df = \
-                    self._add_entry_to_complexes(
-                        gene_id,
-                        product,
-                        complexes_df)
+                    self._add_entry_to_complexes(gene_id,
+                                                 product,
+                                                 product,
+                                                 complexes_df,
+                                                 "Sync")
 
         self.gene_dictionary = gene_dictionary[pandas.notnull(gene_dictionary.index)]
         self.RNA_df = RNA_df
@@ -525,7 +535,6 @@ class Organism(object):
                 if gene_name not in gene_sequences:
                     warn_sequence.append(gene_name)
                     continue
-                    
                 self._add_entry_to_genbank(
                      gene_id,
                      gene_name,
@@ -824,35 +833,26 @@ class Organism(object):
                                        gene_id,
                                        feature,
                                       ):
-        if 'product' in feature.qualifiers:
-            name_annotation = feature.qualifiers["product"][0]
-        else:
-            name_annotation = gene_name
+        name_annotation = feature.qualifiers["product"][0] if 'product' in feature.qualifiers \
+                else gene_name
         if feature.type == 'CDS':
             product = gene_name + '-MONOMER'
             if not complexes_df["genes"].str.contains(gene_id).any():
-                logging.warning("Adding {} ({}) to complexes from genbank".format(gene_id,product))
-                tmp = pandas.DataFrame.from_dict({
-                            product: {
-                                "name": name_annotation,
-                                "genes": "{}()".format(gene_id),
-                                "source": "GenBank",
-                        }}).T
-                complexes_df = pandas.concat([complexes_df, tmp], axis = 0, join = 'outer')
-
+                complexes_df = \
+                    self._add_entry_to_complexes(gene_id,
+                                                 name_annotation,
+                                                 product,
+                                                 complexes_df,
+                                                 "GenBank")
         else: # It's not CDS, but an RNA
             product = "{}-{}".format(gene_name,feature.type)
-            if not RNA_df["Gene"].str.contains(gene_name.replace('(', '\(').replace(')', '\)')).any():
-                logging.warning("Adding {} ({}) to RNAs from genbank".format(gene_id,product))
-                tmp = pandas.DataFrame.from_dict(
-                        {
-                           product : {
-                                "Common-Name": name_annotation,
-                                "Gene": gene_name
-                            }
-                        }
-                    ).T
-                RNA_df = pandas.concat([RNA_df, tmp], axis = 0, join = 'outer')
+            if not RNA_df["Gene"].str.contains(gene_name).any():
+                RNA_df = \
+                    self._add_entry_to_rna(gene_id,
+                                           name_annotation,
+                                           product,
+                                           RNA_df,
+                                           "GenBank")
         return complexes_df,RNA_df,product
     
     def _add_entries_to_optional_files(self,
@@ -895,6 +895,7 @@ class Organism(object):
             return
         
         # TODO: DO WE NEED TO FILTER BY ELEMENT_TYPES? WHY NOT PROCESS THEM ALL?
+        # In some genbanks, CDS are duplicated with gene features. See staph or pputida
         element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
@@ -905,8 +906,8 @@ class Organism(object):
                            'Syncing optional files with genbank contigs...',
                            bar_format = bar_format):
             for feature in record.features:
-#                 if feature.type not in element_types:
-#                     continue
+                if feature.type not in element_types:
+                    continue
                 if self.locus_tag not in feature.qualifiers:
                     warn_locus.append(feature.qualifiers)
                     continue
