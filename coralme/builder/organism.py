@@ -343,7 +343,6 @@ class Organism(object):
         return pandas.concat([df,
                               pandas.DataFrame.from_dict(tmp).T],
                              axis = 0, join = 'outer')
-        
     
     def _add_entry_to_rna(self,
                          gene_id,
@@ -819,14 +818,13 @@ class Organism(object):
         feature_type = feature.type
         if feature_type == 'CDS':
             feature_type = 'MONOMER'
-        tmp = pandas.DataFrame.from_dict({
-                    gene_id: {
+        tmp = {gene_id: {
                         "Accession-1": gene_id,
                         "Left-End-Position": left_end,
                         "Right-End-Position": right_end,
-                "Product": "{}-{}".format(gene_id,feature_type)
-                }}).T
-        return pandas.concat([gene_dictionary, tmp], axis = 0, join = 'outer')
+                        "Product": "{}-{}".format(gene_id,feature_type)
+                }}
+        return self._add_entry_to_df(gene_dictionary, tmp)
     
     def _add_entry_to_complexes_or_rna(self,
                                        complexes_df,
