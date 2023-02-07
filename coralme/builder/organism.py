@@ -568,6 +568,19 @@ class Organism(object):
                                 'to_do':'Add gene sequence in sequences.fasta. Check whether you downloaded the database files from the same BioCyc version.'
             })
 
+    def _create_complexes_entry(self,
+                                row,
+                                genes,
+                                stoich):
+        return {"name" : row["Common-Name"],
+                "genes" : " AND ".join(
+                        [
+                            self.gene_dictionary["Accession-1"][g] + "({})".format(stoich)
+                            for g in genes
+                        ]
+                    ),
+                "source" : "BioCyc"}
+    
     def generate_complexes_df(self):
         proteins_df = self.proteins_df
         
@@ -583,7 +596,6 @@ class Organism(object):
         
         gene_dictionary = self.gene_dictionary
         complexes = {}
-        protein_complexes_dict = {}
         warn_proteins = []
         for p, row in tqdm.tqdm(proteins_df.iterrows(),
                            'Generating complexes dataframe from optional proteins file...',
@@ -599,18 +611,11 @@ class Organism(object):
             genes = [
                 g for g in genes.split(" // ") if g in gene_dictionary["Accession-1"]
             ]
-            complexes[p] = {}
-            complexes[p]["name"] = row["Common-Name"]
-            complexes[p]["genes"] = " AND ".join(
-                [
-                    gene_dictionary["Accession-1"][g] + "({})".format(stoich)
-                    for g in genes
-                ]
-            )
-            protein_complexes_dict[p] = [
-                gene_dictionary["Accession-1"][g] for g in genes
-            ]
-            complexes[p]["source"] = "BioCyc"
+            
+            complexes[p] = self._create_complexes_entry(row,
+                                                        genes,
+                                                        stoich)
+            
         complexes_df = pandas.DataFrame.from_dict(complexes).T[["name", "genes", "source"]]
         complexes_df.index.name = "complex"
         # Warnings
