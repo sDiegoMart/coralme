@@ -898,7 +898,7 @@ class Organism(object):
                     warn_locus.append(feature.qualifiers)
                     continue
                 if not feature.qualifiers[self.locus_tag]:
-                    continue     
+                    continue
                 gene_dictionary,complexes_df,RNA_df = \
                     self._add_entries_to_optional_files(
                                        gene_dictionary,
@@ -1277,7 +1277,7 @@ class Organism(object):
                                location_interpreter):
         new_location = {}
         for k, v in location.items():
-            if isinstance(v, float):
+            if not v or isinstance(v, float):
                 continue
             for loc in v.split(" // "):
                 if loc in location_interpreter.index:
