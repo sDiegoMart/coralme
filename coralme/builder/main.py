@@ -1273,8 +1273,10 @@ class MEReconstruction(object):
 				if pathlib.Path(filename).exists():
 					pathlib.Path(filename).unlink() # python==3.7
 
-		if pathlib.Path(filename).is_file():
+		if pathlib.Path(filename).is_file() and filename.endswith('.xlsx'):
 			df_data = pandas.read_excel(filename).dropna(how = 'all')
+		elif pathlib.Path(filename).is_file() and filename.endswith('.txt'):
+			df_data = pandas.read_csv(filename, sep = '\t', header = 0).dropna(how = 'all')
 		else:
 			# detect if the genbank file was modified using biocyc data
 			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
