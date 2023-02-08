@@ -939,23 +939,36 @@ class Organism(object):
                 'to_do':'Check whether these features are necessary, and correct their locus_tag. If they have been completed from other provided files, ignore.'})
 
     def purge_genes_in_model(self):
-        from cobra.manipulation.delete import remove_genes
         m_model = self.m_model
         gene_dictionary = self.gene_dictionary
         gene_list = []
+        wrong_assoc = []
         for g in tqdm.tqdm(m_model.genes,
                            'Purging M-model genes...',
                            bar_format = bar_format):
             if g.id not in gene_dictionary['Accession-1'].values:
                 gene_list.append(g)
-        remove_genes(m_model, gene_list, remove_reactions=False)
+            else:
+                product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g)]['Product'].values[0]
+                if product not in complexes_df:
+                    wrong_assoc.append(g)
+                
+        cobra.manipulation.delete.remove_genes(m_model,
+                     gene_list + wrong_assoc,
+                     remove_reactions=False)
         # Warnings
         if gene_list:
             self.curation_notes['org.purge_genes_in_model'].append({
-                'msg':'Some genes in m_model were not found in genes.txt or genome.gb. These genes were skipped.',
+                'msg':'Some genes in M-model were not found in genes.txt or genome.gb. These genes were skipped.',
                 'triggered_by':[g.id for g in gene_list],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, add it to genes.txt'})
+        if wrong_assoc:
+            self.curation_notes['org.purge_genes_in_model'].append({
+                'msg':'Some genes in M-model are not enzymes. These genes were skipped.',
+                'triggered_by':[g.id for g in wrong_assoc],
+                'importance':'high',
+                'to_do':'Confirm the gene is correct in the m_model.'})
     
     def get_trna_synthetase(self):
         if self.is_reference:
@@ -1565,7 +1578,7 @@ class Organism(object):
             if 'Accession-1' in warn_dups and not self.is_reference:
                 for d in warn_dups['Accession-1']:
                     if not d: continue
-                    dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].str.contains(d)]
+                    dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(d)]
                     self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
         
         
