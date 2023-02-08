@@ -211,6 +211,8 @@ class Organism(object):
         self.phospholipids = self.get_phospholipids()
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
+        logging.warning("Final replicon checks")
+        self.final_replicon_checks()
         
         print("Reading {} done...".format(self.id))
 
@@ -378,6 +380,8 @@ class Organism(object):
         complexes_df = self.complexes_df
         product_types = {}
         warn_genes = []
+        
+        warn_products= []
         for gene_name,row in tqdm.tqdm(gene_dictionary.iterrows(),
                            'Syncing optional genes file...',
                            bar_format = bar_format,
@@ -395,6 +399,7 @@ class Organism(object):
                      gene_name,
                      warn_genes)
             if product is None:
+                warn_genes.append(gene_id)
                 continue
             if ' ' in product or ('RNA' not in product and 'MONOMER' not in product):
                 product = \
@@ -536,7 +541,7 @@ class Organism(object):
                     warn_position.append(gene_id)
                     continue
                 if gene_name not in gene_sequences:
-                    warn_sequence.append(gene_name)
+                    warn_sequence.append(gene_id)
                     continue
                 self._add_entry_to_genbank(
                      gene_id,
@@ -575,7 +580,7 @@ class Organism(object):
         if warn_sequence:
             self.curation_notes['org.update_genbank_from_files'].append({
                                 'msg':'Could not add some genes in genes.txt to genbank.gb since they lack sequence information. Are your BioCyc files from the same database version?',
-                                'triggered_by':warn_position,
+                                'triggered_by':warn_sequence,
                                 'importance':'medium',
                                 'to_do':'Add gene sequence in sequences.fasta. Check whether you downloaded the database files from the same BioCyc version.'
             })
@@ -1639,3 +1644,9 @@ class Organism(object):
                 file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
             file.write('\n\n')
         file.close()
+        
+    def final_replicon_checks(self):
+        if self.is_reference:
+            return
+        self.gene_dictionary = self.gene_dictionary[self.gene_dictionary["replicon"] != '']
+        self.TU_df = self.TU_df[~self.TU_df["replicon"].isna()]
