@@ -309,9 +309,16 @@ class Organism(object):
     def purge_genes_in_file(self):
         if self.is_reference:
             return
+        
+        all_genenames_in_gb = []
+        for i in self.all_genes_in_gb:
+            genenames = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(i)].index
+            all_genenames_in_gb += list(genenames)
         warn_products = set(self.gene_dictionary[self.gene_dictionary["Product"] == ''].index)
         warn_replicons = set(self.gene_dictionary[self.gene_dictionary["replicon"] == ''].index)
-        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys()) - set(self.all_genes_in_gb)
+        warn_replicons = set(self.gene_dictionary[self.gene_dictionary["Left-End-Position"] == ''].index)
+        warn_replicons = set(self.gene_dictionary[self.gene_dictionary["Right-End-Position"] == ''].index)
+        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys()) - set(all_genenames_in_gb)
         warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
         
         self.gene_dictionary.drop(list(warn_products|warn_genenames|warn_replicons),inplace=True)
