@@ -1119,6 +1119,9 @@ class MEBuilder(object):
 			os.mkdir(directory)
 		for k,v in dataframes.items():
 			v.to_csv(directory + k + '.csv')
+			
+	def find_issue(self,query):
+		coralme.builder.curation.MECurator(self.org).find_issue_with_query(query)
 
 	# shortcuts to methods in the MEReconstruction and METroubleshooter classes
 	def build_me_model(self, overwrite = False):
