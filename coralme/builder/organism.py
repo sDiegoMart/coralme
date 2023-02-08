@@ -941,6 +941,7 @@ class Organism(object):
     def purge_genes_in_model(self):
         m_model = self.m_model
         gene_dictionary = self.gene_dictionary
+        complexes_df = self.complexes_df
         gene_list = []
         wrong_assoc = []
         for g in tqdm.tqdm(m_model.genes,
@@ -949,7 +950,7 @@ class Organism(object):
             if g.id not in gene_dictionary['Accession-1'].values:
                 gene_list.append(g)
             else:
-                product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g)]['Product'].values[0]
+                product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
                 if product not in complexes_df:
                     wrong_assoc.append(g)
                 
