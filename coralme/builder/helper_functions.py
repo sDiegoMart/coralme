@@ -406,7 +406,8 @@ def find_issue(query,d,msg = ''):
     else:
         raise TypeError("unsupported type  " + type(d))
         
-        
+
+# TODO: Add warnings
 def fill_builder(b,fill_with='CPLX_dummy',key=None,d=None,fieldname=None,warnings=None):
     if isinstance(b,coralme.builder.main.MEBuilder):
         for i in dir(b.org):
@@ -415,7 +416,7 @@ def fill_builder(b,fill_with='CPLX_dummy',key=None,d=None,fieldname=None,warning
             attr = getattr(b.org,i)
             if not isinstance(attr,dict):
                 continue
-            fill_builder(attr,fill_with=fill_with,fieldname=i,curation_notes = b.org.curation_notes)
+            fill_builder(attr,fill_with=fill_with,fieldname=i,warnings = warnings)
     elif isinstance(b,dict):
         for k,v in b.items():
             fill_builder(v,key=k,d=b,fill_with=fill_with,fieldname=fieldname,warnings=warnings)
