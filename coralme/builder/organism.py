@@ -179,8 +179,6 @@ class Organism(object):
         self.update_genbank_from_files()
         logging.warning("Updating genes and complexes from genbank")
         self.update_complexes_genes_with_genbank()
-        logging.warning("Purging genes in M-model")
-        self.purge_genes_in_model()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
         
@@ -211,8 +209,11 @@ class Organism(object):
         self.phospholipids = self.get_phospholipids()
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
-        logging.warning("Final replicon checks")
+        
+        logging.warning("Replicon check")
         self.final_replicon_checks()
+        logging.warning("Purging genes in M-model")
+        self.purge_genes_in_model()
         
         print("Reading {} done...".format(self.id))
 
