@@ -1215,7 +1215,7 @@ class MEReconstruction(object):
 			filename = config.get(filecode, '')
 			if pathlib.Path(filename).is_file():
 				df = coralme.builder.flat_files.read(filename)
-				if sorted(df.columns) == sorted(columns):
+				if set(df.columns).issubset(set(columns)):
 					return df
 				else:
 					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
@@ -1281,7 +1281,7 @@ class MEReconstruction(object):
 		if pathlib.Path(filename).is_file() and filename.endswith('.xlsx'):
 			df_data = pandas.read_excel(filename).dropna(how = 'all')
 		elif pathlib.Path(filename).is_file() and filename.endswith('.txt'):
-			df_data = pandas.read_csv(filename, sep = '\t', header = 0).dropna(how = 'all')
+			df_data = pandas.read_csv(filename, sep = '\t', header = 0, dtype = str).dropna(how = 'all')
 		else:
 			# detect if the genbank file was modified using biocyc data
 			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))

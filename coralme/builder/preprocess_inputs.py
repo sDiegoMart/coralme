@@ -405,6 +405,13 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	#data = data.drop_duplicates(inplace = False) # Is it correctly detecting duplicates when strings contain ()?
 
 	def _save_to_excel(data, output):
+		#if overwrite:
+		try:
+			pathlib.Path(output).unlink(missing_ok = True) # python>=3.8
+		except:
+			if pathlib.Path(output).exists():
+				pathlib.Path(output).unlink() # python==3.7
+
 		with open(output, 'wb') as outfile:
 			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
 			data.to_excel(writer, index = False, freeze_panes = (1, 7))
@@ -429,30 +436,30 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		if not output.endswith('.xlsx'):
 			output = '.'.join(output.split('.')[:-1]) + '.xlsx'
 
-		# GPRs expand the model specifications beyond the max size of an excel file (1048576 rows)
+		# GPRs can expand the model specifications beyond the max size of an excel file (1048576 rows)
 		if data.shape[0] > 1048575: # one less to accommodate the header
-			# Divide the DataFrame and save pieces
-			idx = tmp1.groupby(['M-model Reaction ID']).size()
+			# Divide the DataFrame into pieces and save them
+			rxn_ids = data.groupby(['M-model Reaction ID'], dropna = True).size() # Anything with 1 or more ocurrences
 
-			genes = data[data['M-model Reaction ID'].isin(idx[idx < 1000].index)]['Gene Locus ID']
-			data = data[data['Gene Locus ID'].isin(genes)]
-			output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0)
-			_save_to_excel(data, output)
+			gene_ids = data[data['M-model Reaction ID'].isin(rxn_ids[rxn_ids < 1000].index)]['Gene Locus ID']
+			tmp = pandas.concat([ data[data['Gene Locus ID'].isin(gene_ids)], data[data['M-model Reaction ID'].isna()]], axis = 1)
+			_save_to_excel(tmp, '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0))
 
 			if output.endswith('.xlsx'):
-				for idx, gene in enumerate(idx[idx >= 1000].index):
-					output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(idx+1)
-					_save_to_excel(data[data['Gene Locus ID'].isin([gene])], output)
+				for idx, gene_id in enumerate(rxn_ids[rxn_ids >= 1000].index):
+					tmp = data[data['Gene Locus ID'].isin([gene_id])]
+					_save_to_excel(tmp, '.'.join(output.split('.')[:-1]) + '_{:03d}.xlsx'.format(idx+1))
 
+			# save the output as a tsv file
 			if not output.endswith('.txt'):
-				output = '.'.join(output.split('.')[:-1]) + '.txt'
+				output = '.'.join(output.split('.')[:-2]) + '.txt'
 
 			with open(output, 'w') as outfile:
 				data.to_csv(outfile, index = False, sep = '\t')
 		else:
 			_save_to_excel(data, output)
 	except:
-		warning.logging('The builder.df_data was not saved to the \'{:s}\' file.'.format(output))
+		logging.warning('The builder.df_data was not saved to the \'{:s}\' file.'.format(output))
 
 	return data
 

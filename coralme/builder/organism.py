@@ -1356,6 +1356,8 @@ class Organism(object):
                                       protein_location,
                                       gene_location):
         gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
+        if gene not in gene_dictionary:
+            return protein_location
         gene = gene_dictionary.loc[[gene]]["Gene Name"]
         for gene_ in gene: # In case of duplicates
             if gene_ in gene_location:
