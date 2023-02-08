@@ -966,10 +966,10 @@ class Organism(object):
                 'to_do':'Confirm the gene is correct in the m_model. If so, add it to genes.txt'})
         if wrong_assoc:
             self.curation_notes['org.purge_genes_in_model'].append({
-                'msg':'Some genes in M-model are not enzymes. These genes were skipped.',
+                'msg':'Some genes in M-model are not metabolic enzymes. These genes were skipped.',
                 'triggered_by':[g.id for g in wrong_assoc],
                 'importance':'high',
-                'to_do':'Confirm the gene is correct in the m_model.'})
+                'to_do':'Confirm the gene is correct in the m_model. If so, then annotation from GenBank or BioCyc missed them or marked them as a different type'})
     
     def get_trna_synthetase(self):
         if self.is_reference:
