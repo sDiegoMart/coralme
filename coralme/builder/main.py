@@ -210,8 +210,8 @@ class MEBuilder(object):
 		self.org.biomass_constituents = config.get('flux_of_biomass_constituents', {})
 
 		# Fill builder with dummy
-		#print("{} Filling files with CPLX_dummy {}".format(sep, sep))
-		#self.fill()
+		logging.warning("Filling files with CPLX_dummy")
+		self.fill()
 		# Final checks of builder
 		logging.warning("Performing final checks of files")
 		self.check()
@@ -1071,7 +1071,7 @@ class MEBuilder(object):
 
 	def fill(self,
 			 fill_with='CPLX_dummy'):
-		fill_builder(self,fill_with='CPLX_dummy')
+		coralme.builder.helper_functions.fill_builder(self,fill_with='CPLX_dummy')
 
 	def check(self):
 		t_pathways = self.org.protein_location['translocase_pathway'].unique()
