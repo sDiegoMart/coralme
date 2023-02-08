@@ -478,7 +478,8 @@ def correct_input(df):
 
 # 2nd step
 def get_generics(df):
-	tmp = df[df['Generic Complex ID'].notna() & ~df['Feature Type'].isin(['pseudo'])]
+	#tmp = df[df['Generic Complex ID'].notna() & ~df['Feature Type'].isin(['pseudo'])]
+	tmp = df[df['Generic Complex ID'].notna()]
 	tmp = correct_input(tmp)
 
 	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
@@ -493,22 +494,26 @@ def get_generics(df):
 	return tmp
 
 def metacomplex_stoichiometry(df, key):
-	tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.startswith(key) & ~df['Feature Type'].isin(['pseudo'])]
-	tmp = correct_input(tmp)
+	#tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.startswith(key) & ~df['Feature Type'].isin(['pseudo'])]
+	tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.startswith(key)]
+	if not tmp.empty:
+		tmp = correct_input(tmp)
 
-	tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
+		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
-	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
-		if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
-	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
+		fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+			if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
+		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
-	# collapse
-	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
-	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
-	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
+		# collapse
+		tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
+		tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
+		tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
-	tmp['stoich'] = tmp['MetaComplex ID'].str.split(':', expand = True).iloc[:, 1]
-	return tmp
+		tmp['stoich'] = tmp['MetaComplex ID'].str.split(':', expand = True).iloc[:, 1]
+		return tmp
+	else:
+		return None
 
 def ribosome_stoichiometry(df):
 	tmp = metacomplex_stoichiometry(df, 'ribosome')
@@ -525,7 +530,8 @@ def dnapolymerase_stoichiometry(df):
 	return { k.split(':')[0]:int(v) for k,v in zip(tmp['Gene Locus ID'], tmp['stoich']) }
 
 def excision_machinery_stoichiometry(df, keys):
-	tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.match(keys) & ~df['Feature Type'].isin(['pseudo'])]
+	#tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.match(keys) & ~df['Feature Type'].isin(['pseudo'])]
+	tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.match(keys)]
 	if not tmp.empty:
 		tmp = correct_input(tmp)
 
@@ -544,7 +550,8 @@ def excision_machinery_stoichiometry(df, keys):
 		return None
 
 def aa_synthetase_dict(df):
-	tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase') & ~df['Feature Type'].isin(['pseudo'])]
+	#tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase') & ~df['Feature Type'].isin(['pseudo'])]
+	tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase')]
 	tmp = correct_input(tmp)
 
 	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \

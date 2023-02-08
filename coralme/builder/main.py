@@ -4,6 +4,7 @@ import io
 import os
 import re
 import pickle
+import shutil
 import pathlib
 import warnings
 import collections
@@ -88,6 +89,8 @@ class MEBuilder(object):
 
 		config = self.configuration
 		directory = config.get('log_directory', '.')
+		if overwrite and os.path.exists(directory):
+			shutil.rmtree(directory)
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 
@@ -1119,7 +1122,7 @@ class MEBuilder(object):
 			os.mkdir(directory)
 		for k,v in dataframes.items():
 			v.to_csv(directory + k + '.csv')
-			
+
 	def find_issue(self,query):
 		coralme.builder.curation.MECurator(self.org).find_issue_with_query(query)
 
@@ -1304,10 +1307,12 @@ class MEReconstruction(object):
 		model = config.get('model_id', 'coralME')
 
 		directory = config.get('log_directory', '.')
+		if overwrite and os.path.exists(directory):
+			shutil.rmtree(directory)
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 
-		# ## Part 1: Create a minimum solveable ME-model
+		# ## Part 1: Create a minimum solvable ME-model
 		# set logger
 		log = logging.getLogger() # root logger
 		for hdlr in log.handlers[:]: # remove all old handlers
@@ -1472,7 +1477,7 @@ class MEReconstruction(object):
 
 		# ### 6) Add dummy reactions to model and the *unmodeled_protein_fraction* constraint
 		#
-		# This includes the Transcription, Translation, ComplexFormation, and Metabolic reactions for a dummy RNA/protein/complex. Sequence for *dummy RNA* is based on the prevalance of each codon found in the genbank file.
+		# This includes the Transcription, Translation, ComplexFormation, and Metabolic reactions for a dummy RNA/protein/complex. Sequence for *dummy RNA* is based on the prevalence of each codon found in the genbank file.
 
 		coralme.util.building.add_dummy_reactions(me, update = True)
 
