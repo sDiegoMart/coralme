@@ -182,6 +182,9 @@ class Organism(object):
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
         
+        logging.warning("Purging genes in optional files")
+        self.purge_genes_in_file()
+        
         logging.warning("Loading manual curation")
         self.load_manual_curation()
         
@@ -210,8 +213,8 @@ class Organism(object):
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
         
-        logging.warning("Replicon check")
-        self.final_replicon_checks()
+#         logging.warning("Replicon check")
+#         self.final_replicon_checks()
         logging.warning("Purging genes in M-model")
         self.purge_genes_in_model()
         
@@ -372,6 +375,17 @@ class Organism(object):
                 }}
         return self._add_entry_to_df(complexes_df,tmp)
     
+    def purge_genes_in_file(self):
+        if self.is_reference:
+            return
+        warn_products = set(self.gene_dictionary[self.gene_dictionary["Product"] == ''].index)
+        warn_replicons = set(self.gene_dictionary[self.gene_dictionary["replicon"] == ''].index)
+        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys())
+        warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
+        
+        self.gene_dictionary.drop(list(warn_products|warn_sequences|warn_genenames|warn_replicons),inplace=True)
+        
+        
     def sync_files(self):
         if self.is_reference:
             return
@@ -381,8 +395,6 @@ class Organism(object):
         complexes_df = self.complexes_df
         product_types = {}
         warn_genes = []
-        
-        warn_products= []
         for gene_name,row in tqdm.tqdm(gene_dictionary.iterrows(),
                            'Syncing optional genes file...',
                            bar_format = bar_format,
@@ -1660,8 +1672,8 @@ class Organism(object):
             file.write('\n\n')
         file.close()
         
-    def final_replicon_checks(self):
-        if self.is_reference:
-            return
-        self.gene_dictionary = self.gene_dictionary[self.gene_dictionary["replicon"] != '']
-        self.TU_df = self.TU_df[~self.TU_df["replicon"].isna()]
+#     def final_replicon_checks(self):
+#         if self.is_reference:
+#             return
+#         self.gene_dictionary = self.gene_dictionary[self.gene_dictionary["replicon"] != '']
+#         self.TU_df = self.TU_df[~self.TU_df["replicon"].isna()]
