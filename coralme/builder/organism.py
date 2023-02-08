@@ -181,7 +181,7 @@ class Organism(object):
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
-        
+        return
         logging.warning("Purging genes in optional files")
         self.purge_genes_in_file()
         
@@ -305,6 +305,17 @@ class Organism(object):
     def load_manual_curation(self):
         MEManualCuration(self).load_manual_curation()
         
+        
+    def purge_genes_in_file(self):
+        if self.is_reference:
+            return
+        warn_products = set(self.gene_dictionary[self.gene_dictionary["Product"] == ''].index)
+        warn_replicons = set(self.gene_dictionary[self.gene_dictionary["replicon"] == ''].index)
+        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys())
+        warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
+        
+        self.gene_dictionary.drop(list(warn_products|warn_sequences|warn_genenames|warn_replicons),inplace=True)
+        
     def _get_product_type(self,
                          row,
                          complexes_df,
@@ -374,18 +385,7 @@ class Organism(object):
                 "source": source,
                 }}
         return self._add_entry_to_df(complexes_df,tmp)
-    
-    def purge_genes_in_file(self):
-        if self.is_reference:
-            return
-        warn_products = set(self.gene_dictionary[self.gene_dictionary["Product"] == ''].index)
-        warn_replicons = set(self.gene_dictionary[self.gene_dictionary["replicon"] == ''].index)
-        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys())
-        warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
-        
-        self.gene_dictionary.drop(list(warn_products|warn_sequences|warn_genenames|warn_replicons),inplace=True)
-        
-        
+
     def sync_files(self):
         if self.is_reference:
             return
@@ -448,7 +448,7 @@ class Organism(object):
         # Warnings
         if warn_genes:
             self.curation_notes['org.sync_files'].append({
-                                'msg':'The types of some genes (e.g. CDS, RNA...) could not be identified',
+                                'msg':'The types of some genes (e.g. CDS, RNA...) could not be identified. Is Product or Gene Name missing?',
                                 'triggered_by':warn_genes,
                                 'importance':'medium',
                                 'to_do':'Manually fill the products (with types) of these genes in genes.txt'
@@ -509,6 +509,16 @@ class Organism(object):
                     return None
                 return df.loc[product][col]
         return product
+    
+    def _read_product_type(self,
+                           gene_id,
+                           product_types):
+        product_type = product_types[gene_id] \
+                        if gene_id in product_types else 'gene'
+        if 'MONOMER' in product_type:
+            return 'CDS'
+        else:
+            return product_type
         
     def update_genbank_from_files(self):
         if self.is_reference:
@@ -536,9 +546,10 @@ class Organism(object):
             if gene_id not in all_genes_in_gb:
                 product = row['Product'].split(' // ')[0]
                 ### Try to get product type from gene id of type LOCUST_TAG-RNA
-                product_type = product_types[gene_id] \
-                        if gene_id in product_types else 'gene'
-
+                product_type = self._read_product_type(gene_id,
+                                                       product_types)
+                print(gene_id,product_type)
+                
                 ### Retrieve values to sync with genbank
                 product_name = \
                     self._get_product_name_if_present(gene_id,
