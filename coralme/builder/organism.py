@@ -181,7 +181,6 @@ class Organism(object):
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
-        return
         logging.warning("Purging genes in optional files")
         self.purge_genes_in_file()
         
