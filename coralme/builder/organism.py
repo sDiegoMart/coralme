@@ -330,7 +330,7 @@ class Organism(object):
             product_type = re.findall('[a-zA-Z]+',product.split('-')[-1])
             if product_type:product_type = product_type[0]
         ### Set product type to RNA if it is in ID
-        if not product_type:
+        if ' ' in product or ('RNA' not in product and 'MONOMER' not in product) or not product_type:
             if 'RNA' in gene_id \
                     or RNA_df['Gene'].str.match(gene_name).any() \
                     or product in RNA_df.index:
@@ -548,8 +548,6 @@ class Organism(object):
                 ### Try to get product type from gene id of type LOCUST_TAG-RNA
                 product_type = self._read_product_type(gene_id,
                                                        product_types)
-                print(gene_id,product_type)
-                
                 ### Retrieve values to sync with genbank
                 product_name = \
                     self._get_product_name_if_present(gene_id,
