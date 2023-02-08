@@ -181,6 +181,7 @@ class Organism(object):
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
+        
         logging.warning("Purging genes in optional files")
         self.purge_genes_in_file()
         
@@ -310,7 +311,7 @@ class Organism(object):
             return
         warn_products = set(self.gene_dictionary[self.gene_dictionary["Product"] == ''].index)
         warn_replicons = set(self.gene_dictionary[self.gene_dictionary["replicon"] == ''].index)
-        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys())
+#         warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys())
         warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
         
         self.gene_dictionary.drop(list(warn_products|warn_sequences|warn_genenames|warn_replicons),inplace=True)
