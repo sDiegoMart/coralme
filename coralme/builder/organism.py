@@ -941,7 +941,7 @@ class Organism(object):
     def purge_genes_in_model(self):
         m_model = self.m_model
         gene_dictionary = self.gene_dictionary
-        complexes_df = self.complexes_df
+        RNA_df = self.RNA_df
         gene_list = []
         wrong_assoc = []
         for g in tqdm.tqdm(m_model.genes,
@@ -951,7 +951,7 @@ class Organism(object):
                 gene_list.append(g)
             else:
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
-                if product not in complexes_df:
+                if product in RNA_df:
                     wrong_assoc.append(g)
                 
         cobra.manipulation.delete.remove_genes(m_model,
@@ -966,10 +966,10 @@ class Organism(object):
                 'to_do':'Confirm the gene is correct in the m_model. If so, add it to genes.txt'})
         if wrong_assoc:
             self.curation_notes['org.purge_genes_in_model'].append({
-                'msg':'Some genes in M-model are not metabolic enzymes. These genes were skipped.',
+                'msg':'Some genes in M-model are RNAs. These genes were skipped.',
                 'triggered_by':[g.id for g in wrong_assoc],
                 'importance':'high',
-                'to_do':'Confirm the gene is correct in the m_model. If so, then annotation from GenBank or BioCyc missed them or marked them as a different type'})
+                'to_do':'Confirm the gene is correct in the m_model. If so, then annotation from GenBank or BioCyc marked them as a different type'})
     
     def get_trna_synthetase(self):
         if self.is_reference:
