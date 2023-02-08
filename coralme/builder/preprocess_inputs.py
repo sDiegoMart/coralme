@@ -402,57 +402,57 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
 
 	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
-	#data = data.drop_duplicates(inplace = False) # Is it correctly detecting duplicates when string contains ()?
+	#data = data.drop_duplicates(inplace = False) # Is it correctly detecting duplicates when strings contain ()?
 
-	def _save_to_excel(data, outfile):
-		writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
-		data.to_excel(writer, index = False, freeze_panes = (1, 7))
-		(max_row, max_col) = data.shape
-
-		# Get the xlsxwriter workbook and worksheet objects.
-		workbook  = writer.book
-		worksheet = writer.sheets['Sheet1']
-
-		# Set the autofilter.
-		worksheet.autofilter(0, 0, max_row, max_col - 1)
-
-		# Make the columns wider for clarity.
-		worksheet.set_column_pixels(0,  max_col - 1, 96)
-
-		# Close the Pandas Excel writer and output the Excel file.
-		writer.close()
-
-	# Save file as excel or tsv depending on the size
-	# GPRs expand the model specifications beyond the max size of an excel file (1048576 rows)
-	if data.shape[0] > 1048575: # one less to accommodate the header
-		# Divide the DataFrame and save pieces
-		idx = tmp1.groupby(['M-model Reaction ID']).size()
-
-		genes = data[data['M-model Reaction ID'].isin(idx[idx < 1000].index)]['Gene Locus ID']
-		data[data['Gene Locus ID'].isin(genes)]
-		output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0)
+	def _save_to_excel(data, output):
 		with open(output, 'wb') as outfile:
-			_save_to_excel(data, outfile)
+			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
+			data.to_excel(writer, index = False, freeze_panes = (1, 7))
+			(max_row, max_col) = data.shape
 
-		if output.endswith('.xlsx'):
-			with open(output, 'wb') as outfile:
-				_save_to_excel(data[data['Gene Locus ID'].isin([gene])], outfile)
+			# Get the xlsxwriter workbook and worksheet objects.
+			workbook  = writer.book
+			worksheet = writer.sheets['Sheet1']
 
-			for idx, gene in enumerate(idx[idx >= 1000].index):
-				output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(idx+1)
-				with open(output, 'wb') as outfile:
-					_save_to_excel(data[data['Gene Locus ID'].isin([gene])], outfile)
+			# Set the autofilter.
+			worksheet.autofilter(0, 0, max_row, max_col - 1)
 
-		if not output.endswith('.txt'):
-			output = '.'.join(output.split('.')[:-1]) + '.txt'
+			# Make the columns wider for clarity.
+			worksheet.set_column_pixels(0,  max_col - 1, 96)
 
-		with open(output, 'w') as outfile:
-			data.to_csv(outfile, index = False, sep = '\t')
-	else:
+			# Close the Pandas Excel writer and output the Excel file.
+			writer.close()
+		return None
+
+	try:
+		# Save file as excel or tsv depending on the size
 		if not output.endswith('.xlsx'):
 			output = '.'.join(output.split('.')[:-1]) + '.xlsx'
-		with open(output, 'wb') as outfile:
-			_save_to_excel(data, outfile)
+
+		# GPRs expand the model specifications beyond the max size of an excel file (1048576 rows)
+		if data.shape[0] > 1048575: # one less to accommodate the header
+			# Divide the DataFrame and save pieces
+			idx = tmp1.groupby(['M-model Reaction ID']).size()
+
+			genes = data[data['M-model Reaction ID'].isin(idx[idx < 1000].index)]['Gene Locus ID']
+			data = data[data['Gene Locus ID'].isin(genes)]
+			output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0)
+			_save_to_excel(data, output)
+
+			if output.endswith('.xlsx'):
+				for idx, gene in enumerate(idx[idx >= 1000].index):
+					output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(idx+1)
+					_save_to_excel(data[data['Gene Locus ID'].isin([gene])], output)
+
+			if not output.endswith('.txt'):
+				output = '.'.join(output.split('.')[:-1]) + '.txt'
+
+			with open(output, 'w') as outfile:
+				data.to_csv(outfile, index = False, sep = '\t')
+		else:
+			_save_to_excel(data, output)
+	except:
+		warning.logging('The builder.df_data was not saved to the \'{:s}\' file.'.format(output))
 
 	return data
 
