@@ -220,6 +220,11 @@ class MEBuilder(object):
 		logging.warning("Generating curation notes")
 		self.org.generate_curation_notes()
 
+		logging.warning("Saving modified M-model")
+		filename = '{:s}/building_data/m_model_modified.json'.format(config.get('out_directory', './'))
+		cobra.io.save_json_model(self.org.m_model, filename)
+		config['m-model-path'] = filename
+
 		logging.warning("Generating new configuration file")
 		self.input_data(self.org.m_model, overwrite)
 		print("{}File processing done...".format(sep))
@@ -1336,10 +1341,6 @@ class MEReconstruction(object):
 		# Define M-model; from MEBuilder with modifications or the original
 		if hasattr(self, 'org'):
 			me.gem = self.org.m_model
-			filename = '{:s}/building_data/m_model_modified.json'.format(config.get('out_directory', './'))
-			with open(filename, 'w') as outfile:
-				cobra.io.save_json_model(me.gem, outfile)
-			config['m-model-path'] = filename
 		else:
 			if me.global_info['m-model-path'].endswith('.json'):
 				me.gem = cobra.io.load_json_model(me.global_info['m-model-path'])
