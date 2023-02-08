@@ -311,10 +311,10 @@ class Organism(object):
             return
         warn_products = set(self.gene_dictionary[self.gene_dictionary["Product"] == ''].index)
         warn_replicons = set(self.gene_dictionary[self.gene_dictionary["replicon"] == ''].index)
-#         warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys())
+        warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys()) - set(self.all_genes_in_gb)
         warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
         
-        self.gene_dictionary.drop(list(warn_products|warn_sequences|warn_genenames|warn_replicons),inplace=True)
+        self.gene_dictionary.drop(list(warn_products|warn_genenames|warn_replicons),inplace=True)
         
     def _get_product_type(self,
                          row,
@@ -529,7 +529,7 @@ class Organism(object):
         RNA_df = self.RNA_df
         complexes_df = self.complexes_df
         product_types = self.product_types
-        all_genes_in_gb = self. all_genes_in_gb
+        all_genes_in_gb = self.all_genes_in_gb
 
         warn_rnas = []
         warn_proteins = []
