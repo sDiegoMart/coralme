@@ -1025,7 +1025,7 @@ def add_reactions_from_stoichiometric_data(
 			#spontaneous = False
 		#else:
 			#raise Exception('is_spontaneous must be \'True\' or \'False\'.')
-
+		#TODO: detect 'spontaneous' from reaction name
 		if reaction_data.id in is_spontaneous:
 			spontaneous = True
 		else:
