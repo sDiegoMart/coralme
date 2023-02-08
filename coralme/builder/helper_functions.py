@@ -385,3 +385,24 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 			print('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx))), ' '), len(ridx), len([ x for x in res if x ]), 'not ', rxn))
 
 	return [ y for x,y in zip(res, rxns) if x ]
+
+
+def find_issue(query,d,msg = ''):
+    if isinstance(d,dict):
+        if 'msg' in d:
+            msg = d['msg']
+            if 'triggered_by' in d:
+                trigger = d['triggered_by']
+                find_issue(query,trigger,msg=msg)
+        else:
+            for k,v in d.items():
+                find_issue(query,v,msg=msg)
+    elif isinstance(d,list):
+        for i in d:
+            find_issue(query,i,msg=msg)
+    elif isinstance(d,str):
+        if query == d:
+            print(msg)
+    else:
+        raise TypeError("unsupported type  " + type(d))
+        

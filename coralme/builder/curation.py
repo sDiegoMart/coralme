@@ -1,5 +1,6 @@
 import pandas
 import os
+import coralme
 from coralme.builder import dictionaries
 import re
 import logging
@@ -815,3 +816,10 @@ class MECurator(object):
                     'triggered_by':warn_replace,
                     'importance':'low',
                     'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
+                
+    def find_issue_with_query(self,query):
+        for k,v in self.org.curation_notes.items():
+            coralme.builder.helper_functions.find_issue(query,v)
+        
+        
+        
