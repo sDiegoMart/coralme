@@ -177,8 +177,8 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
 			mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
 			mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
-			mods = [ x.replace('lipo', 'lipoate') for x in mods ] # most models, if not all models, use 'lipoate' as metabolite ID
-			logging.warning('The modification \'lipo\' was renamed to \'lipoate\'. Revert manually to match the M-model metabolite.')
+			mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
+			logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
 			mods = [ '{:s}(1)'.format(x) if '(' not in x else x for x in mods ]
 			if len(mods) != 0:
 				return ' AND '.join(mods)
@@ -402,41 +402,57 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
 
 	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
-	data = data.drop_duplicates(inplace = False)
+	#data = data.drop_duplicates(inplace = False) # Is it correctly detecting duplicates when string contains ()?
+
+	def _save_to_excel(data, outfile):
+		writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
+		data.to_excel(writer, index = False, freeze_panes = (1, 7))
+		(max_row, max_col) = data.shape
+
+		# Get the xlsxwriter workbook and worksheet objects.
+		workbook  = writer.book
+		worksheet = writer.sheets['Sheet1']
+
+		# Set the autofilter.
+		worksheet.autofilter(0, 0, max_row, max_col - 1)
+
+		# Make the columns wider for clarity.
+		worksheet.set_column_pixels(0,  max_col - 1, 96)
+
+		# Close the Pandas Excel writer and output the Excel file.
+		writer.close()
 
 	# Save file as excel or tsv depending on the size
 	# GPRs expand the model specifications beyond the max size of an excel file (1048576 rows)
 	if data.shape[0] > 1048575: # one less to accommodate the header
-		if output.endswith('.txt'):
-			pass
-		else:
+		# Divide the DataFrame and save pieces
+		idx = tmp1.groupby(['M-model Reaction ID']).size()
+
+		genes = data[data['M-model Reaction ID'].isin(idx[idx < 1000].index)]['Gene Locus ID']
+		data[data['Gene Locus ID'].isin(genes)]
+		output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0)
+		with open(output, 'wb') as outfile:
+			_save_to_excel(data, outfile)
+
+		if output.endswith('.xlsx'):
+			with open(output, 'wb') as outfile:
+				_save_to_excel(data[data['Gene Locus ID'].isin([gene])], outfile)
+
+			for idx, gene in enumerate(idx[idx >= 1000].index):
+				output = '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(idx+1)
+				with open(output, 'wb') as outfile:
+					_save_to_excel(data[data['Gene Locus ID'].isin([gene])], outfile)
+
+		if not output.endswith('.txt'):
 			output = '.'.join(output.split('.')[:-1]) + '.txt'
 
 		with open(output, 'w') as outfile:
 			data.to_csv(outfile, index = False, sep = '\t')
 	else:
-		if output.endswith('.xlsx'):
-			pass
-		else:
+		if not output.endswith('.xlsx'):
 			output = '.'.join(output.split('.')[:-1]) + '.xlsx'
-
 		with open(output, 'wb') as outfile:
-			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
-			data.to_excel(writer, index = False, freeze_panes = (1, 7))
-			(max_row, max_col) = data.shape
-
-			# Get the xlsxwriter workbook and worksheet objects.
-			workbook  = writer.book
-			worksheet = writer.sheets['Sheet1']
-
-			# Set the autofilter.
-			worksheet.autofilter(0, 0, max_row, max_col - 1)
-
-			# Make the columns wider for clarity.
-			worksheet.set_column_pixels(0,  max_col - 1, 96)
-
-			# Close the Pandas Excel writer and output the Excel file.
-			writer.close()
+			_save_to_excel(data, outfile)
 
 	return data
 
