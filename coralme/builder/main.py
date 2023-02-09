@@ -1224,6 +1224,10 @@ class MEReconstruction(MEBuilder):
 			config['translocation_multipliers'] = self.org.translocation_multipliers
 			logging.warning('Translocation multipliers for yidC and tat homologs were set from homology data.')
 
+		if hasattr(self, 'org') and len(config.get('amino_acid_trna_synthetase', {})) == 0:
+			config['amino_acid_trna_synthetase'] = self.org.amino_acid_trna_synthetase
+			logging.warning('tRNA synthetases were set from homology data.')
+
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass]
 			logging.warning('The biomass reaction {:s} will be skipped during the ME reconstruction steps.'.format(self.org.biomass))
