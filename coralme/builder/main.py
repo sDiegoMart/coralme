@@ -626,9 +626,7 @@ class MEBuilder(object):
 					continue
 				org_g = mutual_hits[g]
 				multipliers[org_cplx][org_g] = value
-		self.org.translocation_multipliers = pandas.DataFrame.from_dict(multipliers).fillna(
-			0.0
-		)
+		self.org.translocation_multipliers = multipliers
 
 	def update_lipoprotein_precursors(self):
 		ref_lipoprotein_precursors = self.ref.lipoprotein_precursors
@@ -1840,7 +1838,7 @@ class MEReconstruction(MEBuilder):
 
 			# TO ADD PATHWAYS WITHOUT HOMOLOGS
 			# Check if the user wants to add dummies to the translocation pathways
-			elif bool(me.global_info.get('add_translocases', False)) and value.get('enzymes', None) is None:
+			elif bool(config.get('add_translocases', False)) and value.get('enzymes', None) is None:
 				value['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) }
 				logging.warning('')
 
