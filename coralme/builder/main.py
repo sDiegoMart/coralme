@@ -1703,8 +1703,9 @@ class MEReconstruction(object):
 
 		me.add_metabolites([coralme.core.component.Complex(degradosome_id)])
 		data = coralme.core.processdata.ComplexData(degradosome_id, me)
-		if data is not None:
-			data.stoichiometry.update(coralme.builder.preprocess_inputs.degradosome_stoichiometry(df_data))
+		stoich = coralme.builder.preprocess_inputs.degradosome_stoichiometry(df_data)
+		if stoich is not None:
+			data.stoichiometry.update(stoich)
 		else:
 			data.stoichiometry.update({'CPLX_dummy' : -1})
 		data.create_complex_formation(verbose = False)

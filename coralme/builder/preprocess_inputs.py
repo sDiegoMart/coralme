@@ -523,7 +523,7 @@ def ribosome_stoichiometry(df):
 
 def degradosome_stoichiometry(df):
 	tmp = metacomplex_stoichiometry(df, 'RNA_degradosome')
-	return { k.split(':')[0]:int(v) for k,v in zip(tmp['Gene Locus ID'], tmp['stoich']) }
+	return { k.split(':')[0]:int(v) for k,v in zip(tmp['Gene Locus ID'], tmp['stoich']) } if tmp is not None else None
 
 def dnapolymerase_stoichiometry(df):
 	tmp = metacomplex_stoichiometry(df, 'DNAP')
