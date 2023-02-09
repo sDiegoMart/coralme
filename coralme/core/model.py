@@ -46,7 +46,7 @@ class MEModel(cobra.core.model.Model):
 
 			# analysis
 			'add_lipoproteins' : False, #
-			'add_translocases' : False, # actually, assign CPLX_dummy to missing enzymes
+			'add_translocases' : True, # actually, assign CPLX_dummy to missing enzymes
 			'include_pseudo_genes' : False,
 			'run_bbh_blast' : True,
 
