@@ -134,7 +134,8 @@ class MEManualCuration(object):
         return self._get_manual_curation(
              "translocation_multipliers.csv",
             create_file=create_file,
-            no_file_return=pandas.DataFrame()).to_dict()
+            no_file_return=pandas.DataFrame(),
+            sep=',').to_dict()
 
     def load_lipoprotein_precursors(self):
         create_file = pandas.DataFrame(columns=['gene'])
