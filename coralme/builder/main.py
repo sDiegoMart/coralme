@@ -165,7 +165,6 @@ class MEBuilder(object):
 			logging.warning("Updating from homology")
 			self.update_from_homology()
 
-        #  TODO: Add flag for overwrite
 			filename = self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt")
 			filename = self.org.directory + "TUs_from_biocyc.txt" if filename == '' else filename
 
@@ -1238,11 +1237,11 @@ class MEReconstruction(object):
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
 		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
 
-		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficientes
+		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficients
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
 		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
 
-		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficientes
+		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficients
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
 		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
 
@@ -1330,7 +1329,7 @@ class MEReconstruction(object):
 		# - Complex Formation Reactions
 		#
 		# ### 1) Create a MEModel object and populate its global info
-		# This includes important parameters that are used to calculate coupling constraints as well as organism-specific information such as comparments, GC fraction, etc.
+		# This includes important parameters that are used to calculate coupling constraints as well as organism-specific information such as compartments, GC fraction, etc.
 
 		me = self.me_model
 
@@ -1413,7 +1412,7 @@ class MEReconstruction(object):
 
 		# ### 3) Add Transcription and Translation reactions
 		#
-		# To construct the bare minimimum components of a transcription and translation reactions.
+		# To construct the bare minimum components of a transcription and translation reactions.
 		# For example, transcription reactions at this point include nucleotides and the synthesized RNAs.
 
 		# RNA and protein names are prefixed in the ME-model following then the locus tag
@@ -1501,8 +1500,8 @@ class MEReconstruction(object):
 		# ### 8) Incorporate remaining biomass constituents
 		# ### 1. General Demand Requirements
 		# There are leftover components from the biomass equation that either:
-		# 1. have no mechanistic function in the model (e.g., *glycogen*)
-		# 2. are cofactors that are regenerated (e.g., *nad*)
+		# 1. they have no mechanistic function in the model (e.g., *glycogen*)
+		# 2. they are cofactors that are regenerated (e.g., *nad*)
 		#
 		# Applies demands and coefficients from the biomass objective function from the M-model.
 
@@ -1595,7 +1594,7 @@ class MEReconstruction(object):
 		# ~~This uses the ribosome composition and subreaction definitions in **coralme/ribosome.py**~~
 
 		# WARNING: EXPERIMENTAL, not included in the original cobrame paper.
-		# 1) Is the coupling coefficient dependent on the lenght of the DNA?
+		# 1) Is the coupling coefficient dependent on the length of the DNA?
 		# 2) Do we need to modify the DNA replication to have one reaction per replicon?
 		# dnapol_id = me.global_info['dnapol_id']
 
@@ -1620,13 +1619,13 @@ class MEReconstruction(object):
 
 		special_trna_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Special_tRNA')
 
-		# Correct 'translation_stop_dict' if PrfA and/or PrfB are not identified
+		# Correct 'translation_stop_dict' if PrfA and/or PrfB homologs were not identified
 		if me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
 			me.global_info['translation_stop_dict']['UGA'] = 'PrfA_mono' # originally assigned to PrfB_mono
-			me.global_info['translation_stop_dict']['UAA'] = 'PrfA_mono' # originally assinged to generic_RF
+			me.global_info['translation_stop_dict']['UAA'] = 'PrfA_mono' # originally assigned to generic_RF
 		if not me.metabolites.has_id('PrfA_mono') and me.metabolites.has_id('PrfB_mono'):
 			me.global_info['translation_stop_dict']['UAG'] = 'PrfB_mono' # originally assigned to PrfA_mono
-			me.global_info['translation_stop_dict']['UAA'] = 'PrfB_mono' # originally assinged to generic_RF
+			me.global_info['translation_stop_dict']['UAA'] = 'PrfB_mono' # originally assigned to generic_RF
 		if not me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
 			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy' # originally assigned to PrfA_mono
 			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy' # originally assigned to PrfB_mono
@@ -1634,14 +1633,14 @@ class MEReconstruction(object):
 		if me.global_info['translation_stop_dict']['UAG'] == 'CPLX_dummy' and me.global_info['translation_stop_dict']['UGA'] == 'CPLX_dummy':
 			me.global_info['translation_stop_dict']['UAA'] = 'CPLX_dummy'
 
-		# TODO: charged tRNAs per organelle
+		# charged tRNAs per organelle
 		for organelle, transl_table in me.global_info['transl_tables'].items():
 			if len(transl_table) == 0:
 				continue
 
 			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'])
 
-		# ### 4) Add tRNA modifications into the ME-model and asocciate them with tRNA charging reactions
+		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 
 		# Add tRNA modifications to ME-model
 		if me.global_info['domain'].lower() in ['prokaryote', 'bacteria']:
@@ -1711,7 +1710,7 @@ class MEReconstruction(object):
 		data = coralme.core.processdata.SubreactionData('RNA_degradation_machine', me)
 		data.enzyme = me.global_info['degradosome_id']
 
-		# .25 water equivalent for atp hydrolysis per nucleotide
+		# .25 water equivalent for ATP hydrolysis per nucleotide
 		data = coralme.core.processdata.SubreactionData('RNA_degradation_atp_requirement', me)
 		data.stoichiometry = { 'atp_c': -0.25, 'h2o_c': -0.25, 'adp_c': 0.25, 'pi_c': 0.25 }
 
@@ -1818,7 +1817,7 @@ class MEReconstruction(object):
 
 			# TO ADD PATHWAYS WITHOUT HOMOLOGS
 			# TODO: Check if the user wants to add dummies to the translocation pathways
-			elif value.get('enzymes', None) is None:
+			elif bool(config.get('add_translocases', False)) and value.get('enzymes', None) is None:
 				value['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) }
 
 		dct = { k:v['abbrev'] for k,v in me.global_info['translocation_pathway'].items() }
@@ -1871,8 +1870,6 @@ class MEReconstruction(object):
 		lipid_modifications = me.global_info.get('lipid_modifications')
 		lipoprotein_precursors = me.global_info.get('lipoprotein_precursors')
 
-		# TODO: associate subreactions of lipid modifications with enzyme
-
 		# Step2: add reactions of lipoprotein formation
 		if bool(config.get('add_lipoproteins', False)):
 			coralme.builder.translocation.add_lipoprotein_formation(
@@ -1880,7 +1877,6 @@ class MEReconstruction(object):
 
 		# ### 2. Correct complex formation IDs if they contain lipoproteins
 
-		# TODO:
 		#for gene in tqdm.tqdm(coralme.builder.translocation.lipoprotein_precursors.values()):
 		if bool(config.get('add_lipoproteins', False)):
 			for gene in tqdm.tqdm(lipoprotein_precursors.values(), 'Adding lipid precursors and lipoproteins...', bar_format = bar_format):
@@ -1974,10 +1970,10 @@ class MEReconstruction(object):
 		coralme.builder.formulas.add_remaining_complex_formulas(me, modification_formulas)
 
 		# Update reactions affected by formula update
-		for r in tqdm.tqdm(me.reactions.query('_mod_lipoyl'), 'Updating FormationReactions involving a lipoyl prostethic group...', bar_format = bar_format):
+		for r in tqdm.tqdm(me.reactions.query('_mod_lipoyl'), 'Updating FormationReactions involving a lipoyl prosthetic group...', bar_format = bar_format):
 			r.update()
 
-		for r in tqdm.tqdm(me.reactions.query('_mod_glycyl'), 'Updating FormationReactions involving a glycyl prostethic group...', bar_format = bar_format):
+		for r in tqdm.tqdm(me.reactions.query('_mod_glycyl'), 'Updating FormationReactions involving a glycyl prosthetic group...', bar_format = bar_format):
 			r.update()
 
 		# add metabolite compartments
