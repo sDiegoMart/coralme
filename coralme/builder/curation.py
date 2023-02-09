@@ -149,7 +149,7 @@ class MEManualCuration(object):
         return self._get_manual_curation(
             "cleaved_methionine.csv",
             create_file = create_file,
-            no_file_return = list())
+            no_file_return = create_file).index.to_list()
 
     def _create_subsystem_classification(self,subsystems):
         d = {}
