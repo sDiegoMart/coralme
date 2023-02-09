@@ -14,7 +14,7 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 	for idx, mod_data in rrna_mods.iterrows():
 		for position in mod_data.positions.split(','):
 			rrna_mod = coralme.core.processdata.SubreactionData('{:s}_at_{:s}'.format(mod_data.modification, position), me_model)
-			rrna_mod.enzyme = mod_data.enzymes.split(' AND ') if mod_data.enzymes != 'No_Machine' else None
+			rrna_mod.enzyme = mod_data.enzymes.split(' AND ') if mod_data.enzymes != 'No_Machine' else ['CPLX_dummy']
 			#rrna_mod.stoichiometry = modification_info[mod_data.modification]['metabolites']
 			rrna_mod.stoichiometry = me_model.process_data.get_by_id(mod_data.modification).stoichiometry
 			rrna_mod.keff = 65. # iOL uses 65. for all RNA mods

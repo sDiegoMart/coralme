@@ -551,7 +551,7 @@ def excision_machinery_stoichiometry(df, keys):
 
 def aa_synthetase_dict(df):
 	#tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase') & ~df['Feature Type'].isin(['pseudo'])]
-	tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase')]
+	tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase') & df['Definition'].notna()]
 	tmp = correct_input(tmp)
 
 	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
@@ -695,7 +695,9 @@ def get_df_rna_enzs(df, filter_in = set(), generics = False):
 		tmp.columns = ['enzymes', 'modification', 'positions']
 		tmp = tmp.drop_duplicates(keep = 'first')
 
-	return tmp
+		return tmp
+	else:
+		return pandas.DataFrame(columns = ['enzymes', 'modification', 'positions'])
 
 def get_df_rna_ptms(df, filter_in = set(), generics = False):
 	tmp = df[df['Feature Type'].isin(['tRNA', 'rRNA'])]
@@ -790,7 +792,8 @@ def get_df_input_from_excel(df, df_rxns):
 	df_rna_enzs = get_df_rna_enzs(df)
 	df_rna_ptms = get_df_rna_ptms(df)
 	cols = ['modification', 'positions']
-	if not df_rna_ptms.empty and not df_rna_enzs.empty:
+
+	if not df_rna_ptms.empty or not df_rna_enzs.empty:
 		df_rna_mods = pandas.merge(df_rna_ptms, df_rna_enzs, how = 'left', left_on = cols, right_on = cols).fillna('No_Machine')
 	else:
 		df_rna_mods = pandas.DataFrame(columns = ['bnum', 'modification', 'positions', 'enzymes'])
