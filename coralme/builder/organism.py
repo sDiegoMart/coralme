@@ -1026,7 +1026,7 @@ class Organism(object):
         proteins_df = self.proteins_df["Common-Name"].dropna()
         trna_ligases = proteins_df[
             proteins_df.str.contains(
-                "tRNA [-]{,2}(?:synthetase|ligase)(?!.*subunit.*)", regex=True
+                "[-]{,2}tRNA (?:synthetase|ligase)(?!.*subunit.*)", regex=True
             )
         ].to_dict()
         warn_ligases = []
