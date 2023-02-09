@@ -1653,11 +1653,10 @@ class MEReconstruction(object):
 			logging.warning('The \'domain\' property is not valid. A valid value is \'Prokaryote\', \'Bacteria\', \'Eukarya\', or \'Eukaryote\'.')
 
 		coralme.builder.trna_charging.add_trna_modification_procedures(me, df_trna_mods)
-
 		# Associate tRNA modifications to tRNAs
 		trna_modifications = coralme.builder.flat_files.get_trna_modification_targets(df_trna_mods)
 		for idx, trna in tqdm.tqdm(list(df_trna_mods.iterrows()), 'Associating tRNA modification enzyme(s) to tRNA(s)...', bar_format = bar_format):
-			for data in me.process_data.query(trna['bnum']):
+			for data in me.process_data.query('tRNA_' + trna['bnum']):
 				data.subreactions = trna_modifications[trna['bnum']]
 
 		# ### 5) Add translation SubReactions into the ME-model and associate them with Translation reactions
