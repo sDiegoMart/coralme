@@ -1160,20 +1160,28 @@ class Organism(object):
                 'to_do':'genome.gb does not have a valid annotation for RpoD. A random identified sigma factor in me_builder.org.sigmas was set as RpoD so that the builder can continue running. Set the correct RpoD by running me_builder.org.rpod = correct_rpod'})
         self.rpod = rpod
     
-    
-    def _get_rna_polymerase_from_complex(self,
+    def _get_slice_from_regex(self,
+                        df,
+                        regex,
+                       ):
+        return df[df["name"].str.match(regex)].index.to_list()
+    def _get_complex_from_regex(self,
+                               df,
+                               cplx_regex,
+                               subunit_regex=None):
+        cplx = self._get_slice_from_regex(df,cplx_regex)
+        if cplx:
+            return cplx[0]
+        if not subunit_regex:
+            return None
+        subunits = self._get_slice_from_regex(df,subunit_regex)
+        return [g.split("-MONOMER")[0] for g in subunits if "-MONOMER" in g]
+    def _get_rna_polymerase_from_regex(self,
                                         complexes_df):
-        rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase.*)(?!.*subunit.*)"
-        return complexes_df[complexes_df["name"].str.contains(rnap_regex, regex=True)].index.to_list()
-    def _get_rna_polymerase_from_subunits(self,
-                                         complexes_df):
-        rnap_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)"
-        RNAP_genes = complexes_df[
-            complexes_df["name"].str.contains(rnap_regex, regex=True)
-        ].index.to_list()
-        return [
-            g.split("-MONOMER")[0] for g in RNAP_genes if "-MONOMER" in g
-        ]
+        return self._get_complex_from_regex(
+            complexes_df,
+            "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?!.*subunit.*)",
+            subunit_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)")
     def _add_rna_polymerase_to_complexes(self,
                                         complexes_df,
                                         RNAP_genes):
@@ -1196,31 +1204,31 @@ class Organism(object):
             RNAP = force_RNAP_as
         else:
             complexes_df = self.complexes_df
-            RNAP = self._get_rna_polymerase_from_complex(complexes_df)
-            if RNAP:
-                RNAP = RNAP[0]
+            RNAP = self._get_rna_polymerase_from_regex(complexes_df)
+            if RNAP is None:
+                RNAP = random.choice(complexes_df.index)
+                self.curation_notes['org.get_rna_polymerase'].append({
+                    'msg':"Could not identify RNA polymerase".format(RNAP),
+                    'importance':'critical',
+                    'to_do':'Find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
+            elif isinstance(RNAP,str):
                 # Warnings
                 self.curation_notes['org.get_rna_polymerase'].append({
                     'msg':"{} was identified as RNA polymerase".format(RNAP),
                     'importance':'high',
                     'to_do':'Check whether you need to correct RNAP by running me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
-            else:
-                RNAP_genes = self._get_rna_polymerase_from_subunits(complexes_df)
-                if RNAP_genes:
-                    complexes_df = self._add_rna_polymerase_to_complexes(complexes_df,
-                                                                        RNAP_genes)
-                    self.curation_notes['org.get_rna_polymerase'].append({
-                        'msg':"RNAP was identified with subunits {}".format(
-                            ", ".join(RNAP_genes)
-                        ),
-                        'importance':'medium',
-                        'to_do':'Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
-                else:
-                    RNAP = random.choice(complexes_df.index)
-                    self.curation_notes['org.get_rna_polymerase'].append({
-                        'msg':"Could not identify RNA polymerase".format(RNAP),
-                        'importance':'critical',
-                        'to_do':'Find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
+            elif isinstance(RNAP,list):
+                RNAP_genes = RNAP
+                RNAP = 'RNAP-CPLX'
+                complexes_df = self._add_rna_polymerase_to_complexes(complexes_df,
+                                                                    RNAP_genes)
+                self.curation_notes['org.get_rna_polymerase'].append({
+                    'msg':"RNAP was identified with subunits {}".format(
+                        ", ".join(RNAP_genes)
+                    ),
+                    'importance':'medium',
+                    'to_do':'Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
+
         self.RNAP = RNAP
         self.complexes_df = complexes_df
         self.sigma_factor_complex_to_rna_polymerase_dict = self.sigmas[
@@ -1233,6 +1241,7 @@ class Organism(object):
                 "polymerase": self.RNAP,
             }
         self.rna_polymerases = list(self.rna_polymerase_id_by_sigma_factor.keys())
+        return RNAP
 
     def get_TU_genes(self):
         TUs = self.TUs
