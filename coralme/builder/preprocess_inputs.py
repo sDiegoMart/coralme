@@ -45,7 +45,7 @@ def generate_organism_specific_matrix(genbank, model):
 		'Complex Location',
 		'Subunit Location',
 		'Translocation Pathway',
-		'Translocation Multiplier'
+		#'Translocation Multiplier'
 	])
 
 	def get_reaction(x):

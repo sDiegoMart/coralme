@@ -1,52 +1,17 @@
-from collections import defaultdict
 from coralme.core.processdata import PostTranslationData
 from coralme.core.reaction import PostTranslationReaction
-
-# Some proteins require different numbers of a complex in order to be
-# translocated by a pathway
-multipliers = {
-	'YidC_MONOMER': {
-		'b1855': 2., 'b3731': 2.
-		},
-	'TatE_MONOMER': {
-		'b4072': 20.0, 'b1475': 5.166666666666667,
-		'b1474': 5.166666666666667, 'b2817': 22.0,
-		'b0973': 14.0, 'b0972': 14.0, 'b0997': 13.5,
-		'b3893': 15.5, 'b0152': 21.0, 'b3894': 15.5,
-		'b1589': 14.0, 'b1588': 15.0, 'b2938': 6.25,
-		'b1587': 14.0, 'b1872': 26.0, 'b2997': 14.0,
-		'b2996': 21.0, 'b2994': 14.0, 'b2435': 20.0,
-		'b0894': 26.0, 'b0123': 23.0, 'b2206': 27.0,
-		'b2205': 20.0
-		},
-	'TatA_MONOMER': {
-		'b4072': 20.0, 'b1475': 5.166666666666667,
-		'b1474': 5.166666666666667, 'b2817': 22.0,
-		'b0973': 14.0, 'b0972': 14.0, 'b0997': 13.5,
-		'b3893': 15.5, 'b0152': 21.0, 'b3894': 15.5,
-		'b1589': 14.0, 'b1588': 15.0, 'b2938': 6.25,
-		'b1587': 14.0, 'b1872': 26.0, 'b2997': 14.0,
-		'b2996': 21.0, 'b2994': 14.0, 'b2435': 20.0,
-		'b0894': 26.0, 'b0123': 23.0, 'b2206': 27.0,
-		'b2205': 20.0
-		},
-	}
-
-multipliers_protein_keys = defaultdict(dict)
-for enzyme, value in multipliers.items():
-	for bnum in value.keys():
-		multipliers_protein_keys['protein_' + bnum][enzyme] = value[bnum]
 
 mmol = 6.022e20  # number of molecules per mmol
 nm2_per_m2 = 1e18  # used to convert nm^2 to m^2
 
 # add_translocation_pathways helper function
-def add_translocation_data_and_reaction(model, pathways, preprocessed_id, processed_id, compartment, peptide_data, membrane_constraints, alt = False):
+def add_translocation_data_and_reaction(model, pathways, preprocessed_id, processed_id, compartment, peptide_data, multipliers, membrane_constraints, alt = False):
 	suffix = '_alt' if alt else ''
 
 	data = PostTranslationData('translocation_' + preprocessed_id + '_' + compartment + suffix, model, processed_id, preprocessed_id)
 	data.translocation = pathways
-	data.translocation_multipliers = multipliers_protein_keys.get(preprocessed_id, {})
+	#data.translocation_multipliers = multipliers_protein_keys.get(preprocessed_id, {})
+	data.translocation_multipliers = multipliers.get(preprocessed_id, {})
 
 	# Add protein surface area constraint
 	if membrane_constraints and compartment != 'Periplasm':
@@ -64,7 +29,7 @@ def add_translocation_data_and_reaction(model, pathways, preprocessed_id, proces
 	model.add_reaction(rxn)
 	rxn.update()
 
-def add_translocation_pathways(model, pathways_df, abbreviation_to_pathway, membrane_constraints = False):
+def add_translocation_pathways(model, pathways_df, abbreviation_to_pathway, multipliers, membrane_constraints = False):
 	# loop through all translation data and add translocation rxns/surface area constraints if they are membrane proteins
 	# We can save time here if filtering what we need to process, not iterate over all TranslationData
 	#for peptide_data in model.translation_data:
@@ -100,11 +65,11 @@ def add_translocation_pathways(model, pathways_df, abbreviation_to_pathway, memb
 
 		# Call the helper function
 		add_translocation_data_and_reaction(
-			model, pathways, preprocessed_id, processed_id, compartment, peptide_data, membrane_constraints, alt = False)
+			model, pathways, preprocessed_id, processed_id, compartment, peptide_data, multipliers, membrane_constraints, alt = False)
 		# if there's an alternative pathway (tat) add this reaction as well
 		if pathways != pathways_alt:
 			add_translocation_data_and_reaction(
-				model, pathways_alt, preprocessed_id, processed_id, compartment, peptide_data, membrane_constraints, alt = True)
+				model, pathways_alt, preprocessed_id, processed_id, compartment, peptide_data, multipliers, membrane_constraints, alt = True)
 
 def add_lipoprotein_formation(model, compartment_dict, lipoprotein_precursors, lipid_modifications, membrane_constraints = False, update = True):
 	# add_lipoprotein_formation helper function

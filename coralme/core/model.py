@@ -45,6 +45,8 @@ class MEModel(cobra.core.model.Model):
 			'feature_types' : [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'misc_RNA' ],
 
 			# analysis
+			'add_lipoproteins' : False, #
+			'add_translocases' : False, # actually, assign CPLX_dummy to missing enzymes
 			'include_pseudo_genes' : False,
 			'run_bbh_blast' : True,
 
@@ -219,6 +221,75 @@ class MEModel(cobra.core.model.Model):
 		protein
 		"""
 		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default/user value
+
+	# WARNING: MODIFIED FUNCTIONS FROM COBRAPY
+	def add_metabolites(self, metabolite_list):
+		"""Will add a list of metabolites to the model object and add new
+		constraints accordingly.
+
+		The change is reverted upon exit when using the model as a context.
+
+		Parameters
+		----------
+		metabolite_list : A list of `cobra.core.Metabolite` objects
+
+		"""
+		if not hasattr(metabolite_list, "__iter__"):
+			metabolite_list = [metabolite_list]
+		if len(metabolite_list) == 0:
+			return None
+
+		# First check whether the metabolites exist in the model
+		metabolite_list = [x for x in metabolite_list if x.id not in self.metabolites]
+
+		bad_ids = [
+			m for m in metabolite_list if not isinstance(m.id, str) or len(m.id) < 1
+		]
+		if len(bad_ids) != 0:
+			raise ValueError("invalid identifiers in {}".format(repr(bad_ids)))
+
+		for x in metabolite_list:
+			x._model = self
+		self.metabolites += metabolite_list
+
+	def remove_metabolites(self, metabolite_list, destructive=False):
+		"""Remove a list of metabolites from the the object.
+
+		The change is reverted upon exit when using the model as a context.
+
+		Parameters
+		----------
+		metabolite_list : list
+			A list with `cobra.Metabolite` objects as elements.
+
+		destructive : bool
+			If False then the metabolite is removed from all
+			associated reactions.  If True then all associated
+			reactions are removed from the Model.
+
+		"""
+		if not hasattr(metabolite_list, "__iter__"):
+			metabolite_list = [metabolite_list]
+		# Make sure metabolites exist in model
+		metabolite_list = [x for x in metabolite_list if x.id in self.metabolites]
+		for x in metabolite_list:
+			x._model = None
+
+			# remove reference to the metabolite in all groups
+			associated_groups = self.get_associated_groups(x)
+			for group in associated_groups:
+				group.remove_members(x)
+
+			if not destructive:
+				for the_reaction in list(x._reaction):
+					the_coefficient = the_reaction._metabolites[x]
+					the_reaction.subtract_metabolites({x: the_coefficient})
+
+			else:
+				for x in list(x._reaction):
+					x.remove_from_model()
+
+		self.metabolites -= metabolite_list
 
 	# This function comes from cobrapy, modified to NOT create variables in the solver
 	def add_reactions(self, reaction_list):

@@ -1365,7 +1365,7 @@ class MEReconstruction(MEBuilder):
 			me._compartments['mc'] = 'ME-model Constraint'
 			logging.warning('Pseudo-compartment \'mc\' (\'ME-model Constraint\') was added into the ME-model.')
 
-		# Define M-model; from MEBuilder with modifications or the original
+		# Define M-model
 		if hasattr(self, 'org'):
 			me.gem = self.org.m_model
 		else:
@@ -1830,7 +1830,7 @@ class MEReconstruction(MEBuilder):
 
 		v1 = { 'length_dependent' : True, 'fixed_keff' : False } # default
 		v2 = { 'length_dependent' : False, 'fixed_keff' : True } # only for FtsY in the SRP pathway
-		v3 = { 'length_dependent' : False, 'fixed_keff' : False } # for all the lol and bam pathway enzymes
+		v3 = { 'length_dependent' : False, 'fixed_keff' : False } # for all the lol and bam pathways enzymes
 
 		for key, value in me.global_info['translocation_pathway'].items():
 			if 'translocation_pathway_' + key in df_transpaths.index:
@@ -1861,7 +1861,12 @@ class MEReconstruction(MEBuilder):
 					transloc_data.stoichiometry = {}
 
 		# Associate data and add translocation reactions
-		coralme.builder.translocation.add_translocation_pathways(me, pathways_df = df_protloc, abbreviation_to_pathway = dct, membrane_constraints = False)
+		multipliers = collections.defaultdict(dict)
+		for enzyme, value in me.global_info.get('multipliers', {}).items():
+			for bnum in value.keys():
+				multipliers['protein_' + bnum][enzyme] = value[bnum]
+
+		coralme.builder.translocation.add_translocation_pathways(me, pathways_df = df_protloc, abbreviation_to_pathway = dct, multipliers = multipliers, membrane_constraints = False)
 
 		# Update stoichiometry of membrane complexes
 		new_stoich = collections.defaultdict(dict)
