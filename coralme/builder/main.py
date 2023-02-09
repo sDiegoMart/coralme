@@ -1820,7 +1820,7 @@ class MEReconstruction(object):
 						for k in df_transpaths.loc['translocation_pathway_' + key].tolist()[0] }
 
 			# TO ADD PATHWAYS WITHOUT HOMOLOGS
-			# TODO: Check if the user wants to add dummies to the translocation pathways
+			# Check if the user wants to add dummies to the translocation pathways
 			elif bool(config.get('add_translocases', False)) and value.get('enzymes', None) is None:
 				value['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) }
 
