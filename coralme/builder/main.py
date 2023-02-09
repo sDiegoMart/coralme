@@ -1123,6 +1123,7 @@ class MEBuilder(object):
 		for k,v in dataframes.items():
 			v.to_csv(directory + k + '.csv')
 
+	# shortcuts to methods in the MECurator class
 	def find_issue(self,query):
 		coralme.builder.curation.MECurator(self.org).find_issue_with_query(query)
 
@@ -1140,7 +1141,7 @@ class MEBuilder(object):
 		self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths = tmp2
 		return tmp1, tmp2
 
-class MEReconstruction(object):
+class MEReconstruction(MEBuilder):
 	"""
 	MEReconstruction class for reconstructing a ME-model from user/automated input
 
@@ -1148,13 +1149,27 @@ class MEReconstruction(object):
 	----------
 
 	"""
-	def __init__(self, builder):
-		try:
-			# only if builder.generate_files() was run before builder.build_me_model()
+	def __init__(self, builder, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+		# only if builder.generate_files() was run before builder.build_me_model()
+		if hasattr(builder, 'org'):
 			self.org = builder.org
+		if hasattr(builder, 'homology'):
 			self.homology = builder.homology
-		except:
-			pass
+		if hasattr(builder, 'df_data'):
+			self.df_data = builder.df_data
+			self.df_tus = builder.df_tus
+			self.df_rmsc = builder.df_rmsc
+			self.df_subs = builder.df_subs
+			self.df_mets = builder.df_mets
+			self.df_rxns = builder.df_rxns
+			self.df_cplxs = builder.df_cplxs
+			self.df_ptms = builder.df_ptms
+			self.df_enz2rxn = builder.df_enz2rxn
+			self.df_rna_mods = builder.df_rna_mods
+			self.df_protloc = builder.df_protloc
+			self.df_transpaths = builder.df_transpaths
 
 		self.logger = builder.logger
 		self.me_model = builder.me_model
@@ -1164,6 +1179,9 @@ class MEReconstruction(object):
 		return None
 
 	def input_data(self, m_model, overwrite = False):
+		if hasattr(self, 'df_data'):
+			return (self.df_tus, self.df_rmsc, self.df_subs, self.df_mets), (self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths)
+
 		config = self.configuration
 
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
