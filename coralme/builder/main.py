@@ -1639,7 +1639,7 @@ class MEReconstruction(MEBuilder):
 			aa_synthetase_dict = me.global_info['amino_acid_trna_synthetase']
 		else:
 			aa_synthetase_dict = coralme.builder.preprocess_inputs.aa_synthetase_dict(df_data)
-			logging.warning('Association of tRNA synthetases and amino acids inferred from GenBank annotation. It can be incomplete.')
+			logging.warning('Association of tRNA synthetases and amino acids was inferred from GenBank annotation. It can be incomplete.')
 		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-model...', bar_format = bar_format):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
