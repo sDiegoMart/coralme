@@ -1185,8 +1185,8 @@ class MEReconstruction(MEBuilder):
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
 			if hasattr(self, 'org'):
-				logging.warning('RNA Polymerases (core enzyme and sigma factors) information was set from homology data.')
 				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
+				logging.warning('RNA Polymerases (core enzyme and sigma factors) information was set from homology data.')
 
 			## replace IDs
 			#for name, rnap in config['rna_polymerases'].items():
@@ -1197,28 +1197,32 @@ class MEReconstruction(MEBuilder):
 
 		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
 			if hasattr(self, 'org'):
-				logging.warning('Lipid modifications were set from M-model metabolites.')
 				config['lipid_modifications'] = [ x for x in self.org.lipids if x.endswith('_p') and (x.startswith('pg') or x.startswith('pe')) and not x.startswith('pgp') ]
+				logging.warning('Lipid modifications were set from M-model metabolites.')
 
 		if config.get('lipoprotein_precursors', None) is None or len(config.get('lipoprotein_precursors')) == 0:
 			if hasattr(self, 'org'):
-				logging.warning('Lipoprotein precursors were set from homology data.')
 				config['lipoprotein_precursors'] = self.org.lipoprotein_precursors
+				logging.warning('Lipoprotein precursors were set from homology data.')
 
 		if config.get('ngam', None) is None:
 			if hasattr(self, 'org'):
-				logging.warning('ATPM (ATP requirement for maintenance) was set from the M-model.')
 				config['ngam'] = self.org.NGAM
+				logging.warning('ATPM (ATP requirement for maintenance) was set from the M-model.')
 
 		if config.get('gam', None) is None:
 			if hasattr(self, 'org'):
-				logging.warning('GAM (ATP requirement for growth) was set from the M-model or default value.')
 				config['gam'] = self.org.GAM
+				logging.warning('GAM (ATP requirement for growth) was set from the M-model or default value.')
 
 		# modify options
 		#config['create_files'] = False
 		config['run_bbh_blast'] = False
 		config['dev_reference'] = False
+
+		if hasattr(self, 'org') and len(config.get('translocation_multipliers', {})) == 0:
+			config['translocation_multipliers'] = self.org.translocation_multipliers
+			logging.warning('Translocation multipliers for yidC and tat homologs were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass]
@@ -1860,7 +1864,7 @@ class MEReconstruction(MEBuilder):
 
 		# Associate data and add translocation reactions
 		multipliers = collections.defaultdict(dict)
-		for enzyme, value in me.global_info.get('multipliers', {}).items():
+		for enzyme, value in me.global_info.get('translocation_multipliers', {}).items():
 			for bnum in value.keys():
 				multipliers['protein_' + bnum][enzyme] = value[bnum]
 
