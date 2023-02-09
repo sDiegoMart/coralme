@@ -89,8 +89,8 @@ class MEBuilder(object):
 
 		config = self.configuration
 		directory = config.get('log_directory', '.')
-		if overwrite and os.path.exists(directory):
-			shutil.rmtree(directory)
+		#if overwrite and os.path.exists(directory):
+			#shutil.rmtree(directory)
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 
@@ -1306,8 +1306,8 @@ class MEReconstruction(object):
 		model = config.get('model_id', 'coralME')
 
 		directory = config.get('log_directory', '.')
-		if overwrite and os.path.exists(directory):
-			shutil.rmtree(directory)
+		#if overwrite and os.path.exists(directory):
+			#shutil.rmtree(directory)
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 
@@ -1703,7 +1703,10 @@ class MEReconstruction(object):
 
 		me.add_metabolites([coralme.core.component.Complex(degradosome_id)])
 		data = coralme.core.processdata.ComplexData(degradosome_id, me)
-		data.stoichiometry.update(coralme.builder.preprocess_inputs.degradosome_stoichiometry(df_data))
+		if data is not None:
+			data.stoichiometry.update(coralme.builder.preprocess_inputs.degradosome_stoichiometry(df_data))
+		else:
+			data.stoichiometry.update({'CPLX_dummy' : -1})
 		data.create_complex_formation(verbose = False)
 
 		# Used for RNA splicing
