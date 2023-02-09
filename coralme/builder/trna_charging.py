@@ -14,7 +14,9 @@ def add_trna_modification_procedures(me_model, trna_mods):
 				name = '{:s}_at_{:s}'.format(mod_data['modification'], position)
 
 			trna_mod = coralme.core.processdata.SubreactionData(name, me_model)
-			trna_mod.enzyme = mod_data['enzymes'].split(' AND ') if mod_data['enzymes'] != 'No_Machine' else None
+			# TODO: Check
+			#trna_mod.enzyme = mod_data['enzymes'].split(' AND ') if mod_data['enzymes'] != 'No_Machine' else None
+			trna_mod.enzyme = ['CPLX_dummy'] if mod_data['enzymes'] is None else mod_data['enzymes'].split(' AND ')
 			#trna_mod.stoichiometry = modification_info[mod_data.modification]['metabolites']
 			try:
 				trna_mod.stoichiometry = me_model.process_data.get_by_id(mod_data.modification).stoichiometry

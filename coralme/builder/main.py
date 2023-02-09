@@ -90,7 +90,8 @@ class MEBuilder(object):
 		config = self.configuration
 		directory = config.get('log_directory', '.')
 		#if overwrite and os.path.exists(directory):
-			#shutil.rmtree(directory)
+			#shutil.rmtree(directory + '/blast_files_and_results')
+			#shutil.rmtree(directory + '/building_data')
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 
@@ -1308,6 +1309,7 @@ class MEReconstruction(object):
 		directory = config.get('log_directory', '.')
 		#if overwrite and os.path.exists(directory):
 			#shutil.rmtree(directory)
+			#shutil.rmtree(directory + '/building_data')
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 
@@ -1612,7 +1614,7 @@ class MEReconstruction(object):
 
 		# The tRNA charging reactions were automatically added when loading the genome from the GenBank file. However, the charging reactions still need to be made aware of the tRNA synthetases which are responsible. Generic charged tRNAs are added to translation reactions via *SubreactionData* below.
 
-		# TODO: tRNA synthetases per organelle
+		# tRNA synthetases per organelle
 		aa_synthetase_dict = coralme.builder.preprocess_inputs.aa_synthetase_dict(df_data)
 		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-model...', bar_format = bar_format):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
@@ -1642,7 +1644,7 @@ class MEReconstruction(object):
 
 		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 
-		# Add tRNA modifications to ME-model
+		# Add tRNA modifications to ME-model per type of organism
 		if me.global_info['domain'].lower() in ['prokaryote', 'bacteria']:
 			df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['16S_rRNAs', '23S_rRNAs'])]
 		elif me.global_info['domain'].lower() in ['eukarya', 'eukaryote']:
@@ -1823,6 +1825,7 @@ class MEReconstruction(object):
 			# Check if the user wants to add dummies to the translocation pathways
 			elif bool(config.get('add_translocases', False)) and value.get('enzymes', None) is None:
 				value['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) }
+				logging.warning('')
 
 		dct = { k:v['abbrev'] for k,v in me.global_info['translocation_pathway'].items() }
 		dct = dict([(v, [k + '_translocation' for k,v1 in dct.items() if v1 == v]) for v in set(dct.values())])
