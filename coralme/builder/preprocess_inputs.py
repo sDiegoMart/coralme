@@ -186,7 +186,10 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			if len(mods) != 0:
 				return ' AND '.join(mods)
 
-	dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
+	if hasattr(builder, 'homology'):
+		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
+	else:
+		dct = { v:k for k,v in builder.org.protein_mod[['Core_enzyme']].to_dict()['Core_enzyme'].items() }
 	data['Cofactors in Modified Complex'] = data.apply(lambda x: cofactors(x, dct), axis = 1)
 
 	# ME-model generics
