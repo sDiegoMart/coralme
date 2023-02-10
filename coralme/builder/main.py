@@ -1096,6 +1096,22 @@ class MEBuilder(object):
 									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.csv'
 				})
 
+	def load(self,
+			 directory):
+		with open(directory, "rb") as f:
+			tmp = pickle.load(f)
+			return tmp
+	def save(self,
+		 directory=False):
+		if not directory:
+			directory = self.org.directory + "builder.pickle"
+		with open(directory, "wb") as f:
+			pickle.dump(self, f)
+
+	def load_me(self,filename='me_model.pickle'):
+		with open(self.org.directory + '/'+filename, "rb") as f:
+			return pickle.load(f)
+
 	def save_builder_info(self):
 		include = [float,int,str,pandas.DataFrame,dict]
 		floats = {}
@@ -2234,5 +2250,5 @@ class METroubleshooter(object):
 			print('\nME-model was saved in the {:s} directory as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.configuration['out_directory'], self.me_model.id))
 		else:
 			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
-
+		self.builder.org.generate_curation_notes()
 		return None
