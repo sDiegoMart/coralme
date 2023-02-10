@@ -91,6 +91,7 @@ def generate_organism_specific_matrix(genbank, model):
 		else:
 			return None
 
+	# TODO: use builder.configuration.get('locus_tag', 'locus_tag') as qualifier key
 	df['Gene Locus ID'] = [ x.qualifiers.get('locus_tag', [None])[0] for x in lst ]
 	df['Definition'] = [ x.qualifiers.get('product', [None])[0] for x in lst ]
 	df['Feature Type'] = [ x.type if x.qualifiers.get('pseudo') is None else 'pseudo' for x in lst ]

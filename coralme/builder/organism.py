@@ -28,7 +28,7 @@ bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{e
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
 # Inherit from logging.Handler
-    
+
 class Organism(object):
     """Organism class for storing information about an organism
 
@@ -60,13 +60,13 @@ class Organism(object):
                 self.id = 'iJL1678b'
         else:
             self.id = config['model_id']
-        
-        
+
+
         self.is_reference = is_reference
         self.curation_notes = defaultdict(list)
         self.config = config
         if self.is_reference:
-            self.locus_tag = 'locus_tag'
+            self.locus_tag = config.get('reference_tag','locus_tag')
         else:
             self.locus_tag = config.get('locus_tag','locus_tag')
 
@@ -181,13 +181,13 @@ class Organism(object):
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
-        
+
         logging.warning("Purging genes in optional files")
         self.purge_genes_in_file()
-        
+
         logging.warning("Loading manual curation")
         self.load_manual_curation()
-        
+
         logging.warning("Getting sigma factors from BioCyc")
         self.get_sigma_factors()
         self.get_rpod()
@@ -212,12 +212,12 @@ class Organism(object):
         self.phospholipids = self.get_phospholipids()
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
-        
+
 #         logging.warning("Replicon check")
 #         self.final_replicon_checks()
         logging.warning("Purging genes in M-model")
         self.purge_genes_in_model()
-        
+
         print("Reading {} done...".format(self.id))
 
     def get_genbank_contigs(self):
@@ -235,7 +235,7 @@ class Organism(object):
         if not os.path.isdir(self.blast_directory):
             os.makedirs(self.blast_directory)
             logging.warning("{} directory was created.".format(self.blast_directory))
-        
+
 
     def check_m_model(self):
         m_model = self.m_model
@@ -243,7 +243,7 @@ class Organism(object):
         # Metabolites
         RNA_mets = []
         formula_mets = []
-        
+
         for m in tqdm.tqdm(m_model.metabolites,
                            'Checking M-model metabolites...',
                            bar_format = bar_format):
@@ -280,7 +280,7 @@ class Organism(object):
                 'triggered_by':subsystem_RXNS,
                 'importance':'high',
                 'to_do':'Make sure the subsystems of these reactions are correct'})
-            
+
     def load_optional_files(self):
         logging.warning("Loading gene dictionary")
         self.gene_dictionary = self.read_gene_dictionary(
@@ -301,15 +301,15 @@ class Organism(object):
         self.TUs = self.read_TU_df(
             self.config.get('biocyc.TUs', self.directory + "TUs.txt")
         )
-        
+
     def load_manual_curation(self):
         MEManualCuration(self).load_manual_curation()
-        
-        
+
+
     def purge_genes_in_file(self):
         if self.is_reference:
             return
-        
+
         all_genenames_in_gb = []
         for i in self.all_genes_in_gb:
             genenames = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(i)].index
@@ -320,11 +320,11 @@ class Organism(object):
         warn_leftpos = set(self.gene_dictionary[self.gene_dictionary["Right-End-Position"] == ''].index)
         warn_sequences = set(self.gene_dictionary.index) - set(self.gene_sequences.keys()) - set(all_genenames_in_gb)
         warn_genenames = set(self.gene_dictionary[self.gene_dictionary.index == ''].index)
-        
+
         self.gene_dictionary.drop(list(
             warn_products|warn_genenames|warn_replicons|warn_sequences|warn_rightpos|warn_leftpos
         ),inplace=True)
-        
+
     def _get_product_type(self,
                          row,
                          complexes_df,
@@ -352,7 +352,7 @@ class Organism(object):
                 warn_genes.append(gene_id)
                 return None,None
         return product,product_type
-    
+
     def _correct_product(self,
                         gene_name,
                         product_type,
@@ -362,14 +362,14 @@ class Organism(object):
         product = '{}-{}'.format(gene_name,product_type)
         gene_dictionary.at[gene_name,'Product'] = product
         return product
-    
+
     def _add_entry_to_df(self,
                          df,
                          tmp):
         return pandas.concat([df,
                               pandas.DataFrame.from_dict(tmp).T],
                              axis = 0, join = 'outer')
-    
+
     def _add_entry_to_rna(self,
                          gene_id,
                          name,
@@ -380,7 +380,7 @@ class Organism(object):
         tmp = {product : {"Common-Name": name,
                           "Gene": gene_id}}
         return self._add_entry_to_df(RNA_df,tmp)
-    
+
     def _add_entry_to_complexes(self,
                                gene_id,
                                name,
@@ -423,7 +423,7 @@ class Organism(object):
             if not gene_name or isinstance(gene_name,float):
                 warn_genes.append(gene_id)
                 continue
-            
+
             product,product_type = \
                 self._get_product_type(row,
                      complexes_df,
@@ -442,7 +442,7 @@ class Organism(object):
                         gene_dictionary)
 
             product_types[gene_id] = product_type
-            
+
             ## Sync files
             if 'RNA' in product_type and product not in RNA_df.index:
                 RNA_df = \
@@ -473,7 +473,7 @@ class Organism(object):
                                 'importance':'medium',
                                 'to_do':'Manually fill the products (with types) of these genes in genes.txt'
             })
-    
+
     def _add_entry_to_genbank(self,
                              gene_id,
                              gene_name,
@@ -513,7 +513,7 @@ class Organism(object):
 
         new_contig.features = [feature0] + [feature1]
         contigs.append(new_contig)
-    
+
     def _get_product_name_if_present(self,
                          gene_id,
                          product,
@@ -529,7 +529,7 @@ class Organism(object):
                     return None
                 return df.loc[product][col]
         return product
-    
+
     def _read_product_type(self,
                            gene_id,
                            product_types):
@@ -539,7 +539,7 @@ class Organism(object):
             return 'CDS'
         else:
             return product_type
-        
+
     def update_genbank_from_files(self):
         if self.is_reference:
             return
@@ -639,10 +639,10 @@ class Organism(object):
                         ]
                     ),
                 "source" : "BioCyc"}
-    
+
     def generate_complexes_df(self):
         proteins_df = self.proteins_df
-        
+
         if proteins_df.empty:
             return pandas.DataFrame(
                 columns = [
@@ -652,7 +652,7 @@ class Organism(object):
                     'source'
                 ]
             ).set_index('complex')
-        
+
         gene_dictionary = self.gene_dictionary
         complexes = {}
         warn_proteins = []
@@ -668,11 +668,11 @@ class Organism(object):
             genes = [
                 g for g in genes.split(" // ") if g in gene_dictionary["Accession-1"]
             ]
-            
+
             complexes[p] = self._create_complexes_entry(row,
                                                         genes,
                                                         stoich)
-            
+
         complexes_df = pandas.DataFrame.from_dict(complexes).T[["name", "genes", "source"]]
         complexes_df.index.name = "complex"
         # Warnings
@@ -683,7 +683,7 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'Fill genes in proteins.txt'})
         return complexes_df.fillna({"name": ""})
-    
+
     def read_optional_file(self,filetype,filename,columns):
         if os.path.isfile(filename):
             file = pandas.read_csv(filename, sep="\t",index_col=0)
@@ -806,7 +806,7 @@ class Organism(object):
         # Overlaps
         file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
         gb_overlap = int((len(genbank_genes & m_model_genes) / len(m_model_genes))*100)
-        
+
         logging.warning('Gene overlap between M-model and Genbank : {}%'.format(gb_overlap))
         logging.warning('Gene overlap between M-model and optional files : {}%'.format(file_overlap))
 
@@ -872,7 +872,7 @@ class Organism(object):
                         "Product": "{}-{}".format(gene_id,feature_type)
                 }}
         return self._add_entry_to_df(gene_dictionary, tmp)
-    
+
     def _add_entry_to_complexes_or_rna(self,
                                        complexes_df,
                                        RNA_df,
@@ -901,7 +901,7 @@ class Organism(object):
                                            RNA_df,
                                            "GenBank")
         return complexes_df,RNA_df,product
-    
+
     def _add_entries_to_optional_files(self,
                                        gene_dictionary,
                                        complexes_df,
@@ -919,7 +919,7 @@ class Organism(object):
                         feature,
                         left_end,
                         right_end)
-        
+
         gene_names = gene_dictionary[gene_dictionary["Accession-1"].eq(gene_id)].index
         for gene_name in gene_names:
             complexes_df,RNA_df,product = \
@@ -934,13 +934,13 @@ class Organism(object):
             gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
             gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
             gene_dictionary.at[gene_name,"replicon"] = record.id
-        
+
         return gene_dictionary,complexes_df,RNA_df
-    
+
     def update_complexes_genes_with_genbank(self):
         if self.is_reference:
             return
-        
+
         # TODO: DO WE NEED TO FILTER BY ELEMENT_TYPES? WHY NOT PROCESS THEM ALL?
         # In some genbanks, CDS are duplicated with gene features. See staph or pputida
         element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
@@ -994,7 +994,7 @@ class Organism(object):
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
                 if product in RNA_df.index:
                     wrong_assoc.append(g)
-                
+
         cobra.manipulation.delete.remove_genes(m_model,
                      gene_list + wrong_assoc,
                      remove_reactions=False)
@@ -1011,13 +1011,13 @@ class Organism(object):
                 'triggered_by':[g.id for g in wrong_assoc],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, then annotation from GenBank or BioCyc marked them as a different type'})
-            
+
     def _get_ligases_from_regex(self,
                                 complexes_df):
         return self._get_slice_from_regex(
             complexes_df,
             "[-]{,2}tRNA (?:synthetase|ligase)(?=$)")
-    
+
     def _get_ligases_subunits_from_regex(self,
                                 complexes_df):
         return self._get_slice_from_regex(
@@ -1027,7 +1027,7 @@ class Organism(object):
                              trna_string):
         t = re.findall(".*[-]{,2}tRNA (?:synthetase|ligase)",trna_string)
         return t[0] if t else None
-    
+
     def get_trna_synthetase(self):
         if self.is_reference:
             return
@@ -1051,21 +1051,21 @@ class Organism(object):
                     d[k] = set([v])
                 else:
                     d[k] = set()
-        trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']  
+        trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']
         for cplx, trna_string in trna_ligases.items():
             aa = find_aminoacid(trna_string)
             if aa is None:continue
             d[aa].add(cplx)
         trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
         new_cplxs = {k:set() for k in d.copy()}
-        
+
         for cplx,trna_string in trna_ligases_from_subunits.items():
             trna_string = self._extract_trna_string(trna_string)
             aa = find_aminoacid(trna_string)
             if aa is None:continue
             if d[aa]: continue
             new_cplxs[aa].add(cplx)
-        
+
         for k,v in new_cplxs.items():
             if not v: continue
             cplx_id = "CPLX-tRNA-{}-LIGASE".format(k.upper()[:3])
@@ -1076,7 +1076,7 @@ class Organism(object):
                                complexes_df,
                                "Inferred from subunits")
             d[k] = set([cplx_id])
-        
+
         warn_ligases = []
         for aa,c_set in d.items():
             c_list = list(c_set)
@@ -1171,7 +1171,7 @@ class Organism(object):
                            'Getting sigma factors...',
                            bar_format = bar_format,
                            total=sigma_df.shape[0]):
-            
+
             tmp = {
                 s : {
                     "complex" : self._process_sigma_name(s, row),
@@ -1180,7 +1180,7 @@ class Organism(object):
                 }
             }
             self.sigmas = self._add_entry_to_df(self.sigmas,tmp)
-            
+
 
     def get_rpod(self):
         sigma_df = self.sigmas
@@ -1203,7 +1203,7 @@ class Organism(object):
                 'importance':'critical',
                 'to_do':'genome.gb does not have a valid annotation for RpoD. A random identified sigma factor in me_builder.org.sigmas was set as RpoD so that the builder can continue running. Set the correct RpoD by running me_builder.org.rpod = correct_rpod'})
         self.rpod = rpod
-    
+
     def _get_slice_from_regex(self,
                         df,
                         regex,
@@ -1232,10 +1232,10 @@ class Organism(object):
             complexes_df,
             "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?!.*subunit.*|.*chain.*)",
             subunit_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*|.*chain.*)")
-        
+
         if cplx is not None:
             return cplx,flag
-        
+
         cplx,flag = self._get_complex_from_regex(
                 complexes_df,
                 "(?:^RNA polymerase$)",
@@ -1403,8 +1403,8 @@ class Organism(object):
                         'importance':'medium',
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
         return df
-    
-    
+
+
     def _process_location_dict(self,
                                location,
                                location_interpreter):
@@ -1417,7 +1417,7 @@ class Organism(object):
                     new_location[k] = location_interpreter["interpretation"][loc]
                     break
         return new_location
-    
+
     def _add_entry_to_protein_location(self,
                                        c,
                                        c_loc,
@@ -1440,7 +1440,7 @@ class Organism(object):
                         }}
                 protein_location = self._add_entry_to_df(protein_location,tmp)
         return protein_location
-    
+
     def get_protein_location(self):
         complexes_df = self.complexes_df
         proteins_df = self.proteins_df
@@ -1474,7 +1474,7 @@ class Organism(object):
                                                     protein_location,
                                                     gene_location)
         self.protein_location = protein_location
-    
+
     def get_reaction_keffs(self):
         if self.is_reference:
             return None
@@ -1570,8 +1570,8 @@ class Organism(object):
             }
         self.reactions = pandas.DataFrame.from_dict(d).T
         self.reactions.index.name = "name"
-    
-    
+
+
     def generate_reaction_matrix(self):
         m_model = self.m_model
         m_to_me = self.m_to_me_mets
@@ -1617,7 +1617,7 @@ class Organism(object):
                 'triggered_by':warn_rxns,
                 'importance':'high',
                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.csv'})
-    
+
     def _get_feature_locus_tag(self,
                                feature):
         lt = feature.qualifiers.get(self.locus_tag,None)
@@ -1625,7 +1625,7 @@ class Organism(object):
             return lt[0]
         lt = feature.qualifiers.get('locus_tag',None)
         return lt[0]
-    
+
     def _map_to_a_generic(self,
                           feature,
                           generic_dict):
@@ -1641,7 +1641,7 @@ class Organism(object):
         if cat:
             logging.warning("Setting {} to {}".format(gene, cat))
             generic_dict[cat]['enzymes'].append(gene)
-    
+
     def get_generics_from_genbank(self):
         if self.is_reference:
             return None
@@ -1666,7 +1666,7 @@ class Organism(object):
                 'importance':'high',
                 'to_do':'Curate and fill generics in generics.csv or directly in me_builder.org.generic_dict'})
 
-    
+
     def _check_for_duplicates_within_datasets(self,
                                              info):
         import collections
@@ -1689,8 +1689,8 @@ class Organism(object):
                     if not d: continue
                     dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(d)]
                     self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
-        
-        
+
+
     def _check_for_duplicates_between_datasets(self,
                                                info):
         # Duplicates between different datasets
@@ -1715,7 +1715,7 @@ class Organism(object):
         df = df[df['reactions'] == 1]
         dup_df = df[df.sum(1)>1]
         return dup_df
-    
+
     def _solve_duplicates_between_datasets(self,
                                            dup_df):
         from coralme.builder.helper_functions import change_reaction_id
@@ -1728,7 +1728,7 @@ class Organism(object):
                 logging.warning('Changed reaction ID from {} to {} to prevent the conflict between: {}'.format(c,c+'_rxn',' and '.join([j for j,k in row.items() if k])))
             else:
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
-    
+
     def check_for_duplicates(self):
         # Duplicates within datasets
         info = {
@@ -1767,7 +1767,7 @@ class Organism(object):
                 file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
             file.write('\n\n')
         file.close()
-        
+
 #     def final_replicon_checks(self):
 #         if self.is_reference:
 #             return
