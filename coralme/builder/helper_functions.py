@@ -430,6 +430,8 @@ def get_metabolites_from_pattern(model,pattern):
     return met_list
 
 def get_met_coeff(stoich,growth_rate,growth_key='mu'):
+	if isinstance(growth_rate,dict):
+		growth_rate = growth_rate.get('biomass_dilution',None)
 	if hasattr(stoich, 'subs'):
 		try:
 			return float(stoich.subs(growth_key,growth_rate))
@@ -456,7 +458,7 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 		for rxn_met,stoich in rxn.metabolites.items():
 			if rxn_met.id == met_id:
 				coeff = get_met_coeff(stoich,
-									  flux_dict['biomass_dilution'],
+									  flux_dict,
 									  growth_key=growth_key)
 				if coeff is None:
 					print('Could not convert {} expression to float in {}'.format(rxn_met.id,rxn.id))
