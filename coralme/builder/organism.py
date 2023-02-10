@@ -387,10 +387,17 @@ class Organism(object):
                                product,
                                complexes_df,
                                source):
+        if product in complexes_df.index:
+            logging.warning('Could not add {} ({}) to complexes from {}. Already in complexes_df'.format(gene_id,product,source))
+            return complexes_df
+        if isinstance(gene_id,str):
+            gene_id = '{}()'.format(gene_id)
+        elif isinstance(gene_id,list):
+            gene_id = ' AND '.join(['{}()'.format(g) for g in gene_id])
         logging.warning('Adding {} ({}) to complexes from {}'.format(gene_id,product,source))
         tmp = {product: {
                 "name": name,
-                "genes": '{}()'.format(gene_id),
+                "genes": gene_id,
                 "source": source,
                 }}
         return self._add_entry_to_df(complexes_df,tmp)
@@ -1005,8 +1012,17 @@ class Organism(object):
                                 complexes_df):
         return self._get_slice_from_regex(
             complexes_df,
-            "[-]{,2}tRNA (?:synthetase|ligase)")
-        
+            "[-]{,2}tRNA (?:synthetase|ligase)(?=$)")
+    
+    def _get_ligases_subunits_from_regex(self,
+                                complexes_df):
+        return self._get_slice_from_regex(
+            complexes_df,
+            "[-]{,2}tRNA (?:synthetase|ligase)(?=.*subunit.*)")
+    def _extract_trna_string(self,
+                             trna_string):
+        t = re.findall(".*[-]{,2}tRNA (?:synthetase|ligase)",trna_string)
+        return t[0] if t else None
     
     def get_trna_synthetase(self):
         if self.is_reference:
@@ -1017,7 +1033,7 @@ class Organism(object):
             for aa, rx in dictionaries.amino_acid_regex.items():
                 if re.search(rx, trna_string):
                     return aa
-            return 0
+            return None
 
         org_amino_acid_trna_synthetase = self.amino_acid_trna_synthetase
         generic_dict = self.generic_dict
@@ -1032,13 +1048,30 @@ class Organism(object):
                 else:
                     d[k] = set()
         trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']  
-        
         for cplx, trna_string in trna_ligases.items():
             aa = find_aminoacid(trna_string)
-            if not aa: continue
-            
+            if aa is None:continue
             d[aa].add(cplx)
-        return d
+        trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
+        new_cplxs = {k:set() for k in d.copy()}
+        
+        for cplx,trna_string in trna_ligases_from_subunits.items():
+            trna_string = self._extract_trna_string(trna_string)
+            aa = find_aminoacid(trna_string)
+            if aa is None:continue
+            if d[aa]: continue
+            new_cplxs[aa].add(cplx)
+        
+        for k,v in new_cplxs.items():
+            if not v: continue
+            cplx_id = "CPLX-tRNA-{}-LIGASE".format(k.upper()[:3])
+            complexes_df = self._add_entry_to_complexes(
+                               list(v),
+                               "tRNA-{} ligase".format(k[0].upper() + k[1:3]),
+                               cplx_id,
+                               complexes_df,
+                               "Inferred from subunits")
+            d[k] = set([cplx_id])
         
         warn_ligases = []
         for aa,c_set in d.items():
@@ -1050,9 +1083,9 @@ class Organism(object):
                 generic_dict[generic] = {'enzymes':c_list}
                 d[aa] = generic
             else:
-                d[aa] = 'CPLX_dummy'
                 warn_ligases.append(aa)
         self.amino_acid_trna_synthetase = d
+        self.complexes_df = complexes_df
 
         # Warnings
         if warn_ligases:
