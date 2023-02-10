@@ -361,11 +361,11 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		tags = [ str(x).split(';') for x in tags ] # we convert here None to 'None'
 		tags = [ x for y in tags for x in y ]
 		# extra modification if compared this function to others
-		tags = [ '{:s}()'.format(x) for x in tags if x != 'None' ]
+		tags = [ '{:s}(\(\d*\)|\(\d*\:\d*\))'.format(x) for x in tags if x != 'None' ]
 
 		#res = df[df['Protein'].str.match(x)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
 	    #query = [ '{:s}()'.format(y) for y in tags ] # sp old_locus_tag's, the query can be a string of tags separated by ';'
-		res = df[df['Protein'].isin(tags)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
+		res = df[df['Protein'].str.fullmatch('|'.join(tags))][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
 
 		if len(res) != 0:
 			return res[0]
