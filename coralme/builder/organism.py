@@ -394,6 +394,10 @@ class Organism(object):
             gene_id = '{}()'.format(gene_id)
         elif isinstance(gene_id,list):
             gene_id = ' AND '.join(['{}()'.format(g) for g in gene_id])
+        elif isinstance(gene_id,dict):
+            gene_id = ' AND '.join(['{}({})'.format(k,v) for k,v in gene_id.items()])
+        else:
+            raise TypeError("Unsupported entry to add to complexes of type " + type(gene_id))
         logging.warning('Adding {} ({}) to complexes from {}'.format(gene_id,product,source))
         tmp = {product: {
                 "name": name,
@@ -1083,6 +1087,7 @@ class Organism(object):
                 generic_dict[generic] = {'enzymes':c_list}
                 d[aa] = generic
             else:
+                d[aa] = 'CPLX_dummy'
                 warn_ligases.append(aa)
         self.amino_acid_trna_synthetase = d
         self.complexes_df = complexes_df
@@ -1219,10 +1224,19 @@ class Organism(object):
         return subunits,'subunits'
     def _get_rna_polymerase_from_regex(self,
                                         complexes_df):
-        return self._get_complex_from_regex(
+        cplx,flag = self._get_complex_from_regex(
             complexes_df,
-            "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?!.*subunit.*)",
-            subunit_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*)")
+            "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?!.*subunit.*|.*chain.*)",
+            subunit_regex = "(?:RNA polymerase.*core enzyme|DNA.*directed.*RNA polymerase)(?=.*subunit.*|.*chain.*)")
+        
+        if cplx is not None:
+            return cplx,flag
+        
+        cplx,flag = self._get_complex_from_regex(
+                complexes_df,
+                "(?:^RNA polymerase$)",
+                subunit_regex = "(?:^RNA polymerase)(?=.*subunit.*)")
+        return cplx,flag
     def _add_rna_polymerase_to_complexes(self,
                                         complexes_df,
                                         RNAP_genes):
