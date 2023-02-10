@@ -1294,7 +1294,7 @@ class TranscriptionReaction(MEReaction):
 		for base, count in base_counts.items():
 			stoichiometry[base] -= count
 
-		# RNA transcription from nucleus, mitochondria, and plastids
+		# allows RNA transcription from nucleus, mitochondria, and plastids
 		compartment_suffix = list(set([ k[-2:] for k,v in stoichiometry.items() if k[:-2] in ['atp', 'ctp', 'gtp', 'utp'] ]))
 		assert len(compartment_suffix) == 1
 

@@ -366,20 +366,24 @@ def build_reactions_from_genbank(
 					#locations.append(SeqFeature.FeatureLocation(
 						#SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
-					# Simplified to this in Bipython >1.80. TODO: TEST
-					#locations.append(SeqFeature.SimpleLocation(int(start)-1, int(stop), strand = strand))
-
 				#seq = SeqFeature.SeqFeature(SeqFeature.CompoundLocation(locations, 'join'))
 			#else:
 				#seq = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(
 					#SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
-				# Simplified to this in Bipython >1.80. TODO: TEST
-				#seq = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand)
-
 			seqs = []
 			for start, stop in zip(starts.split(','), stops.split(',')):
-				seqs.append(SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand))
+				if int(start) < int(stop):
+					# nicely defined locus in reference of the genome sequence
+					seqs.append(SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand))
+				else:
+					# the feature must be split in two
+					print(tu_id, start, stop)
+					try:
+						loc1 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, len(full_seqs[tu_frame.replicon[tu_id]])), strand = strand)
+						loc2 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(0, int(stop)), strand = strand)
+					except:
+						print('failed')
 
 			#sequence = coralme.util.dogma.extract_sequence(
 				#full_seqs[tu_frame.replicon[tu_id]],
@@ -441,18 +445,18 @@ def build_reactions_from_genbank(
 				continue
 
 			# Some features might lack a locus tag
-			if not feature.qualifiers.get(me_model.global_info['locus_tag'], False):
+			if not feature.qualifiers.get(me_model.global_info.get('locus_tag', 'locus_tag'), False):
 				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}. The gene is ignored from the reconstruction.'.format(feature.id, feature.type, str(feature.location), me_model.global_info['locus_tag']))
 				continue
 
 			# Skip feature if it is not a gene used in the ME-model reconstruction
-			filter1 = feature.qualifiers[me_model.global_info['locus_tag']][0] in knockouts
-			filter2 = feature.qualifiers[me_model.global_info['locus_tag']][0] not in genes_to_add
+			filter1 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] in knockouts
+			filter2 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] not in genes_to_add
 			if filter1 or filter2:
 				continue
 
 			# Assign values for all important gene attributes
-			bnum = feature.qualifiers[me_model.global_info['locus_tag']][0]
+			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
 			# old code cannot consider if genes are split
 			#left_pos = int(feature.location.start)
 			#right_pos = int(feature.location.end)
