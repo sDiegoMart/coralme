@@ -609,7 +609,7 @@ def get_df_rxns(df):
 	return tmp
 
 def get_df_cplxs(df, generics = False):
-	tmp = df[df['Feature Type'].isin(['CDS', 'pseudo'])].fillna('')
+	tmp = df[df['Feature Type'].isin(['CDS', 'pseudo', 'ncRNA'])].fillna('')
 
 	# get enzymatic complexes with generics subunits
 	df_generics = df[df['Feature Type'].isin(['CDS'])].fillna('')
@@ -767,7 +767,7 @@ def get_df_input_from_excel(df, df_rxns):
 	lst = [
 		#'Complex Name',
 		#'Complex ID',
-		#'Cofactors in Modified Complex',
+		'Cofactors in Modified Complex',
 		'Generic Complex ID',
 		'MetaComplex ID',
 		'ME-model SubReaction',
