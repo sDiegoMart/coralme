@@ -387,36 +387,40 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 	return [ y for x,y in zip(res, rxns) if x ]
 
 def exchange_single_model(me, flux_dict = 0, solution=0):
-    import pandas as pd
+	import pandas as pd
 
-    complete_dict = {'id':[],'name':[],'reaction':[],'lower_bound':[],'upper_bound':[],'flux':[]}
+	complete_dict = {'id':[],'name':[],'reaction':[],'lower_bound':[],'upper_bound':[],'flux':[]}
 
-    if solution:
-        flux_dict = solution.fluxes
-    elif not flux_dict:
-        flux_dict = me.solution.fluxes
+	if solution:
+		flux_dict = solution.fluxes
+	elif not flux_dict:
+		flux_dict = me.solution.fluxes
 
-    for rxn in me.reactions:
-        if not rxn.reactants or not rxn.products:
-            flux = flux_dict[rxn.id]
+	for rxn in me.reactions:
+		try:
+			if rxn.reactants and rxn.products:
+				continue
+		except:
+			continue
+		flux = flux_dict[rxn.id]
 
-            if not flux:
-                continue
-            rxn_name = rxn.name
-            reaction = rxn.reaction
-            lb = rxn.lower_bound
-            ub = rxn.upper_bound
+		if not flux:
+			continue
+		rxn_name = rxn.name
+		reaction = rxn.reaction
+		lb = rxn.lower_bound
+		ub = rxn.upper_bound
 
-            complete_dict['id'].append(rxn.id)
-            complete_dict['name'].append(rxn_name)
-            complete_dict['reaction'].append(reaction)
-            complete_dict['lower_bound'].append(lb)
-            complete_dict['upper_bound'].append(ub)
-            complete_dict['flux'].append(flux)
+		complete_dict['id'].append(rxn.id)
+		complete_dict['name'].append(rxn_name)
+		complete_dict['reaction'].append(reaction)
+		complete_dict['lower_bound'].append(lb)
+		complete_dict['upper_bound'].append(ub)
+		complete_dict['flux'].append(flux)
 
 
-    df = pd.DataFrame(complete_dict).set_index('id')
-    return df
+	df = pandas.DataFrame(complete_dict).set_index('id')
+	return df
 
 def get_metabolites_from_pattern(model,pattern):
     met_list = []
@@ -425,14 +429,23 @@ def get_metabolites_from_pattern(model,pattern):
             met_list.append(met.id)
     return met_list
 
-def flux_based_reactions(model,met_id,only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
+def get_met_coeff(stoich,growth_rate,growth_key='mu'):
+	if hasattr(stoich, 'subs'):
+		try:
+			return float(stoich.subs(growth_key,growth_rate))
+		except:
+			return None
+	return stoich
+
+def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
 		if not model.solution:
 			print('No solution in model object')
 			return
 		flux_dict = model.solution.fluxes
-	reactions = get_reactions_of_met(model,met_id,only_types=only_types,ignore_types=ignore_types,verbose=False)
+	reactions = get_reactions_of_met(model,met_id,only_types=only_types,
+									 ignore_types=ignore_types,verbose=False,growth_key=growth_key)
 	if len(reactions) == 0:
 		print('No reactions found for {}'.format(met_id))
 		return
@@ -442,29 +455,28 @@ def flux_based_reactions(model,met_id,only_types=(),ignore_types = (),threshold 
 		result_dict[rxn.id] = {}
 		for rxn_met,stoich in rxn.metabolites.items():
 			if rxn_met.id == met_id:
-				if hasattr(stoich, 'subs'):
-					try:
-						coeff = float(stoich.subs(mu,flux_dict['biomass_dilution']))
-					except:
-						warn('Could not convert {} expression to float in {}'.format(rxn_met.id,rxn.id))
-				else:
-					coeff = stoich
+				coeff = get_met_coeff(stoich,
+									  flux_dict['biomass_dilution'],
+									  growth_key=growth_key)
+				if coeff is None:
+					print('Could not convert {} expression to float in {}'.format(rxn_met.id,rxn.id))
+					continue
 				result_dict[rxn.id]['lb'] = rxn.lower_bound
 				result_dict[rxn.id]['ub'] = rxn.upper_bound
 				result_dict[rxn.id]['rxn_flux'] = flux_dict[rxn.id]
 				result_dict[rxn.id]['met_flux'] = flux_dict[rxn.id]*coeff
 				result_dict[rxn.id]['reaction'] = rxn.reaction
 				break
-	df = pd.DataFrame.from_dict(result_dict).T
+	df = pandas.DataFrame.from_dict(result_dict).T
 	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
 
-def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = True):
+def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = True,growth_key='mu'):
 	import copy
 	met_stoich = 0
 	if only_types:
-		only_reaction_types = tuple([getattr(draft_cobrame,i) for i in only_types])
+		only_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in only_types])
 	elif ignore_types:
-		ignore_reaction_types = tuple([getattr(draft_cobrame,i) for i in ignore_types])
+		ignore_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in ignore_types])
 	reactions = []
 
 	if not hasattr(me.metabolites,met):
@@ -474,16 +486,14 @@ def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbos
 			continue
 		elif ignore_types and isinstance(rxn, ignore_reaction_types):
 			continue
-		reactants = [met.id for met in rxn.reactants]
-		products = [met.id for met in rxn.products]
-
 		try:
-			pos = 1 if met in products else -1
+			met_obj = me.metabolites.get_by_id(met)
+			pos = 1 if get_met_coeff(rxn.metabolites[met_obj],0.1,growth_key=growth_key) > 1 else 0
 			rev = 1 if rxn.lower_bound < 0 else 0
 			fwd = 1 if rxn.upper_bound > 0 else 0
 		except:
 			if verbose:
-				print(rxn.id, 'symbolic bounds')
+				print(rxn.id, ' could not parse')
 			else:
 				pass
 

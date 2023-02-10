@@ -1980,6 +1980,8 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		# Either entirely based on SASA or using fit keffs from [Ebrahim et al 2016](https://www.ncbi.nlm.nih.gov/pubmed/27782110?dopt=Abstract)
+		
+		#TO DO: Reincorporate here Keff rescaling from SASA (already in BACILLUSme and PPUTIDAme)
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
