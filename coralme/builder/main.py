@@ -1769,7 +1769,7 @@ class MEReconstruction(MEBuilder):
 				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, stoichiometry)
 			else:
 				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, { 'CPLX_dummy' : 1})
-				logging.warning('The excision complex for {:s} was not identified from homology and was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
+				logging.warning('The components of the excision complex for {:s} was not identified from homology and was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
 
 		# add excision machineries into TranscriptionData
 		coralme.builder.transcription.add_rna_splicing(me)
