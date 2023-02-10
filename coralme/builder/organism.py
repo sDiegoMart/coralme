@@ -1661,6 +1661,7 @@ class Organism(object):
                     self._map_to_a_generic(
                           feature,
                           generic_dict)
+        if self.duplicated_genes is not None:
             for d in self.duplicated_genes:
                 if not d: continue
                 dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(d)]
