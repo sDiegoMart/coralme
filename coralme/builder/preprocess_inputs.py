@@ -179,6 +179,8 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
 			mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
 			logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
+			mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
+			logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
 			mods = [ '{:s}(1)'.format(x) if '(' not in x else x for x in mods ]
 			if len(mods) != 0:
 				return ' AND '.join(mods)
