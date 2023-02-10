@@ -1213,14 +1213,18 @@ class Organism(object):
                                complexes_df,
                                cplx_regex,
                                subunit_regex=None):
+        # Get complex as one entry from complexes
         cplx = self._get_slice_from_regex(complexes_df,cplx_regex)
-        if not cplx.empty and cplx.shape[0] == 1:
+        if cplx.shape[0] == 1:
             return cplx.iloc[[0],:],'cplx'
         if subunit_regex is None:
             return None,None
+        # Get complex as composed from subunits
         subunits = self._get_slice_from_regex(complexes_df,subunit_regex)
         if subunits.empty:
             return None,None
+        if subunits.shape[0] == 1:
+            return subunits,'cplx'
         return subunits,'subunits'
     def _get_rna_polymerase_from_regex(self,
                                         complexes_df):
@@ -1235,7 +1239,7 @@ class Organism(object):
         cplx,flag = self._get_complex_from_regex(
                 complexes_df,
                 "(?:^RNA polymerase$)",
-                subunit_regex = "(?:^RNA polymerase)(?=.*subunit.*)")
+                subunit_regex = "(?:^RNA polymerase)(?=.*subunit.*|.*chain.*)")
         return cplx,flag
     def _add_rna_polymerase_to_complexes(self,
                                         complexes_df,
