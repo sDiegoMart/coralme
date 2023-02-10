@@ -1335,7 +1335,7 @@ class MEReconstruction(MEBuilder):
 			gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
 
 			# generate a minimal dataframe from the genbank and m-model files
-			df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
+			df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, config.get('locus_tag', 'locus_tag'), model = m_model)
 			# complete minimal dataframe with automated info from homology
 			df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
 
@@ -1767,6 +1767,9 @@ class MEReconstruction(MEBuilder):
 			stoichiometry = coralme.builder.preprocess_inputs.excision_machinery_stoichiometry(df_data, excision_type)
 			if stoichiometry is not None:
 				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, stoichiometry)
+			else:
+				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, { 'CPLX_dummy' : 1})
+				logging.warning('The excision complex for {:s} was not identified from homology and was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
 
 		# add excision machineries into TranscriptionData
 		coralme.builder.transcription.add_rna_splicing(me)
@@ -1980,7 +1983,7 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		# Either entirely based on SASA or using fit keffs from [Ebrahim et al 2016](https://www.ncbi.nlm.nih.gov/pubmed/27782110?dopt=Abstract)
-		
+
 		#TO DO: Reincorporate here Keff rescaling from SASA (already in BACILLUSme and PPUTIDAme)
 
 		# ## Part 8: Model updates and corrections

@@ -441,18 +441,18 @@ def build_reactions_from_genbank(
 				continue
 
 			# Some features might lack a locus tag
-			if not feature.qualifiers.get('locus_tag', False):
-				logging.warning('The feature of type \'{:s}\', located at \'{:s}\' misses a locus tag. The gene is ignored from the reconstruction.'.format(feature.type, str(feature.location)))
+			if not feature.qualifiers.get(me_model.global_info['locus_tag'], False):
+				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}. The gene is ignored from the reconstruction.'.format(feature.id, feature.type, str(feature.location), me_model.global_info['locus_tag']))
 				continue
 
 			# Skip feature if it is not a gene used in the ME-model reconstruction
-			filter1 = feature.qualifiers['locus_tag'][0] in knockouts
-			filter2 = feature.qualifiers['locus_tag'][0] not in genes_to_add
+			filter1 = feature.qualifiers[me_model.global_info['locus_tag']][0] in knockouts
+			filter2 = feature.qualifiers[me_model.global_info['locus_tag']][0] not in genes_to_add
 			if filter1 or filter2:
 				continue
 
 			# Assign values for all important gene attributes
-			bnum = feature.qualifiers['locus_tag'][0]
+			bnum = feature.qualifiers[me_model.global_info['locus_tag']][0]
 			# old code cannot consider if genes are split
 			#left_pos = int(feature.location.start)
 			#right_pos = int(feature.location.end)
@@ -619,7 +619,7 @@ def build_reactions_from_genbank(
 			if len(me_model.global_info['START_tRNA']) == 0:
 				logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
 		else:
-			logging.warning('No tRNA genes were identified from their locus tags. Disregard this message if your organism does not posses chloroplasts.')
+			logging.warning('No tRNA genes were identified from their locus tags.')
 
 	# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
 	me_model.global_info['aa2trna'] = aa2trna

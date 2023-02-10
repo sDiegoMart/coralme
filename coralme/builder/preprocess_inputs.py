@@ -11,7 +11,7 @@ try:
 except:
 	warnings.warn("This pandas version does not allow for correct warning handling. Pandas >=1.5.1 is suggested.")
 
-def generate_organism_specific_matrix(genbank, model):
+def generate_organism_specific_matrix(genbank, locus_tag, model):
 	contigs = []
 	for contig in SeqIO.parse(genbank, 'genbank'):
 		contigs.append(contig)
@@ -91,8 +91,8 @@ def generate_organism_specific_matrix(genbank, model):
 		else:
 			return None
 
-	# TODO: use builder.configuration.get('locus_tag', 'locus_tag') as qualifier key
-	df['Gene Locus ID'] = [ x.qualifiers.get('locus_tag', [None])[0] for x in lst ]
+	#df['Gene Locus ID'] = [ x.qualifiers.get('locus_tag', [None])[0] for x in lst ]
+	df['Gene Locus ID'] = [ x.qualifiers.get(locus_tag, [None])[0] for x in lst ]
 	df['Definition'] = [ x.qualifiers.get('product', [None])[0] for x in lst ]
 	df['Feature Type'] = [ x.type if x.qualifiers.get('pseudo') is None else 'pseudo' for x in lst ]
 
