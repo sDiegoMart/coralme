@@ -175,6 +175,8 @@ class Organism(object):
         self.complexes_df = self._complexes_df
         logging.warning("Syncing files")
         self.sync_files()
+        logging.warning("Looking for duplicates in provided files")
+        self.check_for_duplicates()
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
         logging.warning("Updating genes and complexes from genbank")
@@ -193,8 +195,7 @@ class Organism(object):
         self.get_rpod()
         logging.warning("Getting RNA polymerase from BioCyc")
         self.get_rna_polymerase()
-        logging.warning("Looking for duplicates in provided files")
-        self.check_for_duplicates()
+
         logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
         logging.warning("Generating transcription units dataframe")
@@ -398,7 +399,7 @@ class Organism(object):
             gene_id = ' AND '.join(['{}({})'.format(k,v) for k,v in gene_id.items()])
         else:
             raise TypeError("Unsupported entry to add to complexes of type " + type(gene_id))
-        logging.warning('Adding {} ({}) to complexes from {}'.format(gene_id,product,source))
+        logging.warning('Adding {} ({}) to complexes from {}'.format(product,gene_id,source))
         tmp = {product: {
                 "name": name,
                 "genes": gene_id,
@@ -482,6 +483,8 @@ class Organism(object):
                              row,
                              contigs,
                              gene_sequences):
+        if self.duplicated_genes is not None and gene_id in self.duplicated_genes:
+            gene_id = '{};{}'.format(gene_id,gene_name)
         logging.warning('Adding {} to genbank file as {}'.format(gene_id,product_type))
         from Bio.SeqFeature import SeqFeature, CompoundLocation, ExactPosition, FeatureLocation, SimpleLocation
         from Bio.SeqRecord import SeqRecord
@@ -909,6 +912,8 @@ class Organism(object):
                                        feature,
                                        record):
         gene_id = feature.qualifiers[self.locus_tag][0]
+        if ';' in gene_id:
+            gene_id = gene_id.split(';')[0]
         left_end = min([i.start for i in feature.location.parts])
         right_end = max([i.end for i in feature.location.parts])
         if not gene_dictionary["Accession-1"].eq(gene_id).any():
@@ -1656,6 +1661,10 @@ class Organism(object):
                     self._map_to_a_generic(
                           feature,
                           generic_dict)
+            for d in self.duplicated_genes:
+                if not d: continue
+                dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(d)]
+                generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
         for k, v in generic_dict.items():
             if not v:
                 warn_generics.append(k)
@@ -1685,10 +1694,9 @@ class Organism(object):
                 'importance':'critical',
                 'to_do':'Remove or fix duplicates. If duplicates are in Accession-1, they are processed as different possibilities to get the same enzyme, so they are added as generic complexes. Check!'})
             if 'Accession-1' in warn_dups and not self.is_reference:
-                for d in warn_dups['Accession-1']:
-                    if not d: continue
-                    dups = self.gene_dictionary[self.gene_dictionary['Accession-1'].eq(d)]
-                    self.generic_dict['generic_{}'.format(d)] = {"enzymes":[i for i in dups['Product'].values if i]}
+                self.duplicated_genes = warn_dups['Accession-1']
+                return
+        self.duplicated_genes = None
 
 
     def _check_for_duplicates_between_datasets(self,
