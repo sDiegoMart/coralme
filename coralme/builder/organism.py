@@ -992,7 +992,7 @@ class Organism(object):
                 gene_list.append(g)
             else:
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
-                if product in RNA_df:
+                if product in RNA_df.index:
                     wrong_assoc.append(g)
                 
         cobra.manipulation.delete.remove_genes(m_model,
@@ -1617,11 +1617,19 @@ class Organism(object):
                 'triggered_by':warn_rxns,
                 'importance':'high',
                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.csv'})
-
+    
+    def _get_feature_locus_tag(self,
+                               feature):
+        lt = feature.qualifiers.get(self.locus_tag,None)
+        if lt is not None:
+            return lt[0]
+        lt = feature.qualifiers.get('locus_tag',None)
+        return lt[0]
+    
     def _map_to_a_generic(self,
                           feature,
                           generic_dict):
-        gene = "RNA_" + feature.qualifiers[self.locus_tag][0]
+        gene = "RNA_" + self._get_feature_locus_tag(feature)
         if any("5S" in i for i in feature.qualifiers["product"]):
             cat = "generic_5s_rRNAs"
         elif any("16S" in i for i in feature.qualifiers["product"]):
