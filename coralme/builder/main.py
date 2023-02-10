@@ -1233,7 +1233,8 @@ class MEReconstruction(MEBuilder):
 			logging.warning('The biomass reaction {:s} will be skipped during the ME reconstruction steps.'.format(self.org.biomass))
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
-			logging.warning('The FMETTRS reaction will be skipped during the ME reconstruction steps.')
+			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
+
 
 		if hasattr(self, 'homology') and len(config.get('braun\'s_lipoproteins', [])) == 0:
 			lst = [ k.split('_mod_')[0] for k,v in self.homology.org_cplx_homolog.items() if 'palmitate' in v ]
