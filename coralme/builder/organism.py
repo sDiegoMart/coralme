@@ -1172,15 +1172,17 @@ class Organism(object):
                        ):
         return df[df["name"].str.contains(regex,regex=True)]
     def _get_complex_from_regex(self,
-                               df,
+                               complexes_df,
                                cplx_regex,
                                subunit_regex=None):
-        cplx = self._get_slice_from_regex(df,cplx_regex)
+        cplx = self._get_slice_from_regex(complexes_df,cplx_regex)
         if not cplx.empty and cplx.shape[0] == 1:
             return cplx.iloc[[0],:],'cplx'
         if subunit_regex is None:
             return None,None
-        subunits = self._get_slice_from_regex(df,subunit_regex)
+        subunits = self._get_slice_from_regex(complexes_df,subunit_regex)
+        if subunits.empty:
+            return None,None
         return subunits,'subunits'
     def _get_rna_polymerase_from_regex(self,
                                         complexes_df):
