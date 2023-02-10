@@ -1,5 +1,4 @@
-from coralme.core.processdata import PostTranslationData
-from coralme.core.reaction import PostTranslationReaction
+import coralme
 
 mmol = 6.022e20  # number of molecules per mmol
 nm2_per_m2 = 1e18  # used to convert nm^2 to m^2
@@ -8,7 +7,7 @@ nm2_per_m2 = 1e18  # used to convert nm^2 to m^2
 def add_translocation_data_and_reaction(model, pathways, preprocessed_id, processed_id, compartment, peptide_data, multipliers, membrane_constraints, alt = False):
 	suffix = '_alt' if alt else ''
 
-	data = PostTranslationData('translocation_' + preprocessed_id + '_' + compartment + suffix, model, processed_id, preprocessed_id)
+	data = coralme.core.processdata.PostTranslationData('translocation_' + preprocessed_id + '_' + compartment + suffix, model, processed_id, preprocessed_id)
 	data.translocation = pathways
 	#data.translocation_multipliers = multipliers_protein_keys.get(preprocessed_id, {})
 	data.translocation_multipliers = multipliers.get(preprocessed_id, {})
@@ -24,7 +23,7 @@ def add_translocation_data_and_reaction(model, pathways, preprocessed_id, proces
 		# Adds surface area constraint in units of m^2/mmol
 		data.surface_area['SA_protein_' + compartment] = (1.21 / thickness * 2.) * mass * mmol / nm2_per_m2
 
-	rxn = PostTranslationReaction('translocation_' + peptide_data.id + '_' + compartment + suffix)
+	rxn = coralme.core.reaction.PostTranslationReaction('translocation_' + peptide_data.id + '_' + compartment + suffix)
 	rxn.posttranslation_data = data
 	model.add_reaction(rxn)
 	rxn.update()
@@ -76,7 +75,7 @@ def add_lipoprotein_formation(model, compartment_dict, lipoprotein_precursors, l
 	def add_lipoprotein_data_and_reaction(first_lipid, second_lipid):
 
 		# Add PostTranslation Data, modifications and surface area
-		data = PostTranslationData(reaction_prefix + '_' + second_lipid, model, processed_id, preprocessed_id)
+		data = coralme.core.processdata.PostTranslationData(reaction_prefix + '_' + second_lipid, model, processed_id, preprocessed_id)
 		data.subreactions['mod_1st_' + first_lipid] = 1
 		data.subreactions['mod_2nd_' + second_lipid] = 1
 		data.biomass_type = 'lipid_biomass'
@@ -93,7 +92,7 @@ def add_lipoprotein_formation(model, compartment_dict, lipoprotein_precursors, l
 				}
 
 		# Add Reaction to model and associated it with its data
-		rxn = PostTranslationReaction(reaction_prefix + '_' + second_lipid)
+		rxn = coralme.core.reaction.PostTranslationReaction(reaction_prefix + '_' + second_lipid)
 		model.add_reaction(rxn)
 		rxn.posttranslation_data = data
 

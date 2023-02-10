@@ -134,8 +134,9 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	else:
 		data['BioCyc'] = None
 
-	dct = builder.homology.mutual_hits
-	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
+	if hasattr(builder, 'homology'):
+		dct = builder.homology.mutual_hits
+		data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
 
 	# ME-model complexes: restructure complexes_df to obtain the correct complex stoichiometry from the index
 	df = builder.org.complexes_df.copy(deep = True)
@@ -179,11 +180,16 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
 			mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
 			logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
+			mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
+			logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
 			mods = [ '{:s}(1)'.format(x) if '(' not in x else x for x in mods ]
 			if len(mods) != 0:
 				return ' AND '.join(mods)
 
-	dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
+	if hasattr(builder, 'homology'):
+		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
+	else:
+		dct = { v:k for k,v in builder.org.protein_mod[['Core_enzyme']].to_dict()['Core_enzyme'].items() }
 	data['Cofactors in Modified Complex'] = data.apply(lambda x: cofactors(x, dct), axis = 1)
 
 	# ME-model generics
@@ -603,7 +609,7 @@ def get_df_rxns(df):
 	return tmp
 
 def get_df_cplxs(df, generics = False):
-	tmp = df[df['Feature Type'].isin(['CDS', 'pseudo'])].fillna('')
+	tmp = df[df['Feature Type'].isin(['CDS', 'pseudo', 'ncRNA'])].fillna('')
 
 	# get enzymatic complexes with generics subunits
 	df_generics = df[df['Feature Type'].isin(['CDS'])].fillna('')
@@ -761,7 +767,7 @@ def get_df_input_from_excel(df, df_rxns):
 	lst = [
 		#'Complex Name',
 		#'Complex ID',
-		#'Cofactors in Modified Complex',
+		'Cofactors in Modified Complex',
 		'Generic Complex ID',
 		'MetaComplex ID',
 		'ME-model SubReaction',

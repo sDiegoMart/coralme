@@ -231,7 +231,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 
 def build_reactions_from_genbank(
 	me_model, gb_filename, tu_frame = pandas.DataFrame(columns = ['genes']), genes_to_add = list(),
-	feature_types = [ 'CDS', 'rRNA', 'tRNA' ], update = True, verbose = True,
+	feature_types = [ 'CDS', 'rRNA', 'tRNA', 'ncRNA' ], update = True, verbose = True,
 	trna_misacylation = dict(), genome_mods = dict(), knockouts = list()):
 	# trna_to_codon = dict(), frameshift_dict = None, # not needed anymore
 

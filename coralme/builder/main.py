@@ -1224,12 +1224,17 @@ class MEReconstruction(MEBuilder):
 			config['translocation_multipliers'] = self.org.translocation_multipliers
 			logging.warning('Translocation multipliers for yidC and tat homologs were set from homology data.')
 
+		if hasattr(self, 'org') and len(config.get('amino_acid_trna_synthetase', {})) == 0:
+			config['amino_acid_trna_synthetase'] = self.org.amino_acid_trna_synthetase
+			logging.warning('tRNA synthetases were set from homology data.')
+
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass]
 			logging.warning('The biomass reaction {:s} will be skipped during the ME reconstruction steps.'.format(self.org.biomass))
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
-			logging.warning('The FMETTRS reaction will be skipped during the ME reconstruction steps.')
+			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
+
 
 		if hasattr(self, 'homology') and len(config.get('braun\'s_lipoproteins', [])) == 0:
 			lst = [ k.split('_mod_')[0] for k,v in self.homology.org_cplx_homolog.items() if 'palmitate' in v ]
@@ -1253,7 +1258,7 @@ class MEReconstruction(MEBuilder):
 				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
 				return tmp
 
-		# INPUTS: We capture if the file exists or if it is empty
+		# INPUTS: We capture if the file exists or if the key in the configuration file is ''
 		# Transcriptional Units
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
 		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
@@ -1313,11 +1318,10 @@ class MEReconstruction(MEBuilder):
 			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
 			gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
 
-			# generate a minimal dataframe from genbank and m-model files
+			# generate a minimal dataframe from the genbank and m-model files
 			df_data = coralme.builder.preprocess_inputs.generate_organism_specific_matrix(gb, model = m_model)
 			# complete minimal dataframe with automated info from homology
-			if hasattr(self, 'homology'):
-				df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
+			df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
 		return (df_tus, df_rmsc, df_subs, df_mets), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
