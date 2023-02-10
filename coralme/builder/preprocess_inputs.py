@@ -134,8 +134,9 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	else:
 		data['BioCyc'] = None
 
-	dct = builder.homology.mutual_hits
-	data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
+	if hasattr(builder, 'homology'):
+		dct = builder.homology.mutual_hits
+		data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
 
 	# ME-model complexes: restructure complexes_df to obtain the correct complex stoichiometry from the index
 	df = builder.org.complexes_df.copy(deep = True)

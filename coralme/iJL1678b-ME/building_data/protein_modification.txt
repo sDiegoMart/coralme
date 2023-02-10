@@ -485,12 +485,12 @@ ASPAMINOTRANS-DIMER_mod_pydx5p(1)	ASPAMINOTRANS-DIMER	pydx5p(1)	M_protein_recon
 BRANCHED-CHAINAMINOTRANSFER-CPLX_mod_pydx5p(1)	BRANCHED-CHAINAMINOTRANSFER-CPLX	pydx5p(1)	M_protein_recon
 USHA-MONOMER_mod_cobalt2(1)	USHA-MONOMER	cobalt2(1)	M_protein_recon
 CMPKI-MONOMER_mod_mg2(1)	CMPKI-MONOMER	mg2(1)	M_protein_recon
-FLAVODOXIN1-MONOMER_mod_Oxidized	FLAVODOXIN1-MONOMER	Oxidized(1)	M_protein_recon
-FLAVODOXIN2-MONOMER_mod_Oxidized	FLAVODOXIN2-MONOMER	Oxidized(1)	M_protein_recon
-GLUTAREDOXIN-MONOMER_mod_Oxidized	GLUTAREDOXIN-MONOMER	Oxidized(1)	M_protein_recon
-GRXB-MONOMER_mod_Oxidized	GRXB-MONOMER	Oxidized(1)	M_protein_recon
-CPLX0-7817_mod_Oxidized	CPLX0-7817	Oxidized(1)	M_protein_recon
-GRXC-MONOMER_mod_Oxidized	GRXC-MONOMER	Oxidized(1)	M_protein_recon
+FLAVODOXIN1-MONOMER_mod_Oxidized(1)	FLAVODOXIN1-MONOMER	Oxidized(1)	M_protein_recon
+FLAVODOXIN2-MONOMER_mod_Oxidized(1)	FLAVODOXIN2-MONOMER	Oxidized(1)	M_protein_recon
+GLUTAREDOXIN-MONOMER_mod_Oxidized(1)	GLUTAREDOXIN-MONOMER	Oxidized(1)	M_protein_recon
+GRXB-MONOMER_mod_Oxidized(1)	GRXB-MONOMER	Oxidized(1)	M_protein_recon
+CPLX0-7817_mod_Oxidized(1)	CPLX0-7817	Oxidized(1)	M_protein_recon
+GRXC-MONOMER_mod_Oxidized(1)	GRXC-MONOMER	Oxidized(1)	M_protein_recon
 IscU_mod_2fe2s(1)	IscU	2fe2s(1)	M_protein_recon
 IscU_mod_2fe2s(2)	IscU	2fe2s(2)	M_protein_recon
 IscU_mod_4fe4s(1)	IscU	4fe4s(1)	M_protein_recon
@@ -499,14 +499,14 @@ CPLX0-1341_mod_2fe2s(1)	CPLX0-1341	2fe2s(1)	M_protein_recon
 CPLX0-1341_mod_2fe2s(2)	CPLX0-1341	2fe2s(2)	M_protein_recon
 CPLX0-1341_mod_4fe4s(1)	CPLX0-1341	4fe4s(1)	M_protein_recon
 EG10544-MONOMER_mod_palmitate(1)	EG10544-MONOMER	palmitate(1)	M_protein_recon
-DSBG-CPLX_mod_Oxidized	DSBG-CPLX	Oxidized(1)	M_protein_recon
-DSBD-MONOMER_mod_Oxidized	DSBD-MONOMER	Oxidized(1)	M_protein_recon
-DSBC-CPLX_mod_Oxidized	DSBC-CPLX	Oxidized(1)	M_protein_recon
+DSBG-CPLX_mod_Oxidized(1)	DSBG-CPLX	Oxidized(1)	M_protein_recon
+DSBD-MONOMER_mod_Oxidized(1)	DSBD-MONOMER	Oxidized(1)	M_protein_recon
+DSBC-CPLX_mod_Oxidized(1)	DSBC-CPLX	Oxidized(1)	M_protein_recon
 EG11597-MONOMER_mod_amp(1)	EG11597-MONOMER	amp(1)	M_protein_recon
 EG11597-MONOMER_mod_coo(1)	EG11597-MONOMER	coo(1)	M_protein_recon
 EG11597-MONOMER_mod_cosh(1)	EG11597-MONOMER	cosh(1)	M_protein_recon
-RED-THIOREDOXIN-MONOMER_mod_Oxidized	RED-THIOREDOXIN-MONOMER	Oxidized(1)	M_protein_recon
-RED-THIOREDOXIN2-MONOMER_mod_Oxidized	RED-THIOREDOXIN2-MONOMER	Oxidized(1)	M_protein_recon
+RED-THIOREDOXIN-MONOMER_mod_Oxidized(1)	RED-THIOREDOXIN-MONOMER	Oxidized(1)	M_protein_recon
+RED-THIOREDOXIN2-MONOMER_mod_Oxidized(1)	RED-THIOREDOXIN2-MONOMER	Oxidized(1)	M_protein_recon
 EG50003-MONOMER_mod_pan4p(1)	EG50003-MONOMER	pan4p(1)	M_protein_recon
 EG50003-MONOMER_mod_pan4p(1)_mod_ac(1)	EG50003-MONOMER	pan4p(1) AND ac(1)	M_protein_recon
 EG50003-MONOMER_mod_pan4p(1)_mod_mal(1)	EG50003-MONOMER	pan4p(1) AND mal(1)	M_protein_recon
