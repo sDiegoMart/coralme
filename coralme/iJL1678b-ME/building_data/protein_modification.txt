@@ -468,7 +468,7 @@ DHPDIOXYGEN-CPLX_mod_fe2(1)	DHPDIOXYGEN-CPLX	fe2(1)	M_protein_recon
 GSP-CPLX_mod_mg2(1)	GSP-CPLX	mg2(1)	M_protein_recon
 GUANYL-KIN-CPLX_mod_mg2(1)	GUANYL-KIN-CPLX	mg2(1)	M_protein_recon
 LysII_RS_dim_mod_mg2(6)	LysII_RS_dim	mg2(6)	M_protein_recon
-LysII_RS_dim_mod_lys(1)_DASH_L	LysII_RS_dim	lys_DASH_L(1)	M_protein_recon
+LysII_RS_dim_mod_lys_DASH_L(1)	LysII_RS_dim	lys_DASH_L(1)	M_protein_recon
 LYXK-CPLX_mod_mg2(1)	LYXK-CPLX	mg2(1)	M_protein_recon
 PDXK-CPLX_mod_zn2(1)	PDXK-CPLX	zn2(1)	M_protein_recon
 PDXK-CPLX_mod_mg2(1)	PDXK-CPLX	mg2(1)	M_protein_recon
