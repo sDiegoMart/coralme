@@ -1000,6 +1000,13 @@ class Organism(object):
                 'triggered_by':[g.id for g in wrong_assoc],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, then annotation from GenBank or BioCyc marked them as a different type'})
+            
+    def _get_ligases_from_regex(self,
+                                complexes_df):
+        return self._get_slice_from_regex(
+            complexes_df,
+            "[-]{,2}tRNA (?:synthetase|ligase)")
+        
     
     def get_trna_synthetase(self):
         if self.is_reference:
@@ -1014,6 +1021,7 @@ class Organism(object):
 
         org_amino_acid_trna_synthetase = self.amino_acid_trna_synthetase
         generic_dict = self.generic_dict
+        complexes_df = self.complexes_df
         d = {}
         for k,v in org_amino_acid_trna_synthetase.copy().items():
             if isinstance(v,list):
@@ -1023,18 +1031,16 @@ class Organism(object):
                     d[k] = set([v])
                 else:
                     d[k] = set()
-        proteins_df = self.proteins_df["Common-Name"].dropna()
-        trna_ligases = proteins_df[
-            proteins_df.str.contains(
-                "[-]{,2}tRNA (?:synthetase|ligase)(?!.*subunit.*)", regex=True
-            )
-        ].to_dict()
-        warn_ligases = []
+        trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']  
+        
         for cplx, trna_string in trna_ligases.items():
             aa = find_aminoacid(trna_string)
-            if aa:
-                d[aa].add(cplx)
-
+            if not aa: continue
+            
+            d[aa].add(cplx)
+        return d
+        
+        warn_ligases = []
         for aa,c_set in d.items():
             c_list = list(c_set)
             if len(c_list) == 1:
@@ -1164,18 +1170,18 @@ class Organism(object):
                         df,
                         regex,
                        ):
-        return df[df["name"].str.match(regex)].index.to_list()
+        return df[df["name"].str.contains(regex,regex=True)]
     def _get_complex_from_regex(self,
                                df,
                                cplx_regex,
                                subunit_regex=None):
         cplx = self._get_slice_from_regex(df,cplx_regex)
-        if cplx:
-            return cplx[0]
-        if not subunit_regex:
-            return None
+        if not cplx.empty and cplx.shape[0] == 1:
+            return cplx.iloc[[0],:],'cplx'
+        if subunit_regex is None:
+            return None,None
         subunits = self._get_slice_from_regex(df,subunit_regex)
-        return [g.split("-MONOMER")[0] for g in subunits if "-MONOMER" in g]
+        return subunits,'subunits'
     def _get_rna_polymerase_from_regex(self,
                                         complexes_df):
         return self._get_complex_from_regex(
@@ -1204,21 +1210,22 @@ class Organism(object):
             RNAP = force_RNAP_as
         else:
             complexes_df = self.complexes_df
-            RNAP = self._get_rna_polymerase_from_regex(complexes_df)
+            RNAP,flag = self._get_rna_polymerase_from_regex(complexes_df)
             if RNAP is None:
                 RNAP = random.choice(complexes_df.index)
                 self.curation_notes['org.get_rna_polymerase'].append({
                     'msg':"Could not identify RNA polymerase".format(RNAP),
                     'importance':'critical',
                     'to_do':'Find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
-            elif isinstance(RNAP,str):
+            elif flag == 'cplx':
+                RNAP = RNAP.index[0]
                 # Warnings
                 self.curation_notes['org.get_rna_polymerase'].append({
                     'msg':"{} was identified as RNA polymerase".format(RNAP),
                     'importance':'high',
                     'to_do':'Check whether you need to correct RNAP by running me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
-            elif isinstance(RNAP,list):
-                RNAP_genes = RNAP
+            elif flag == 'subunits':
+                RNAP_genes = [g.split("-MONOMER")[0] for g in RNAP.index if "-MONOMER" in g]
                 RNAP = 'RNAP-CPLX'
                 complexes_df = self._add_rna_polymerase_to_complexes(complexes_df,
                                                                     RNAP_genes)
@@ -1241,7 +1248,6 @@ class Organism(object):
                 "polymerase": self.RNAP,
             }
         self.rna_polymerases = list(self.rna_polymerase_id_by_sigma_factor.keys())
-        return RNAP
 
     def get_TU_genes(self):
         TUs = self.TUs
