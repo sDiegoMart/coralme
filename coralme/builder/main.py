@@ -2041,7 +2041,7 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 9: Update ME-model, prune reactions and save
 		me.update()
-		#me.prune()
+		me.prune()
 
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)

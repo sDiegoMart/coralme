@@ -694,16 +694,21 @@ class MEModel(cobra.core.model.Model):
 			for rxn in m.reactions:
 				if rxn.metabolites[m] < 0 and not rxn.id.startswith('DM_'):
 					delete = False
-			if delete:
+			if delete and self.reactions.has_id('DM_' + m.id):
+				#try:
+					#WARNING: for some reason, m._model returns None and the try/except fails at m.remove_from_model
+					#self.reactions.get_by_id('DM_' + m.id).remove_from_model(remove_orphans = True)
+					#if m in self.metabolites:
+						#Defaults to subtractive when removing reaction
+						#m.remove_from_model(destructive = False)
+				#except KeyError:
+					#pass
+				self.reactions.get_by_id('DM_' + m.id).remove_from_model(remove_orphans = True)
 				try:
-					self.reactions.get_by_id('DM_' + m.id).remove_from_model(remove_orphans = True)
-					if m in self.metabolites:
-						# Defaults to subtractive when removing reaction
-						m.remove_from_model()
-				except KeyError:
+					m.remove_from_model(destructive = False)
+				except AttributeError:
 					pass
-				else:
-					removed_rna.add(m.id)
+				removed_rna.add(m.id)
 
 		for t in tqdm.tqdm(self.reactions.query('transcription_TU'), 'Pruning unnecessary Transcriptional Units...', bar_format = bar_format):
 			if t.id in skip:
