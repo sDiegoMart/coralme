@@ -18,7 +18,7 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 
 	# get all features
 	lst = [ x for y in [ x.features for x in contigs ] for x in y ]
-	lst = [ x for x in lst if x.type in [ 'CDS', 'ncRNA', 'tRNA', 'rRNA', 'tmRNA' ] ]
+	lst = [ x for x in lst if x.type in [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'misc_RNA' ] ]
 
 	# create a pandas DataFrame with organism-specific information to be completed with the builder data
 	df = pandas.DataFrame(columns = [
@@ -146,7 +146,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	df['genes'] = df['genes'].str.split(' AND ')
 	df = df.explode('genes')
 	df['stoich'] = df['genes'].apply(lambda x: '1' if x.split('(')[1][:-1] == '' else str(x.split('(')[1][:-1]))
-	df['genes'] = df['genes'].apply(lambda x: x.split('(')[0])
+	df['genes'] = df['genes'].apply(lambda x: x.split('(')[0].replace('-MONOMER', ''))
 	df.index = df.index + ':' + df['stoich']
 
 	def complexes(x, df):
@@ -377,10 +377,13 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data.apply(lambda x: location(x, df), axis = 1))
 	data = data.explode('Complex Location')
 
-	# Filter in wrong enzyme-reaction associations
+	# Filter in inferred enzyme-reaction associations
 	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
 	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	cplxs = [ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ]
+	cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
+	# add complexes inferred from tRNA synthetases
+	dct = builder.org.amino_acid_trna_synthetase
+	cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
 
 	# this dataframe contains only genes associated to a M-model reaction
 	tmp1 = data.copy(deep = True).reset_index(drop = True)

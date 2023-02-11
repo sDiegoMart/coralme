@@ -428,6 +428,9 @@ def build_reactions_from_genbank(
 	from collections import Counter
 	codon_usage = Counter()
 
+	# New Gene Locus ID
+	new_locus_tag_counter = 1
+
 	# Associate each feature (RNA_product) with a TU and add translation reactions and demands
 	for contig in contigs:
 		for feature in tqdm.tqdm(contig.features, 'Adding features from contig {:s} into the ME-model...'.format(contig.id), bar_format = bar_format):
@@ -446,13 +449,24 @@ def build_reactions_from_genbank(
 
 			# Some features might lack a locus tag
 			if not feature.qualifiers.get(me_model.global_info.get('locus_tag', 'locus_tag'), False):
-				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}. The gene is ignored from the reconstruction.'.format(feature.id, feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
-				continue
+				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}.'.format(feature.qualifiers.get('product', ['\'no product name\''])[0], feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
+				filter1 = feature.qualifiers.get('gene', ['\'no product name\''])[0].startswith('tRNA-')
+				filter2 = feature.qualifiers.get('product', ['\'no product name\''])[0].startswith('tRNA-')
+				if filter1 or filter2:
+					feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')] = new_locus_tag = ['CORALME_{:03d}'.format(new_locus_tag_counter)]
+					logging.warning('The feature was identified as a tRNA and assigned the Gene Locus ID \'{:s}\'.'.format(new_locus_tag[0]))
+					new_locus_tag_counter += 1
+				else:
+					logging.warning('The gene identified will be ignored from the reconstruction.')
+					continue
 
 			# Skip feature if it is not a gene used in the ME-model reconstruction
-			filter1 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] in knockouts
-			filter2 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] not in genes_to_add
-			if filter1 or filter2:
+			filter1 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0].startswith('CORALME_')
+			filter2 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] in knockouts
+			filter3 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] not in genes_to_add
+			if filter1:
+				pass
+			elif filter2 or filter3:
 				continue
 
 			# Assign values for all important gene attributes
@@ -526,10 +540,10 @@ def build_reactions_from_genbank(
 			msg1 = 'From the tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
 			msg2 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). No further modification needs to take place.'
 
-			canonical_aa = ['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']
+			canonical_aas = ['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']
 			if rna_type == 'tRNA':
 				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
-				if aa in canonical_aa + ['Asx', 'Glx', 'fMet', 'Sec']:
+				if aa in canonical_aas + ['Asx', 'Glx', 'fMet', 'Sec']:
 					pass
 				else:
 					logging.warning('The tRNA \'{:s}\' is not associated to a valid product name (tRNA-Amino acid 3 letters code)'.format(bnum))
@@ -652,7 +666,7 @@ def build_reactions_from_genbank(
 		df = pandas.concat([aa2codons, aa2trna[organelle]], axis = 1).dropna(how = 'any').explode(1)
 
 		# Check amino acids
-		for aa in canonical_aa:
+		for aa in canonical_aas:
 			if aa in aa2trna[organelle].index:
 				pass
 			else:
