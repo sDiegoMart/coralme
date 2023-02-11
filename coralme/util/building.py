@@ -446,7 +446,7 @@ def build_reactions_from_genbank(
 
 			# Some features might lack a locus tag
 			if not feature.qualifiers.get(me_model.global_info.get('locus_tag', 'locus_tag'), False):
-				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}. The gene is ignored from the reconstruction.'.format(feature.id, feature.type, str(feature.location), me_model.global_info['locus_tag']))
+				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}. The gene is ignored from the reconstruction.'.format(feature.id, feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
 				continue
 
 			# Skip feature if it is not a gene used in the ME-model reconstruction
