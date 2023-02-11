@@ -230,6 +230,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 	return None
 
 def build_reactions_from_genbank(
+	# TODO: DO WE NEED TO EXTEND FEATURE TYPES TO MATCH ORGANISM? {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
 	me_model, gb_filename, tu_frame = pandas.DataFrame(columns = ['genes']), genes_to_add = list(),
 	feature_types = [ 'CDS', 'rRNA', 'tRNA', 'ncRNA' ], update = True, verbose = True,
 	trna_misacylation = dict(), genome_mods = dict(), knockouts = list()):

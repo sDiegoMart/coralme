@@ -947,7 +947,6 @@ class Organism(object):
         if self.is_reference:
             return
 
-        # TODO: DO WE NEED TO FILTER BY ELEMENT_TYPES? WHY NOT PROCESS THEM ALL?
         # In some genbanks, CDS are duplicated with gene features. See staph or pputida
         element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
         complexes_df = self.complexes_df
@@ -1751,6 +1750,15 @@ class Organism(object):
         self._check_for_duplicates_within_datasets(info)
         dup_df = self._check_for_duplicates_between_datasets(info)
         self._solve_duplicates_between_datasets(dup_df)
+        
+#     def check_for_duplicates_in_genbank(self):
+#         contigs = self.contigs
+#         for record in self.contigs:
+#             for feature in record.features:
+#                 if self.locus_tag not in feature.qualifiers:
+#                     continue
+                
+                
 
     def generate_curation_notes(self):
         import json
