@@ -179,7 +179,6 @@ class Organism(object):
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
         
-        # TODO: Check for duplicates in genbank. CDIFF breaks because of CD630_05040
         logging.warning('Pruning genbank from unwanted feature types')
         self.prune_genbank()
         
