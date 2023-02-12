@@ -231,7 +231,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 
 def build_reactions_from_genbank(
 	me_model, gb_filename, tu_frame = pandas.DataFrame(columns = ['genes']), genes_to_add = list(),
-	feature_types = [ 'CDS', 'rRNA', 'tRNA', 'ncRNA' ], update = True, verbose = True,
+	feature_types = [ 'CDS', 'rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'misc_RNA' ], update = True, verbose = True,
 	trna_misacylation = dict(), genome_mods = dict(), knockouts = list()):
 	# trna_to_codon = dict(), frameshift_dict = None, # not needed anymore
 
@@ -449,7 +449,7 @@ def build_reactions_from_genbank(
 
 			# Some features might lack a locus tag
 			if not feature.qualifiers.get(me_model.global_info.get('locus_tag', 'locus_tag'), False):
-				logging.warning('The feature {:s} of type \'{:s}\', located at \'{:s}\' misses a {:s}.'.format(feature.qualifiers.get('product', ['\'no product name\''])[0], feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
+				logging.warning('The feature \'{:s}\' of type \'{:s}\', located at \'{:s}\' misses a \'{:s}\' qualifier.'.format(feature.qualifiers.get('product', ['\'no product name\''])[0], feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
 				filter1 = feature.qualifiers.get('gene', ['\'no product name\''])[0].startswith('tRNA-')
 				filter2 = feature.qualifiers.get('product', ['\'no product name\''])[0].startswith('tRNA-')
 				if filter1 or filter2:
@@ -460,17 +460,21 @@ def build_reactions_from_genbank(
 					logging.warning('The gene identified will be ignored from the reconstruction.')
 					continue
 
+			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
+			if me_model.process_data.has_id(bnum):
+				logging.warning('A gene with a Gene Locus ID \'{:s}\' was added previously. Please, check the GenBank file and correct it accordingly.'.format(bnum))
+				continue
+
 			# Skip feature if it is not a gene used in the ME-model reconstruction
-			filter1 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0].startswith('CORALME_')
-			filter2 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] in knockouts
-			filter3 = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0] not in genes_to_add
+			filter1 = bnum.startswith('CORALME_')
+			filter2 = bnum in knockouts
+			filter3 = bnum not in genes_to_add
 			if filter1:
 				pass
 			elif filter2 or filter3:
 				continue
 
 			# Assign values for all important gene attributes
-			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
 			# old code cannot consider if genes are split
 			#left_pos = int(feature.location.start)
 			#right_pos = int(feature.location.end)
