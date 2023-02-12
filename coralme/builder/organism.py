@@ -28,6 +28,7 @@ bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{e
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
 # Inherit from logging.Handler
+element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
 
 class Organism(object):
     """Organism class for storing information about an organism
@@ -181,6 +182,7 @@ class Organism(object):
         # TODO: Check for duplicates in genbank. CDIFF breaks because of CD630_05040
         logging.warning('Pruning genbank from unwanted feature types')
         self.prune_genbank()
+        
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
 
@@ -558,8 +560,10 @@ class Organism(object):
                 if product not in df.index:
                     warn.append(gene_id)
                     return None
-                return df.loc[product][col]
-        return product
+                product_name = df.loc[product][col]
+                if not product_name:
+                    return product_name if product_name else None
+        return product if product else None
 
     def _read_product_type(self,
                            gene_id,
@@ -624,9 +628,8 @@ class Organism(object):
                      row,
                      contigs,
                      gene_sequences)
-
         with open(self.directory + 'genome_modified.gb', 'w') as outfile:
-            for contig in contigs:
+            for contig in self.contigs:
                 Bio.SeqIO.write(contig, outfile, 'genbank')
         # Warnings
         if warn_rnas:
@@ -975,7 +978,6 @@ class Organism(object):
             return
 
         # In some genbanks, CDS are duplicated with gene features. See staph or pputida
-        element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
@@ -1656,7 +1658,7 @@ class Organism(object):
         if lt is not None:
             return lt[0]
         lt = feature.qualifiers.get('locus_tag',None)
-        return lt[0]
+        return lt[0] if lt is not None else None
 
     def _map_to_a_generic(self,
                           feature,
@@ -1780,11 +1782,26 @@ class Organism(object):
         
     def prune_genbank(self):
         contigs = self.contigs
-        for record in self.contigs:
-            for feature in record.features:
-                if self.locus_tag not in feature.qualifiers:
+        new_contigs = []
+        for contig in tqdm.tqdm(contigs,
+                           'Pruning GenBank...',
+                           bar_format = bar_format):
+            new_contig = \
+                self._create_genbank_contig(
+                               contig.id,
+                               contig.seq,
+                               contig.name,
+                               contig.description,
+                               'GenBank')
+            new_contig.features = []
+            for feature in contig.features:
+                if feature.type != 'source' and \
+                        feature.type != 'gene' and \
+                        feature.type not in element_types:
                     continue
-                
+                new_contig.features.append(feature)
+            new_contigs.append(new_contig)
+        self.contigs = new_contigs
                 
 
     def generate_curation_notes(self):
