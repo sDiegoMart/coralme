@@ -167,7 +167,6 @@ class Organism(object):
         self.check_m_model()
         logging.warning("Loading genbank file")
         self.get_genbank_contigs()
-        # TODO: Check for duplicates in genbank. CDIFF breaks because of CD630_05040
         logging.warning("Loading optional files")
         self.load_optional_files()
         logging.warning("Checking gene overlap")
@@ -180,6 +179,7 @@ class Organism(object):
         self.check_for_duplicates()
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
+        # TODO: Check for duplicates in genbank. CDIFF breaks because of CD630_05040
         logging.warning("Updating genes and complexes from genbank")
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
