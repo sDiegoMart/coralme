@@ -1784,6 +1784,7 @@ class Organism(object):
         self._solve_duplicates_between_datasets(dup_df)
         
     def prune_genbank(self):
+        # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
         new_contigs = []
         for contig in tqdm.tqdm(contigs,
