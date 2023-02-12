@@ -561,8 +561,7 @@ class Organism(object):
                     warn.append(gene_id)
                     return None
                 product_name = df.loc[product][col]
-                if not product_name:
-                    return product_name if product_name else None
+                return product_name if product_name else None
         return product if product else None
 
     def _read_product_type(self,
