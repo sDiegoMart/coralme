@@ -1663,7 +1663,11 @@ class Organism(object):
     def _map_to_a_generic(self,
                           feature,
                           generic_dict):
-        gene = "RNA_" + self._get_feature_locus_tag(feature)
+        gene_id = self._get_feature_locus_tag(feature)
+        if gene_id is None:
+            logging.warning('Could not get {} of a feature at location {}'.format(feature.location))
+            return
+        gene = "RNA_" + gene_id
         if any("5S" in i for i in feature.qualifiers["product"]):
             cat = "generic_5s_rRNAs"
         elif any("16S" in i for i in feature.qualifiers["product"]):
