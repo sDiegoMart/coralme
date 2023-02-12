@@ -1785,6 +1785,7 @@ class Organism(object):
     def prune_genbank(self):
         # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
+        exclude_prune_types = list(element_types) + ['source','gene']
         new_contigs = []
         for contig in tqdm.tqdm(contigs,
                            'Pruning GenBank...',
@@ -1798,11 +1799,12 @@ class Organism(object):
                                'GenBank')
             new_contig.features = []
             for feature in contig.features:
-                if feature.type != 'source' and \
-                        feature.type != 'gene' and \
-                        feature.type not in element_types:
+                if feature.type not in exclude_prune_types:
                     continue
                 new_contig.features.append(feature)
+            if len(new_contig.features) <= 1: 
+                # only source, no feature
+                continue
             new_contigs.append(new_contig)
         self.contigs = new_contigs
                 
