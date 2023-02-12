@@ -200,12 +200,10 @@ class MEBuilder(object):
 # 		self.org.generate_metabolites_file()
 
 # 		# #### Reactions
-# 		# TODO: ARE WE GOING TO USE THIS ANYMORE?
 # 		logging.warning("Generating reactions file")
 # 		self.org.generate_reactions_file()
 
 # 		# #### Reaction matrix
-# 		# TODO: ARE WE GOING TO USE THIS ANYMORE?
 # 		logging.warning("Generating reaction matrix file")
 # 		self.org.generate_reaction_matrix()
 
@@ -1984,7 +1982,7 @@ class MEReconstruction(MEBuilder):
 		# ## Part 7: Set keffs
 		# Either entirely based on SASA or using fit keffs from [Ebrahim et al 2016](https://www.ncbi.nlm.nih.gov/pubmed/27782110?dopt=Abstract)
 
-		#TO DO: Reincorporate here Keff rescaling from SASA (already in BACILLUSme and PPUTIDAme)
+		#TODO: Reincorporate here Keff rescaling from SASA (already in BACILLUSme and PPUTIDAme)
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
