@@ -177,9 +177,13 @@ class Organism(object):
         self.sync_files()
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
+        
+        # TODO: Check for duplicates in genbank. CDIFF breaks because of CD630_05040
+        logging.warning('Pruning genbank from unwanted feature types')
+        self.prune_genbank()
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
-        # TODO: Check for duplicates in genbank. CDIFF breaks because of CD630_05040
+
         logging.warning("Updating genes and complexes from genbank")
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
@@ -215,8 +219,6 @@ class Organism(object):
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
 
-#         logging.warning("Replicon check")
-#         self.final_replicon_checks()
         logging.warning("Purging genes in M-model")
         self.purge_genes_in_model()
 
@@ -475,6 +477,43 @@ class Organism(object):
                                 'importance':'medium',
                                 'to_do':'Manually fill the products (with types) of these genes in genes.txt'
             })
+            
+    def _create_genbank_contig(self,
+                               contig_id,
+                               seq,
+                               name,
+                               description,
+                               source):
+        from Bio.SeqRecord import SeqRecord
+        from Bio.SeqFeature import SeqFeature, ExactPosition, SimpleLocation
+        new_contig = SeqRecord(seq=seq,
+                              id = contig_id,
+                              name = name,
+                              description = description,
+                              annotations = {
+                                  'molecule_type' : 'DNA'
+                              })
+        
+        new_contig.features = [SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(seq))),
+                              type='source',
+                              id = contig_id,
+                              qualifiers = {'note':'Added from {}'.format(source)})]
+        return new_contig
+    
+    def _create_contig_feature(self,
+                                gene_id,
+                                seq,
+                                strand,
+                                feature_type,
+                                product_name):
+        from Bio.SeqFeature import SeqFeature, ExactPosition, SimpleLocation
+        return SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(seq)),strand),
+                      type=feature_type,
+                      id = gene_id,
+                      qualifiers = {
+                          self.locus_tag:[gene_id],
+                          'product':[product_name]
+                      })
 
     def _add_entry_to_genbank(self,
                              gene_id,
@@ -488,34 +527,22 @@ class Organism(object):
             gene_id = '{};{}'.format(gene_id,gene_name)
         logging.warning('Adding {} to genbank file as {}'.format(gene_id,product_type))
         from Bio.SeqFeature import SeqFeature, CompoundLocation, ExactPosition, FeatureLocation, SimpleLocation
-        from Bio.SeqRecord import SeqRecord
         gene_seq = gene_sequences[gene_name]
         gene_left = int(row['Left-End-Position'])
         gene_right = int(row['Right-End-Position'])
-        new_contig = SeqRecord(seq=gene_seq.seq,
-                              #id = 'contig-{}'.format(gene_id),
-                              id = '{}'.format(gene_id),
-                              name = gene_seq.name,
-                              description = gene_seq.description,
-                              annotations = {
-                                  'molecule_type' : 'DNA'
-                              })
+        
+        new_contig = self._create_genbank_contig('{}'.format(gene_id),
+                                                 gene_seq.seq,
+                                                 gene_seq.name,
+                                                 gene_seq.description,
+                                                 'BioCyc')
+        feature = self._create_contig_feature(gene_id,
+                                               gene_seq.seq,
+                                               1 if gene_left < gene_right else -1,
+                                               product_type,
+                                               product_name)
 
-        feature0 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq))),
-                              type='source',
-                              #id = 'contig-{}'.format(gene_id),
-                              id = '{}'.format(gene_id),
-                              qualifiers = {'note':'Added from BioCyc'})
-        feature1 = SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(gene_seq.seq)),strand = 1 if gene_left < gene_right else -1),
-                              type=product_type,
-                              id = gene_id,
-                              #strand = 1 if gene_left < gene_right else -1,
-                              qualifiers = {
-                                  self.locus_tag:[gene_id],
-                                  'product':[product_name]
-                              })
-
-        new_contig.features = [feature0] + [feature1]
+        new_contig.features += [feature]
         contigs.append(new_contig)
 
     def _get_product_name_if_present(self,
@@ -1751,12 +1778,12 @@ class Organism(object):
         dup_df = self._check_for_duplicates_between_datasets(info)
         self._solve_duplicates_between_datasets(dup_df)
         
-#     def check_for_duplicates_in_genbank(self):
-#         contigs = self.contigs
-#         for record in self.contigs:
-#             for feature in record.features:
-#                 if self.locus_tag not in feature.qualifiers:
-#                     continue
+    def prune_genbank(self):
+        contigs = self.contigs
+        for record in self.contigs:
+            for feature in record.features:
+                if self.locus_tag not in feature.qualifiers:
+                    continue
                 
                 
 
@@ -1785,9 +1812,3 @@ class Organism(object):
                 file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
             file.write('\n\n')
         file.close()
-
-#     def final_replicon_checks(self):
-#         if self.is_reference:
-#             return
-#         self.gene_dictionary = self.gene_dictionary[self.gene_dictionary["replicon"] != '']
-#         self.TU_df = self.TU_df[~self.TU_df["replicon"].isna()]
