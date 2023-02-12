@@ -2253,5 +2253,6 @@ class METroubleshooter(object):
 			print('\nME-model was saved in the {:s} directory as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.configuration['out_directory'], self.me_model.id))
 		else:
 			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
-		self.builder.org.generate_curation_notes()
+		# TODO: Update curation notes with ts
+# 		self.builder.org.generate_curation_notes()
 		return None
