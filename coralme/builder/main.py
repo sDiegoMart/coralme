@@ -452,7 +452,7 @@ class MEBuilder(object):
 							org_complexes_df = pandas.concat([org_complexes_df, tmp], axis = 0, join = 'outer')
 					if cplx_id in protein_mod["Core_enzyme"].values:
 						cplx_id = protein_mod[
-							protein_mod["Core_enzyme"].str.contains(cplx_id)
+							protein_mod["Core_enzyme"].eq(cplx_id)
 						].index[0]
 						if "Oxidized" in cplx_id:
 							cplx_id = cplx_id.split("_mod_Oxidized")[0]
