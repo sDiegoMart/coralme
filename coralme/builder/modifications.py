@@ -81,7 +81,9 @@ def add_biotin_modifications(me_model):
 	return None
 
 def add_FeFe_and_NiFe_modifications(me_model):
-	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe_complexes']
+	# TO DO: This is buggy. Error with E. coli.
+	return
+	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe']
 
 	for mod, base_complex in fefe_and_nife_modifications.items():
 		for data in me_model.process_data.get_by_id(mod).get_complex_data():
