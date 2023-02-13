@@ -172,6 +172,8 @@ def concatenate_graphs(L,r=[]):
 
 def get_graph(T,G={}):
 	if isinstance(T,str):
+		if T in G:
+			T = T + '_REPETITIONMARK_' + str(len(G)) 
 		G[T] = '$'
 		return G
 	elif isinstance(T,dict):
@@ -182,6 +184,8 @@ def get_graph(T,G={}):
 				l.append(get_graph(i,d))
 			d = concatenate_graphs(l)
 			for k,v in d.items():
+				if k in G:
+					k = k + '_REPETITIONMARK_' + str(len(G))
 				G[k] = v
 			return G
 		elif 'or' in T:
@@ -195,6 +199,7 @@ def traverse_graph(G,L = [], C = []):
 		return L,C
 	if isinstance(G,dict):
 		for k,v in G.items():
+			k = k.split('_REPETITIONMARK_')[0]
 			l = L + [k]
 			l,C = traverse_graph(v,l,C)
 		return L,C
