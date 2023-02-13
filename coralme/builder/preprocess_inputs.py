@@ -222,81 +222,98 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data = data.explode('Generic Complex ID')
 
 	# ME-model metacomplexes (e.g., ribosome)
-	def rnapol(x, lst):
-		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
+	def get_rnapol(x, lst):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst:
+			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst:
 				return 'RNAP'
 
-	def ribosome(x, lst):
-		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
+	lst = builder.org.RNAP if isinstance(builder.org.RNAP, list) else [builder.org.RNAP]
+	lst += list(builder.org.sigmas.index)
+	data['MetaComplex ID'] = data.apply(lambda x: get_rnapol(x, lst), axis = 1)
+
+	def get_ribosome(x, lst):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst or 'generic_{:s}'.format(tag) in lst:
+			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 				return 'ribosome:1'
 
-	def degradosome(x, lst):
-		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
+	lst = [ x for y in [builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']] for x in y ]
+	data['MetaComplex ID'].update(data.apply(lambda x: get_ribosome(x, lst), axis = 1))
+
+	def get_degradosome(x, lst):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst:
+			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst:
 				return 'RNA_degradosome:1'
 
-	def excision(x, dct):
+	lst = [ x.split('_mod_')[0] for x in builder.org.rna_degradosome['rna_degradosome']['enzymes'] ]
+	data['MetaComplex ID'].update(data.apply(lambda x: get_degradosome(x, lst), axis = 1))
+
+	def get_excision(x, dct):
 		subrxns = []
 		for key, lst in dct.items():
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
+			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or 'generic_{:s}'.format(tag) in lst:
+				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 					subrxns.append(key + ':1')
 		if len(subrxns) != 0:
 			return subrxns
 
-	def transpaths(x, dct):
-		pathways = []
+	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
+	data['MetaComplex ID'].update(data.apply(lambda x: get_excision(x, dct), axis = 1))
+
+	def get_trna_modifiers(x, dct):
+		subrxns = []
 		for key, lst in dct.items():
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
+			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or 'generic_{:s}'.format(tag) in lst:
+				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+					subrxns.append(key + ':1')
+		if len(subrxns) != 0:
+			return subrxns
+
+	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.trna_modification.items() }
+	data['MetaComplex ID'].update(data.apply(lambda x: get_trna_modifiers(x, dct), axis = 1))
+
+	def get_transpaths(x, dct):
+		pathways = []
+		for key, lst in dct.items():
+			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
+			tags = [ str(x).split(';') for x in tags ]
+			for tag in [ x for y in tags for x in y ]:
+				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 					pathways.append('translocation_pathway_' + key)
 		if len(pathways) != 0:
 			return pathways
 
-	lst = builder.org.RNAP if isinstance(builder.org.RNAP, list) else [builder.org.RNAP]
-	lst += list(builder.org.sigmas.index)
-	data['MetaComplex ID'] = data.apply(lambda x: rnapol(x, lst), axis = 1)
-
-	lst = [ x for y in [builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']] for x in y ]
-	data['MetaComplex ID'].update(data.apply(lambda x: ribosome(x, lst), axis = 1))
-
-	lst = [ x.split('_mod_')[0] for x in builder.org.rna_degradosome['rna_degradosome']['enzymes'] ]
-	data['MetaComplex ID'].update(data.apply(lambda x: degradosome(x, lst), axis = 1))
-
-	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
-	data['MetaComplex ID'].update(data.apply(lambda x: excision(x, dct), axis = 1))
-
 	dct = { k:list(v['enzymes'].keys()) for k,v in builder.org.translocation_pathways.items() if len(v['enzymes']) != 0 }
-	data['MetaComplex ID'].update(data.apply(lambda x: transpaths(x, dct), axis = 1))
+	data['MetaComplex ID'].update(data.apply(lambda x: get_transpaths(x, dct), axis = 1))
 	data = data.explode('MetaComplex ID')
 
 	# ME-model subreactions
 	def ribosome_subrxns(x, dct):
 		for key, lst in dct.items():
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
+			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or 'generic_{:s}'.format(tag) in lst:
+				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 					return 'Ribosome_' + key
+
+	dct = { k:[ x.split('_mod_')[0] for x in [v['enzyme']] ] for k,v in builder.org.ribosome_subreactions.items() }
+	data['ME-model SubReaction'] = data.apply(lambda x: ribosome_subrxns(x, dct), axis = 1)
 
 	def translation_subrxns(x, dct):
 		for key, lst in dct.items():
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
+			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or 'generic_{:s}'.format(tag) in lst:
+				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 					if key.endswith('InfA') or key.endswith('InfC'):
 						return key
 					elif key.endswith('InfB'):
@@ -318,24 +335,21 @@ def complete_organism_specific_matrix(builder, data, model, output):
 					else:
 						return 'Translation_termination_' + key
 
-	def transcription_subrxns(x, dct):
-		subrxns = []
-		for key, lst in dct.items():
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
-			tags = [ str(x).split(';') for x in tags ]
-			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or 'generic_{:s}'.format(tag) in lst:
-					subrxns.append(key)
-		if len(subrxns) != 0:
-			return subrxns
-
-	dct = { k:[ x.split('_mod_')[0] for x in [v['enzyme']] ] for k,v in builder.org.ribosome_subreactions.items() }
-	data['ME-model SubReaction'] = data.apply(lambda x: ribosome_subrxns(x, dct), axis = 1)
-
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.initiation_subreactions.items() }
 	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.elongation_subreactions.items() })
 	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.termination_subreactions.items() })
 	data['ME-model SubReaction'].update(data.apply(lambda x: translation_subrxns(x, dct), axis = 1))
+
+	def transcription_subrxns(x, dct):
+		subrxns = []
+		for key, lst in dct.items():
+			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
+			tags = [ str(x).split(';') for x in tags ]
+			for tag in [ x for y in tags for x in y ]:
+				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+					subrxns.append(key)
+		if len(subrxns) != 0:
+			return subrxns
 
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.transcription_subreactions.items() }
 	data['ME-model SubReaction'].update(data.apply(lambda x: transcription_subrxns(x, dct), axis = 1))
@@ -412,7 +426,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
 
 	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
-	#data = data.drop_duplicates(inplace = False) # Is it correctly detecting duplicates when strings contain ()?
+	#data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
 
 	def _save_to_excel(data, output):
 		#if overwrite:
@@ -449,7 +463,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 		# GPRs can expand the model specifications beyond the max size of an excel file (1048576 rows)
 		if data.shape[0] > 1048575: # one less to accommodate the header
 			# Divide the DataFrame into pieces and save them
-			rxn_ids = data.groupby(['M-model Reaction ID'], dropna = True).size() # Anything with 1 or more ocurrences
+			rxn_ids = data.groupby(['M-model Reaction ID'], dropna = True).size() # Anything with 1 or more occurrences
 
 			gene_ids = data[data['M-model Reaction ID'].isin(rxn_ids[rxn_ids < 1000].index)]['Gene Locus ID']
 			tmp = pandas.concat([ data[data['Gene Locus ID'].isin(gene_ids)], data[data['M-model Reaction ID'].isna()]], axis = 1)
@@ -779,7 +793,7 @@ def get_df_input_from_excel(df, df_rxns):
 		'RNA mods/enzyme'
 		]
 
-	tmp1 = df[df['Feature Type'].str.match('CDS')].dropna(subset = lst, how = 'all', axis = 0)
+	tmp1 = df[df['Feature Type'].str.match('CDS')]#.dropna(subset = lst, how = 'all', axis = 0)
 	tmp2 = df[df['Feature Type'].isin(['rRNA', 'tRNA', 'ncRNA', 'tmRNA', 'misc_RNA', 'pseudo'])]
 	df = pandas.concat([tmp1, tmp2], axis = 0).drop_duplicates()
 	df = df.fillna({

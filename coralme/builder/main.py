@@ -61,7 +61,7 @@ class MEBuilder(object):
 		if kwargs:
 			config.update(kwargs)
 
-		self.me_model = coralme.core.model.MEModel(config.get('model_id', 'coralME'), config.get('growth_key', 'mu'))
+		self.me_model = coralme.core.model.MEModel(config.get('ME-Model-ID', 'coralME'), config.get('growth_key', 'mu'))
 		self.configuration = config
 		self.curation_notes = { 'builder' : [], 'reconstruction' : [], 'troubleshoot' : [] }
 		self.logger = {
@@ -102,7 +102,7 @@ class MEBuilder(object):
 		logging.basicConfig(
 			filename = '{:s}/MEBuilder-{:s}.log'.format(
 				config.get('log_directory','.'),
-				config.get('model_id','coralME')),
+				config.get('ME-Model-ID','coralME')),
 			filemode = 'w',
 			level = logging.WARNING,
 			format = log_format)
@@ -231,7 +231,7 @@ class MEBuilder(object):
 		print("{}File processing done...".format(sep))
 
 		# We will remove duplicates entries in the log output
-		with open('{:s}/MEBuilder-{:s}.log'.format(config.get('log_directory', '.'), config.get('model_id', 'coralME')), 'w') as outfile:
+		with open('{:s}/MEBuilder-{:s}.log'.format(config.get('log_directory', '.'), config.get('ME-Model-ID', 'coralME')), 'w') as outfile:
 			logger = self.logger['MEBuilder'].log_list
 
 			tmp = pandas.DataFrame(logger)
@@ -1342,7 +1342,7 @@ class MEReconstruction(MEBuilder):
 
 	def build_me_model(self, overwrite = False):
 		config = self.configuration
-		model = config.get('model_id', 'coralME')
+		model = config.get('ME-Model-ID', 'coralME')
 
 		directory = config.get('log_directory', '.')
 		#if overwrite and os.path.exists(directory):

@@ -17,7 +17,7 @@ def _update(MEReaction):
 	return None
 
 class MEModel(cobra.core.model.Model):
-	def __init__(self, name, mu = 'mu'):
+	def __init__(self, name = 'coralME', mu = 'mu'):
 		cobra.Model.__init__(self, name)
 
 		self.global_info = {
@@ -221,6 +221,15 @@ class MEModel(cobra.core.model.Model):
 		protein
 		"""
 		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default/user value
+
+	#TODO: set me.genes with [ x.id.split('RNA_')[1] for x in builder.me_model.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')) ]
+	#@property
+	#def me_genes(self):
+		#return self._me_genes
+
+	#@me_genes.setter
+	#def me_genes(self, values):
+		#self._me_genes = values
 
 	# WARNING: MODIFIED FUNCTIONS FROM COBRAPY
 	def add_metabolites(self, metabolite_list):

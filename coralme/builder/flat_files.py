@@ -151,6 +151,8 @@ def process_m_model(
 	#m_model.remove_reactions([ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix ])
 	rxns_to_remove = [ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix if m_model.reactions.has_id(rxn) ]
 	m_model.remove_reactions(rxns_to_remove)
+	mets_to_remove = [ m for m in m_model.metabolites if len(m.reactions) == 0 ]
+	m_model.remove_metabolites(mets_to_remove)
 
 	# met_data DataFrame
 	mets_data = mets_data[mets_data['type'].isin(['ADD', 'REPLACE'])]
@@ -240,7 +242,7 @@ def process_m_model(
 		met_obj.name = m_to_me_map.loc[m_met_id, 'name']
 		met_obj.formula = m_to_me_map.loc[m_met_id, 'formula'] if m_to_me_map.loc[m_met_id, 'formula'] != '' else None
 		met_obj.compartment = m_met_id.split('_')[-1]
-		# This "fails" silently if the met_obj ID already exists
+		# WARNING: This "fails" silently if the met_obj ID already exists
 		m_model.add_metabolites([met_obj])
 
 	if repair:

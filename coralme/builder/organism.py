@@ -14,7 +14,7 @@ import tqdm
 import coralme
 from coralme.builder import dictionaries
 
-from coralme.builder.curation import MEManualCuration,MECurator
+from coralme.builder.curation import MEManualCuration, MECurator
 
 import warnings
 try:
@@ -60,7 +60,7 @@ class Organism(object):
             else:
                 self.id = 'iJL1678b'
         else:
-            self.id = config['model_id']
+            self.id = config['ME-Model-ID']
 
 
         self.is_reference = is_reference
@@ -134,6 +134,7 @@ class Organism(object):
             filename = self.directory + "TUs_from_biocyc.txt"
         else:
             filename = self.config.get('df_TranscriptionalUnits', self.directory + "TUs_from_biocyc.txt")
+
         if os.path.isfile(filename) and (not self.config.get('overwrite', True) or self.is_reference):
             tmp = pandas.read_csv(filename, index_col = 0, sep = "\t")
             tmp = tmp.dropna(subset=['start', 'stop'], how = 'any')
@@ -143,7 +144,11 @@ class Organism(object):
 
     @property
     def _m_model(self):
-        model = self.config['m-model-path']
+        if self.is_reference:
+            model = self.directory + 'm_model.json'
+        else:
+            model = self.config['m-model-path']
+
         if model.endswith('.json'):
             return cobra.io.load_json_model(model)
         elif model.endswith('.xml'):
@@ -478,7 +483,7 @@ class Organism(object):
                                 'importance':'medium',
                                 'to_do':'Manually fill the products (with types) of these genes in genes.txt'
             })
-            
+
     def _create_genbank_contig(self,
                                contig_id,
                                seq,
@@ -531,7 +536,7 @@ class Organism(object):
         gene_seq = gene_sequences[gene_name]
         gene_left = int(row['Left-End-Position'])
         gene_right = int(row['Right-End-Position'])
-        
+
         new_contig = self._create_genbank_contig('{}'.format(gene_id),
                                                  gene_seq.seq,
                                                  gene_seq.name,
@@ -1781,7 +1786,7 @@ class Organism(object):
         self._check_for_duplicates_within_datasets(info)
         dup_df = self._check_for_duplicates_between_datasets(info)
         self._solve_duplicates_between_datasets(dup_df)
-        
+
     def prune_genbank(self):
         # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
@@ -1807,7 +1812,7 @@ class Organism(object):
                 continue
             new_contigs.append(new_contig)
         self.contigs = new_contigs
-                
+
 
     def generate_curation_notes(self):
         import json
