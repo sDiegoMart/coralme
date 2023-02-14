@@ -841,9 +841,10 @@ class Organism(object):
                 all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
                 transl_table+=(feature.qualifiers.get('transl_table',[None]))
         self.all_genes_in_gb = all_genes_in_gb
-        if len(set(transl_table)) > 1:
-            warn_table = set(transl_table)
-        self.transl_table = [i for i in set(transl_table) if i is not None][0]
+        transl_table = set(i for i in set(transl_table) if i is not None)
+        if len(transl_table) > 1:
+            warn_table = transl_table
+        self.transl_table = list(transl_table)[0]
         
         genbank_genes = set(all_genes_in_gb)
 
