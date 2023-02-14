@@ -113,7 +113,7 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 	# df.set_index(['Gene Locus ID', 'Definition', 'Feature type'], inplace = True)
 	return df.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
 
-def complete_organism_specific_matrix(builder, data, model, output = 'coralme.xlsx'):
+def complete_organism_specific_matrix(builder, data, model, output = False):
 	# ME-model homology to reference
 	def bbh(x, dct, keys):
 		#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
@@ -169,29 +169,38 @@ def complete_organism_specific_matrix(builder, data, model, output = 'coralme.xl
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], str(x['Complex ID']).split(':')[0] ]
 		tags = [ str(x).split(';') for x in tags ]
 
-		cplxs = []
+		all_mods = []
 		for tag in [ x for y in tags for x in y ]:
-			cplxs.append(dct.get(tag, None))
+			all_mods.append([ x.split('_mod_')[1:] for x in dct.get(tag, [])]) # return a list of mods
+		all_mods = [ x for y in all_mods for x in y ]
+		# if multiple modifications: [['mn2(1)'], ['2fe2s(1)', 'mn2(1)'], ['4fe4s(1)', 'mn2(1)']]
+		# into ['mn2(1)', '2fe2s(1) AND mn2(1), '4fe4s(1) AND mn2(1)]
 
-		cplxs = [ x for x in cplxs if x is not None ]
-		if len(cplxs) != 0:
-			mods = [ x.split('_mod_')[1:] for x in cplxs ][0]
-			mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
-			mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
-			mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
-			mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
-			logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
-			mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
-			logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
-			mods = [ '{:s}(1)'.format(x) if '(' not in x else x for x in mods ]
-			if len(mods) != 0:
-				return ' AND '.join(mods)
+		mod_strings = []
+		if len(all_mods) != 0:
+			for mods in all_mods:
+				mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
+				mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
+				mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
+				mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
+				logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
+				mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor(1)') for x in mods ]
+				logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
+				if len(mods) != 0:
+					mod_strings.append(' AND '.join(mods))
+		if len(mod_strings) != 0:
+			return mod_strings
 
-	if hasattr(builder, 'homology'):
-		dct = { k.split('_mod_')[0]:v for k,v in builder.homology.org_cplx_homolog.items() if '_mod_' in k }
-	else:
-		dct = { v:k for k,v in builder.org.protein_mod[['Core_enzyme']].to_dict()['Core_enzyme'].items() }
+	dct = {}
+	#if hasattr(builder, 'homology'):
+		#for k,v in builder.homology.org_cplx_homolog.items():
+			#if '_mod_' in k:
+				#dct.setdefault(v, []).append(k.split('_mod_')[0])
+	#else:
+	for k,v in builder.org.protein_mod[['Core_enzyme']].to_dict()['Core_enzyme'].items():
+		dct.setdefault(v, []).append(k)
 	data['Cofactors in Modified Complex'] = data.apply(lambda x: cofactors(x, dct), axis = 1)
+	data = data.explode('Cofactors in Modified Complex')
 
 	# ME-model generics
 	def generics_from_gene(x, dct):
@@ -385,7 +394,7 @@ def complete_organism_specific_matrix(builder, data, model, output = 'coralme.xl
 		tags = [ '{:s}(\(\d*\)|\(\d*\:\d*\))'.format(x) for x in tags if x != 'None' ]
 
 		#res = df[df['Protein'].str.match(x)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
-	    #query = [ '{:s}()'.format(y) for y in tags ] # sp old_locus_tag's, the query can be a string of tags separated by ';'
+		#query = [ '{:s}()'.format(y) for y in tags ] # sp old_locus_tag's, the query can be a string of tags separated by ';'
 		res = df[df['Protein'].str.fullmatch('|'.join(tags))][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
 
 		if len(res) != 0:
@@ -396,43 +405,6 @@ def complete_organism_specific_matrix(builder, data, model, output = 'coralme.xl
 	df = builder.org.protein_location.dropna(how = 'all', subset = ['Complex_compartment', 'Protein', 'Protein_compartment'])
 	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data.apply(lambda x: get_protein_location(x, df), axis = 1))
 	data = data.explode('Complex Location')
-
-	# Filter in inferred enzyme-reaction associations
-	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
-	# add complexes inferred from tRNA synthetases
-	dct = builder.org.amino_acid_trna_synthetase
-	cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
-
-	# this dataframe contains only genes associated to a M-model reaction
-	tmp1 = data.copy(deep = True).reset_index(drop = True)
-	tmp1 = tmp1[tmp1['M-model Reaction ID'].notna() & tmp1['Complex ID'].notna()]
-	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
-
-	# this dataframe contains genes associated to generics (correct association) and to reactions (incorrect association)
-	tmp2 = data.copy(deep = True).reset_index(drop = True)
-	tmp2 = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Complex ID'].notna() & tmp2['Generic Complex ID'].notna()]
-	tmp2 = tmp2[~tmp2['Complex ID'].str.fullmatch('|'.join(cplxs))]
-
-	if not tmp2.empty:
-		# TODO: Check stoichiometry of generics in complexes
-		no_generics = tmp2.copy(deep = True)
-		no_generics['Complex ID'] = no_generics.apply(lambda x: 'CPLX_{:s}-0:1({:s})'.format(x['M-model Reaction ID'], x['Generic Complex ID']), axis = 1)
-		no_generics['Generic Complex ID'] = None
-		no_generics.drop_duplicates(subset = ['Complex ID'])
-
-		no_reactions = tmp2.copy(deep = True)
-		no_reactions[['M-model Reaction ID', 'Reaction Name', 'Reversibility']] = None
-
-		tmp2 = pandas.concat([no_reactions, no_generics], axis = 0)
-
-	# this dataframe contains genes NOT associated to a M-model reaction
-	tmp3 = data.copy(deep = True).reset_index(drop = True)
-	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
-
-	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
-	#data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
 
 	def _save_to_excel(data, output):
 		#if overwrite:
@@ -461,35 +433,87 @@ def complete_organism_specific_matrix(builder, data, model, output = 'coralme.xl
 			writer.close()
 		return None
 
-	try:
-		# Save file as excel or tsv depending on the size
-		if not output.endswith('.xlsx'):
-			output = '.'.join(output.split('.')[:-1]) + '.xlsx'
+	# Filter in inferred enzyme-reaction associations
+	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+	cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
+	# keep complexes inferred from tRNA synthetases
+	dct = builder.org.amino_acid_trna_synthetase
+	cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
+	# don't drop complexes from special modifications
+	complex_cofactors = []
+	for key, value in builder.configuration.get('complex_cofactors', {}).items():
+		if key == 'fes_transfers' and len(value) != 0:
+			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+		if key == 'fes_chaperones' and len(value) != 0:
+			complex_cofactors.append([ k for k,v in value.items() if v != '' ])
+			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+		if key == 'bmocogdp_chaperones' and len(value) != 0:
+			complex_cofactors.append([ k for k,v in value.items() if v != '' ])
+			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+		if key == 'FeFe/NiFe' and len(value) != 0:
+			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+	cplxs.update([ '{:s}:\d+'.format(x.split('_mod_')[0]) for y in complex_cofactors for x in y ])
 
-		# GPRs can expand the model specifications beyond the max size of an excel file (1048576 rows)
-		if data.shape[0] > 1048575: # one less to accommodate the header
-			# Divide the DataFrame into pieces and save them
-			rxn_ids = data.groupby(['M-model Reaction ID'], dropna = True).size() # Anything with 1 or more occurrences
+	# this dataframe contains only genes associated to M-model reactions
+	tmp1 = data.copy(deep = True).reset_index(drop = True)
+	tmp1 = tmp1[tmp1['M-model Reaction ID'].notna() & tmp1['Complex ID'].notna()]
+	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
 
-			gene_ids = data[data['M-model Reaction ID'].isin(rxn_ids[rxn_ids < 1000].index)]['Gene Locus ID']
-			tmp = pandas.concat([ data[data['Gene Locus ID'].isin(gene_ids)], data[data['M-model Reaction ID'].isna()]], axis = 1)
-			_save_to_excel(tmp, '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0))
+	# this dataframe contains genes associated to generics (correct association) and to reactions (incorrect association)
+	tmp2 = data.copy(deep = True).reset_index(drop = True)
+	tmp2 = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Complex ID'].notna() & tmp2['Generic Complex ID'].notna()]
+	tmp2 = tmp2[~tmp2['Complex ID'].str.fullmatch('|'.join(cplxs))]
 
-			if output.endswith('.xlsx'):
-				for idx, gene_id in enumerate(rxn_ids[rxn_ids >= 1000].index):
-					tmp = data[data['Gene Locus ID'].isin([gene_id])]
-					_save_to_excel(tmp, '.'.join(output.split('.')[:-1]) + '_{:03d}.xlsx'.format(idx+1))
+	if not tmp2.empty:
+		# TODO: Check stoichiometry of generics in complexes
+		no_generics = tmp2.copy(deep = True)
+		no_generics['Complex ID'] = no_generics.apply(lambda x: 'CPLX_{:s}-0:1({:s})'.format(x['M-model Reaction ID'], x['Generic Complex ID']), axis = 1)
+		no_generics['Generic Complex ID'] = None
+		no_generics.drop_duplicates(subset = ['Complex ID'])
 
-			# save the output as a tsv file
-			if not output.endswith('.txt'):
-				output = '.'.join(output.split('.')[:-2]) + '.txt'
+		no_reactions = tmp2.copy(deep = True)
+		no_reactions[['M-model Reaction ID', 'Reaction Name', 'Reversibility']] = None
 
-			with open(output, 'w') as outfile:
-				data.to_csv(outfile, index = False, sep = '\t')
-		else:
-			_save_to_excel(data, output)
-	except:
-		logging.warning('The builder.df_data was not saved to the \'{:s}\' file.'.format(output))
+		tmp2 = pandas.concat([no_reactions, no_generics], axis = 0)
+
+	# this dataframe contains genes NOT associated to a M-model reaction
+	tmp3 = data.copy(deep = True).reset_index(drop = True)
+	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
+
+	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
+	#data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
+
+	if output:
+		try:
+			# Save file as excel or tsv depending on the size
+			if not str(output).endswith('.xlsx'):
+				output = '.'.join(output.split('.')[:-1]) + '.xlsx'
+
+			# GPRs can expand the model specifications beyond the max size of an excel file (1048576 rows)
+			if data.shape[0] > 1048575: # one less to accommodate the header
+				# Divide the DataFrame into pieces and save them
+				rxn_ids = data.groupby(['M-model Reaction ID'], dropna = True).size() # Anything with 1 or more occurrences
+
+				gene_ids = data[data['M-model Reaction ID'].isin(rxn_ids[rxn_ids < 1000].index)]['Gene Locus ID']
+				tmp = pandas.concat([ data[data['Gene Locus ID'].isin(gene_ids)], data[data['M-model Reaction ID'].isna()]], axis = 1)
+				_save_to_excel(tmp, '.'.join(output.split('.')[:-1]) + '_{:02d}.xlsx'.format(0))
+
+				if output.endswith('.xlsx'):
+					for idx, gene_id in enumerate(rxn_ids[rxn_ids >= 1000].index):
+						tmp = data[data['Gene Locus ID'].isin([gene_id])]
+						_save_to_excel(tmp, '.'.join(output.split('.')[:-1]) + '_{:03d}.xlsx'.format(idx+1))
+
+				# save the output as a tsv file
+				if not output.endswith('.txt'):
+					output = '.'.join(output.split('.')[:-2]) + '.txt'
+
+				with open(output, 'w') as outfile:
+					data.to_csv(outfile, index = False, sep = '\t')
+			else:
+				_save_to_excel(data, output)
+		except:
+			logging.warning('The builder.df_data was not saved to the \'{:s}\' file.'.format(output))
 
 	return data
 

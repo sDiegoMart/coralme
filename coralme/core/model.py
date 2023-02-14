@@ -84,27 +84,20 @@ class MEModel(cobra.core.model.Model):
 				'Ribosome_gtp_bound_30S_assembly_factor_phase1' : 'gtp_hydrolysis_era'
 				},
 
+			'complex_cofactors' : {
+				'fes_transfer' : { 'erpA' : '', 'iscA' : '', 'sufA' : '' },
+				'biotin_subreactions' : { 'mod_btn_c' : [ 'biotin_ligase' ] },
+				'lipoate_subreactions' : { 'mod_lipoyl_c' : [ 'lipoyl_denovo', 'lipoyl_scavenging' ] },
+				'fes_chaperones' : {},
+				'bmocogdp_chaperones' : {},
+				'FeFe/NiFe' : { 'mod_FeFe_cofactor_c' : '', 'mod_NiFe_cofactor_c' : '' }
+				},
+
 			'peptide_processing_subreactions' : [
 				'Translation_termination_peptide_deformylase_processing',
 				'Translation_termination_peptide_chain_release',
 				'Translation_termination_ribosome_recycler'
 				],
-
-			'complex_cofactors' : {
-				'fes_transfer' : { 'erpA' : 'CPLX0-7617', 'iscA' : 'IscA_tetra', 'sufA' : 'CPLX0-7824' },
-				'biotin_subreactions' : { 'mod_btn_c' : [ 'biotin_ligase' ] },
-				'lipoate_subreactions' : { 'mod_lipoyl_c' : [ 'lipoyl_denovo', 'lipoyl_scavenging' ] },
-				'fes_chaperones' : { 'CPLX0-1762': 'G6712-MONOMER' }, # From the ecolime github repository
-				'bmocogdp_chaperones' : {
-					'TMAOREDUCTI-CPLX': 'EG12195-MONOMER',
-					'DIMESULFREDUCT-CPLX': 'G6849-MONOMER',
-					'NITRATREDUCTA-CPLX': 'NARJ-MONOMER',
-					'NITRATREDUCTZ-CPLX': 'NARW-MONOMER',
-					'NAP-CPLX': 'NAPD-MONOMER',
-					'NAPAB-CPLX_NAPC-MONOMER': 'NAPD-MONOMER'
-					},
-				'FeFe/NiFe' : { 'mod_FeFe_cofactor_c' : '', 'mod_NiFe_cofactor_c' : '' }
-				},
 
 			'translocation_pathway' : {
 				'sec' : {
