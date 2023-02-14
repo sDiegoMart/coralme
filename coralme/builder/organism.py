@@ -845,7 +845,7 @@ class Organism(object):
         if len(transl_table) > 1:
             warn_table = transl_table
         elif not transl_table:
-            transl_table = ['1']
+            transl_table = ['11']
         self.transl_table = list(transl_table)[0]
         
         genbank_genes = set(all_genes_in_gb)
