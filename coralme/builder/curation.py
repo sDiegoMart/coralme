@@ -590,12 +590,11 @@ class MEManualCuration(object):
         ]).set_index('bnum')
     def load_trna_modification_targets(self):
         create_file = self._create_trna_modification_targets()
-        df = self._get_manual_curation(
+        return self._get_manual_curation(
             "post_transcriptional_modification_of_tRNA.csv",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
-        return self._process_trna_modification_targets(df)
 
     def _create_folding_dict(self):
         return pandas.DataFrame.from_dict(dictionaries.folding_dict.copy()).T.rename_axis('mechanism')
