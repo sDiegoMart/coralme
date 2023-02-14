@@ -844,6 +844,8 @@ class Organism(object):
         transl_table = set(i for i in set(transl_table) if i is not None)
         if len(transl_table) > 1:
             warn_table = transl_table
+        elif not transl_table:
+            transl_table = ['1']
         self.transl_table = list(transl_table)[0]
         
         genbank_genes = set(all_genes_in_gb)
@@ -1801,6 +1803,8 @@ class Organism(object):
         self._solve_duplicates_between_datasets(dup_df)
 
     def prune_genbank(self):
+        if self.is_reference:
+            return
         # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
         exclude_prune_types = list(element_types) + ['source','gene']
