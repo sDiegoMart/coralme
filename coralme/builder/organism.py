@@ -1823,6 +1823,8 @@ class Organism(object):
             for feature in contig.features:
                 if feature.type not in exclude_prune_types:
                     continue
+                if not self.config['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
+                    continue
                 if 'transl_table' not in feature.qualifiers:
                     feature.qualifiers['transl_table'] = self.transl_table
                 new_contig.features.append(feature)
