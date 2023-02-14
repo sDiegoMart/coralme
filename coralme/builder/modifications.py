@@ -81,16 +81,17 @@ def add_biotin_modifications(me_model):
 	return None
 
 def add_FeFe_and_NiFe_modifications(me_model):
-	# TO DO: This is buggy. Error with E. coli.
-	return
 	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe']
 
 	for mod, base_complex in fefe_and_nife_modifications.items():
-		for data in me_model.process_data.get_by_id(mod).get_complex_data():
-			cplx_data = me_model.process_data.get_by_id(data.id)
-			cplx_data.complex_id = data.complex_id
-			cplx_data.stoichiometry = { base_complex: 1 }
-			cplx_data.subreactions[mod] = 0
+		if me_model.process_data.has_id(base_complex):
+			for data in me_model.process_data.get_by_id(mod).get_complex_data():
+				cplx_data = me_model.process_data.get_by_id(data.id)
+				cplx_data.complex_id = data.complex_id
+				cplx_data.stoichiometry = { base_complex: 1 }
+				cplx_data.subreactions[mod] = 0
+		else:
+			logging.warning('The ID \'{:s}\' in the configuration file does not exit in the ME-model.'.format(base_complex) )
 
 	return None
 

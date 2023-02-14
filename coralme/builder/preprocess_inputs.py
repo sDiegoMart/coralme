@@ -113,7 +113,7 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 	# df.set_index(['Gene Locus ID', 'Definition', 'Feature type'], inplace = True)
 	return df.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
 
-def complete_organism_specific_matrix(builder, data, model, output):
+def complete_organism_specific_matrix(builder, data, model, output = 'coralme.xlsx'):
 	# ME-model homology to reference
 	def bbh(x, dct, keys):
 		#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
@@ -267,19 +267,25 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
 	data['MetaComplex ID'].update(data.apply(lambda x: get_excision(x, dct), axis = 1))
 
-	def get_trna_modifiers(x, dct):
-		subrxns = []
-		for key, lst in dct.items():
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
-			tags = [ str(x).split(';') for x in tags ]
-			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
-					subrxns.append(key + ':1')
-		if len(subrxns) != 0:
-			return subrxns
+	def get_rrna_modifiers(x, lst):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
+		tags = [ str(x).split(';') for x in tags ]
+		for tag in [ x for y in tags for x in y ]:
+			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+				return 'rRNA_modifier_enzyme'
 
-	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.trna_modification.items() }
-	data['MetaComplex ID'].update(data.apply(lambda x: get_trna_modifiers(x, dct), axis = 1))
+	lst = [ v['machine'].split('_mod_')[0] for k,v in builder.org.rrna_modifications.items() ]
+	data['MetaComplex ID'].update(data.apply(lambda x: get_rrna_modifiers(x, lst), axis = 1))
+
+	def get_trna_modifiers(x, lst):
+		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
+		tags = [ str(x).split(';') for x in tags ]
+		for tag in [ x for y in tags for x in y ]:
+			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+				return 'tRNA_modifier_enzyme'
+
+	lst = set([ x for y in [ [ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.trna_modification.items() ] for x in y ])
+	data['MetaComplex ID'].update(data.apply(lambda x: get_trna_modifiers(x, lst), axis = 1))
 
 	def get_transpaths(x, dct):
 		pathways = []
@@ -297,7 +303,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	data = data.explode('MetaComplex ID')
 
 	# ME-model subreactions
-	def ribosome_subrxns(x, dct):
+	def get_ribosome_subrxns(x, dct):
 		for key, lst in dct.items():
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
@@ -306,9 +312,9 @@ def complete_organism_specific_matrix(builder, data, model, output):
 					return 'Ribosome_' + key
 
 	dct = { k:[ x.split('_mod_')[0] for x in [v['enzyme']] ] for k,v in builder.org.ribosome_subreactions.items() }
-	data['ME-model SubReaction'] = data.apply(lambda x: ribosome_subrxns(x, dct), axis = 1)
+	data['ME-model SubReaction'] = data.apply(lambda x: get_ribosome_subrxns(x, dct), axis = 1)
 
-	def translation_subrxns(x, dct):
+	def get_translation_subrxns(x, dct):
 		for key, lst in dct.items():
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
@@ -338,9 +344,9 @@ def complete_organism_specific_matrix(builder, data, model, output):
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.initiation_subreactions.items() }
 	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.elongation_subreactions.items() })
 	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.termination_subreactions.items() })
-	data['ME-model SubReaction'].update(data.apply(lambda x: translation_subrxns(x, dct), axis = 1))
+	data['ME-model SubReaction'].update(data.apply(lambda x: get_translation_subrxns(x, dct), axis = 1))
 
-	def transcription_subrxns(x, dct):
+	def get_transcription_subrxns(x, dct):
 		subrxns = []
 		for key, lst in dct.items():
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
@@ -352,11 +358,11 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			return subrxns
 
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.transcription_subreactions.items() }
-	data['ME-model SubReaction'].update(data.apply(lambda x: transcription_subrxns(x, dct), axis = 1))
+	data['ME-model SubReaction'].update(data.apply(lambda x: get_transcription_subrxns(x, dct), axis = 1))
 	data = data.explode('ME-model SubReaction')
 
 	# Post-translation processing
-	def processing(x, lst):
+	def get_processing_targets(x, lst):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
@@ -364,14 +370,14 @@ def complete_organism_specific_matrix(builder, data, model, output):
 				return 'TRUE'
 
 	lst = builder.org.folding_dict['GroEL_dependent_folding']['enzymes']
-	data['GroEL_dependent_folding'] = data.apply(lambda x: processing(x, lst), axis = 1)
+	data['GroEL_dependent_folding'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
 	lst = builder.org.folding_dict['DnaK_dependent_folding']['enzymes']
-	data['DnaK_dependent_folding'] = data.apply(lambda x: processing(x, lst), axis = 1)
+	data['DnaK_dependent_folding'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
 	lst = builder.org.cleaved_methionine
-	data['N_terminal_methionine_cleavage'] = data.apply(lambda x: processing(x, lst), axis = 1)
+	data['N_terminal_methionine_cleavage'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
 
 	# protein location
-	def location(x, df):
+	def get_protein_location(x, df):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ] # we convert here None to 'None'
 		tags = [ x for y in tags for x in y ]
@@ -388,7 +394,7 @@ def complete_organism_specific_matrix(builder, data, model, output):
 			return [None, None, None]
 
 	df = builder.org.protein_location.dropna(how = 'all', subset = ['Complex_compartment', 'Protein', 'Protein_compartment'])
-	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data.apply(lambda x: location(x, df), axis = 1))
+	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data.apply(lambda x: get_protein_location(x, df), axis = 1))
 	data = data.explode('Complex Location')
 
 	# Filter in inferred enzyme-reaction associations
@@ -517,7 +523,7 @@ def get_generics(df):
 	tmp = tmp.groupby(['Generic Complex ID']).agg({'Gene Locus ID': lambda x: sorted(set(x.tolist()))}).to_dict()['Gene Locus ID'].items()
 	return tmp
 
-def metacomplex_stoichiometry(df, key):
+def get_metacomplex_stoichiometry(df, key):
 	#tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.startswith(key) & ~df['Feature Type'].isin(['pseudo'])]
 	tmp = df[df['MetaComplex ID'].notna() & df['MetaComplex ID'].str.startswith(key)]
 	if not tmp.empty:
@@ -540,17 +546,17 @@ def metacomplex_stoichiometry(df, key):
 		return None
 
 def ribosome_stoichiometry(df):
-	tmp = metacomplex_stoichiometry(df, 'ribosome')
+	tmp = get_metacomplex_stoichiometry(df, 'ribosome')
 	ribosome_stoich = { 'ribosome' : { 'stoich' : { k.split(':')[0]:int(v) for k,v in zip(tmp['Gene Locus ID'], tmp['stoich'])}}}
 	ribosome_stoich['ribosome']['stoich']['gtp_c'] = 1
 	return ribosome_stoich
 
 def degradosome_stoichiometry(df):
-	tmp = metacomplex_stoichiometry(df, 'RNA_degradosome')
+	tmp = get_metacomplex_stoichiometry(df, 'RNA_degradosome')
 	return { k.split(':')[0]:int(v) for k,v in zip(tmp['Gene Locus ID'], tmp['stoich']) } if tmp is not None else None
 
 def dnapolymerase_stoichiometry(df):
-	tmp = metacomplex_stoichiometry(df, 'DNAP')
+	tmp = get_metacomplex_stoichiometry(df, 'DNAP')
 	return { k.split(':')[0]:int(v) for k,v in zip(tmp['Gene Locus ID'], tmp['stoich']) }
 
 def excision_machinery_stoichiometry(df, keys):
