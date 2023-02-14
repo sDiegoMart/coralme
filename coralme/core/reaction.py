@@ -667,7 +667,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 		"""
 
 	@property
-	def _genes(self):
+	def genes(self):
 		return frozenset()
 
 class MetabolicReaction(MEReaction):
@@ -805,7 +805,7 @@ class MetabolicReaction(MEReaction):
 			self.lower_bound = max(0, +self.stoichiometric_data.lower_bound)
 			self.upper_bound = max(0, +self.stoichiometric_data.upper_bound)
 	@property
-	def _genes(self):
+	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
 
 class ComplexFormation(MEReaction):
@@ -1148,7 +1148,7 @@ class PostTranslationReaction(MEReaction):
 
 		self.add_metabolites(object_stoichiometry, combine = False)
 	@property
-	def _genes(self):
+	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
 class TranscriptionReaction(MEReaction):
 	"""Transcription of a TU to produced TranscribedGene.
@@ -1386,7 +1386,7 @@ class TranscriptionReaction(MEReaction):
 		if tmrna_mass > 0:
 			self.add_metabolites({metabolites.tmRNA_biomass: tmrna_mass}, combine = False)
 	@property
-	def _genes(self):
+	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
 class GenericFormationReaction(MEReaction):
 	"""
@@ -1676,7 +1676,7 @@ class TranslationReaction(MEReaction):
 		mrna_mass = transcript.formula_weight / 1000.  # kDa
 		self.add_metabolites({metabolites.mRNA_biomass: (-mrna_mass * deg_amount)}, combine = False)
 	@property
-	def _genes(self):
+	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
 class tRNAChargingReaction(MEReaction):
 	"""
@@ -1782,7 +1782,7 @@ class tRNAChargingReaction(MEReaction):
 		# Replace reaction stoichiometry with updated stoichiometry
 		self.add_metabolites(object_stoichiometry)
 	@property
-	def _genes(self):
+	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
 class SummaryVariable(MEReaction):
 	"""
