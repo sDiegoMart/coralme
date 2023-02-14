@@ -550,11 +550,10 @@ class MEModel(cobra.core.model.Model):
 			if isinstance(data, coralme.core.processdata.SubreactionData):
 				yield data
 
-# 	@property
-# 	def genes(self):
-		
+	@property
+	def all_genes(self):
+		return [g for g in self.metabolites if isinstance(g,coralme.core.component.TranscribedGene)]
 
-	# ME-model methods
 	def get_metabolic_flux(self, solution = None):
 		"""Extract the flux state for Metabolic reactions."""
 		if solution is None:
