@@ -288,16 +288,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	# TODO
 	#data['RNA mods/enzyme']
 
-	def get_trna_modifiers(x, lst):
-		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
-		tags = [ str(x).split(';') for x in tags ]
-		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
-				return 'tRNA_modifier_enzyme'
-
-	lst = set([ x for y in [ [ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.trna_modification.items() ] for x in y ])
-	data['MetaComplex ID'].update(data.apply(lambda x: get_trna_modifiers(x, lst), axis = 1))
-
 	def get_transpaths(x, dct):
 		pathways = []
 		for key, lst in dct.items():
