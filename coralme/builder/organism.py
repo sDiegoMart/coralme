@@ -1818,6 +1818,8 @@ class Organism(object):
             for feature in contig.features:
                 if feature.type not in exclude_prune_types:
                     continue
+                if 'transl_table' not in feature.qualifiers:
+                    feature.qualifiers['transl_table'] = self.transl_table
                 new_contig.features.append(feature)
             if len(new_contig.features) <= 1: 
                 # only source, no feature
