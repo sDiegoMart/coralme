@@ -674,7 +674,7 @@ class MEManualCuration(object):
                 sep = '\t'))
     
     def _modify_lipid_modifications_from_load(self,df):
-        return df['enzymes'].to_dict()
+        return {k:v.split(',') for k,v in df['enzymes'].to_dict().items()}
     def _create_lipid_modifications(self):
         return pandas.DataFrame(columns=[
             'lipid_mod',

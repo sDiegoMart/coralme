@@ -990,6 +990,22 @@ class MEBuilder(object):
 				org_rna_modification[org_cplx] = []
 			org_rna_modification[org_cplx] = v.copy()
 
+	def update_lipid_modifications_from_homology(self):
+		ref_lipid_modifications = self.ref.lipid_modifications
+		org_lipid_modifications = self.org.lipid_modifications
+		ref_cplx_homolog = self.homology.ref_cplx_homolog
+		for k, v in tqdm.tqdm(ref_lipid_modifications.items(),
+					'Updating lipid modification machinery from homology...',
+					bar_format = bar_format,
+					total=len(ref_lipid_modifications)):
+			if k not in org_lipid_modifications:
+				org_lipid_modifications[k] = []
+			for i in v:
+				if i not in ref_cplx_homolog: continue
+				org_cplx = ref_cplx_homolog[i]
+				if org_cplx not in org_lipid_modifications[k]: 
+					org_lipid_modifications[k].append(org_cplx)
+
 	def update_transcription_subreactions_from_homology(self):
 		ref_transcription_subreactions = self.ref.transcription_subreactions
 		org_transcription_subreactions = self.org.transcription_subreactions
@@ -1061,6 +1077,7 @@ class MEBuilder(object):
 		self.update_excision_machinery_from_homology()
 		self.update_special_modifications_from_homology()
 		self.update_rna_modification_from_homology()
+		self.update_lipid_modifications_from_homology()
 		self.update_m_model()
 
 	def fill(self,
