@@ -183,10 +183,10 @@ class Organism(object):
         self.sync_files()
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
-        
+
         logging.warning('Pruning genbank from unwanted feature types')
         self.prune_genbank()
-        
+
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
 
@@ -499,13 +499,13 @@ class Organism(object):
                               annotations = {
                                   'molecule_type' : 'DNA'
                               })
-        
+
         new_contig.features = [SeqFeature(SimpleLocation(ExactPosition(0),ExactPosition(len(seq))),
                               type='source',
                               id = contig_id,
                               qualifiers = {'note':'Added from {}'.format(source)})]
         return new_contig
-    
+
     def _create_contig_feature(self,
                                 gene_id,
                                 seq,
@@ -847,7 +847,7 @@ class Organism(object):
         elif not transl_table:
             transl_table = ['11']
         self.transl_table = list(transl_table)[0]
-        
+
         genbank_genes = set(all_genes_in_gb)
 
         # Overlaps
@@ -1823,12 +1823,12 @@ class Organism(object):
             for feature in contig.features:
                 if feature.type not in exclude_prune_types:
                     continue
-                if not self.config['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
+                if not self.config.get('include_pseudo_genes', False) and 'pseudo' in feature.qualifiers:
                     continue
                 if 'transl_table' not in feature.qualifiers:
                     feature.qualifiers['transl_table'] = self.transl_table
                 new_contig.features.append(feature)
-            if len(new_contig.features) <= 1: 
+            if len(new_contig.features) <= 1:
                 # only source, no feature
                 continue
             new_contigs.append(new_contig)

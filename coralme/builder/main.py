@@ -1786,6 +1786,9 @@ class MEReconstruction(MEBuilder):
 		# Check if the modification is set on any component in the organism-specific matrix
 		if me.process_data.has_id('mod_btn_c'):
 			coralme.builder.modifications.add_biotin_modifications(me)
+		#TODO: 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA in CitD catalyzed by CitX
+		if me.process_data.has_id('mod_2tpr3dpcoa_c'):
+			coralme.builder.modifications.add_triphosphoribosyl_dephospho_CoA(me)
 		if me.process_data.has_id('mod_lipoyl_c'):
 			coralme.builder.modifications.add_lipoate_modifications(me)
 		if me.process_data.has_id('mod_3fe4s_c') or me.process_data.has_id('mod_4fe4s_c') or me.process_data.has_id('mod_2fe2s_c'):

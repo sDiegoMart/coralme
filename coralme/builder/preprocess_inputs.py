@@ -276,15 +276,17 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
 	data['MetaComplex ID'].update(data.apply(lambda x: get_excision(x, dct), axis = 1))
 
-	def get_rrna_modifiers(x, lst):
+	def get_rna_modifiers(x, lst):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
 			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
-				return 'rRNA_modifier_enzyme'
+				return 'RNA_modifier_enzyme'
 
-	lst = [ v['machine'].split('_mod_')[0] for k,v in builder.org.rrna_modifications.items() ]
-	data['MetaComplex ID'].update(data.apply(lambda x: get_rrna_modifiers(x, lst), axis = 1))
+	lst = [ k.split('_mod_')[0] for k,v in builder.org.rna_modification.items() ]
+	data['MetaComplex ID'].update(data.apply(lambda x: get_rna_modifiers(x, lst), axis = 1))
+	# TODO
+	#data['RNA mods/enzyme']
 
 	def get_trna_modifiers(x, lst):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
