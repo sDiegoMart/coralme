@@ -75,7 +75,7 @@ class MEManualCuration(object):
         self.org.special_modifications = self.load_special_modifications()
         logging.warning("Loading rna modifications and targets")
         self.org.rna_modification = self.load_rna_modification()
-        self.org.trna_modification_targets = self.load_trna_modification_targets()
+        self.org.rna_modification_targets = self.load_rna_modification_targets()
         logging.warning("Loading folding information of proteins")
         self.org.folding_dict = self.load_folding_dict()
         logging.warning("Loading transcription subreactions")
@@ -558,7 +558,7 @@ class MEManualCuration(object):
             sep = '\t')
         return self._modify_rna_modification_from_load(df)
 
-    def _process_trna_modification_targets(self,
+    def _process_rna_modification_targets(self,
                                df):
         df = df.reset_index()
         trna_mod_dict = {}
@@ -570,16 +570,16 @@ class MEManualCuration(object):
             trna_mod_dict[mod["bnum"]][mod_loc] = 1
         return trna_mod_dict
     
-    def _create_trna_modification_targets(self):
+    def _create_rna_modification_targets(self):
         return pandas.DataFrame(columns=[
             'bnum',
             'position',
             'modification'
         ]).set_index('bnum')
-    def load_trna_modification_targets(self):
-        create_file = self._create_trna_modification_targets()
+    def load_rna_modification_targets(self):
+        create_file = self._create_rna_modification_targets()
         return self._get_manual_curation(
-            "post_transcriptional_modification_of_tRNA.csv",
+            "post_transcriptional_modification_of_RNA.csv",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
