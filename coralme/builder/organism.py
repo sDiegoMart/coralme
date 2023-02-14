@@ -547,7 +547,7 @@ class Organism(object):
                                                1 if gene_left < gene_right else -1,
                                                product_type,
                                                product_name)
-
+        feature.qualifiers['transl_table'] = self.transl_table
         new_contig.features += [feature]
         contigs.append(new_contig)
 
@@ -832,12 +832,19 @@ class Organism(object):
         m_model_genes = set([g.id for g in self.m_model.genes])
         file_genes = set(self.gene_dictionary['Accession-1'].values)
         all_genes_in_gb = []
+        transl_table = []
+        warn_table = []
         for record in self.contigs:
             for feature in record.features:
                 if self.locus_tag not in feature.qualifiers:
                     continue
                 all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
+                transl_table+=(feature.qualifiers.get('transl_table',[None]))
         self.all_genes_in_gb = all_genes_in_gb
+        if len(set(transl_table)) > 1:
+            warn_table = set(transl_table)
+        self.transl_table = [i for i in set(transl_table) if i is not None][0]
+        
         genbank_genes = set(all_genes_in_gb)
 
         # Overlaps
@@ -863,7 +870,12 @@ class Organism(object):
                 'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
                 'importance':gs,
                 'to_do':'Check whether genbank was downloaded correctly.'})
-
+        if warn_table:
+            self.curation_notes['org.check_gene_overlap'].append({
+                'msg':'Provided GenBank file contains more than one translation table. Is this correct?',
+                'triggered_by':warn_table,
+                'importance':'high',
+                'to_do':'Check if translation tables are correct.'})
 
     def update_ribosome_stoich(self):
         if self.is_reference:
