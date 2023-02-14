@@ -55,8 +55,8 @@ class MEManualCuration(object):
         self.org.ribosome_subreactions = self.load_ribosome_subreactions()
         logging.warning("Loading generics")
         self.org.generic_dict = self.load_generic_dict()
-        logging.warning("Loading ribosome rrna modifications")
-        self.org.rrna_modifications = self.load_rrna_modifications()
+#         logging.warning("Loading ribosome rrna modifications")
+#         self.org.rrna_modifications = self.load_rrna_modifications()
         logging.warning("Loading amino acid tRNA synthetases")
         self.org.amino_acid_trna_synthetase = self.load_amino_acid_trna_synthetase()
         logging.warning("Loading peptide release factors")
@@ -73,8 +73,8 @@ class MEManualCuration(object):
         self.org.excision_machinery = self.load_excision_machinery()
         logging.warning("Loading special modifications")
         self.org.special_modifications = self.load_special_modifications()
-        logging.warning("Loading trna modifications and targets")
-        self.org.trna_modification = self.load_trna_modification()
+        logging.warning("Loading rna modifications and targets")
+        self.org.rna_modification = self.load_rna_modification()
         self.org.trna_modification_targets = self.load_trna_modification_targets()
         logging.warning("Loading folding information of proteins")
         self.org.folding_dict = self.load_folding_dict()
@@ -302,27 +302,27 @@ class MEManualCuration(object):
             sep = '\t')
         return self._modify_generic_dict_from_load(df)
     
-    def _create_rrna_modifications(self):
-        return pandas.DataFrame.from_dict(dictionaries.rrna_modifications.copy()).T.rename_axis('modification')
-    def _modify_rrna_modifications_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "metabolites"] = self._dict_to_str(row["metabolites"])
-        return df
-    def _modify_rrna_modifications_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["metabolites"] = self._str_to_dict(v["metabolites"])
-        return d
-    def load_rrna_modifications(self):
-        create_file = self._modify_rrna_modifications_for_save(
-                self._create_rrna_modifications()) 
-        df = self._get_manual_curation(
-            "rrna_modifications.csv",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_rrna_modifications_from_load(df)
+#     def _create_rrna_modifications(self):
+#         return pandas.DataFrame.from_dict(dictionaries.rrna_modifications.copy()).T.rename_axis('modification')
+#     def _modify_rrna_modifications_for_save(self,df):
+#         df = df.copy()
+#         for r, row in df.iterrows():
+#             df.loc[r, "metabolites"] = self._dict_to_str(row["metabolites"])
+#         return df
+#     def _modify_rrna_modifications_from_load(self,df):
+#         d = df.T.to_dict()
+#         for k, v in d.items():
+#             v["metabolites"] = self._str_to_dict(v["metabolites"])
+#         return d
+#     def load_rrna_modifications(self):
+#         create_file = self._modify_rrna_modifications_for_save(
+#                 self._create_rrna_modifications()) 
+#         df = self._get_manual_curation(
+#             "rrna_modifications.csv",
+#             create_file = create_file,
+#             no_file_return = create_file,
+#             sep = '\t')
+#         return self._modify_rrna_modifications_from_load(df)
     
     def _create_amino_acid_trna_synthetase(self):
         return pandas.DataFrame.from_dict(
@@ -538,37 +538,25 @@ class MEManualCuration(object):
             sep = '\t')
         return self._modify_special_modifications_from_load(df)
     
-    def _create_trna_modification(self):
-        df = pandas.DataFrame.from_dict(dictionaries.trna_modification.copy()).T.rename_axis('modification')
-        df[["carriers"]] = df[["carriers"]].applymap(
-                lambda x: {} if pandas.isnull(x) else x
-            )
-        return df
-    def _modify_trna_modification_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-            df.loc[r, "carriers"] = self._dict_to_str(row["carriers"])
-        return df
-    def _modify_trna_modification_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-            v["carriers"] = self._str_to_dict(v["carriers"])
+    def _modify_rna_modification_from_load(self,df):
+        d = {}
+        for mod,row in df.iterrows():
+            mods = ['{}_at_{}'.format(mod,i) for i in row['positions'].split(',')]
+            for enz in row['enzymes'].split(' AND '):
+                if enz not in d: d[enz] = []
+                d[enz] = mods
         return d
-    def load_trna_modification(self):
-        create_file = self._modify_trna_modification_for_save(
-                self._create_trna_modification()) 
+        
+    def load_rna_modification(self):
+        create_file = pandas.DataFrame(columns=[
+            'modification','positions','type','enzymes','source'
+        ]).set_index('modification')
         df = self._get_manual_curation(
-            "trna_modification.csv",
+            "rna_modification.csv",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
-        return self._modify_trna_modification_from_load(df)
+        return self._modify_rna_modification_from_load(df)
 
     def _process_trna_modification_targets(self,
                                df):

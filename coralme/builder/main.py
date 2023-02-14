@@ -768,34 +768,34 @@ class MEBuilder(object):
 				'importance':'medium',
 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.ribosome_subreactions. Curate the inputs in ribosome_subreactions.csv accordingly.'})
 
-	def update_rrna_modifications_from_homology(self):
-		ref_rrna_modifications = self.ref.rrna_modifications
-		org_rrna_modifications = self.org.rrna_modifications
-		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		warn_proteins = []
-		for k, v in tqdm.tqdm(ref_rrna_modifications.items(),
-					'Updating rRNA modifications from homology...',
-					bar_format = bar_format,
-					total=len(ref_rrna_modifications)):
-			ref_cplx = v["machine"]
-			if ref_cplx in ref_cplx_homolog:
-				org_cplx = ref_cplx_homolog[v["machine"]]
-				defined_cplx = org_rrna_modifications[k]["machine"]
-				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
-					org_rrna_modifications[k]["machine"] = org_cplx
-				else:
-					warn_proteins.append({
-						'subreaction':k,
-						'defined_complex':defined_cplx,
-						'inferred_complex':org_cplx
-					})
-		# Warnings
-		if warn_proteins:
-			self.org.curation_notes['update_rrna_modifications_from_homology'].append({
-				'msg':'Some enzymes defined in me_builder.org.rrna_modifications are different from the ones inferred from homology',
-				'triggered_by':warn_proteins,
-				'importance':'medium',
-				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.rrna_modifications. Curate the inputs in rrna_modifications.csv accordingly.'})
+# 	def update_rrna_modifications_from_homology(self):
+# 		ref_rrna_modifications = self.ref.rrna_modifications
+# 		org_rrna_modifications = self.org.rrna_modifications
+# 		ref_cplx_homolog = self.homology.ref_cplx_homolog
+# 		warn_proteins = []
+# 		for k, v in tqdm.tqdm(ref_rrna_modifications.items(),
+# 					'Updating rRNA modifications from homology...',
+# 					bar_format = bar_format,
+# 					total=len(ref_rrna_modifications)):
+# 			ref_cplx = v["machine"]
+# 			if ref_cplx in ref_cplx_homolog:
+# 				org_cplx = ref_cplx_homolog[v["machine"]]
+# 				defined_cplx = org_rrna_modifications[k]["machine"]
+# 				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
+# 					org_rrna_modifications[k]["machine"] = org_cplx
+# 				else:
+# 					warn_proteins.append({
+# 						'subreaction':k,
+# 						'defined_complex':defined_cplx,
+# 						'inferred_complex':org_cplx
+# 					})
+# 		# Warnings
+# 		if warn_proteins:
+# 			self.org.curation_notes['update_rrna_modifications_from_homology'].append({
+# 				'msg':'Some enzymes defined in me_builder.org.rrna_modifications are different from the ones inferred from homology',
+# 				'triggered_by':warn_proteins,
+# 				'importance':'medium',
+# 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.rrna_modifications. Curate the inputs in rrna_modifications.csv accordingly.'})
 
 	def update_amino_acid_trna_synthetases_from_homology(self):
 		ref_amino_acid_trna_synthetase = self.ref.amino_acid_trna_synthetase
@@ -976,24 +976,19 @@ class MEBuilder(object):
 				if i not in defined_cplxs:
 					defined_cplxs.append(i)
 
-	def update_trna_modification_from_homology(self):
-		ref_trna_modification = self.ref.trna_modification
-		org_trna_modification = self.org.trna_modification
+	def update_rna_modification_from_homology(self):
+		ref_rna_modification = self.ref.rna_modification
+		org_rna_modification = self.org.rna_modification
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		for k, v in tqdm.tqdm(ref_trna_modification.items(),
-					'Updating tRNA modification machinery from homology...',
+		for k, v in tqdm.tqdm(ref_rna_modification.items(),
+					'Updating RNA modification machinery from homology...',
 					bar_format = bar_format,
-					total=len(ref_trna_modification)):
-			ref_cplxs = v["enzymes"]
-			defined_cplxs = org_trna_modification[k]["enzymes"]
-			org_cplxs = [
-				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
-			]
-			for i in org_cplxs:
-				if v["stoich"]:
-					org_trna_modification[k]["stoich"] = v["stoich"]
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+					total=len(ref_rna_modification)):
+			if k not in ref_cplx_homolog: continue
+			org_cplx = ref_cplx_homolog[k]
+			if org_cplx not in org_rna_modification: 
+				org_rna_modification[org_cplx] = []
+			org_rna_modification[org_cplx] = v.copy()
 
 	def update_transcription_subreactions_from_homology(self):
 		ref_transcription_subreactions = self.ref.transcription_subreactions
@@ -1054,7 +1049,7 @@ class MEBuilder(object):
 		self.update_generics_from_homology()
 		self.update_folding_dict_from_homology()
 		self.update_ribosome_subreactions_from_homology()
-		self.update_rrna_modifications_from_homology()
+# 		self.update_rrna_modifications_from_homology()
 		self.update_amino_acid_trna_synthetases_from_homology()
 		self.update_peptide_release_factors_from_homology()
 		self.update_transcription_subreactions_from_homology()
@@ -1065,7 +1060,7 @@ class MEBuilder(object):
 		self.update_rna_degradosome_from_homology()
 		self.update_excision_machinery_from_homology()
 		self.update_special_modifications_from_homology()
-		self.update_trna_modification_from_homology()
+		self.update_rna_modification_from_homology()
 		self.update_m_model()
 
 	def fill(self,
