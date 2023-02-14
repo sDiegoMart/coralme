@@ -81,7 +81,10 @@ class MEManualCuration(object):
         logging.warning("Loading transcription subreactions")
         self.org.transcription_subreactions = self.load_transcription_subreactions()
         logging.warning("Loading protein translocation pathways")
-        self.org.translocation_pathways = self.load_translocation_pathways()    
+        self.org.translocation_pathways = self.load_translocation_pathways() 
+        logging.warning("Loading lipid modifications")
+        self.org.lipid_modifications = self.load_lipid_modifications()
+        
     
     def _get_manual_curation(self,
                              filename,
@@ -546,7 +549,6 @@ class MEManualCuration(object):
                 if enz not in d: d[enz] = []
                 d[enz] = mods
         return d
-        
     def load_rna_modification(self):
         create_file = pandas.DataFrame(columns=[
             'modification','positions','type','enzymes','source'
@@ -558,17 +560,17 @@ class MEManualCuration(object):
             sep = '\t')
         return self._modify_rna_modification_from_load(df)
 
-    def _process_rna_modification_targets(self,
-                               df):
-        df = df.reset_index()
-        trna_mod_dict = {}
-        for mod in df.iterrows():
-            mod = mod[1]
-            mod_loc = "%s_at_%s" % (mod["modification"], mod["position"])
-            if mod["bnum"] not in trna_mod_dict:
-                trna_mod_dict[mod["bnum"]] = {}
-            trna_mod_dict[mod["bnum"]][mod_loc] = 1
-        return trna_mod_dict
+#     def _process_rna_modification_targets(self,
+#                                df):
+#         df = df.reset_index()
+#         trna_mod_dict = {}
+#         for mod in df.iterrows():
+#             mod = mod[1]
+#             mod_loc = "%s_at_%s" % (mod["modification"], mod["position"])
+#             if mod["bnum"] not in trna_mod_dict:
+#                 trna_mod_dict[mod["bnum"]] = {}
+#             trna_mod_dict[mod["bnum"]][mod_loc] = 1
+#         return trna_mod_dict
     
     def _create_rna_modification_targets(self):
         return pandas.DataFrame(columns=[
@@ -670,6 +672,22 @@ class MEManualCuration(object):
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t'))
+    
+    def _modify_lipid_modifications_from_load(self,df):
+        return df['enzymes'].to_dict()
+    def _create_lipid_modifications(self):
+        return pandas.DataFrame(columns=[
+            'lipid_mod',
+            'enzymes'
+        ]).set_index('lipid_mod')
+    def load_lipid_modifications(self):
+        create_file = self._create_lipid_modifications()
+        df =  self._get_manual_curation(
+                "lipid_modifications.csv",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return self._modify_lipid_modifications_from_load(df)
     
     def _str_to_dict(self,
                     d):
