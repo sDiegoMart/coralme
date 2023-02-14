@@ -26,6 +26,42 @@ from coralme.core.component import Metabolite as Metabolite
 
 from collections import defaultdict
 from operator import attrgetter
+import re
+
+def _get_genes_of_complex(c,genes = set()):
+	if isinstance(c,coralme.core.component.Complex):
+		cplx_data = c._model.process_data.get_by_id(c.id)
+		for j in cplx_data.stoichiometry:
+			obj = c._model.metabolites.get_by_id(j)
+			tmp = _get_genes_of_complex(obj, genes=genes)
+			genes = genes.union(tmp)
+		return genes
+
+	if isinstance(c,coralme.core.component.TranslatedGene):
+		return set([c.id.split('protein_')[1]])
+	if isinstance(c,coralme.core.component.TranscribedGene):
+		return set([c.id.split('RNA_')[1]])
+	if isinstance(c,coralme.core.component.GenericComponent):
+		g = set()
+		cd = c._model.process_data.get_by_id(c.id)
+		for i in cd.component_list:
+			iobj = c._model.metabolites.get_by_id(i)
+			g = g.union(_get_genes_of_complex(iobj, genes=genes))
+		return g
+	if isinstance(c,coralme.core.component.Metabolite):
+		return set()
+	if isinstance(c,coralme.core.component.ProcessedProtein):
+		return _get_genes_of_complex(c.unprocessed_protein,genes=genes)
+	raise TypeError('Unsupported metabolite type {}'.format(
+		type(c)))
+
+def _get_genes_from_reaction_metabolites(r):
+	genes = set()
+	complexes = [m for m in r.metabolites if hasattr(r.metabolites[m],'subs') \
+				and isinstance(m,coralme.core.component.Complex)]
+	for c in complexes:
+		genes = genes.union(_get_genes_of_complex(c))
+	return frozenset([cobra.core.Gene(i) for i in genes])
 
 class MEReaction(cobra.core.reaction.Reaction):
 	# TODO set _upper and _lower bounds as a property
@@ -630,6 +666,10 @@ class MEReaction(cobra.core.reaction.Reaction):
 			</table>
 		"""
 
+	@property
+	def genes(self):
+		return frozenset()
+
 class MetabolicReaction(MEReaction):
 	"""Irreversible metabolic reaction including required enzymatic complex
 
@@ -764,6 +804,9 @@ class MetabolicReaction(MEReaction):
 		else:
 			self.lower_bound = max(0, +self.stoichiometric_data.lower_bound)
 			self.upper_bound = max(0, +self.stoichiometric_data.upper_bound)
+	@property
+	def genes(self):
+		return _get_genes_from_reaction_metabolites(self)
 
 class ComplexFormation(MEReaction):
 	"""Formation of a functioning enzyme complex that can act as a catalyst for
@@ -1104,7 +1147,9 @@ class PostTranslationReaction(MEReaction):
 			raise ValueError('If SubReactions in PostTranslationData modify the protein, the \'biomass_type\' must be provided.')
 
 		self.add_metabolites(object_stoichiometry, combine = False)
-
+	@property
+	def genes(self):
+		return _get_genes_from_reaction_metabolites(self)
 class TranscriptionReaction(MEReaction):
 	"""Transcription of a TU to produced TranscribedGene.
 
@@ -1340,7 +1385,9 @@ class TranscriptionReaction(MEReaction):
 			self.add_metabolites({metabolites.mRNA_biomass: mrna_mass}, combine = False)
 		if tmrna_mass > 0:
 			self.add_metabolites({metabolites.tmRNA_biomass: tmrna_mass}, combine = False)
-
+	@property
+	def genes(self):
+		return _get_genes_from_reaction_metabolites(self)
 class GenericFormationReaction(MEReaction):
 	"""
 	Some components in an ME-model can perform exactly the same function. To
@@ -1628,7 +1675,9 @@ class TranslationReaction(MEReaction):
 		# RNA biomass consumed due to degradation
 		mrna_mass = transcript.formula_weight / 1000.  # kDa
 		self.add_metabolites({metabolites.mRNA_biomass: (-mrna_mass * deg_amount)}, combine = False)
-
+	@property
+	def genes(self):
+		return _get_genes_from_reaction_metabolites(self)
 class tRNAChargingReaction(MEReaction):
 	"""
 	Reaction class for the charging of a tRNA with an amino acid
@@ -1732,7 +1781,9 @@ class tRNAChargingReaction(MEReaction):
 
 		# Replace reaction stoichiometry with updated stoichiometry
 		self.add_metabolites(object_stoichiometry)
-
+	@property
+	def genes(self):
+		return _get_genes_from_reaction_metabolites(self)
 class SummaryVariable(MEReaction):
 	"""
 	SummaryVariables are reactions that impose global constraints on the model.
