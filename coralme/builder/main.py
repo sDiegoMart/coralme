@@ -1157,7 +1157,7 @@ class MEBuilder(object):
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
-		self.org.generate_curation_notes()
+# 		self.org.generate_curation_notes() TODO: MAKE THIS WORK
 
 	def input_data(self, gem, overwrite):
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
@@ -2330,6 +2330,4 @@ class METroubleshooter(object):
 			print('\nME-model was saved in the {:s} directory as MEModel-step3-{:s}-Troubleshooted.pkl'.format(self.configuration['out_directory'], self.me_model.id))
 		else:
 			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
-		# TODO: Update curation notes with ts
-# 		self.builder.org.generate_curation_notes()
 		return None
