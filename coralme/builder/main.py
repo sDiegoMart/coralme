@@ -2005,10 +2005,62 @@ class MEReconstruction(MEBuilder):
 			logging.warning('No Braun\'s lipoprotein (lpp gene) homolog was set. Please check if it is the correct behavior.')
 
 		# ## Part 7: Set keffs
-		# Either entirely based on SASA or using fit keffs from [Ebrahim et al 2016](https://www.ncbi.nlm.nih.gov/pubmed/27782110?dopt=Abstract)
-
-		#TODO: Reincorporate here Keff rescaling from SASA (already in BACILLUSme and PPUTIDAme)
-
+		flag = self.configuration.get('keff_method',None)
+		if flag == 'estimate':
+			reaction_median_keffs = pandas.read_csv(
+				self.configuration.get(
+					'reaction_median_keff',
+					self.configuration['out_directory'] + 'building_data/reaction_median_keffs.txt'),
+				sep='\t'
+			)
+			sasa_list = []
+			for met in me.metabolites:
+				cplx_sasa = 0.
+				if not isinstance(met, coralme.core.component.Complex):
+					continue
+				MW = met.formula_weight
+				if not MW:
+					MW = 0
+					logging.warning(' {} has no formula'.format(key))
+				cplx_sasa += MW ** (3. / 4)
+				sasa_list.append(cplx_sasa)
+			median_sasa = numpy.median(numpy.array(sasa_list))
+			for key, row in tqdm.tqdm(reaction_median_keffs.iterrows(),
+							   'Estimating Keffs with SASA...',
+							   bar_format = bar_format,
+							   total=reaction_median_keffs.shape[0]):
+				reaction_id = row['reaction']
+				complex_id = row['complex']
+				median_keff = row['keff']
+				molecular_weight = me.metabolites.get_by_id(complex_id).formula_weight
+				sasa = molecular_weight ** (3./4)
+				keff = sasa * median_keff / median_sasa
+				if keff > 3000:
+					keff = 3000.
+				elif keff < .01:
+					keff = .01
+				try:
+					r = me.reactions.get_by_id(reaction_id)
+					r.keff = keff
+					r.update()
+				except:
+					logging.warning('There was a problem setting Keff for {}'.format(reaction_id))
+		elif flag == 'read':
+			final_keffs = pandas.read_csv(
+				self.configuration.get(
+					'final_reaction_keffs',
+					self.configuration['out_directory'] + 'building_data/final_reaction_keffs.txt'),
+				sep='\t'
+			)
+			for key, row in tqdm.tqdm(final_keffs.iterrows(),
+							   'Reading Keffs...',
+							   bar_format = bar_format,
+							   total=final_keffs.shape[0]):
+				try:
+					me.reactions.get_by_id(reaction_id).keff = row['keff']
+				except:
+					logging.warning('There was a problem setting Keff for {}'.format(key))
+        
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
 

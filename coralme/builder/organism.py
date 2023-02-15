@@ -1530,7 +1530,7 @@ class Organism(object):
     def get_reaction_keffs(self):
         if self.is_reference:
             return None
-
+        # Keff estimator from https://pubs.acs.org/doi/10.1021/bi2002289
         m_model = self.m_model
         subsystem_classification = self.subsystem_classification
         enz_rxn_assoc_df = self.enz_rxn_assoc_df
@@ -1563,7 +1563,9 @@ class Organism(object):
                     rxn_keff_dict[r]["keff"] = keff
         self.reaction_median_keffs = pandas.DataFrame.from_dict(rxn_keff_dict).T
         self.reaction_median_keffs.index.name = "reaction"
-
+        self.reaction_median_keffs.to_csv(self.directory + 'reaction_median_keffs.txt',
+                                          sep='\t')
+        
     def get_phospholipids(self):
         m_model = self.m_model
         return [
