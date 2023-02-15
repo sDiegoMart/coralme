@@ -85,6 +85,8 @@ def add_triphosphoribosyl_dephospho_CoA(me_model):
 	_2tpr3dpcoa = me_model.global_info['complex_cofactors']['triphosphoribosyl_dephospho_coa']
 	return None
 
+#TODO: glycyl
+
 def add_FeFe_and_NiFe_modifications(me_model):
 	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe']
 

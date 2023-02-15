@@ -986,7 +986,7 @@ class MEBuilder(object):
 					total=len(ref_rna_modification)):
 			if k not in ref_cplx_homolog: continue
 			org_cplx = ref_cplx_homolog[k]
-			if org_cplx not in org_rna_modification: 
+			if org_cplx not in org_rna_modification:
 				org_rna_modification[org_cplx] = []
 			org_rna_modification[org_cplx] = v.copy()
 
@@ -1003,7 +1003,7 @@ class MEBuilder(object):
 			for i in v:
 				if i not in ref_cplx_homolog: continue
 				org_cplx = ref_cplx_homolog[i]
-				if org_cplx not in org_lipid_modifications[k]: 
+				if org_cplx not in org_lipid_modifications[k]:
 					org_lipid_modifications[k].append(org_cplx)
 
 	def update_transcription_subreactions_from_homology(self):
@@ -1657,7 +1657,7 @@ class MEReconstruction(MEBuilder):
 
 		ribosome_stoich = coralme.builder.preprocess_inputs.ribosome_stoichiometry(df_data)
 		ribosome_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Ribosome')
-		df_rrna_mods = df_rna_mods[df_rna_mods['bnum'].isin(['16S_rRNAs', '23S_rRNAs'])]
+		df_rrna_mods = df_rna_mods[df_rna_mods['bnum'].isin(['16s_rRNAs', '23s_rRNAs'])]
 		coralme.builder.ribosome.add_ribosome(me, ribosome_stoich, ribosome_subreactions, df_rrna_mods, verbose = True)
 
 		# ### 3) Add charged tRNA reactions
@@ -1700,7 +1700,7 @@ class MEReconstruction(MEBuilder):
 
 		# Add tRNA modifications to ME-model per type of organism
 		if me.global_info['domain'].lower() in ['prokaryote', 'bacteria']:
-			df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['16S_rRNAs', '23S_rRNAs'])]
+			df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['16s_rRNAs', '23s_rRNAs'])]
 		elif me.global_info['domain'].lower() in ['eukarya', 'eukaryote']:
 			df_trna_mods = df_rna_mods[~df_rna_mods['bnum'].isin(['18S_rRNAs', '25S_rRNAs', '28S_rRNAs'])]
 		else:
@@ -1805,6 +1805,9 @@ class MEReconstruction(MEBuilder):
 			coralme.builder.modifications.add_biotin_modifications(me)
 		#TODO: 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA in CitD catalyzed by CitX
 		if me.process_data.has_id('mod_2tpr3dpcoa_c'):
+			coralme.builder.modifications.add_triphosphoribosyl_dephospho_CoA(me)
+		#TODO: glycyl
+		if me.process_data.has_id('mod_glycyl_c'):
 			coralme.builder.modifications.add_triphosphoribosyl_dephospho_CoA(me)
 		if me.process_data.has_id('mod_lipoyl_c'):
 			coralme.builder.modifications.add_lipoate_modifications(me)
@@ -1940,6 +1943,13 @@ class MEReconstruction(MEBuilder):
 
 		lipid_modifications = me.global_info.get('lipid_modifications')
 		lipoprotein_precursors = me.global_info.get('lipoprotein_precursors')
+
+		# Step1: assign enzymes to lipid modifications
+		if hasattr(self, 'org'):
+			for data in me.process_data.query('^mod_1st'):
+				data.enzyme = self.org.lipid_modifications.get('pg_pe_160', 'CPLX_dummy')
+			for data in me.process_data.query('^mod_2nd'):
+				data.enzyme = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
 
 		# Step2: add reactions of lipoprotein formation
 		if bool(config.get('add_lipoproteins', False)):

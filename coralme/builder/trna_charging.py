@@ -9,12 +9,11 @@ def add_trna_modification_procedures(me_model, trna_mods):
 	for idx, mod_data in tqdm.tqdm(list(trna_mods.iterrows()), 'Adding tRNA modification SubReactions...', bar_format = bar_format):
 		for position in mod_data['positions'].split(','):
 			#if mod_data.type == 'met_tRNA':
-			if mod_data['bnum'] in me_model.global_info['START_tRNA']:
-				#name = '{:s}_at_{:s}_in_{:s}'.format(mod_data.modification, position, mod_data.type)
-				name = '{:s}_at_{:s}_in_{:s}'.format(mod_data['modification'], position, mod_data['bnum'])
-			else:
-				name = '{:s}_at_{:s}'.format(mod_data['modification'], position)
-
+			#if mod_data['bnum'] in me_model.global_info['START_tRNA']:
+				##name = '{:s}_at_{:s}_in_{:s}'.format(mod_data.modification, position, mod_data.type)
+				#name = '{:s}_at_{:s}_in_met_tRNA'.format(mod_data['modification'], position)
+			#else:
+			name = '{:s}_at_{:s}'.format(mod_data['modification'], position)
 			trna_mod = coralme.core.processdata.SubreactionData(name, me_model)
 			#trna_mod.enzyme = mod_data['enzymes'].split(' AND ') if mod_data['enzymes'] != 'No_Machine' else None
 			trna_mod.enzyme = mod_data.enzymes.split(' AND ') if mod_data.enzymes != 'No_Machine' else ['CPLX_dummy']

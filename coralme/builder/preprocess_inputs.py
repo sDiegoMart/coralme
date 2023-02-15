@@ -276,6 +276,13 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
 	data['MetaComplex ID'].update(data.apply(lambda x: get_excision(x, dct), axis = 1))
 
+	# set RNA targets
+	dct = builder.org.rna_modification_targets.copy(deep = True)
+	dct['at'] = dct['modification'] + '_at_' + dct['position']
+	dct = dct.groupby('bnum').agg({'at': lambda x: ','.join(x.tolist())}).to_dict()['at']
+	data['RNA mods/enzyme'] = data['Gene Locus ID'].apply(lambda x: dct.get(str(x), None))
+
+	# set RNA modifiers and targets
 	def get_rna_modifiers(x, lst):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
@@ -283,10 +290,9 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 				return 'RNA_modifier_enzyme'
 
-	lst = [ k.split('_mod_')[0] for k,v in builder.org.rna_modification.items() ]
-	data['MetaComplex ID'].update(data.apply(lambda x: get_rna_modifiers(x, lst), axis = 1))
-	# TODO
-	#data['RNA mods/enzyme']
+	dct = { k.split('_mod_')[0]:','.join(v) for k,v in builder.org.rna_modification.items() }
+	data['MetaComplex ID'].update(data.apply(lambda x: get_rna_modifiers(x, list(dct.keys())), axis = 1))
+	data['RNA mods/enzyme'].update(data['Complex ID'].apply(lambda x: dct.get(str(x).split(':')[0], None)))
 
 	def get_transpaths(x, dct):
 		pathways = []
@@ -741,7 +747,7 @@ def get_df_rna_enzs(df, filter_in = set(), generics = False):
 		tmp.columns = ['enzymes', 'modification', 'positions']
 		tmp = tmp.drop_duplicates(keep = 'first')
 
-		return tmp
+		return tmp.groupby(['modification', 'positions']).agg({'enzymes': lambda x: ' AND '.join(x.to_list())}).reset_index()
 	else:
 		return pandas.DataFrame(columns = ['enzymes', 'modification', 'positions'])
 
