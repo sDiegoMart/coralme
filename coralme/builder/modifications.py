@@ -77,21 +77,28 @@ def _replace_modification(dct, me_model):
 		#cplx_data.create_complex_formation() # the cplx_data already exists
 
 def add_btn_modifications(me_model):
-	# { "mod_btn_c" : [ "biotin_ligase" ] }
-	dct = me_model.global_info['complex_cofactors']['biotin_subreactions']
-	_replace_modification(dct, me_model)
+	# dct = { "mod_btn_c" : [ "biotin_ligase" ] }
+	dct = me_model.global_info['complex_cofactors'].get('biotin_subreactions', {})
+	if bool(dct):
+		_replace_modification(dct, me_model)
 
 def add_2tpr3dpcoa_modifications(me_model):
-	dct = me_model.global_info['complex_cofactors']['citx_subreactions']
-	_replace_modification(dct, me_model)
+	# dct = { "mod_2tpr3dpcoa_c" : [ "citx_transfer_to_citd" ] }
+	dct = me_model.global_info['complex_cofactors'].get('citx_subreactions', {})
+	if bool(dct):
+		_replace_modification(dct, me_model)
 
 def add_glycyl_modifications(me_model):
-	dct = me_model.global_info['complex_cofactors']['glycyl_subreactions']
-	_replace_modification(dct, me_model)
+	# dct = { "mod_glycyl_c" : [ "gre_activation" ] }
+	dct = me_model.global_info['complex_cofactors'].get('glycyl_subreactions', {})
+	if bool(dct):
+		_replace_modification(dct, me_model)
 
 def add_pan4p_modifications(me_model):
-	dct = me_model.global_info['complex_cofactors']['acps_subreactions']
-	_replace_modification(dct, me_model)
+	# dct = { "mod_pan4p_c" : [ "acpP_activation" ] }
+	dct = me_model.global_info['complex_cofactors'].get('acps_subreactions', {})
+	if bool(dct):
+		_replace_modification(dct, me_model)
 
 def add_FeFe_and_NiFe_modifications(me_model):
 	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe']

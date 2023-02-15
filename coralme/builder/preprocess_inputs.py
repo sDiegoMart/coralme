@@ -458,6 +458,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	tmp1 = tmp1[tmp1['M-model Reaction ID'].notna() & tmp1['Complex ID'].notna()]
 	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
 
+	# this dataframe contains genes NOT associated to M-model reactions
 	tmp4 = data.copy(deep = True).reset_index(drop = True)
 	tmp4 = tmp4[tmp4['M-model Reaction ID'].notna() & tmp4['Complex ID'].notna()]
 	tmp4 = tmp4[~tmp4['Complex ID'].str.fullmatch('|'.join(cplxs))]
