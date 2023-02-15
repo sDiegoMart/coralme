@@ -1261,9 +1261,8 @@ class MEReconstruction(MEBuilder):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
 			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
 
-
-		if hasattr(self, 'homology') and len(config.get('braun\'s_lipoproteins', [])) == 0:
-			lst = [ k.split('_mod_')[0] for k,v in self.homology.org_cplx_homolog.items() if 'palmitate' in v ]
+		if hasattr(self, 'org') and len(config.get('braun\'s_lipoproteins', [])) == 0:
+			lst = [ k.split('_mod_')[0] for k,v in self.org.protein_mod.to_dict()['Modifications'].items() if 'palmitate' in v ]
 			config['braun\'s_lipoproteins'] = lst if isinstance(lst, list) else [lst]
 			if len(lst) != 0:
 				logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(', '.join(lst)))
@@ -1271,18 +1270,21 @@ class MEReconstruction(MEBuilder):
 		def read(filecode, input_type, filename_if_empty, columns = []):
 			filename = config.get(filecode, '')
 			if pathlib.Path(filename).is_file():
-				df = coralme.builder.flat_files.read(filename)
-				if set(df.columns).issubset(set(columns)):
-					return df
-				else:
-					logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
+				file_to_read = filename
+			elif pathlib.Path(filename_if_empty).is_file():
+				file_to_read = filename_if_empty
 			else:
 				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty \'{:s}\' file was created.'.format(input_type, filename, filename_if_empty))
 				config[filecode] = filename_if_empty
-
 				tmp = pandas.DataFrame(columns = columns)
 				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
 				return tmp
+
+			df = coralme.builder.flat_files.read(file_to_read)
+			if set(df.columns).issubset(set(columns)):
+				return df
+			else:
+				logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
 
 		# INPUTS: We capture if the file exists or if the key in the configuration file is ''
 		# Transcriptional Units
@@ -1411,8 +1413,7 @@ class MEReconstruction(MEBuilder):
 
 		# Read user inputs
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
-		df_tus, df_rmsc, df_subs, df_mets = tmp1
-		df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths = tmp2
+		(df_tus, df_rmsc, df_subs, df_mets), (df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths) = tmp1, tmp2
 
 		# Remove default ME-model SubReactions that are not mapped in the organism-specific matrix
 		subrxns = set(df_data[df_data['ME-model SubReaction'].notnull()]['ME-model SubReaction'])
@@ -1800,23 +1801,29 @@ class MEReconstruction(MEBuilder):
 				modifications['mod_' + mod] = abs(value)
 			me.process_data.get_by_id(complex_id).subreactions = modifications
 
-		# Check if the modification is set on any component in the organism-specific matrix
+		# Check if complex modifications are set on any component in the organism-specific matrix
+		# biotin---[acetyl-CoA-carboxylase] ligase
 		if me.process_data.has_id('mod_btn_c'):
-			coralme.builder.modifications.add_biotin_modifications(me)
-		#TODO: 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA in CitD catalyzed by CitX
+			coralme.builder.modifications.add_btn_modifications(me)
+		# 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA in CitD catalyzed by CitX
 		if me.process_data.has_id('mod_2tpr3dpcoa_c'):
-			coralme.builder.modifications.add_triphosphoribosyl_dephospho_CoA(me)
-		#TODO: glycyl
+			coralme.builder.modifications.add_2tpr3dpcoa_modifications(me)
+		# activation of glycyl radical enzymes
 		if me.process_data.has_id('mod_glycyl_c'):
-			coralme.builder.modifications.add_triphosphoribosyl_dephospho_CoA(me)
+			coralme.builder.modifications.add_glycyl_modifications(me)
+		# pap4p in AcpP catalyzed by AcpS
+		if me.process_data.has_id('mod_pan4p_c'):
+			coralme.builder.modifications.add_pan4p_modifications(me)
+		# https://www.genome.jp/pathway/map00785
 		if me.process_data.has_id('mod_lipoyl_c'):
-			coralme.builder.modifications.add_lipoate_modifications(me)
+			coralme.builder.modifications.add_lipoyl_modifications(me)
+
 		if me.process_data.has_id('mod_3fe4s_c') or me.process_data.has_id('mod_4fe4s_c') or me.process_data.has_id('mod_2fe2s_c'):
 			coralme.builder.modifications.add_iron_sulfur_modifications(me)
 		if me.process_data.has_id('mod_FeFe_cofactor_c') or me.process_data.has_id('mod_NiFe_cofactor_c'):
 			coralme.builder.modifications.add_FeFe_and_NiFe_modifications(me)
 		if me.process_data.has_id('mod_bmocogdp_c'):
-			coralme.builder.modifications.add_bmocogdp_modifications(me)
+			coralme.builder.modifications.add_bmocogdp_chaperones(me)
 
 		# add formation reactions for each of the ComplexData
 		for data in tqdm.tqdm(list(me.complex_data), 'Adding ComplexFormation into the ME-model...', bar_format = bar_format):
@@ -2060,7 +2067,7 @@ class MEReconstruction(MEBuilder):
 					me.reactions.get_by_id(reaction_id).keff = row['keff']
 				except:
 					logging.warning('There was a problem setting Keff for {}'.format(key))
-        
+
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
 

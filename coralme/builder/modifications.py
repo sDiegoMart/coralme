@@ -3,10 +3,10 @@ import coralme
 
 def add_iron_sulfur_modifications(me_model):
 	#generic_fes_transfer_complexes = me_model.global_info['complex_cofactors']['generic_fes_transfer_complexes']
-	fes_transfer = me_model.global_info['complex_cofactors']['fes_transfers']
+	fes_transfers = me_model.global_info['complex_cofactors']['fes_transfers']
 	for fes in ['2fe2s', '4fe4s']:
 		name = 'generic_{:s}_transfer_complex'.format(fes)
-		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in fes_transfer.values() if x != '' ]
+		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in fes_transfers.values() if x != '' ]
 		generic_fes_transfer = coralme.core.processdata.GenericData(name, me_model, components)
 		generic_fes_transfer.create_reactions()
 
@@ -14,7 +14,7 @@ def add_iron_sulfur_modifications(me_model):
 		me_model.add_metabolites([coralme.core.component.Metabolite(fes + '_c')])
 
 		# create unloading reactions
-		for name in fes_transfer.values():
+		for name in fes_transfers.values():
 			if name != '':
 				rxn = coralme.core.reaction.MEReaction('_'.join([name, fes, 'unloading']))
 				me_model.add_reactions([rxn])
@@ -53,57 +53,67 @@ def add_iron_sulfur_modifications(me_model):
 
 	return None
 
-def add_biotin_modifications(me_model):
-	biotin_modifications = me_model.global_info['complex_cofactors']['biotin_subreactions']
-	for mod in list(biotin_modifications.values())[0]:
-		if mod in me_model.process_data:
-			mod_data = me_model.process_data.get_by_id(mod)
-		else:
-			# create SubreactionData
-			mod_data = coralme.core.processdata.SubreactionData(mod, me_model)
+def _replace_modification(dct, me_model):
+	modification = list(dct.keys())[0] # current modification ID in me.process_data
+	new_subrxn_id = list(dct.values())[0][0] # subreaction ID in process_data to replace modification ID
 
+	if me_model.process_data.has_id(new_subrxn_id):
+		new_mod_data = me_model.process_data.get_by_id(new_subrxn_id)
+	else: # create SubreactionData with new ID (e.g., mod_btn_c now biotin_ligase)
+		new_mod_data = coralme.core.processdata.SubreactionData(new_subrxn_id, me_model)
 		try:
-			mod_data._element_contribution = mod_data.calculate_element_contribution()
+			new_mod_data._element_contribution = new_mod_data.calculate_element_contribution()
 		except:
-			logging.warning('All metabolites in SubreactionData \'{:s}\' must have a formula to determine its element contribution.'.format(mod))
+			logging.warning('All metabolites in SubreactionData \'{:s}\' must have a formula to determine their elemental contribution.'.format(new_mod_data))
 
-	biotin = me_model.process_data.get_by_id(list(biotin_modifications.keys())[0])
-	for data in biotin.get_complex_data():
+	for data in me_model.process_data.get_by_id(modification).get_complex_data():
 		cplx_data = me_model.process_data.get_by_id(data.id)
 		# copy the original data
 		cplx_data.complex_id = data.complex_id
 		cplx_data.stoichiometry = data.stoichiometry
 		cplx_data.subreactions = data.subreactions.copy()
 		# remove mod_btn_c and replace it with the new subreaction id
-		cplx_data.subreactions[mod] = cplx_data.subreactions.pop(biotin.id)
+		cplx_data.subreactions[new_mod_data.id] = cplx_data.subreactions.pop(modification)
 		#cplx_data.create_complex_formation() # the cplx_data already exists
 
-	return None
+def add_btn_modifications(me_model):
+	# { "mod_btn_c" : [ "biotin_ligase" ] }
+	dct = me_model.global_info['complex_cofactors']['biotin_subreactions']
+	_replace_modification(dct, me_model)
 
-#TODO: 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA in CitD catalyzed by CitX
-def add_triphosphoribosyl_dephospho_CoA(me_model):
-	_2tpr3dpcoa = me_model.global_info['complex_cofactors']['triphosphoribosyl_dephospho_coa']
-	return None
+def add_2tpr3dpcoa_modifications(me_model):
+	dct = me_model.global_info['complex_cofactors']['citx_subreactions']
+	_replace_modification(dct, me_model)
 
-#TODO: glycyl
+def add_glycyl_modifications(me_model):
+	dct = me_model.global_info['complex_cofactors']['glycyl_subreactions']
+	_replace_modification(dct, me_model)
+
+def add_pan4p_modifications(me_model):
+	dct = me_model.global_info['complex_cofactors']['acps_subreactions']
+	_replace_modification(dct, me_model)
 
 def add_FeFe_and_NiFe_modifications(me_model):
 	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe']
 
 	for mod, base_complex in fefe_and_nife_modifications.items():
-		if me_model.process_data.has_id(mod):
-			for data in me_model.process_data.get_by_id(mod).get_complex_data():
-				cplx_data = me_model.process_data.get_by_id(data.id)
-				cplx_data.complex_id = data.complex_id
-				cplx_data.stoichiometry = { base_complex: 1 }
-				cplx_data.subreactions[mod] = 0
+		if base_complex != '' and me_model.process_data.has_id(mod):
+			complex_data = list(me_model.process_data.get_by_id(mod).get_complex_data())
+			if len(complex_data) > 0:
+				for data in complex_data:
+					cplx_data = me_model.process_data.get_by_id(data.id)
+					cplx_data.complex_id = data.complex_id
+					cplx_data.stoichiometry = { base_complex : 1 }
+					cplx_data.subreactions[mod] = 0
+			else:
+				logging.warning('The ID \'{:s}\' in the configuration file has no base complexes assigned to it.'.format(mod))
 		else:
-			logging.warning('The ID \'{:s}\' in the configuration file has no base complexes assigned to it.'.format(mod) )
+			logging.warning('The ID \'{:s}\' in the configuration file does not exist in the ME-model.'.format(mod))
 
 	return None
 
 #def add_lipoate_modifications(me_model, lipoate_modifications):
-def add_lipoate_modifications(me_model):
+def add_lipoyl_modifications(me_model):
 	# two different reactions can add a lipoate modification.
 	# We create a separate SubreactionData for each one
 	#for key, mod in lipoate_modifications):
@@ -122,7 +132,7 @@ def add_lipoate_modifications(me_model):
 		try:
 			mod_data._element_contribution = mod_data.calculate_element_contribution()
 		except:
-			logging.warning('All metabolites in SubreactionData \'{:s}\' must have a formula to determine its element contribution.'.format(mod))
+			logging.warning('All metabolites in SubreactionData \'{:s}\' must have a formula to determine their elemental contribution.'.format(mod))
 
 	lipoate = me_model.process_data.get_by_id(list(lipoate_modifications.keys())[0])
 	#alt_lipo = me_model.process_data.get_by_id('mod_lipo_c_alt')
@@ -147,7 +157,7 @@ def add_lipoate_modifications(me_model):
 
 	return None
 
-def add_bmocogdp_modifications(me_model):
+def add_bmocogdp_chaperones(me_model):
 	bmocogdp_chaperones = me_model.global_info['complex_cofactors']['bmocogdp_chaperones']
 	for chaperone in set(bmocogdp_chaperones.values()):
 		new_mod = coralme.core.processdata.SubreactionData('mod_bmocogdp_c_' + chaperone, me_model)

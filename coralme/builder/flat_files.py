@@ -122,7 +122,7 @@ def remove_compartment(id_str):
 	return '_'.join(id_str.split('_')[:-1]) # compartment ID follows the last underscore
 
 def process_reaction_matrix_dict(reaction_matrix, cplx_data, me_compartments = set()):
-	reaction_matrix['Reaction'] = reaction_matrix['Reaction'].str.split(', ')
+	reaction_matrix['Reaction'] = reaction_matrix['Reaction'].str.split(',')
 	reaction_matrix = reaction_matrix.explode('Reaction')
 	complex_dct = get_complex_subunit_stoichiometry(cplx_data)
 	reaction_matrix_dict = get_reaction_matrix_dict(reaction_matrix, compartments = me_compartments, complex_set = set(complex_dct.keys()))
