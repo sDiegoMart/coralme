@@ -435,28 +435,33 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
 	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
 	cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
-	# keep complexes inferred from tRNA synthetases
-	dct = builder.org.amino_acid_trna_synthetase
-	cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
-	# don't drop complexes from special modifications
-	complex_cofactors = []
-	for key, value in builder.configuration.get('complex_cofactors', {}).items():
-		if key == 'fes_transfers' and len(value) != 0:
-			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-		if key == 'fes_chaperones' and len(value) != 0:
-			complex_cofactors.append([ k for k,v in value.items() if v != '' ])
-			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-		if key == 'bmocogdp_chaperones' and len(value) != 0:
-			complex_cofactors.append([ k for k,v in value.items() if v != '' ])
-			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-		if key == 'FeFe/NiFe' and len(value) != 0:
-			complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-	cplxs.update([ '{:s}:\d+'.format(x.split('_mod_')[0]) for y in complex_cofactors for x in y ])
+	## keep complexes inferred from tRNA synthetases
+	#dct = builder.org.amino_acid_trna_synthetase
+	#cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
+	## don't drop complexes from special modifications
+	#complex_cofactors = []
+	#for key, value in builder.configuration.get('complex_cofactors', {}).items():
+		#if key == 'fes_transfers' and len(value) != 0:
+			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+		#if key == 'fes_chaperones' and len(value) != 0:
+			#complex_cofactors.append([ k for k,v in value.items() if v != '' ])
+			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+		#if key == 'bmocogdp_chaperones' and len(value) != 0:
+			#complex_cofactors.append([ k for k,v in value.items() if v != '' ])
+			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+		#if key == 'FeFe/NiFe' and len(value) != 0:
+			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
+	#cplxs.update([ '{:s}:\d+'.format(x.split('_mod_')[0]) for y in complex_cofactors for x in y ])
 
 	# this dataframe contains only genes associated to M-model reactions
 	tmp1 = data.copy(deep = True).reset_index(drop = True)
 	tmp1 = tmp1[tmp1['M-model Reaction ID'].notna() & tmp1['Complex ID'].notna()]
 	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
+
+	tmp4 = data.copy(deep = True).reset_index(drop = True)
+	tmp4 = tmp4[tmp4['M-model Reaction ID'].notna() & tmp4['Complex ID'].notna()]
+	tmp4 = tmp4[~tmp4['Complex ID'].str.fullmatch('|'.join(cplxs))]
+	tmp4['M-model Reaction ID'] = tmp4['Reaction Name'] = tmp4['Reversibility'] = None
 
 	# this dataframe contains genes associated to generics (correct association) and to reactions (incorrect association)
 	tmp2 = data.copy(deep = True).reset_index(drop = True)
@@ -479,7 +484,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	tmp3 = data.copy(deep = True).reset_index(drop = True)
 	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
 
-	data = pandas.concat([tmp1, tmp2, tmp3], axis = 0)
+	data = pandas.concat([tmp1, tmp4, tmp2, tmp3], axis = 0)
 	#data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
 
 	if output:
