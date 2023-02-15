@@ -445,7 +445,7 @@ AERGLYC3PDEHYDROG-CPLX_mod_fad(1)	AERGLYC3PDEHYDROG-CPLX	fad(1)	M_protein_recon
 SUCCORNTRANSAM-CPLX_mod_pydx5p(1)	SUCCORNTRANSAM-CPLX	pydx5p(1)	M_protein_recon
 ISOCITHASE-CPLX_mod_mn2(1)	ISOCITHASE-CPLX	mn2(1)	M_protein_recon
 ISOCITHASE-CPLX_mod_mg2(1)	ISOCITHASE-CPLX	mg2(1)	M_protein_recon
-CPLX0-250_FORMATEDEHYDROGH-MONOMER_mod_4fe4s(8)_mod_2fe2s(2)_mod_bmocogdp(1)_mod_NiFeCoCN2	CPLX0-250_FORMATEDEHYDROGH-MONOMER	4fe4s(8) AND 2fe2s(2) AND bmocogdp(1) AND NiFeCoCN2(1)	M_protein_recon
+CPLX0-250_FORMATEDEHYDROGH-MONOMER_mod_4fe4s(8)_mod_2fe2s(2)_mod_bmocogdp(1)_mod_NiFeCoCN2(1)	CPLX0-250_FORMATEDEHYDROGH-MONOMER	4fe4s(8) AND 2fe2s(2) AND bmocogdp(1) AND NiFeCoCN2(1)	M_protein_recon
 G6523-MONOMER_G6518-MONOMER_mod_fmn(1)	G6523-MONOMER_G6518-MONOMER	fmn(1)	M_protein_recon
 EG10370-MONOMER_mod_mn2(1)	EG10370-MONOMER	mn2(1)	M_protein_recon
 NITRATREDUCTA-CPLX_mod_bmocogdp(1)_mod_3fe4s(1)_mod_4fe4s(1)	NITRATREDUCTA-CPLX	bmocogdp(1) AND 3fe4s(1) AND 4fe4s(1)	M_protein_recon
