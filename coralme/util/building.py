@@ -428,6 +428,9 @@ def build_reactions_from_genbank(
 	from collections import Counter
 	codon_usage = Counter()
 
+	# rna components
+	rna_components = []
+
 	# New Gene Locus ID
 	new_locus_tag_counter = 1
 
@@ -473,6 +476,9 @@ def build_reactions_from_genbank(
 				pass
 			elif filter2 or filter3:
 				continue
+
+			if feature.type in [ 'ncRNA', 'tmRNA', 'misc_RNA' ]:
+				rna_components.append(bnum)
 
 			# Assign values for all important gene attributes
 			# old code cannot consider if genes are split
@@ -614,6 +620,9 @@ def build_reactions_from_genbank(
 
 			for TU_id in parent_tu:
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
+
+	# list of rna components
+	me_model.global_info['rna_components'] = rna_components
 
 	# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
 	me_model.global_info['aa2trna'] = aa2trna

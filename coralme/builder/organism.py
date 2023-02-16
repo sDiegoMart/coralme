@@ -183,10 +183,8 @@ class Organism(object):
         self.sync_files()
         logging.warning("Looking for duplicates in provided files")
         self.check_for_duplicates()
-
         logging.warning('Pruning genbank from unwanted feature types')
         self.prune_genbank()
-
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
 
@@ -1565,7 +1563,7 @@ class Organism(object):
         self.reaction_median_keffs.index.name = "reaction"
         self.reaction_median_keffs.to_csv(self.directory + 'reaction_median_keffs.txt',
                                           sep='\t')
-        
+
     def get_phospholipids(self):
         m_model = self.m_model
         return [
