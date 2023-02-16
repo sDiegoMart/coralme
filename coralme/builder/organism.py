@@ -1555,9 +1555,8 @@ class Organism(object):
             cplxs = row["Complexes"].split(" OR ")
             for c in cplxs:
                 for d in reaction_dirs:
-                    r = "{}_{}_{}".format(reaction, d, c)
+                    r = "{}".format(reaction)
                     rxn_keff_dict[r] = {}
-                    rxn_keff_dict[r]["complex"] = c
                     rxn_keff_dict[r]["keff"] = keff
         self.reaction_median_keffs = pandas.DataFrame.from_dict(rxn_keff_dict).T
         self.reaction_median_keffs.index.name = "reaction"
