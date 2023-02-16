@@ -205,7 +205,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 	#for tRNA, codon in trna_to_codon[organelle].items():
 		#if 'START' in codon:
 			#start = True
-	if not any([ True if 'START' in v else False for k,v in trna_to_codon[organelle].items() ]):
+	if not any([ True if 'START' in v else False for k,v in trna_to_codon.items() ]):
 		logging.warning('Associate at least one tRNA-Met/tRNA-fMet gene with the \'START\' keyword or add manually a \'tRNAChargingReaction\'.')
 
 	# add in all the tRNA charging reactions
@@ -584,7 +584,7 @@ def build_reactions_from_genbank(
 					# misacylation in the cytoplasm of Gram-positive eubacteria (and other bacteria such as cyanobacteria)
 					filter2 = me_model.global_info['domain'].lower() in ['bacteria', 'prokaryote']
 
-					if (filter1a and filter1b) or filter2:
+					if filter1a and filter1b or filter2:
 						trna_to_aa[bnum] = trna_misacylation[aa]
 						if aa.endswith('x'):
 							logging.warning(msg2.format(bnum, aa, trna_misacylation[aa], aa))
