@@ -118,7 +118,7 @@ class MEBuilder(object):
 		# self.org.get_rna_polymerase(force_RNAP_as='')
 
 		logging.warning("Modifying and preparing M-model")
-		self.curate()
+# 		self.curate()
 		self.prepare_model()
 
 		# ## Homology with reference
@@ -398,8 +398,8 @@ class MEBuilder(object):
 		protein_mod.index.name = "Modified_enzyme"
 		self.org.protein_mod = pandas.concat([self.org.protein_mod,protein_mod])
 
-	def curate(self):
-		coralme.builder.curation.MECurator(self.org).curate()
+# 	def curate(self):
+# 		coralme.builder.curation.MECurator(self.org).curate()
 
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
 		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
