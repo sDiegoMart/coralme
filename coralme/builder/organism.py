@@ -135,7 +135,7 @@ class Organism(object):
         else:
             filename = self.config.get('df_TranscriptionalUnits', self.directory + "TUs_from_biocyc.txt")
 
-        if os.path.isfile(filename) and (not self.config.get('overwrite', True) or self.is_reference):
+        if os.path.isfile(filename): #(not self.config.get('overwrite', True) or self.is_reference):
             tmp = pandas.read_csv(filename, index_col = 0, sep = "\t")
             tmp = tmp.dropna(subset=['start', 'stop'], how = 'any')
             return tmp
