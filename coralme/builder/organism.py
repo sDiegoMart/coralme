@@ -842,7 +842,7 @@ class Organism(object):
         transl_table = set(i for i in set(transl_table) if i is not None)
         if len(transl_table) > 1:
             warn_table = transl_table
-        elif not transl_table:
+        elif not transl_table and 'RNA' not in feature.type:
             transl_table = ['11']
         self.transl_table = list(transl_table)[0]
 
