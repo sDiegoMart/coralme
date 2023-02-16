@@ -251,6 +251,7 @@ class Organism(object):
         # Metabolites
         RNA_mets = []
         formula_mets = []
+        formulaweight_mets = []
 
         for m in tqdm.tqdm(m_model.metabolites,
                            'Checking M-model metabolites...',
@@ -259,6 +260,8 @@ class Organism(object):
                 RNA_mets.append(m)
             if not m.formula:
                 formula_mets.append(m.id)
+            if m.formula_weight is None:
+                formulaweight_mets.append(m.id)
 
         # Reactions
         subsystem_RXNS = []
@@ -280,6 +283,12 @@ class Organism(object):
             self.curation_notes['org.check_m_model'].append({
                 'msg':"Some metabolites are missing their formula",
                 'triggered_by':formula_mets,
+                'importance':'critical',
+                'to_do':'Correct the formulas of the listed metabolites. Some metabolite formulas are critical for the completion of this pipeline. If homology is ON, this pipeline will try to fill in the formulas from the reference.'})
+        if formulaweight_mets:
+            self.curation_notes['org.check_m_model'].append({
+                'msg':"Some metabolites have a problematic formula. If these metabolites are used in protein modifications, or other subreactions, it will cause an error.",
+                'triggered_by':formulaweight_mets,
                 'importance':'critical',
                 'to_do':'Correct the formulas of the listed metabolites. Some metabolite formulas are critical for the completion of this pipeline. If homology is ON, this pipeline will try to fill in the formulas from the reference.'})
         if subsystem_RXNS:
