@@ -137,7 +137,7 @@ class Organism(object):
 
         if os.path.isfile(filename): #(not self.config.get('overwrite', True) or self.is_reference):
             tmp = pandas.read_csv(filename, index_col = 0, sep = "\t")
-            tmp = tmp.dropna(subset=['start', 'stop'], how = 'any')
+            tmp = tmp.dropna(subset=['start', 'stop', 'genes'], how = 'any')
             return tmp
         else:
             return self.get_TU_df()
@@ -842,7 +842,7 @@ class Organism(object):
         transl_table = set(i for i in set(transl_table) if i is not None)
         if len(transl_table) > 1:
             warn_table = transl_table
-        elif not transl_table:
+        elif not transl_table and 'RNA' not in feature.type:
             transl_table = ['11']
         self.transl_table = list(transl_table)[0]
 
@@ -1555,9 +1555,8 @@ class Organism(object):
             cplxs = row["Complexes"].split(" OR ")
             for c in cplxs:
                 for d in reaction_dirs:
-                    r = "{}_{}_{}".format(reaction, d, c)
+                    r = "{}".format(reaction)
                     rxn_keff_dict[r] = {}
-                    rxn_keff_dict[r]["complex"] = c
                     rxn_keff_dict[r]["keff"] = keff
         self.reaction_median_keffs = pandas.DataFrame.from_dict(rxn_keff_dict).T
         self.reaction_median_keffs.index.name = "reaction"

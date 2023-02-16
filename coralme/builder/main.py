@@ -1696,6 +1696,7 @@ class MEReconstruction(MEBuilder):
 				continue
 
 			if hasattr(self, 'org'):
+				# TO DO: If no org, selenocysteine is not defined and next line errors
 				selenocysteine = self.org.special_trna_subreactions
 
 			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine = selenocysteine)
@@ -2021,8 +2022,9 @@ class MEReconstruction(MEBuilder):
 				self.configuration.get(
 					'reaction_median_keff',
 					self.configuration['out_directory'] + 'building_data/reaction_median_keffs.txt'),
-				sep='\t'
-			)
+				sep='\t',
+				index_col=0
+			)['keff'].to_dict()
 			sasa_list = []
 			for met in me.metabolites:
 				cplx_sasa = 0.
@@ -2035,24 +2037,23 @@ class MEReconstruction(MEBuilder):
 				cplx_sasa += MW ** (3. / 4)
 				sasa_list.append(cplx_sasa)
 			median_sasa = numpy.median(numpy.array(sasa_list))
-			for key, row in tqdm.tqdm(reaction_median_keffs.iterrows(),
-							   'Estimating Keffs with SASA...',
-							   bar_format = bar_format,
-							   total=reaction_median_keffs.shape[0]):
-				reaction_id = row['reaction']
-				complex_id = row['complex']
-				median_keff = row['keff']
-				molecular_weight = me.metabolites.get_by_id(complex_id).formula_weight
-				sasa = molecular_weight ** (3./4)
+			metabolic_reactions = [r for r in me.reactions if isinstance(r,coralme.core.reaction.MetabolicReaction)]
+			for r in tqdm.tqdm(metabolic_reactions,
+							   'Estimating Metabolic Keffs with SASA',
+							   bar_format=bar_format):
+				base_id = r._stoichiometric_data.id
+				if base_id not in reaction_median_keffs:
+					continue
+				cplx = me.metabolites.get_by_id(r._complex_data.id)
+				median_keff = reaction_median_keffs[base_id]
+				sasa = cplx.formula_weight ** (3./4)
 				keff = sasa * median_keff / median_sasa
-				if keff > 3000:
-					keff = 3000.
-				elif keff < .01:
-					keff = .01
+				if keff > 3000: keff = 3000.
+				elif keff < .01: keff = .01
 				try:
-					r = me.reactions.get_by_id(reaction_id)
 					r.keff = keff
 					r.update()
+					logging.warning('Setting Keff for {} in {}'.format(r.id,keff))
 				except:
 					logging.warning('There was a problem setting Keff for {}'.format(reaction_id))
 		elif flag == 'read':
