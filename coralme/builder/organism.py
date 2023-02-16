@@ -1583,53 +1583,53 @@ class Organism(object):
             str(m.id) for m in m_model.metabolites.query(re.compile("^[a-z]*[0-9]{2,3}_.$"))
         ]
 
-    def generate_metabolites_file(self):
-        m_model = self.m_model
-        d = {}
-        seen = set()
-        for m in tqdm.tqdm(m_model.metabolites,
-                           'Saving M-model metabolites...',
-                           bar_format = bar_format):
-            if m in seen:
-                continue
-            m_root = m.id[:-2]
-            same_mets = m_model.metabolites.query(
-                re.compile("^" + m_root + "_[a-z]{1}$")
-            )
-            compartment_string = " AND ".join(
-                m_model.compartments[i.compartment] for i in same_mets
-            )
-            d[m_root] = {
-                "name": m.name,
-                "formula": m.formula,
-                "compartment": compartment_string,
-                "data_source": m_model.id,
-            }
-            seen = seen | set(same_mets)
-        self.metabolites = pandas.DataFrame.from_dict(d).T
-        self.metabolites.index.name = "id"
+#     def generate_metabolites_file(self):
+#         m_model = self.m_model
+#         d = {}
+#         seen = set()
+#         for m in tqdm.tqdm(m_model.metabolites,
+#                            'Saving M-model metabolites...',
+#                            bar_format = bar_format):
+#             if m in seen:
+#                 continue
+#             m_root = m.id[:-2]
+#             same_mets = m_model.metabolites.query(
+#                 re.compile("^" + m_root + "_[a-z]{1}$")
+#             )
+#             compartment_string = " AND ".join(
+#                 m_model.compartments[i.compartment] for i in same_mets
+#             )
+#             d[m_root] = {
+#                 "name": m.name,
+#                 "formula": m.formula,
+#                 "compartment": compartment_string,
+#                 "data_source": m_model.id,
+#             }
+#             seen = seen | set(same_mets)
+#         self.metabolites = pandas.DataFrame.from_dict(d).T
+#         self.metabolites.index.name = "id"
 
-    def generate_reactions_file(self):
-        def is_spontaneous(r):
-            return (
-                1
-                if "spontaneous" in r.name or "diffusion" in r.name and not r.genes
-                else 0
-            )
+#     def generate_reactions_file(self):
+#         def is_spontaneous(r):
+#             return (
+#                 1
+#                 if "spontaneous" in r.name or "diffusion" in r.name and not r.genes
+#                 else 0
+#             )
 
-        m_model = self.m_model
-        d = {}
-        for r in tqdm.tqdm(m_model.reactions,
-                           'Saving M-model reactions...',
-                           bar_format = bar_format):
-            d[r.id] = {
-                "description": r.name,
-                "is_reversible": int(r.reversibility),
-                "data_source": m_model.id,
-                "is_spontaneous": is_spontaneous(r),
-            }
-        self.reactions = pandas.DataFrame.from_dict(d).T
-        self.reactions.index.name = "name"
+#         m_model = self.m_model
+#         d = {}
+#         for r in tqdm.tqdm(m_model.reactions,
+#                            'Saving M-model reactions...',
+#                            bar_format = bar_format):
+#             d[r.id] = {
+#                 "description": r.name,
+#                 "is_reversible": int(r.reversibility),
+#                 "data_source": m_model.id,
+#                 "is_spontaneous": is_spontaneous(r),
+#             }
+#         self.reactions = pandas.DataFrame.from_dict(d).T
+#         self.reactions.index.name = "name"
 
 
 #     def generate_reaction_matrix(self):
