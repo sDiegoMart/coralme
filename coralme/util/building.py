@@ -477,7 +477,7 @@ def build_reactions_from_genbank(
 			elif filter2 or filter3:
 				continue
 
-			if feature.type in [ 'ncRNA', 'tmRNA', 'misc_RNA' ]:
+			if feature.type in [ 'ncRNA', 'tmRNA', 'misc_RNA', 'RNA' ]:
 				rna_components.append(bnum)
 
 			# Assign values for all important gene attributes
