@@ -46,7 +46,7 @@ class MEManualCuration(object):
         logging.warning("Loading sigma factors")
         self.org.sigmas = self.load_sigmas()
         logging.warning("Loading M to ME metabolites dictionary")
-        self.org.m_to_me_mets = self.load_m_to_me_mets()
+        self.org.me_mets = self.load_me_mets()
         logging.warning("Loading RNA degradosome")
         self.org.rna_degradosome = self.load_rna_degradosome()
         logging.warning("Reading ribosomal proteins")
@@ -203,15 +203,16 @@ class MEManualCuration(object):
             no_file_return = create_file,
             sep = ',')
 
-    def load_m_to_me_mets(self):
+    def load_me_mets(self):
         create_file = pandas.DataFrame(columns = [
-                'm_name','me_name'
-            ]).set_index('m_name')
+                'id','me_id','name','formula','compartment','type'
+
+            ]).set_index('id')
         return self._get_manual_curation(
-            "m_to_me_mets.csv",
+            "me_metabolites.csv",
             create_file = create_file,
             no_file_return = create_file,
-            sep = ',')
+            sep = '\t')
     
     def load_rna_degradosome(self):
         create_file = pandas.DataFrame(columns = [

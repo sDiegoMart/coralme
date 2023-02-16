@@ -651,20 +651,20 @@ class MEBuilder(object):
 			cleaved_methionine.append(mutual_hits[g])
 		self.org.cleaved_methionine = cleaved_methionine
 
-	def update_m_to_me_mets(self):
-		ref_m_to_me_mets = self.ref.m_to_me_mets
+	def update_me_mets(self):
+		ref_me_mets = self.ref.me_mets
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
 		protein_mod = self.org.protein_mod.reset_index().set_index("Core_enzyme")
-		m_to_me_mets = self.org.m_to_me_mets
+		me_mets = self.org.me_mets
 		m_model = self.org.m_model
 		d = {}
 		warn_skip = []
 		warn_found = []
 		warn_skip_2 = []
-		for ref_m, row in tqdm.tqdm(ref_m_to_me_mets.iterrows(),
+		for ref_m, row in tqdm.tqdm(ref_me_mets.iterrows(),
 					'Mapping M-metabolites to E-metabolites...',
 					bar_format = bar_format,
-					total=ref_m_to_me_mets.shape[0]):
+					total=ref_me_mets.shape[0]):
 			if ref_m not in m_model.metabolites:
 				if "__" in ref_m:
 					ref_m = ref_m.replace("__", "_")
@@ -673,41 +673,41 @@ class MEBuilder(object):
 						continue
 					else:
 						warn_found.append(ref_m)
-			if ref_m in m_to_me_mets.index:
+			if ref_m in me_mets.index:
 				continue
-			ref_me = row["me_name"]
+			ref_me = row["me_id"]
+			ref_changetype = row['type']
 			d[ref_m] = {}
+			me_id = ''
 			if ref_me in ref_cplx_homolog:
 				org_me = ref_cplx_homolog[ref_me]
-				me_name = org_me
-			elif ref_me == "eliminate":
-				me_name = "eliminate"
+				me_id = org_me
+				changetype = "REPLACE"
+			elif ref_changetype == "REMOVE":
+				changetype = "REMOVE"
 			else:
-				me_name = "curate"
-			d[ref_m]["me_name"] = me_name
+				changetype = "CURATE"
+			d[ref_m]["me_id"] = me_id
+			d[ref_m]["type"] = changetype
 		if d:
 			df = pandas.DataFrame.from_dict(d).T
-			df.index.name = "m_name"
-			df = df.reset_index()
-			m_to_me_mets = m_to_me_mets.reset_index(drop=True)
-			#m_to_me_mets = m_to_me_mets.append(df)
-			m_to_me_mets = pandas.concat([m_to_me_mets, df], axis = 0, join = 'outer')
-			m_to_me_mets = m_to_me_mets.set_index("m_name")
-			self.org.m_to_me_mets = m_to_me_mets
+			df.index.name = "id"
+			me_mets = pandas.concat([me_mets, df], axis = 0, join = 'outer')
+			self.org.me_mets = me_mets.fillna('')
 		# Warnings
 		if warn_skip or warn_found or warn_skip_2:
 			if warn_skip:
-				self.org.curation_notes['update_m_to_me_mets'].append({
-					'msg':'Some metabolites in m_to_me_mets.csv are not in m_model, so they were skipped.',
+				self.org.curation_notes['update_me_mets'].append({
+					'msg':'Some metabolites in me_metabolites.csv are not in m_model, so they were skipped.',
 					'triggered_by':warn_skip,
 					'importance':'medium',
-					'to_do':'Confirm these metabolites are correctly defined in m_to_me_mets.csv'})
+					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.csv'})
 			if warn_found:
-				self.org.curation_notes['update_m_to_me_mets'].append({
-					'msg':'Some metabolites in m_to_me_mets.csv were found in reference m_model after replacing __ with _',
+				self.org.curation_notes['update_me_mets'].append({
+					'msg':'Some metabolites in me_metabolites.csv were found in reference m_model after replacing __ with _',
 					'triggered_by':warn_found,
 					'importance':'medium',
-					'to_do':'Confirm these metabolites are correctly defined in m_to_me_mets.csv'})
+					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.csv'})
 
 	def update_generics_from_homology(self):
 		generic_dict = self.org.generic_dict
@@ -1061,7 +1061,7 @@ class MEBuilder(object):
 		self.update_translocation_multipliers()
 		self.update_lipoprotein_precursors()
 		self.update_cleaved_methionine()
-		self.update_m_to_me_mets()
+		self.update_me_mets()
 		self.update_generics_from_homology()
 		self.update_folding_dict_from_homology()
 		self.update_ribosome_subreactions_from_homology()
