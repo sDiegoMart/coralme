@@ -1623,51 +1623,51 @@ class Organism(object):
         self.reactions.index.name = "name"
 
 
-    def generate_reaction_matrix(self):
-        m_model = self.m_model
-        m_to_me = self.m_to_me_mets
-        df = pandas.DataFrame.from_dict(
-            {"Reaction": {}, "Metabolites": {}, "Compartment": {}, "Stoichiometry": {}}
-        ).set_index("Reaction")
-        warn_rxns = []
-        for rxn in tqdm.tqdm(m_model.reactions,
-                           'Creating M-model reaction matrix...',
-                           bar_format = bar_format):
-            if set(
-                [
-                    m_to_me.loc[met.id, "me_name"]
-                    for met in rxn.metabolites
-                    if met.id in m_to_me.index
-                ]
-            ) == set(["eliminate"]):
-                warn_rxns.append(rxn.id)
-                continue
-            for metabolite in rxn.metabolites:
-                compartment = m_model.compartments[metabolite.compartment]
-                met = metabolite.id[:-2]
-                if metabolite.id in m_to_me.index:
-                    if m_to_me.loc[metabolite.id, "me_name"] == "eliminate":
-                        continue
-                    met = m_to_me.loc[metabolite.id, "me_name"]
-                coefficient = rxn.get_coefficient(metabolite)
-                tmp = pandas.DataFrame.from_dict({
-                    rxn.id: {
-                        "Metabolites": met,
-                        "Compartment": compartment,
-                        "Stoichiometry": coefficient,
-                        }}).T
-                df = pandas.concat([df, tmp], axis = 0, join = 'outer')
-        df.index.name = "Reaction"
-        self.reaction_matrix = df
+#     def generate_reaction_matrix(self):
+#         m_model = self.m_model
+#         m_to_me = self.m_to_me_mets
+#         df = pandas.DataFrame.from_dict(
+#             {"Reaction": {}, "Metabolites": {}, "Compartment": {}, "Stoichiometry": {}}
+#         ).set_index("Reaction")
+#         warn_rxns = []
+#         for rxn in tqdm.tqdm(m_model.reactions,
+#                            'Creating M-model reaction matrix...',
+#                            bar_format = bar_format):
+#             if set(
+#                 [
+#                     m_to_me.loc[met.id, "me_name"]
+#                     for met in rxn.metabolites
+#                     if met.id in m_to_me.index
+#                 ]
+#             ) == set(["eliminate"]):
+#                 warn_rxns.append(rxn.id)
+#                 continue
+#             for metabolite in rxn.metabolites:
+#                 compartment = m_model.compartments[metabolite.compartment]
+#                 met = metabolite.id[:-2]
+#                 if metabolite.id in m_to_me.index:
+#                     if m_to_me.loc[metabolite.id, "me_name"] == "eliminate":
+#                         continue
+#                     met = m_to_me.loc[metabolite.id, "me_name"]
+#                 coefficient = rxn.get_coefficient(metabolite)
+#                 tmp = pandas.DataFrame.from_dict({
+#                     rxn.id: {
+#                         "Metabolites": met,
+#                         "Compartment": compartment,
+#                         "Stoichiometry": coefficient,
+#                         }}).T
+#                 df = pandas.concat([df, tmp], axis = 0, join = 'outer')
+#         df.index.name = "Reaction"
+#         self.reaction_matrix = df
 
-        df.to_csv(self.directory + 'reaction_matrix.txt')
-        # Warnings
-        if warn_rxns:
-            self.curation_notes['org.generate_reaction_matrix'].append({
-                'msg':'Some reactions consisted only of metabolites marked for elimination in m_to_me_mets.csv, so they were removed',
-                'triggered_by':warn_rxns,
-                'importance':'high',
-                'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.csv'})
+#         df.to_csv(self.directory + 'reaction_matrix.txt')
+#         # Warnings
+#         if warn_rxns:
+#             self.curation_notes['org.generate_reaction_matrix'].append({
+#                 'msg':'Some reactions consisted only of metabolites marked for elimination in m_to_me_mets.csv, so they were removed',
+#                 'triggered_by':warn_rxns,
+#                 'importance':'high',
+#                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.csv'})
 
     def _get_feature_locus_tag(self,
                                feature):
