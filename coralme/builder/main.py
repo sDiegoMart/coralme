@@ -1696,6 +1696,7 @@ class MEReconstruction(MEBuilder):
 				continue
 
 			if hasattr(self, 'org'):
+				# TO DO: If no org, selenocysteine is not defined and next line errors
 				selenocysteine = self.org.special_trna_subreactions
 
 			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine = selenocysteine)
