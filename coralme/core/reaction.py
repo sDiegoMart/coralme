@@ -1564,6 +1564,7 @@ class TranslationReaction(MEReaction):
 		trna_misacylation = self._model.global_info['trna_misacylation']
 
 		# -----------------Add Amino Acids----------------------------------
+		# Correct count of amino acids in translation reactions to account for misacylation of tRNAs
 		for aa, value in translation_data.amino_acid_count.items():
 			if aa.replace('__L_' + organelle, '') in [ x.lower() for x in trna_misacylation.keys() ]:
 				new_stoichiometry[aa] = 0

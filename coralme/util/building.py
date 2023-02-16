@@ -198,14 +198,14 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 			if me_model.metabolites.has_id(aa.lower() + '__L_' + organelle):
 				trna_to_aa[tRNA] = me_model.metabolites.get_by_id(aa.lower() + '__L_' + organelle)
 			else:
-				logging.warning('The \'{:s}\' metabolite does not exist in the ME-model.'.format(aa.lower() + '__L_' + organelle))
+				logging.warning('The amino acid \'{:s}\' does not exist in the ME-model.'.format(aa.lower() + '__L_' + organelle))
 
 	# check trna_to_codon for START codon
-	start = False
-	for tRNA, codon in trna_to_codon.items():
-		if 'START' in codon:
-			start = True
-	if not start:
+	#start = False
+	#for tRNA, codon in trna_to_codon[organelle].items():
+		#if 'START' in codon:
+			#start = True
+	if not any([ True if 'START' in v else False for k,v in trna_to_codon[organelle].items() ]):
 		logging.warning('Associate at least one tRNA-Met/tRNA-fMet gene with the \'START\' keyword or add manually a \'tRNAChargingReaction\'.')
 
 	# add in all the tRNA charging reactions
@@ -550,7 +550,11 @@ def build_reactions_from_genbank(
 			msg1 = 'From the tRNA misacylation dictionary, make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
 			msg2 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). No further modification needs to take place.'
 
-			canonical_aas = ['Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val']
+			canonical_aas = [
+				'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile',
+				'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val'
+				]
+
 			if rna_type == 'tRNA':
 				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
 				if aa in canonical_aas + ['Asx', 'Glx', 'fMet', 'Sec']:
@@ -560,12 +564,11 @@ def build_reactions_from_genbank(
 					continue
 
 				# TODO: Check if this is correct... I think it is...
-				# Special tRNA(Asx) that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
 				msg = 'The tRNA \'{:s}\' is associated to two amino acids. The \'trna_misacylation\' dictionary was modified to attempt load the correct amino acid.'
+				# Special tRNA(Asx) that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
 				if aa == 'Asx':
 					trna_misacylation['Asx'] = 'Asp'
 					logging.warning(msg.format(bnum))
-
 				# Special tRNA(Glx) that can be loaded with Gln (EC 6.1.1.18) or Glu (EC 6.1.1.17)
 				if aa == 'Glx':
 					trna_misacylation['Glx'] = 'Glu'
@@ -581,7 +584,7 @@ def build_reactions_from_genbank(
 					# misacylation in the cytoplasm of Gram-positive eubacteria (and other bacteria such as cyanobacteria)
 					filter2 = me_model.global_info['domain'].lower() in ['bacteria', 'prokaryote']
 
-					if filter1a and filter1b or filter2:
+					if (filter1a and filter1b) or filter2:
 						trna_to_aa[bnum] = trna_misacylation[aa]
 						if aa.endswith('x'):
 							logging.warning(msg2.format(bnum, aa, trna_misacylation[aa], aa))
@@ -604,6 +607,7 @@ def build_reactions_from_genbank(
 				#old code
 				#trna_to_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
 
+			# trna_to_codon accounts for misacylation: { 'tRNA ID' : 'Amino acid to load into the tRNA' }
 			trna_to_aa = { k:v.replace('fMet', 'Met') for k,v in trna_to_aa.items() }
 			me_model.global_info['trna_to_aa'] = trna_to_aa
 
@@ -625,6 +629,7 @@ def build_reactions_from_genbank(
 	me_model.global_info['rna_components'] = rna_components
 
 	# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
+	# aa2trna derives from trna_to_aa, so it also accounts for misacylation: { 'organelle ID' : 'DataFrame of amino acid to load into the tRNA' }
 	me_model.global_info['aa2trna'] = aa2trna
 
 	for organelle, aa2trna_dct in aa2trna.items():
@@ -666,6 +671,7 @@ def build_reactions_from_genbank(
 
 		dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
 		aa2codons = pandas.DataFrame(data = [dct.keys(), dct.values()]).T.groupby(1).agg({0: lambda x: x.tolist()})
+		# aa2codons derives from the translation table and maps amino acids to the codon
 		me_model.global_info['aa2codons'][organelle] = aa2codons
 
 		#if me_model.global_info.get('translation_table', None) is None:
