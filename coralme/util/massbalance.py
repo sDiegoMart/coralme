@@ -9,7 +9,7 @@ def stringify(element, number):
 
 def elements_to_formula(obj, elements):
 	#obj.formula = ''.join(stringify(e, n) for e, n in sorted(iteritems(elements)))
-	obj.formula = ''.join(stringify(e, n) for e, n in sorted(elements.items()))
+	obj.formula = ''.join(stringify(e, n) for e, n in sorted(elements.items()) if n != 0)
 
 def eval_reaction_at_growth_rate(reaction, growth_rate):
 	for key, value in reaction._metabolites.items():
