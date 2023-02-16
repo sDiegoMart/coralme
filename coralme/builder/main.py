@@ -1210,7 +1210,7 @@ class MEReconstruction(MEBuilder):
 
 		# Inferred information
 		if hasattr(self, 'org'):
-			config['selenocysteine'] = self.org.special_trna_subreactions['sec_addition_at_UGA']['enzymes']
+			config['selenocysteine_enzymes'] = self.org.special_trna_subreactions['sec_addition_at_UGA']['enzymes']
 			logging.warning('Selenocysteine complex SelAB was set from homology data.')
 
 			config['pg_pe_160'] = self.org.lipid_modifications.get('pg_pe_160', 'CPLX_dummy')
@@ -1706,7 +1706,7 @@ class MEReconstruction(MEBuilder):
 			if len(transl_table) == 0:
 				continue
 
-			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine = me.global_info['selenocysteine'])
+			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine_enzymes = me.global_info['selenocysteine_enzymes'])
 
 		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 
