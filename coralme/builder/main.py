@@ -1208,6 +1208,17 @@ class MEReconstruction(MEBuilder):
 
 		config = self.configuration
 
+		# Inferred information
+		if hasattr(self, 'org'):
+			config['selenocysteine'] = self.org.special_trna_subreactions['sec_addition_at_UGA']['enzymes']
+			logging.warning('Selenocysteine complex SelAB was set from homology data.')
+
+			config['pg_pe_160'] = self.org.lipid_modifications.get('pg_pe_160', 'CPLX_dummy')
+			logging.warning('Enzymes to transfer phospholipids from 9hosphatidylglycerol/phosphatidylethanolamine to target proteins were set from homology data.')
+
+			config['other_lipids'] = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
+			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
+
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
 			if hasattr(self, 'org'):
@@ -1695,11 +1706,7 @@ class MEReconstruction(MEBuilder):
 			if len(transl_table) == 0:
 				continue
 
-			if hasattr(self, 'org'):
-				# TO DO: If no org, selenocysteine is not defined and next line errors
-				selenocysteine = self.org.special_trna_subreactions
-
-			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine = selenocysteine)
+			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine = me.global_info['selenocysteine'])
 
 		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 
@@ -1956,11 +1963,10 @@ class MEReconstruction(MEBuilder):
 		lipoprotein_precursors = me.global_info.get('lipoprotein_precursors')
 
 		# Step1: assign enzymes to lipid modifications
-		if hasattr(self, 'org'):
-			for data in me.process_data.query('^mod_1st'):
-				data.enzyme = self.org.lipid_modifications.get('pg_pe_160', 'CPLX_dummy')
-			for data in me.process_data.query('^mod_2nd'):
-				data.enzyme = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
+		for data in me.process_data.query('^mod_1st'):
+			data.enzyme = me.global_info.get('pg_pe_160', 'CPLX_dummy')
+		for data in me.process_data.query('^mod_2nd'):
+			data.enzyme = me.global_info.get('other_lipids', 'CPLX_dummy')
 
 		# Step2: add reactions of lipoprotein formation
 		if bool(config.get('add_lipoproteins', False)):
