@@ -229,8 +229,8 @@ def process_m_model(
 				rxn.add_metabolites({ new_id : old_stoich })
 				logging.warning('Metabolite \'{:s}\' was replaced with \'{:s}\' in MetabolicReaction \'{:s}\'.'.format(met.id, m_to_me_map.loc[met.id, 'me_id'], rxn.id))
 
-	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REPLACE')].index ])
-	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REMOVE')].index ])
+	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REPLACE')].index if m_model.metabolites.has_id(x) ])
+	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REMOVE')].index if m_model.metabolites.has_id(x) ])
 
 	# Add new metabolites (ME-metabolites) with properties into the "M-model"
 	for m_met_id in m_to_me_map.index:
