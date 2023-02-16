@@ -1690,12 +1690,15 @@ class MEReconstruction(MEBuilder):
 		if me.global_info['translation_stop_dict']['UAG'] == 'CPLX_dummy' and me.global_info['translation_stop_dict']['UGA'] == 'CPLX_dummy':
 			me.global_info['translation_stop_dict']['UAA'] = 'CPLX_dummy'
 
-		# charged tRNAs per organelle
+		# charged tRNAs
 		for organelle, transl_table in me.global_info['transl_tables'].items():
 			if len(transl_table) == 0:
 				continue
 
-			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'])
+			if hasattr(self, 'org'):
+				selenocysteine = self.org.special_trna_subreactions
+
+			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine = selenocysteine)
 
 		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 

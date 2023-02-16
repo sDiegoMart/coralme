@@ -52,7 +52,7 @@ def add_subreactions_to_model(me_model, subreactions):
 		#data.stoichiometry = info['stoich']
 		#data._element_contribution = info.get('element_contribution', {})
 
-def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set([11]), translation_stop_dict = {}, special_trna_subreactions = {}):
+def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set([11]), translation_stop_dict = {}, selenocysteine = {}):
 	"""
 	Create subreaction for each codon. this will be used to model
 	the addition of charged tRNAs to the elongating peptide
@@ -105,8 +105,9 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 		subreaction_data._element_contribution = subreaction_data.calculate_element_contribution()
 
 	# Add subreactions for start codon and selenocysteine
-	for rxn, info in special_trna_subreactions.items():
-		data = coralme.core.processdata.SubreactionData(rxn, me_model)
-		data.enzyme = info['enzymes']
-		data.stoichiometry = info['stoich']
-		data._element_contribution = info.get('element_contribution', {})
+	if me_model.metabolites.has_id('generic_tRNA_UGA_ser__L_c'):
+		key, values = zip(*selenocysteine.items())
+		data = coralme.core.processdata.SubreactionData(key[0], me_model)
+		data.enzyme = values[0]['enzymes']
+		data.stoichiometry = values[0]['stoich']
+		#data._element_contribution = values[0].get('element_contribution', {})

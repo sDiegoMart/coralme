@@ -718,9 +718,10 @@ class TranslationData(ProcessData):
 		if not amino_acid_sequence.startswith('M'):
 			# alternate start codons translated as methionine
 			amino_acid_sequence = 'M' + ''.join(amino_acid_sequence[1:])
-		if '*' in amino_acid_sequence:
+		if '*' in amino_acid_sequence or 'U' in amino_acid_sequence: # translation of selenocysteine
 			#amino_acid_sequence = amino_acid_sequence.replace('*', 'C') # Cysteine?
 			amino_acid_sequence = amino_acid_sequence.replace('*', 'S') # Ser-tRNA is the precursor of Sec-tRNA
+			amino_acid_sequence = amino_acid_sequence.replace('U', 'S') # Ser-tRNA is the precursor of Sec-tRNA
 
 		return amino_acid_sequence
 
@@ -828,8 +829,8 @@ class TranslationData(ProcessData):
 
 			codon = codon.replace('U', 'T')
 			#if codon == 'TGA' and table == 11:
-			if codon == 'TGA' and self.transl_table == 11:
-				logging.warning('Adding selenocystein for \'{:s}\', following translation table {:d} (See more https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG{:d}).'.format(self.id, table, table))
+			if codon == 'TGA' and self.transl_table.id == 11:
+				logging.warning('Adding selenocysteine for \'{:s}\', following translation table {:d} (See more https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG{:d}).'.format(self.id, self.transl_table.id, self.transl_table.id))
 				aa = 'sec'
 			else:
 				#abbreviated_aa = coralme.util.dogma.codon_table[codon]
