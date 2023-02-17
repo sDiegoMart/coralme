@@ -173,7 +173,7 @@ def concatenate_graphs(L,r=[]):
 def get_graph(T,G={}):
 	if isinstance(T,str):
 		if T in G:
-			T = T + '_REPETITIONMARK_' + str(len(G)) 
+			T = T + '_REPETITIONMARK_' + str(len(G))
 		G[T] = '$'
 		return G
 	elif isinstance(T,dict):
@@ -359,12 +359,14 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 		return [False]
 
 	rxns = []
+	rxns_to_drop = []
 	for idx, flux in me.solution.fluxes.items():
 		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
 				#print('Closing {}'.format(idx))
+				rxns_to_drop.append(idx)
 				me.reactions.get_by_id(idx).bounds = (0, 0)
 
 	print('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
@@ -389,7 +391,7 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 			res.append(True)
 			print('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx))), ' '), len(ridx), len([ x for x in res if x ]), 'not ', rxn))
 
-	return [ y for x,y in zip(res, rxns) if x ]
+	return [ y for x,y in zip(res, rxns) if x ], [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
 
 def exchange_single_model(me, flux_dict = 0, solution=0):
 	import pandas as pd
@@ -540,7 +542,7 @@ def find_issue(query,d,msg = ''):
             print(msg)
     else:
         raise TypeError("unsupported type  " + type(d))
-        
+
 
 # TODO: Add warnings
 def fill_builder(b,fill_with='CPLX_dummy',key=None,d=None,fieldname=None,warnings=None):

@@ -1706,7 +1706,7 @@ class MEReconstruction(MEBuilder):
 			if len(transl_table) == 0:
 				continue
 
-			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine_enzymes = me.global_info['selenocysteine_enzymes'])
+			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine_enzymes = me.global_info.get('selenocysteine_enzymes', []))
 
 		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 
@@ -2236,8 +2236,8 @@ class METroubleshooter(object):
 				if filter1 and not filter2 and not filter3 and not filter4:
 					mets.append(met.id)
 
-		if met_types == 'Metabolite':
-			# remove metabolites that are fed into the model through transport reactions
+		if 'Metabolite' in met_types:
+			# remove from the metabolites to test that are fed into the model through transport reactions
 			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
 			mets = set(mets).difference(medium)
 
@@ -2256,11 +2256,11 @@ class METroubleshooter(object):
 			mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 			mets = set(mets).difference(set(['coa_c']))
 
-		bf_gaps = coralme.builder.helper_functions.brute_force_check(self.me_model, mets, growth_key_and_value)
+		bf_gaps, no_gaps = coralme.builder.helper_functions.brute_force_check(self.me_model, mets, growth_key_and_value)
 		if self.me_model.feasibility(keys = growth_key_and_value):
-			return bf_gaps, True
+			return bf_gaps, no_gaps, True
 		else:
-			return bf_gaps, False
+			return bf_gaps, no_gaps, False
 
 	def troubleshoot(self, growth_key_and_value = None):
 		if growth_key_and_value is None:
@@ -2299,7 +2299,10 @@ class METroubleshooter(object):
 		if works == False:
 			met_type = 'Metabolite'
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-			bf_gaps, works = self.brute_check(growth_key_and_value, met_types = met_type)
+			bf_gaps, no_gaps, works = self.brute_check(growth_key_and_value, met_types = met_type)
+			print(no_gaps)
+			# close sink reactions that are not gaps
+			self.me_model.remove_reactions(no_gaps)
 
 			if len(bf_gaps) != 0 or bf_gaps[0]:
 				self.curation_notes['troubleshoot'].append({
@@ -2340,7 +2343,7 @@ class METroubleshooter(object):
 					self.me_model.remove_reactions([rxn])
 
 			print('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
-			self.me_model.optimize(max_mu = 3.0, precision = 1e-6)
+			self.me_model.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
 			print('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
 
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(self.configuration['out_directory'], self.me_model.id), 'wb') as outfile:

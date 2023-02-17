@@ -901,7 +901,7 @@ class MEModel(cobra.core.model.Model):
 
 	def optimize(self,
 		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
-		tolerance = 1e-6, precision = 'quad', verbose = False):
+		tolerance = 1e-6, precision = 'quad', verbose = True):
 
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
@@ -952,7 +952,7 @@ class MEModel(cobra.core.model.Model):
 		else:
 			return False
 
-	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 1. }, tolerance = 1e-6, precision = 'quad', **kwargs):
+	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 0.001 }, tolerance = 1e-6, precision = 'quad', **kwargs):
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
 		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'

@@ -486,7 +486,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
 
 	data = pandas.concat([tmp1, tmp4, tmp2, tmp3], axis = 0)
-	#data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
+	data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
 
 	if output:
 		try:
