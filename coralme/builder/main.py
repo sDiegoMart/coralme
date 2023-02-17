@@ -185,6 +185,8 @@ class MEBuilder(object):
 						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
 			self.configuration['df_TranscriptionalUnits'] = filename
 
+		filename = self.org.config.get('df_matrix_subrxn_stoich', self.org.directory + "subreaction_matrix.txt")
+		self.org.subreaction_matrix.to_csv(filename,sep='\t')
 		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
@@ -1052,6 +1054,41 @@ class MEBuilder(object):
 			if not m.formula:
 				m.formula = ref_m.formula
 
+	def update_subreaction_matrix(self):
+		ref_subreaction_matrix = self.ref.subreaction_matrix
+		org_subreaction_matrix = self.org.subreaction_matrix
+		org_model = self.org.m_model
+		ref_model = self.ref.m_model
+		ref_cplx_homolog = self.homology.ref_cplx_homolog
+		for subrxn,row in tqdm.tqdm(ref_subreaction_matrix.iterrows(),
+					'Updating subreaction matrix with homology...',
+					bar_format = bar_format,
+					total=ref_subreaction_matrix.shape[0]):
+			d = {}
+			d[subrxn] = {'Metabolites':'','Stoichiometry':''}
+			met = row['Metabolites'].split('_mod_')[0]
+			if met in org_model.metabolites:
+				d[subrxn]['Metabolites'] = met
+				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
+			elif met in ref_cplx_homolog:
+				if 'mod' in met:
+					mods = '_mod_' + '_mod_'.join(row['Metabolites'].split('_mod_')[1:])
+				else:
+					mods = ''
+				d[subrxn]['Metabolites'] = ref_cplx_homolog[met] + mods
+				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
+			elif met not in ref_model.metabolites:
+				d[subrxn]['Metabolites'] = 'CPLX_dummy'
+				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
+			else:
+				continue
+			org_subreaction_matrix = \
+				pandas.concat([org_subreaction_matrix,
+							  pandas.DataFrame.from_dict(d).T],
+							 axis = 0, join = 'outer')
+		self.org.subreaction_matrix = org_subreaction_matrix
+		self.org.subreaction_matrix.index.name = 'Reaction'
+
 	def update_from_homology(self):
 		self.update_enzyme_stoichiometry()
 		self.update_protein_modification()
@@ -1079,6 +1116,7 @@ class MEBuilder(object):
 		self.update_rna_modification_from_homology()
 		self.update_lipid_modifications_from_homology()
 		self.update_m_model()
+		self.update_subreaction_matrix()
 
 	def fill(self,
 			 fill_with='CPLX_dummy'):

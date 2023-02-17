@@ -84,6 +84,8 @@ class MEManualCuration(object):
         self.org.translocation_pathways = self.load_translocation_pathways() 
         logging.warning("Loading lipid modifications")
         self.org.lipid_modifications = self.load_lipid_modifications()
+        logging.warning("Loading subreaction_matrix")
+        self.org.subreaction_matrix = self.load_subreaction_matrix()
         
     
     def _get_manual_curation(self,
@@ -93,7 +95,11 @@ class MEManualCuration(object):
                              sep = '\t'):
         filepath = self.directory + filename
         if os.path.isfile(filepath):
-            return pandas.read_csv(filepath, index_col=0,sep=sep).fillna("")
+            return pandas.read_csv(filepath,
+                                   index_col=0,
+                                   sep=sep,
+                                  comment='#',
+                                  skip_blank_lines=True).fillna("")
         
         if create_file is not None:
             create_file.to_csv(filepath,sep=sep)
@@ -689,6 +695,19 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return self._modify_lipid_modifications_from_load(df)
+    
+    def _create_subreaction_matrix(self):
+        return pandas.DataFrame(columns=[
+            'Reaction','Metabolites','Stoichiometry'
+        ]).set_index('Reaction')
+    def load_subreaction_matrix(self):
+        create_file = self._create_subreaction_matrix()
+        df =  self._get_manual_curation(
+                "subreaction_matrix.txt",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return df
     
     def _str_to_dict(self,
                     d):
