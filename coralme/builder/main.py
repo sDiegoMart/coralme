@@ -1152,8 +1152,8 @@ class MEBuilder(object):
 		coralme.builder.curation.MECurator(self.org).find_issue_with_query(query)
 
 	# shortcuts to methods in the MEReconstruction and METroubleshooter classes
-	def build_me_model(self, overwrite = False):
-		coralme.builder.main.MEReconstruction(self).build_me_model(overwrite = overwrite)
+	def build_me_model(self, update = True, prune = True, overwrite = False):
+		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite)
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
@@ -1214,7 +1214,7 @@ class MEReconstruction(MEBuilder):
 			logging.warning('Selenocysteine complex SelAB was set from homology data.')
 
 			config['pg_pe_160'] = self.org.lipid_modifications.get('pg_pe_160', 'CPLX_dummy')
-			logging.warning('Enzymes to transfer phospholipids from 9hosphatidylglycerol/phosphatidylethanolamine to target proteins were set from homology data.')
+			logging.warning('The prolipoprotein diacylglyceryl transferase and the signal peptidase homologs were set from homology data.')
 
 			config['other_lipids'] = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
 			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
@@ -1365,7 +1365,7 @@ class MEReconstruction(MEBuilder):
 		# All other inputs and remove unnecessary genes from df_data
 		return (df_tus, df_rmsc, df_subs, df_mets), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
 
-	def build_me_model(self, overwrite = False):
+	def build_me_model(self, update = True, prune = True, overwrite = False):
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 
@@ -2132,8 +2132,10 @@ class MEReconstruction(MEBuilder):
 		coralme.builder.compartments.add_compartments_to_model(me)
 
 		# ## Part 9: Update ME-model, prune reactions and save
-		me.update()
-		me.prune()
+		if update:
+			me.update()
+		if prune:
+			me.prune()
 
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
 			pickle.dump(me, outfile)
