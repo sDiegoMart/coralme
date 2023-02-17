@@ -451,7 +451,6 @@ EG10370-MONOMER_mod_mn2(1)	EG10370-MONOMER	mn2(1)	M_protein_recon
 NITRATREDUCTA-CPLX_mod_bmocogdp(1)_mod_3fe4s(1)_mod_4fe4s(1)	NITRATREDUCTA-CPLX	bmocogdp(1) AND 3fe4s(1) AND 4fe4s(1)	M_protein_recon
 FLAVONADPREDUCT-MONOMER_mod_fad(1)	FLAVONADPREDUCT-MONOMER	fad(1)	M_protein_recon
 NITRATREDUCTZ-CPLX_mod_bmocogdp(1)_mod_pheme(2)_mod_4fe4s(3)_mod_3fe4s(1)	NITRATREDUCTZ-CPLX	bmocogdp(1) AND pheme(2) AND 4fe4s(3) AND 3fe4s(1)	M_protein_recon
-CPLX0-782_mod_4fe4s(2)	CPLX0-782	4fe4s(2)	M_protein_recon
 GCVMULTI-CPLX_mod_lipo(1)	GCVMULTI-CPLX	lipo(1)	M_protein_recon
 IMIDHISTID-CPLX_mod_mn2(1)	IMIDHISTID-CPLX	mn2(1)	M_protein_recon
 CPLX0-341_mod_fmn(1)	CPLX0-341	fmn(1)	M_protein_recon
@@ -608,6 +607,8 @@ CPLX0-1341_mod_2fe2s(1)_mod_fe2(2)	CPLX0-1341	2fe2s(1) AND fe2(2)	M_protein_reco
 CPLX0-246_CPLX0-1342_mod_pydx5p(1)	CPLX0-246_CPLX0-1342	pydx5p(1)	M_protein_recon
 CPLX0-1341_mod_2fe1s(1)	CPLX0-1341	2fe1s(1)	M_protein_recon
 CPLX0-7824_mod_4fe4s(1)	CPLX0-7824	4fe4s(1)	M_protein_recon
+CPLX0-782_mod_4fe4s(2)	CPLX0-782	4fe4s(2)	M_protein_recon
+CPLX0-782_mod_2fe2s(1)_mod_4fe4s(1)	CPLX0-782	2fe2s(1) AND 4fe4s(1)	M_protein_recon
 IscU_mod_2fe2s(1)_mod_fe2(2)	IscU	2fe2s(1) AND fe2(2)	M_protein_recon
 CPLX-7524_mod_4fe4s(1)_mod_mn2(1)	CPLX-7524	4fe4s(1) AND mn2(1)	M_protein_recon
 CPLX0-7824_mod_2fe2s(1)	CPLX0-7824	2fe2s(1)	M_protein_recon

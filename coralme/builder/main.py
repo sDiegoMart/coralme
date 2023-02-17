@@ -371,7 +371,7 @@ class MEBuilder(object):
 					if c not in cplx_cofactor_dict:
 						cplx_cofactor_dict[c] = {}
 					ref_mods = ref_mod_df.loc[[rc]]
-					for idx, (_, row) in enumerate(ref_mods.iterrows()):
+					for _,row in ref_mods.iterrows():
 						mods = row["Modifications"].split(" AND ")
 						cplx = c
 						cofs = []
@@ -1055,8 +1055,9 @@ class MEBuilder(object):
 				m.formula = ref_m.formula
 
 	def update_subreaction_matrix(self):
-		ref_subreaction_matrix = self.ref.subreaction_matrix
 		org_subreaction_matrix = self.org.subreaction_matrix
+		if not org_subreaction_matrix.empty:return
+		ref_subreaction_matrix = self.ref.subreaction_matrix
 		org_model = self.org.m_model
 		ref_model = self.ref.m_model
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
@@ -1071,7 +1072,7 @@ class MEBuilder(object):
 				d[subrxn]['Metabolites'] = met
 				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
 			elif met in ref_cplx_homolog:
-				if 'mod' in met:
+				if 'mod' in row['Metabolites']:
 					mods = '_mod_' + '_mod_'.join(row['Metabolites'].split('_mod_')[1:])
 				else:
 					mods = ''
