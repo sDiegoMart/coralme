@@ -276,13 +276,13 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
 	data['MetaComplex ID'].update(data.apply(lambda x: get_excision(x, dct), axis = 1))
 
-	# set RNA targets
+	# set RNA targets (tRNA<->mod_at_position)
 	dct = builder.org.rna_modification_targets.copy(deep = True)
 	dct['at'] = dct['modification'] + '_at_' + dct['position']
 	dct = dct.groupby('bnum').agg({'at': lambda x: ','.join(x.tolist())}).to_dict()['at']
 	data['RNA mods/enzyme'] = data['Gene Locus ID'].apply(lambda x: dct.get(str(x), None))
 
-	# set RNA modifiers and targets
+	# set RNA modifiers (CDS<->mod_at_position)
 	def get_rna_modifiers(x, lst):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
