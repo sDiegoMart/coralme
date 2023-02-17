@@ -1,6 +1,7 @@
 modification	positions	type	enzymes	source
-D	16,17,20,20A	met_tRNA	DusA_mono
-D	16U,17,20,20A,21	tRNA	generic_Dus
+D	16U,17,20,20A,21	tRNA	DusB_mono
+D	16U,17,20,20A,21	tRNA	DusC_mono
+D	16U,17,20,20A,21,16_in_met_tRNA,17_in_met_tRNA,20_in_met_tRNA,20A_in_met_tRNA	met_tRNA	DusA_mono
 Y	38,39,40	tRNA	TruA_dim
 Y	32	tRNA	RluA_mono
 Y	55	tRNA	TruB_mono
