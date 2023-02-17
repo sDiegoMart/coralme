@@ -185,7 +185,8 @@ class MEBuilder(object):
 						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
 			self.configuration['df_TranscriptionalUnits'] = filename
 
-		filename = self.org.config.get('df_matrix_subrxn_stoich', self.org.directory + "subreaction_matrix.txt")
+		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
+		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
 		self.org.subreaction_matrix.to_csv(filename,sep='\t')
 		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
