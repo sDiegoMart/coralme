@@ -2265,7 +2265,7 @@ class METroubleshooter(object):
 		if isinstance(met_types, str):
 			met_types = [met_types]
 
-		mets = []
+		mets = set()
 		for met_type in met_types:
 			for met in self.me_model.metabolites:
 				filter1 = type(met) == getattr(coralme.core.component, met_type)
@@ -2273,7 +2273,7 @@ class METroubleshooter(object):
 				filter3 = met.id.endswith('trna_c')
 				filter4 = met.id.endswith('_e')
 				if filter1 and not filter2 and not filter3 and not filter4:
-					mets.append(met.id)
+					mets.add(met.id)
 
 		if 'Metabolite' in met_types:
 			# remove from the metabolites to test that are fed into the model through transport reactions
@@ -2282,7 +2282,6 @@ class METroubleshooter(object):
 
 			# filter out manually
 			mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
-			mets = set(mets).difference(set(['ade_c']))
 			mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
 			mets = set(mets).difference(set(['cdp_c', 'cmp_c', 'ctp_c']))
 			mets = set(mets).difference(set(['gdp_c', 'gmp_c', 'gtp_c']))
@@ -2310,7 +2309,7 @@ class METroubleshooter(object):
 		print('~ '*1 + 'Troubleshooting started...')
 		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...', end = '')
 		if self.me_model.feasibility(keys = growth_key_and_value):
-			print('  '*5 + '\nOriginal ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(keys.values)[0]))
+			print('  '*5 + '\nOriginal ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			return None
 		else:
 			print(' FALSE.')
@@ -2319,6 +2318,9 @@ class METroubleshooter(object):
 		# Step 1. Find topological gaps
 		print('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 		deadends = self.gap_find()
+
+		medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
+		deadends = set(deadends).difference(medium)
 
 		if len(deadends) != 0:
 			self.curation_notes['troubleshoot'].append({
@@ -2339,6 +2341,8 @@ class METroubleshooter(object):
 			met_type = 'Metabolite'
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
 			bf_gaps, no_gaps, works = self.brute_check(growth_key_and_value, met_types = met_type)
+			print(bf_gaps)
+			print()
 			print(no_gaps)
 			# close sink reactions that are not gaps
 			self.me_model.remove_reactions(no_gaps)

@@ -391,7 +391,10 @@ def brute_force_check(me, metabolites_to_add, growth_key_and_value):
 			res.append(True)
 			print('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx))), ' '), len(ridx), len([ x for x in res if x ]), 'not ', rxn))
 
-	return [ y for x,y in zip(res, rxns) if x ], [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
+	bf_gaps = [ y for x,y in zip(res, rxns) if x ] # True
+	no_gaps = [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
+
+	return bf_gaps, no_gaps
 
 def exchange_single_model(me, flux_dict = 0, solution=0):
 	import pandas as pd
