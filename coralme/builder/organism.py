@@ -265,7 +265,9 @@ class Organism(object):
                 RNA_mets.append(m)
             if not m.formula:
                 formula_mets.append(m.id)
-            if m.formula_weight is None:
+            try:
+                float(m.formula_weight)
+            except:
                 formulaweight_mets.append(m.id)
 
         # Reactions
