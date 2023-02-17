@@ -2341,9 +2341,7 @@ class METroubleshooter(object):
 			met_type = 'Metabolite'
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
 			bf_gaps, no_gaps, works = self.brute_check(growth_key_and_value, met_types = met_type)
-			print(bf_gaps)
-			print()
-			print(no_gaps)
+
 			# close sink reactions that are not gaps
 			self.me_model.remove_reactions(no_gaps)
 
