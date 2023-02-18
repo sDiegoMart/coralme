@@ -278,9 +278,13 @@ class MEBuilder(object):
 				'importance':'critical',
 				'to_do':'Check that the model you provided works'})
 
-		self.org.biomass = str(m_model.objective.expression.as_two_terms()[0]).split('*')[1]
-		biomass_rxn = m_model.reactions.get_by_id(self.org.biomass)
-		logging.warning('{} was identified as the biomass reaction'.format(biomass_rxn.id))
+		try:
+			self.org.biomass = str(m_model.objective.expression.as_two_terms()[0]).split('*')[1]
+			biomass_rxn = m_model.reactions.get_by_id(self.org.biomass)
+			logging.warning('{} was identified as the biomass reaction'.format(biomass_rxn.id))
+		except:
+			self.org.biomass = None
+			logging.warning('Could not identify biomass reaction')
 
 
 		adp = m_model.metabolites.adp_c
@@ -1306,7 +1310,7 @@ class MEReconstruction(MEBuilder):
 			logging.warning('tRNA synthetases were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
-			config['defer_to_rxn_matrix'] = [self.org.biomass]
+			config['defer_to_rxn_matrix'] = [self.org.biomass] if self.org.biomass is not None else []
 			logging.warning('The biomass reaction {:s} will be skipped during the ME reconstruction steps.'.format(self.org.biomass))
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
