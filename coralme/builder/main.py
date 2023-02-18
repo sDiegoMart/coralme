@@ -2108,11 +2108,11 @@ class MEReconstruction(MEBuilder):
 				sep=',',index_col=0
 			).fillna('')
 			mapped_keffs = {}
+			mapped = set()
 			for key, row in tqdm.tqdm(final_keffs.iterrows(),
 							   'Reading Keffs...',
 							   bar_format = bar_format,
 							   total=final_keffs.shape[0]):
-				mapped = set()
 				for r in me.reactions.query(key):
 					if not hasattr(r,'_stoichiometric_data'):
 						continue
