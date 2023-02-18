@@ -284,13 +284,14 @@ class MEBuilder(object):
 			logging.warning('{} was identified as the biomass reaction'.format(biomass_rxn.id))
 		except:
 			self.org.biomass = None
+			biomass_rxn = None
 			logging.warning('Could not identify biomass reaction')
 
 
 		adp = m_model.metabolites.adp_c
 		# Get GAM
 		self.org.GAM = None
-		if adp in biomass_rxn.metabolites:
+		if biomass_rxn is not None and adp in biomass_rxn.metabolites:
 			self.org.GAM = biomass_rxn.metabolites[adp]
 			logging.warning('GAM identified with value {}'.format(self.org.GAM))
 		else:
