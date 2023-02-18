@@ -2063,6 +2063,7 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		flag = self.configuration.get('keff_method',None)
+		mapped_keffs = {}
 		if flag == 'estimate':
 			reaction_median_keffs = pandas.read_csv(
 				self.configuration.get(
@@ -2096,27 +2097,49 @@ class MEReconstruction(MEBuilder):
 				keff = sasa * median_keff / median_sasa
 				if keff > 3000: keff = 3000.
 				elif keff < .01: keff = .01
+				mapped_keffs[r] = keff
+		elif os.path.isfile(flag):
+			final_keffs = pandas.read_csv(flag,
+				sep=',',index_col=0
+			).fillna('')
+			mapped_keffs = {}
+			for key, row in tqdm.tqdm(final_keffs.iterrows(),
+							   'Reading Keffs...',
+							   bar_format = bar_format,
+							   total=final_keffs.shape[0]):
+				mapped = set()
+				for r in me.reactions.query(key):
+					if not hasattr(r,'_stoichiometric_data'):
+						continue
+					if not r._stoichiometric_data.id == key:
+						continue
+					c = r._complex_data
+					if c is None:
+						continue
+					c = c.id
+					mods = ['']
+					if 'mod' in c:
+						modinfo = c.split('_mod_')
+						c,mods = modinfo[0],modinfo[1:]
+					if not c == row['complex']:
+						continue
+					if not set(mods) == set(row['mods'].split(' AND ')):
+						continue
+					mapped_keffs[r] = row['keff']
+					mapped.add(key)
+			missing = set(final_keffs.index) - set(mapped)
+			for i in missing:
+				logging.warning('Could not map Keff of reaction {}'.format(i))
+		if mapped_keffs:
+			for r,keff in tqdm.tqdm(mapped_keffs.items(),
+							   'Setting Keffs...',
+							   bar_format = bar_format):
 				try:
 					r.keff = keff
 					r.update()
 					logging.warning('Setting Keff for {} in {}'.format(r.id,keff))
 				except:
-					logging.warning('There was a problem setting Keff for {}'.format(reaction_id))
-		elif flag == 'read':
-			final_keffs = pandas.read_csv(
-				self.configuration.get(
-					'final_reaction_keffs',
-					self.configuration['out_directory'] + 'building_data/final_reaction_keffs.txt'),
-				sep='\t'
-			)
-			for key, row in tqdm.tqdm(final_keffs.iterrows(),
-							   'Reading Keffs...',
-							   bar_format = bar_format,
-							   total=final_keffs.shape[0]):
-				try:
-					me.reactions.get_by_id(reaction_id).keff = row['keff']
-				except:
-					logging.warning('There was a problem setting Keff for {}'.format(key))
+					logging.warning('There was a problem setting Keff for {}'.format(r.id))
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
