@@ -411,8 +411,8 @@ class MEBuilder(object):
 
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
 		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
-		if self.configuration.get('df_enzyme_reaction_association',None) is not None:
-			return
+# 		if self.configuration.get('df_enzyme_reaction_association',None) is not None:
+# 			return
 		m_model = self.org.m_model
 		org_complexes_df = self.org.complexes_df
 		protein_mod = self.org.protein_mod
@@ -427,6 +427,9 @@ class MEBuilder(object):
 		for rxn in tqdm.tqdm(m_model.reactions,
 					'Getting enzyme-reaction associations...',
 					bar_format = bar_format):
+			if rxn.id in self.org.enz_rxn_assoc_df.index:
+				# Only complete those not in manual curation
+				continue
 			unnamed_counter = 0
 			rule = str(rxn.gene_reaction_rule)
 			if not rule:
