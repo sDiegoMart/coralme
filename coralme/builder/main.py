@@ -1355,7 +1355,7 @@ class MEReconstruction(MEBuilder):
 		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
 
 		# Metabolites metadata
-		cols = ['id', 'me_id', 'name', 'formula', 'type']
+		cols = ['id', 'me_id', 'name', 'formula', 'compartment', 'type']
 		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
 
 		# set new options in the MEBuilder object

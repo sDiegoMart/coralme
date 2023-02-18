@@ -156,8 +156,7 @@ def process_m_model(
 
 	# met_data DataFrame
 	mets_data = mets_data[mets_data['type'].isin(['ADD', 'REPLACE'])]
-	#mets_data.columns = ['me_id', 'name', 'formula', 'compartment', 'type']
-	mets_data.columns = ['me_id', 'name', 'formula', 'type']
+	mets_data.columns = ['me_id', 'name', 'formula', 'compartment', 'type']
 	mets_data.rename(lambda x: x.replace('_DASH_', '__'), inplace = True)
 
 	# process protein_complex DataFrame, and...
@@ -207,7 +206,7 @@ def process_m_model(
 	#m_to_me_map.columns = ['me_id', 'name', 'formula', 'compartment', 'data_source']
 	m_to_me_map.rename(lambda x: x.replace('_DASH_', '__'), inplace = True)
 
-	m_model.add_metabolites([ coralme.core.component.Complex(id = x) for x in m_to_me_map[m_to_me_map['type'].str.match('REPLACE')]['me_id'] ])
+	m_model.add_metabolites([ coralme.core.component.Complex(id = x) for x in m_to_me_map['me_id'] ])
 
 	for rxn in m_model.reactions:
 		#met_id = remove_compartment(met.id)
@@ -229,8 +228,7 @@ def process_m_model(
 				rxn.add_metabolites({ new_id : old_stoich })
 				logging.warning('Metabolite \'{:s}\' was replaced with \'{:s}\' in MetabolicReaction \'{:s}\'.'.format(met.id, m_to_me_map.loc[met.id, 'me_id'], rxn.id))
 
-	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REPLACE')].index if m_model.metabolites.has_id(x) ])
-	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.match('REMOVE')].index if m_model.metabolites.has_id(x) ])
+	m_model.remove_metabolites([ m_model.metabolites.get_by_id(x) for x in m_to_me_map[m_to_me_map['type'].str.fullmatch('REPLACE|REMOVE')].index if m_model.metabolites.has_id(x) ])
 
 	# Add new metabolites (ME-metabolites) with properties into the "M-model"
 	for m_met_id in m_to_me_map.index:

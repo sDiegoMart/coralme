@@ -179,7 +179,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		mod_strings = []
 		if len(all_mods) != 0:
 			for mods in all_mods:
-				mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
+				#mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
 				mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
 				mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
 				mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
@@ -187,7 +187,10 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 				mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
 				logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
 				if len(mods) != 0:
-					mod_strings.append(' AND '.join(mods))
+					if 'pan4p(1)' not in mods:
+						mod_strings.append(' AND '.join(mods))
+					else:
+						mod_strings.append('pan4p(1)')
 		if len(mod_strings) != 0:
 			return mod_strings
 
