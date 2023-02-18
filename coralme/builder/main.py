@@ -507,8 +507,8 @@ class MEBuilder(object):
 				"", numpy.nan
 			).dropna()  # Remove empty rules
 
-		enz_rxn_assoc_df.index.name = "Reaction"
-		self.org.enz_rxn_assoc_df = enz_rxn_assoc_df
+		self.org.enz_rxn_assoc_df = pandas.concat([enz_rxn_assoc_df, self.org.enz_rxn_assoc_df], axis = 0, join = 'outer')
+		self.org.enz_rxn_assoc_df.index.name = "Reaction"
 		self.org.complexes_df = org_complexes_df
 		self.org.protein_mod = protein_mod
 
