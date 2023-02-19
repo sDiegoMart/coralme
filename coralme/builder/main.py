@@ -277,15 +277,20 @@ class MEBuilder(object):
 				'importance':'critical',
 				'to_do':'Check that the model you provided works'})
 
-		self.org.biomass = str(m_model.objective.expression.as_two_terms()[0]).split('*')[1]
-		biomass_rxn = m_model.reactions.get_by_id(self.org.biomass)
-		logging.warning('{} was identified as the biomass reaction'.format(biomass_rxn.id))
+		try:
+			self.org.biomass = str(m_model.objective.expression.as_two_terms()[0]).split('*')[1]
+			biomass_rxn = m_model.reactions.get_by_id(self.org.biomass)
+			logging.warning('{} was identified as the biomass reaction'.format(biomass_rxn.id))
+		except:
+			self.org.biomass = None
+			biomass_rxn = None
+			logging.warning('Could not identify biomass reaction')
 
 
 		adp = m_model.metabolites.adp_c
 		# Get GAM
 		self.org.GAM = None
-		if adp in biomass_rxn.metabolites:
+		if biomass_rxn is not None and adp in biomass_rxn.metabolites:
 			self.org.GAM = biomass_rxn.metabolites[adp]
 			logging.warning('GAM identified with value {}'.format(self.org.GAM))
 		else:
@@ -405,7 +410,8 @@ class MEBuilder(object):
 
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
 		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
-
+# 		if self.configuration.get('df_enzyme_reaction_association',None) is not None:
+# 			return
 		m_model = self.org.m_model
 		org_complexes_df = self.org.complexes_df
 		protein_mod = self.org.protein_mod
@@ -420,6 +426,9 @@ class MEBuilder(object):
 		for rxn in tqdm.tqdm(m_model.reactions,
 					'Getting enzyme-reaction associations...',
 					bar_format = bar_format):
+			if rxn.id in self.org.enz_rxn_assoc_df.index:
+				# Only complete those not in manual curation
+				continue
 			unnamed_counter = 0
 			rule = str(rxn.gene_reaction_rule)
 			if not rule:
@@ -497,8 +506,8 @@ class MEBuilder(object):
 				"", numpy.nan
 			).dropna()  # Remove empty rules
 
-		enz_rxn_assoc_df.index.name = "Reaction"
-		self.org.enz_rxn_assoc_df = enz_rxn_assoc_df
+		self.org.enz_rxn_assoc_df = pandas.concat([enz_rxn_assoc_df, self.org.enz_rxn_assoc_df], axis = 0, join = 'outer')
+		self.org.enz_rxn_assoc_df.index.name = "Reaction"
 		self.org.complexes_df = org_complexes_df
 		self.org.protein_mod = protein_mod
 
@@ -1303,8 +1312,8 @@ class MEReconstruction(MEBuilder):
 			logging.warning('tRNA synthetases were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
-			config['defer_to_rxn_matrix'] = [self.org.biomass]
-			logging.warning('The biomass reaction {:s} will be skipped during the ME reconstruction steps.'.format(self.org.biomass))
+			config['defer_to_rxn_matrix'] = [self.org.biomass] if self.org.biomass is not None else []
+			logging.warning('The biomass reaction will be skipped during the ME reconstruction steps.')
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
 			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
@@ -2060,85 +2069,84 @@ class MEReconstruction(MEBuilder):
 			logging.warning('No Braun\'s lipoprotein (lpp gene) homolog was set. Please check if it is the correct behavior.')
 
 		# ## Part 7: Set keffs
-		#flag = self.configuration.get('keff_method', None)
-		#mapped_keffs = {}
-		#if flag == 'estimate':
-			#reaction_median_keffs = pandas.read_csv(
-				#self.configuration.get(
-					#'reaction_median_keff',
-					#self.configuration['out_directory'] + 'building_data/reaction_median_keffs.txt'),
-				#sep='\t',
-				#index_col=0
-			#)['keff'].to_dict()
-			#sasa_list = []
-			#for met in me.metabolites:
-				#cplx_sasa = 0.
-				#if not isinstance(met, coralme.core.component.Complex):
-					#continue
-				#MW = met.formula_weight
-				#if not MW:
-					#MW = 0
-					#logging.warning(' {} has no formula'.format(key))
-				#cplx_sasa += MW ** (3. / 4)
-				#sasa_list.append(cplx_sasa)
-			#median_sasa = numpy.median(numpy.array(sasa_list))
-			#metabolic_reactions = [r for r in me.reactions if isinstance(r,coralme.core.reaction.MetabolicReaction)]
-			#for r in tqdm.tqdm(metabolic_reactions,
-							   #'Estimating Metabolic Keffs with SASA',
-							   #bar_format=bar_format):
-				#base_id = r._stoichiometric_data.id
-				#if base_id not in reaction_median_keffs:
-					#continue
-				#cplx = me.metabolites.get_by_id(r._complex_data.id)
-				#median_keff = reaction_median_keffs[base_id]
-				#sasa = cplx.formula_weight ** (3./4)
-				#keff = sasa * median_keff / median_sasa
-				#if keff > 3000: keff = 3000.
-				#elif keff < .01: keff = .01
-				#mapped_keffs[r] = keff
-
-		#elif os.path.isfile(flag):
-			#final_keffs = pandas.read_csv(flag,
-				#sep=',',index_col=0
-			#).fillna('')
-			#mapped_keffs = {}
-			#for key, row in tqdm.tqdm(final_keffs.iterrows(),
-							   #'Reading Keffs...',
-							   #bar_format = bar_format,
-							   #total=final_keffs.shape[0]):
-				#mapped = set()
-				#for r in me.reactions.query(key):
-					#if not hasattr(r,'_stoichiometric_data'):
-						#continue
-					#if not r._stoichiometric_data.id == key:
-						#continue
-					#c = r._complex_data
-					#if c is None:
-						#continue
-					#c = c.id
-					#mods = ['']
-					#if 'mod' in c:
-						#modinfo = c.split('_mod_')
-						#c,mods = modinfo[0],modinfo[1:]
-					#if not c == row['complex']:
-						#continue
-					#if not set(mods) == set(row['mods'].split(' AND ')):
-						#continue
-					#mapped_keffs[r] = row['keff']
-					#mapped.add(key)
-			#missing = set(final_keffs.index) - set(mapped)
-			#for i in missing:
-				#logging.warning('Could not map Keff of reaction {}'.format(i))
-		#if mapped_keffs:
-			#for r,keff in tqdm.tqdm(mapped_keffs.items(),
-							   #'Setting Keffs...',
-							   #bar_format = bar_format):
-				#try:
-					#r.keff = keff
-					#r.update()
-					#logging.warning('Setting Keff for {} in {}'.format(r.id,keff))
-				#except:
-					#logging.warning('There was a problem setting Keff for {}'.format(r.id))
+		flag = self.configuration.get('keff_method',None)
+		mapped_keffs = {}
+		if flag == 'estimate':
+			reaction_median_keffs = pandas.read_csv(
+				self.configuration.get(
+					'reaction_median_keff',
+					self.configuration['out_directory'] + 'building_data/reaction_median_keffs.txt'),
+				sep='\t',
+				index_col=0
+			)['keff'].to_dict()
+			sasa_list = []
+			for met in me.metabolites:
+				cplx_sasa = 0.
+				if not isinstance(met, coralme.core.component.Complex):
+					continue
+				MW = met.formula_weight
+				if not MW:
+					MW = 0
+					logging.warning(' {} has no formula'.format(key))
+				cplx_sasa += MW ** (3. / 4)
+				sasa_list.append(cplx_sasa)
+			median_sasa = numpy.median(numpy.array(sasa_list))
+			metabolic_reactions = [r for r in me.reactions if isinstance(r,coralme.core.reaction.MetabolicReaction)]
+			for r in tqdm.tqdm(metabolic_reactions,
+							   'Estimating Metabolic Keffs with SASA',
+							   bar_format=bar_format):
+				base_id = r._stoichiometric_data.id
+				if base_id not in reaction_median_keffs:
+					continue
+				cplx = me.metabolites.get_by_id(r._complex_data.id)
+				median_keff = reaction_median_keffs[base_id]
+				sasa = cplx.formula_weight ** (3./4)
+				keff = sasa * median_keff / median_sasa
+				if keff > 3000: keff = 3000.
+				elif keff < .01: keff = .01
+				mapped_keffs[r] = keff
+		elif os.path.isfile(flag):
+			final_keffs = pandas.read_csv(flag,
+				sep=',',index_col=0
+			).fillna('')
+			mapped_keffs = {}
+			mapped = set()
+			for key, row in tqdm.tqdm(final_keffs.iterrows(),
+							   'Reading Keffs...',
+							   bar_format = bar_format,
+							   total=final_keffs.shape[0]):
+				for r in me.reactions.query(key):
+					if not hasattr(r,'_stoichiometric_data'):
+						continue
+					if not r._stoichiometric_data.id == key:
+						continue
+					c = r._complex_data
+					if c is None:
+						continue
+					c = c.id
+					mods = ['']
+					if 'mod' in c:
+						modinfo = c.split('_mod_')
+						c,mods = modinfo[0],modinfo[1:]
+					if not c == row['complex']:
+						continue
+					if not set(mods) == set(row['mods'].split(' AND ')):
+						continue
+					mapped_keffs[r] = row['keff']
+					mapped.add(key)
+			missing = set(final_keffs.index) - set(mapped)
+			for i in missing:
+				logging.warning('Could not map Keff of reaction {}'.format(i))
+		if mapped_keffs:
+			for r,keff in tqdm.tqdm(mapped_keffs.items(),
+							   'Setting Keffs...',
+							   bar_format = bar_format):
+				try:
+					r.keff = keff
+					r.update()
+					logging.warning('Setting Keff for {} in {}'.format(r.id,keff))
+				except:
+					logging.warning('There was a problem setting Keff for {}'.format(r.id))
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems

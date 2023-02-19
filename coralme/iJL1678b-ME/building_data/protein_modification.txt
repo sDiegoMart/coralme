@@ -15,7 +15,7 @@ CARBPSYN-CPLX_mod_cd2(1)	CARBPSYN-CPLX	cd2(1)	M_protein_recon
 CARBPSYN-CPLX_mod_zn2(1)	CARBPSYN-CPLX	zn2(1)	M_protein_recon
 APP-UBIOX-CPLX_mod_pheme(1)_mod_hemed(1)	APP-UBIOX-CPLX	pheme(1) AND hemed(1)	M_protein_recon
 CYT-D-UBIOX-CPLX_mod_pheme(1)_mod_hemed(1)	CYT-D-UBIOX-CPLX	pheme(1) AND hemed(1)	M_protein_recon
-CYT-O-UBIOX-CPLX_mod_pheme(1)_mod_cu2(1)	CYT-O-UBIOX-CPLX	pheme(1) AND cu2(1)	M_protein_recon
+CYT-O-UBIOX-CPLX_mod_pheme(1)_mod_hemeO(1)_mod_cu2(1)	CYT-O-UBIOX-CPLX	pheme(1) AND hemeO(1) AND cu2(1)	M_protein_recon
 DIMESULFREDUCT-CPLX_mod_bmocogdp(1)	DIMESULFREDUCT-CPLX	bmocogdp(1)	M_protein_recon
 ETHAMLY-CPLX_mod_adocbl(1)	ETHAMLY-CPLX	adocbl(1)	M_protein_recon
 SULFITE-REDUCT-CPLX_mod_4fe4s(1)_mod_sheme(1)_mod_fmn(1)_mod_fad(1)	SULFITE-REDUCT-CPLX	4fe4s(1) AND sheme(1) AND fmn(1) AND fad(1)	M_protein_recon
@@ -392,7 +392,7 @@ HYDROPEROXIDII-CPLX_mod_hemed(6)	HYDROPEROXIDII-CPLX	hemed(6)	M_protein_recon
 DTDPGLUCDEHYDRAT-CPLX_mod_nad(1)	DTDPGLUCDEHYDRAT-CPLX	nad(1)	M_protein_recon
 UDPGLUCEPIM-CPLX_mod_nad(1)	UDPGLUCEPIM-CPLX	nad(1)	M_protein_recon
 HYDROPEROXIDI-CPLX_mod_pheme(1)	HYDROPEROXIDI-CPLX	pheme(1)	M_protein_recon
-ADCLY-CPLX_mod_pydx(1)	ADCLY-CPLX	pydx(1)	M_protein_recon
+ADCLY-CPLX_mod_pydx5p(1)	ADCLY-CPLX	pydx5p(1)	M_protein_recon
 ARGDECARBOXDEG-CPLX_mod_pydx5p(1)	ARGDECARBOXDEG-CPLX	pydx5p(1)	M_protein_recon
 O-SUCCHOMOSERLYASE-CPLX_mod_pydx5p(1)	O-SUCCHOMOSERLYASE-CPLX	pydx5p(1)	M_protein_recon
 ACSERLYA-CPLX_mod_pydx5p(2)	ACSERLYA-CPLX	pydx5p(2)	M_protein_recon

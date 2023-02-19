@@ -84,8 +84,10 @@ class MEManualCuration(object):
         self.org.translocation_pathways = self.load_translocation_pathways() 
         logging.warning("Loading lipid modifications")
         self.org.lipid_modifications = self.load_lipid_modifications()
-        logging.warning("Loading subreaction_matrix")
+        logging.warning("Loading subreaction matrix")
         self.org.subreaction_matrix = self.load_subreaction_matrix()
+        logging.warning("Loading enzyme-reaction-association")
+        self.org.enz_rxn_assoc_df = self.load_enz_rxn_assoc_df()
         
     
     def _get_manual_curation(self,
@@ -704,6 +706,19 @@ class MEManualCuration(object):
         create_file = self._create_subreaction_matrix()
         df =  self._get_manual_curation(
                 "subreaction_matrix.txt",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return df
+    
+    def _create_enz_rxn_assoc_df(self):
+        return pandas.DataFrame(columns=[
+            'Reaction','Complexes'
+        ]).set_index('Reaction')
+    def load_enz_rxn_assoc_df(self):
+        create_file = self._create_enz_rxn_assoc_df()
+        df =  self._get_manual_curation(
+                "enzyme_reaction_association.csv",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t')
