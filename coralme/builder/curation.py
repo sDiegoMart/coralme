@@ -122,7 +122,7 @@ class MEManualCuration(object):
                 'notes',
                 ]).set_index('reaction_id')
         return self._get_manual_curation(
-             "reaction_corrections.csv",
+             "reaction_corrections.txt",
              create_file = create_file,
              no_file_return = create_file,
              sep = ',').T.to_dict()
@@ -136,14 +136,14 @@ class MEManualCuration(object):
                 'translocase_pathway',
                 ]).set_index('Complex')
         return self._get_manual_curation(
-             "peptide_compartment_and_pathways.csv",
+             "peptide_compartment_and_pathways.txt",
              create_file = create_file,
              no_file_return = create_file)
 
     def load_translocation_multipliers(self):
         create_file = None
         return self._get_manual_curation(
-             "translocation_multipliers.csv",
+             "translocation_multipliers.txt",
             create_file=create_file,
             no_file_return=pandas.DataFrame(),
             sep=',').to_dict()
@@ -151,7 +151,7 @@ class MEManualCuration(object):
     def load_lipoprotein_precursors(self):
         create_file = pandas.DataFrame(columns=['gene'])
         return self._get_manual_curation(
-            "lipoprotein_precursors.csv",
+            "lipoprotein_precursors.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep=',').to_dict()["gene"]
@@ -159,7 +159,7 @@ class MEManualCuration(object):
     def load_cleaved_methionine(self):
         create_file = pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes')
         return self._get_manual_curation(
-            "cleaved_methionine.csv",
+            "cleaved_methionine.txt",
             create_file = create_file,
             no_file_return = create_file).index.to_list()
 
@@ -181,7 +181,7 @@ class MEManualCuration(object):
         create_file = self._create_subsystem_classification(subsystems)
 
         df = self._get_manual_curation(
-            "subsystem_classification.csv",
+            "subsystem_classification.txt",
             create_file = create_file,
             no_file_return = pandas.DataFrame())
         
@@ -196,7 +196,7 @@ class MEManualCuration(object):
                 {"complex_id": {}, "name": {}, "genes": {}, "mod": {}, "replace": {}}
             ).set_index("complex_id")
         return self._get_manual_curation(
-            "protein_corrections.csv",
+            "protein_corrections.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = ',')
@@ -206,7 +206,7 @@ class MEManualCuration(object):
                 'sigma','complex','genes','name'
             ]).set_index('sigma')
         return self._get_manual_curation(
-            "sigma_factors.csv",
+            "sigma_factors.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = ',')
@@ -217,7 +217,7 @@ class MEManualCuration(object):
 
             ]).set_index('id')
         return self._get_manual_curation(
-            "me_metabolites.csv",
+            "me_metabolites.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -227,7 +227,7 @@ class MEManualCuration(object):
                 'rna_degradosome'
             ]).set_index('rna_degradosome')
         df = self._get_manual_curation(
-            "rna_degradosome.csv",
+            "rna_degradosome.txt",
             create_file = create_file,
             no_file_return = create_file)
         return {
@@ -259,7 +259,7 @@ class MEManualCuration(object):
     def load_ribosome_stoich(self):
         create_file = self._create_ribosome_stoich()
         df = self._get_manual_curation(
-            "ribosomal_proteins.csv",
+            "ribosomal_proteins.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -282,7 +282,7 @@ class MEManualCuration(object):
         create_file = self._modify_ribosome_subreactions_for_save(
                 self._create_ribosome_subreactions())
         df = self._get_manual_curation(
-            "ribosome_subreactions.csv",
+            "ribosome_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -308,7 +308,7 @@ class MEManualCuration(object):
         create_file = self._modify_generic_dict_for_save(
                 self._create_generic_dict())
         df = self._get_manual_curation(
-            "generic_dict.csv",
+            "generic_dict.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -330,7 +330,7 @@ class MEManualCuration(object):
 #         create_file = self._modify_rrna_modifications_for_save(
 #                 self._create_rrna_modifications()) 
 #         df = self._get_manual_curation(
-#             "rrna_modifications.csv",
+#             "rrna_modifications.txt",
 #             create_file = create_file,
 #             no_file_return = create_file,
 #             sep = '\t')
@@ -342,7 +342,7 @@ class MEManualCuration(object):
     def load_amino_acid_trna_synthetase(self):
         create_file = self._create_amino_acid_trna_synthetase()
         return self._get_manual_curation(
-                "amino_acid_trna_synthetase.csv",
+                "amino_acid_trna_synthetase.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t').to_dict()['enzyme']
@@ -367,7 +367,7 @@ class MEManualCuration(object):
         create_file = self._modify_peptide_release_factors_for_save(
                 self._create_peptide_release_factors()) 
         df = self._get_manual_curation(
-            "peptide_release_factors.csv",
+            "peptide_release_factors.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -397,7 +397,7 @@ class MEManualCuration(object):
         create_file = self._modify_initiation_subreactions_for_save(
                 self._create_initiation_subreactions()) 
         df = self._get_manual_curation(
-            "initiation_subreactions.csv",
+            "initiation_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -423,7 +423,7 @@ class MEManualCuration(object):
         create_file = self._modify_elongation_subreactions_for_save(
                 self._create_elongation_subreactions()) 
         df = self._get_manual_curation(
-            "elongation_subreactions.csv",
+            "elongation_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -457,7 +457,7 @@ class MEManualCuration(object):
         create_file = self._modify_termination_subreactions_for_save(
                 self._create_termination_subreactions()) 
         df = self._get_manual_curation(
-            "termination_subreactions.csv",
+            "termination_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -492,7 +492,7 @@ class MEManualCuration(object):
         create_file = self._modify_special_trna_subreactions_for_save(
                 self._create_special_trna_subreactions()) 
         df = self._get_manual_curation(
-            "special_trna_subreactions.csv",
+            "special_trna_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -518,7 +518,7 @@ class MEManualCuration(object):
         create_file = self._modify_excision_machinery_for_save(
                 self._create_excision_machinery()) 
         df = self._get_manual_curation(
-            "excision_machinery.csv",
+            "excision_machinery.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -544,7 +544,7 @@ class MEManualCuration(object):
         create_file = self._modify_special_modifications_for_save(
                 self._create_special_modifications()) 
         df = self._get_manual_curation(
-            "special_modifications.csv",
+            "special_modifications.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -563,7 +563,7 @@ class MEManualCuration(object):
             'modification','positions','type','enzymes','source'
         ]).set_index('modification')
         df = self._get_manual_curation(
-            "rna_modification.csv",
+            "rna_modification.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -590,7 +590,7 @@ class MEManualCuration(object):
     def load_rna_modification_targets(self):
         create_file = self._create_rna_modification_targets()
         return self._get_manual_curation(
-            "post_transcriptional_modification_of_RNA.csv",
+            "post_transcriptional_modification_of_RNA.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -615,7 +615,7 @@ class MEManualCuration(object):
         create_file = self._modify_folding_dict_for_save(
                 self._create_folding_dict()) 
         df = self._get_manual_curation(
-            "folding_dict.csv",
+            "folding_dict.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -641,7 +641,7 @@ class MEManualCuration(object):
         create_file = self._modify_transcription_subreactions_for_save(
                 self._create_transcription_subreactions()) 
         df = self._get_manual_curation(
-            "transcription_subreactions.csv",
+            "transcription_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
@@ -677,7 +677,7 @@ class MEManualCuration(object):
             ).set_index("pathway")
         return self._process_translocation_pathways(
             self._get_manual_curation(
-                "translocation_pathways.csv",
+                "translocation_pathways.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t'))
@@ -692,7 +692,7 @@ class MEManualCuration(object):
     def load_lipid_modifications(self):
         create_file = self._create_lipid_modifications()
         df =  self._get_manual_curation(
-                "lipid_modifications.csv",
+                "lipid_modifications.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t')
@@ -718,7 +718,7 @@ class MEManualCuration(object):
     def load_enz_rxn_assoc_df(self):
         create_file = self._create_enz_rxn_assoc_df()
         df =  self._get_manual_curation(
-                "enzyme_reaction_association.csv",
+                "enzyme_reaction_association.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t')
@@ -847,16 +847,16 @@ class MECurator(object):
 #         if warn_manual_mod or warn_replace:
 #             if warn_manual_mod:
 #                 self.org.curation_notes['add_manual_complexes'].append({
-#                     'msg':'Some modifications in protein_corrections.csv are already in me_builder.org.protein_mod and were skipped.',
+#                     'msg':'Some modifications in protein_corrections.txt are already in me_builder.org.protein_mod and were skipped.',
 #                     'triggered_by':warn_manual_mod,
 #                     'importance':'low',
-#                     'to_do':'Check whether the protein modification specified in protein_corrections.csv is correct and not duplicated.'})
+#                     'to_do':'Check whether the protein modification specified in protein_corrections.txt is correct and not duplicated.'})
 #             if warn_replace:
 #                 self.org.curation_notes['add_manual_complexes'].append({
-#                     'msg':'Some modified proteins marked for replacement in protein_corrections.csv are not in me_builder.org.protein_mod. Did nothing.',
+#                     'msg':'Some modified proteins marked for replacement in protein_corrections.txt are not in me_builder.org.protein_mod. Did nothing.',
 #                     'triggered_by':warn_replace,
 #                     'importance':'low',
-#                     'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
+#                     'to_do':'Check whether the marked modified protein in protein_corrections.txt for replacement is correctly defined.'})
                 
     def find_issue_with_query(self,query):
         for k,v in self.org.curation_notes.items():

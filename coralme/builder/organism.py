@@ -919,7 +919,7 @@ class Organism(object):
                 'msg':'Some ribosomal proteins do not contain subunit information (30S, 50S) so they could not be mapped.',
                 'triggered_by':warn_proteins,
                 'importance':'high',
-                'to_do':'Classify them in ribosomal_proteins.csv'})
+                'to_do':'Classify them in ribosomal_proteins.txt'})
 
     def _add_entry_to_gene_dictionary(self,
                                 gene_dictionary,
@@ -1228,7 +1228,7 @@ class Organism(object):
             self.curation_notes['org.get_sigma_factors'].append({
                 'msg':"No sigma factors could be identified from proteins.txt",
                 'importance':'critical',
-                'to_do':'Manually define sigmas in sigma_factors.csv'})
+                'to_do':'Manually define sigmas in sigma_factors.txt'})
             random_cplx = random.choice(complexes_df.index)
             sigma_df = complexes_df.loc[[random_cplx]]
         ## Get sigmas automatically
@@ -1680,10 +1680,10 @@ class Organism(object):
 #         # Warnings
 #         if warn_rxns:
 #             self.curation_notes['org.generate_reaction_matrix'].append({
-#                 'msg':'Some reactions consisted only of metabolites marked for elimination in m_to_me_mets.csv, so they were removed',
+#                 'msg':'Some reactions consisted only of metabolites marked for elimination in m_to_me_mets.txt, so they were removed',
 #                 'triggered_by':warn_rxns,
 #                 'importance':'high',
-#                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.csv'})
+#                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.txt'})
 
     def _get_feature_locus_tag(self,
                                feature):
@@ -1740,7 +1740,7 @@ class Organism(object):
                 'msg':'Some generics in me_builder.org.generic_dict are empty.',
                 'triggered_by':warn_generics,
                 'importance':'high',
-                'to_do':'Curate and fill generics in generics.csv or directly in me_builder.org.generic_dict'})
+                'to_do':'Curate and fill generics in generics.txt or directly in me_builder.org.generic_dict'})
 
 
     def _check_for_duplicates_within_datasets(self,
@@ -1940,16 +1940,16 @@ class Organism(object):
         if warn_manual_mod or warn_replace:
             if warn_manual_mod:
                 self.curation_notes['org.add_manual_complexes'].append({
-                    'msg':'Some modifications in protein_corrections.csv are already in me_builder.org.protein_mod and were skipped.',
+                    'msg':'Some modifications in protein_corrections.txt are already in me_builder.org.protein_mod and were skipped.',
                     'triggered_by':warn_manual_mod,
                     'importance':'low',
-                    'to_do':'Check whether the protein modification specified in protein_corrections.csv is correct and not duplicated.'})
+                    'to_do':'Check whether the protein modification specified in protein_corrections.txt is correct and not duplicated.'})
             if warn_replace:
                 self.curation_notes['org.add_manual_complexes'].append({
-                    'msg':'Some modified proteins marked for replacement in protein_corrections.csv are not in me_builder.org.protein_mod. Did nothing.',
+                    'msg':'Some modified proteins marked for replacement in protein_corrections.txt are not in me_builder.org.protein_mod. Did nothing.',
                     'triggered_by':warn_replace,
                     'importance':'low',
-                    'to_do':'Check whether the marked modified protein in protein_corrections.csv for replacement is correctly defined.'})
+                    'to_do':'Check whether the marked modified protein in protein_corrections.txt for replacement is correctly defined.'})
                 
     def generate_curation_notes(self):
         import json

@@ -155,8 +155,8 @@ class MEBuilder(object):
 			logging.warning("Getting homologs")
 
 			self.get_homology(evalue = 1e-10)
-			self.homology.mutual_hits_df.to_csv('{:s}/mutual_hits.csv'.format(folder))
-			#self.homology.mutual_hits_df.to_csv(self.org.directory+'{:s}/mutual_hits.csv'.format(folder))
+			self.homology.mutual_hits_df.to_csv('{:s}/mutual_hits.txt'.format(folder))
+			#self.homology.mutual_hits_df.to_csv(self.org.directory+'{:s}/mutual_hits.txt'.format(folder))
 
 			# #### Get enzyme homology
 			self.homology.get_complex_homology()
@@ -695,16 +695,16 @@ class MEBuilder(object):
 		if warn_skip or warn_found or warn_skip_2:
 			if warn_skip:
 				self.org.curation_notes['update_me_mets'].append({
-					'msg':'Some metabolites in me_metabolites.csv are not in m_model, so they were skipped.',
+					'msg':'Some metabolites in me_metabolites.txt are not in m_model, so they were skipped.',
 					'triggered_by':warn_skip,
 					'importance':'medium',
-					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.csv'})
+					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.txt'})
 			if warn_found:
 				self.org.curation_notes['update_me_mets'].append({
-					'msg':'Some metabolites in me_metabolites.csv were found in reference m_model after replacing __ with _',
+					'msg':'Some metabolites in me_metabolites.txt were found in reference m_model after replacing __ with _',
 					'triggered_by':warn_found,
 					'importance':'medium',
-					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.csv'})
+					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.txt'})
 
 	def update_generics_from_homology(self):
 		generic_dict = self.org.generic_dict
@@ -763,7 +763,7 @@ class MEBuilder(object):
 				'msg':'Some enzymes defined in me_builder.org.ribosome_subreactions are different from the ones inferred from homology',
 				'triggered_by':warn_proteins,
 				'importance':'medium',
-				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.ribosome_subreactions. Curate the inputs in ribosome_subreactions.csv accordingly.'})
+				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.ribosome_subreactions. Curate the inputs in ribosome_subreactions.txt accordingly.'})
 
 # 	def update_rrna_modifications_from_homology(self):
 # 		ref_rrna_modifications = self.ref.rrna_modifications
@@ -792,7 +792,7 @@ class MEBuilder(object):
 # 				'msg':'Some enzymes defined in me_builder.org.rrna_modifications are different from the ones inferred from homology',
 # 				'triggered_by':warn_proteins,
 # 				'importance':'medium',
-# 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.rrna_modifications. Curate the inputs in rrna_modifications.csv accordingly.'})
+# 				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.rrna_modifications. Curate the inputs in rrna_modifications.txt accordingly.'})
 
 	def update_amino_acid_trna_synthetases_from_homology(self):
 		ref_amino_acid_trna_synthetase = self.ref.amino_acid_trna_synthetase
@@ -821,7 +821,7 @@ class MEBuilder(object):
 				'msg':'Some enzymes defined in me_builder.org.amino_acid_trna_synthetase are different from the ones inferred from homology',
 				'triggered_by':warn_proteins,
 				'importance':'medium',
-				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.amino_acid_trna_synthetase. Curate the inputs in amino_acid_trna_synthetase.csv accordingly.'})
+				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.amino_acid_trna_synthetase. Curate the inputs in amino_acid_trna_synthetase.txt accordingly.'})
 
 	def update_peptide_release_factors_from_homology(self):
 		ref_peptide_release_factors = self.ref.peptide_release_factors
@@ -850,7 +850,7 @@ class MEBuilder(object):
 				'msg':'Some enzymes defined in me_builder.org.peptide_release_factors are different from the ones inferred from homology',
 				'triggered_by':warn_proteins,
 				'importance':'medium',
-				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.peptide_release_factors. Curate the inputs in peptide_release_factors.csv accordingly.'})
+				'to_do':'Confirm whether the definitions or homology calls are correct in me_builder.org.peptide_release_factors. Curate the inputs in peptide_release_factors.txt accordingly.'})
 
 	def update_initiation_subreactions_from_homology(self):
 		ref_initiation_subreactions = self.ref.initiation_subreactions
@@ -1137,7 +1137,7 @@ class MEBuilder(object):
 									'msg':'Some translocase pathways in org.protein_location are not defined in org.translocation_pathways.',
 									'triggered_by':missing_pathways,
 									'importance':'high',
-									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.csv'
+									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.txt'
 				})
 
 	def load(self,
@@ -1179,7 +1179,7 @@ class MEBuilder(object):
 		if not os.path.exists(directory):
 			os.mkdir(directory)
 		for k,v in dataframes.items():
-			v.to_csv(directory + k + '.csv')
+			v.to_csv(directory + k + '.txt')
 
 	# shortcuts to methods in the MECurator class
 	def find_issue(self,query):

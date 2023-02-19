@@ -140,7 +140,7 @@ class Homology(object):
 				'msg':'Some complexes were partial hits in the BLAST',
 				'triggered_by':warn_candidates,
 				'importance':'medium',
-				'to_do':'Curate these manually in protein_corrections.csv'})
+				'to_do':'Curate these manually in protein_corrections.txt'})
 		for i in self.org.generic_dict.keys():
 			org_cplx_homolog[i] = i
 			ref_cplx_homolog[i] = i
