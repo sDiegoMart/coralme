@@ -2334,7 +2334,7 @@ class METroubleshooter(object):
 				self.me_model.relax_bounds()
 				self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps, works = coralme.builder.helper_functions.brute_check(growth_key_and_value, met_types = met_type)
+				bf_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_types = met_type)
 				if works:
 					e_gaps.append(bf_gaps)
 					break
