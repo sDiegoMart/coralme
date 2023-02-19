@@ -196,20 +196,6 @@ class MEBuilder(object):
 		logging.warning("Setting reaction Keffs")
 		self.org.get_reaction_keffs()
 
-# 		# ## Files from model
-# 		# TODO: ARE WE GOING TO USE THIS ANYMORE?
-# 		# #### Metabolites
-# 		logging.warning("Generating metabolites file")
-# 		self.org.generate_metabolites_file()
-
-# 		# #### Reactions
-# 		logging.warning("Generating reactions file")
-# 		self.org.generate_reactions_file()
-
-# 		# #### Reaction matrix
-# 		logging.warning("Generating reaction matrix file")
-# 		self.org.generate_reaction_matrix()
-
 		# #### Biomass constituents
 		self.org.biomass_constituents = config.get('flux_of_biomass_constituents', {})
 
