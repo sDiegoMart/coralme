@@ -1329,10 +1329,10 @@ class MEReconstruction(MEBuilder):
 			if pathlib.Path(filename).is_file():
 				file_to_read = filename
 			elif pathlib.Path(filename_if_empty).is_file():
-				file_to_read = filename_if_empty
+				file_to_read = '{:s}/{:s}'.format(config.get('log_directory', 'coralME_output'), filename_if_empty)
 			else:
 				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty \'{:s}\' file was created.'.format(input_type, filename, filename_if_empty))
-				config[filecode] = filename_if_empty
+				config[filecode] = '{:s}/{:s}'.format(config.get('log_directory', 'coralME_output'), filename_if_empty)
 				tmp = pandas.DataFrame(columns = columns)
 				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
 				return tmp
