@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import re
 import copy
+import logging
 import sympy
 import pandas
 
@@ -349,53 +350,6 @@ def add_exchange_reactions(me, metabolites, prefix = 'SK_'):
 		#print(r.id,r.lower_bound,r.upper_bound,r.reaction)
 	return me
 
-def brute_force_check(me, metabolites_to_add, growth_key_and_value):
-	print('  '*6 + 'Adding sink reactions for {:d} metabolites'.format(len(metabolites_to_add)))
-	add_exchange_reactions(me, metabolites_to_add)
-
-	if me.feasibility(keys = growth_key_and_value):
-		pass
-	else:
-		return [False]
-
-	rxns = []
-	rxns_to_drop = []
-	for idx, flux in me.solution.fluxes.items():
-		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
-			if abs(flux) > 0:
-				rxns.append(idx)
-			else:
-				#print('Closing {}'.format(idx))
-				rxns_to_drop.append(idx)
-				me.reactions.get_by_id(idx).bounds = (0, 0)
-
-	print('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
-
-	# reaction ID : position in the model.reactions DictList object
-	ridx = { k:v for k,v in me.reactions._dict.items() if k in rxns }
-
-	# populate with stoichiometry
-	Sf, Se, lb, ub, b, c, cs, atoms = me.construct_lp_problem(keys = growth_key_and_value)
-
-	res = []
-	msg = 'Processed: {:s}/{:d}, Gaps: {:d}. The ME-model is {:s}feasible if {:s} is closed.'
-	for idx, (rxn, pos) in enumerate(ridx.items()):
-		lb[pos] = 0
-		ub[pos] = 0
-		if me.feasibility(keys = growth_key_and_value, **{'lp' : [Sf, dict(), lb, ub, b, c, cs, set()]}):
-			res.append(False)
-			print('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx))), ' '), len(ridx), len([ x for x in res if x ]), '', rxn))
-		else:
-			lb[pos] = -1000
-			ub[pos] = +1000
-			res.append(True)
-			print('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx))), ' '), len(ridx), len([ x for x in res if x ]), 'not ', rxn))
-
-	bf_gaps = [ y for x,y in zip(res, rxns) if x ] # True
-	no_gaps = [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
-
-	return bf_gaps, no_gaps
-
 def exchange_single_model(me, flux_dict = 0, solution=0):
 	import pandas as pd
 
@@ -574,3 +528,132 @@ def fill_builder(b,fill_with='CPLX_dummy',key=None,d=None,fieldname=None,warning
                     d[key] = 'CPLX_dummy'
     else:
         pass
+
+def gap_find(me_model):
+	#from draft_coralme.util.helper_functions import find_gaps
+	logging.warning('  '*5 + 'Finding gaps from the M-model only...')
+	m_gaps = coralme.builder.helper_functions.find_gaps(me_model.gem)
+
+	logging.warning('  '*5 + 'Finding gaps in the ME-model...')
+	me_gaps = coralme.builder.helper_functions.find_gaps(me_model, growth_key = me_model.mu)
+
+	idx = list(set(me_gaps.index) - set(m_gaps.index))
+	new_gaps = me_gaps.loc[idx]
+
+	filt1 = new_gaps['p'] == 1
+	filt2 = new_gaps['c'] == 1
+	filt3 = new_gaps['u'] == 1
+
+	deadends = list(new_gaps[filt1 | filt2 | filt3].index)
+	deadends = sorted([ x for x in deadends if 'biomass' not in x if not x.endswith('_e') ])
+
+	logging.warning('  '*5 + '{:d} metabolites were identified as deadends.'.format(len(deadends)))
+	for met in deadends:
+		name = me_model.metabolites.get_by_id(met).name
+		logging.warning('  '*6 + '{:s}: {:s}'.format(met, 'Missing metabolite in the M-model.' if name == '' else name))
+	return deadends
+
+def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.001 }, met_types = 'Metabolite'):
+	if len(deadends) != 0:
+		logging.warning('  '*5 + 'Adding a sink reaction for each identified deadend metabolite...')
+		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends)
+	else:
+		logging.warning('  '*5 + 'Empty set of deadends metabolites to test.')
+		return None
+
+	logging.warning('  '*5 + 'Optimizing gapfilled ME-model...')
+
+	if me_model.feasibility(keys = growth_key_and_value):
+		logging.warning(' The ME-model is feasible.')
+		logging.warning('  '*5 + 'Gapfilled ME-model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
+		return True
+	else:
+		logging.warning(' The ME-model is not feasible.')
+		logging.warning('  '*5 + 'Provided set of sink reactions for deadend metabolites does not allow growth.')
+		return False
+
+def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
+	logging.warning('  '*6 + 'Adding sink reactions for {:d} metabolites'.format(len(metabolites_to_add)))
+	coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
+
+	if me_model.feasibility(keys = growth_key_and_value):
+		pass
+	else:
+		return [False]
+
+	rxns = []
+	rxns_to_drop = []
+	for idx, flux in me_model.solution.fluxes.items():
+		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
+			if abs(flux) > 0:
+				rxns.append(idx)
+			else:
+				#logging.warning('Closing {}'.format(idx))
+				rxns_to_drop.append(idx)
+				me_model.reactions.get_by_id(idx).bounds = (0, 0)
+
+	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
+
+	# reaction ID : position in the model.reactions DictList object
+	ridx = { k:v for k,v in me_model.reactions._dict.items() if k in rxns }
+
+	# populate with stoichiometry
+	Sf, Se, lb, ub, b, c, cs, atoms = me_model.construct_lp_problem(keys = growth_key_and_value)
+
+	res = []
+	msg = 'Processed: {:s}/{:d}, Gaps: {:d}. The ME-model is {:s}feasible if {:s} is closed.'
+	for idx, (rxn, pos) in enumerate(ridx.items()):
+		lb[pos] = 0
+		ub[pos] = 0
+		if me_model.feasibility(keys = growth_key_and_value, **{'lp' : [Sf, dict(), lb, ub, b, c, cs, set()]}):
+			res.append(False)
+			logging.warning('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), '', rxn)))
+		else:
+			lb[pos] = -1000
+			ub[pos] = +1000
+			res.append(True)
+			logging.warning('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), 'not ', rxn)))
+
+	bf_gaps = [ y for x,y in zip(res, rxns) if x ] # True
+	no_gaps = [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
+
+	return bf_gaps, no_gaps
+
+def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
+	if isinstance(met_types, str):
+		met_types = [met_types]
+
+	mets = set()
+	for met_type in met_types:
+		for met in me_model.metabolites:
+			filter1 = type(met) == getattr(coralme.core.component, met_type)
+			filter2 = met.id.startswith('trna')
+			filter3 = met.id.endswith('trna_c')
+			filter4 = met.id.endswith('_e')
+			if filter1 and not filter2 and not filter3 and not filter4:
+				mets.add(met.id)
+
+	if 'Metabolite' in met_types:
+		# remove from the metabolites to test that are fed into the model through transport reactions
+		medium = set([ '{:s}_c'.format(x[3:-2]) for x in me_model.gem.medium.keys() ])
+		mets = set(mets).difference(medium)
+
+		# filter out manually
+		mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
+		mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
+		mets = set(mets).difference(set(['cdp_c', 'cmp_c', 'ctp_c']))
+		mets = set(mets).difference(set(['gdp_c', 'gmp_c', 'gtp_c']))
+		mets = set(mets).difference(set(['udp_c', 'ump_c', 'utp_c']))
+		mets = set(mets).difference(set(['dadp_c', 'dcdp_c', 'dgdp_c', 'dtdp_c', 'dudp_c']))
+		mets = set(mets).difference(set(['damp_c', 'dcmp_c', 'dgmp_c', 'dtmp_c', 'dump_c']))
+		mets = set(mets).difference(set(['datp_c', 'dctp_c', 'dgtp_c', 'dttp_c', 'dutp_c']))
+		mets = set(mets).difference(set(['nad_c', 'nadh_c', 'nadp_c', 'nadph_c']))
+		mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
+		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
+		mets = set(mets).difference(set(['coa_c']))
+
+	bf_gaps, no_gaps = coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets), growth_key_and_value)
+	if me_model.feasibility(keys = growth_key_and_value):
+		return bf_gaps, no_gaps, True
+	else:
+		return bf_gaps, no_gaps, False

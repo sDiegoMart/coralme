@@ -38,7 +38,6 @@ gre_activation	amet_c	-1.0
 gre_activation	dad__2_c	1.0
 gre_activation	FLAVODOXIN1-MONOMER_mod_Oxidized(1)	1.0
 gre_activation	met__L_c	1.0
-gre_activation	PFLACTENZ-MONOMER	enzyme
 
 # CoA-[4'-phosphopantetheine]:apo-[acyl-carrier protein] 4'-pantetheinephosphotransferase
 acpP_activation	coa_c	-1.0
