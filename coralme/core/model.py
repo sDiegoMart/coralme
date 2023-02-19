@@ -1,4 +1,5 @@
 import re
+import pickle
 import typing
 import logging
 
@@ -1014,3 +1015,73 @@ class MEModel(cobra.core.model.Model):
 				rxn.lower_bound = 0
 			elif rxn.lower_bound < 0:
 				rxn.lower_bound = -1000
+
+	# A copy from METroubleshooter without curation notes
+	def troubleshoot(self, growth_key_and_value = None):
+		if growth_key_and_value is None:
+			growth_key_and_value = { self.mu : 0.001 }
+
+		growth_key, growth_value = zip(*growth_key_and_value.items())
+
+		print('~ '*1 + 'Troubleshooting started...')
+		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...', end = '')
+		if self.feasibility(keys = growth_key_and_value):
+			print('  '*5 + '\nOriginal ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
+			return None
+		else:
+			print(' FALSE.')
+			works = False
+
+		# Step 1. Find topological gaps
+		print('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
+		deadends = coralme.builder.helper_functions.gap_find(self)
+
+		medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.medium.keys() ])
+		deadends = set(deadends).difference(medium)
+
+		# Step 2. Test feasibility adding all topological gaps
+		if len(deadends) != 0:
+			print('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
+			print('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
+			works = coralme.builder.helper_functions.gap_fill(self, deadends = deadends, growth_key_and_value = growth_key_and_value)
+
+		if len(deadends) == 0 and works == False:
+			print('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
+
+		if works == False:
+			met_type = 'Metabolite'
+			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
+			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value = growth_key_and_value, met_types = met_type)
+
+			# close sink reactions that are not gaps
+			self.remove_reactions(no_gaps)
+
+		# Step 3. Test different sets of MEComponents
+		e_gaps = []
+		if works == False:
+			print('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+
+			met_types = [ 'Complex', 'GenerictRNA', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
+			for met_type in met_types:
+				print('  '*5 + 'Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(met_type))
+
+				self.relax_bounds()
+				self.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
+
+				bf_gaps, works = coralme.builder.helper_functions.brute_check(growth_key_and_value, met_types = met_type)
+				if works:
+					e_gaps.append(bf_gaps)
+					break
+
+		if works: # Meaning it can grow in any case
+			print('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
+			self.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
+			print('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.solution.objective_value))
+
+			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(self.global_info['out_directory'], self.id), 'wb') as outfile:
+				pickle.dump(self, outfile)
+
+			print('\nME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(self.global_info['out_directory'], self.id))
+		else:
+			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
+		return None
