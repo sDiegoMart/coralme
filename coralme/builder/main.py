@@ -2276,13 +2276,12 @@ class METroubleshooter(object):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		logging.warning('~ '*1 + 'Troubleshooting started...')
-		# TODO: change to logging.warning
-		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...', end = '')
+		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
 		if self.me_model.feasibility(keys = growth_key_and_value):
-			logging.warning('  '*5 + '\nOriginal ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
+			logging.warning('  '*5 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			return None
 		else:
-			logging.warning(' FALSE.')
+			logging.warning('  '*5 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
 		# Step 1. Find topological gaps
