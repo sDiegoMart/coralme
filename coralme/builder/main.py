@@ -2069,13 +2069,13 @@ class MEReconstruction(MEBuilder):
 			logging.warning('No Braun\'s lipoprotein (lpp gene) homolog was set. Please check if it is the correct behavior.')
 
 		# ## Part 7: Set keffs
-		flag = self.configuration.get('keff_method',None)
+		flag = self.configuration.get('keff_method','estimate')
 		mapped_keffs = {}
 		if flag == 'estimate':
 			reaction_median_keffs = pandas.read_csv(
 				self.configuration.get(
 					'reaction_median_keff',
-					self.configuration['out_directory'] + 'building_data/reaction_median_keffs.txt'),
+					self.configuration['out_directory'] + '/building_data/reaction_median_keffs.txt'),
 				sep='\t',
 				index_col=0
 			)['keff'].to_dict()
