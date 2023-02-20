@@ -196,7 +196,6 @@ class MEBuilder(object):
 				with open(filename, 'w') as outfile:
 					self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
 					logging.warning('The subreaction data file was saved to the ./{:s} file.'.format(filename))
-		self.configuration['df_matrix_subrxn_stoich'] = filename
 
 # 		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
 # 		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
