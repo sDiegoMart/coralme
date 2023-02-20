@@ -184,6 +184,22 @@ class MEBuilder(object):
 						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
 			self.configuration['df_TranscriptionalUnits'] = filename
 
+			filename = self.org.config.get('df_matrix_subrxn_stoich', self.org.directory + "subreaction_matrix.txt")
+			filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
+
+			if overwrite:
+				with open(filename, 'w') as outfile:
+					self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
+					logging.warning('The subreaction data file was processed and overwritten into the {:s} file.'.format(filename))
+			else:
+				if pathlib.Path(filename).exists():
+					logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
+				else:
+					with open(filename, 'w') as outfile:
+						self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
+						logging.warning('The subreaction data file was saved to the ./{:s} file.'.format(filename))
+			self.configuration['df_matrix_subrxn_stoich'] = filename
+
 # 		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
 # 		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
 # 		self.org.subreaction_matrix.to_csv(filename,sep='\t')
@@ -1084,7 +1100,6 @@ class MEBuilder(object):
 							 axis = 0, join = 'outer')
 		self.org.subreaction_matrix = org_subreaction_matrix
 		self.org.subreaction_matrix.index.name = 'Reaction'
-		self.org.subreaction_matrix.to_csv(self.org.directory + "subreaction_matrix.txt",sep='\t')
 
 	def update_from_homology(self):
 		self.update_enzyme_stoichiometry()
