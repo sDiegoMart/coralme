@@ -1323,19 +1323,13 @@ class MEReconstruction(MEBuilder):
 			if len(lst) != 0:
 				logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(', '.join(lst)))
 
-		def read(filecode, input_type, filename_if_empty, columns = []):
+		def read(filecode, input_type, columns = []):
 			filename = config.get(filecode, '')
-			filename_if_empty = '{:s}/building_data/{:s}'.format(config.get('out_directory', 'coralME_output'), filename_if_empty)
 			if pathlib.Path(filename).is_file():
 				file_to_read = filename
-			elif pathlib.Path(filename_if_empty).is_file():
-				file_to_read = filename_if_empty
 			else:
-				logging.warning('Input file with {:s} \'{:s}\' does not exist. An empty \'{:s}\' file was created.'.format(input_type, filename, filename_if_empty))
-				config[filecode] = '{:s}/{:s}'.format(config.get('out_directory', 'coralME_output'), filename_if_empty)
-				tmp = pandas.DataFrame(columns = columns)
-				tmp.to_csv(filename_if_empty, sep = '\t', index = False)
-				return tmp
+				logging.warning('Did not find file \'{:s}\' '.format(filename))
+				return pandas.DataFrame(columns=columns)
 
 			df = coralme.builder.flat_files.read(file_to_read)
 			if set(df.columns).issubset(set(columns)):
@@ -1346,23 +1340,23 @@ class MEReconstruction(MEBuilder):
 		# INPUTS: We capture if the file exists or if the key in the configuration file is ''
 		# Transcriptional Units
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
-		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs.txt', cols).set_index('TU_id', inplace = False)
+		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', cols).set_index('TU_id', inplace = False)
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficients
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
+		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', cols)
 
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficients
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
+		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', cols)
 
 		# Orphan and Spontaneous reaction metadata
 		cols = ['name', 'description', 'is_reversible', 'is_spontaneous']
-		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols).set_index('name', inplace = False)
+		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', cols).set_index('name', inplace = False)
 
 		# Metabolites metadata
 		cols = ['id', 'me_id', 'name', 'formula', 'compartment', 'type']
-		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols).set_index('id', inplace = False)
+		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', cols).set_index('id', inplace = False)
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
