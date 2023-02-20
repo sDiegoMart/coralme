@@ -10,6 +10,7 @@ import Bio
 import cobra
 import pandas
 import tqdm
+bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
 
 import coralme
 from coralme.builder import dictionaries
@@ -23,7 +24,7 @@ except:
     warnings.warn("This biopython version does not allow for correct warning handling. Biopython >=1.80 is suggested.")
 
 import logging
-bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+log = logging.getLogger(__name__)
 
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
@@ -198,7 +199,7 @@ class Organism(object):
 
         logging.warning("Loading manual curation")
         self.load_manual_curation()
-        
+
         logging.warning("Integrating manual metabolic reactions")
         self.modify_metabolic_reactions()
         logging.warning("Integrating manual complexes")
@@ -1935,7 +1936,7 @@ class Organism(object):
 
         self.complexes_df = complexes_df
         self.protein_mod = protein_mod
-        
+
         # Warnings
         if warn_manual_mod or warn_replace:
             if warn_manual_mod:
@@ -1950,7 +1951,7 @@ class Organism(object):
                     'triggered_by':warn_replace,
                     'importance':'low',
                     'to_do':'Check whether the marked modified protein in protein_corrections.txt for replacement is correctly defined.'})
-                
+
     def generate_curation_notes(self):
         import json
         curation_notes = self.curation_notes
