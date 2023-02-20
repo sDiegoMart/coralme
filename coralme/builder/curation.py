@@ -733,7 +733,7 @@ class MEManualCuration(object):
     def load_reaction_matrix(self):
         create_file = self._create_reaction_matrix()
         df =  self._get_manual_curation(
-                "subreaction_matrix.txt",
+                "reaction_matrix.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t')
