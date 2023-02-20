@@ -1,5 +1,8 @@
 import re
+
 import logging
+log = logging.getLogger(__name__)
+
 import coralme
 from collections import Counter
 

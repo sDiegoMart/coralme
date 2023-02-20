@@ -1,4 +1,5 @@
 import logging
+log = logging.getLogger(__name__)
 import coralme
 
 def add_iron_sulfur_modifications(me_model):
@@ -66,6 +67,7 @@ def _replace_modification(dct, me_model):
 		except:
 			logging.warning('All metabolites in SubreactionData \'{:s}\' must have a formula to determine their elemental contribution.'.format(new_mod_data))
 
+	# This function does not replace information in process_data; it rather changes information in subreactions
 	for data in me_model.process_data.get_by_id(modification).get_complex_data():
 		cplx_data = me_model.process_data.get_by_id(data.id)
 		# copy the original data
@@ -121,7 +123,7 @@ def add_FeFe_and_NiFe_modifications(me_model):
 
 #def add_lipoate_modifications(me_model, lipoate_modifications):
 def add_lipoyl_modifications(me_model):
-	# two different reactions can add a lipoate modification.
+	# Two different reactions can add a lipoate modification.
 	# We create a separate SubreactionData for each one
 	#for key, mod in lipoate_modifications):
 	lipoate_modifications = me_model.global_info['complex_cofactors']['lipoate_subreactions']

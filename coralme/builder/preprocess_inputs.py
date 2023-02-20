@@ -3,7 +3,10 @@ import numpy
 import pathlib
 import pandas
 import warnings
+
 import logging
+log = logging.getLogger(__name__)
+
 from Bio import SeqIO
 
 try:
@@ -179,13 +182,19 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		mod_strings = []
 		if len(all_mods) != 0:
 			for mods in all_mods:
-				#mods = [ x for x in mods if not x.startswith('3hocta') ] # metabolic modification in ACP
+				mods = [ x for x in mods if not x.startswith('SH') ] # Sulfur transfer in [enzyme]-S-sulfanylcysteine are enzymatic reactions
+				logging.warning('The modification \'SH\' was removed. Add MetabolicReactions to transfer sulfur from cysteine and to the many acceptors.')
 				mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
 				mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
+				mods = [ x.replace('LI', 'Li') for x in mods ]
+				mods = [ x.replace('dpm', 'hmbil') for x in mods ]
+				logging.warning('The modification \'dpm\' was renamed to \'hmbil\'. Add a MetabolicReaction to convert \'hmbil\' into \'dpm\'.')
 				mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
 				logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
+				logging.warning('Add MetabolicReactions to salvage or de novo synthesis of lipoyl moieties. See https://www.genome.jp/pathway/map00785 for more information.')
 				mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
 				logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
+				logging.warning('Add MetabolicReactions to synthetize and transfer the NiFe_cofactor into the enzyme. See https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY-8319 for more information.')
 				if len(mods) != 0:
 					if 'pan4p(1)' not in mods:
 						mod_strings.append(' AND '.join(mods))

@@ -1,7 +1,9 @@
 import re
 import pickle
 import typing
+
 import logging
+log = logging.getLogger(__name__)
 
 # install by the user
 import tqdm
@@ -86,7 +88,7 @@ class MEModel(cobra.core.model.Model):
 				},
 
 			'complex_cofactors' : {
-				'fes_transfer' : { 'erpA' : '', 'iscA' : '', 'sufA' : '' },
+				'fes_transfers' : { 'erpA' : '', 'iscA' : '', 'sufA' : '' },
 				'biotin_subreactions' : { 'mod_btn_c' : [ 'biotin_ligase' ] },
 				'lipoate_subreactions' : { 'mod_lipoyl_c' : [ 'lipoyl_denovo', 'lipoyl_scavenging' ] },
 				'fes_chaperones' : {},

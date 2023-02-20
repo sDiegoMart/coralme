@@ -1,4 +1,6 @@
 import logging
+log = logging.getLogger(__name__)
+
 import coralme
 
 #def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, modification_info, verbose = True):
