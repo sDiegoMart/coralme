@@ -27,6 +27,7 @@ class MEManualCuration(object):
         self.directory = self.org.directory
         self.curation_notes = self.org.curation_notes
         self.is_reference = self.org.is_reference
+        self.configuration = self.org.config
 
     def load_manual_curation(self):
         logging.warning("Loading protein location")
@@ -94,8 +95,12 @@ class MEManualCuration(object):
                              filename,
                              create_file=None,
                              no_file_return=pandas.DataFrame(),
-                             sep = '\t'):
-        filepath = self.directory + filename
+                             sep = '\t',
+                             pathtype = 'relative'):
+        if pathtype == 'absolute':
+            filepath = filename
+        else:
+            filepath = self.directory + filename
         if os.path.isfile(filepath):
             return pandas.read_csv(filepath,
                                    index_col=0,
@@ -216,11 +221,15 @@ class MEManualCuration(object):
                 'id','me_id','name','formula','compartment','type'
 
             ]).set_index('id')
+        filename = self.configuration.get('df_metadata_metabolites', None)
+        if filename is None or not filename:
+            filename = self.org.directory + "me_metabolites.txt"
         return self._get_manual_curation(
-            "me_metabolites.txt",
+            filename,
             create_file = create_file,
             no_file_return = create_file,
-            sep = '\t')
+            sep = '\t',
+            pathtype = 'absolute')
     
     def load_rna_degradosome(self):
         create_file = pandas.DataFrame(columns = [
