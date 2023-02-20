@@ -165,40 +165,40 @@ class MEBuilder(object):
 			logging.warning("Updating from homology")
 			self.update_from_homology()
 
-			filename = self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt")
-			filename = self.org.directory + "TUs_from_biocyc.txt" if filename == '' else filename
+		filename = self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt")
+		filename = self.org.directory + "TUs_from_biocyc.txt" if filename == '' else filename
 
-			df = self.org.TU_df
-			df = df.sort_index(inplace = False)
+		df = self.org.TU_df
+		df = df.sort_index(inplace = False)
 
-			if overwrite:
+		if overwrite:
+			with open(filename, 'w') as outfile:
+				self.org.TU_df.to_csv(outfile, sep = '\t')
+				logging.warning('The BioCyc transcriptional data file was processed and overwritten into the {:s} file.'.format(filename))
+		else:
+			if pathlib.Path(filename).exists():
+				logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
+			else:
 				with open(filename, 'w') as outfile:
 					self.org.TU_df.to_csv(outfile, sep = '\t')
-					logging.warning('The BioCyc transcriptional data file was processed and overwritten into the {:s} file.'.format(filename))
+					logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
+		self.configuration['df_TranscriptionalUnits'] = filename
+
+		filename = self.org.config.get('df_matrix_subrxn_stoich', self.org.directory + "subreaction_matrix.txt")
+		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
+
+		if overwrite:
+			with open(filename, 'w') as outfile:
+				self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
+				logging.warning('The subreaction data file was processed and overwritten into the {:s} file.'.format(filename))
+		else:
+			if pathlib.Path(filename).exists():
+				logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
 			else:
-				if pathlib.Path(filename).exists():
-					logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
-				else:
-					with open(filename, 'w') as outfile:
-						self.org.TU_df.to_csv(outfile, sep = '\t')
-						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
-			self.configuration['df_TranscriptionalUnits'] = filename
-
-			filename = self.org.config.get('df_matrix_subrxn_stoich', self.org.directory + "subreaction_matrix.txt")
-			filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
-
-			if overwrite:
 				with open(filename, 'w') as outfile:
 					self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
-					logging.warning('The subreaction data file was processed and overwritten into the {:s} file.'.format(filename))
-			else:
-				if pathlib.Path(filename).exists():
-					logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
-				else:
-					with open(filename, 'w') as outfile:
-						self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
-						logging.warning('The subreaction data file was saved to the ./{:s} file.'.format(filename))
-			self.configuration['df_matrix_subrxn_stoich'] = filename
+					logging.warning('The subreaction data file was saved to the ./{:s} file.'.format(filename))
+		self.configuration['df_matrix_subrxn_stoich'] = filename
 
 # 		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
 # 		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
