@@ -219,11 +219,11 @@ class MEManualCuration(object):
     def load_me_mets(self):
         create_file = pandas.DataFrame(columns = [
                 'id','me_id','name','formula','compartment','type'
-
             ]).set_index('id')
-        filename = self.configuration.get('df_metadata_metabolites', None)
-        if filename is None or not filename:
-            filename = self.org.directory + "me_metabolites.txt"
+#         filename = self.configuration.get('df_metadata_metabolites', None)
+#         if filename is None or not filename:
+#             filename = self.org.directory + "me_metabolites.txt"
+        filename = self.org.directory + "me_metabolites.txt" 
         return self._get_manual_curation(
             filename,
             create_file = create_file,
