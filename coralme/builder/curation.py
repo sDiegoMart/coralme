@@ -85,8 +85,14 @@ class MEManualCuration(object):
         self.org.translocation_pathways = self.load_translocation_pathways() 
         logging.warning("Loading lipid modifications")
         self.org.lipid_modifications = self.load_lipid_modifications()
+        
+        # Special input files
         logging.warning("Loading subreaction matrix")
         self.org.subreaction_matrix = self.load_subreaction_matrix()
+        logging.warning("Loading reaction matrix")
+        self.org.reaction_matrix = self.load_reaction_matrix()
+        logging.warning("Loading orphan reactions")
+        self.org.orphan_and_spont_reactions = self.load_orphan_and_spont_reactions()
         logging.warning("Loading enzyme-reaction-association")
         self.org.enz_rxn_assoc_df = self.load_enz_rxn_assoc_df()
         
@@ -715,6 +721,33 @@ class MEManualCuration(object):
         create_file = self._create_subreaction_matrix()
         df =  self._get_manual_curation(
                 "subreaction_matrix.txt",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return df
+    
+    def _create_reaction_matrix(self):
+        return pandas.DataFrame(columns=[
+            'Reaction', 'Metabolites', 'Stoichiometry'
+        ]).set_index('Reaction')
+    def load_reaction_matrix(self):
+        create_file = self._create_reaction_matrix()
+        df =  self._get_manual_curation(
+                "subreaction_matrix.txt",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return df
+    
+    
+    def _create_orphan_and_spont_reactions(self):
+        return pandas.DataFrame(columns=[
+            'name', 'description', 'is_reversible', 'is_spontaneous'
+        ]).set_index('name')
+    def load_orphan_and_spont_reactions(self):
+        create_file = self._create_orphan_and_spont_reactions()
+        df =  self._get_manual_curation(
+                "orphan_and_spont_reactions.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t')
