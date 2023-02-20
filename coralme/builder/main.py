@@ -184,9 +184,7 @@ class MEBuilder(object):
 					logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
 		self.configuration['df_TranscriptionalUnits'] = filename
 
-		filename = self.org.config.get('df_matrix_subrxn_stoich', self.org.directory + "subreaction_matrix.txt")
-		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
-
+		filename = self.org.directory + "subreaction_matrix.txt"
 		if overwrite:
 			with open(filename, 'w') as outfile:
 				self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
