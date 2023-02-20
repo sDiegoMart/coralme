@@ -2302,7 +2302,7 @@ class METroubleshooter(object):
 			if no_gaps:
 				self.me_model.remove_reactions(no_gaps)
 
-			if len(bf_gaps) != 0 or bf_gaps[0]:
+			if bf_gaps and (len(bf_gaps) != 0 or bf_gaps[0]):
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Additional deadends were identified',
 					'triggered_by':bf_gaps,
