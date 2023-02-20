@@ -197,6 +197,19 @@ class MEBuilder(object):
 					self.org.subreaction_matrix.to_csv(outfile, sep = '\t')
 					logging.warning('The subreaction data file was saved to the ./{:s} file.'.format(filename))
 
+		filename = self.org.directory + "me_metabolites.txt"
+		if overwrite:
+			with open(filename, 'w') as outfile:
+				self.org.me_mets.to_csv(outfile, sep = '\t')
+				logging.warning('The M to ME metabolite mapping file was processed and overwritten into the {:s} file.'.format(filename))
+		else:
+			if pathlib.Path(filename).exists():
+				logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
+			else:
+				with open(filename, 'w') as outfile:
+					self.org.me_mets.to_csv(outfile, sep = '\t')
+					logging.warning('The M to ME metabolite mapping file was saved to the ./{:s} file.'.format(filename))
+
 # 		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
 # 		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
 # 		self.org.subreaction_matrix.to_csv(filename,sep='\t')
