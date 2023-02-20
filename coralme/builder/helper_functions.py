@@ -579,7 +579,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	if me_model.feasibility(keys = growth_key_and_value):
 		pass
 	else:
-		return [False]
+		return False,False
 
 	rxns = []
 	rxns_to_drop = []

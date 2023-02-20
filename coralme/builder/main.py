@@ -2299,7 +2299,8 @@ class METroubleshooter(object):
 			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value = growth_key_and_value, met_types = met_type)
 
 			# close sink reactions that are not gaps
-			self.me_model.remove_reactions(no_gaps)
+			if no_gaps:
+				self.me_model.remove_reactions(no_gaps)
 
 			if len(bf_gaps) != 0 or bf_gaps[0]:
 				self.curation_notes['troubleshoot'].append({
@@ -2321,7 +2322,10 @@ class METroubleshooter(object):
 				self.me_model.relax_bounds()
 				self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_types = met_type)
+				bf_gaps,no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_types = met_type)
+				# close sink reactions that are not gaps
+				if no_gaps:
+					self.me_model.remove_reactions(no_gaps)
 				if works:
 					e_gaps.append(bf_gaps)
 					break
