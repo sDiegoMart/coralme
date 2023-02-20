@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 import re
 import copy
+
 import logging
+log = logging.getLogger(__name__)
+
 import sympy
 import pandas
 
@@ -531,10 +534,10 @@ def fill_builder(b,fill_with='CPLX_dummy',key=None,d=None,fieldname=None,warning
 
 def gap_find(me_model):
 	#from draft_coralme.util.helper_functions import find_gaps
-	logging.warning('  '*5 + 'Finding gaps from the M-model only...')
+	coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Finding gaps from the M-model only...')
 	m_gaps = coralme.builder.helper_functions.find_gaps(me_model.gem)
 
-	logging.warning('  '*5 + 'Finding gaps in the ME-model...')
+	coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Finding gaps in the ME-model...')
 	me_gaps = coralme.builder.helper_functions.find_gaps(me_model, growth_key = me_model.mu)
 
 	idx = list(set(me_gaps.index) - set(m_gaps.index))
@@ -547,39 +550,39 @@ def gap_find(me_model):
 	deadends = list(new_gaps[filt1 | filt2 | filt3].index)
 	deadends = sorted([ x for x in deadends if 'biomass' not in x if not x.endswith('_e') ])
 
-	logging.warning('  '*5 + '{:d} metabolites were identified as deadends.'.format(len(deadends)))
+	coralme.builder.main.ListHandler.print_and_log('  '*5 + '{:d} metabolites were identified as deadends.'.format(len(deadends)))
 	for met in deadends:
 		name = me_model.metabolites.get_by_id(met).name
-		logging.warning('  '*6 + '{:s}: {:s}'.format(met, 'Missing metabolite in the M-model.' if name == '' else name))
+		coralme.builder.main.ListHandler.print_and_log('  '*6 + '{:s}: {:s}'.format(met, 'Missing metabolite in the M-model.' if name == '' else name))
 	return deadends
 
 def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.001 }, met_types = 'Metabolite'):
 	if len(deadends) != 0:
-		logging.warning('  '*5 + 'Adding a sink reaction for each identified deadend metabolite...')
+		coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Adding a sink reaction for each identified deadend metabolite...')
 		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends)
 	else:
-		logging.warning('  '*5 + 'Empty set of deadends metabolites to test.')
+		coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Empty set of deadends metabolites to test.')
 		return None
 
-	logging.warning('  '*5 + 'Optimizing gapfilled ME-model...')
+	coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Optimizing gapfilled ME-model...')
 
 	if me_model.feasibility(keys = growth_key_and_value):
-		logging.warning(' The ME-model is feasible.')
-		logging.warning('  '*5 + 'Gapfilled ME-model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
+		#coralme.builder.main.ListHandler.print_and_log('  '*5 + 'The ME-model is feasible.')
+		coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Gapfilled ME-model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
 		return True
 	else:
-		logging.warning(' The ME-model is not feasible.')
-		logging.warning('  '*5 + 'Provided set of sink reactions for deadend metabolites does not allow growth.')
+		#coralme.builder.main.ListHandler.print_and_log('  '*5 + 'The ME-model is not feasible.')
+		coralme.builder.main.ListHandler.print_and_log('  '*5 + 'Provided set of sink reactions for deadend metabolites does not allow growth.')
 		return False
 
 def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
-	logging.warning('  '*6 + 'Adding sink reactions for {:d} metabolites'.format(len(metabolites_to_add)))
+	coralme.builder.main.ListHandler.print_and_log('  '*6 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
 	coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
 
 	if me_model.feasibility(keys = growth_key_and_value):
 		pass
 	else:
-		return False,False
+		return metabolites_to_add, [], False
 
 	rxns = []
 	rxns_to_drop = []
@@ -588,11 +591,11 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
-				#logging.warning('Closing {}'.format(idx))
+				#coralme.builder.main.ListHandler.print_and_log('Closing {}'.format(idx))
 				rxns_to_drop.append(idx)
 				me_model.reactions.get_by_id(idx).bounds = (0, 0)
 
-	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
+	coralme.builder.main.ListHandler.print_and_log('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
 
 	# reaction ID : position in the model.reactions DictList object
 	ridx = { k:v for k,v in me_model.reactions._dict.items() if k in rxns }
@@ -607,17 +610,20 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 		ub[pos] = 0
 		if me_model.feasibility(keys = growth_key_and_value, **{'lp' : [Sf, dict(), lb, ub, b, c, cs, set()]}):
 			res.append(False)
-			logging.warning('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), '', rxn)))
+			coralme.builder.main.ListHandler.print_and_log('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), '', rxn)))
 		else:
 			lb[pos] = -1000
 			ub[pos] = +1000
 			res.append(True)
-			logging.warning('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), 'not ', rxn)))
+			coralme.builder.main.ListHandler.print_and_log('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), 'not ', rxn)))
 
 	bf_gaps = [ y for x,y in zip(res, rxns) if x ] # True
 	no_gaps = [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
 
-	return bf_gaps, no_gaps
+	if me_model.feasibility(keys = growth_key_and_value):
+		return bf_gaps, no_gaps, True
+	else:
+		return bf_gaps, no_gaps, False
 
 def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 	if isinstance(met_types, str):
@@ -652,8 +658,4 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 		mets = set(mets).difference(set(['coa_c']))
 
-	bf_gaps, no_gaps = coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets), growth_key_and_value)
-	if me_model.feasibility(keys = growth_key_and_value):
-		return bf_gaps, no_gaps, True
-	else:
-		return bf_gaps, no_gaps, False
+	bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
