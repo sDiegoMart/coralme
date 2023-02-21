@@ -620,10 +620,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	bf_gaps = [ y for x,y in zip(res, rxns) if x ] # True
 	no_gaps = [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
 
-	if me_model.feasibility(keys = growth_key_and_value):
-		return bf_gaps, no_gaps, True
-	else:
-		return bf_gaps, no_gaps, False
+	return bf_gaps, no_gaps, True
 
 def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 	if isinstance(met_types, str):
@@ -658,4 +655,4 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 		mets = set(mets).difference(set(['coa_c']))
 
-	bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
+	return coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
