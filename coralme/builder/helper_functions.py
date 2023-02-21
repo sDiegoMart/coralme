@@ -657,34 +657,60 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 
 	return coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
 
+def get_next_from_type(l,t):
+    try:
+        return next(i for i in l if isinstance(i,t))
+    except:
+        return set()
+
 def find_complexes(m):
-	if isinstance(m,coralme.core.component.TranslatedGene):
-		cplxs = set()
-		for r in m.reactions:
-			cplxs = cplxs | find_complexes(r)
-		return cplxs
-	if isinstance(m,coralme.core.component.TranscribedGene):
-		translated_protein = m.id.replace('RNA_','protein_')
-		if translated_protein in m._model.metabolites:
-			return find_complexes(m._model.metabolites.get_by_id(translated_protein))
-		cplxs = set()
-		for r in m.reactions:
-			cplxs = cplxs | find_complexes(r)
-		return cplxs
-	if isinstance(m,coralme.core.reaction.PostTranslationReaction):
-		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.ProcessedProtein)))
-	if isinstance(m,coralme.core.component.ProcessedProtein):
-		return find_complexes(next(i for i in m.reactions if isinstance(i,coralme.core.reaction.ComplexFormation)))
-	if isinstance(m,coralme.core.reaction.ComplexFormation):
-		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.Complex)))
-	if isinstance(m,coralme.core.reaction.GenericFormationReaction):
-		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.GenericComponent)))
-	if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent):
-		other_formations = [r for r in m.reactions if isinstance(r,coralme.core.reaction.ComplexFormation) if m in r.reactants]
-		if other_formations:
-			cplxs = set()
-			for r in other_formations:
-				cplxs = cplxs | find_complexes(r)
-			return cplxs
-		return set([m])
-	return set()
+#     print(m.id,type(m))
+    if isinstance(m,coralme.core.component.TranslatedGene):
+        cplxs = set()
+        for r in m.reactions:
+            cplxs = cplxs | find_complexes(r)
+        return cplxs
+    if isinstance(m,coralme.core.component.TranscribedGene):
+        translated_protein = m.id.replace('RNA_','protein_')
+        if translated_protein in m._model.metabolites:
+            return find_complexes(m._model.metabolites.get_by_id(translated_protein))
+        cplxs = set()
+        for r in m.reactions:
+            cplxs = cplxs | find_complexes(r)
+        return cplxs
+    if isinstance(m,coralme.core.reaction.PostTranslationReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein))
+    if isinstance(m,coralme.core.component.ProcessedProtein):
+        return find_complexes(get_next_from_type(m.reactions,coralme.core.reaction.ComplexFormation))
+    if isinstance(m,coralme.core.reaction.ComplexFormation):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex))
+    if isinstance(m,coralme.core.reaction.GenericFormationReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent))
+    if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent):
+        other_formations = [r for r in m.reactions if isinstance(r,coralme.core.reaction.ComplexFormation) if m in r.reactants]
+        if other_formations:
+            cplxs = set()
+            for r in other_formations:
+                cplxs = cplxs | find_complexes(r)
+            return cplxs
+        return set([m])
+    return set()
+
+def get_functions(cplx):
+	functions = set()
+	for r in cplx.reactions:
+		if isinstance(r,coralme.core.reaction.MetabolicReaction) and hasattr(r,'subsystem'):
+			if r.subsystem:
+				functions.add(r.subsystem)
+				continue
+			functions.add('metabolic_no_subsystem')
+			continue
+		if isinstance(r,coralme.core.reaction.TranslationReaction):
+			functions.add('Translation')
+		elif isinstance(r,coralme.core.reaction.TranscriptionReaction):
+			functions.add('Transcription')
+		elif isinstance(r,coralme.core.reaction.tRNAChargingReaction):
+			functions.add('tRNA-Charging')
+		elif isinstance(r,coralme.core.reaction.PostTranslationReaction):
+			functions.add('Post-translation')
+	return functions

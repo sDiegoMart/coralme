@@ -44,8 +44,15 @@ class MEComponent(cobra.core.metabolite.Metabolite):
 			raise AttributeError("method must be \'subtractive\' or \'destructive\'")
 
 	@property
-	def complexes(m):
-		return coralme.builder.helper_functions.find_complexes(m)
+	def complexes(self):
+		return coralme.builder.helper_functions.find_complexes(self)
+	@property
+	def functions(self):
+		cplxs = self.complexes
+		functions = set()
+		for c in cplxs:
+			functions = functions | coralme.builder.helper_functions.get_functions(c)
+		return functions
 
 class Metabolite(MEComponent):
 	"""
