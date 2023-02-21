@@ -43,6 +43,10 @@ class MEComponent(cobra.core.metabolite.Metabolite):
 		else:
 			raise AttributeError("method must be \'subtractive\' or \'destructive\'")
 
+	@property
+	def complexes(m):
+		return coralme.builder.helper_functions.find_complexes(m)
+
 class Metabolite(MEComponent):
 	"""
 	coralme metabolite representation
@@ -142,21 +146,21 @@ class TranslatedGene(MEComponent):
 		locus = self.id.replace('protein_', '')
 		return self._model.process_data.get_by_id(locus)
 
-	@property
-	def complexes(self):
-		"""Get the complexes that the protein forms
+# 	@property
+# 	def complexes(self):
+# 		"""Get the complexes that the protein forms
 
-		Returns
-		-------
-		list
-			List of :class:`coralme.core.component.Complex` s that the protein
-			is a subunit of
-		"""
-		complex_list = []
-		for reaction in self.reactions:
-			if hasattr(reaction, 'complex'):
-				complex_list.append(reaction.complex)
-		return complex_list
+# 		Returns
+# 		-------
+# 		list
+# 			List of :class:`coralme.core.component.Complex` s that the protein
+# 			is a subunit of
+# 		"""
+# 		complex_list = []
+# 		for reaction in self.reactions:
+# 			if hasattr(reaction, 'complex'):
+# 				complex_list.append(reaction.complex)
+# 		return complex_list
 
 	@property
 	def metabolic_reactions(self):

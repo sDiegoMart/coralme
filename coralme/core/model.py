@@ -557,6 +557,23 @@ class MEModel(cobra.core.model.Model):
 	def all_genes(self):
 		return [g for g in self.metabolites if isinstance(g,coralme.core.component.TranscribedGene)]
 
+	@property
+	def find_complex(m):
+		if isinstance(m,cobrame.core.component.TranslatedGene):
+			cplxs = []
+			for r in m.reactions:
+				cplxs += find_complex(r)
+			return cplxs
+		if isinstance(m,cobrame.core.reaction.PostTranslationReaction):
+			return find_complex(next(i for i in m.metabolites if isinstance(i,cobrame.core.component.ProcessedProtein)))
+		if isinstance(m,cobrame.core.component.ProcessedProtein):
+			return find_complex(next(i for i in m.reactions if isinstance(i,cobrame.core.reaction.ComplexFormation)))
+		if isinstance(m,cobrame.core.reaction.ComplexFormation):
+			return find_complex(next(i for i in m.metabolites if isinstance(i,cobrame.core.component.Complex)))
+		if isinstance(m,cobrame.core.component.Complex):
+			return [m]
+		return []
+
 	def get_metabolic_flux(self, solution = None):
 		"""Extract the flux state for Metabolic reactions."""
 		if solution is None:

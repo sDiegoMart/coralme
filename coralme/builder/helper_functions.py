@@ -656,3 +656,29 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 		mets = set(mets).difference(set(['coa_c']))
 
 	return coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
+
+def find_complexes(m):
+	if isinstance(m,coralme.core.component.TranslatedGene):
+		cplxs = set()
+		for r in m.reactions:
+			cplxs = cplxs | find_complexes(r)
+		return cplxs
+	if isinstance(m,coralme.core.component.TranscribedGene):
+		translated_protein = m.id.replace('RNA_','protein_')
+		if translated_protein in m._model.metabolites:
+			return find_complexes(m._model.metabolites.get_by_id(translated_protein))
+		cplxs = set()
+		for r in m.reactions:
+			cplxs = cplxs | find_complexes(r)
+		return cplxs
+	if isinstance(m,coralme.core.reaction.PostTranslationReaction):
+		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.ProcessedProtein)))
+	if isinstance(m,coralme.core.component.ProcessedProtein):
+		return find_complexes(next(i for i in m.reactions if isinstance(i,coralme.core.reaction.ComplexFormation)))
+	if isinstance(m,coralme.core.reaction.ComplexFormation):
+		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.Complex)))
+	if isinstance(m,coralme.core.reaction.GenericFormationReaction):
+		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.GenericComponent)))
+	if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent):
+		return set([m])
+	return set()
