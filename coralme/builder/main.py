@@ -95,7 +95,7 @@ class MEBuilder(object):
 			"df_matrix_subrxn_stoich",
 			"df_metadata_orphan_rxns",
 			"df_metadata_metabolites",
-			"effective_turnover_rate",
+			"df_reaction_keff_consts",
 
 			"biocyc.genes",
 			"biocyc.prots",
@@ -1247,7 +1247,7 @@ class MEBuilder(object):
 
 	def input_data(self, gem, overwrite):
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
-		self.df_tus, self.df_rmsc, self.df_subs, self.df_mets = tmp1
+		self.df_tus, self.df_rmsc, self.df_subs, self.df_mets, self.df_keffs = tmp1
 		self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths = tmp2
 		return tmp1, tmp2
 
@@ -1271,6 +1271,7 @@ class MEReconstruction(MEBuilder):
 			self.df_rmsc = builder.df_rmsc
 			self.df_subs = builder.df_subs
 			self.df_mets = builder.df_mets
+			self.df_keffs = builder.df_keffs
 			self.df_rxns = builder.df_rxns
 			self.df_cplxs = builder.df_cplxs
 			self.df_ptms = builder.df_ptms
@@ -1288,7 +1289,7 @@ class MEReconstruction(MEBuilder):
 
 	def input_data(self, m_model, overwrite = False):
 		if hasattr(self, 'df_data'):
-			return (self.df_tus, self.df_rmsc, self.df_subs, self.df_mets), (self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths)
+			return (self.df_tus, self.df_rmsc, self.df_subs, self.df_mets, self.df_keffs), (self.df_data, self.df_rxns, self.df_cplxs, self.df_ptms, self.df_enz2rxn, self.df_rna_mods, self.df_protloc, self.df_transpaths)
 
 		config = self.configuration
 
@@ -1376,7 +1377,7 @@ class MEReconstruction(MEBuilder):
 			else:
 				logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
 
-		# INPUTS: We capture if the file exists or if the key in the configuration file is ''
+		# User inputs
 		# Transcriptional Units
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
 		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', cols).set_index('TU_id', inplace = False)
@@ -1396,6 +1397,10 @@ class MEReconstruction(MEBuilder):
 		# Metabolites metadata
 		cols = ['id', 'me_id', 'name', 'formula', 'compartment', 'type']
 		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', cols).set_index('id', inplace = False)
+
+		# Effective turnover rates
+		cols = ['reaction', 'keff', 'complex', 'mods']
+		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols).set_index('reaction', inplace = False).fillna('')
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -1442,17 +1447,18 @@ class MEReconstruction(MEBuilder):
 			df_data = coralme.builder.preprocess_inputs.complete_organism_specific_matrix(self, df_data, model = m_model, output = filename)
 
 		# All other inputs and remove unnecessary genes from df_data
-		return (df_tus, df_rmsc, df_subs, df_mets), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
+		return (df_tus, df_rmsc, df_subs, df_mets, df_keffs), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
 
 	def build_me_model(self, update = True, prune = True, overwrite = False):
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
-		directory = config.get('log_directory', '.')
-		#if overwrite and os.path.exists(directory):
-			#shutil.rmtree(directory)
-			#shutil.rmtree(directory + '/building_data')
-		if not os.path.exists(directory):
-			os.mkdir(directory)
+		out_directory = config.get('out_directory', '.')
+		if not os.path.exists(out_directory):
+			os.mkdir(out_directory)
+
+		log_directory = config.get('log_directory', '.')
+		if not os.path.exists(log_directory):
+			os.mkdir(log_directory)
 
 		# ## Part 1: Create a minimum solvable ME-model
 		# set logger
@@ -1461,10 +1467,12 @@ class MEReconstruction(MEBuilder):
 			log.removeHandler(hdlr)
 
 		# Old code works in a separate script; but it works if we remove the old handler
-		logging.basicConfig(filename = '{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		logging.basicConfig(filename = '{:s}/MEReconstruction-step1-{:s}.log'.format(log_directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
 		log.addHandler(self.logger['MEReconstruction-step1'])
 		#log.addHandler(logging.StreamHandler(sys.stdout))
 		logging.captureWarnings(True)
+
+		ListHandler.print_and_log("Initiating ME-model reconstruction...")
 
 		# This will include the bare minimum representations of that still produce a working ME-model:
 		# - Metabolic Reactions
@@ -1503,7 +1511,7 @@ class MEReconstruction(MEBuilder):
 
 		# Read user inputs
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
-		(df_tus, df_rmsc, df_subs, df_mets), (df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths) = tmp1, tmp2
+		(df_tus, df_rmsc, df_subs, df_mets, df_keffs), (df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths) = tmp1, tmp2
 
 		# Remove default ME-model SubReactions from global_info that are not mapped in the organism-specific matrix
 		subrxns = set(df_data[df_data['ME-model SubReaction'].notnull()]['ME-model SubReaction'])
@@ -1562,7 +1570,7 @@ class MEReconstruction(MEBuilder):
 		lst = set(df_data['Gene Locus ID'].str.replace('^protein_', '', regex = True).str.replace('^RNA_', '', regex = True).tolist())
 
 		# detect if the genbank file was modified using biocyc data
-		gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
+		gb = '{:s}/building_data/genome_modified.gb'.format(out_directory)
 		gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
 
 		coralme.util.building.build_reactions_from_genbank(
@@ -1712,10 +1720,10 @@ class MEReconstruction(MEBuilder):
 		dna_replication.upper_bound = dna_demand_bound
 
 		# ### 9) Save ME-model as a pickle file
-		with open('{:s}/MEModel-step1-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
+		with open('{:s}/MEModel-step1-{:s}.pkl'.format(out_directory, model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		ListHandler.print_and_log('ME-model was saved in the {:s} directory as MEModel-step1-{:s}.pkl'.format(config['out_directory'], model))
+		ListHandler.print_and_log('ME-model was saved in the {:s} directory as MEModel-step1-{:s}.pkl'.format(out_directory, model))
 
 		# ## Part 2: Add metastructures to solving ME-model
 		# set logger
@@ -1724,7 +1732,7 @@ class MEReconstruction(MEBuilder):
 			log.removeHandler(hdlr)
 
 		# Old code works in a separate script; but it works if we remove the old handler
-		logging.basicConfig(filename = '{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		logging.basicConfig(filename = '{:s}/MEReconstruction-step2-{:s}.log'.format(log_directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
 		log.addHandler(self.logger['MEReconstruction-step2'])
 		#log.addHandler(logging.StreamHandler(sys.stdout))
 		logging.captureWarnings(True)
@@ -2121,59 +2129,61 @@ class MEReconstruction(MEBuilder):
 			logging.warning('No Braun\'s lipoprotein (lpp gene) homolog was set. Please check if it is the correct behavior.')
 
 		# ## Part 7: Set keffs
-		flag = self.configuration.get('keff_method','estimate')
 		mapped_keffs = {}
-		if flag == 'estimate':
-		# ## Keffs
-			logging.warning("Setting reaction Keffs")
-			self.org.get_reaction_keffs()
-			reaction_median_keffs = pandas.read_csv(
-					self.configuration.get(
-						'reaction_median_keff',
-						self.configuration['out_directory'] + '/building_data/reaction_median_keffs.txt'),
-					sep='\t',
-					index_col=0
-				)['keff'].to_dict()
-			sasa_list = []
-			for met in me.metabolites:
-				cplx_sasa = 0.
-				if not isinstance(met, coralme.core.component.Complex):
-					continue
-				MW = met.formula_weight
-				if not MW:
-					MW = 0
-					logging.warning(' {} has no formula'.format(key))
-				cplx_sasa += MW ** (3. / 4)
-				sasa_list.append(cplx_sasa)
-			median_sasa = numpy.median(numpy.array(sasa_list))
-			metabolic_reactions = [r for r in me.reactions if isinstance(r,coralme.core.reaction.MetabolicReaction)]
-			for r in tqdm.tqdm(metabolic_reactions,
-							   'Estimating Metabolic Keffs with SASA',
-							   bar_format=bar_format):
-				base_id = r._stoichiometric_data.id
+		if df_keffs.empty:
+			logging.warning("Estimating effective turnover rates...")
+
+			#sasa_list = []
+			#for met in me_model.metabolites:
+				#cplx_sasa = 0.
+				#if not isinstance(met, coralme.core.component.Complex):
+					#continue
+				#MW = met.formula_weight
+				#if not MW:
+					#MW = 0
+					#logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(key))
+				#cplx_sasa += MW ** (3. / 4)
+				#sasa_list.append(cplx_sasa)
+
+			#median_sasa = numpy.median(numpy.array(sasa_list))
+			sasa_dct = { x.id:( x.formula_weight ** (3. / 4.) if x.formula_weight else 0, x.id if not x.formula_weight else False ) for x in me.metabolites if type(x) == coralme.core.component.Complex }
+
+			for met in [ v[1] for k,v in sasa_dct.items() ]:
+				if met:
+					logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
+
+			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
+			reactions = [ rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction) ]
+
+			reaction_median_keffs = self.org.get_reaction_keffs() # saves file to reaction_median_keffs.txt
+			#reaction_median_keffs = pandas.read_csv(
+				#self.configuration.get('reaction_median_keff', out_directory + '/building_data/reaction_median_keffs.txt'),
+					#sep='\t',
+					#index_col=0
+				#)['keff'].to_dict()
+
+			for rxn in tqdm.tqdm(reactions, 'Setting the effective turnover rates using the SASA method...', bar_format = bar_format):
+				base_id = rxn._stoichiometric_data.id
 				if base_id not in reaction_median_keffs:
 					continue
-				cplx = me.metabolites.get_by_id(r._complex_data.id)
+				cplx = me.metabolites.get_by_id(rxn._complex_data.id)
 				median_keff = reaction_median_keffs[base_id]
-				sasa = cplx.formula_weight ** (3./4)
+				#sasa = cplx.formula_weight ** (3. / 4.)
+				sasa = sasa_dct[cplx.id][0]
 				keff = sasa * median_keff / median_sasa
-				if keff > 3000: keff = 3000.
-				elif keff < .01: keff = .01
-				mapped_keffs[r] = keff
-		elif os.path.isfile(flag):
-			final_keffs = pandas.read_csv(flag,
-				sep=',',index_col=0
-			).fillna('')
-			mapped_keffs = {}
+				#if keff > 3000: keff = 3000.
+				#elif keff < .01: keff = .01
+				#mapped_keffs[rxn] = keff
+				mapped_keffs[rxn] = 3000 if keff > 3000 else keff if keff < 0.01 else keff
+
+		else:
 			mapped = set()
-			for key, row in tqdm.tqdm(final_keffs.iterrows(),
-							   'Reading Keffs...',
-							   bar_format = bar_format,
-							   total=final_keffs.shape[0]):
-				for r in me.reactions.query(key):
-					if not hasattr(r,'_stoichiometric_data'):
+			for idx, row in tqdm.tqdm(df_keffs.iterrows(), 'Reading effective turnover rates from user input...', bar_format = bar_format, total = df_keffs.shape[0]):
+				for r in me.reactions.query(idx):
+					# TODO: comments
+					if not hasattr(r, '_stoichiometric_data'):
 						continue
-					if not r._stoichiometric_data.id == key:
+					if not r._stoichiometric_data.id == idx:
 						continue
 					c = r._complex_data
 					if c is None:
@@ -2188,20 +2198,21 @@ class MEReconstruction(MEBuilder):
 					if not set(mods) == set(row['mods'].split(' AND ')):
 						continue
 					mapped_keffs[r] = row['keff']
-					mapped.add(key)
-			missing = set(final_keffs.index) - set(mapped)
-			for i in missing:
-				logging.warning('Could not map Keff of reaction {}'.format(i))
+					mapped.add(idx)
+
+			missing = set(df_keffs.index).difference(set(mapped))
+
+			for rxn in missing:
+				logging.warning('Could not map effective turnover rates of reaction \'{:}\'.'.format(rxn))
+
 		if mapped_keffs:
-			for r,keff in tqdm.tqdm(mapped_keffs.items(),
-							   'Setting Keffs...',
-							   bar_format = bar_format):
+			for rxn, keff in tqdm.tqdm(mapped_keffs.items(), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
 				try:
-					r.keff = keff
+					r.keff = float(keff)
 					r.update()
-					logging.warning('Setting Keff for {} in {}'.format(r.id,keff))
+					logging.warning('Setting the effective turnover rate for \'{:s}\' in {:s} successfully.'.format(rxn.id, keff))
 				except:
-					logging.warning('There was a problem setting Keff for {}'.format(r.id))
+					logging.warning('There was a problem setting the effective turnover rate for \'{:s}\'.'.format(rxn.id))
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
@@ -2262,19 +2273,19 @@ class MEReconstruction(MEBuilder):
 		if prune:
 			me.prune()
 
-		with open('{:s}/MEModel-step2-{:s}.pkl'.format(config['out_directory'], model), 'wb') as outfile:
+		with open('{:s}/MEModel-step2-{:s}.pkl'.format(out_directory, model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
-		ListHandler.print_and_log('ME-model was saved in the {:s} directory as MEModel-step2-{:s}.pkl'.format(config['out_directory'], model))
+		ListHandler.print_and_log('ME-model was saved in the {:s} directory as MEModel-step2-{:s}.pkl'.format(out_directory, model))
 
 		n_genes = len(me.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')))
 		new_genes = n_genes * 100. / len(me.gem.genes) - 100
 		ListHandler.print_and_log('Done. Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
 
-		with open('{:s}/MEReconstruction-{:s}.log'.format(directory, model), 'w') as outfile:
+		with open('{:s}/MEReconstruction-{:s}.log'.format(log_directory, model), 'w') as outfile:
 			for filename in [
-				'{:s}/MEReconstruction-step1-{:s}.log'.format(directory, model),
-				'{:s}/MEReconstruction-step2-{:s}.log'.format(directory, model)
+				'{:s}/MEReconstruction-step1-{:s}.log'.format(log_directory, model),
+				'{:s}/MEReconstruction-step2-{:s}.log'.format(log_directory, model)
 				]:
 
 				try:
@@ -2332,7 +2343,7 @@ class METroubleshooter(object):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		logging.warning('~ '*1 + 'Troubleshooting started...')
-		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
+		logging.warning('  '*5 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
 		if self.me_model.feasibility(keys = growth_key_and_value):
 			logging.warning('  '*5 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = True
@@ -2394,7 +2405,7 @@ class METroubleshooter(object):
 				self.me_model.relax_bounds()
 				self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps,no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_types = met_type)
+				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_types = met_type)
 				# close sink reactions that are not gaps
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
