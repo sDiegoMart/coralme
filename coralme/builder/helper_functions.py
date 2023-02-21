@@ -680,5 +680,11 @@ def find_complexes(m):
 	if isinstance(m,coralme.core.reaction.GenericFormationReaction):
 		return find_complexes(next(i for i in m.metabolites if isinstance(i,coralme.core.component.GenericComponent)))
 	if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent):
+		other_formations = [r for r in m.reactions if isinstance(r,cobrame.core.reaction.ComplexFormation) if m in r.reactants]
+		if other_formations:
+			cplxs = set()
+			for r in other_formations:
+				cplxs = cplxs | find_complexes(r)
+			return cplxs
 		return set([m])
 	return set()
