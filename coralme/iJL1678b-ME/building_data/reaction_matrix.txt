@@ -1,4 +1,4 @@
-Reaction	Metabolites	Stoichiometry
+Reaction	Metabolites	Compartment	Stoichiometry
 RNDR1b3	CPLX0-7817_mod_Oxidized(1)	No_Compartment	1.0
 RNDR1b3	CPLX0-7817	No_Compartment	-1.0
 RNDR1b3	adp	Cytosol	-1.0
