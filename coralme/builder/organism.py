@@ -1562,6 +1562,9 @@ class Organism(object):
                            'Getting reaction Keffs...',
                            bar_format = bar_format,
                            total=enz_rxn_assoc_df.shape[0]):
+            if reaction not in m_model.reactions:
+                logging.warning('Tried setting Keffs for {} but it is not in model'.format(reaction))
+                continue
             r = m_model.reactions.get_by_id(reaction)
             subsystem = r.subsystem
             if subsystem in subsystem_classification:
