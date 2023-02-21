@@ -95,6 +95,7 @@ class MEBuilder(object):
 			"df_matrix_subrxn_stoich",
 			"df_metadata_orphan_rxns",
 			"df_metadata_metabolites",
+			"effective_turnover_rate",
 
 			"biocyc.genes",
 			"biocyc.prots",
@@ -1367,8 +1368,7 @@ class MEReconstruction(MEBuilder):
 			if pathlib.Path(filename).is_file():
 				file_to_read = filename
 			else:
-				logging.warning('Did not find file \'{:s}\' '.format(filename))
-				return pandas.DataFrame(columns=columns)
+				return pandas.DataFrame(columns = columns)
 
 			df = coralme.builder.flat_files.read(file_to_read)
 			if set(df.columns).issubset(set(columns)):
