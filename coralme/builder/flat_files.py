@@ -2,7 +2,10 @@ import tqdm
 import json
 import cobra
 import pandas
+
 import logging
+log = logging.getLogger(__name__)
+
 import coralme
 from collections import defaultdict
 

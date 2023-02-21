@@ -3,6 +3,8 @@ import cobra
 import coralme
 
 import logging
+log = logging.getLogger(__name__)
+
 import collections
 
 class ProcessData(object):

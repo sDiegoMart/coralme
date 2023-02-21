@@ -85,6 +85,34 @@ class MEBuilder(object):
 
 		self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col = 0)
 
+		exists = []
+		for filename in [
+			"m-model-path",
+			"genbank-path",
+
+			"df_TranscriptionalUnits",
+			"df_matrix_stoichiometry",
+			"df_matrix_subrxn_stoich",
+			"df_metadata_orphan_rxns",
+			"df_metadata_metabolites",
+
+			"biocyc.genes",
+			"biocyc.prots",
+			"biocyc.TUs",
+			"biocyc.RNAs",
+			"biocyc.seqs",
+			]:
+
+			if config.get(filename, None) is None:
+				pass
+			elif config.get(filename, '') == '':
+				pass
+			else:
+				exists.append([config[filename], pathlib.Path(config[filename]).exists()])
+
+		if not all([ y for x,y in exists ]):
+			raise FileNotFoundError('Check the path to the {:s} file(s).'.format(', '.join([ x for x,y in exists if y == False ])))
+
 		return None
 
 	def generate_files(self, overwrite = True):
@@ -165,24 +193,24 @@ class MEBuilder(object):
 			logging.warning("Updating from homology")
 			self.update_from_homology()
 
-		filename = self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt")
-		filename = self.org.directory + "TUs_from_biocyc.txt" if filename == '' else filename
+			filename = self.org.config.get('df_TranscriptionalUnits', self.org.directory + "TUs_from_biocyc.txt")
+			filename = self.org.directory + "TUs_from_biocyc.txt" if filename == '' else filename
 
-		df = self.org.TU_df
-		df = df.sort_index(inplace = False)
+			df = self.org.TU_df
+			df = df.sort_index(inplace = False)
 
-		if overwrite:
-			with open(filename, 'w') as outfile:
-				self.org.TU_df.to_csv(outfile, sep = '\t')
-				logging.warning('The BioCyc transcriptional data file was processed and overwritten into the {:s} file.'.format(filename))
-		else:
-			if pathlib.Path(filename).exists():
-				logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
-			else:
+			if overwrite:
 				with open(filename, 'w') as outfile:
 					self.org.TU_df.to_csv(outfile, sep = '\t')
-					logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
-		self.configuration['df_TranscriptionalUnits'] = filename
+					logging.warning('The BioCyc transcriptional data file was processed and overwritten into the {:s} file.'.format(filename))
+			else:
+				if pathlib.Path(filename).exists():
+					logging.warning('Set \'overwrite = True\' to overwrite the {:s} file.'.format(filename))
+				else:
+					with open(filename, 'w') as outfile:
+						self.org.TU_df.to_csv(outfile, sep = '\t')
+						logging.warning('The BioCyc transcriptional data file was saved to the ./{:s} file.'.format(filename))
+			self.configuration['df_TranscriptionalUnits'] = filename
 
 		filename = self.org.directory + "subreaction_matrix.txt"
 		if overwrite:
@@ -1140,8 +1168,7 @@ class MEBuilder(object):
 		self.update_m_model()
 		self.update_subreaction_matrix()
 
-	def fill(self,
-			 fill_with='CPLX_dummy'):
+	def fill(self, fill_with='CPLX_dummy'):
 		coralme.builder.helper_functions.fill_builder(self,fill_with='CPLX_dummy')
 
 	def check(self):
@@ -1166,13 +1193,12 @@ class MEBuilder(object):
 									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.txt'
 				})
 
-	def load(self,
-			 directory):
+	def load(self, directory):
 		with open(directory, "rb") as f:
 			tmp = pickle.load(f)
 			return tmp
-	def save(self,
-		 directory=False):
+
+	def save(self, directory=False):
 		if not directory:
 			directory = self.org.directory + "builder.pickle"
 		with open(directory, "wb") as f:
@@ -1328,7 +1354,8 @@ class MEReconstruction(MEBuilder):
 			logging.warning('The biomass reaction will be skipped during the ME reconstruction steps.')
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
-			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
+			config['defer_to_rxn_matrix'].append('ATPM')
+			logging.warning('The FMETTRS and ATPM reactions from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
 
 		if hasattr(self, 'org') and len(config.get('braun\'s_lipoproteins', [])) == 0:
 			lst = [ k.split('_mod_')[0] for k,v in self.org.protein_mod.to_dict()['Modifications'].items() if 'palmitate' in v ]
@@ -1626,7 +1653,7 @@ class MEReconstruction(MEBuilder):
 			if key in me.global_info:
 				setattr(me, key, me.global_info[key])
 
-		biomass_constituents = me.global_info['flux_of_biomass_constituents']
+		biomass_constituents = me.global_info.get('flux_of_biomass_constituents', {})
 
 		rxn = coralme.core.reaction.SummaryVariable('biomass_constituent_demand')
 		me.add_reactions([rxn])
@@ -1640,7 +1667,7 @@ class MEReconstruction(MEBuilder):
 		# Metabolites and coefficients from biomass objective function
 
 		lipid_demand = {}
-		for key, value in me.global_info['flux_of_lipid_constituents'].items():
+		for key, value in me.global_info.get('flux_of_lipid_constituents', {}).items():
 			lipid_demand[key] = abs(value)
 
 		for met, requirement in lipid_demand.items():
@@ -1867,21 +1894,40 @@ class MEReconstruction(MEBuilder):
 			me.process_data.get_by_id(complex_id).subreactions = modifications
 
 		# Check if complex modifications are set on any component in the organism-specific matrix
+		# Dipyrromethane
+		# dpm modification never from the free metabolite
+		if me.process_data.has_id('mod_dpm_c'):
+			me.remove_metabolites([me.metabolites.dpm_c])
+			me.gem.remove_metabolites([me.gem.metabolites.dpm_c])
+
 		# biotin---[acetyl-CoA-carboxylase] ligase
+		# biotin loaded from the free metabolite; don't remove it from the model
 		if me.process_data.has_id('mod_btn_c'):
 			coralme.builder.modifications.add_btn_modifications(me)
+
 		# 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA in CitD catalyzed by CitX
+		# 2'-(5''-triphosphoribosyl)-3'-dephospho-CoA loaded from the free metabolite; don't remove it from the model
 		if me.process_data.has_id('mod_2tpr3dpcoa_c'):
 			coralme.builder.modifications.add_2tpr3dpcoa_modifications(me)
+
 		# activation of glycyl radical enzymes
+		# glycyl modification never from the free metabolite
 		if me.process_data.has_id('mod_glycyl_c'):
 			coralme.builder.modifications.add_glycyl_modifications(me)
+			if me.metabolites.has_id('glycyl_c'):
+				me.remove_metabolites([me.metabolites.glycyl_c])
+
 		# pap4p in AcpP catalyzed by AcpS
+		# pan4p loaded from free CoA, producing pap as byproduct; don't remove it from the model
 		if me.process_data.has_id('mod_pan4p_c'):
 			coralme.builder.modifications.add_pan4p_modifications(me)
+
 		# https://www.genome.jp/pathway/map00785
+		# lipoyl is a pseudo metabolite; it rather comes from free lipoate or from octanoate-ACP
 		if me.process_data.has_id('mod_lipoyl_c'):
 			coralme.builder.modifications.add_lipoyl_modifications(me)
+			if me.metabolites.has_id('lipoyl_c'):
+				me.remove_metabolites([me.metabolites.lipoyl_c])
 
 		if me.process_data.has_id('mod_3fe4s_c') or me.process_data.has_id('mod_4fe4s_c') or me.process_data.has_id('mod_2fe2s_c'):
 			coralme.builder.modifications.add_iron_sulfur_modifications(me)
@@ -2264,7 +2310,8 @@ class METroubleshooter(object):
 	def troubleshoot(self, growth_key_and_value = None):
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
-		directory = config.get('log_directory', '.')
+		out_directory = config.get('out_directory', '.')
+		log_directory = config.get('log_directory', '.')
 
 		# set logger
 		log = logging.getLogger() # root logger
@@ -2272,7 +2319,7 @@ class METroubleshooter(object):
 			log.removeHandler(hdlr)
 
 		# Old code works in a separate script; but it works if we remove the old handler
-		logging.basicConfig(filename = '{:s}/METroubleshooter-{:s}.log'.format(directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
+		logging.basicConfig(filename = '{:s}/METroubleshooter-{:s}.log'.format(log_directory, model), filemode = 'w', level = logging.WARNING, format = log_format)
 		log.addHandler(self.logger['METroubleshooter'])
 		log.addHandler(logging.StreamHandler(sys.stdout))
 		logging.captureWarnings(True)
@@ -2286,33 +2333,36 @@ class METroubleshooter(object):
 		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
 		if self.me_model.feasibility(keys = growth_key_and_value):
 			logging.warning('  '*5 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
-			return None
+			works = True
 		else:
 			logging.warning('  '*5 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
 		# Step 1. Find topological gaps
-		logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-		deadends = coralme.builder.helper_functions.gap_find(self.me_model)
+		deadends = []
+		if works == False:
+			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
+			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
 
-		medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
-		deadends = set(deadends).difference(medium)
+			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
+			deadends = set(deadends).difference(medium)
 
-		if len(deadends) != 0:
-			self.curation_notes['troubleshoot'].append({
-				'msg':'Some deadends were identified',
-				'triggered_by':deadends,
-				'importance':'high',
-				'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
+			if len(deadends) != 0:
+				self.curation_notes['troubleshoot'].append({
+					'msg':'Some deadends were identified',
+					'triggered_by':deadends,
+					'importance':'high',
+					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
 
-		# Step 2. Test feasibility adding all topological gaps
-		if len(deadends) != 0:
-			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
+			# Step 2. Test feasibility adding all topological gaps
+			if len(deadends) != 0:
+				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
+				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
+				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
 
 		if len(deadends) == 0 and works == False:
 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
+
 		if works == False:
 			met_type = 'Metabolite'
 			logging.warning('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
@@ -2367,15 +2417,15 @@ class METroubleshooter(object):
 			self.me_model.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
 			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
 
-			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(self.configuration['out_directory'], self.me_model.id), 'wb') as outfile:
+			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
-			logging.warning('ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(self.configuration['out_directory'], self.me_model.id))
+			logging.warning('ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id))
 		else:
 			logging.warning('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
 
 		# We will remove duplicates entries in the log output
-		with open('{:s}/METroubleshooter-{:s}.log'.format(config.get('log_directory', '.'), config.get('ME-Model-ID', 'coralME')), 'w') as outfile:
+		with open('{:s}/METroubleshooter-{:s}.log'.format(log_directory, model), 'w') as outfile:
 			logger = self.logger['METroubleshooter'].log_list
 
 			tmp = pandas.DataFrame(logger)

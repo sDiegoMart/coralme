@@ -2,7 +2,9 @@ import tqdm
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
 import numpy
 import pandas
+
 import logging
+log = logging.getLogger(__name__)
 
 import coralme
 

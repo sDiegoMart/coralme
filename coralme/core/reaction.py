@@ -1,6 +1,8 @@
 import numpy
 import sympy
+
 import logging
+log = logging.getLogger(__name__)
 
 from typing import (
 	TYPE_CHECKING,

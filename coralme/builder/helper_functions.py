@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 import re
 import copy
+
 import logging
+log = logging.getLogger(__name__)
+
 import sympy
 import pandas
 
@@ -564,22 +567,22 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 	logging.warning('  '*5 + 'Optimizing gapfilled ME-model...')
 
 	if me_model.feasibility(keys = growth_key_and_value):
-		logging.warning(' The ME-model is feasible.')
+		#logging.warning('  '*5 + 'The ME-model is feasible.')
 		logging.warning('  '*5 + 'Gapfilled ME-model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
 		return True
 	else:
-		logging.warning(' The ME-model is not feasible.')
+		#logging.warning('  '*5 + 'The ME-model is not feasible.')
 		logging.warning('  '*5 + 'Provided set of sink reactions for deadend metabolites does not allow growth.')
 		return False
 
 def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
-	logging.warning('  '*6 + 'Adding sink reactions for {:d} metabolites'.format(len(metabolites_to_add)))
+	logging.warning('  '*6 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
 	coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
 
 	if me_model.feasibility(keys = growth_key_and_value):
 		pass
 	else:
-		return False,False
+		return metabolites_to_add, [], False
 
 	rxns = []
 	rxns_to_drop = []
@@ -617,7 +620,10 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	bf_gaps = [ y for x,y in zip(res, rxns) if x ] # True
 	no_gaps = [ y for x,y in zip(res, rxns) if not x ] + rxns_to_drop
 
-	return bf_gaps, no_gaps
+	if me_model.feasibility(keys = growth_key_and_value):
+		return bf_gaps, no_gaps, True
+	else:
+		return bf_gaps, no_gaps, False
 
 def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 	if isinstance(met_types, str):
@@ -652,8 +658,4 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 		mets = set(mets).difference(set(['coa_c']))
 
-	bf_gaps, no_gaps = coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets), growth_key_and_value)
-	if me_model.feasibility(keys = growth_key_and_value):
-		return bf_gaps, no_gaps, True
-	else:
-		return bf_gaps, no_gaps, False
+	bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)

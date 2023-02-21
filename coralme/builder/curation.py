@@ -3,9 +3,12 @@ import os
 import coralme
 from coralme.builder import dictionaries
 import re
+
 import logging
+log = logging.getLogger(__name__)
+
 import tqdm
-import cobra 
+import cobra
 
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
 class MEManualCuration(object):
@@ -20,7 +23,7 @@ class MEManualCuration(object):
     org : coralme.builder.organism.Organism
         Organism object.
     """
-    
+
     def __init__(self,
                  org):
         self.org = org
@@ -82,10 +85,10 @@ class MEManualCuration(object):
         logging.warning("Loading transcription subreactions")
         self.org.transcription_subreactions = self.load_transcription_subreactions()
         logging.warning("Loading protein translocation pathways")
-        self.org.translocation_pathways = self.load_translocation_pathways() 
+        self.org.translocation_pathways = self.load_translocation_pathways()
         logging.warning("Loading lipid modifications")
         self.org.lipid_modifications = self.load_lipid_modifications()
-        
+
         # Special input files
         logging.warning("Loading subreaction matrix")
         self.org.subreaction_matrix = self.load_subreaction_matrix()
@@ -95,8 +98,8 @@ class MEManualCuration(object):
         self.org.orphan_and_spont_reactions = self.load_orphan_and_spont_reactions()
         logging.warning("Loading enzyme-reaction-association")
         self.org.enz_rxn_assoc_df = self.load_enz_rxn_assoc_df()
-        
-    
+
+
     def _get_manual_curation(self,
                              filename,
                              create_file=None,
@@ -113,17 +116,17 @@ class MEManualCuration(object):
                                    sep=sep,
                                   comment='#',
                                   skip_blank_lines=True).fillna("")
-        
+
         if create_file is not None:
             create_file.to_csv(filepath,sep=sep)
-        
+
         self.curation_notes['org._get_manual_curation'].append({
             'msg':'No {} file found'.format(filename),
             'importance':'low',
             'to_do':'Fill in {}'.format(filepath)
         })
         return no_file_return
-    
+
     def load_reaction_corrections(self):
         create_file = pandas.DataFrame(columns = [
                 'reaction_id',
@@ -137,7 +140,7 @@ class MEManualCuration(object):
              create_file = create_file,
              no_file_return = create_file,
              sep = ',').T.to_dict()
-    
+
     def load_protein_location(self):
         create_file = pandas.DataFrame(columns = [
                 'Complex',
@@ -195,13 +198,13 @@ class MEManualCuration(object):
             "subsystem_classification.txt",
             create_file = create_file,
             no_file_return = pandas.DataFrame())
-        
+
         d = {}
         for c in df.columns:
             for s in df[df[c] == 1].index:
                 d[s] = c
         return d
-    
+
     def load_manual_complexes(self):
         create_file = pandas.DataFrame.from_dict(
                 {"complex_id": {}, "name": {}, "genes": {}, "mod": {}, "replace": {}}
@@ -229,14 +232,14 @@ class MEManualCuration(object):
 #         filename = self.configuration.get('df_metadata_metabolites', None)
 #         if filename is None or not filename:
 #             filename = self.org.directory + "me_metabolites.txt"
-        filename = self.org.directory + "me_metabolites.txt" 
+        filename = self.org.directory + "me_metabolites.txt"
         return self._get_manual_curation(
             filename,
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t',
             pathtype = 'absolute')
-    
+
     def load_rna_degradosome(self):
         create_file = pandas.DataFrame(columns = [
                 'rna_degradosome'
@@ -265,12 +268,12 @@ class MEManualCuration(object):
                     elif s == "50S":
                         ribosome_stoich["50_S_assembly"]["stoich"][p] = 1
         return ribosome_stoich
-    
+
     def _create_ribosome_stoich(self):
         return pandas.DataFrame.from_dict(
             {"proteins": {"30S": "generic_16s_rRNAs",
                           "50S": "generic_5s_rRNAs,generic_23s_rRNAs"}}).rename_axis('subunit')
-    
+
     def load_ribosome_stoich(self):
         create_file = self._create_ribosome_stoich()
         df = self._get_manual_curation(
@@ -278,9 +281,9 @@ class MEManualCuration(object):
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
-        
+
         return self._process_ribosome_stoich(df)
-    
+
     def _create_ribosome_subreactions(self):
         return pandas.DataFrame.from_dict(dictionaries.ribosome_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_ribosome_subreactions_for_save(self,df):
@@ -302,7 +305,7 @@ class MEManualCuration(object):
             no_file_return = create_file,
             sep = '\t')
         return self._modify_ribosome_subreactions_from_load(df)
-    
+
     def _create_generic_dict(self):
         return pandas.DataFrame.from_dict(dictionaries.generics.copy()).T.rename_axis('generic_component')
     def _modify_generic_dict_for_save(self,df):
@@ -328,7 +331,7 @@ class MEManualCuration(object):
             no_file_return = create_file,
             sep = '\t')
         return self._modify_generic_dict_from_load(df)
-    
+
 #     def _create_rrna_modifications(self):
 #         return pandas.DataFrame.from_dict(dictionaries.rrna_modifications.copy()).T.rename_axis('modification')
 #     def _modify_rrna_modifications_for_save(self,df):
@@ -343,14 +346,14 @@ class MEManualCuration(object):
 #         return d
 #     def load_rrna_modifications(self):
 #         create_file = self._modify_rrna_modifications_for_save(
-#                 self._create_rrna_modifications()) 
+#                 self._create_rrna_modifications())
 #         df = self._get_manual_curation(
 #             "rrna_modifications.txt",
 #             create_file = create_file,
 #             no_file_return = create_file,
 #             sep = '\t')
 #         return self._modify_rrna_modifications_from_load(df)
-    
+
     def _create_amino_acid_trna_synthetase(self):
         return pandas.DataFrame.from_dict(
             {"enzyme": dictionaries.amino_acid_trna_synthetase.copy()}).rename_axis('amino_acid')
@@ -361,7 +364,7 @@ class MEManualCuration(object):
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t').to_dict()['enzyme']
-    
+
     def _create_peptide_release_factors(self):
         return pandas.DataFrame.from_dict(dictionaries.translation_stop_dict.copy()).T.rename_axis('release_factor')
     def _modify_peptide_release_factors_for_save(self,df):
@@ -380,7 +383,7 @@ class MEManualCuration(object):
         return d
     def load_peptide_release_factors(self):
         create_file = self._modify_peptide_release_factors_for_save(
-                self._create_peptide_release_factors()) 
+                self._create_peptide_release_factors())
         df = self._get_manual_curation(
             "peptide_release_factors.txt",
             create_file = create_file,
@@ -410,14 +413,14 @@ class MEManualCuration(object):
         return d
     def load_initiation_subreactions(self):
         create_file = self._modify_initiation_subreactions_for_save(
-                self._create_initiation_subreactions()) 
+                self._create_initiation_subreactions())
         df = self._get_manual_curation(
             "initiation_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_initiation_subreactions_from_load(df)
-    
+
     def _create_elongation_subreactions(self):
         return pandas.DataFrame.from_dict(dictionaries.elongation_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_elongation_subreactions_for_save(self,df):
@@ -436,14 +439,14 @@ class MEManualCuration(object):
         return d
     def load_elongation_subreactions(self):
         create_file = self._modify_elongation_subreactions_for_save(
-                self._create_elongation_subreactions()) 
+                self._create_elongation_subreactions())
         df = self._get_manual_curation(
             "elongation_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_elongation_subreactions_from_load(df)
-    
+
     def _create_termination_subreactions(self):
         df = pandas.DataFrame.from_dict(dictionaries.termination_subreactions.copy()).T.rename_axis('subreaction')
         df[["element_contribution"]] = df[["element_contribution"]].applymap(
@@ -470,14 +473,14 @@ class MEManualCuration(object):
         return d
     def load_termination_subreactions(self):
         create_file = self._modify_termination_subreactions_for_save(
-                self._create_termination_subreactions()) 
+                self._create_termination_subreactions())
         df = self._get_manual_curation(
             "termination_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_termination_subreactions_from_load(df)
-    
+
     def _create_special_trna_subreactions(self):
         df = pandas.DataFrame.from_dict(dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
         df[["element_contribution"]] = df[["element_contribution"]].applymap(
@@ -485,7 +488,7 @@ class MEManualCuration(object):
         )
         return pandas.DataFrame.from_dict(dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_special_trna_subreactions_for_save(self,df):
-        
+
         df = df.copy()
         for r, row in df.iterrows():
             df.loc[r, "enzymes"] = ",".join(row["enzymes"])
@@ -505,7 +508,7 @@ class MEManualCuration(object):
         return d
     def load_special_trna_subreactions(self):
         create_file = self._modify_special_trna_subreactions_for_save(
-                self._create_special_trna_subreactions()) 
+                self._create_special_trna_subreactions())
         df = self._get_manual_curation(
             "special_trna_subreactions.txt",
             create_file = create_file,
@@ -531,14 +534,14 @@ class MEManualCuration(object):
         return d
     def load_excision_machinery(self):
         create_file = self._modify_excision_machinery_for_save(
-                self._create_excision_machinery()) 
+                self._create_excision_machinery())
         df = self._get_manual_curation(
             "excision_machinery.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_excision_machinery_from_load(df)
-    
+
     def _create_special_modifications(self):
         return pandas.DataFrame.from_dict(dictionaries.special_modifications.copy()).T.rename_axis('modification')
     def _modify_special_modifications_for_save(self,df):
@@ -557,14 +560,14 @@ class MEManualCuration(object):
         return d
     def load_special_modifications(self):
         create_file = self._modify_special_modifications_for_save(
-                self._create_special_modifications()) 
+                self._create_special_modifications())
         df = self._get_manual_curation(
             "special_modifications.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_special_modifications_from_load(df)
-    
+
     def _modify_rna_modification_from_load(self,df):
         d = {}
         for mod,row in df.iterrows():
@@ -595,7 +598,7 @@ class MEManualCuration(object):
 #                 trna_mod_dict[mod["bnum"]] = {}
 #             trna_mod_dict[mod["bnum"]][mod_loc] = 1
 #         return trna_mod_dict
-    
+
     def _create_rna_modification_targets(self):
         return pandas.DataFrame(columns=[
             'bnum',
@@ -628,14 +631,14 @@ class MEManualCuration(object):
         return d
     def load_folding_dict(self):
         create_file = self._modify_folding_dict_for_save(
-                self._create_folding_dict()) 
+                self._create_folding_dict())
         df = self._get_manual_curation(
             "folding_dict.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_folding_dict_from_load(df)
-    
+
     def _create_transcription_subreactions(self):
         return pandas.DataFrame.from_dict(dictionaries.transcription_subreactions.copy()).T.rename_axis('mechanism')
     def _modify_transcription_subreactions_for_save(self,df):
@@ -654,14 +657,14 @@ class MEManualCuration(object):
         return d
     def load_transcription_subreactions(self):
         create_file = self._modify_transcription_subreactions_for_save(
-                self._create_transcription_subreactions()) 
+                self._create_transcription_subreactions())
         df = self._get_manual_curation(
             "transcription_subreactions.txt",
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t')
         return self._modify_transcription_subreactions_from_load(df)
-    
+
     def _process_translocation_pathways(self,
                                     df):
         d = {}
@@ -696,7 +699,7 @@ class MEManualCuration(object):
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t'))
-    
+
     def _modify_lipid_modifications_from_load(self,df):
         return {k:v.split(',') for k,v in df['enzymes'].to_dict().items()}
     def _create_lipid_modifications(self):
@@ -712,7 +715,7 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return self._modify_lipid_modifications_from_load(df)
-    
+
     def _create_subreaction_matrix(self):
         return pandas.DataFrame(columns=[
             'Reaction','Metabolites','Stoichiometry'
@@ -725,7 +728,7 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df
-    
+
     def _create_reaction_matrix(self):
         return pandas.DataFrame(columns=[
             'Reaction', 'Metabolites', 'Stoichiometry'
@@ -738,8 +741,8 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df
-    
-    
+
+
     def _create_orphan_and_spont_reactions(self):
         return pandas.DataFrame(columns=[
             'name', 'description', 'is_reversible', 'is_spontaneous'
@@ -752,7 +755,7 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df
-    
+
     def _create_enz_rxn_assoc_df(self):
         return pandas.DataFrame(columns=[
             'Reaction','Complexes'
@@ -765,7 +768,7 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df
-    
+
     def _str_to_dict(self,
                     d):
         regex = ":(?=[-]?\d+(?:$|\.))"
@@ -777,9 +780,9 @@ class MEManualCuration(object):
 
     def _dict_to_str(self, d):
         return ",".join(["{}:{}".format(k, v) for k, v in d.items()])
-    
-    
-    
+
+
+
 class MECurator(object):
     """MECurator class for integrating additional curation.
 
@@ -791,17 +794,17 @@ class MECurator(object):
     org : coralme.builder.organism.Organism
         Organism object.
     """
-    
+
     def __init__(self,
                 org):
         self.org = org
-        
+
 #     def curate(self):
 #         logging.warning("Integrating manual metabolic reactions")
 #         self.modify_metabolic_reactions()
 #         logging.warning("Integrating manual complexes")
 #         self.add_manual_complexes()
-        
+
 #     def modify_metabolic_reactions(self):
 #         m_model = self.org.m_model
 #         new_reactions_dict = self.org.reaction_corrections
@@ -884,7 +887,7 @@ class MECurator(object):
 
 #         self.org.complexes_df = complexes_df
 #         self.org.protein_mod = protein_mod
-        
+
 #         # Warnings
 #         if warn_manual_mod or warn_replace:
 #             if warn_manual_mod:
@@ -899,10 +902,9 @@ class MECurator(object):
 #                     'triggered_by':warn_replace,
 #                     'importance':'low',
 #                     'to_do':'Check whether the marked modified protein in protein_corrections.txt for replacement is correctly defined.'})
-                
+
     def find_issue_with_query(self,query):
         for k,v in self.org.curation_notes.items():
             coralme.builder.helper_functions.find_issue(query,v)
-        
-        
-        
+
+
