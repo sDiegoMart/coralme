@@ -41,6 +41,9 @@ def get_remaining_complex_elements(model, c, modification_formulas):
 		elif 'SH(1)' in component:
 			new_elements['S'] += 1
 
+		elif 'glycyl(1)' in component:
+			new_elements['H'] -= 1
+
 		# modifies O- to SH
 		elif component == 'cosh(1)':
 			new_elements['O'] -= 1
@@ -65,7 +68,7 @@ def get_remaining_complex_elements(model, c, modification_formulas):
 			for e, v in tmp_met.elements.items():
 				new_elements[e] += v * float(value)
 
-		elif 'Oxidized' in component and 'FLAVODOXIN' not in base_complex:
+		elif 'Oxidized(1)' in component and 'FLAVODOXIN' not in base_complex:
 			new_elements.update({'H': -2})
 
 		if elements == new_elements and 'FLAVODOXIN' not in base_complex:
