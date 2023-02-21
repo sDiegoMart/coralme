@@ -1056,7 +1056,8 @@ class MEModel(cobra.core.model.Model):
 			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value = growth_key_and_value, met_types = met_type)
 
 			# close sink reactions that are not gaps
-			self.remove_reactions(no_gaps)
+			if no_gaps:
+				self.remove_reactions(no_gaps)
 
 		# Step 3. Test different sets of MEComponents
 		e_gaps = []
@@ -1071,6 +1072,8 @@ class MEModel(cobra.core.model.Model):
 				self.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
 				bf_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_types = met_type)
+				if no_gaps:
+					self.me_model.remove_reactions(no_gaps)
 				if works:
 					e_gaps.append(bf_gaps)
 					break
