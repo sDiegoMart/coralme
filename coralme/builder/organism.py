@@ -1563,7 +1563,7 @@ class Organism(object):
                            bar_format = bar_format,
                            total=enz_rxn_assoc_df.shape[0]):
             if reaction not in m_model.reactions:
-                #TODO: Change this so that Keffs of new reactions in reaction_matrix can be estimated 
+                #TODO: Change this so that Keffs of new reactions in reaction_matrix can be estimated
                 logging.warning('Tried setting Keffs for {} but it is not in model'.format(reaction))
                 continue
             r = m_model.reactions.get_by_id(reaction)
@@ -1581,8 +1581,8 @@ class Organism(object):
                     rxn_keff_dict[r]["keff"] = keff
         self.reaction_median_keffs = pandas.DataFrame.from_dict(rxn_keff_dict).T
         self.reaction_median_keffs.index.name = "reaction"
-        self.reaction_median_keffs.to_csv(self.directory + 'reaction_median_keffs.txt',
-                                          sep='\t')
+        self.reaction_median_keffs.to_csv(self.directory + 'reaction_median_keffs.txt', sep='\t')
+        return self.reaction_median_keffs['keff'].to_dict()
 
     def get_phospholipids(self):
         m_model = self.m_model
