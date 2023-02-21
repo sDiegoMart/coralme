@@ -245,10 +245,6 @@ class MEBuilder(object):
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
 
-		# ## Keffs
-		logging.warning("Setting reaction Keffs")
-		self.org.get_reaction_keffs()
-
 		# #### Biomass constituents
 		self.org.biomass_constituents = config.get('flux_of_biomass_constituents', {})
 
@@ -2125,13 +2121,16 @@ class MEReconstruction(MEBuilder):
 		flag = self.configuration.get('keff_method','estimate')
 		mapped_keffs = {}
 		if flag == 'estimate':
+		# ## Keffs
+			logging.warning("Setting reaction Keffs")
+			self.org.get_reaction_keffs()
 			reaction_median_keffs = pandas.read_csv(
-				self.configuration.get(
-					'reaction_median_keff',
-					self.configuration['out_directory'] + '/building_data/reaction_median_keffs.txt'),
-				sep='\t',
-				index_col=0
-			)['keff'].to_dict()
+					self.configuration.get(
+						'reaction_median_keff',
+						self.configuration['out_directory'] + '/building_data/reaction_median_keffs.txt'),
+					sep='\t',
+					index_col=0
+				)['keff'].to_dict()
 			sasa_list = []
 			for met in me.metabolites:
 				cplx_sasa = 0.
