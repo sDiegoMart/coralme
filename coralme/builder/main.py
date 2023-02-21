@@ -537,12 +537,15 @@ class MEBuilder(object):
 								}}).T
 						org_complexes_df = pandas.concat([org_complexes_df, tmp], axis = 0, join = 'outer')
 				enz_rxn_assoc_dict[rxn.id] = generified_rule
-			enz_rxn_assoc_df = pandas.DataFrame.from_dict({"Complexes": enz_rxn_assoc_dict})
-			enz_rxn_assoc_df = enz_rxn_assoc_df.replace(
-				"", numpy.nan
-			).dropna()  # Remove empty rules
+		enz_rxn_assoc_df = pandas.DataFrame.from_dict({"Complexes": enz_rxn_assoc_dict})
+		enz_rxn_assoc_df = enz_rxn_assoc_df.replace(
+			"", numpy.nan
+		).dropna()  # Remove empty rules
 
-		self.org.enz_rxn_assoc_df = pandas.concat([enz_rxn_assoc_df, self.org.enz_rxn_assoc_df], axis = 0, join = 'outer')
+		if not enz_rxn_assoc_df.empty: # Only if it inferred any new GPRs
+			self.org.enz_rxn_assoc_df = pandas.concat([enz_rxn_assoc_df, self.org.enz_rxn_assoc_df], axis = 0, join = 'outer')
+		else:
+			logging.warning('No new GPR was inferred. If you provided all GPRs in enzyme_reaction_association.txt, no further action is needed.')
 		self.org.enz_rxn_assoc_df.index.name = "Reaction"
 		self.org.complexes_df = org_complexes_df
 		self.org.protein_mod = protein_mod
