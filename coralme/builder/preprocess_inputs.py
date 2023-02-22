@@ -187,8 +187,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 				mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
 				mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
 				mods = [ x.replace('LI', 'Li') for x in mods ]
-				mods = [ x.replace('dpm', 'hmbil') for x in mods ]
-				logging.warning('The modification \'dpm\' was renamed to \'hmbil\'. Add a MetabolicReaction to convert \'hmbil\' into \'dpm\'.')
 				mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
 				logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
 				logging.warning('Add MetabolicReactions to salvage or de novo synthesis of lipoyl moieties. See https://www.genome.jp/pathway/map00785 for more information.')
@@ -445,8 +443,12 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 
 	# Filter in inferred enzyme-reaction associations
 	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	# TODO: The correct enzyme can be the base complex, not the modified complex
 	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
+	dct = { values[0]:idx for idx, values in cplxs.explode('Complexes').iterrows() }
+	cplxs = set([ '{:s}:\d+'.format(k) for k,v in dct.items() ])
+
+	#cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
 	## keep complexes inferred from tRNA synthetases
 	#dct = builder.org.amino_acid_trna_synthetase
 	#cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
@@ -467,8 +469,8 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 
 	# this dataframe contains only genes associated to M-model reactions
 	tmp1 = data.copy(deep = True).reset_index(drop = True)
-	tmp1 = tmp1[tmp1['M-model Reaction ID'].notna() & tmp1['Complex ID'].notna()]
-	tmp1 = tmp1[tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
+	tmp1['M-model Reaction ID'] = tmp1.apply(lambda x: dct.get(str(x['Complex ID']).split(':')[0], None), axis = 1)
+	tmp1 = tmp1[tmp1['Complex ID'].notna() & tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
 
 	# this dataframe contains genes NOT associated to M-model reactions
 	tmp4 = data.copy(deep = True).reset_index(drop = True)
