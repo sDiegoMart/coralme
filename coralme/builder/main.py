@@ -1905,7 +1905,7 @@ class MEReconstruction(MEBuilder):
 		# Check if complex modifications are set on any component in the organism-specific matrix
 		# Dipyrromethane
 		# dpm modification never from the free metabolite
-		if me.process_data.has_id('mod_dpm_c'):
+		if me.process_data.has_id('mod_dpm_c') and me.metabolites.had_id('dpm_c'):
 			me.remove_metabolites([me.metabolites.dpm_c])
 			#me.gem.remove_metabolites([me.gem.metabolites.dpm_c])
 
