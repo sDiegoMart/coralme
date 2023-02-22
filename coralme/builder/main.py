@@ -324,29 +324,31 @@ class MEBuilder(object):
 			logging.warning('Could not identify biomass reaction')
 
 
-		adp = m_model.metabolites.adp_c
+		self.org.GAM = self.configuration.get('GAM',None)
 		# Get GAM
-		self.org.GAM = None
-		if biomass_rxn is not None and adp in biomass_rxn.metabolites:
-			self.org.GAM = biomass_rxn.metabolites[adp]
-			logging.warning('GAM identified with value {}'.format(self.org.GAM))
-		else:
-			self.org.GAM = 45.
-			self.org.curation_notes['prepare_model'].append({
-				'msg':'GAM could not be identified from biomass reaction, setting a standard value of 45. adp_c is not present as a product.',
-				'importance':'high',
-				'to_do':'Check whether the biomass reaction was read or defined correctly. You can define GAM with me_builder.org.GAM = GAM_value'})
-		# Get NGAM
-		NGAMs = ['NGAM','ATPM']
-		self.org.NGAM = None
-		for r in NGAMs:
-			if r in m_model.reactions:
-				rxn = m_model.reactions.get_by_id(r)
-				if rxn.lower_bound <= 0:
-					continue
-				self.org.NGAM = rxn.lower_bound
-				logging.warning('{} was identified as NGAM with value {}'.format(r,self.org.NGAM))
-				break
+		if self.org.GAM is None:
+			adp = m_model.metabolites.adp_c
+			if biomass_rxn is not None and adp in biomass_rxn.metabolites:
+				self.org.GAM = biomass_rxn.metabolites[adp]
+				logging.warning('GAM identified with value {}'.format(self.org.GAM))
+			else:
+				self.org.GAM = 45.
+				self.org.curation_notes['prepare_model'].append({
+					'msg':'GAM could not be identified from biomass reaction, setting a standard value of 45. adp_c is not present as a product.',
+					'importance':'high',
+					'to_do':'Check whether the biomass reaction was read or defined correctly. You can define GAM with me_builder.org.GAM = GAM_value'})
+			# Get NGAM
+			NGAMs = ['NGAM','ATPM']
+		self.org.NGAM = self.configuration.get('NGAM',None)
+		if self.org.NGAM is None:
+			for r in NGAMs:
+				if r in m_model.reactions:
+					rxn = m_model.reactions.get_by_id(r)
+					if rxn.lower_bound <= 0:
+						continue
+					self.org.NGAM = rxn.lower_bound
+					logging.warning('{} was identified as NGAM with value {}'.format(r,self.org.NGAM))
+					break
 		if self.org.NGAM == None:
 			self.org.NGAM = 1.
 			self.org.curation_notes['prepare_model'].append({
