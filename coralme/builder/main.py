@@ -337,10 +337,10 @@ class MEBuilder(object):
 					'msg':'GAM could not be identified from biomass reaction, setting a standard value of 45. adp_c is not present as a product.',
 					'importance':'high',
 					'to_do':'Check whether the biomass reaction was read or defined correctly. You can define GAM with me_builder.org.GAM = GAM_value'})
-			# Get NGAM
-			NGAMs = ['NGAM','ATPM']
 		self.org.NGAM = self.configuration.get('NGAM',None)
 		if self.org.NGAM is None:
+			# Get NGAM
+			NGAMs = ['NGAM','ATPM']
 			for r in NGAMs:
 				if r in m_model.reactions:
 					rxn = m_model.reactions.get_by_id(r)
