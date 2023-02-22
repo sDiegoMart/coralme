@@ -1905,7 +1905,7 @@ class MEReconstruction(MEBuilder):
 		# dpm modification never from the free metabolite
 		if me.process_data.has_id('mod_dpm_c'):
 			me.remove_metabolites([me.metabolites.dpm_c])
-			me.gem.remove_metabolites([me.gem.metabolites.dpm_c])
+			#me.gem.remove_metabolites([me.gem.metabolites.dpm_c])
 
 		# biotin---[acetyl-CoA-carboxylase] ligase
 		# biotin loaded from the free metabolite; don't remove it from the model
@@ -2174,7 +2174,7 @@ class MEReconstruction(MEBuilder):
 				#if keff > 3000: keff = 3000.
 				#elif keff < .01: keff = .01
 				#mapped_keffs[rxn] = keff
-				mapped_keffs[rxn] = 3000 if keff > 3000 else keff if keff < 0.01 else keff
+				mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
 
 		else:
 			mapped = set()
@@ -2203,7 +2203,7 @@ class MEReconstruction(MEBuilder):
 			missing = set(df_keffs.index).difference(set(mapped))
 
 			for rxn in missing:
-				logging.warning('Could not map effective turnover rates of reaction \'{:}\'.'.format(rxn))
+				logging.warning('Could not map the effective turnover rates of the \'{:}\' reaction.'.format(rxn))
 
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(mapped_keffs.items(), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
@@ -2212,7 +2212,7 @@ class MEReconstruction(MEBuilder):
 					r.update()
 					logging.warning('Setting the effective turnover rate for \'{:s}\' in {:s} successfully.'.format(rxn.id, keff))
 				except:
-					logging.warning('There was a problem setting the effective turnover rate for \'{:s}\'.'.format(rxn.id))
+					logging.warning('There was a problem setting the effective turnover rate for the \'{:s}\' reaction.'.format(rxn.id))
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
