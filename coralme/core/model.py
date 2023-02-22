@@ -195,7 +195,7 @@ class MEModel(cobra.core.model.Model):
 			'trna_to_codon' : {},
 			'aa2codons' : {},
 
-			'gam' : 45.,
+			'gam' : 34.98,
 			'ngam' : 1.,
 			'unmodeled_protein_fraction' : 0.36,
 
