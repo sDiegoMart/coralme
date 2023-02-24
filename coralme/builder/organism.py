@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
 # Inherit from logging.Handler
-element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA'}
+element_types = {'CDS', 'rRNA','tRNA', 'ncRNA','misc_RNA','RNA','tmRNA'}
 
 class Organism(object):
     """Organism class for storing information about an organism
