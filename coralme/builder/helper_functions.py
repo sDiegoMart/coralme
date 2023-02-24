@@ -639,9 +639,9 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite'):
 				mets.add(met.id)
 
 	if 'Metabolite' in met_types:
-		# remove from the metabolites to test that are fed into the model through transport reactions
+		#remove from the metabolites to test that are fed into the model through transport reactions
 		medium = set([ '{:s}_c'.format(x[3:-2]) for x in me_model.gem.medium.keys() ])
-		mets = set(mets).difference(medium)
+		#mets = set(mets).difference(medium)
 
 		# filter out manually
 		mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
