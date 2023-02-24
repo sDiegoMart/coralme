@@ -1328,7 +1328,7 @@ class MEReconstruction(MEBuilder):
 			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
 
 			self.org.get_reaction_keffs() # saves a file to <out_directory>/building_data/reaction_median_keffs.txt
-			config['df_reaction_keff_consts'] = config.get('out_directory', '.') + '/building_data/reaction_median_keffs.txt'
+# 			config['df_reaction_keff_consts'] = config.get('out_directory', '.') + '/building_data/reaction_median_keffs.txt'
 
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
@@ -2157,9 +2157,9 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		mapped_keffs = {}
-		if df_keffs.empty:
+		if "complex" in df_keffs.columns: #df_keffs.empty: TODO:
 			logging.warning("Estimating effective turnover rates...")
-
+			reaction_median_keffs = df_keffs
 			#sasa_list = []
 			#for met in me_model.metabolites:
 				#cplx_sasa = 0.
@@ -2182,7 +2182,7 @@ class MEReconstruction(MEBuilder):
 			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
 			reactions = [ rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction) ]
 
-			reaction_median_keffs = self.org.get_reaction_keffs() # saves file to reaction_median_keffs.txt
+			#reaction_median_keffs = self.org.get_reaction_keffs() # saves file to reaction_median_keffs.txt
 			#reaction_median_keffs = pandas.read_csv(
 				#self.configuration.get('reaction_median_keff', out_directory + '/building_data/reaction_median_keffs.txt'),
 					#sep='\t',
