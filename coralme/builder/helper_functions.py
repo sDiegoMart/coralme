@@ -737,10 +737,7 @@ def load_curation_notes(filepath):
 def publish_curation_notes(curation_notes,filepath):
 	import json
 	file = open(filepath,'w')
-	for k,v in tqdm.tqdm(curation_notes.items(),
-					   'Generating curation notes...',
-					   bar_format = bar_format,
-					   total=len(curation_notes)):
+	for k,v in curation_notes.items():
 		file.write('\n')
 		for w in v:
 			file.write('{} {}@{} {}\n'.format('#'*20,w['importance'],k,'#'*20))
