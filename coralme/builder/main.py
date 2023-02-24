@@ -2156,90 +2156,91 @@ class MEReconstruction(MEBuilder):
 			logging.warning('No Braun\'s lipoprotein (lpp gene) homolog was set. Please check if it is the correct behavior.')
 
 		# ## Part 7: Set keffs
-		mapped_keffs = {}
-		if df_keffs.empty:
-			logging.warning("Estimating effective turnover rates...")
+		# TODO: keffs when estimated need builder.org; When supplied by the user, needs to be not empty
+		#mapped_keffs = {}
+		#if df_keffs.empty:
+			#logging.warning("Estimating effective turnover rates...")
 
-			#sasa_list = []
-			#for met in me_model.metabolites:
-				#cplx_sasa = 0.
-				#if not isinstance(met, coralme.core.component.Complex):
+			##sasa_list = []
+			##for met in me_model.metabolites:
+				##cplx_sasa = 0.
+				##if not isinstance(met, coralme.core.component.Complex):
+					##continue
+				##MW = met.formula_weight
+				##if not MW:
+					##MW = 0
+					##logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(key))
+				##cplx_sasa += MW ** (3. / 4)
+				##sasa_list.append(cplx_sasa)
+
+			##median_sasa = numpy.median(numpy.array(sasa_list))
+			#sasa_dct = { x.id:( x.formula_weight ** (3. / 4.) if x.formula_weight else 0, x.id if not x.formula_weight else False ) for x in me.metabolites if type(x) == coralme.core.component.Complex }
+
+			#for met in [ v[1] for k,v in sasa_dct.items() ]:
+				#if met:
+					#logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
+
+			#median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
+			#reactions = [ rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction) ]
+
+			#reaction_median_keffs = self.org.get_reaction_keffs() # saves file to reaction_median_keffs.txt
+			##reaction_median_keffs = pandas.read_csv(
+				##self.configuration.get('reaction_median_keff', out_directory + '/building_data/reaction_median_keffs.txt'),
+					##sep='\t',
+					##index_col=0
+				##)['keff'].to_dict()
+
+			#for rxn in tqdm.tqdm(reactions, 'Setting the effective turnover rates using the SASA method...', bar_format = bar_format):
+				#base_id = rxn._stoichiometric_data.id
+				#if base_id not in reaction_median_keffs:
 					#continue
-				#MW = met.formula_weight
-				#if not MW:
-					#MW = 0
-					#logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(key))
-				#cplx_sasa += MW ** (3. / 4)
-				#sasa_list.append(cplx_sasa)
+				#cplx = me.metabolites.get_by_id(rxn._complex_data.id)
+				#median_keff = reaction_median_keffs[base_id]
+				##sasa = cplx.formula_weight ** (3. / 4.)
+				#sasa = sasa_dct[cplx.id][0]
+				#keff = sasa * median_keff / median_sasa
+				##if keff > 3000: keff = 3000.
+				##elif keff < .01: keff = .01
+				##mapped_keffs[rxn] = keff
+				#mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
 
-			#median_sasa = numpy.median(numpy.array(sasa_list))
-			sasa_dct = { x.id:( x.formula_weight ** (3. / 4.) if x.formula_weight else 0, x.id if not x.formula_weight else False ) for x in me.metabolites if type(x) == coralme.core.component.Complex }
+		#else:
+			#mapped = set()
+			#for idx, row in tqdm.tqdm(df_keffs.iterrows(), 'Reading effective turnover rates from user input...', bar_format = bar_format, total = df_keffs.shape[0]):
+				#for r in me.reactions.query(idx):
+					## TODO: comments
+					#if not hasattr(r, '_stoichiometric_data'):
+						#continue
+					#if not r._stoichiometric_data.id == idx:
+						#continue
+					#c = r._complex_data
+					#if c is None:
+						#continue
+					#c = c.id
+					#mods = ['']
+					#if 'mod' in c:
+						#modinfo = c.split('_mod_')
+						#c,mods = modinfo[0],modinfo[1:]
+					#if not c == row['complex']:
+						#continue
+					#if not set(mods) == set(row['mods'].split(' AND ')):
+						#continue
+					#mapped_keffs[r] = row['keff']
+					#mapped.add(idx)
 
-			for met in [ v[1] for k,v in sasa_dct.items() ]:
-				if met:
-					logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
+			#missing = set(df_keffs.index).difference(set(mapped))
 
-			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
-			reactions = [ rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction) ]
+			#for rxn in missing:
+				#logging.warning('Could not map the effective turnover rates of the \'{:}\' reaction.'.format(rxn))
 
-			reaction_median_keffs = self.org.get_reaction_keffs() # saves file to reaction_median_keffs.txt
-			#reaction_median_keffs = pandas.read_csv(
-				#self.configuration.get('reaction_median_keff', out_directory + '/building_data/reaction_median_keffs.txt'),
-					#sep='\t',
-					#index_col=0
-				#)['keff'].to_dict()
-
-			for rxn in tqdm.tqdm(reactions, 'Setting the effective turnover rates using the SASA method...', bar_format = bar_format):
-				base_id = rxn._stoichiometric_data.id
-				if base_id not in reaction_median_keffs:
-					continue
-				cplx = me.metabolites.get_by_id(rxn._complex_data.id)
-				median_keff = reaction_median_keffs[base_id]
-				#sasa = cplx.formula_weight ** (3. / 4.)
-				sasa = sasa_dct[cplx.id][0]
-				keff = sasa * median_keff / median_sasa
-				#if keff > 3000: keff = 3000.
-				#elif keff < .01: keff = .01
-				#mapped_keffs[rxn] = keff
-				mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
-
-		else:
-			mapped = set()
-			for idx, row in tqdm.tqdm(df_keffs.iterrows(), 'Reading effective turnover rates from user input...', bar_format = bar_format, total = df_keffs.shape[0]):
-				for r in me.reactions.query(idx):
-					# TODO: comments
-					if not hasattr(r, '_stoichiometric_data'):
-						continue
-					if not r._stoichiometric_data.id == idx:
-						continue
-					c = r._complex_data
-					if c is None:
-						continue
-					c = c.id
-					mods = ['']
-					if 'mod' in c:
-						modinfo = c.split('_mod_')
-						c,mods = modinfo[0],modinfo[1:]
-					if not c == row['complex']:
-						continue
-					if not set(mods) == set(row['mods'].split(' AND ')):
-						continue
-					mapped_keffs[r] = row['keff']
-					mapped.add(idx)
-
-			missing = set(df_keffs.index).difference(set(mapped))
-
-			for rxn in missing:
-				logging.warning('Could not map the effective turnover rates of the \'{:}\' reaction.'.format(rxn))
-
-		if mapped_keffs:
-			for rxn, keff in tqdm.tqdm(mapped_keffs.items(), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
-				try:
-					r.keff = float(keff)
-					r.update()
-					logging.warning('Setting the effective turnover rate for \'{:s}\' in {:s} successfully.'.format(rxn.id, keff))
-				except:
-					logging.warning('There was a problem setting the effective turnover rate for the \'{:s}\' reaction.'.format(rxn.id))
+		#if mapped_keffs:
+			#for rxn, keff in tqdm.tqdm(mapped_keffs.items(), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
+				#try:
+					#r.keff = float(keff)
+					#r.update()
+					#logging.warning('Setting the effective turnover rate for \'{:s}\' in {:s} successfully.'.format(rxn.id, keff))
+				#except:
+					#logging.warning('There was a problem setting the effective turnover rate for the \'{:s}\' reaction.'.format(rxn.id))
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
