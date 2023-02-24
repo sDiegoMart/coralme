@@ -2424,7 +2424,7 @@ class METroubleshooter(object):
 		if works == False:
 			logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
 
-			met_types = [ 'Complex', 'GenerictRNA', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
+			met_types = [ 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
 
 			for met_type in met_types:
 				logging.warning('  '*5 + 'Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(met_type))
