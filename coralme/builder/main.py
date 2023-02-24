@@ -86,6 +86,7 @@ class MEBuilder(object):
 
 		self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col = 0)
 
+		# check user options
 		exists = []
 		for filename in [
 			"m-model-path",
@@ -115,7 +116,12 @@ class MEBuilder(object):
 		if not all([ y for x,y in exists ]):
 			raise FileNotFoundError('Check the path to the {:s} file(s).'.format(', '.join([ x for x,y in exists if y == False ])))
 
+		for option in [ "out_directory", "log_directory" ]:
+			if config.get(option, '.') == '':
+				self.configuration[option] = config.get('ME-Model-ID', 'coralME')
+
 		return None
+
 	def generate_files(self, overwrite = True):
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
@@ -1321,6 +1327,9 @@ class MEReconstruction(MEBuilder):
 			config['other_lipids'] = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
 			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
 
+			self.org.get_reaction_keffs() # saves a file to <out_directory>/building_data/reaction_median_keffs.txt
+			config['df_reaction_keff_consts'] = config.get('out_directory', '.') + '/building_data/reaction_median_keffs.txt'
+
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
 			if hasattr(self, 'org'):
@@ -1370,10 +1379,13 @@ class MEReconstruction(MEBuilder):
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass] if self.org.biomass is not None else []
 			logging.warning('The biomass reaction will be skipped during the ME reconstruction steps.')
+
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
+			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
+		if not 'ATPM' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('ATPM')
-			logging.warning('The FMETTRS and ATPM reactions from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
+			logging.warning('The ATPM reaction from the M-model will be replaced by a SummaryVariable during the ME-model reconstruction steps.')
 
 		if hasattr(self, 'org') and len(config.get('braun\'s_lipoproteins', [])) == 0:
 			lst = [ k.split('_mod_')[0] for k,v in self.org.protein_mod.to_dict()['Modifications'].items() if 'palmitate' in v ]
@@ -1423,18 +1435,18 @@ class MEReconstruction(MEBuilder):
 		self.configuration.update(config)
 
 		# detect if the genbank file was modified using biocyc data
-		gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
+		gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', '.'))
 		config['genbank-path'] = gb if pathlib.Path(gb).exists() else config['genbank-path']
 
 		if overwrite:
 			new = config.get('new_config_file', 'coralme-config.yaml')
 			yaml = new if new.endswith('.yaml') else '{:s}.yaml'.format(new)
-			with open('{:s}/{:s}'.format(config['out_directory'], yaml), 'w') as outfile:
+			with open('{:s}/{:s}'.format(config.get('out_directory', '.'), yaml), 'w') as outfile:
 				anyconfig.dump(config, outfile)
 			logging.warning('New configuration file \'{:s}\' was written with inferred options.'.format(yaml))
-			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
+			#with open('{:s}/{:s}'.format(config.get('out_directory', '.'), new), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
-			#with open('{:s}/{:s}'.format(config['out_directory'], new), 'w') as outfile:
+			#with open('{:s}/{:s}'.format(config.get('out_directory', '.'), new), 'w') as outfile:
 				#anyconfig.dump(config, outfile)
 
 		# Drop-in replacement of input files:
@@ -1455,7 +1467,7 @@ class MEReconstruction(MEBuilder):
 			df_data = pandas.read_csv(filename, sep = '\t', header = 0, dtype = str).dropna(how = 'all')
 		else:
 			# detect if the genbank file was modified using biocyc data
-			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', './'))
+			gb = '{:s}/building_data/genome_modified.gb'.format(config.get('out_directory', '.'))
 			gb = gb if pathlib.Path(gb).exists() else config['genbank-path']
 
 			# generate a minimal dataframe from the genbank and m-model files
@@ -1790,8 +1802,6 @@ class MEReconstruction(MEBuilder):
 		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-model...', bar_format = bar_format):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
-		special_trna_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Special_tRNA')
-
 		# Correct 'translation_stop_dict' if PrfA and/or PrfB homologs were not identified
 		if me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
 			me.global_info['translation_stop_dict']['UGA'] = 'PrfA_mono' # originally assigned to PrfB_mono
@@ -1895,7 +1905,7 @@ class MEReconstruction(MEBuilder):
 			if stoichiometry is not None:
 				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, stoichiometry)
 			else:
-				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, { 'CPLX_dummy' : 1})
+				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, { 'CPLX_dummy' : 1 })
 				logging.warning('The components of the excision complex for {:s} was not identified from homology and was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
 
 		# add excision machineries into TranscriptionData
@@ -1920,9 +1930,9 @@ class MEReconstruction(MEBuilder):
 		# Check if complex modifications are set on any component in the organism-specific matrix
 		# Dipyrromethane
 		# dpm modification never from the free metabolite
-		if me.process_data.has_id('mod_dpm_c') and me.metabolites.has_id('dpm_c'):
-			me.remove_metabolites([me.metabolites.dpm_c])
-			#me.gem.remove_metabolites([me.gem.metabolites.dpm_c])
+		if me.process_data.has_id('mod_dpm_c'):
+			if me.metabolites.has_id('dpm_c'):
+				me.remove_metabolites([me.metabolites.dpm_c])
 
 		# biotin---[acetyl-CoA-carboxylase] ligase
 		# biotin loaded from the free metabolite; don't remove it from the model
@@ -2375,7 +2385,7 @@ class METroubleshooter(object):
 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
 
 			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
-			deadends = set(deadends).difference(medium)
+			#deadends = set(deadends).difference(medium)
 
 			if len(deadends) != 0:
 				self.curation_notes['troubleshoot'].append({
