@@ -723,7 +723,7 @@ def dict_to_defaultdict(dct):
 def save_curation_notes(curation_notes,filepath):
 	import json
 	file = open(filepath,'w')
-	file.write(json.dumps(curation_notes))
+	file.write(json.dumps(curation_notes, indent=4, sort_keys=True))
 	file.close()
 
 def load_curation_notes(filepath):
