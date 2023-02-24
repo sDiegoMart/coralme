@@ -13,6 +13,8 @@ from ast import parse as ast_parse, Name, And, Or, BitOr, BitAnd, BoolOp, Expres
 import cobra
 import coralme
 
+import collections
+
 # from cobrame without changes
 def get_base_complex_data(model, complex_id):
 	"""
@@ -714,3 +716,44 @@ def get_functions(cplx):
 		elif isinstance(r,coralme.core.reaction.PostTranslationReaction):
 			functions.add('Post-translation')
 	return functions
+
+def dict_to_defaultdict(dct):
+    return collections.defaultdict(lambda: [], dct)
+
+def save_curation_notes(curation_notes,filepath):
+	import json
+	file = open(filepath,'w')
+	file.write(json.dumps(curation_notes))
+	file.close()
+
+def load_curation_notes(filepath):
+	import json
+	import os
+	if not os.path.isfile(filepath):
+		return collections.defaultdict(list)
+	with open(filepath) as json_file:
+		return json.load(json_file,object_hook=dict_to_defaultdict)
+
+def publish_curation_notes(curation_notes,filepath):
+	import json
+	file = open(filepath,'w')
+	for k,v in tqdm.tqdm(curation_notes.items(),
+					   'Generating curation notes...',
+					   bar_format = bar_format,
+					   total=len(curation_notes)):
+		file.write('\n')
+		for w in v:
+			file.write('{} {}@{} {}\n'.format('#'*20,w['importance'],k,'#'*20))
+			file.write('{} {}\n'.format('*'*10,w['msg']))
+			if 'triggered_by' in w:
+				file.write('The following items triggered the warning:\n')
+				for i in w['triggered_by']:
+					if isinstance(i,dict):
+						file.write('\n')
+						file.write(json.dumps(i))
+						file.write('\n')
+					else:
+						file.write(i + '\n')
+			file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
+		file.write('\n\n')
+	file.close()

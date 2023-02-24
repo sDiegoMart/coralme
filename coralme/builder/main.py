@@ -64,10 +64,14 @@ class MEBuilder(object):
 
 		if kwargs:
 			config.update(kwargs)
-
-		self.me_model = coralme.core.model.MEModel(config.get('ME-Model-ID', 'coralME'), config.get('growth_key', 'mu'))
 		self.configuration = config
-		self.curation_notes = { 'builder' : [], 'reconstruction' : [], 'troubleshoot' : [] }
+		self.me_model = coralme.core.model.MEModel(config.get('ME-Model-ID', 'coralME'), config.get('growth_key', 'mu'))
+		if hasattr(self,'org'):
+			self.curation_notes = self.org.curation_notes
+		else:
+			self.curation_notes = coralme.builder.helper_functions.load_curation_notes(
+				self.configuration['out_directory'] + 'curation_notes.json'
+			)
 		self.logger = {
 			'MEBuilder' : coralme.builder.main.ListHandler([]),
 			'MEReconstruction-step1' : coralme.builder.main.ListHandler([]),
@@ -115,7 +119,6 @@ class MEBuilder(object):
 			raise FileNotFoundError('Check the path to the {:s} file(s).'.format(', '.join([ x for x,y in exists if y == False ])))
 
 		return None
-
 	def generate_files(self, overwrite = True):
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
@@ -258,7 +261,14 @@ class MEBuilder(object):
 
 		# Update notes
 		logging.warning("Generating curation notes")
-		self.org.generate_curation_notes()
+		coralme.builder.helper_functions.save_curation_notes(
+				self.curation_notes,
+				self.configuration['out_directory'] + 'curation_notes.json',
+			)
+		coralme.builder.helper_functions.publish_curation_notes(
+				self.curation_notes,
+				self.configuration['out_directory']+ 'curation_notes.json'
+			)
 
 		logging.warning("Saving modified M-model")
 		filename = '{:s}/building_data/m_model_modified.json'.format(config.get('out_directory', './'))
@@ -1245,7 +1255,8 @@ class MEBuilder(object):
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
-# 		self.org.generate_curation_notes() TODO: MAKE THIS WORK
+		coralme.builder.helper_functions.publish_curation_notes(
+			self.curation_notes,self.configuration['out_directory']+ 'curation_notes.json')
 
 	def input_data(self, gem, overwrite):
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
