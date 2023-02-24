@@ -1055,8 +1055,8 @@ class MEModel(cobra.core.model.Model):
 		print('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 		deadends = coralme.builder.helper_functions.gap_find(self)
 
-		medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.medium.keys() ])
-		deadends = set(deadends).difference(medium)
+		medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.gem.medium.keys() ])
+		#deadends = set(deadends).difference(medium)
 
 		# Step 2. Test feasibility adding all topological gaps
 		if len(deadends) != 0:
