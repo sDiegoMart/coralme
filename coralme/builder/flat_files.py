@@ -209,7 +209,7 @@ def process_m_model(
 	#m_to_me_map.columns = ['me_id', 'name', 'formula', 'compartment', 'data_source']
 	m_to_me_map.rename(lambda x: x.replace('_DASH_', '__'), inplace = True)
 
-	m_model.add_metabolites([ coralme.core.component.Complex(id = x) for x in m_to_me_map['me_id'] ])
+	m_model.add_metabolites([ coralme.core.component.Complex(id = x) for x in set(m_to_me_map['me_id']) ])
 
 	for rxn in m_model.reactions:
 		#met_id = remove_compartment(met.id)
