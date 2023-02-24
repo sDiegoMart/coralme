@@ -1254,7 +1254,7 @@ class MEBuilder(object):
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
 		coralme.builder.helper_functions.publish_curation_notes(
-			self.curation_notes,self.configuration['out_directory']+ 'curation_notes.json')
+			self.curation_notes,self.configuration['out_directory']+ 'curation_notes.txt')
 
 	def input_data(self, gem, overwrite):
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
