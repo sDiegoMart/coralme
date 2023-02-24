@@ -261,7 +261,7 @@ class MEBuilder(object):
 		self.curation_notes = self.org.curation_notes
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory'] + 'curation_notes.json',
+				self.configuration['out_directory'] + 'curation_notes.json'
 			)
 		coralme.builder.helper_functions.publish_curation_notes(
 				self.curation_notes,
@@ -1198,7 +1198,7 @@ class MEBuilder(object):
 		if missing_pathways:
 			self.org.curation_notes['check'].append({
 									'msg':'Some translocase pathways in org.protein_location are not defined in org.translocation_pathways.',
-									'triggered_by':missing_pathways,
+									'triggered_by':list(missing_pathways),
 									'importance':'high',
 									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.txt'
 				})
@@ -1253,8 +1253,14 @@ class MEBuilder(object):
 
 	def troubleshoot(self, growth_key_and_value = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
+		coralme.builder.helper_functions.save_curation_notes(
+				self.curation_notes,
+				self.configuration['out_directory'] + 'curation_notes.json'
+			)
 		coralme.builder.helper_functions.publish_curation_notes(
-			self.curation_notes,self.configuration['out_directory']+ 'curation_notes.txt')
+				self.curation_notes,
+				self.configuration['out_directory']+ 'curation_notes.txt'
+			)
 
 	def input_data(self, gem, overwrite):
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction(self).input_data(gem, overwrite)
@@ -2374,7 +2380,7 @@ class METroubleshooter(object):
 			if len(deadends) != 0:
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Some deadends were identified',
-					'triggered_by':deadends,
+					'triggered_by':list(deadends),
 					'importance':'high',
 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
 
@@ -2399,7 +2405,7 @@ class METroubleshooter(object):
 			if bf_gaps and (len(bf_gaps) != 0 or bf_gaps[0]):
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Additional deadends were identified',
-					'triggered_by':bf_gaps,
+					'triggered_by':list(bf_gaps),
 					'importance':'high',
 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
 
