@@ -66,12 +66,9 @@ class MEBuilder(object):
 			config.update(kwargs)
 		self.configuration = config
 		self.me_model = coralme.core.model.MEModel(config.get('ME-Model-ID', 'coralME'), config.get('growth_key', 'mu'))
-		if hasattr(self,'org'):
-			self.curation_notes = self.org.curation_notes
-		else:
-			self.curation_notes = coralme.builder.helper_functions.load_curation_notes(
-				self.configuration['out_directory'] + 'curation_notes.json'
-			)
+		self.curation_notes = coralme.builder.helper_functions.load_curation_notes(
+			self.configuration['out_directory'] + 'curation_notes.json'
+		)
 		self.logger = {
 			'MEBuilder' : coralme.builder.main.ListHandler([]),
 			'MEReconstruction-step1' : coralme.builder.main.ListHandler([]),
@@ -261,13 +258,14 @@ class MEBuilder(object):
 
 		# Update notes
 		logging.warning("Generating curation notes")
+		self.curation_notes = self.org.curation_notes
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
 				self.configuration['out_directory'] + 'curation_notes.json',
 			)
 		coralme.builder.helper_functions.publish_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory']+ 'curation_notes.json'
+				self.configuration['out_directory']+ 'curation_notes.txt'
 			)
 
 		logging.warning("Saving modified M-model")
