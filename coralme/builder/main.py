@@ -2384,9 +2384,6 @@ class METroubleshooter(object):
 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
 
-			medium = set([ '{:s}_c'.format(x[3:-2]) for x in self.me_model.gem.medium.keys() ])
-			#deadends = set(deadends).difference(medium)
-
 			if len(deadends) != 0:
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Some deadends were identified',
