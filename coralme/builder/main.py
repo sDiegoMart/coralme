@@ -1220,9 +1220,9 @@ class MEBuilder(object):
 		with open(directory, "wb") as f:
 			pickle.dump(self, f)
 
-	def load_me(self,filename='me_model.pickle'):
-		with open(self.org.directory + '/'+filename, "rb") as f:
-			return pickle.load(f)
+# 	def load_me(self,filename='me_model.pickle'):
+# 		with open(self.org.directory + '/'+filename, "rb") as f:
+# 			return pickle.load(f)
 
 	def save_builder_info(self):
 		include = [float,int,str,pandas.DataFrame,dict]
