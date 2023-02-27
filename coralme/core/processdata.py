@@ -771,10 +771,14 @@ class TranslationData(ProcessData):
 			{codon_sequence: number_of_occurrences}
 
 		"""
-		codons = (self.nucleotide_sequence[i: i + 3] for i in range(0, len(self.nucleotide_sequence), 3))
-		codon_count = collections.defaultdict(int)
-		for i in codons:
-			codon_count[i.replace('T', 'U')] += 1
+		#codons = (self.nucleotide_sequence[i: i+3] for i in range(0, len(self.nucleotide_sequence), 3))
+		#codon_count = collections.defaultdict(int)
+		#for i in codons:
+			#codon_count[i.replace('T', 'U')] += 1
+
+		codons = [self.nucleotide_sequence[i: i+3] for i in range(0, len(self.nucleotide_sequence), 3)]
+		codons = [ x for x in codons if len(x) == 3 ]
+		codon_count = collections.Counter(codons)
 
 		return codon_count
 
