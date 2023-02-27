@@ -859,7 +859,7 @@ class Organism(object):
         transl_table = set(i for i in set(transl_table) if i is not None)
         if len(transl_table) > 1:
             warn_table = transl_table
-        elif not transl_table and 'RNA' not in feature.type:
+        elif not transl_table:
             transl_table = ['11']
         self.transl_table = list(transl_table)[0]
 
@@ -1808,6 +1808,13 @@ class Organism(object):
                 logging.warning('Changed reaction ID from {} to {} to prevent the conflict between: {}'.format(c,c+'_rxn',' and '.join([j for j,k in row.items() if k])))
             else:
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
+                
+    def _is_sequence_divisible_by_three(self,
+                                        contig,
+                                        f):
+        if f.type == 'source' or 'RNA' in f.type:
+            return True
+        return not bool(len(f.extract(contig).seq.replace('-', '')) % 3)
 
     def check_for_duplicates(self):
         # Duplicates within datasets
@@ -1829,6 +1836,7 @@ class Organism(object):
         contigs = self.contigs
         exclude_prune_types = list(element_types) + ['source','gene']
         new_contigs = []
+        warn_sequence = []
         for contig in tqdm.tqdm(contigs,
                            'Pruning GenBank...',
                            bar_format = bar_format):
@@ -1845,14 +1853,25 @@ class Organism(object):
                     continue
                 if not self.config.get('include_pseudo_genes', False) and 'pseudo' in feature.qualifiers:
                     continue
-                if 'transl_table' not in feature.qualifiers:
+                if 'transl_table' not in feature.qualifiers and 'RNA' not in feature.type:
                     feature.qualifiers['transl_table'] = self.transl_table
+                if not self._is_sequence_divisible_by_three(new_contig,
+                                                        feature):
+                    d = feature.qualifiers.copy()
+                    d['location'] = str(feature.location)
+                    warn_sequence.append(d)
                 new_contig.features.append(feature)
             if len(new_contig.features) <= 1:
                 # only source, no feature
                 continue
             new_contigs.append(new_contig)
         self.contigs = new_contigs
+        if warn_sequence:
+            self.curation_notes['org.prune_genbank'].append({
+                    'msg':'Some features contain a sequence that is not divisible by 3.',
+                    'triggered_by':warn_sequence,
+                    'importance':'critical',
+                    'to_do':'Check whether any of these genes are translated in your final ME-model. If so, fix the positions of the gene in genome_modified.gb'})
 
     def modify_metabolic_reactions(self):
         if self.is_reference:
