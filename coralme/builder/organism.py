@@ -188,7 +188,6 @@ class Organism(object):
         self.prune_genbank()
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
-        return
 
         logging.warning("Updating genes and complexes from genbank")
         self.update_complexes_genes_with_genbank()
