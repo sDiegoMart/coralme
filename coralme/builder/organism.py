@@ -188,6 +188,7 @@ class Organism(object):
         self.prune_genbank()
         logging.warning('Completing genbank with provided files')
         self.update_genbank_from_files()
+        return
 
         logging.warning("Updating genes and complexes from genbank")
         self.update_complexes_genes_with_genbank()
@@ -855,7 +856,7 @@ class Organism(object):
                     continue
                 all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
                 transl_table+=(feature.qualifiers.get('transl_table',[None]))
-        self.all_genes_in_gb = all_genes_in_gb
+#         self.all_genes_in_gb = all_genes_in_gb
         transl_table = set(i for i in set(transl_table) if i is not None)
         if len(transl_table) > 1:
             warn_table = transl_table
@@ -1847,6 +1848,7 @@ class Organism(object):
                                contig.name,
                                contig.description,
                                'GenBank')
+            self.all_genes_in_gb = []
             new_contig.features = []
             for feature in contig.features:
                 if feature.type not in exclude_prune_types:
@@ -1861,6 +1863,9 @@ class Organism(object):
                     d['location'] = str(feature.location)
                     warn_sequence.append(d)
                 new_contig.features.append(feature)
+                if self.locus_tag not in feature.qualifiers:
+                    continue
+                self.all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
             if len(new_contig.features) <= 1:
                 # only source, no feature
                 continue
