@@ -445,8 +445,11 @@ def build_reactions_from_genbank(
 				organelle = feature.qualifiers.get('organelle', [None])[0]
 				continue
 
+			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
+
 			# Optionally add pseudo genes into the ME-model
 			if not me_model.global_info['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
+				logging.warning('The feature {:s} is a pseudogene. Use \'include_pseudo_genes : True\' to add the feature into the model.'.format(bnum))
 				continue
 
 			# Add only features based on their type
@@ -466,7 +469,6 @@ def build_reactions_from_genbank(
 					logging.warning('The gene identified will be ignored from the reconstruction.')
 					continue
 
-			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
 			if me_model.process_data.has_id(bnum):
 				logging.warning('A gene with a Gene Locus ID \'{:s}\' was added previously. Please, check the GenBank file and correct it accordingly.'.format(bnum))
 				continue
@@ -516,7 +518,11 @@ def build_reactions_from_genbank(
 			create_transcribed_gene(me_model, bnum, rna_type, str(seq), left_pos, right_pos, strand)
 
 			# Add translation reaction for mRNA
-			if rna_type == 'mRNA' and len(seq) % 3 == 0: # if the genomic modification is not paired correctly with the knockouts list
+			# builder.generate_files will create a modified genbank
+			# If the user runs a configuration with the original genbank, pseudogenes could not assert len(seq) % 3 == 0
+			# Also, genomic modification that are not paired correctly within the knockouts list could not assert len(seq) % 3 == 0
+			#if rna_type == 'mRNA' and len(seq) % 3 == 0:
+			if rna_type == 'mRNA':
 				# Add the translation table
 				prot = feature.qualifiers.get('translation', [''])[0]
 				transl_table = feature.qualifiers.get('transl_table', ['1'])[0]
