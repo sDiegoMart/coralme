@@ -446,7 +446,10 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
 	# TODO: The correct enzyme can be the base complex, not the modified complex
 	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	dct = { values[0]:idx for idx, values in cplxs.explode('Complexes').iterrows() }
+	#dct = { values[0]:idx for idx, values in cplxs.explode('Complexes').iterrows() } # dictionaries can only have one keys
+	dct = {}
+	for idx, values in cplxs.explode('Complexes').iterrows():
+		dct.setdefault(values[0], []).append(idx)
 	cplxs = set([ '{:s}:\d+'.format(k) for k,v in dct.items() ])
 
 	#cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
@@ -470,7 +473,8 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 
 	# this dataframe contains only genes associated to M-model reactions
 	tmp1 = data.copy(deep = True).reset_index(drop = True)
-	tmp1['M-model Reaction ID'] = tmp1.apply(lambda x: dct.get(str(x['Complex ID']).split(':')[0], None), axis = 1)
+	tmp1['M-model Reaction ID'].update(tmp1.apply(lambda x: dct.get(str(x['Complex ID']).split(':')[0], None), axis = 1))
+	tmp1 = tmp1.explode('M-model Reaction ID')
 	tmp1 = tmp1[tmp1['Complex ID'].notna() & tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
 
 	# this dataframe contains genes NOT associated to M-model reactions
