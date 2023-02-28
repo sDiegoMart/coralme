@@ -1863,9 +1863,12 @@ class Organism(object):
                     d = feature.qualifiers.copy()
                     d['location'] = str(feature.location)
                     warn_sequence.append(d)
-                new_contig.features.append(feature)
-                if self.locus_tag not in feature.qualifiers:
+                
+                locus_tag = self._get_feature_locus_tag(feature)
+                if locus_tag is None:
                     continue
+                feature.qualifiers[self.locus_tag] = locus_tag
+                new_contig.features.append(feature)
                 self.all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
             if len(new_contig.features) <= 1:
                 # only source, no feature
