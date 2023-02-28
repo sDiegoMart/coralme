@@ -2231,7 +2231,7 @@ class MEReconstruction(MEBuilder):
 
 			for rxn in missing:
 				logging.warning('Could not map the effective turnover rates of the \'{:}\' reaction.'.format(rxn))
-
+		me.global_info['mapped_keffs'] = mapped_keffs
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(mapped_keffs.items(), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
 				try:
@@ -2305,9 +2305,17 @@ class MEReconstruction(MEBuilder):
 
 		ListHandler.print_and_log('ME-model was saved in the {:s} directory as MEModel-step2-{:s}.pkl'.format(out_directory, model))
 
+		n_mets = len(me.metabolites)
+		new_mets = n_mets * 100. / len(me.gem.metabolites) - 100
+		n_rxns = len(me.reactions)
+		new_rxns = n_rxns * 100. / len(me.gem.reactions) - 100
 		n_genes = len(me.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')))
 		new_genes = n_genes * 100. / len(me.gem.genes) - 100
-		ListHandler.print_and_log('Done. Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
+
+		ListHandler.print_and_log('ME-model reconstruction is done.')
+		ListHandler.print_and_log('Number of metabolites in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_mets, new_mets, len(me.gem.metabolites)))
+		ListHandler.print_and_log('Number of reactions in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_rxns, new_rxns, len(me.gem.reactions)))
+		ListHandler.print_and_log('Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
 
 		with open('{:s}/MEReconstruction-{:s}.log'.format(log_directory, model), 'w') as outfile:
 			for filename in [
