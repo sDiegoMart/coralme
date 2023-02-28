@@ -193,7 +193,6 @@ class Organism(object):
         self.update_complexes_genes_with_genbank()
         logging.warning("Generating protein modifications dataframe")
         self.protein_mod = self._protein_mod
-
         logging.warning("Purging genes in optional files")
         self.purge_genes_in_file()
 
@@ -1056,6 +1055,7 @@ class Organism(object):
                            'Purging M-model genes...',
                            bar_format = bar_format):
             if g.id not in gene_dictionary['Accession-1'].values:
+                print(g.id)
                 gene_list.append(g)
             else:
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
@@ -1839,6 +1839,8 @@ class Organism(object):
         exclude_prune_types = list(element_types) + ['source'] #+ ['source','gene']
         new_contigs = []
         warn_sequence = []
+        self.all_genes_in_gb = []
+        
         for contig in tqdm.tqdm(contigs,
                            'Pruning GenBank...',
                            bar_format = bar_format):
@@ -1849,7 +1851,6 @@ class Organism(object):
                                contig.name,
                                contig.description,
                                'GenBank')
-            self.all_genes_in_gb = []
             new_contig.features = []
             for feature in contig.features:
                 if feature.type not in exclude_prune_types:
