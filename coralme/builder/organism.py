@@ -1809,12 +1809,7 @@ class Organism(object):
             else:
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
                 
-    def _is_sequence_divisible_by_three(self,
-                                        contig,
-                                        f):
-        if f.type == 'source' or 'RNA' in f.type:
-            return True
-        return not bool(len(f.extract(contig).seq.replace('-', '')) % 3)
+
 
     def check_for_duplicates(self):
         # Duplicates within datasets
@@ -1828,13 +1823,20 @@ class Organism(object):
         self._check_for_duplicates_within_datasets(info)
         dup_df = self._check_for_duplicates_between_datasets(info)
         self._solve_duplicates_between_datasets(dup_df)
-
+        
+    def _is_sequence_divisible_by_three(self,
+                                        contig,
+                                        f):
+        if f.type == 'source' or 'RNA' in f.type:
+            return True
+        return not bool(len(f.extract(contig).seq.replace('-', '')) % 3)
+    
     def prune_genbank(self):
         if self.is_reference:
             return
         # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
-        exclude_prune_types = list(element_types) + ['source','gene']
+        exclude_prune_types = list(element_types) + ['source'] #+ ['source','gene']
         new_contigs = []
         warn_sequence = []
         for contig in tqdm.tqdm(contigs,
