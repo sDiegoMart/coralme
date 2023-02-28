@@ -1852,6 +1852,9 @@ class Organism(object):
                                'GenBank')
             new_contig.features = []
             for feature in contig.features:
+                if feature.type == 'source':
+                    new_contig.features.append(feature)
+                    continue
                 if feature.type not in exclude_prune_types:
                     continue
                 if not self.config.get('include_pseudo_genes', False) and 'pseudo' in feature.qualifiers:
