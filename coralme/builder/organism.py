@@ -1867,9 +1867,9 @@ class Organism(object):
                 locus_tag = self._get_feature_locus_tag(feature)
                 if locus_tag is None:
                     continue
-                feature.qualifiers[self.locus_tag] = locus_tag
+                feature.qualifiers[self.locus_tag] = [locus_tag]
                 new_contig.features.append(feature)
-                self.all_genes_in_gb.append(feature.qualifiers[self.locus_tag][0])
+                self.all_genes_in_gb.append(locus_tag)
             if len(new_contig.features) <= 1:
                 # only source, no feature
                 continue
