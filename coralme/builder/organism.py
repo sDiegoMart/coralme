@@ -1055,7 +1055,6 @@ class Organism(object):
                            'Purging M-model genes...',
                            bar_format = bar_format):
             if g.id not in gene_dictionary['Accession-1'].values:
-                print(g.id)
                 gene_list.append(g)
             else:
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
