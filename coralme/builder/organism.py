@@ -1835,7 +1835,7 @@ class Organism(object):
             return
         # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
-        exclude_prune_types = list(element_types) + ['source'] #+ ['source','gene']
+        exclude_prune_types = list(element_types) #+ ['source','gene']
         new_contigs = []
         warn_sequence = []
         self.all_genes_in_gb = []
