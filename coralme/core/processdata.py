@@ -777,7 +777,7 @@ class TranslationData(ProcessData):
 			#codon_count[i.replace('T', 'U')] += 1
 
 		codons = [self.nucleotide_sequence[i: i+3] for i in range(0, len(self.nucleotide_sequence), 3)]
-		codons = [ x for x in codons if len(x) == 3 ]
+		codons = [ x.replace('T', 'U') for x in codons if len(x) == 3 ]
 		codon_count = collections.Counter(codons)
 
 		return codon_count

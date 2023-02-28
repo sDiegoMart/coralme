@@ -1144,3 +1144,10 @@ acp_lipoate_synthase	nadh_c	1.0
 CPLX0-782_mod_4fe4s_regeneration(1)	CPLX0-782_mod_2fe2s(1)_mod_4fe4s(1)	-1.0
 CPLX0-782_mod_4fe4s_regeneration(1)	2fe2s_c	-1.0
 CPLX0-782_mod_4fe4s_regeneration(1)	CPLX0-782_mod_4fe4s(2)	1.0
+NHFRBO	EG12450-MONOMER	-1.0
+NHFRBO	nad_c	1.0
+NHFRBO	n2o_c	1.0
+NHFRBO	h_c	-1.0
+NHFRBO	nadh_c	-1.0
+NHFRBO	h2o_c	1.0
+NHFRBO	no_c	-2.0
