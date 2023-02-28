@@ -2157,7 +2157,7 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		mapped_keffs = {}
-		if "complex" in df_keffs.columns: #df_keffs.empty: TODO:
+		if "complex" not in df_keffs.columns: #df_keffs.empty: TODO:
 			logging.warning("Estimating effective turnover rates...")
 			reaction_median_keffs = df_keffs
 			#sasa_list = []
