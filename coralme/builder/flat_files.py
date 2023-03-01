@@ -198,9 +198,9 @@ def process_m_model(
 		if rxn_id in rxns_data.index:
 			reversible = rxns_data.loc[rxn_id, 'is_reversible']
 		else:
-			reversible = True
+			reversible = 'True'
 			logging.warning('Unable to determine MetabolicReaction \'{:s}\' reversibility. Default value is \'True\'.'.format(rxn_id))
-		rxn.lower_bound = -1000 if reversible else 0
+		rxn.lower_bound = -1000 if reversible.lower() == 'true' else 0
 		logging.warning('The MetabolicReaction \'{:s}\' was created into the M-model (using \'reaction_matrix.txt\').'.format(rxn_id))
 
 	# m_to_me_map DataFrame
@@ -299,9 +299,9 @@ def get_m_model(
 			except KeyError:
 				metabolite = cobra.Metabolite(met_id)
 			reaction.add_metabolites({metabolite: amount})
-		reaction.lower_bound = -1000. if rxn_info.is_reversible[rxn_id] else 0.
+		reaction.lower_bound = -1000. if rxn_info.is_reversible[rxn_id].lower() == 'true' else 0.
 		reaction.upper_bound = 1000.
-		if rxn_info.is_spontaneous[rxn_id]:
+		if rxn_info.is_spontaneous[rxn_id].lower() == 'true':
 			reaction.gene_reaction_rule = 's0001'
 		m.add_reaction(reaction)
 
