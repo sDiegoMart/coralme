@@ -62,37 +62,19 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 
 			# (An)A (old)locustag/gene name can be associated to many reactions
 			lst = [ x for y in lst for x in y ]
-			if lst == []:
-				return []
-			else:
-				return lst
+			return lst
 
 	def get_reaction_name(x):
-		if x is not None:
-			try:
-				return model.reactions.get_by_id(x).name
-			except:
-				return None
-		else:
-			return None
+		if model.reactions.has_id(x):
+			return model.reactions.get_by_id(x).name
 
 	def get_reversibility(x):
-		if x is not None:
-			try:
-				return 'TRUE' if model.reactions.get_by_id(x).reversibility else None
-			except:
-				return None
-		else:
-			return None
+		if model.reactions.has_id(x):
+			return 'True' if model.reactions.get_by_id(x).reversibility else 'False'
 
 	def get_spontaneous(x):
-		if x is not None:
-			if 'spontaneous' in model.reactions.get_by_id(x).name:
-				return 'TRUE'
-			else:
-				return None
-		else:
-			return None
+		if model.reactions.has_id(x):
+			return 'True' if 'spontaneous' in model.reactions.get_by_id(x).name else 'False'
 
 	#df['Gene Locus ID'] = [ x.qualifiers.get('locus_tag', [None])[0] for x in lst ]
 	df['Gene Locus ID'] = [ x.qualifiers.get(locus_tag, [None])[0] for x in lst ]
@@ -105,13 +87,13 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 	tmp = [ x.qualifiers['old_locus_tag'] if x.qualifiers.get('old_locus_tag', None) is not None else None for x in lst ]
 	df['Old Locus Tag'] = [ ';'.join(x) if x is not None else None for x in tmp ]
 
-	df['M-model Reaction ID'] = df['Old Locus Tag'].apply(lambda x: get_reaction(x))
-	df['M-model Reaction ID'] += df['Gene Names'].apply(lambda x: get_reaction(x))
-	df['M-model Reaction ID'] += df['Gene Locus ID'].apply(lambda x: get_reaction(x))
-	df = df.explode('M-model Reaction ID')
+	#df['M-model Reaction ID'] = df['Old Locus Tag'].apply(lambda x: get_reaction(x))
+	#df['M-model Reaction ID'] += df['Gene Names'].apply(lambda x: get_reaction(x))
+	#df['M-model Reaction ID'] += df['Gene Locus ID'].apply(lambda x: get_reaction(x))
+	#df = df.explode('M-model Reaction ID')
 
-	df['Reaction Name'] = df['M-model Reaction ID'].apply(lambda x: get_reaction_name(x))
-	df['Reversibility'] = df['M-model Reaction ID'].apply(lambda x: get_reversibility(x))
+	#df['Reaction Name'] = df['M-model Reaction ID'].apply(lambda x: get_reaction_name(x))
+	#df['Reversibility'] = df['M-model Reaction ID'].apply(lambda x: get_reversibility(x))
 
 	# df.set_index(['Gene Locus ID', 'Definition', 'Feature type'], inplace = True)
 	return df.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
@@ -385,7 +367,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
 			if tag in lst:
-				return 'TRUE'
+				return 'True'
 
 	lst = builder.org.folding_dict['GroEL_dependent_folding']['enzymes']
 	data['GroEL_dependent_folding'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
@@ -851,14 +833,14 @@ def get_df_input_from_excel(df, df_rxns):
 	df = pandas.concat([tmp1, tmp2], axis = 0).drop_duplicates()
 	df = df.fillna({
 		'Gene Locus ID' : '',
-		'Reversibility' : False,
-		#'Spontaneous' : False, # see reactions.txt input file
-		'GroEL_dependent_folding' : False,
-		'DnaK_dependent_folding' : False,
-		'N_terminal_methionine_cleavage' : False
+		'Reversibility' : 'False',
+		#'Spontaneous' : 'False', # see reactions.txt input file
+		'GroEL_dependent_folding' : 'False',
+		'DnaK_dependent_folding' : 'False',
+		'N_terminal_methionine_cleavage' : 'False'
 		})
 
-	df_rxns = pandas.concat([get_df_rxns(df), df_rxns])
+	df_rxns = pandas.concat([get_df_rxns(df), df_rxns]).fillna('False')
 	df_cplxs = get_df_cplxs(df)
 	df_ptms = get_df_ptms(df)
 	df_enz2rxn = get_df_enz2rxn(df)
