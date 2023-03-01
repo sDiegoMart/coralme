@@ -1429,7 +1429,8 @@ class MEReconstruction(MEBuilder):
 
 		# Effective turnover rates
 		cols = ['reaction', 'keff', 'complex', 'mods']
-		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols).set_index('reaction', inplace = False).fillna('')
+		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols).set_index('reaction', inplace = False)
+		df_keffs = df_keffs.fillna('').replace({ 'complex' : { '' : 'SPONT' }})
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -1462,7 +1463,7 @@ class MEReconstruction(MEBuilder):
 					pathlib.Path(filename).unlink() # python==3.7
 
 		if pathlib.Path(filename).is_file() and filename.endswith('.xlsx'):
-			df_data = pandas.read_excel(filename).dropna(how = 'all')
+			df_data = pandas.read_excel(filename, dtype = str).dropna(how = 'all')
 		elif pathlib.Path(filename).is_file() and filename.endswith('.txt'):
 			df_data = pandas.read_csv(filename, sep = '\t', header = 0, dtype = str).dropna(how = 'all')
 		else:
@@ -1672,7 +1673,7 @@ class MEReconstruction(MEBuilder):
 
 		# Associate a reaction id with the ME-model complex id (including modifications)
 		rxn_to_cplx_dict = coralme.builder.flat_files.get_reaction_to_complex(m_model, df_enz2rxn)
-		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'] == True].index.values)
+		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'].str.match('True|true')].index.values)
 
 		coralme.util.building.add_reactions_from_stoichiometric_data(
 			me, rxn_to_cplx_dict, is_spontaneous = spontaneous_rxns, update = True)
@@ -2205,38 +2206,40 @@ class MEReconstruction(MEBuilder):
 
 		else:
 			mapped = set()
-			for idx, row in tqdm.tqdm(df_keffs.iterrows(), 'Reading effective turnover rates from user input...', bar_format = bar_format, total = df_keffs.shape[0]):
+			for idx, row in tqdm.tqdm(df_keffs.iterrows(), 'Mapping effective turnover rates from user input...', bar_format = bar_format, total = df_keffs.shape[0]):
 				for r in me.reactions.query(idx):
 					# TODO: comments
 					if not hasattr(r, '_stoichiometric_data'):
 						continue
 					if not r._stoichiometric_data.id == idx:
 						continue
-					c = r._complex_data
+					c = r._complex_data # c is None if the reaction is spontaneous
 					if c is None:
-						continue
-					c = c.id
+						c = 'SPONT'
+					else:
+						c = c.id
+
 					mods = ['']
 					if 'mod' in c:
 						modinfo = c.split('_mod_')
 						c,mods = modinfo[0],modinfo[1:]
 					if not c == row['complex']:
 						continue
-					if not set(mods) == set(row['mods'].split(' AND ')):
+					if not set(mods) == set(str(row['mods']).split(' AND ')):
 						continue
 					mapped_keffs[r] = row['keff']
 					mapped.add(idx)
 
-			missing = set(df_keffs.index).difference(set(mapped))
+			missing = sorted(set(df_keffs.index).difference(set(mapped)))
 
 			for rxn in missing:
-				logging.warning('Could not map the effective turnover rates of the \'{:}\' reaction.'.format(rxn))
-		me.global_info['mapped_keffs'] = mapped_keffs
+				logging.warning('Mapping of the effective turnover rates of the \'{:}\' reaction failed.'.format(rxn))
+
 		if mapped_keffs:
-			for rxn, keff in tqdm.tqdm(mapped_keffs.items(), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
+			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
 				try:
-					r.keff = float(keff)
-					r.update()
+					rxn.keff = float(keff)
+					rxn.update()
 					logging.warning('Setting the effective turnover rate for \'{:s}\' in {:s} successfully.'.format(rxn.id, keff))
 				except:
 					logging.warning('There was a problem setting the effective turnover rate for the \'{:s}\' reaction.'.format(rxn.id))
