@@ -878,10 +878,7 @@ class MEModel(cobra.core.model.Model):
 		res.append(self.reactions.query(x))
 		res.append(self.process_data.query(x))
 		res = [ x for y in res for x in y ]
-		if len(res) == 1:
-			return res[0]
-		else:
-			return res
+		return res
 
 	def construct_lp_problem(self, keys = False):
 		# populate empty dictionaries with stoichiometry
