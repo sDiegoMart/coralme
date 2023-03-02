@@ -1085,12 +1085,12 @@ def add_reactions_from_stoichiometric_data(
 		for complex_id in complexes_list:
 
 			directionality_list = []
-			if reaction_data.lower_bound < 0:
+			if reaction_data.lower_bound <= 0:
 				directionality_list.append('reverse')
-			if reaction_data.upper_bound > 0:
+			if reaction_data.upper_bound >= 0:
 				directionality_list.append('forward')
 			if reaction_data.upper_bound == 0 and reaction_data.lower_bound == 0:
-				directionality_list.append('forward')
+				#directionality_list.append('forward')
 				logging.warning('Reaction \'{:s}\' cannot carry flux. Please check if it is the correct behavior.'.format(reaction_data.id))
 
 			for directionality in directionality_list:
