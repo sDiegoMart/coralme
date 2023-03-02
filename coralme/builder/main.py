@@ -1429,8 +1429,7 @@ class MEReconstruction(MEBuilder):
 
 		# Effective turnover rates
 		cols = ['reaction', 'direction', 'complex', 'mods', 'keff']
-		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols).set_index('reaction', inplace = False)
-		df_keffs = df_keffs.fillna('').replace({ 'complex' : { '' : 'SPONT' }})
+		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols)
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -2208,45 +2207,23 @@ class MEReconstruction(MEBuilder):
 				mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
 
 		else:
-			mapped = set()
-			rxns = [ x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') ]
+			# dictionary of reaction IDs : coralme.core.reaction objects
+			rxns = { x.id:x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') }
 
 			for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
-				rxn = '{:s}_{:s}_{:s}_{:s}'.format(idx, row['direction'], row['complex'], '_mod_'.join(row['mods'].split(' AND ')))
-				# me.query escapes parentheses in reaction IDs
-				#for rxn in me.query(rxn):
-				#for r in me.reactions.query(idx):
-					# TODO: comments
+				if row['direction'] is numpy.nan and row['complex'] is numpy.nan and row['mods'] is numpy.nan:
+					# subreactions have ID = reaction_name
+					idx = row['reaction']
+				else:
+					# metabolic reactions have ID = reaction_name + direction + complex
+					idx = '{:s}_{:s}_{:s}'.format(row['reaction'], row['direction'], row['complex'])
+					if not row['mods'] is numpy.nan:
+						idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
 
-					#if not r._stoichiometric_data.id == idx:
-					#if not rxn.id == idx:
-						#continue
-
-					# c is None if the reaction is spontaneous
-					# subreactions have no _complex_data
-					#c = rxn._complex_data
-					#if c is None:
-						#c = 'SPONT'
-					#else:
-						#c = c.id
-
-					#mods = ['']
-					#if 'mod' in c:
-						#modinfo = c.split('_mod_')
-						#c, mods = modinfo[0], modinfo[1:]
-
-					#if not c == row['complex']:
-						#continue
-					#if not set(mods) == set(str(row['mods']).split(' AND ')):
-						#continue
-
-				if me.reactions.has_id(rxn) or me.process_data.has_id(rxn):
-					mapped_keffs[rxn] = row['keff']
-					mapped.add(idx)
-
-			missing_keffs = sorted(set(df_keffs.index).difference(set(mapped)))
-			for keff in missing_keffs:
-				logging.warning('Mapping of the effective turnover rate \'{:}\' failed.'.format(keff))
+				if idx in rxns.keys():
+					mapped_keffs[rxns[idx]] = row['keff']
+				else:
+					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Check if the reaction or subreaction is in the ME-model.'.format(idx))
 
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
