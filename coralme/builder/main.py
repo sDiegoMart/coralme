@@ -1401,7 +1401,7 @@ class MEReconstruction(MEBuilder):
 				return pandas.DataFrame(columns = columns)
 
 			df = coralme.builder.flat_files.read(file_to_read)
-			if set(df.columns).issubset(set(columns)):
+			if set(columns).issubset(set(df.columns)):
 				return df
 			else:
 				logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
@@ -1428,7 +1428,7 @@ class MEReconstruction(MEBuilder):
 		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', cols).set_index('id', inplace = False)
 
 		# Effective turnover rates
-		cols = ['reaction', 'keff', 'complex', 'mods']
+		cols = ['reaction', 'direction', 'complex', 'mods', 'keff']
 		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols).set_index('reaction', inplace = False)
 		df_keffs = df_keffs.fillna('').replace({ 'complex' : { '' : 'SPONT' }})
 
@@ -1795,11 +1795,14 @@ class MEReconstruction(MEBuilder):
 		# The tRNA charging reactions were automatically added when loading the genome from the GenBank file. However, the charging reactions still need to be made aware of the tRNA synthetases which are responsible. Generic charged tRNAs are added to translation reactions via *SubreactionData* below.
 
 		# tRNA synthetases per organelle
-		if hasattr(self, 'org'):
+		if hasattr(self, 'org') and len(me.global_info.get('amino_acid_trna_synthetase', {})) == 0:
 			aa_synthetase_dict = me.global_info['amino_acid_trna_synthetase']
+		elif len(me.global_info.get('amino_acid_trna_synthetase', {})) != 0:
+			aa_synthetase_dict = me.global_info.get('amino_acid_trna_synthetase', {})
 		else:
 			aa_synthetase_dict = coralme.builder.preprocess_inputs.aa_synthetase_dict(df_data)
 			logging.warning('Association of tRNA synthetases and amino acids was inferred from GenBank annotation. It can be incomplete.')
+
 		for data in tqdm.tqdm(list(me.tRNA_data), 'Adding tRNA synthetase(s) information into the ME-model...', bar_format = bar_format):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
@@ -2206,34 +2209,44 @@ class MEReconstruction(MEBuilder):
 
 		else:
 			mapped = set()
-			for idx, row in tqdm.tqdm(df_keffs.iterrows(), 'Mapping effective turnover rates from user input...', bar_format = bar_format, total = df_keffs.shape[0]):
-				for r in me.reactions.query(idx):
-					# TODO: comments
-					if not hasattr(r, '_stoichiometric_data'):
-						continue
-					if not r._stoichiometric_data.id == idx:
-						continue
-					c = r._complex_data # c is None if the reaction is spontaneous
-					if c is None:
-						c = 'SPONT'
-					else:
-						c = c.id
+			rxns = [ x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') ]
 
-					mods = ['']
-					if 'mod' in c:
-						modinfo = c.split('_mod_')
-						c,mods = modinfo[0],modinfo[1:]
-					if not c == row['complex']:
-						continue
-					if not set(mods) == set(str(row['mods']).split(' AND ')):
-						continue
-					mapped_keffs[r] = row['keff']
+			for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
+				rxn = '{:s}_{:s}_{:s}_{:s}'.format(idx, row['direction'], row['complex'], '_mod_'.join(row['mods'].split(' AND ')))
+				# me.query escapes parentheses in reaction IDs
+				#for rxn in me.query(rxn):
+				#for r in me.reactions.query(idx):
+					# TODO: comments
+
+					#if not r._stoichiometric_data.id == idx:
+					#if not rxn.id == idx:
+						#continue
+
+					# c is None if the reaction is spontaneous
+					# subreactions have no _complex_data
+					#c = rxn._complex_data
+					#if c is None:
+						#c = 'SPONT'
+					#else:
+						#c = c.id
+
+					#mods = ['']
+					#if 'mod' in c:
+						#modinfo = c.split('_mod_')
+						#c, mods = modinfo[0], modinfo[1:]
+
+					#if not c == row['complex']:
+						#continue
+					#if not set(mods) == set(str(row['mods']).split(' AND ')):
+						#continue
+
+				if me.reactions.has_id(rxn) or me.process_data.has_id(rxn):
+					mapped_keffs[rxn] = row['keff']
 					mapped.add(idx)
 
-			missing = sorted(set(df_keffs.index).difference(set(mapped)))
-
-			for rxn in missing:
-				logging.warning('Mapping of the effective turnover rates of the \'{:}\' reaction failed.'.format(rxn))
+			missing_keffs = sorted(set(df_keffs.index).difference(set(mapped)))
+			for keff in missing_keffs:
+				logging.warning('Mapping of the effective turnover rate \'{:}\' failed.'.format(keff))
 
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
