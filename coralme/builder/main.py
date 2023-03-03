@@ -2221,7 +2221,7 @@ class MEReconstruction(MEBuilder):
 						idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
 
 				if idx in rxns.keys():
-					mapped_keffs[rxns[idx]] = row['keff']
+					mapped_keffs[rxns[idx]] = 3000 if float(row['keff']) > 3000 else 0.01 if float(row['keff']) < 0.01 else row['keff']
 				else:
 					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Check if the reaction or subreaction is in the ME-model.'.format(idx))
 
