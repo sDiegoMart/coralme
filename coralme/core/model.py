@@ -680,9 +680,9 @@ class MEModel(cobra.core.model.Model):
 		if not skip:
 			skip = []
 
-		inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
-		for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
-			r.remove_from_model(remove_orphans = False)
+		#inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
+		#for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
+			#r.remove_from_model(remove_orphans = False)
 
 		complex_data_list = [ i.id for i in self.complex_data if i.id not in skip ]
 		for c_d in tqdm.tqdm(complex_data_list, 'Pruning unnecessary ComplexData reactions...', bar_format = bar_format):
@@ -1035,8 +1035,8 @@ class MEModel(cobra.core.model.Model):
 			elif rxn.lower_bound < 0:
 				rxn.lower_bound = -1000
 
-	# A copy from METroubleshooter without curation notes
-	def troubleshoot(self, growth_key_and_value = None):
+	# A copy from METroubleshooter without curation notes or logging capability
+	def troubleshoot(self, growth_key_and_value = None, skip = set()):
 		if growth_key_and_value is None:
 			growth_key_and_value = { self.mu : 0.001 }
 
@@ -1054,6 +1054,7 @@ class MEModel(cobra.core.model.Model):
 		# Step 1. Find topological gaps
 		print('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 		deadends = coralme.builder.helper_functions.gap_find(self)
+		deadends = set(deadends).difference(set(skip))
 
 		# Step 2. Test feasibility adding all topological gaps
 		if len(deadends) != 0:
@@ -1067,7 +1068,7 @@ class MEModel(cobra.core.model.Model):
 		if works == False:
 			met_type = 'Metabolite'
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value = growth_key_and_value, met_types = met_type)
+			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_types, skip = skip)
 
 			# close sink reactions that are not gaps
 			if no_gaps:
@@ -1085,7 +1086,7 @@ class MEModel(cobra.core.model.Model):
 				self.relax_bounds()
 				self.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_types = met_type)
+				bf_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_types, skip = skip)
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
 				if works:

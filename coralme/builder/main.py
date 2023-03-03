@@ -1257,8 +1257,8 @@ class MEBuilder(object):
 	def build_me_model(self, update = True, prune = True, overwrite = False):
 		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite)
 
-	def troubleshoot(self, growth_key_and_value = None):
-		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value)
+	def troubleshoot(self, growth_key_and_value = None, skip = set()):
+		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
 				self.configuration['out_directory'] + 'curation_notes.json'
@@ -2349,7 +2349,7 @@ class METroubleshooter(object):
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
 
-	def troubleshoot(self, growth_key_and_value = None):
+	def troubleshoot(self, growth_key_and_value = None, skip = set()):
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		out_directory = config.get('out_directory', '.')
@@ -2367,7 +2367,7 @@ class METroubleshooter(object):
 		logging.captureWarnings(True)
 
 		if growth_key_and_value is None:
-			growth_key_and_value = { self.me_model.mu : 0.01 }
+			growth_key_and_value = { self.me_model.mu : 0.001 }
 
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
@@ -2385,6 +2385,7 @@ class METroubleshooter(object):
 		if works == False:
 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
+			deadends = set(deadends).difference(set(skip))
 
 			if len(deadends) != 0:
 				self.curation_notes['troubleshoot'].append({
@@ -2405,7 +2406,7 @@ class METroubleshooter(object):
 		if works == False:
 			met_type = 'Metabolite'
 			logging.warning('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value = growth_key_and_value, met_types = met_type)
+			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
 
 			# close sink reactions that are not gaps
 			if no_gaps:
@@ -2431,7 +2432,7 @@ class METroubleshooter(object):
 				self.me_model.relax_bounds()
 				self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_types = met_type)
+				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
 				# close sink reactions that are not gaps
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
