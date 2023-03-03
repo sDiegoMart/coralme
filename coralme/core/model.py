@@ -680,8 +680,11 @@ class MEModel(cobra.core.model.Model):
 		if not skip:
 			skip = []
 
-		complex_data_list = [ i.id for i in self.complex_data if i.id not in skip ]
+		inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
+		for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
+			r.remove_from_model(remove_orphans = True)
 
+		complex_data_list = [ i.id for i in self.complex_data if i.id not in skip ]
 		for c_d in tqdm.tqdm(complex_data_list, 'Pruning unnecessary ComplexData reactions...', bar_format = bar_format):
 			c = self.process_data.get_by_id(c_d)
 			cplx = c.complex
@@ -737,7 +740,7 @@ class MEModel(cobra.core.model.Model):
 					delete = False
 			if delete and self.reactions.has_id('DM_' + m.id):
 				#try:
-					#WARNING: for some reason, m._model returns None and the try/except fails at m.remove_from_model
+					#WARNING: for some reason, m._model returns None and the try/except fails to catch a KeyError at m.remove_from_model
 					#self.reactions.get_by_id('DM_' + m.id).remove_from_model(remove_orphans = True)
 					#if m in self.metabolites:
 						#Defaults to subtractive when removing reaction
