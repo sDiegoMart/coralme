@@ -2227,12 +2227,13 @@ class MEReconstruction(MEBuilder):
 
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
-				try:
-					rxn.keff = float(keff)
+				#try:
+				rxn.keff = float(keff)
+				if hasattr(rxn, 'update'): # subreactions has no update attribute
 					rxn.update()
-					logging.warning('Setting the effective turnover rate for \'{:s}\' in {:s} successfully.'.format(rxn.id, keff))
-				except:
-					logging.warning('There was a problem setting the effective turnover rate for the \'{:s}\' reaction.'.format(rxn.id))
+				logging.warning('Setting the effective turnover rate for \'{:s}\' in {:f} successfully.'.format(rxn.id, float(keff)))
+				#except:
+					#logging.warning('There was a problem setting the effective turnover rate for the \'{:s}\' reaction.'.format(rxn.id))
 
 		# ## Part 8: Model updates and corrections
 		# ### 1. Subsystems
