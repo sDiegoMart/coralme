@@ -1068,7 +1068,7 @@ class MEModel(cobra.core.model.Model):
 		if works == False:
 			met_type = 'Metabolite'
 			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_types, skip = skip)
+			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_type, skip = skip)
 
 			# close sink reactions that are not gaps
 			if no_gaps:
@@ -1086,7 +1086,7 @@ class MEModel(cobra.core.model.Model):
 				self.relax_bounds()
 				self.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_types, skip = skip)
+				bf_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_type, skip = skip)
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
 				if works:
