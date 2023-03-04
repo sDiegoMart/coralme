@@ -99,6 +99,9 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 	return df.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
 
 def complete_organism_specific_matrix(builder, data, model, output = False):
+	if not hasattr(builder, 'org'):
+		raise Exception('Please, run MEBuilder(*[configuration file]).generate_files() to generate the Organism-Specific Matrix.')
+
 	# ME-model homology to reference
 	def bbh(x, dct, keys):
 		#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'] ]
@@ -113,16 +116,16 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		if len(lst) != 0:
 			return lst[0]
 
+	if hasattr(builder, 'homology'):
+		dct = builder.homology.mutual_hits
+		data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
+
 	if builder.configuration.get('biocyc.genes', False):
 		# We reuse the bbh function, but changed the dictionary of relationships between IDs
 		dct = { v['Accession-1']:k for k,v in builder.org.gene_dictionary.iterrows() }
 		data['BioCyc'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'Gene Names']), axis = 1)
 	else:
 		data['BioCyc'] = None
-
-	if hasattr(builder, 'homology'):
-		dct = builder.homology.mutual_hits
-		data['Reference BBH'] = data.apply(lambda x: bbh(x, dct, keys = ['Gene Locus ID', 'Old Locus Tag', 'BioCyc']), axis = 1)
 
 	# ME-model complexes: restructure complexes_df to obtain the correct complex stoichiometry from the index
 	df = builder.org.complexes_df.copy(deep = True)
@@ -149,6 +152,16 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['Complex ID'] = data.apply(lambda x: complexes(x, df), axis = 1)
 	data = data.explode('Complex ID')
 
+	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+
+	dct = {}
+	for idx, values in cplxs.explode('Complexes').iterrows():
+		dct.setdefault(values[0], []).append(idx)
+	cplxs = set([ '{:s}:\d+'.format(k) for k,v in dct.items() ])
+	data['M-model Reaction ID'] = data.apply(lambda x: dct.get(str(x['Complex ID']).split(':')[0], None), axis = 1)
+	data = data.explode('M-model Reaction ID')
+
 	# ME-model cofactors
 	def cofactors(x, dct):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], str(x['Complex ID']).split(':')[0] ]
@@ -171,7 +184,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 				mods = [ x.replace('LI', 'li') for x in mods ]
 				mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
 				logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
-				logging.warning('Add MetabolicReactions to salvage or de novo synthesis of lipoyl moieties. See https://www.genome.jp/pathway/map00785 for more information.')
+				logging.warning('Add MetabolicReaction\'s to salvage or de novo synthesize lipoyl moieties. See https://www.genome.jp/pathway/map00785 for more information.')
 				mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
 				logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
 				logging.warning('Add MetabolicReactions to synthesize and transfer the NiFe_cofactor into the final acceptor enzyme. See https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY-8319 for more information.')
@@ -185,15 +198,33 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 			return mod_strings
 
 	dct = {}
-	#if hasattr(builder, 'homology'):
-		#for k,v in builder.homology.org_cplx_homolog.items():
-			#if '_mod_' in k:
-				#dct.setdefault(v, []).append(k.split('_mod_')[0])
-	#else:
 	for k,v in builder.org.protein_mod[['Core_enzyme']].to_dict()['Core_enzyme'].items():
 		dct.setdefault(v, []).append(k)
 	data['Cofactors in Modified Complex'] = data.apply(lambda x: cofactors(x, dct), axis = 1)
 	data = data.explode('Cofactors in Modified Complex')
+
+	# The correct enzyme can be the base complex, not the modified complex
+	# We are going to filter out modifications from data['Cofactors in Modified Complex']
+	# tmp1 contains complex-cofactor relationships that are true in a reaction-complex-cofactor association
+	tmp1 = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	tmp1 = tmp1[tmp1['Complexes'].str.contains('_mod_')]
+	tmp1['Cofactors in Modified Complex'] = tmp1['Complexes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
+	tmp1['Complexes'] = tmp1['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+	tmp1 = tmp1.explode(['Complexes', 'Cofactors in Modified Complex'])
+	tmp1['M-model Reaction ID'] = tmp1.index
+
+	# tmp2d contains complex-cofactor relationships that are true AND wrong in reaction-complex-cofactor
+	tmp2 = data.copy(deep = True)
+	tmp2a = tmp2[tmp2['M-model Reaction ID'].isna() & tmp2['Cofactors in Modified Complex'].isna()]
+	tmp2b = tmp2[tmp2['M-model Reaction ID'].isna() & tmp2['Cofactors in Modified Complex'].notna()]
+	tmp2c = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Cofactors in Modified Complex'].isna()]
+	tmp2d = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Cofactors in Modified Complex'].notna()]
+
+	# We merge tmp1 & tmp2d and find out correct reaction-cofactor relationships
+	tmp2d = pandas.merge(tmp1, tmp2d, on = ['Cofactors in Modified Complex', 'M-model Reaction ID'], how = 'outer', indicator = True)
+
+	data = pandas.concat([tmp2a, tmp2b, tmp2c, tmp2d[tmp2d['_merge'].str.fullmatch('both')]], axis = 0)
+	data = data.drop(columns = ['Complexes', '_merge'])
 
 	# ME-model generics
 	def generics_from_gene(x, dct):
@@ -397,6 +428,9 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['Complex Location'], data['Subunit Location'], data['Translocation Pathway'] = zip(*data.apply(lambda x: get_protein_location(x, df), axis = 1))
 	data = data.explode('Complex Location')
 
+	# final sorting
+	data = data.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
+
 	def _save_to_excel(data, output):
 		#if overwrite:
 		try:
@@ -423,71 +457,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 			# Close the Pandas Excel writer and output the Excel file.
 			writer.close()
 		return None
-
-	# Filter in inferred enzyme-reaction associations
-	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	# TODO: The correct enzyme can be the base complex, not the modified complex
-	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	#dct = { values[0]:idx for idx, values in cplxs.explode('Complexes').iterrows() } # dictionaries can only have one keys
-	dct = {}
-	for idx, values in cplxs.explode('Complexes').iterrows():
-		dct.setdefault(values[0], []).append(idx)
-	cplxs = set([ '{:s}:\d+'.format(k) for k,v in dct.items() ])
-
-	#cplxs = set([ '{:s}:\d+'.format(x) for x in cplxs.explode('Complexes')['Complexes'].to_list() ])
-	## keep complexes inferred from tRNA synthetases
-	#dct = builder.org.amino_acid_trna_synthetase
-	#cplxs.update([ '{:s}:\d+'.format(v.split('_mod_')[0]) for k,v in dct.items() ])
-	## don't drop complexes from special modifications
-	#complex_cofactors = []
-	#for key, value in builder.configuration.get('complex_cofactors', {}).items():
-		#if key == 'fes_transfers' and len(value) != 0:
-			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-		#if key == 'fes_chaperones' and len(value) != 0:
-			#complex_cofactors.append([ k for k,v in value.items() if v != '' ])
-			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-		#if key == 'bmocogdp_chaperones' and len(value) != 0:
-			#complex_cofactors.append([ k for k,v in value.items() if v != '' ])
-			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-		#if key == 'FeFe/NiFe' and len(value) != 0:
-			#complex_cofactors.append([ v for k,v in value.items() if v != '' ])
-	#cplxs.update([ '{:s}:\d+'.format(x.split('_mod_')[0]) for y in complex_cofactors for x in y ])
-
-	# this dataframe contains only genes associated to M-model reactions
-	tmp1 = data.copy(deep = True).reset_index(drop = True)
-	tmp1['M-model Reaction ID'].update(tmp1.apply(lambda x: dct.get(str(x['Complex ID']).split(':')[0], None), axis = 1))
-	tmp1 = tmp1.explode('M-model Reaction ID')
-	tmp1 = tmp1[tmp1['Complex ID'].notna() & tmp1['Complex ID'].str.fullmatch('|'.join(cplxs))]
-
-	# this dataframe contains genes NOT associated to M-model reactions
-	tmp4 = data.copy(deep = True).reset_index(drop = True)
-	tmp4 = tmp4[tmp4['M-model Reaction ID'].notna() & tmp4['Complex ID'].notna()]
-	tmp4 = tmp4[~tmp4['Complex ID'].str.fullmatch('|'.join(cplxs))]
-	tmp4['M-model Reaction ID'] = tmp4['Reaction Name'] = tmp4['Reversibility'] = None
-
-	# this dataframe contains genes associated to generics (correct association) and to reactions (incorrect association)
-	tmp2 = data.copy(deep = True).reset_index(drop = True)
-	tmp2 = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Complex ID'].notna() & tmp2['Generic Complex ID'].notna()]
-	tmp2 = tmp2[~tmp2['Complex ID'].str.fullmatch('|'.join(cplxs))]
-
-	if not tmp2.empty:
-		# TODO: Check stoichiometry of generics in complexes
-		no_generics = tmp2.copy(deep = True)
-		no_generics['Complex ID'] = no_generics.apply(lambda x: 'CPLX_{:s}-0:1({:s})'.format(x['M-model Reaction ID'], x['Generic Complex ID']), axis = 1)
-		no_generics['Generic Complex ID'] = None
-		no_generics.drop_duplicates(subset = ['Complex ID'])
-
-		no_reactions = tmp2.copy(deep = True)
-		no_reactions[['M-model Reaction ID', 'Reaction Name', 'Reversibility']] = None
-
-		tmp2 = pandas.concat([no_reactions, no_generics], axis = 0)
-
-	# this dataframe contains genes NOT associated to a M-model reaction
-	tmp3 = data.copy(deep = True).reset_index(drop = True)
-	tmp3 = tmp3[tmp3['M-model Reaction ID'].isna()]
-
-	data = pandas.concat([tmp1, tmp4, tmp2, tmp3], axis = 0)
-	data = data.drop_duplicates(inplace = False) # Is this correctly detecting duplicates when strings contain '(' or ')'?
 
 	if output:
 		try:
