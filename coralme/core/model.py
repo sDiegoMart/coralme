@@ -906,7 +906,7 @@ class MEModel(cobra.core.model.Model):
 		b = [ m._bound for m in self.metabolites ] # accumulation
 		#c = [ r.objective_coefficient for r in self.reactions ]
 		c = [ 0 for r in self.reactions ]
-		# constraint sense eventually be in the metabolite...
+		# constraint sense eventually will be in the metabolite...
 		cs = [ 'E' for m in self.metabolites ]
 
 		if keys:
@@ -943,7 +943,7 @@ class MEModel(cobra.core.model.Model):
 		from coralme.solver.solver import ME_NLP
 		#me_nlp = ME_NLP(me)
 		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
-		muopt, xopt, yopt, basis, stat = me_nlp.bisectmu(
+		muopt, xopt, yopt, zopt, basis, stat = me_nlp.bisectmu(
 				mumax = max_mu,
 				mumin = min_mu,
 				maxIter = maxIter,
@@ -957,6 +957,7 @@ class MEModel(cobra.core.model.Model):
 		#y = pi
 		# J = [S; c]
 		y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
+		z_dict = { rxn.id : zopt[idx] for idx, rxn in enumerate(self.reactions) }
 		#y_dict['linear_objective'] = y[len(y)-1]
 
 		if stat == 'optimal':
@@ -965,8 +966,8 @@ class MEModel(cobra.core.model.Model):
 				objective_value = muopt,
 				status = stat,
 				fluxes = x_dict, # x_primal is a numpy.array with only fluxes info
-				reduced_costs = None,
-				shadow_prices = None,
+				reduced_costs = z_dict,
+				shadow_prices = y_dict,
 				)
 			return True
 		else:
@@ -988,7 +989,7 @@ class MEModel(cobra.core.model.Model):
 		from coralme.solver.solver import ME_NLP
 		#me_nlp = ME_NLP(me)
 		me_nlp = ME_NLP(Sf, dict(), b, c, lb, ub, cs, set(keys.keys()), None)
-		muopt, xopt, yopt, basis, stat = me_nlp.bisectmu(
+		muopt, xopt, yopt, zopt, basis, stat = me_nlp.bisectmu(
 				mumax = 1., # mu was already replaced and maxIter is one, so a value here doesn't matter
 				mumin = 0.,
 				maxIter = 1,
@@ -1002,6 +1003,7 @@ class MEModel(cobra.core.model.Model):
 		#y = pi
 		# J = [S; c]
 		y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
+		z_dict = { rxn.id : zopt[idx] for idx, rxn in enumerate(self.reactions) }
 		#y_dict['linear_objective'] = y[len(y)-1]
 
 		if stat == 'optimal':
@@ -1010,8 +1012,8 @@ class MEModel(cobra.core.model.Model):
 				objective_value = list(keys.values())[0],
 				status = stat,
 				fluxes = x_dict, # x_primal is a numpy.array with only fluxes info
-				reduced_costs = None,
-				shadow_prices = None,
+				reduced_costs = z_dict,
+				shadow_prices = y_dict,
 				)
 			return True
 		else:
@@ -1086,7 +1088,7 @@ class MEModel(cobra.core.model.Model):
 				self.relax_bounds()
 				self.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
-				bf_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_type, skip = skip)
+				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_type, skip = skip)
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
 				if works:
