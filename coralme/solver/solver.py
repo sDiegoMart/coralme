@@ -347,17 +347,17 @@ class ME_NLP:
             nstropts = nStrOpts, nintopts = nIntOpts, nrealopts = nRealOpts
             )
 
-        self.inform = inform
-        self.hs = hs
-        self.x = x
-        self.y = pi
-        self.z = rc
+        #self.inform = inform
+        #self.hs = hs
+        #self.x = x
+        #self.y = pi # shadow prices
+        #self.z = rc # reduced costs
 
-        status = self.inform
-        if int(status) == 0:
-            status = 'optimal'
+        #status = self.inform
+        if int(inform) == 0:
+            inform = 'optimal'
 
-        return x, pi, status, hs
+        return x, pi, rc, inform, hs
 
     def bisectmu(
         self, mumin = 0.0, mumax = 2.0, maxIter = 100,
@@ -383,9 +383,9 @@ class ME_NLP:
             print('---------\t------------------\t-------------')
 
         # test mumax
-        x_new, y_new, stat_new, hs_new = self.solvelp(mumax, basis, precision)
+        x_new, y_new, z_new, stat_new, hs_new = self.solvelp(mumax, basis, precision)
         if stat_new == 'optimal':
-            return mumax, x_new, y_new, basis, stat_new
+            return mumax, x_new, y_new, z_new, basis, stat_new
 
         else:
             for idx in range(1, maxIter + 1):
@@ -393,7 +393,7 @@ class ME_NLP:
                 muf = (mumin + mumax) / 2.
                 # Retrieve evaluation from cache if it exists: golden section advantage
                 #xopt, yopt, basis, stat = self.checkmu(muf, basis, precision)
-                x_new, y_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
+                x_new, y_new, z_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
 
                 if stat_new == 'optimal':
                     basis = hs_new
@@ -415,4 +415,4 @@ class ME_NLP:
             # Save feasible basis
             self.feas_basis = basis
 
-            return muf, x_new, y_new, basis, stat_new
+            return muf, x_new, y_new, z_new, basis, stat_new
