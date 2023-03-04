@@ -2372,7 +2372,7 @@ class METroubleshooter(object):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		logging.warning('~ '*1 + 'Troubleshooting started...')
-		logging.warning('  '*5 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
+		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
 		if self.me_model.feasibility(keys = growth_key_and_value):
 			logging.warning('  '*5 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = True
