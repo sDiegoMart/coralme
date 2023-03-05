@@ -152,16 +152,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['Complex ID'] = data.apply(lambda x: complexes(x, df), axis = 1)
 	data = data.explode('Complex ID')
 
-	cplxs = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	cplxs['Complexes'] = cplxs['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-
-	dct = {}
-	for idx, values in cplxs.explode('Complexes').iterrows():
-		dct.setdefault(values[0], []).append(idx)
-	cplxs = set([ '{:s}:\d+'.format(k) for k,v in dct.items() ])
-	data['M-model Reaction ID'] = data.apply(lambda x: dct.get(str(x['Complex ID']).split(':')[0], None), axis = 1)
-	data = data.explode('M-model Reaction ID')
-
 	# ME-model cofactors
 	def cofactors(x, dct):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], str(x['Complex ID']).split(':')[0] ]
@@ -174,7 +164,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		# if multiple modifications: [['mn2(1)'], ['2fe2s(1)', 'mn2(1)'], ['4fe4s(1)', 'mn2(1)']]
 		# into ['mn2(1)', '2fe2s(1) AND mn2(1), '4fe4s(1) AND mn2(1)]
 
-		mod_strings = []
+		mod_strings = [None]
 		if len(all_mods) != 0:
 			for mods in all_mods:
 				mods = [ x for x in mods if not x.startswith('SH') ] # Sulfur transfer in [enzyme]-S-sulfanylcysteine are enzymatic reactions
@@ -202,31 +192,26 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		dct.setdefault(v, []).append(k)
 	data['Cofactors in Modified Complex'] = data.apply(lambda x: cofactors(x, dct), axis = 1)
 	data = data.explode('Cofactors in Modified Complex')
+	data = data.drop_duplicates()
 
-	# The correct enzyme can be the base complex, not the modified complex
-	# We are going to filter out modifications from data['Cofactors in Modified Complex']
-	# tmp1 contains complex-cofactor relationships that are true in a reaction-complex-cofactor association
-	tmp1 = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	tmp1 = tmp1[tmp1['Complexes'].str.contains('_mod_')]
-	tmp1['Cofactors in Modified Complex'] = tmp1['Complexes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
-	tmp1['Complexes'] = tmp1['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	tmp1 = tmp1.explode(['Complexes', 'Cofactors in Modified Complex'])
-	tmp1['M-model Reaction ID'] = tmp1.index
+	# Add M-model Reaction IDs, names, and reversibility from builder
+	# It considers complex name and cofactors
+	dct = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	dct['Complex ID'] = dct['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+	dct['Cofactors'] = dct['Complexes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
+	dct['Reaction'] = dct.index
 
-	# tmp2d contains complex-cofactor relationships that are true AND wrong in reaction-complex-cofactor
-	tmp2 = data.copy(deep = True)
-	tmp2a = tmp2[tmp2['M-model Reaction ID'].isna() & tmp2['Cofactors in Modified Complex'].isna()]
-	tmp2b = tmp2[tmp2['M-model Reaction ID'].isna() & tmp2['Cofactors in Modified Complex'].notna()]
-	tmp2c = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Cofactors in Modified Complex'].isna()]
-	tmp2d = tmp2[tmp2['M-model Reaction ID'].notna() & tmp2['Cofactors in Modified Complex'].notna()]
+	dct = dct.explode(['Complex ID', 'Cofactors']).replace('', 'None')
+	dct = dct.groupby(['Complex ID', 'Cofactors']).agg({'Reaction' : lambda x: x.tolist()})
+	# final dictionary: (Complex, Cofactors) : Reaction ID
+	dct = { k:v['Reaction'] for k,v in dct.iterrows() }
 
-	# We merge tmp1 & tmp2d and find out correct reaction-cofactor relationships
-	tmp2d = pandas.merge(tmp1, tmp2d, on = ['Cofactors in Modified Complex', 'M-model Reaction ID'], how = 'outer', indicator = True)
-
-	data = pandas.concat([tmp2a, tmp2b, tmp2c, tmp2d[tmp2d['_merge'].str.fullmatch('both')]], axis = 0)
-	data = data.drop(columns = ['Complexes', '_merge'])
+	data['M-model Reaction ID'] = data.apply(lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), None), axis = 1)
+	data = data.explode('M-model Reaction ID')
+	data = data.drop_duplicates()
 
 	# ME-model generics
+	# TODO: some generics are specific complex-cofactor matches
 	def generics_from_gene(x, dct):
 		generics = []
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
