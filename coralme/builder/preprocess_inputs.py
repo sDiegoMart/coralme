@@ -197,31 +197,32 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	# Add M-model Reaction IDs, names, and reversibility from builder
 	# It considers complex name and cofactors
 	dct = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	dct['Complex ID'] = dct['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+	dct['Complex'] = dct['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
 	dct['Cofactors'] = dct['Complexes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
 	dct['Reaction'] = dct.index
 
-	dct = dct.explode(['Complex ID', 'Cofactors']).replace('', 'None')
-	dct = dct.groupby(['Complex ID', 'Cofactors']).agg({'Reaction' : lambda x: x.tolist()})
+	dct = dct.explode(['Complex', 'Cofactors']).replace('', 'None')
+	dct = dct.groupby(['Complex', 'Cofactors']).agg({'Reaction' : lambda x: x.tolist()})
 	# final dictionary: (Complex, Cofactors) : Reaction ID
 	dct = { k:v['Reaction'] for k,v in dct.iterrows() }
 
 	data['M-model Reaction ID'] = data.apply(lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), None), axis = 1)
 	data = data.explode('M-model Reaction ID')
+	data['Reaction Name'] = data['M-model Reaction ID'].apply(lambda x: model.reactions.get_by_id(x).name if model.reactions.has_id(x) else None)
+	data['Reversibility'] = data['M-model Reaction ID'].apply(lambda x: str(model.reactions.get_by_id(x).reversibility) if model.reactions.has_id(x) else None)
 	data = data.drop_duplicates()
 
 	# ME-model generics
-	# TODO: some generics are specific complex-cofactor matches
 	def generics_from_gene(x, dct):
 		generics = []
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for key, lst in dct.items():
 			for tag in [ x for y in tags for x in y ]:
-				if tag + '-MONOMER' in lst:
-					generics.append(key)
-				if 'RNA_' + tag in lst:
-					generics.append(key)
+				if tag + '-MONOMER' == key[0]:
+					generics.append(lst)
+				if 'RNA_' + tag == key[0]:
+					generics.append(lst)
 
 		if len(generics) != 0:
 			return generics
@@ -229,12 +230,22 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	def generics_from_complex(x, dct):
 		generics = []
 		for key, lst in dct.items():
-			if str(x['Complex ID']).split(':')[0] in lst:
-				generics.append(key)
+			if str(x['Complex ID']).split(':')[0] == key[0] and str(x['Cofactors in Modified Complex']).split(':')[0] == key[1]:
+				generics.append(lst)
 		if len(generics) != 0:
 			return generics
 
-	dct = { k.replace('generic_', ''):[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.generic_dict.items() }
+	dct = pandas.DataFrame.from_dict({ k.replace('generic_', ''):v for k,v in builder.org.generic_dict.items() }).T
+	dct = dct.explode('enzymes')
+	dct['Complex'] = dct['enzymes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+	dct['Cofactors'] = dct['enzymes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
+	dct['Generic'] = dct.index
+
+	dct = dct.explode(['Complex', 'Cofactors']).replace('', 'None')
+	dct = dct.groupby(['Complex', 'Cofactors']).agg({'Generic' : lambda x: set(x.tolist())})
+	# final dictionary: (Complex, Cofactors) : Generic ID
+	dct = { k:list(v['Generic'])[0] for k,v in dct.iterrows() }
+
 	data['Generic Complex ID'] = data.apply(lambda x: generics_from_gene(x, dct), axis = 1)
 	data['Generic Complex ID'].update(data.apply(lambda x: generics_from_complex(x, dct), axis = 1))
 	data = data.explode('Generic Complex ID')
