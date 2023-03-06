@@ -1541,6 +1541,7 @@ class Organism(object):
                                                     gene_location)
         self.protein_location = protein_location
 
+    # TODO: New format of keffs file
     def get_reaction_keffs(self):
         if self.is_reference:
             return None
@@ -1563,7 +1564,7 @@ class Organism(object):
                            total=enz_rxn_assoc_df.shape[0]):
             if reaction not in m_model.reactions:
                 #TODO: Change this so that Keffs of new reactions in reaction_matrix can be estimated
-                logging.warning('Tried setting Keffs for {} but it is not in model'.format(reaction))
+                logging.warning('Tried setting Keffs for {}, but the reaction is not in model.'.format(reaction))
                 continue
             r = m_model.reactions.get_by_id(reaction)
             subsystem = r.subsystem
@@ -1807,7 +1808,7 @@ class Organism(object):
                 logging.warning('Changed reaction ID from {} to {} to prevent the conflict between: {}'.format(c,c+'_rxn',' and '.join([j for j,k in row.items() if k])))
             else:
                 raise ValueError('The identifier {} is duplicated in {}. Please fix!'.format(c,' and '.join([j for j,k in row.items() if k])))
-                
+
 
 
     def check_for_duplicates(self):
@@ -1822,14 +1823,14 @@ class Organism(object):
         self._check_for_duplicates_within_datasets(info)
         dup_df = self._check_for_duplicates_between_datasets(info)
         self._solve_duplicates_between_datasets(dup_df)
-        
+
     def _is_sequence_divisible_by_three(self,
                                         contig,
                                         f):
         if f.type == 'source' or 'RNA' in f.type:
             return True
         return not bool(len(f.extract(contig).seq.replace('-', '')) % 3)
-    
+
     def prune_genbank(self):
         if self.is_reference:
             return
@@ -1839,7 +1840,7 @@ class Organism(object):
         new_contigs = []
         warn_sequence = []
         self.all_genes_in_gb = []
-        
+
         for contig in tqdm.tqdm(contigs,
                            'Pruning GenBank...',
                            bar_format = bar_format):
@@ -1866,7 +1867,7 @@ class Organism(object):
                     d = feature.qualifiers.copy()
                     d['location'] = str(feature.location)
                     warn_sequence.append(d)
-                
+
                 locus_tag = self._get_feature_locus_tag(feature)
                 if locus_tag is None:
                     continue
@@ -2012,7 +2013,7 @@ class Organism(object):
                 file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
             file.write('\n\n')
         file.close()
-    
+
     def publish_curation_notes(self):
         import json
         curation_notes = self.curation_notes
