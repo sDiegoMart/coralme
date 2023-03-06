@@ -2134,23 +2134,24 @@ class MEReconstruction(MEBuilder):
 			for brauns_lipoprotein in me.global_info['braun\'s_lipoproteins']:
 				# Perform checks before attempt to incorporate the Braun's lipoproteins
 				if not me.metabolites.has_id(brauns_lipid_mod):
-					logging.warning('The metabolite \'{:s}\' is not present in the ME-model and the Braun\'s lipoprotein demand cannot be set. Please check if it is the correct behavior. . See http://bigg.ucsd.edu/universal/metabolites/murein5px4p for more information.'.format(brauns_lipid_mod))
+					logging.warning('The metabolite \'{:s}\' is not present in the ME-model and the Braun\'s lipoprotein demand cannot be set. Please check if it is the correct behavior. See http://bigg.ucsd.edu/universal/metabolites/murein5px4p for more information.'.format(brauns_lipid_mod))
 					continue
-				if not me.metabolites.has_id('protein_{:s}_lipoprotein_Outer_Membrane'.format(brauns_lipoprotein)):
-					logging.warning('The \'add_lipoproteins\' option is \'False\' or coralme failed to add the correct ME-model component and the Braun\'s lipoprotein demand cannot be set. Please check if it is the correct behavior.')
+				if not me.reactions.has_id('formation_{:s}'.format(brauns_lipoprotein)):
+					logging.warning('The \'add_lipoproteins\' option is \'False\' or coralme failed to add the \'{:s}\' ComplexFormation reaction and the Braun\'s lipoprotein demand cannot be set. Please check if it is the correct behavior.'.format(brauns_lipoprotein))
 					continue
 
 				rxn = coralme.core.reaction.SummaryVariable('core_structural_demand_brauns_{:s}'.format(brauns_lipoprotein))
 				murein5px4p = me.metabolites.get_by_id(brauns_lipid_mod)
 				murein5px4p_mass = murein5px4p.formula_weight / 1000.
-				lipoprotein = me.metabolites.get_by_id('protein_{:s}_lipoprotein_Outer_Membrane'.format(brauns_lipoprotein))
+				# Ecolime: 1.0 protein_b1677_lipoprotein_Outer_Membrane --> 1.0 EG10544-MONOMER (brauns_lipoprotein ID)
+				lipoprotein = me.metabolites.get_by_id(brauns_lipoprotein)
 				me.add_reactions([rxn])
 
 				# biomass of lipoprotein accounted for in translation and lipid modification
 				rxn.add_metabolites({
 					murein5px4p : -abs(me.global_info['braun\'s_murein_flux']),
 					lipoprotein : -abs(me.global_info['braun\'s_lpp_flux']),
-					me.metabolites.peptidoglycan_biomass : abs(me.global_info['brauns_murein_flux']) * murein5px4p_mass
+					me.metabolites.peptidoglycan_biomass : abs(me.global_info['braun\'s_murein_flux']) * murein5px4p_mass
 					},
 					combine = False)
 				rxn.lower_bound = me.mu # coralme.util.mu
