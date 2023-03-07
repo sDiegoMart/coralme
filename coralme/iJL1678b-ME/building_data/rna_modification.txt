@@ -17,7 +17,7 @@ Um	32	tRNA	TrmJ_dim
 s4U	8	tRNA	ThiI_mono
 i6A	37	tRNA	MiaA_dim_mod_mg2(2)
 ms2i6A	37	tRNA	MiaA_dim_mod_mg2(2) AND MiaB_mono_mod_4fe4s(1)
-Q	34	tRNA	Tgt_hexa_mod_zn2(6) AND QueA_mono AND QueG_mono_mod_adocbl(1)
+Q	34	tRNA	Tgt_hexa_mod_zn2(6) AND QueA_mono AND QueG_mono_mod_4fe4s(2)
 s2C	32	tRNA	YdaO_mono
 Gm	18	tRNA	TrmH_dim
 Cm	32	tRNA	TrmJ_dim
