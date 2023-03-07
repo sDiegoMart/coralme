@@ -1045,12 +1045,12 @@ class MEModel(cobra.core.model.Model):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		print('~ '*1 + 'Troubleshooting started...')
-		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...', end = '')
-		if self.feasibility(keys = growth_key_and_value):
-			print('  '*5 + '\nOriginal ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
-			return None
+		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
+		if self.me_model.feasibility(keys = growth_key_and_value):
+			print('  '*1 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
+			works = True
 		else:
-			print(' FALSE.')
+			print('  '*1 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
 		# Step 1. Find topological gaps
