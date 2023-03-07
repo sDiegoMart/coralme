@@ -898,19 +898,30 @@ class Organism(object):
         if self.is_reference:
             return
         complexes_df = self.complexes_df
+        protein_mod = self.protein_mod.reset_index().set_index('Core_enzyme')
         ribo_df = complexes_df.loc[
             complexes_df["name"].str.contains("ribosomal.*(?:subunit)?.* protein", regex=True)
         ]
         ribosome_stoich = self.ribosome_stoich
+        ribo_30S = ribosome_stoich["30_S_assembly"]["stoich"]
+        ribo_50S = ribosome_stoich["50_S_assembly"]["stoich"]
         warn_proteins = []
         for p, row in tqdm.tqdm(ribo_df.iterrows(),
                            'Gathering ribosome stoichiometry...',
                            bar_format = bar_format,
                            total=ribo_df.shape[0]):
+            
+            p_mod_list = []
+            if p in protein_mod.index:
+                p_mod_list = protein_mod.loc[[p]]['Modified_enzyme'].values
             if "30S" in row["name"]:
-                ribosome_stoich["30_S_assembly"]["stoich"][p] = 1
+                if set(p_mod_list) & set(ribo_30S.keys()):
+                    continue
+                ribo_30S[p] = 1
             elif "50S" in row["name"]:
-                ribosome_stoich["50_S_assembly"]["stoich"][p] = 1
+                if set(p_mod_list) & set(ribo_50S.keys()):
+                    continue
+                ribo_50S[p] = 1
             else:
                 warn_proteins.append(p)
         self.ribosomal_proteins = ribo_df
