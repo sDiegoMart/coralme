@@ -515,12 +515,19 @@ class MEBuilder(object):
 									}}).T
 							org_complexes_df = pandas.concat([org_complexes_df, tmp], axis = 0, join = 'outer')
 					if cplx_id in protein_mod["Core_enzyme"].values:
-						cplx_id = protein_mod[
+						# Use modifications
+						cplx_mods = protein_mod[
 							protein_mod["Core_enzyme"].eq(cplx_id)
-						].index[0]
-						if "Oxidized" in cplx_id:
-							cplx_id = cplx_id.split("_mod_Oxidized")[0]
-					reaction_cplx_list.append(cplx_id)
+						].index
+						print(rxn.id,cplx_mods)
+						for cplx_id in cplx_mods:
+							if "Oxidized" in cplx_id:
+								reaction_cplx_list.append(cplx_id.split("_mod_Oxidized")[0])
+							else:
+								reaction_cplx_list.append(cplx_id)
+					else:
+						# Use base complex
+						reaction_cplx_list.append(cplx_id)
 				enz_rxn_assoc_dict[rxn.id] = " OR ".join(reaction_cplx_list)
 			else:
 				logging.warning('{} contains a GPR rule that has {} possible gene combinations. Generifying it.'.format(rxn.id,len(rule_list)))
