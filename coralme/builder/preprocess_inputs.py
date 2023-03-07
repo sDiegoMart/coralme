@@ -258,42 +258,68 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst:
 				return 'RNAP'
 
+	# TODO: Check cofactors df = builder.org.protein_mod.copy(deep = True) -> df[df['Core_enzyme'].str.contains('hRNAP')]
 	lst = builder.org.RNAP if isinstance(builder.org.RNAP, list) else [builder.org.RNAP]
 	lst += list(builder.org.sigmas.index)
 	data['MetaComplex ID'] = data.apply(lambda x: get_rnapol(x, lst), axis = 1)
 
-	def get_ribosome(x, lst):
+	def get_ribosome(x, dct):
+		mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+			#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+			if '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None]):
+				return 'ribosome:1'
+			if tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None]):
+				return 'ribosome:1'
+			if 'generic_{:s}'.format(tag) in dct and mods in dct.get('generic_{:s}'.format(tag), [None]):
 				return 'ribosome:1'
 
-	lst = [ x for y in [builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']] for x in y ]
-	data['MetaComplex ID'].update(data.apply(lambda x: get_ribosome(x, lst), axis = 1))
+	dct = {}
+	for x in [ x for y in [builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']] for x in y ]:
+		dct.setdefault(x.split('_mod_')[0], []).append(' AND '.join(x.split('_mod_')[1:]))
+	data['MetaComplex ID'].update(data.apply(lambda x: get_ribosome(x, dct), axis = 1))
 
-	def get_degradosome(x, lst):
+	def get_degradosome(x, dct):
+		mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst:
+			#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst:
+			if '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None]):
+				return 'RNA_degradosome:1'
+			if tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None]):
 				return 'RNA_degradosome:1'
 
-	lst = [ x.split('_mod_')[0] for x in builder.org.rna_degradosome['rna_degradosome']['enzymes'] ]
-	data['MetaComplex ID'].update(data.apply(lambda x: get_degradosome(x, lst), axis = 1))
+	dct = {}
+	for x in [ x for x in builder.org.rna_degradosome['rna_degradosome']['enzymes'] ]:
+		dct.setdefault(x.split('_mod_')[0], []).append(' AND '.join(x.split('_mod_')[1:]))
+	data['MetaComplex ID'].update(data.apply(lambda x: get_degradosome(x, dct), axis = 1))
 
 	def get_excision(x, dct):
 		subrxns = []
-		for key, lst in dct.items():
+		for key, subdct in dct.items():
+			mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+				#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+				filter1 = '{:s}-MONOMER'.format(tag) in subdct and mods in subdct.get('{:s}-MONOMER'.format(tag), [None])
+				filter2 = tag.split(':')[0] in subdct and mods in subdct.get(tag.split(':')[0], [None])
+				filter3 = 'generic_{:s}'.format(tag) in subdct and mods in subdct.get('generic_{:s}'.format(tag), [None])
+
+				if filter1 or filter2 or filter3:
 					subrxns.append(key + ':1')
 		if len(subrxns) != 0:
 			return subrxns
 
-	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
+	dct = { k:[ x for x in v['enzymes'] ] for k,v in builder.org.excision_machinery.items() }
+	for key in dct:
+		tmp = {}
+		for x in dct[key]:
+			tmp.setdefault(x.split('_mod_')[0], []).append(' AND '.join(x.split('_mod_')[1:]))
+		dct[key] = tmp
 	data['MetaComplex ID'].update(data.apply(lambda x: get_excision(x, dct), axis = 1))
 
 	# set RNA targets (tRNA<->mod_at_position)
@@ -303,16 +329,28 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['RNA mods/enzyme'] = data['Gene Locus ID'].apply(lambda x: dct.get(str(x), None))
 
 	# set RNA modifiers (CDS<->mod_at_position)
-	def get_rna_modifiers(x, lst):
+	def get_rna_modifiers(x, dct):
+		mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
-			if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+			#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+			if '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None]):
+				return 'RNA_modifier_enzyme'
+			if tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None]):
+				return 'RNA_modifier_enzyme'
+			if 'generic_{:s}'.format(tag) in dct and mods in dct.get('generic_{:s}'.format(tag), [None]):
 				return 'RNA_modifier_enzyme'
 
-	dct = { k.split('_mod_')[0]:','.join(v) for k,v in builder.org.rna_modification.items() }
-	data['MetaComplex ID'].update(data.apply(lambda x: get_rna_modifiers(x, list(dct.keys())), axis = 1))
-	data['RNA mods/enzyme'].update(data['Complex ID'].apply(lambda x: dct.get(str(x).split(':')[0], None)))
+	dct = { k.split('_mod_')[0]:' AND '.join(k.split('_mod_')[1:]) for k,v in builder.org.rna_modification.items() }
+	data['MetaComplex ID'].update(data.apply(lambda x: get_rna_modifiers(x, dct), axis = 1))
+
+	def get_rna_modifications(x, dct):
+		mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
+		return dct.get((str(x['Complex ID']).split(':')[0], mods), None)
+
+	dct = { (k.split('_mod_')[0], ' AND '.join(k.split('_mod_')[1:])):','.join(v) for k,v in builder.org.rna_modification.items() }
+	data['RNA mods/enzyme'].update(data.apply(lambda x: get_rna_modifications(x, dct), axis = 1))
 
 	def get_transpaths(x, dct):
 		pathways = []
@@ -330,8 +368,10 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data = data.explode('MetaComplex ID')
 
 	# ME-model subreactions
+	# TODO: generalize to complexes with cofactors
 	def get_ribosome_subrxns(x, dct):
 		for key, lst in dct.items():
+			mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
@@ -342,11 +382,16 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['ME-model SubReaction'] = data.apply(lambda x: get_ribosome_subrxns(x, dct), axis = 1)
 
 	def get_translation_subrxns(x, dct):
-		for key, lst in dct.items():
+		for key, subdct in dct.items():
+			mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+				filter1 = '{:s}-MONOMER'.format(tag) in subdct and mods in subdct.get('{:s}-MONOMER'.format(tag), [None])
+				filter2 = tag.split(':')[0] in subdct and mods in subdct.get(tag.split(':')[0], [None])
+				filter3 = 'generic_{:s}'.format(tag) in subdct and mods in subdct.get('generic_{:s}'.format(tag), [None])
+
+				if filter1 or filter2 or filter3:
 					if key.endswith('InfA') or key.endswith('InfC'):
 						return key
 					elif key.endswith('InfB'):
@@ -368,23 +413,41 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 					else:
 						return 'Translation_termination_' + key
 
-	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.initiation_subreactions.items() }
-	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.elongation_subreactions.items() })
-	dct.update({ k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.termination_subreactions.items() })
+	dct = { k:[ x for x in v['enzymes'] ] for k,v in builder.org.initiation_subreactions.items() }
+	dct.update({ k:[ x for x in v['enzymes'] ] for k,v in builder.org.elongation_subreactions.items() })
+	dct.update({ k:[ x for x in v['enzymes'] ] for k,v in builder.org.termination_subreactions.items() })
+
+	for key in dct:
+		tmp = {}
+		for x in dct[key]:
+			tmp.setdefault(x.split('_mod_')[0], []).append(' AND '.join(x.split('_mod_')[1:]))
+		dct[key] = tmp
+
 	data['ME-model SubReaction'].update(data.apply(lambda x: get_translation_subrxns(x, dct), axis = 1))
 
 	def get_transcription_subrxns(x, dct):
 		subrxns = []
-		for key, lst in dct.items():
+		for key, subdct in dct.items():
+			mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
-				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
+				filter1 = '{:s}-MONOMER'.format(tag) in subdct and mods in subdct.get('{:s}-MONOMER'.format(tag), [None])
+				filter2 = tag.split(':')[0] in subdct and mods in subdct.get(tag.split(':')[0], [None])
+				filter3 = 'generic_{:s}'.format(tag) in subdct and mods in subdct.get('generic_{:s}'.format(tag), [None])
+
+				if filter1 or filter2 or filter3:
 					subrxns.append(key)
 		if len(subrxns) != 0:
 			return subrxns
 
-	dct = { k:[ x.split('_mod_')[0] for x in v['enzymes'] ] for k,v in builder.org.transcription_subreactions.items() }
+	dct = { k:[ x for x in v['enzymes'] ] for k,v in builder.org.transcription_subreactions.items() }
+	for key in dct:
+		tmp = {}
+		for x in dct[key]:
+			tmp.setdefault(x.split('_mod_')[0], []).append(' AND '.join(x.split('_mod_')[1:]))
+		dct[key] = tmp
+
 	data['ME-model SubReaction'].update(data.apply(lambda x: get_transcription_subrxns(x, dct), axis = 1))
 	data = data.explode('ME-model SubReaction')
 
@@ -408,7 +471,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ] # we convert here None to 'None'
 		tags = [ x for y in tags for x in y ]
-		# extra modification if compared this function to others
+		# extra modification if compared this function to others above
 		tags = [ '{:s}(\(\d*\)|\(\d*\:\d*\))'.format(x) for x in tags if x != 'None' ]
 
 		#res = df[df['Protein'].str.match(x)][['Complex_compartment', 'Protein_compartment', 'translocase_pathway']].values
