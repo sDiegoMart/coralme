@@ -8,3 +8,5 @@ generic_RNase	RNase_T_dim_mod_mg2(4),RNase_BN_dim_mod_zn2(2),Rnd_mono_mod_mg2(5)
 generic_16s_rRNAs	RNA_b3851,RNA_b3968,RNA_b3756,RNA_b3278,RNA_b4007,RNA_b2591,RNA_b0201
 generic_23s_rRNAs	RNA_b3854,RNA_b3970,RNA_b3758,RNA_b3275,RNA_b4009,RNA_b2589,RNA_b0204
 generic_5s_rRNAs	RNA_b3855,RNA_b3971,RNA_b3759,RNA_b3274,RNA_b4010,RNA_b2588,RNA_b0205,RNA_b3272
+generic_2fe2s_transfer_complex	CPLX0-7617_mod_2fe2s(1),CPLX0-7824_mod_2fe2s(1),IscA_tetra_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	CPLX0-7617_mod_4fe4s(1),CPLX0-7824_mod_4fe4s(1),IscA_tetra_mod_4fe4s(1)
