@@ -141,8 +141,8 @@ grxox_c	GLUTAREDOXIN-MONOMER_mod_Oxidized(1)				REPLACE
 iscs_c	IscS_mod_pydx5p(2)				REPLACE
 iscssh_c	IscS_mod_pydx5p(2)_mod_SH(1)				REPLACE
 iscu_c	IscU				REPLACE
-iscu__2fe2s_c	IscU_mod_2fe2s(2)				REPLACE
-iscu__2fe2s2_c	IscU_mod_2fe2s2(2)				REPLACE
+iscu__2fe2s_c	IscU_mod_2fe2s(1)				REPLACE
+iscu__2fe2s2_c	IscU_mod_2fe2s(2)				REPLACE
 iscu__4fe4s_c	IscU_mod_4fe4s(1)				REPLACE
 trdrd_c	RED-THIOREDOXIN-MONOMER				REPLACE
 trdox_c	RED-THIOREDOXIN-MONOMER_mod_Oxidized(1)				REPLACE
