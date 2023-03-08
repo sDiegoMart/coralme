@@ -251,6 +251,8 @@ class MEBuilder(object):
 		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
+		logging.warning("Getting tRNA to codon information")
+		self.get_trna_to_codon()
 
 		# #### Biomass constituents
 		self.org.biomass_constituents = config.get('flux_of_biomass_constituents', {})
@@ -385,6 +387,184 @@ class MEBuilder(object):
 
 	def get_homology(self, evalue=1e-10):
 		self.homology = coralme.builder.homology.Homology(self.org, self.ref, evalue = evalue)
+
+	def get_trna_to_codon(self):
+		import Bio
+		from Bio import SeqIO, Seq, SeqFeature, SeqUtils
+		me_model = self.me_model
+		contigs = self.org.contigs
+		# Dictionary of tRNA locus ID to the model.metabolite object. It accounts for misacylation
+		trna_to_aa = {}
+		# Dictionary of tRNA locus ID to the model.metabolite object. It accounts for misacylation
+		trna_misacylation = self.configuration.get('trna_misacylation',dict())
+
+		# Dictionary of tRNA locus ID to amino acid, one dict of tRNAs per organelle type
+		# aa2trna does not account for misacylation
+		aa2trna = { 'c' : {} } # prokaryotes and eukaryotes
+
+		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+			aa2trna.update({'m' : {}, 'h' : {}}) # mitochondria and plastids
+
+		# Translation tables, one table per organelle type
+		transl_tables = { 'c' : set() } # prokaryotes and eukaryotes
+		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+			transl_tables.update({'m' : set(), 'h' : set()}) # mitochondria and plastids
+
+		# Set of start and stop codons
+		start_codons = set()
+		stop_codons = set()
+
+		# Messages
+		msg1 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). Make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
+		msg2 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). No further modification needs to take place.'
+
+		canonical_aas = [
+			'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile',
+			'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val'
+			]
+		for contig in contigs:
+			for feature in tqdm.tqdm(contig.features,
+									 'Getting tRNA to codon dictionary'.format(contig.id),
+									 bar_format = bar_format):
+				# Find organelle in source
+				if feature.type == 'source':
+					organelle = feature.qualifiers.get('organelle', [None])[0]
+					continue
+				seq = feature.extract(contig).seq.replace('-', '')
+				if feature.type == 'CDS':
+					# Add the translation table
+					prot = feature.qualifiers.get('translation', [''])[0]
+					transl_table = feature.qualifiers.get('transl_table', ['1'])[0]
+
+					# Add the start codon to the start_codons set
+					start_codons.add(str(seq[:3]).replace('T', 'U'))
+					# Add the stop codon to the stop_codons sets
+					stop_codons.add(str(seq[-3:]).replace('T', 'U'))
+
+					# Add the translation table per organelle
+					if organelle is None:
+						transl_tables['c'].add(int(transl_table))
+						if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+							logging.warning('Contig \'{:s}\' does not report an organelle type.'.format(contig.id))
+					elif organelle.lower() in ['mitochondria', 'mitochondrion']:
+						transl_tables['m'].add(int(transl_table))
+					elif organelle.lower() in ['chloroplast', 'plastid']:
+						transl_tables['h'].add(int(transl_table))
+					else:
+						continue
+
+				if not feature.type == 'tRNA':
+					continue
+
+				bnum = self.org._get_feature_locus_tag(feature)
+				if bnum is None:
+					continue
+				aa = feature.qualifiers.get('product', ['tRNA-None'])[0].split('-')[1]
+				if aa in canonical_aas + ['Asx', 'Glx', 'fMet', 'Sec']:
+					pass
+				else:
+					logging.warning('The tRNA \'{:s}\' is not associated to a valid product name (tRNA-Amino acid 3 letters code)'.format(bnum))
+					continue
+				msg = 'The tRNA \'{:s}\' is associated to two amino acids. The \'trna_misacylation\' dictionary was modified to attempt load the correct amino acid.'
+				# Special tRNA(Asx) that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
+				if aa == 'Asx':
+					trna_misacylation['Asx'] = 'Asp'
+					logging.warning(msg.format(bnum))
+				# Special tRNA(Glx) that can be loaded with Gln (EC 6.1.1.18) or Glu (EC 6.1.1.17)
+				if aa == 'Glx':
+					trna_misacylation['Glx'] = 'Glu'
+					logging.warning(msg.format(bnum))
+
+				if aa in trna_misacylation.keys():
+					# misacylation only in mitochondria and chloroplasts
+					filter1a = me_model.global_info['domain'].lower() in ['eukarya', 'eukaryote']
+					filter1b = str(organelle).lower() in ['mitochondria', 'mitochondrion', 'chloroplast', 'plastid']
+					# misacylation in the cytoplasm of Gram-positive eubacteria (and other bacteria such as cyanobacteria)
+					filter2 = me_model.global_info['domain'].lower() in ['bacteria', 'prokaryote']
+
+					if filter1a and filter1b or filter2:
+						trna_to_aa[bnum] = trna_misacylation[aa]
+						if aa.endswith('x'):
+							logging.warning(msg2.format(bnum, aa, trna_misacylation[aa], aa))
+						else:
+							logging.warning(msg1.format(bnum, aa, trna_misacylation[aa], aa, trna_misacylation[aa], aa, aa, aa))
+					else:
+						# misacylation is not valid in the compartment and domain
+						trna_to_aa[bnum] = aa
+				else:
+					trna_to_aa[bnum] = aa
+
+				if organelle is None:
+					aa2trna['c'][bnum] = aa
+				elif organelle.lower() in ['mitochondria', 'mitochondrion']:
+					aa2trna['m'][bnum] = aa
+				elif organelle.lower() in ['chloroplast', 'plastid']:
+					aa2trna['h'][bnum] = aa
+				#old code
+				#trna_to_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
+
+		# trna_to_codon does not account for misacylation: { 'tRNA ID' : 'Amino acid to load into the tRNA' }
+		trna_to_aa = { k:v.replace('fMet', 'Met') for k,v in trna_to_aa.items() }
+
+		for organelle, aa2trna_dct in aa2trna.items():
+			aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
+			aa2trna_df = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
+			aa2trna_df = aa2trna_df.groupby(0).agg({1: lambda x: x.tolist()})
+			if 'fMet' in aa2trna_df.index:
+				aa2trna_df.loc['Met'] = aa2trna_df.loc['fMet'] + aa2trna_df.loc['Met']
+
+			aa2trna[organelle] = aa2trna_df
+
+			if not aa2trna_df.empty:
+				# assign START tRNAs to every fMet-tRNA (Met-tRNA if not) and check if at least one tRNA was identified
+				if 'fMet' in aa2trna_df.index:
+					if len(me_model.global_info['START_tRNA']) == 0:
+						me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['fMet'])[0]
+
+				if 'Met' in aa2trna_df.index:
+					if len(me_model.global_info['START_tRNA']) == 0:
+						me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['Met'])[0]
+
+				# final check
+				if len(me_model.global_info['START_tRNA']) == 0:
+					logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
+			else:
+				logging.warning('No tRNA genes were identified from their locus tags.')
+
+		# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
+		# aa2trna derives from trna_to_aa, so it also accounts for misacylation: { 'organelle ID' : 'DataFrame of amino acid to load into the tRNA' }
+		aa2codon = {}
+		trna_to_codon = {}
+		for organelle, transl_table in transl_tables.items():
+			if len(transl_table) == 0:
+				continue
+
+			#codon_table = Bio.Data.CodonTable.generic_by_id[me_model.global_info.get('translation_table', 11)]
+			#me_model.global_info['codon_table'] = codon_table
+			codon_table = Bio.Data.CodonTable.generic_by_id[list(transl_table)[0]]
+
+			dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
+			aa2codons = pandas.DataFrame(data = [dct.keys(), dct.values()]).T.groupby(1).agg({0: lambda x: x.tolist()})
+			# aa2codons derives from the translation table and maps amino acids to the codon
+			aa2codon[organelle] = aa2codons
+			if list(transl_table)[0] == 11:
+				aa2codons.loc['Sec'] = [['UGA']] # an internal UGA encodes selenocysteine
+
+			df = pandas.concat([aa2codons, aa2trna[organelle]], axis = 1).dropna(how = 'any').explode(1)
+
+			# Check amino acids
+			for aa in canonical_aas:
+				if aa in aa2trna[organelle].index:
+					pass
+				else:
+					logging.warning('At least one tRNA-{:s} gene is missing in the genbank file. A \'generic_tRNA_triplet_aa\' dummy metabolite will be created to account for the related aminoacyl tRNA synthetase expression.'.format(aa))
+			trna_to_codon_organelle = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
+			trna_to_codon[organelle] = trna_to_codon_organelle
+
+		me_model.global_info['aa2trna'] = aa2trna
+		me_model.global_info['trna_misacylation'] = trna_misacylation
+		me_model.global_info['trna_to_codon'] = trna_to_codon
+		return None
 
 	def update_enzyme_stoichiometry(self):
 		complexes_df = self.org.complexes_df

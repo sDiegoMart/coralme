@@ -32,8 +32,7 @@ generics = {'generic_16Sm4Cm1402': {'enzymes':[]},
                         'generic_23s_rRNAs': {'enzymes':[]},
                         'generic_5s_rRNAs': {'enzymes':[]},
                         'generic_5s_rRNAs': {'enzymes':[]},
-                        'generic_2fe2s_transfer_complex': {'enzymes':[]},
-                        'generic_4fe4s_transfer_complex': {'enzymes':[]}
+                        'generic_fes_transfers_complex': {'enzymes':[]}
            }
 
 rrna_modifications = {
