@@ -519,7 +519,6 @@ class MEBuilder(object):
 						cplx_mods = protein_mod[
 							protein_mod["Core_enzyme"].eq(cplx_id)
 						].index
-						print(rxn.id,cplx_mods)
 						for cplx_id in cplx_mods:
 							if "Oxidized" in cplx_id:
 								reaction_cplx_list.append(cplx_id.split("_mod_Oxidized")[0])
