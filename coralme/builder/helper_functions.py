@@ -441,7 +441,7 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 	df = pandas.DataFrame.from_dict(result_dict).T
 	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
 
-def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = True,growth_key='mu'):
+def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = False,growth_key='mu'):
 	import copy
 	met_stoich = 0
 	if only_types:
