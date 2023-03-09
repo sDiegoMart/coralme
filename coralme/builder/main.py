@@ -2073,10 +2073,11 @@ class MEReconstruction(MEBuilder):
 		coralme.builder.transcription.add_rna_polymerase_complexes(me, rna_polymerases, verbose = False)
 
 		# Associate the correct RNA_polymerase and factors to TUs
+		sigma_to_rnap = {v['sigma_factor']:k for k,v in rna_polymerases.items()}
 		for tu_id in tqdm.tqdm(df_tus.index, 'Associating a RNA Polymerase to each Transcriptional Unit...', bar_format = bar_format):
 			try:
 				transcription_data = me.process_data.get_by_id(tu_id)
-				transcription_data.RNA_polymerase = df_tus['dnapol'][tu_id]
+				transcription_data.RNA_polymerase = sigma_to_rnap[df_tus['rnapol'][tu_id]]
 			except KeyError as e:
 				logging.warning('Transcription Unit \'{:s}\' is missing from ProcessData. Check if it is the correct behavior.'.format(tu_id))
 				pass
