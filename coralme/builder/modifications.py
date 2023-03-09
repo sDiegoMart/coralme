@@ -7,7 +7,7 @@ def add_iron_sulfur_modifications(me_model):
 	fes_transfers = me_model.global_info['complex_cofactors']['fes_transfers']
 	for fes in ['2fe2s', '4fe4s']:
 		name = 'generic_{:s}_transfer_complex'.format(fes)
-		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in fes_transfers.values() if x != '' ]
+		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers.values()) if x != '' ]
 		generic_fes_transfer = coralme.core.processdata.GenericData(name, me_model, components)
 		generic_fes_transfer.create_reactions()
 
@@ -15,7 +15,7 @@ def add_iron_sulfur_modifications(me_model):
 		me_model.add_metabolites([coralme.core.component.Metabolite(fes + '_c')])
 
 		# create unloading reactions
-		for name in fes_transfers.values():
+		for name in set(fes_transfers.values()):
 			if name != '':
 				rxn = coralme.core.reaction.MEReaction('_'.join([name, fes, 'unloading']))
 				me_model.add_reactions([rxn])
@@ -163,6 +163,12 @@ def add_lipoyl_modifications(me_model):
 			# remove mod_lipoyl_c and replace it with the new subreaction id
 			new_cplx_data.subreactions[mod] = new_cplx_data.subreactions.pop(lipoate.id)
 			new_cplx_data.create_complex_formation()
+
+	# Delete old ComplexFormation data
+	# TODO: remove entry from process_data
+	lst = list(me_model.process_data.get_by_id('mod_lipoyl_c').get_complex_data())
+	lst = [ x.formation for x in lst ]
+	me_model.remove_reactions(lst)
 
 	return None
 
