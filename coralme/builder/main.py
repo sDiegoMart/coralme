@@ -1513,6 +1513,10 @@ class MEReconstruction(MEBuilder):
 			config['other_lipids'] = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
 			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
 
+			lst = self.org.generic_dict['generic_fes_transfers_complex']['enzymes'] # = ['CPLX0-7617', 'CPLX0-7824', 'IscA_tetra']
+			config['complex_cofactors']['fes_transfers'] = { k:v for k,v in zip([ 'erpA', 'sufA', 'iscA' ], lst)}
+			logging.warning('The iron-sulfur cluster insertion homologs were set from homology data.')
+
 			self.org.get_reaction_keffs() # saves a file to <out_directory>/building_data/reaction_median_keffs.txt
 # 			config['df_reaction_keff_consts'] = config.get('out_directory', '.') + '/building_data/reaction_median_keffs.txt'
 
