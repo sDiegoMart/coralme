@@ -1513,7 +1513,7 @@ class MEReconstruction(MEBuilder):
 			config['other_lipids'] = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
 			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
 
-			lst = self.org.generic_dict.get('generic_fes_transfers_complex', {'enzymes'})['enzymes'] # ecolime = ['CPLX0-7617', 'CPLX0-7824', 'IscA_tetra']
+			lst = self.org.generic_dict.get('generic_fes_transfers_complex', {'enzymes' : []})['enzymes'] # ecolime = ['CPLX0-7617', 'CPLX0-7824', 'IscA_tetra']
 			if len(lst) != 3:
 				lst = lst + ['CPLX_dummy'] * (3 - len(lst))
 			config['complex_cofactors']['fes_transfers'] = { k:v for k,v in zip([ 'erpA', 'sufA', 'iscA' ], lst)}
