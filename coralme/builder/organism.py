@@ -1420,6 +1420,7 @@ class Organism(object):
             RNAP = RNAP_mod
         self.RNAP = RNAP
         self.complexes_df = complexes_df
+        self.protein_mod = protein_mod
         self.sigma_factor_complex_to_rna_polymerase_dict = self.sigmas[
             "complex"
         ].to_dict()
