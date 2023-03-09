@@ -429,6 +429,21 @@ class Organism(object):
                 "source": source,
                 }}
         return self._add_entry_to_df(complexes_df,tmp)
+    
+    def _add_entry_to_protein_mod(self,
+                                  protein_mod,
+                                  mod_complex,
+                                  core_enzyme,
+                                  mods,
+                                  source):
+        logging.warning('Adding {} to protein_mod from {}'.format(product, source))
+        tmp = {mod_complex: {
+                "Core_enzyme": core_enzyme,
+                "Modifications": mods,
+                "Source": source,
+                }}
+        return self._add_entry_to_df(protein_mod,tmp)
+    
 
     def sync_files(self):
         if self.is_reference:
@@ -1353,6 +1368,12 @@ class Organism(object):
                 }
             ).T
         )
+    
+    def _is_beta_prime_in_RNAP(self,RNAP,complexes_df):
+        genes = [i for i in complexes_df.loc[RNAP]['genes'].split(' AND ')]
+        df = complexes_df[complexes_df['genes'].str.contains('|'.join(genes))]
+        return df['name'].str.contains("beta(\'|prime)",regex=True).any()
+    
     def get_rna_polymerase(self, force_RNAP_as=""):
         RNAP = ""
         if force_RNAP_as:
@@ -1384,7 +1405,11 @@ class Organism(object):
                     ),
                     'importance':'medium',
                     'to_do':'Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
-
+        
+        # Identify if beta prime in RNAP, if so, add zn2 and mg2
+        if self._is_beta_prime_in_RNAP(self,RNAP,complexes_df):
+            RNAP += '_mod_zn2(1)_mod_mg2(2)'
+            # add to protein_mod
         self.RNAP = RNAP
         self.complexes_df = complexes_df
         self.sigma_factor_complex_to_rna_polymerase_dict = self.sigmas[
@@ -1960,11 +1985,18 @@ class Organism(object):
                     total=manual_complexes.shape[0]):
             if info["genes"]:
                 if new_complex not in complexes_df:
-                    complexes_df = complexes_df.append(
-                        pandas.DataFrame.from_dict(
-                            {new_complex: {"name": "", "genes": "", "source": "Manual"}}
-                        ).T
-                    )
+                    complexes_df = \
+                    self._add_entry_to_complexes(
+                               "",
+                               "",
+                               new_complex,
+                               complexes_df,
+                               "Manual")
+#                     complexes_df = complexes_df.append(
+#                         pandas.DataFrame.from_dict(
+#                             {new_complex: {"name": "", "genes": "", "source": "Manual"}}
+#                         ).T
+#                     )
                 complexes_df.loc[new_complex, "genes"] = info["genes"]
                 complexes_df.loc[new_complex, "name"] = str(info["name"])
             if info["mod"]:
@@ -1987,17 +2019,22 @@ class Organism(object):
                         protein_mod = protein_mod.drop(info["replace"])
                     else:
                         warn_replace.append(mod_complex)
-                protein_mod = protein_mod.append(
-                    pandas.DataFrame.from_dict(
-                        {
-                            mod_complex: {
-                                "Core_enzyme": new_complex,
-                                "Modifications": info["mod"],
-                                "Source": "Manual",
-                            }
-                        }
-                    ).T
-                )
+                protein_mod = self._add_entry_to_protein_mod(protein_mod,
+                                                             mod_complex,
+                                                             new_complex,
+                                                             info["mod"],
+                                                             "Manual")
+#                 protein_mod = protein_mod.append(
+#                     pandas.DataFrame.from_dict(
+#                         {
+#                             mod_complex: {
+#                                 "Core_enzyme": new_complex,
+#                                 "Modifications": info["mod"],
+#                                 "Source": "Manual",
+#                             }
+#                         }
+#                     ).T
+#                 )
         complexes_df.index.name = "complex"
 
         self.complexes_df = complexes_df
