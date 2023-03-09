@@ -429,7 +429,7 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 							  flux_dict,
 							  growth_key=growth_key)
 		if coeff is None:
-			print('Could not convert {} expression to float in {}'.format(rxn_met.id,rxn.id))
+			print('Could not convert expression to float in {}'.format(rxn.id))
 			continue
 		result_dict[rxn.id]['lb'] = rxn.lower_bound
 		result_dict[rxn.id]['ub'] = rxn.upper_bound
