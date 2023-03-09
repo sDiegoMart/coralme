@@ -14,6 +14,33 @@ try:
 except:
 	warnings.warn("This pandas version does not allow for correct warning handling. Pandas >=1.5.1 is suggested.")
 
+def _save_to_excel(data, output):
+	#if overwrite:
+	try:
+		pathlib.Path(output).unlink(missing_ok = True) # python>=3.8
+	except:
+		if pathlib.Path(output).exists():
+			pathlib.Path(output).unlink() # python==3.7
+
+	with open(output, 'wb') as outfile:
+		writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
+		data.to_excel(writer, index = False, freeze_panes = (1, 7))
+		(max_row, max_col) = data.shape
+
+		# Get the xlsxwriter workbook and worksheet objects.
+		workbook  = writer.book
+		worksheet = writer.sheets['Sheet1']
+
+		# Set the autofilter.
+		worksheet.autofilter(0, 0, max_row, max_col - 1)
+
+		# Make the columns wider for clarity.
+		worksheet.set_column_pixels(0,  max_col - 1, 96)
+
+		# Close the Pandas Excel writer and output the Excel file.
+		writer.close()
+	return None
+
 def generate_organism_specific_matrix(genbank, locus_tag, model):
 	contigs = []
 	for contig in SeqIO.parse(genbank, 'genbank'):
@@ -45,6 +72,7 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 		'DnaK_dependent_folding',
 		'N_terminal_methionine_cleavage',
 		'RNA mods/enzyme',
+		'tRNA-codon association',
 		'Complex Location',
 		'Subunit Location',
 		'Translocation Pathway',
@@ -466,6 +494,10 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	lst = builder.org.cleaved_methionine
 	data['N_terminal_methionine_cleavage'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
 
+	# tRNA to codon association from GenBank data
+	dct = { k:','.join(v) for x in [ v for k,v in builder.me_model.global_info['trna_to_codon'].items() ] for k,v in x.items() }
+	data['tRNA-codon association'] = data.apply(lambda x: dct.get(x['Gene Locus ID'], None), axis = 1)
+
 	# protein location
 	def get_protein_location(x, df):
 		tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Generic Complex ID'] ]
@@ -489,33 +521,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 
 	# final sorting
 	data = data.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
-
-	def _save_to_excel(data, output):
-		#if overwrite:
-		try:
-			pathlib.Path(output).unlink(missing_ok = True) # python>=3.8
-		except:
-			if pathlib.Path(output).exists():
-				pathlib.Path(output).unlink() # python==3.7
-
-		with open(output, 'wb') as outfile:
-			writer = pandas.ExcelWriter(outfile, engine = 'xlsxwriter')
-			data.to_excel(writer, index = False, freeze_panes = (1, 7))
-			(max_row, max_col) = data.shape
-
-			# Get the xlsxwriter workbook and worksheet objects.
-			workbook  = writer.book
-			worksheet = writer.sheets['Sheet1']
-
-			# Set the autofilter.
-			worksheet.autofilter(0, 0, max_row, max_col - 1)
-
-			# Make the columns wider for clarity.
-			worksheet.set_column_pixels(0,  max_col - 1, 96)
-
-			# Close the Pandas Excel writer and output the Excel file.
-			writer.close()
-		return None
 
 	if output:
 		try:
@@ -569,7 +574,7 @@ def get_generics(df):
 	tmp = df[df['Generic Complex ID'].notna()]
 	tmp = correct_input(tmp)
 
-	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+	fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 		if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
@@ -588,7 +593,7 @@ def get_metacomplex_stoichiometry(df, key):
 
 		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
-		fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+		fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 			if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
 		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
@@ -622,9 +627,9 @@ def excision_machinery_stoichiometry(df, keys):
 	if not tmp.empty:
 		tmp = correct_input(tmp)
 
-		fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+		fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 			if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
-		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
+		tmp['Modified Complex'] = tmp.apply(fn, axis = 1)
 
 		# collapse
 		tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
@@ -641,9 +646,9 @@ def aa_synthetase_dict(df):
 	tmp = df[df['Definition'].str.contains('--tRNA ligase|-tRNA synthetase') & df['Definition'].notna()]
 	tmp = correct_input(tmp)
 
-	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+	fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 		if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
-	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
+	tmp['Modified Complex'] = tmp.apply(fn, axis = 1)
 
 	# collapse
 	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
@@ -667,7 +672,7 @@ def get_subreactions(df, key: str):
 	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}_cplx'.format(x))
 	tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
-	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+	fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 		if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
@@ -724,7 +729,7 @@ def get_df_ptms(df):
 	if not tmp.empty:
 		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split('(')[0].split(':')[0] if isinstance(x, str) else x)
 
-		fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')])
+		fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')])
 		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
 		tmp = tmp[['Modified Complex', 'Complex ID', 'Cofactors in Modified Complex']]
@@ -743,7 +748,7 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}-MONOMER'.format(x))
 	tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
-	fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+	fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 		if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
@@ -769,7 +774,7 @@ def get_df_rna_enzs(df, filter_in = set(), generics = False):
 		tmp['Gene Locus ID'] = tmp['Gene Locus ID'].apply(lambda x: '{:s}-MONOMER'.format(x))
 		tmp['Complex ID'] = tmp['Complex ID'].apply(lambda x: x.split(':')[0] if isinstance(x, str) else x)
 
-		fn = lambda x: x['Complex ID'] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
+		fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')]) \
 			if isinstance(x['Cofactors in Modified Complex'], str) else numpy.nan
 		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
