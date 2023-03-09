@@ -421,23 +421,21 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 		print('No reactions found for {}'.format(met_id))
 		return
 
+	met = model.metabolites.get_by_id(met_id)
 	result_dict = {}
 	for rxn in reactions:
 		result_dict[rxn.id] = {}
-		for rxn_met,stoich in rxn.metabolites.items():
-			if rxn_met.id == met_id:
-				coeff = get_met_coeff(stoich,
-									  flux_dict,
-									  growth_key=growth_key)
-				if coeff is None:
-					print('Could not convert {} expression to float in {}'.format(rxn_met.id,rxn.id))
-					continue
-				result_dict[rxn.id]['lb'] = rxn.lower_bound
-				result_dict[rxn.id]['ub'] = rxn.upper_bound
-				result_dict[rxn.id]['rxn_flux'] = flux_dict[rxn.id]
-				result_dict[rxn.id]['met_flux'] = flux_dict[rxn.id]*coeff
-				result_dict[rxn.id]['reaction'] = rxn.reaction
-				break
+		coeff = get_met_coeff(rxn.metabolites[met],
+							  flux_dict,
+							  growth_key=growth_key)
+		if coeff is None:
+			print('Could not convert {} expression to float in {}'.format(rxn_met.id,rxn.id))
+			continue
+		result_dict[rxn.id]['lb'] = rxn.lower_bound
+		result_dict[rxn.id]['ub'] = rxn.upper_bound
+		result_dict[rxn.id]['rxn_flux'] = flux_dict[rxn.id]
+		result_dict[rxn.id]['met_flux'] = flux_dict[rxn.id]*coeff
+		result_dict[rxn.id]['reaction'] = rxn.reaction
 	df = pandas.DataFrame.from_dict(result_dict).T
 	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
 
