@@ -436,7 +436,7 @@ class Organism(object):
                                   core_enzyme,
                                   mods,
                                   source):
-        logging.warning('Adding {} to protein_mod from {}'.format(product, source))
+        logging.warning('Adding {} to protein_mod from {}'.format(mod_complex, source))
         tmp = {mod_complex: {
                 "Core_enzyme": core_enzyme,
                 "Modifications": mods,
@@ -1375,6 +1375,7 @@ class Organism(object):
         return df['name'].str.contains("beta(\'|prime)",regex=True).any()
     
     def get_rna_polymerase(self, force_RNAP_as=""):
+        protein_mod = self.protein_mod
         RNAP = ""
         if force_RNAP_as:
             RNAP = force_RNAP_as
@@ -1396,6 +1397,7 @@ class Organism(object):
                     'to_do':'Check whether you need to correct RNAP by running me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
             elif flag == 'subunits':
                 RNAP_genes = [g.split("-MONOMER")[0] for g in RNAP.index if "-MONOMER" in g]
+                RNAP_genes = [self.gene_dictionary.loc[g]['Accession-1'] for g in RNAP_genes]
                 RNAP = 'RNAP-CPLX'
                 complexes_df = self._add_rna_polymerase_to_complexes(complexes_df,
                                                                     RNAP_genes)
@@ -1406,10 +1408,16 @@ class Organism(object):
                     'importance':'medium',
                     'to_do':'Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
         
-        # Identify if beta prime in RNAP, if so, add zn2 and mg2
-        if self._is_beta_prime_in_RNAP(self,RNAP,complexes_df):
-            RNAP += '_mod_zn2(1)_mod_mg2(2)'
-            # add to protein_mod
+        # Identify if beta prime in RNAP, if so, add zn2 and mg2. https://pubmed.ncbi.nlm.nih.gov/15351641/
+        if self._is_beta_prime_in_RNAP(RNAP,complexes_df):
+            RNAP_mod = RNAP + '_mod_zn2(1)_mod_mg2(2)'
+            protein_mod = \
+                self._add_entry_to_protein_mod(protein_mod,
+                                             RNAP_mod,
+                                             RNAP,
+                                             "zn2(1) AND mg2(2)",
+                                             "RNA_Polymerase")
+            RNAP = RNAP_mod
         self.RNAP = RNAP
         self.complexes_df = complexes_df
         self.sigma_factor_complex_to_rna_polymerase_dict = self.sigmas[
