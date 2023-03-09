@@ -399,8 +399,6 @@ def get_metabolites_from_pattern(model,pattern):
     return met_list
 
 def get_met_coeff(stoich,growth_rate,growth_key='mu'):
-	if isinstance(growth_rate,dict):
-		growth_rate = growth_rate.get('biomass_dilution',None)
 	if hasattr(stoich, 'subs'):
 		try:
 			return float(stoich.subs(growth_key,growth_rate))
@@ -409,6 +407,7 @@ def get_met_coeff(stoich,growth_rate,growth_key='mu'):
 	return stoich
 
 def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
+	import tqdm
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
 		if not model.solution:
@@ -423,18 +422,23 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 
 	met = model.metabolites.get_by_id(met_id)
 	result_dict = {}
-	for rxn in reactions:
+	g = flux_dict.get('biomass_dilution',None)
+	for rxn in tqdm.tqdm(reactions):
+		f = flux_dict[rxn.id]
 		result_dict[rxn.id] = {}
-		coeff = get_met_coeff(rxn.metabolites[met],
-							  flux_dict,
-							  growth_key=growth_key)
+		if f:
+			coeff = get_met_coeff(rxn.metabolites[met],
+								  g,
+								  growth_key=growth_key)
+		else:
+			coeff = 0
 		if coeff is None:
 			print('Could not convert expression to float in {}'.format(rxn.id))
 			continue
 		result_dict[rxn.id]['lb'] = rxn.lower_bound
 		result_dict[rxn.id]['ub'] = rxn.upper_bound
-		result_dict[rxn.id]['rxn_flux'] = flux_dict[rxn.id]
-		result_dict[rxn.id]['met_flux'] = flux_dict[rxn.id]*coeff
+		result_dict[rxn.id]['rxn_flux'] = f
+		result_dict[rxn.id]['met_flux'] = f*coeff
 		result_dict[rxn.id]['reaction'] = rxn.reaction
 	df = pandas.DataFrame.from_dict(result_dict).T
 	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
