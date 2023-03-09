@@ -424,7 +424,7 @@ class MEBuilder(object):
 			]
 		for contig in contigs:
 			for feature in tqdm.tqdm(contig.features,
-									 'Getting tRNA to codon dictionary'.format(contig.id),
+									 'Getting tRNA to codon dictionary from {}'.format(contig.id),
 									 bar_format = bar_format):
 				# Find organelle in source
 				if feature.type == 'source':
