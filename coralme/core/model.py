@@ -682,6 +682,7 @@ class MEModel(cobra.core.model.Model):
 
 		inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
 		for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
+			logging.warning('Removing inactive MetabolicReaction {}'.format(r.id))
 			r.remove_from_model(remove_orphans = False)
 
 		complex_data_list = [ i.id for i in self.complex_data if i.id not in skip ]
@@ -690,6 +691,7 @@ class MEModel(cobra.core.model.Model):
 			cplx = c.complex
 			if len(cplx.reactions) == 1:
 				list(cplx.reactions)[0].delete(remove_orphans = True)
+				logging.warning('Removing unnecessary ComplexData reactions for {}'.format(c_d))
 				self.process_data.remove(self.process_data.get_by_id(c_d))
 
 		for p in tqdm.tqdm(list(self.metabolites.query('_folded')), 'Pruning unnecessary FoldedProtein reactions...', bar_format = bar_format):
@@ -704,6 +706,7 @@ class MEModel(cobra.core.model.Model):
 					while len(p.reactions) > 0:
 						list(p.reactions)[0].delete(remove_orphans = True)
 						for data in self.process_data.query(p.id):
+							logging.warning('Removing unnecessary FoldedProtein reactions for {}'.format(p.id))
 							self.process_data.remove(data.id)
 
 		for p in tqdm.tqdm(self.metabolites.query(re.compile('^protein_')), 'Pruning unnecessary ProcessedProtein reactions...', bar_format = bar_format):
@@ -715,6 +718,7 @@ class MEModel(cobra.core.model.Model):
 						break
 				if delete:
 					for rxn in list(p.reactions):
+						logging.warning('Removing unnecessary ProcessedProtein reactions for {}'.format(rxn.posttranslation_data.id))
 						self.process_data.remove(rxn.posttranslation_data.id)
 						rxn.delete(remove_orphans = True)
 
@@ -730,6 +734,7 @@ class MEModel(cobra.core.model.Model):
 						p_id = p.id.replace('protein_', '')
 						data = self.process_data.get_by_id(p_id)
 						self.process_data.remove(data.id)
+						logging.warning('Removing unnecessary TranslatedGene reactions for {}'.format(p_id))
 						rxn.delete(remove_orphans = True)
 
 		removed_rna = set()
@@ -749,8 +754,10 @@ class MEModel(cobra.core.model.Model):
 					#pass
 				self.reactions.get_by_id('DM_' + m.id).remove_from_model(remove_orphans = True)
 				try:
+					logging.warning('Removing unnecessary TranscribedGene reactions for {}'.format(m.id))
 					m.remove_from_model(destructive = False)
 				except AttributeError:
+					logging.warning('AttributeError for {}'.format(m.id))
 					pass
 				removed_rna.add(m.id)
 
@@ -767,6 +774,7 @@ class MEModel(cobra.core.model.Model):
 			t_process_id = t.id.replace('transcription_', '')
 			if delete:
 				t.remove_from_model(remove_orphans = True)
+				logging.warning('Removing unnecessary Transcriptional Units for {}'.format(t_process_id))
 				self.process_data.remove(t_process_id)
 			else:
 				# gets rid of the removed RNA from the products
