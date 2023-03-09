@@ -1104,7 +1104,10 @@ class Organism(object):
                              trna_string):
         t = re.findall(".*[-]{,2}tRNA (?:synthetase|ligase)",trna_string)
         return t[0] if t else None
-
+    
+    def _is_base_complex_in_list(self,cplx,lst):
+        return cplx in set(i.split('_mod_')[0] for i in lst)
+    
     def get_trna_synthetase(self):
         if self.is_reference:
             return
@@ -1119,19 +1122,28 @@ class Organism(object):
         org_amino_acid_trna_synthetase = self.amino_acid_trna_synthetase
         generic_dict = self.generic_dict
         complexes_df = self.complexes_df
+        warn_generic = []
         d = {}
         for k,v in org_amino_acid_trna_synthetase.copy().items():
             if isinstance(v,list):
                 d[k] = set(v)
             elif isinstance(v,str):
-                if v:
-                    d[k] = set([v])
-                else:
+                if not v:
                     d[k] = set()
+                    continue
+                if 'generic' in v:
+                    if v not in generic_dict:
+                        warn_generic.append(v)
+                        d[k] = set()
+                        continue
+                    d[k] = set(generic_dict[v]['enzymes'])
+                    continue
+                d[k] = set([v])
         trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']
         for cplx, trna_string in trna_ligases.items():
             aa = find_aminoacid(trna_string)
             if aa is None:continue
+            if self._is_base_complex_in_list(cplx,d[aa]): continue
             d[aa].add(cplx)
         trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
         new_cplxs = {k:set() for k in d.copy()}
@@ -1176,6 +1188,13 @@ class Organism(object):
                 'triggered_by':warn_ligases,
                 'importance':'high',
                 'to_do':'Check whether your organism should have a ligase for these amino acids, or if you need to add a reaction to get it (e.g. tRNA amidotransferases)'})
+            
+        if warn_generic:
+            self.curation_notes['org.get_trna_synthetase'].append({
+                'msg':'A generic tRNA ligase was defined in amino_acid_trna_synthetase, but it is not defined in generic_dict.',
+                'triggered_by':warn_generic,
+                'importance':'high',
+                'to_do':'Fix the definition in generic_dict'})
 
     def get_peptide_release_factors(self):
         if self.is_reference:
