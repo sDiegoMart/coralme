@@ -1515,7 +1515,7 @@ class MEReconstruction(MEBuilder):
 
 			lst = self.org.generic_dict.get('generic_fes_transfers_complex', []) # ecolime = ['CPLX0-7617', 'CPLX0-7824', 'IscA_tetra']
 			if len(lst) != 3:
-				lst = lst + [ '' ] * (3 - len(lst))
+				lst = lst + [''] * (3 - len(lst))
 			config['complex_cofactors']['fes_transfers'] = { k:v for k,v in zip([ 'erpA', 'sufA', 'iscA' ], lst)}
 			logging.warning('The iron-sulfur cluster insertion homologs were set from homology data.')
 
