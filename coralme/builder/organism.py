@@ -257,6 +257,7 @@ class Organism(object):
         RNA_mets = []
         formula_mets = []
         formulaweight_mets = []
+        deadend_mets = []
 
         for m in tqdm.tqdm(m_model.metabolites,
                            'Checking M-model metabolites...',
@@ -269,6 +270,8 @@ class Organism(object):
                 float(m.formula_weight)
             except:
                 formulaweight_mets.append(m.id)
+            if len(m.reactions) == 0:
+                deadend_mets.append(m.id)
 
         # Reactions
         subsystem_RXNS = []
@@ -304,6 +307,12 @@ class Organism(object):
                 'triggered_by':subsystem_RXNS,
                 'importance':'high',
                 'to_do':'Make sure the subsystems of these reactions are correct'})
+        if deadend_mets:
+            self.curation_notes['org.check_m_model'].append({
+                'msg':"Some metabolites have no reactions associated",
+                'triggered_by':deadend_mets,
+                'importance':'high',
+                'to_do':'Make sure these metabolites are removed or connected properly'})
 
     def load_optional_files(self):
         logging.warning("Loading gene dictionary")
