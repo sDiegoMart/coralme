@@ -311,7 +311,7 @@ class Organism(object):
             self.curation_notes['org.check_m_model'].append({
                 'msg':"Some metabolites have no reactions associated",
                 'triggered_by':deadend_mets,
-                'importance':'high',
+                'importance':'critical',
                 'to_do':'Make sure these metabolites are removed or connected properly'})
 
     def load_optional_files(self):
