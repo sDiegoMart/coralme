@@ -429,7 +429,7 @@ class Organism(object):
                 "source": source,
                 }}
         return self._add_entry_to_df(complexes_df,tmp)
-    
+
     def _add_entry_to_protein_mod(self,
                                   protein_mod,
                                   mod_complex,
@@ -443,7 +443,7 @@ class Organism(object):
                 "Source": source,
                 }}
         return self._add_entry_to_df(protein_mod,tmp)
-    
+
 
     def sync_files(self):
         if self.is_reference:
@@ -576,7 +576,7 @@ class Organism(object):
                                                1 if gene_left < gene_right else -1,
                                                product_type,
                                                product_name)
-        feature.qualifiers['transl_table'] = self.transl_table
+        feature.qualifiers['transl_table'] = [self.transl_table]
         new_contig.features += [feature]
         contigs.append(new_contig)
 
@@ -925,7 +925,7 @@ class Organism(object):
                            'Gathering ribosome stoichiometry...',
                            bar_format = bar_format,
                            total=ribo_df.shape[0]):
-            
+
             p_mod_list = []
             if p in protein_mod.index:
                 p_mod_list = protein_mod.loc[[p]]['Modified_enzyme'].values
@@ -1119,10 +1119,10 @@ class Organism(object):
                              trna_string):
         t = re.findall(".*[-]{,2}tRNA (?:synthetase|ligase)",trna_string)
         return t[0] if t else None
-    
+
     def _is_base_complex_in_list(self,cplx,lst):
         return cplx in set(i.split('_mod_')[0] for i in lst)
-    
+
     def get_trna_synthetase(self):
         if self.is_reference:
             return
@@ -1203,7 +1203,7 @@ class Organism(object):
                 'triggered_by':warn_ligases,
                 'importance':'high',
                 'to_do':'Check whether your organism should have a ligase for these amino acids, or if you need to add a reaction to get it (e.g. tRNA amidotransferases)'})
-            
+
         if warn_generic:
             self.curation_notes['org.get_trna_synthetase'].append({
                 'msg':'A generic tRNA ligase was defined in amino_acid_trna_synthetase, but it is not defined in generic_dict.',
@@ -1368,12 +1368,12 @@ class Organism(object):
                 }
             ).T
         )
-    
+
     def _is_beta_prime_in_RNAP(self,RNAP,complexes_df):
         genes = [i for i in complexes_df.loc[RNAP]['genes'].split(' AND ')]
         df = complexes_df[complexes_df['genes'].str.contains('|'.join(genes))]
         return df['name'].str.contains("beta(\'|prime)",regex=True).any()
-    
+
     def get_rna_polymerase(self, force_RNAP_as=""):
         protein_mod = self.protein_mod
         RNAP = ""
@@ -1407,7 +1407,7 @@ class Organism(object):
                     ),
                     'importance':'medium',
                     'to_do':'Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)'})
-        
+
         # Identify if beta prime in RNAP, if so, add zn2 and mg2. https://pubmed.ncbi.nlm.nih.gov/15351641/
         if self._is_beta_prime_in_RNAP(RNAP,complexes_df):
             RNAP_mod = RNAP + '_mod_zn2(1)_mod_mg2(2)'
@@ -1925,7 +1925,7 @@ class Organism(object):
                 if not self.config.get('include_pseudo_genes', False) and 'pseudo' in feature.qualifiers:
                     continue
                 if 'transl_table' not in feature.qualifiers and 'RNA' not in feature.type:
-                    feature.qualifiers['transl_table'] = self.transl_table
+                    feature.qualifiers['transl_table'] = [self.transl_table]
                 if not self._is_sequence_divisible_by_three(new_contig,
                                                         feature):
                     d = feature.qualifiers.copy()
