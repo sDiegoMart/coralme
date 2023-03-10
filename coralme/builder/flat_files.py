@@ -154,8 +154,8 @@ def process_m_model(
 	#m_model.remove_reactions([ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix ])
 	rxns_to_remove = [ m_model.reactions.get_by_id(rxn) for rxn in defer_to_rxn_matrix if m_model.reactions.has_id(rxn) ]
 	m_model.remove_reactions(rxns_to_remove)
-	mets_to_remove = [ m for m in m_model.metabolites if len(m.reactions) == 0 ]
-	m_model.remove_metabolites(mets_to_remove)
+# 	mets_to_remove = [ m for m in m_model.metabolites if len(m.reactions) == 0 ]
+# 	m_model.remove_metabolites(mets_to_remove)
 
 	# met_data DataFrame
 	mets_data = mets_data[mets_data['type'].isin(['ADD', 'REPLACE'])]
