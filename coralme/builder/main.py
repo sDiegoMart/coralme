@@ -2600,62 +2600,63 @@ class METroubleshooter(object):
 # 			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
 # 			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
 
-		# Step 1. Find topological gaps
-		deadends = []
-		if works == False:
-			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
-			deadends = set(deadends).difference(set(skip))
+# 		# Step 1. Find topological gaps
+# 		deadends = []
+# 		if works == False:
+# 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
+# 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
+# 			deadends = set(deadends).difference(set(skip))
 
-			if len(deadends) != 0:
-				self.curation_notes['troubleshoot'].append({
-					'msg':'Some deadends were identified',
-					'triggered_by':list(deadends),
-					'importance':'high',
-					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
-			# Step 2. Test feasibility adding all topological gaps
-				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
+# 			if len(deadends) != 0:
+# 				self.curation_notes['troubleshoot'].append({
+# 					'msg':'Some deadends were identified',
+# 					'triggered_by':list(deadends),
+# 					'importance':'high',
+# 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
+# 			# Step 2. Test feasibility adding all topological gaps
+# 				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
+# 				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
+# 				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
 
-		if len(deadends) == 0 and works == False:
-			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
+# 		if len(deadends) == 0 and works == False:
+# 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
 
-		if works == False:
-			met_type = 'Metabolite'
-			logging.warning('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
+# 		if works == False:
+# 			met_type = 'Metabolite'
+# 			logging.warning('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
+# 			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
 
-			# close sink reactions that are not gaps
-			if no_gaps:
-				self.me_model.remove_reactions(no_gaps)
+# 			# close sink reactions that are not gaps
+# 			if no_gaps:
+# 				self.me_model.remove_reactions(no_gaps)
 
-			if bf_gaps and (len(bf_gaps) != 0 or bf_gaps[0]):
-				self.curation_notes['troubleshoot'].append({
-					'msg':'Additional deadends were identified',
-					'triggered_by':list(bf_gaps),
-					'importance':'high',
-					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
+# 			if bf_gaps and (len(bf_gaps) != 0 or bf_gaps[0]):
+# 				self.curation_notes['troubleshoot'].append({
+# 					'msg':'Additional deadends were identified',
+# 					'triggered_by':list(bf_gaps),
+# 					'importance':'high',
+# 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
 
 		# Step 3. Test different sets of MEComponents
 		e_gaps = []
 		if works == False:
-			logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+# 			logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
 
-			met_types = [ 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
+			met_types = ['Deadends', 'Cofactors', 'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
 
-			for met_type in met_types:
-				logging.warning('  '*5 + 'Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(met_type))
-
-				self.me_model.relax_bounds()
-				self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
+			for idx,met_type in enumerate(met_types):
+				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
+				if idx > 2:
+					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
+					self.me_model.relax_bounds()
+					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
 
 				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
 				# close sink reactions that are not gaps
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
 				if works:
-					e_gaps.append(bf_gaps)
+					e_gaps = bf_gaps
 					break
 
 		if works: # Meaning it can grow in any case

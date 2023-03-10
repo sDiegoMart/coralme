@@ -343,6 +343,7 @@ def find_gaps(model, growth_key = sympy.Symbol('mu', positive = True)):
 	return df
 
 def add_exchange_reactions(me, metabolites, prefix = 'SK_'):
+	rxns = []
 	for met in metabolites:
 		rxn_id = prefix + met
 		if rxn_id not in me.reactions:
@@ -352,8 +353,9 @@ def add_exchange_reactions(me, metabolites, prefix = 'SK_'):
 		else:
 			r = me.reactions.get_by_id(rxn_id)
 		r.bounds = (-10, 1000)
+		rxns.append(r)
 		#print(r.id,r.lower_bound,r.upper_bound,r.reaction)
-	return me
+	return rxns
 
 def exchange_single_model(me, flux_dict = 0, solution=0):
 	import pandas as pd
@@ -580,8 +582,8 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 		return False
 
 def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
-	logging.warning('  '*6 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
-	coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
+	logging.warning('  '*5 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
+	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
 
 	if me_model.feasibility(keys = growth_key_and_value):
 		pass
@@ -590,7 +592,10 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 
 	rxns = []
 	rxns_to_drop = []
-	for idx, flux in me_model.solution.fluxes.items():
+# 	for idx, flux in me_model.solution.fluxes.items():
+	for r in sk_rxns:
+		idx = r.id
+		flux = me_model.solution.fluxes[idx]
 		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
 			if abs(flux) > 0:
 				rxns.append(idx)
@@ -602,14 +607,18 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
 
 	# reaction ID : position in the model.reactions DictList object
-	ridx = { k:v for k,v in me_model.reactions._dict.items() if k in rxns }
+	rxns = rxns[::-1] # Try present SKs the last.
+	ridx = []
+	for r in rxns:
+		ridx.append((r,me_model.reactions._dict[r]))
+# 	ridx = { k:v for k,v in me_model.reactions._dict.items() if k in rxns }
 
 	# populate with stoichiometry
 	Sf, Se, lb, ub, b, c, cs, atoms = me_model.construct_lp_problem(keys = growth_key_and_value)
 
 	res = []
 	msg = 'Processed: {:s}/{:d}, Gaps: {:d}. The ME-model is {:s}feasible if {:s} is closed.'
-	for idx, (rxn, pos) in enumerate(ridx.items()):
+	for idx, (rxn, pos) in enumerate(ridx):
 		lb[pos] = 0
 		ub[pos] = 0
 		if me_model.feasibility(keys = growth_key_and_value, **{'lp' : [Sf, dict(), lb, ub, b, c, cs, set()]}):
@@ -626,19 +635,29 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 
 	return bf_gaps, no_gaps, True
 
+def get_mets_from_type(me_model,met_type):
+	if met_type == 'Deadends':
+		return set(coralme.builder.helper_functions.gap_find(me_model))
+	if met_type == 'Cofactors':
+		return set(coralme.builder.helper_functions.get_cofactors_in_me_model(me_model))
+
+	mets = set()
+	for met in me_model.metabolites:
+		filter1 = type(met) == getattr(coralme.core.component, met_type)
+		filter2 = met.id.startswith('trna')
+		filter3 = met.id.endswith('trna_c')
+		filter4 = met.id.endswith('_e')
+		if filter1 and not filter2 and not filter3 and not filter4:
+			mets.add(met.id)
+	return mets
+
 def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite', skip = set()):
 	if isinstance(met_types, str):
 		met_types = [met_types]
 
 	mets = set()
 	for met_type in met_types:
-		for met in me_model.metabolites:
-			filter1 = type(met) == getattr(coralme.core.component, met_type)
-			filter2 = met.id.startswith('trna')
-			filter3 = met.id.endswith('trna_c')
-			filter4 = met.id.endswith('_e')
-			if filter1 and not filter2 and not filter3 and not filter4:
-				mets.add(met.id)
+		mets = mets | get_mets_from_type(me_model,met_type)
 
 	if 'Metabolite' in met_types:
 		#remove from the metabolites to test that are fed into the model through transport reactions
@@ -757,3 +776,13 @@ def publish_curation_notes(curation_notes,filepath):
 			file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
 		file.write('\n\n')
 	file.close()
+
+def get_cofactors_in_me_model(me):
+	cofactors = set()
+	for i in me.process_data.query('^mod_'):
+		for k,v in i.stoichiometry.items():
+			if not me.metabolites.has_id(k):
+				continue
+			if v < 0:
+				cofactors.add(k)
+	return list(cofactors)
