@@ -427,7 +427,7 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 		f = flux_dict[rxn.id]
 		result_dict[rxn.id] = {}
 		if f:
-		coeff = get_met_coeff(rxn.metabolites[met],
+			coeff = get_met_coeff(rxn.metabolites[met],
 								  g,
 									  growth_key=growth_key)
 		else:
