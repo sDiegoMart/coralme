@@ -347,7 +347,7 @@ def add_exchange_reactions(me, metabolites, prefix = 'SK_'):
 		rxn_id = prefix + met
 		if rxn_id not in me.reactions:
 			r = coralme.core.reaction.MEReaction(rxn_id)
-			me.add_reaction(r)
+			me.add_reactions([r])
 			r.add_metabolites({ met: -1 })
 		else:
 			r = me.reactions.get_by_id(rxn_id)
@@ -427,9 +427,9 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 		f = flux_dict[rxn.id]
 		result_dict[rxn.id] = {}
 		if f:
-			coeff = get_met_coeff(rxn.metabolites[met],
+		coeff = get_met_coeff(rxn.metabolites[met],
 								  g,
-								  growth_key=growth_key)
+									  growth_key=growth_key)
 		else:
 			coeff = 0
 		if coeff is None:
