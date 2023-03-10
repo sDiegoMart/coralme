@@ -757,3 +757,13 @@ def publish_curation_notes(curation_notes,filepath):
 			file.write('\n{}Solution:\n{}\n\n'.format('*'*10,w['to_do']))
 		file.write('\n\n')
 	file.close()
+
+def get_cofactors_in_me_model(me):
+	cofactors = set()
+	for i in me.process_data.query('^mod_'):
+		for k,v in i.stoichiometry.items():
+			if not me.metabolites.has_id(k):
+				continue
+			if v < 0:
+				cofactors.add(k)
+	return list(cofactors)
