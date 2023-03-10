@@ -2581,25 +2581,32 @@ class METroubleshooter(object):
 			logging.warning('  '*1 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
+# 		# Step 1. # TODO: Try cofactors 
+# 		cofactors = []
+# 		if works == False:
+# 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
+# 			cofactors = coralme.builder.helper_functions.find_cofactors(self.me_model)
+# 			# Step 2. Test feasibility adding all topological gaps
+# 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
+# 			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
+# 			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
+
 		# Step 1. Find topological gaps
 		deadends = []
 		if works == False:
 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
 			deadends = set(deadends).difference(set(skip))
-
-			if len(deadends) != 0:
-				self.curation_notes['troubleshoot'].append({
-					'msg':'Some deadends were identified',
-					'triggered_by':list(deadends),
-					'importance':'high',
-					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
-
+		if len(deadends) != 0:
+			self.curation_notes['troubleshoot'].append({
+				'msg':'Some deadends were identified',
+				'triggered_by':list(deadends),
+				'importance':'high',
+				'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
 			# Step 2. Test feasibility adding all topological gaps
-			if len(deadends) != 0:
-				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
+			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
+			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
+			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
 
 		if len(deadends) == 0 and works == False:
 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
