@@ -1625,7 +1625,6 @@ class MEReconstruction(MEBuilder):
 		# Effective turnover rates
 		cols = ['reaction', 'direction', 'complex', 'mods', 'keff']
 		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols)
-		print(df.keffs)
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
