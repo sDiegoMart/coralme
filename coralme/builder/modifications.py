@@ -169,6 +169,7 @@ def add_lipoyl_modifications(me_model):
 	lst = list(me_model.process_data.get_by_id('mod_lipoyl_c').get_complex_data())
 	lst = [ x.formation for x in lst ]
 	me_model.remove_reactions(lst)
+	#me_model.process_data.remove('mod_lipoyl_c')
 
 	return None
 

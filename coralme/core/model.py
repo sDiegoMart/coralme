@@ -193,7 +193,7 @@ class MEModel(cobra.core.model.Model):
 			'genome_mods' : {},
 			'trna_misacylation' : {},
 			'trna_to_codon' : {},
-			'aa2codons' : {},
+			'trna_to_aa' : {},
 
 			'gam' : 34.98,
 			'ngam' : 1.,

@@ -49,6 +49,7 @@ def add_rna_splicing(me_model):
 		n_excised = sum(data.excised_bases.values())
 		n_cuts = len(data.RNA_products) * 2
 		if n_excised == 0 or n_cuts == 0:
+		#if n_cuts == 0:
 			continue
 
 		rna_types = list(data.RNA_types)

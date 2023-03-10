@@ -25,7 +25,7 @@ def add_translocation_data_and_reaction(model, pathways, preprocessed_id, proces
 
 	rxn = coralme.core.reaction.PostTranslationReaction('translocation_' + peptide_data.id + '_' + compartment + suffix)
 	rxn.posttranslation_data = data
-	model.add_reaction(rxn)
+	model.add_reactions([rxn])
 	rxn.update()
 
 def add_translocation_pathways(model, pathways_df, abbreviation_to_pathway, multipliers, membrane_constraints = False):

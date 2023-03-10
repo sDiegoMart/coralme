@@ -391,17 +391,19 @@ class MEBuilder(object):
 	def get_trna_to_codon(self):
 		import Bio
 		from Bio import SeqIO, Seq, SeqFeature, SeqUtils
+
 		me_model = self.me_model
 		contigs = self.org.contigs
+
 		# Dictionary of tRNA locus ID to the model.metabolite object. It accounts for misacylation
 		trna_to_aa = {}
+
 		# Dictionary of tRNA locus ID to the model.metabolite object. It accounts for misacylation
 		trna_misacylation = self.configuration.get('trna_misacylation',dict())
 
 		# Dictionary of tRNA locus ID to amino acid, one dict of tRNAs per organelle type
 		# aa2trna does not account for misacylation
 		aa2trna = { 'c' : {} } # prokaryotes and eukaryotes
-
 		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
 			aa2trna.update({'m' : {}, 'h' : {}}) # mitochondria and plastids
 
@@ -409,10 +411,6 @@ class MEBuilder(object):
 		transl_tables = { 'c' : set() } # prokaryotes and eukaryotes
 		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
 			transl_tables.update({'m' : set(), 'h' : set()}) # mitochondria and plastids
-
-		# Set of start and stop codons
-		start_codons = set()
-		stop_codons = set()
 
 		# Messages
 		msg1 = 'From the tRNA misacylation dictionary, the {:s} gene [tRNA({:s})] is loaded and converted into {:s}-tRNA({:s}). Make sure a MetabolicReaction to convert a {:s}-tRNA({:s}) into a {:s}-tRNA({:s}) is present in the ME-model.'
@@ -435,11 +433,6 @@ class MEBuilder(object):
 					# Add the translation table
 					prot = feature.qualifiers.get('translation', [''])[0]
 					transl_table = feature.qualifiers.get('transl_table', ['1'])[0]
-
-					# Add the start codon to the start_codons set
-					start_codons.add(str(seq[:3]).replace('T', 'U'))
-					# Add the stop codon to the stop_codons sets
-					stop_codons.add(str(seq[-3:]).replace('T', 'U'))
 
 					# Add the translation table per organelle
 					if organelle is None:
@@ -558,12 +551,18 @@ class MEBuilder(object):
 					pass
 				else:
 					logging.warning('At least one tRNA-{:s} gene is missing in the genbank file. A \'generic_tRNA_triplet_aa\' dummy metabolite will be created to account for the related aminoacyl tRNA synthetase expression.'.format(aa))
+
 			trna_to_codon_organelle = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 			trna_to_codon[organelle] = trna_to_codon_organelle
 
-		me_model.global_info['aa2trna'] = aa2trna
-		me_model.global_info['trna_misacylation'] = trna_misacylation
+		#me_model.global_info['aa2codons'] = aa2codons
+		#me_model.global_info['aa2trna'] = aa2trna
+
+		me_model.global_info['trna_to_aa'] = trna_to_aa
 		me_model.global_info['trna_to_codon'] = trna_to_codon
+
+		me_model.global_info['trna_misacylation'] = trna_misacylation
+
 		return None
 
 	def update_enzyme_stoichiometry(self):
@@ -1490,8 +1489,12 @@ class MEReconstruction(MEBuilder):
 			self.df_transpaths = builder.df_transpaths
 
 		self.logger = builder.logger
-		self.me_model = builder.me_model
 		self.configuration = builder.configuration
+		# reboot me_model
+		if len(builder.me_model.reactions) == 1 and len(builder.me_model.metabolites):
+			self.me_model = builder.me_model
+		else:
+			self.me_model = coralme.core.model.MEModel(self.configuration.get('ME-Model-ID', 'coralME'), self.configuration.get('growth_key', 'mu'))
 		self.curation_notes = builder.curation_notes
 
 		return None
@@ -1872,6 +1875,12 @@ class MEReconstruction(MEBuilder):
 		# Associate a reaction id with the ME-model complex id (including modifications)
 		rxn_to_cplx_dict = coralme.builder.flat_files.get_reaction_to_complex(m_model, df_enz2rxn)
 		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'].str.match('True|true')].index.values)
+		# Correct rxn_to_cplx_dict with spontaneous reactions
+		for key in spontaneous_rxns:
+			if rxn_to_cplx_dict.get(key, None) is None:
+				rxn_to_cplx_dict[key] = {None}
+			else:
+				rxn_to_cplx_dict[key].add(None)
 
 		coralme.util.building.add_reactions_from_stoichiometric_data(
 			me, rxn_to_cplx_dict, is_spontaneous = spontaneous_rxns, update = True)
@@ -2073,11 +2082,11 @@ class MEReconstruction(MEBuilder):
 		coralme.builder.transcription.add_rna_polymerase_complexes(me, rna_polymerases, verbose = False)
 
 		# Associate the correct RNA_polymerase and factors to TUs
-		sigma_to_rnap = {v['sigma_factor']:k for k,v in rna_polymerases.items()}
+		sigma_to_rnap = { v['sigma_factor']:k for k,v in rna_polymerases.items() }
 		for tu_id in tqdm.tqdm(df_tus.index, 'Associating a RNA Polymerase to each Transcriptional Unit...', bar_format = bar_format):
 			try:
 				transcription_data = me.process_data.get_by_id(tu_id)
-				transcription_data.RNA_polymerase = sigma_to_rnap[df_tus['rnapol'][tu_id]]
+				transcription_data.RNA_polymerase = sigma_to_rnap.get(df_tus['rnapol'][tu_id], None)
 			except KeyError as e:
 				logging.warning('Transcription Unit \'{:s}\' is missing from ProcessData. Check if it is the correct behavior.'.format(tu_id))
 				pass
@@ -2597,16 +2606,17 @@ class METroubleshooter(object):
 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
 			deadends = set(deadends).difference(set(skip))
-		if len(deadends) != 0:
-			self.curation_notes['troubleshoot'].append({
-				'msg':'Some deadends were identified',
-				'triggered_by':list(deadends),
-				'importance':'high',
-				'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
+
+			if len(deadends) != 0:
+				self.curation_notes['troubleshoot'].append({
+					'msg':'Some deadends were identified',
+					'triggered_by':list(deadends),
+					'importance':'high',
+					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
 			# Step 2. Test feasibility adding all topological gaps
-			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
+				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
+				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
+				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
 
 		if len(deadends) == 0 and works == False:
 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
