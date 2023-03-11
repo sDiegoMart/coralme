@@ -583,6 +583,7 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 
 def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	logging.warning('  '*5 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
+	existing_sinks = [r.id for r in me_model.reactions.query('^SK_')]
 	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
 
 	if me_model.feasibility(keys = growth_key_and_value):
@@ -597,6 +598,8 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 		idx = r.id
 		flux = me_model.solution.fluxes[idx]
 		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
+			if r.id in existing_sinks:
+				continue
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
@@ -607,7 +610,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
 
 	# reaction ID : position in the model.reactions DictList object
-	rxns = rxns[::-1] # Try present SKs the last.
+	rxns = rxns + existing_sinks# Try present SKs the last.
 	ridx = []
 	for r in rxns:
 		ridx.append((r,me_model.reactions._dict[r]))
