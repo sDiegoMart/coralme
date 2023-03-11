@@ -601,6 +601,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
 			if r.id in existing_sinks:
 				rxns_to_append.append(idx)
+				continue
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
