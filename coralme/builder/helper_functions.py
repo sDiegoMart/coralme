@@ -593,13 +593,14 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 
 	rxns = []
 	rxns_to_drop = []
+	rxns_to_append = []
 # 	for idx, flux in me_model.solution.fluxes.items():
 	for r in sk_rxns:
 		idx = r.id
 		flux = me_model.solution.fluxes[idx]
 		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
 			if r.id in existing_sinks:
-				continue
+				rxns_to_append.append(idx)
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
@@ -610,7 +611,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
 
 	# reaction ID : position in the model.reactions DictList object
-	rxns = rxns + existing_sinks# Try present SKs the last.
+	rxns = rxns + rxns_to_append# Try present SKs the last.
 	ridx = []
 	for r in rxns:
 		ridx.append((r,me_model.reactions._dict[r]))
