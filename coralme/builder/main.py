@@ -1564,7 +1564,7 @@ class MEReconstruction(MEBuilder):
 		config['dev_reference'] = False
 
 		if hasattr(self, 'org') and len(config.get('translocation_multipliers', {})) == 0:
-			config['translocation_multipliers'] = self.org.translocation_multipliers
+			config['translocation_multipliers'] = { k:{ k:v for k,v in v.items() if v != 0 } for k,v in self.org.translocation_multipliers.items() }
 			logging.warning('Translocation multipliers for yidC and tat homologs were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('amino_acid_trna_synthetase', {})) == 0:
@@ -2150,7 +2150,7 @@ class MEReconstruction(MEBuilder):
 				me.remove_metabolites([me.metabolites.dpm_c])
 
 		# TODO: use a different ID for spontaneous modification vs enzymatic modification (?)
-		# biotin from the free metabolite in malonyl-CoA carboxylase; don't remove it from the model
+		# biotin from the free metabolite in malonate decarboxylase (EC 7.2.4.4); don't remove biotin from the model (EC 4.1.1.88 is biotin-independent)
 		# biotin from the free metabolite in acetyl-CoA carboxylase, but using biotin---[acetyl-CoA-carboxylase] ligase
 		if me.process_data.has_id('mod_btn_c'):
 			coralme.builder.modifications.add_btn_modifications(me)
@@ -2425,13 +2425,13 @@ class MEReconstruction(MEBuilder):
 			rxns = { x.id:x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') }
 
 			for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
-				if row['direction'] is numpy.nan and row['complex'] is numpy.nan and row['mods'] is numpy.nan:
+				if row['direction'] == '' and row['complex'] == '' and row['mods'] == '':
 					# subreactions have ID = reaction_name
 					idx = row['reaction']
 				else:
 					# metabolic reactions have ID = reaction_name + direction + complex
 					idx = '{:s}_{:s}_{:s}'.format(row['reaction'], row['direction'], row['complex'])
-					if not row['mods'] is numpy.nan:
+					if row['mods'] != '':
 						idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
 
 				if idx in rxns.keys():
