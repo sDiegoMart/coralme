@@ -77,15 +77,14 @@ def get_complex_modifications(reaction_matrix, protein_complexes, complex_mods, 
 				ignored_complexes.add(met)
 
 	# correct ignored complexes
-	ignored_complexes = [ x for x in ignored_complexes if not x.split('_mod_')[1:] == ['pydx5p(1)', 'pydx5p(2)']]
+	ignored_complexes = [ x for x in ignored_complexes
+		if x.split('_mod_')[1:] != ['pydx5p(1)'] and x.split('_mod_')[1:] != ['pydx5p(2)'] and x.split('_mod_')[1:] != ['4fe4s(2)']]
 
 	new_mod_dict = {}
 	for key, value in complex_mods.T.to_dict().items():
-		# TODO: Decide if ignore complexes or not:
-		# if yes, CPLX0-782_mod_4fe4s(2), CPLX0-246_CPLX0-1342_mod_pydx5p(1) and IscS_mod_pydx5p(2) must be exceptions
-		# if not, FormationReactions can bypass true metabolic reactions
-		#if key in ignored_complexes:
-			#continue
+		# QueG_mono_mod_4fe4s(2), CPLX0-782_mod_4fe4s(2), CPLX0-246_CPLX0-1342_mod_pydx5p(1) and IscS_mod_pydx5p(2) must be exceptions
+		if key in ignored_complexes:
+			continue
 		key = key.replace('_DASH_', '__')
 		new_mod_dict[key] = {}
 		new_mod_dict[key]['core_enzyme'] = value['Core_enzyme']
