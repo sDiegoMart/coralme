@@ -1132,6 +1132,16 @@ class Organism(object):
     def _is_base_complex_in_list(self,cplx,lst):
         return cplx in set(i.split('_mod_')[0] for i in lst)
 
+    def _get_genes_of_cplx(self,cplx):
+        d = {}
+        for i in self.complexes_df.loc[cplx]['genes'].split(' AND '):
+            gene = re.findall('.*(?=\(\d*\))',i)[0]
+            coeff = re.findall('(?<=\().*(?=\))',i)[0]
+            d[gene] = coeff
+        return d
+#         return [re.findall('.*(?=\(\d*\))',i)[0] \
+#                 for i in self.complexes_df.loc[cplx]['genes'].split(' AND ')]
+    
     def get_trna_synthetase(self):
         if self.is_reference:
             return
@@ -1170,26 +1180,28 @@ class Organism(object):
             if self._is_base_complex_in_list(cplx,d[aa]): continue
             d[aa].add(cplx)
         trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
-        new_cplxs = {k:set() for k in d.copy()}
-
+        new_cplxs = {k:dict() for k in d.copy()}
         for cplx,trna_string in trna_ligases_from_subunits.items():
             trna_string = self._extract_trna_string(trna_string)
             aa = find_aminoacid(trna_string)
             if aa is None:continue
             if d[aa]: continue
-            new_cplxs[aa].add(cplx)
-
+            cplx_genes = self._get_genes_of_cplx(cplx)
+            for k,v in cplx_genes.items():
+                new_cplxs[aa][k] = v
+#             new_cplxs[aa].add(cplx)
+        
         for k,v in new_cplxs.items():
             if not v: continue
             cplx_id = "CPLX-tRNA-{}-LIGASE".format(k.upper()[:3])
             complexes_df = self._add_entry_to_complexes(
-                               list(v),
+                               v,
                                "tRNA-{} ligase".format(k[0].upper() + k[1:3]),
                                cplx_id,
                                complexes_df,
                                "Inferred from subunits")
             d[k] = set([cplx_id])
-
+        
         warn_ligases = []
         for aa,c_set in d.items():
             c_list = list(c_set)
