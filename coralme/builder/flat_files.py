@@ -13,7 +13,7 @@ def fix_id(id_str):
 	return id_str.replace('_DASH_', '__')
 
 def read(filename) -> pandas.DataFrame:
-	return pandas.read_csv(filename, sep = '\t', index_col = None, comment = '#', skip_blank_lines = True, dtype = str)
+	return pandas.read_csv(filename, sep = '\t', index_col = None, comment = '#', skip_blank_lines = True, dtype = str, keep_default_na = False)
 
 def get_complex_subunit_stoichiometry(complex_stoichiometry, rna_components = set()) -> dict:
 	"""Returns dictionary of prot/prot, prot/rna complexes: {stoichiometry: {locus_tag: count}}
@@ -70,18 +70,20 @@ def get_complex_modifications(reaction_matrix, protein_complexes, complex_mods, 
 	complex_dct = get_complex_subunit_stoichiometry(protein_complexes)
 	complex_set = set(complex_dct.keys())
 
-	# ignore complexes which are produced in the reaction matrix
-	#rxn_dict = get_reaction_matrix_dict(reaction_matrix, compartments = compartments, complex_set = complex_set)
-	#ignored_complexes = set()
-	#for met_stoich in rxn_dict.values():
-		#for met, value in met_stoich.items():
-			#if 'mod_c' not in met:
-				#ignored_complexes.add(met.replace('_c', ''))
-			#else:
-				#ignored_complexes.add(met)
+	ignored_complexes = set()
+	for met_stoich in coralme.builder.flat_files.get_reaction_matrix_dict(reaction_matrix).values():
+		for met, value in met_stoich.items():
+			if len(met.split('_mod_')[1:]) >= 1:
+				ignored_complexes.add(met)
+
+	# correct ignored complexes
+	ignored_complexes = [ x for x in ignored_complexes if not x.split('_mod_')[1:] == ['pydx5p(1)', 'pydx5p(2)']]
 
 	new_mod_dict = {}
 	for key, value in complex_mods.T.to_dict().items():
+		# TODO: Decide if ignore complexes or not:
+		# if yes, CPLX0-782_mod_4fe4s(2), CPLX0-246_CPLX0-1342_mod_pydx5p(1) and IscS_mod_pydx5p(2) must be exceptions
+		# if not, FormationReactions can bypass true metabolic reactions
 		#if key in ignored_complexes:
 			#continue
 		key = key.replace('_DASH_', '__')
