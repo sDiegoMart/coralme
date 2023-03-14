@@ -554,7 +554,7 @@ class MEBuilder(object):
 					warn_trnas.append(aa)
 			if warn_trnas:
 				self.org.curation_notes['get_trna_to_codon'].append({
-					'msg':'Some tRNAs are missing in the files.',
+					'msg':'Some tRNAs could be missing in the files.',
 					'triggered_by':warn_trnas,
 					'importance':'critical',
 					'to_do':'Identify the respective missing tRNAs and add them to a file (RNAs.txt or genome.gb)'})
