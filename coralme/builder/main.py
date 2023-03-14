@@ -546,11 +546,18 @@ class MEBuilder(object):
 			df = pandas.concat([aa2codons, aa2trna[organelle]], axis = 1).dropna(how = 'any').explode(1)
 
 			# Check amino acids
+			warn_trnas = []
 			for aa in canonical_aas:
 				if aa in aa2trna[organelle].index:
 					pass
 				else:
-					logging.warning('At least one tRNA-{:s} gene is missing in the genbank file. A \'generic_tRNA_triplet_aa\' dummy metabolite will be created to account for the related aminoacyl tRNA synthetase expression.'.format(aa))
+					warn_trnas.append(aa)
+			if warn_trnas:
+				self.org.curation_notes['get_trna_to_codon'].append({
+					'msg':'Some tRNAs are missing in the files.',
+					'triggered_by':warn_trnas,
+					'importance':'critical',
+					'to_do':'Identify the respective missing tRNAs and add them to a file (RNAs.txt or genome.gb)'})
 
 			trna_to_codon_organelle = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 			trna_to_codon[organelle] = trna_to_codon_organelle
