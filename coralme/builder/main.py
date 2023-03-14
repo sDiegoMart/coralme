@@ -1564,7 +1564,7 @@ class MEReconstruction(MEBuilder):
 		config['dev_reference'] = False
 
 		if hasattr(self, 'org') and len(config.get('translocation_multipliers', {})) == 0:
-			config['translocation_multipliers'] = self.org.translocation_multipliers
+			config['translocation_multipliers'] = { k:{ k:v for k,v in v.items() if v != 0 } for k,v in self.org.translocation_multipliers.items() }
 			logging.warning('Translocation multipliers for yidC and tat homologs were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('amino_acid_trna_synthetase', {})) == 0:
@@ -1599,7 +1599,7 @@ class MEReconstruction(MEBuilder):
 			if set(columns).issubset(set(df.columns)):
 				return df
 			else:
-				logging.warning('Column names in \'{:s}\' does not comply default values.'.format(filename))
+				logging.warning('Column names in \'{:s}\' does not comply default values: {:s}.'.format(filename, ','.join(columns)))
 
 		# User inputs
 		# Transcriptional Units
@@ -1825,7 +1825,7 @@ class MEReconstruction(MEBuilder):
 		# Modifications are added as SubReactions
 		coralme.util.building.add_model_complexes(me, cplx_dct, mods_dct)
 
-		# Remove modifications. They will be added back in later (See Building Step 2, Part 3).
+		# Remove modifications. They will be added back in later (See Building Step 2, subsection 3).
 		for data in tqdm.tqdm(list(me.complex_data), 'Removing SubReactions from ComplexData...', bar_format = bar_format):
 			data.subreactions = {}
 
@@ -1847,6 +1847,8 @@ class MEReconstruction(MEBuilder):
 
 		generics = coralme.builder.preprocess_inputs.get_generics(df_data)
 		for generic, components in tqdm.tqdm(generics, 'Adding Generic(s) into the ME-model...', bar_format = bar_format):
+			if 'generic_fes_transfers_complex' in generic:
+				continue
 			coralme.core.processdata.GenericData(generic, me, components).create_reactions()
 
 		# ### 6) Add dummy reactions to model and the *unmodeled_protein_fraction* constraint
@@ -2125,12 +2127,13 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 3: Add remaining modifications (including iron clusters and lipoate)
 
-		# mods_dct is a dictionary {complex_name_with_mods: {core_enzyme: complex_name, modifications: {stoichiometry}}
-		mods_dct = coralme.builder.flat_files.get_complex_modifications(
-			reaction_matrix = df_rmsc,
-			protein_complexes = df_cplxs,
-			complex_mods = df_ptms,
-			compartments = { v:k for k,v in me._compartments.items() })
+		## This is calculated above (See Building Step 1, subsection 3)
+		## mods_dct is a dictionary {complex_name_with_mods: {core_enzyme: complex_name, modifications: {stoichiometry}}
+		#mods_dct = coralme.builder.flat_files.get_complex_modifications(
+			#reaction_matrix = df_rmsc,
+			#protein_complexes = df_cplxs,
+			#complex_mods = df_ptms,
+			#compartments = { v:k for k,v in me._compartments.items() })
 
 		for complex_id, info in tqdm.tqdm(mods_dct.items(), 'Processing ComplexData in ME-model...', bar_format = bar_format):
 			modifications = {}
@@ -2146,8 +2149,9 @@ class MEReconstruction(MEBuilder):
 			if me.metabolites.has_id('dpm_c'):
 				me.remove_metabolites([me.metabolites.dpm_c])
 
-		# biotin---[acetyl-CoA-carboxylase] ligase
-		# biotin loaded from the free metabolite; don't remove it from the model
+		# TODO: use a different ID for spontaneous modification vs enzymatic modification (?)
+		# biotin from the free metabolite in malonate decarboxylase (EC 7.2.4.4); don't remove biotin from the model (EC 4.1.1.88 is biotin-independent)
+		# biotin from the free metabolite in acetyl-CoA carboxylase, but using biotin---[acetyl-CoA-carboxylase] ligase
 		if me.process_data.has_id('mod_btn_c'):
 			coralme.builder.modifications.add_btn_modifications(me)
 
@@ -2421,13 +2425,13 @@ class MEReconstruction(MEBuilder):
 			rxns = { x.id:x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') }
 
 			for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
-				if row['direction'] is numpy.nan and row['complex'] is numpy.nan and row['mods'] is numpy.nan:
+				if row['direction'] == '' and row['complex'] == '' and row['mods'] == '':
 					# subreactions have ID = reaction_name
 					idx = row['reaction']
 				else:
 					# metabolic reactions have ID = reaction_name + direction + complex
 					idx = '{:s}_{:s}_{:s}'.format(row['reaction'], row['direction'], row['complex'])
-					if not row['mods'] is numpy.nan:
+					if row['mods'] != '':
 						idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
 
 				if idx in rxns.keys():
@@ -2492,7 +2496,7 @@ class MEReconstruction(MEBuilder):
 		for r in tqdm.tqdm(me.reactions.query('_mod_lipoyl'), 'Updating FormationReactions involving a lipoyl prosthetic group...', bar_format = bar_format):
 			r.update()
 
-		for r in tqdm.tqdm(me.reactions.query('_mod_glycyl'), 'Updating FormationReactions involving a glycyl prosthetic group...', bar_format = bar_format):
+		for r in tqdm.tqdm(me.reactions.query('_mod_glycyl'), 'Updating FormationReactions involving a glycyl radical...', bar_format = bar_format):
 			r.update()
 
 		# add metabolite compartments
@@ -2590,7 +2594,7 @@ class METroubleshooter(object):
 			logging.warning('  '*1 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
-# 		# Step 1. # TODO: Try cofactors 
+# 		# Step 1. # TODO: Try cofactors
 # 		cofactors = []
 # 		if works == False:
 # 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')

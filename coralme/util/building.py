@@ -352,7 +352,7 @@ def build_reactions_from_genbank(
 	# RNA_products will be added so no need to update now
 	for tu_id in tqdm.tqdm(tu_frame.index, 'Adding Transcriptional Units into the ME-model...', bar_format = bar_format):
 		# in rare cases, transcription units have no genes associated to them
-		if isinstance(tu_frame.genes[tu_id], float):
+		if tu_frame.genes[tu_id] is '': # we read df_tus as strings
 			logging.warning('The transcription unit \'{:s}\' has no genes associated to it. Please check if it is the correct behavior.'.format(tu_id))
 			continue
 
