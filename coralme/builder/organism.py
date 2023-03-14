@@ -399,9 +399,12 @@ class Organism(object):
     def _add_entry_to_df(self,
                          df,
                          tmp):
-        return pandas.concat([df,
+        indexname = df.index.name
+        df = pandas.concat([df,
                               pandas.DataFrame.from_dict(tmp).T],
                              axis = 0, join = 'outer')
+        df.index.name = indexname
+        return df
 
     def _add_entry_to_rna(self,
                          gene_id,
