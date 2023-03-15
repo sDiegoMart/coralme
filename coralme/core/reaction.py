@@ -198,10 +198,12 @@ class MEReaction(cobra.core.reaction.Reaction):
 			try:
 				object_stoichiometry[mets.get_by_id(key)] = value
 			except KeyError:
+				if key.split('_mod_')[0] in [ x.id for x in list(self._model.complex_data)]:
+					default_type = coralme.core.component.Complex
 				new_met = coralme.core.component.create_component(key, default_type = default_type)
 				if verbose:
 					#logging.warning('Metabolite created \'{:s}\' in ME-model \'{:s}\'.'.format(repr(new_met), repr(self)))
-					logging.warning('Metabolite \'{:s}\' created in Reaction \'{:s}\'. No further actions must be taken.'.format(new_met.id, self.id))
+					logging.warning('Component \'{:s}\' created in Reaction \'{:s}\'. No further actions must be taken.'.format(new_met.id, self.id))
 				object_stoichiometry[new_met] = value
 				self._model.add_metabolites([new_met])
 		return object_stoichiometry
