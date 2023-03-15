@@ -412,10 +412,11 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 	import tqdm
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
-		if not model.solution:
+		if not hasattr(model,'solution') or not model.solution:
 			print('No solution in model object')
-			return
-		flux_dict = model.solution.fluxes
+			flux_dict = {r.id:0. for r in model.reactions}
+		else:
+			flux_dict = model.solution.fluxes
 	reactions = get_reactions_of_met(model,met_id,only_types=only_types,
 									 ignore_types=ignore_types,verbose=False,growth_key=growth_key)
 	if len(reactions) == 0:
