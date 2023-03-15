@@ -67,6 +67,9 @@ class Metabolite(MEComponent):
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
 
+	#def __repr__(self):
+		#return 'Metabolite'
+
 class TranscribedGene(MEComponent):
 	"""
 	Metabolite class for gene created from
@@ -106,6 +109,9 @@ class TranscribedGene(MEComponent):
 		self.RNA_type = rna_type
 		self.nucleotide_sequence = nucleotide_sequence
 
+	#def __repr__(self):
+		#return 'TranscribedGene'
+
 	@property
 	def nucleotide_count(self):
 		"""
@@ -137,6 +143,9 @@ class TranslatedGene(MEComponent):
 	"""
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
+
+	#def __repr__(self):
+		#return 'TranslatedGene'
 
 	@property
 	def translation_data(self):
@@ -215,6 +224,9 @@ class ProcessedProtein(MEComponent):
 		MEComponent.__init__(self, id)
 		self.unprocessed_protein_id = unprocessed_protein_id
 
+	#def __repr__(self):
+		#return 'ProcessedProtein'
+
 	@property
 	def unprocessed_protein(self):
 		"""Get unprocessed protein reactant in PostTranslationReaction
@@ -238,6 +250,9 @@ class Complex(MEComponent):
 
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
+
+	#def __repr__(self):
+		#return 'Complex'
 
 	@property
 	def metabolic_reactions(self):
@@ -268,6 +283,9 @@ class Ribosome(Complex):
 	def __init__(self, id):
 		Complex.__init__(self, id)
 
+	#def __repr__(self):
+		#return 'Ribosome'
+
 class RNAP(Complex):
 	"""
 	Metabolite class for RNA polymerase complexes. Inherits from
@@ -282,6 +300,9 @@ class RNAP(Complex):
 	def __init__(self, id):
 		Complex.__init__(self, id)
 
+	#def __repr__(self):
+		#return 'RNAP'
+
 class GenericComponent(MEComponent):
 	"""
 	Metabolite class for generic components created from
@@ -295,6 +316,9 @@ class GenericComponent(MEComponent):
 	"""
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
+
+	#def __repr__(self):
+		#return 'GenericComponent'
 
 class GenerictRNA(MEComponent):
 	"""
@@ -311,6 +335,9 @@ class GenerictRNA(MEComponent):
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
 
+	#def __repr__(self):
+		#return 'GenerictRNA'
+
 class Constraint(MEComponent):
 	"""
 	Metabolite class for global constraints such as biomass
@@ -322,6 +349,9 @@ class Constraint(MEComponent):
 	"""
 	def __init__(self, id):
 		MEComponent.__init__(self, id)
+
+	#def __repr__(self):
+		#return 'Constraint'
 
 def create_component(component_id, default_type = MEComponent, rnap_set = set()):
 	"""creates a component and attempts to set the correct type"""
