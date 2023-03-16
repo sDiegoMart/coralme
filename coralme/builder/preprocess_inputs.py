@@ -352,7 +352,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 
 	# set RNA targets (tRNA<->mod_at_position)
 	dct = builder.org.rna_modification_targets.copy(deep = True)
-	dct['at'] = dct['modification'] + '_at_' + dct['position']
+	dct['at'] = dct['modification'] + '_at_' + dct['position'].astype(str)
 	dct = dct.groupby('bnum').agg({'at': lambda x: ','.join(x.tolist())}).to_dict()['at']
 	data['RNA mods/enzyme'] = data['Gene Locus ID'].apply(lambda x: dct.get(str(x), None))
 
