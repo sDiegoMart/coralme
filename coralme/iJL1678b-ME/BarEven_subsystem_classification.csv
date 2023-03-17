@@ -1,0 +1,312 @@
+﻿ID,Module name,Type
+1,"Glycolysis (Embden-Meyerhof pathway), glucose => pyruvate",Primary - Carbohydrate & Energy Metabolism
+2,"Glycolysis, core module involving three-carbon compounds",Primary - Carbohydrate & Energy Metabolism
+3,"Gluconeogenesis, oxaloacetate => fructose-6P",Primary - Carbohydrate & Energy Metabolism
+4,Pentose phosphate pathway (Pentose phosphate cycle),Primary - Carbohydrate & Energy Metabolism
+5,"PRPP biosynthesis, ribose 5P -> PRPP",Primary - Carbohydrate & Energy Metabolism
+6,"Pentose phosphate pathway, oxidative phase, glucose 6P => ribulose	5P",Primary - Carbohydrate & Energy Metabolism
+7,"Pentose phosphate pathway, non-oxidative phase, fructose 6P =>	ribose 5P",Primary - Carbohydrate & Energy Metabolism
+8,"Entner-Doudoroff pathway, glucose-6P => glyceraldehyde-3P + pyruvate",Primary - Carbohydrate & Energy Metabolism
+9,"Citrate cycle (TCA cycle, Krebs cycle)",Primary - Carbohydrate & Energy Metabolism
+10,"Citrate cycle, first carbon oxidation",Primary - Carbohydrate & Energy Metabolism
+11,"Citrate cycle, second carbon oxidation",Primary - Carbohydrate & Energy Metabolism
+679,"Pyruvate oxidation, pyruvate => acetyl-CoA",Primary - Carbohydrate & Energy Metabolism
+680,"Semi-phosphorylative Entner-Doudoroff pathway, gluconate =>	glyceraldehyde-3P + pyruvate",Primary - Carbohydrate & Energy Metabolism
+681,"Non-phosphorylative Entner-Doudoroff pathway, gluconate =>	glyceraldehyde + pyruvate",Primary - Carbohydrate & Energy Metabolism
+12,Glyoxylate cycle,Primary - Carbohydrate & Energy Metabolism
+118,"Pentose interconversion, arabinose/ribulose/xylulose/xylose",Primary - Carbohydrate & Energy Metabolism
+294,Reductive pentose phosphate cycle (Calvin cycle),Primary - Carbohydrate & Energy Metabolism
+295,"Reductive pentose phosphate cycle, RuBP + CO2 => glyceraldehyde-3P",Primary - Carbohydrate & Energy Metabolism
+296,"Reductive pentose phosphate cycle, glyceraldehyde-3P => RuBP",Primary - Carbohydrate & Energy Metabolism
+297,"CAM (Crassulacean acid metabolism), dark",Primary - Carbohydrate & Energy Metabolism
+298,"CAM (Crassulacean acid metabolism), light",Primary - Carbohydrate & Energy Metabolism
+299,"C4-dicarboxylic acid cycle, phosphoenolpyruvate carboxykinase type",Primary - Carbohydrate & Energy Metabolism
+300,"C4-dicarboxylic acid cycle, NAD+ -malic enzyme type",Primary - Carbohydrate & Energy Metabolism
+301,"C4-dicarboxylic acid cycle, NADP+ -malic enzyme type",Primary - Carbohydrate & Energy Metabolism
+302,Reductive carboxylate cycle,Primary - Carbohydrate & Energy Metabolism
+17,"Glutamate biosynthesis, oxoglutarate => glutamate (glutamate	dehydrogenase)","Primary - amino acids, fatty acids and nucleotides"
+18,"Glutamine biosynthesis, glutamate => glutamine","Primary - amino acids, fatty acids and nucleotides"
+19,"Glutamate biosynthesis, oxoglutarete => glutamate (glutamate	synthase)","Primary - amino acids, fatty acids and nucleotides"
+21,"Aspartate biosynthesis, oxaloacetate => aspartate","Primary - amino acids, fatty acids and nucleotides"
+22,"Asparagine biosynthesis, aspartate => asparagine","Primary - amino acids, fatty acids and nucleotides"
+26,"Alanine biosynthesis, pyruvate => alanine","Primary - amino acids, fatty acids and nucleotides"
+38,"Glutamine degradation, glutamine => glutamate + NH3","Primary - amino acids, fatty acids and nucleotides"
+44,"Aspartate degradation, aspartate => fumarate","Primary - amino acids, fatty acids and nucleotides"
+45,"Aspartate degradation, aspartate => oxaloacetate","Primary - amino acids, fatty acids and nucleotides"
+46,"Asparagine degradation, asparagine => aspartate +NH3","Primary - amino acids, fatty acids and nucleotides"
+20,"Proline biosynthesis, glutamate => proline","Primary - amino acids, fatty acids and nucleotides"
+41,"Ornithine biosynthesis, glutamate => ornithine","Primary - amino acids, fatty acids and nucleotides"
+42,Urea cycle,"Primary - amino acids, fatty acids and nucleotides"
+43,"Arginine degradation, arginine => citrulline","Primary - amino acids, fatty acids and nucleotides"
+33,"Chorismate biosynthesis, phosphoenolpyruvate + erythrose-4P =>	chorismate","Primary - amino acids, fatty acids and nucleotides"
+34,"Tryptophan biosynthesis, chorismate => tryptophan","Primary - amino acids, fatty acids and nucleotides"
+35,"Phenylalanine biosynthesis, chorismate => phenylalanine","Primary - amino acids, fatty acids and nucleotides"
+36,"Tyrosine biosynthesis, chorismate => tyrosine","Primary - amino acids, fatty acids and nucleotides"
+65,"Tryptophan metabolism, tryptophan => tryptamine","Primary - amino acids, fatty acids and nucleotides"
+72,"Tyrosine biosynthesis, phenylalanine => tyrosine","Primary - amino acids, fatty acids and nucleotides"
+73,"Tyrosine biosynthesis, prephanate => pretyrosine => tyrosine","Primary - amino acids, fatty acids and nucleotides"
+27,"Valine biosynthesis, pyruvate => valine","Primary - amino acids, fatty acids and nucleotides"
+28,"Leucine biosynthesis, pyruvate => leucine","Primary - amino acids, fatty acids and nucleotides"
+29,"Isoleucine biosynthesis, pyruvate => isoleucine","Primary - amino acids, fatty acids and nucleotides"
+58,"Leucine degradation, leucine => acetoacetate + acetyl-CoA","Primary - amino acids, fatty acids and nucleotides"
+59,"Isoleucine degradation, isoleucine => propionyl-CoA","Primary - amino acids, fatty acids and nucleotides"
+24,"Methionine biosynthesis, apartate => homoserine => methionine","Primary - amino acids, fatty acids and nucleotides"
+32,"Cysteine biosynthesis, serine => cysteine","Primary - amino acids, fatty acids and nucleotides"
+52,"Methionine biosynthesis, intermediates, homoserine =>	O-acetylhomoserine => cystathionine","Primary - amino acids, fatty acids and nucleotides"
+53,"Methionine biosynthesis, intermediates, homoserine =>	O-acetylhomoserine => L-homocysteine","Primary - amino acids, fatty acids and nucleotides"
+55,Methionine degradation,"Primary - amino acids, fatty acids and nucleotides"
+56,"S-Adenosylmethionine biosynthesis, methionine =>	S-adenosylmethionine => methionine","Primary - amino acids, fatty acids and nucleotides"
+62,"Cysteine metabolism, cysteine => 3-sulfino-L-alanine => pyruvate","Primary - amino acids, fatty acids and nucleotides"
+63,"Cysteine metabolism, cysteine => 3-mercaptopyruvate => pyruvate","Primary - amino acids, fatty acids and nucleotides"
+64,"Cysteine metabolism, cysteine => pyruvate","Primary - amino acids, fatty acids and nucleotides"
+159,"Fatty acid biosynthesis, initiation","Primary - amino acids, fatty acids and nucleotides"
+160,"Fatty acid biosynthesis, elongation","Primary - amino acids, fatty acids and nucleotides"
+172,"Fatty acid biosynthesis, elongation, mitochondria","Primary - amino acids, fatty acids and nucleotides"
+173,"beta-Oxidation, acyl-CoA synthesis","Primary - amino acids, fatty acids and nucleotides"
+174,beta-Oxidation,"Primary - amino acids, fatty acids and nucleotides"
+25,"Threonine biosynthesis, apartate => homoserine => threonine","Primary - amino acids, fatty acids and nucleotides"
+30,"Serine biosynthesis, glycerate-3P => serine","Primary - amino acids, fatty acids and nucleotides"
+31,"Glycine biosynthesis, serine => glycine","Primary - amino acids, fatty acids and nucleotides"
+57,"Threonine biosynthesis, glycine => threonine","Primary - amino acids, fatty acids and nucleotides"
+60,"Serine biosynthesis, hydroxypyruvate => serine","Primary - amino acids, fatty acids and nucleotides"
+61,"Glycine biosynthesis, betaine => glycine","Primary - amino acids, fatty acids and nucleotides"
+37,"Histidine biosynthesis, PRPP => histidine","Primary - amino acids, fatty acids and nucleotides"
+79,"Histidine degradation, histidine => N-formiminoglutamate =>	glutamate","Primary - amino acids, fatty acids and nucleotides"
+23,"Lysine biosynthesis, aspartate => lysine","Primary - amino acids, fatty acids and nucleotides"
+47,"Lysine biosynthesis, 2-oxoglutarate => 2-aminoadipate => lysine","Primary - amino acids, fatty acids and nucleotides"
+48,"Lysine biosynthesis, 2-oxoglutarate => 2-aminoadipate => lysine","Primary - amino acids, fatty acids and nucleotides"
+49,"Lysine degradation, lysine => 6-amino-2-oxohexanoate =>	acetoacetyl-CoA","Primary - amino acids, fatty acids and nucleotides"
+50,"Lysine degradation, lysine => saccharopine => acetoacetyl-CoA","Primary - amino acids, fatty acids and nucleotides"
+90,"Inosine monophosphate biosynthesis, PRPP + glutamine => IMP","Primary - amino acids, fatty acids and nucleotides"
+91,"Adenine nucleotide biosynthesis, IMP => ADP/dADP,ATP/dATP","Primary - amino acids, fatty acids and nucleotides"
+92,"Guanine nucleotide biosynthesis, IMP => GDP/dGDP,GTP/dGTP","Primary - amino acids, fatty acids and nucleotides"
+93,"Uridine monophosphate biosynthesis, glutamine (+ PRPP) => UMP","Primary - amino acids, fatty acids and nucleotides"
+94,"Pyrimidine ribonucleotide biosynthesis, UMP => UDP/UTP,CDP/CTP","Primary - amino acids, fatty acids and nucleotides"
+95,"Pyrimidine deoxyribonuleotide biosynthesis, CDP/CTP =>	dCDP/dCTP,dTDP/dTTP","Primary - amino acids, fatty acids and nucleotides"
+719,"Cysteine biosynthesis, homocysteine + serine => cysteine","Primary - amino acids, fatty acids and nucleotides"
+40,GABA (gamma-Aminobutyrate) shunt,Intermediate
+68,"Tryptophan metabolism, kynurenine => 2-aminomuconate",Intermediate
+235,Tocopherol biosynthesis,Intermediate
+239,"Ascorbate biosynthesis, plants",Intermediate
+240,"NAD biosynthesis, aspartate => NAD",Intermediate
+241,"Menaquinone biosynthesis, chorismate => menaquinone",Intermediate
+242,"Ubiquinone biosynthesis, chorismate => ubiquinone, prokaryotes",Intermediate
+243,"Glutathione biosynthesis, glutamate => glutathione",Intermediate
+244,"Pantothenate biosynthesis, valine/L-aspartate=> pantothenate",Intermediate
+245,"Coenzyme A biosynthesis, pantothenate => CoA",Intermediate
+246,"Heme biosynthesis, glutamate => protoheme/siroheme",Intermediate
+247,"Cobalamin biosynthesis, cobinamide => cobalamin",Intermediate
+248,"Biotin biosynthesis, pimeloyl-CoA => biotin",Intermediate
+250,"Riboflavin biosynthesis, GTP => riboflavin/FMN/FAD",Intermediate
+251,"Folate biosynthesis, GTP => THF",Intermediate
+252,"Thiamine biosynthesis, AIR => thiamine-P/thiamine-2P",Intermediate
+253,"Phylloquinone biosynthesis, chorismate => phylloquinone",Intermediate
+254,"Ubiquinone biosynthesis, chorismate => ubiquinone, eukaryotes",Intermediate
+255,"Ascorbate biosynthesis, animals",Intermediate
+269,Tetrahydrofolate biosynthesis,Intermediate
+270,C1-unit interconversion,Intermediate
+54,Methionine salvage pathway,Intermediate
+161,"Eicosanoid biosynthesis, phospholipid => arachidonate",Intermediate
+162,"Eicosanoid biosynthesis, arachidonate => PGH2",Intermediate
+163,"Eicosanoid biosynthesis, PGH2 => PGD2",Intermediate
+164,"Eicosanoid biosynthesis, PGH2 => PGE2",Intermediate
+165,"Eicosanoid biosynthesis, PGH2 => PGF2alpha",Intermediate
+166,"Eicosanoid biosynthesis, PGH2 => prostacyclin",Intermediate
+167,"Eicosanoid biosynthesis, arachidonate => LTA4",Intermediate
+168,"Eicosanoid biosynthesis, LTA4 => LTB4",Intermediate
+169,"Eicosanoid biosynthesis, LTA4 => LTC4",Intermediate
+170,"Eicosanoid biosynthesis, PGH2 => TX",Intermediate
+175,"Eicosanoid biosynthesis, arachidonate => 12(R)-HETE",Intermediate
+176,"Eicosanoid biosynthesis, arachidonate => 8(S)-HETE",Intermediate
+177,"Ketone body biosynthesis, acetyl-CoA =>	acetoacetate/3-hydroxybutyrate/acetone",Intermediate
+178,"Eicosanoid biosynthesis, linoleate => arachidonate",Intermediate
+179,"Eicosanoid biosynthesis, arachidonate => 15(S)-HPETE/12(S)-HPETE",Intermediate
+180,"Eicosanoid biosynthesis, arachidonate => 20-HETE/19-HETE",Intermediate
+187,"Eicosanoid biosynthesis, arachidonate =>	14,15-DHET/11,12-DHET/8,9-DHET/5,6-DHET",Intermediate
+190,"Eicosanoid biosynthesis, 15(S)-HPETE =>	11,12,15-THETA/11,14,15-THETA",Intermediate
+199,"Linoleic acid metabolism, phospholipid => linoleate",Intermediate
+200,"Linoleic acid metabolism, linoleate => 12(13)-EpOME/9(10)-EpOME",Intermediate
+201,"Linoleic acid metabolism, linoleate => 13(S)-HPODE/9(S)-HPODE",Intermediate
+181,Triacylglycerol biosynthesis,Intermediate
+202,Acylglycerol degradation,Intermediate
+203,Glyceroglycolipid biosynthesis,Intermediate
+182,Phosphatidic acid (PA) biosynthesis,Intermediate
+183,"Phosphatidylcholine (PC) biosynthesis, choline => PC",Intermediate
+184,"Phosphatidylcholine (PC) biosynthesis, PE => PC",Intermediate
+185,"Phosphatidylethanolamine (PE) biosynthesis, ethanolamine => PE",Intermediate
+186,"Phosphatidylethanolamine (PE) biosynthesis, PS => PE",Intermediate
+188,"Phosphatidylserine (PS) biosynthesis, CDP-diacylglycerol => PS",Intermediate
+204,"CDP-diacylglycerol biosynthesis, PA => CDP-diacylglycerol",Intermediate
+205,Phosphatidylcholine (PC) degradation,Intermediate
+206,"Phosphatidylethanolamine (PE) degradation, PE => PA",Intermediate
+207,"Phosphatidylserine (PS) biosynthesis, PE => PS",Intermediate
+208,"Phosphatidylserine (PS) biosynthesis, PC => PS",Intermediate
+209,"Phosphatidylinositol (PI) biosynthesis, CDP-diacylglycerol =>	phosphatidylinositol",Intermediate
+210,"Phosphatidylglycerol biosynthesis, CDP-diacylglycerol =>	phosphatidylglycerol",Intermediate
+211,"Diphosphatidylglycerol biosynthesis, CDP-glycerol => cardiolipin",Intermediate
+212,"Platelet-activating factor (PAF) biosynthesis, plasmanylcholine =>	PAF",Intermediate
+213,"Platelet-activating factor (PAF) biosynthesis, alkylacetylglycerol	=> PAF",Intermediate
+214,"Platelet-activating factor (PAF) degradation, PAF => lyso PAF",Intermediate
+215,Plasmenylethanolamine biosynthesis,Intermediate
+216,Plasmenylcholine biosynthesis,Intermediate
+256,"Inositol phosphate metabolism, PI=> PIP2 => Ins(1,4,5)P3 =>	Ins(1.3.4.5)P4",Intermediate
+257,"Inositol phosphate metabolism, Ins(1,3,4,5)P4 => Ins(1,3,4)P3 =>	inositol",Intermediate
+258,"Inositol phosphate metabolism, Ins(1,4,5)P3 => myo-inositol",Intermediate
+259,"Inositol phosphate metabolism, Ins(1,3,4)P3 => phytate",Intermediate
+126,"Glycosphingolipid, globo-series, globoside biosynthesis",Intermediate
+127,"Glycosphingolipid, globo-series, globoside => forssman antigen",Intermediate
+128,"Glycosphingolipid, globo-series, globoside => SSEA",Intermediate
+129,"Glycosphingolipid, ganglioside a-series",Intermediate
+130,"Glycosphingolipid, ganglioside b-series",Intermediate
+131,"Glycosphingolipid, ganglioside c-series",Intermediate
+132,"Glycosphingolipid, ganglioside O-series",Intermediate
+133,"Glycosphingolipid, lacto-series, Lc4Cer biosynthesis",Intermediate
+134,"Glycosphingolipid, lacto-series, Lc4Cer => Type I H, Leb",Intermediate
+135,"Glycosphingolipid, lacto-series, Type I H => Type I A, ALeb",Intermediate
+136,"Glycosphingolipid, lacto-series, Type I H => Type I B, BLeb",Intermediate
+137,"Glycosphingolipid, lacto-series, Lc4Cer => Lea",Intermediate
+138,"Glycosphingolipid, lacto-series, Lc4Cer => sialyl Lea",Intermediate
+139,"Glycosphingolipid, neolacto-series, nLc4Cer biosynthesis",Intermediate
+140,"Glycosphingolipid, neolacto-series, nLc4Cer => Type II H, Ley",Intermediate
+141,"Glycosphingolipid, neolacto-series, Type II H => Type II A",Intermediate
+142,"Glycosphingolipid, neolacto-series, Type II A => Type III A",Intermediate
+143,"Glycosphingolipid, neolacto-series, Type II H => Type II B",Intermediate
+144,"Glycosphingolipid, neolacto-series, nLc4Cer => Lex",Intermediate
+145,"Glycosphingolipid, neolacto-series, nLc4Cer => sialyl Lex",Intermediate
+146,"Glycosphingolipid, neolacto-series, nLc4Cer => nLc6Cer",Intermediate
+147,"Glycosphingolipid, neolacto-series, nLc6Cer => I antigen",Intermediate
+157,"Glycosphingolipid, ganglio-series, GD3/GT3 => acetylated	GD3/acetylated GT3",Intermediate
+100,"N-glycan biosynthesis, cytosol",Intermediate
+106,"O-glycan biosynthesis, core 1, core 2",Intermediate
+107,"O-glycan biosynthesis, core 3, core 4",Intermediate
+108,"O-glycan biosynthesis, core 6",Intermediate
+109,"O-glycan biosynthesis, Tn antigens",Intermediate
+110,"O-glycan biosynthesis, T antigens",Intermediate
+148,"N-glycan biosynthesis, ER lumen",Intermediate
+149,"N-glycan biosynthesis, cis-Golgi",Intermediate
+150,"N-glycan biosynthesis, high-mannose type",Intermediate
+151,"N-glycan biosynthesis, complex type",Intermediate
+111,"Glycosaminoglycan biosynthesis, linkage tetrasaccharide",Intermediate
+112,"Glycosaminoglycan biosynthesis, chondroitin sulfate backbone",Intermediate
+113,"Glycosaminoglycan biosynthesis, heparan sulfate backbone",Intermediate
+152,Dermatan sulfate degradation,Intermediate
+153,Chondroitin sulfate degradation,Intermediate
+154,Heparan sulfate degradation,Intermediate
+155,Keratan sulfate degradation,Intermediate
+114,"Lipopolysaccharide biosynthesis, KDO2-lipid A",Intermediate
+156,"Lipopolysaccharide biosynthesis, inner core => outer core =>	O-antigen",Intermediate
+97,"UDP-glucose and UDP-galactose biosynthesis, Glc-1P/Gal-1P =>	UDP-Glc/UDP-Gal",Intermediate
+98,"UDP-N-Acetylglucosamine biosynthesis, Fru-6P => UDP-GlcNAc",Intermediate
+99,"GDP-Mannose biosynthesis, Fru-6P => GDP-Man",Intermediate
+101,"UDP-N-Acetylgalactosamine and UDP-N-acetylmannosamine biosynthesis,	UDP-GlcNAC => UDP-GalNAC/UDP-ManNAC",Intermediate
+102,"UDP-Xylose biosynthesis, UDP-Glc => UDP-Xyl => Xyl",Intermediate
+103,"UDP-N-Acetylmuramate biosynthesis, UDP-GlcNAc => UDP-MurNAc",Intermediate
+104,"CMP-N-Acetylneuraminate biosynthesis, ManNAc => Neu5Ac-9P =>	CMP-Neu5Ac",Intermediate
+105,"dTDP-Sugar biosynthesis, Glc-1P => dTDP-Glc => dTPD-Rha",Intermediate
+115,"Fucose biosynthesis, GDP-mannose => L-fucose",Intermediate
+116,"Sucrose synthesis, UDP-glucose + fructose => sucrose",Intermediate
+119,CMP-Kdo biosynthesis,Intermediate
+120,ADP-L-glycero-D-manno-heptose biosynthesis,Intermediate
+83,"beta-Alanine biosynthesis, L-aspartate => beta-alanine",Intermediate
+84,"beta-Alanine biosynthesis, cytosine / uracil => beta-alanine",Intermediate
+89,Creatine pathway,Intermediate
+13,"Glyoxylate biosynthesis, glycolate => glyoxylate",Intermediate
+14,"Glyoxylate biosynthesis, glycine => glyoxylate",Intermediate
+15,"Malonate semialdehyde pathway, propanoyl-CoA => Acetyl-CoA",Intermediate
+16,Glucuronate pathway (uronate pathway),Intermediate
+117,Uronic acid metabolism,Intermediate
+158,Pectin degradation,Intermediate
+303,"Methane oxidation, methylotroph, methane => CO2",Intermediate
+304,Methanogenesis,Intermediate
+305,"Nitrogen fixation, N2 => ammonia",Intermediate
+306,"Sulfur reduction, sulfate => H2S",Intermediate
+124,Lactosylceramide biosynthesis,Intermediate
+125,Cerebroside and sulfatide biosynthesis,Intermediate
+171,"Ciliatine metabolism, phosphoenolpyruvate => ciliatine => ceramide	ciliatine",Intermediate
+189,Ceramide biosynthesis,Intermediate
+217,Sphingosine biosynthesis,Intermediate
+218,Sphingosine degradation,Intermediate
+219,Cerebroside degradation,Intermediate
+220,Sphingomyelin metabolism,Intermediate
+224,Choresterol biosynthesis,Intermediate
+225,Ergocalciferol biosynthesis,Intermediate
+226,Cholecalciferol biosynthesis,Intermediate
+249,"Pyridoxal biosynthesis, erythrose-4P => pyridoxal-5P",Intermediate
+682,Pyruvate:ferredoxin oxidoreductase,Intermediate
+683,2-oxoglutarate:ferredoxin oxidoreductase,Intermediate
+684,2-oxoisovalerate:ferredoxin oxidoreductase,Intermediate
+685,indolepyruvate:ferredoxin oxidoreductase,Intermediate
+268,"Alkaloid biosynthesis, dopamine => (S)-reticuline =>	morphine/dihydrosanguinarine/macarpine",Secondary
+66,"Tryptophan metabolism, tryptophan => serotonin =>	5-hydroxyindoleacetate/melatonin",Secondary
+67,"Tryptophan metabolism, tryptophan => kynurenine => kynurenate",Secondary
+74,"Tyrosine metabolism, tyrosine => L-DOPA => dopaquinone => melanin",Secondary
+75,"Catecholamine biosynthesis, tyrosine => dopamine => noradrenaline =>	adrenaline",Secondary
+77,"Thyroid hormone biosynthesis, tyrosine => triiodothyronine/thyroxine",Secondary
+78,"Tyrosine degradation, tyrosine => homogentisate",Secondary
+236,"Retinol biosynthesis, beta-cacrotene => retinol",Secondary
+238,Jasmonic acid biosynthesis,Secondary
+264,"Flavonoid biosynthesis, 4-coumaroyl-CoA => naringenin => apigenin",Secondary
+265,"Flavonoid biosynthesis, naringenin => pelargonidin 3-O-glucoside",Secondary
+266,"Flavonoid biosynthesis, dihydrokaempferol => kaempferol",Secondary
+267,"Flavonoid biosynthesis, dihydrokaempferol => dihydroquercetin =>	quercetin",Secondary
+80,"Histidine metabolism, histidine => histamine",Secondary
+51,Ectoine biosynthesis,Secondary
+82,Selenocysteine metabolism,Secondary
+85,Carnosine / anserine biosynthesis,Secondary
+86,"Taurine biosynthesis, cysteine => hypotaurine => taurine",Secondary
+87,"Taurine biosynthesis, cysteine => cysteate => taurine",Secondary
+88,"Isethionate biosynthesis, taurine <=> isethionate",Secondary
+69,"Lignin biosynthesis, 4-hydroxycinnamyl alcohol => lignin",Secondary
+70,"Lignin biosynthesis, coniferyl alcohol => lignin",Secondary
+71,"Lignin biosynthesis, sinapyl alcohol => lignin",Secondary
+260,"Polyamine biosynthesis, arginine => putrescine => spermidine",Secondary
+261,"Polyamine biosynthesis, ornithine => putrescine",Secondary
+262,"Ptrescine metabolism, N-acetylation, putrescine => 4-aminobutanoate",Secondary
+263,"Ptrescine metabolism, gamma-glutamylation, putrescine =>	4-aminobutanoate",Secondary
+96,"Purine alkaloid biosynthesis, xanthosine => theobromine, caffeine,	theophylline",Secondary
+227,"Bile acid biosynthesis, cholesterol => cholate",Secondary
+228,"Bile acid biosynthesis, cholesterol => chenodeoxycholate",Secondary
+229,"Conjugated bile acid biosynthesis, choloyl-CoA =>	taurocholate/glycocholate",Secondary
+230,"Steroid hormone biosynthesis, cholesterol => prognenolone =>	progesterone",Secondary
+231,"C21-Steroid hormone biosynthesis, progesterone =>	corticosterone/aldosterone",Secondary
+232,"C21-Steroid hormone biosynthesis, progesterone => cortisol/cortisone",Secondary
+233,"C19-Steroid hormone biosynthesis, pregnenolone => androstenedione	<=> testosterone",Secondary
+234,"C18-Steroid hormone biosynthesis,  androstenedione/testerone =>	estrone/estradiol",Secondary
+191,"C5 isoprenoid biosynthesis, mevalonate pathway",Secondary
+192,"C5 isoprenoid biosynthesis, non-mevalonate pathway",Secondary
+193,C10 isoprenoid biosynthesis,Secondary
+194,C15 isoprenoid biosynthesis,Secondary
+195,C20 isoprenoid biosynthesis,Secondary
+196,C30 isoprenoid biosynthesis,Secondary
+197,"C40 isoprenoid biosynthesis, GGAP => lycopene",Secondary
+198,"C40 isoprenoid biosynthesis, lycopene => beta-carotene",Secondary
+222,"C30 isoprenoid biosynthesis, squalene => lanosterol",Secondary
+223,"C30 isoprenoid biosynthesis, squalene => cycloartenol",Secondary
+271,"Complex I (NADH dehydrogenase), NADH dehydrogenase I",x
+272,"Complex I (NADH dehydrogenase), NADH dehydrogenase (ubiquinone) Fe-S	protein/flavoprotein",x
+274,"Complex I (NADH dehydrogenase), NADH dehydrogenase I/diaphorase	subunit of the bidirectional hydrogenase",x
+275,"Complex I (NADH dehydrogenase), NADH dehydrogenase (ubiquinone) 1	alpha subcomplex",x
+276,"Complex I (NADH dehydrogenase), NADH dehydrogenase (ubiquinone) 1	beta subcomplex",x
+277,"Complex II (succinate dehydrogenase / fumarate reductase), succinate	dehydrogenase (ubiquinone)",x
+278,"Complex II (succinate dehydrogenase / fumarate reductase), succinate	dehydrogenase",x
+279,"Complex II (succinate dehydrogenase / fumarate reductase), fumarate	reductase",x
+280,Complex III (Cytochrome bc1 complex),x
+281,Complex III (Cytochrome bc1 complex),x
+282,Cytochrome bd complex,x
+283,"Complex IV (Cytochrome c oxidase), cytochrome c oxidase",x
+284,"Complex IV (Cytochrome c oxidase), cytochrome o ubiquinol	oxidase/cytochrome c oxidase/quinol oxidase polypeptide",x
+285,"Complex IV (Cytochrome c oxidase), cytochrome c oxidase, cbb3-type",x
+286,F-type ATPase (Bacteria),x
+287,F-type ATPase (Eukaryotes),x
+288,V-type ATPase (Prokaryotes),x
+289,V-type ATPase (Eukaryotes),x
+121,"GPI-anchor biosynthesis, cytoplasmic leaflet",x
+122,"GPI-anchor biosynthesis, lumenal leaflet",x
+123,"GPI-anchor biosynthesis, ER",x
+39,Selenocysteinyl-tRNA biosynthesis,x
+290,Photosystem II,x
+291,Cytochrome b6f complex,x
+292,Photosystem I,x
+293,ATP synthase,x
+273,"Complex I (NADH dehydrogenase), NADH dehydrogenase I",x
+718,oligosaccharyltransferase complex,x
