@@ -906,12 +906,12 @@ class Organism(object):
 
         if fs:
             self.curation_notes['org.check_gene_overlap'].append({
-                'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
+                'msg':'M-model has a {} gene overlap with optional files (BioCyc)'.format(file_overlap),
                 'importance':fs,
                 'to_do':'Check whether optional files where downloaded correctly.'})
         if gs:
             self.curation_notes['org.check_gene_overlap'].append({
-                'msg':'M-model has a {} gene overlap with optional files (BioCyc)',
+                'msg':'M-model has a {} gene overlap with Genbank'.format(gb_overlap),
                 'importance':gs,
                 'to_do':'Check whether genbank was downloaded correctly.'})
         if warn_table:
