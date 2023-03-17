@@ -2032,6 +2032,12 @@ class Organism(object):
 #                     )
                 complexes_df.loc[new_complex, "genes"] = info["genes"]
                 complexes_df.loc[new_complex, "name"] = str(info["name"])
+            
+            if info["replace"]:
+                if info["replace"] in protein_mod.index:
+                    protein_mod = protein_mod.drop(info["replace"])
+                else:
+                    warn_replace.append(mod_complex)
             if info["mod"]:
                 mod_complex = (
                     new_complex
@@ -2047,11 +2053,7 @@ class Organism(object):
                 if mod_complex in protein_mod.index:
                     warn_manual_mod.append(mod_complex)
                     continue
-                if info["replace"]:
-                    if info["replace"] in protein_mod.index:
-                        protein_mod = protein_mod.drop(info["replace"])
-                    else:
-                        warn_replace.append(mod_complex)
+
                 protein_mod = self._add_entry_to_protein_mod(protein_mod,
                                                              mod_complex,
                                                              new_complex,

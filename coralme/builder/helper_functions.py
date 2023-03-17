@@ -408,6 +408,20 @@ def get_met_coeff(stoich,growth_rate,growth_key='mu'):
 			return None
 	return stoich
 
+def summarize_reactions(model,met_id,only_types=(),ignore_types = ()):
+	reactions = get_reactions_of_met(model,met_id,only_types=only_types,
+								 ignore_types=ignore_types,verbose=False)
+	d = {}
+	for r in reactions:
+		d[r.id] = {
+			'name':r.name,
+			'gene_reaction_rule':r.gene_reaction_rule,
+			'reaction':r.reaction,
+			'notes':r.notes if r.notes else ''
+		}
+	return pandas.DataFrame.from_dict(d).T
+
+
 def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
 	import tqdm
 	if not flux_dict:
