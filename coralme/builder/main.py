@@ -1338,7 +1338,7 @@ class MEBuilder(object):
 			elif met not in ref_model.metabolites:
 				d[subrxn]['Metabolites'] = 'CPLX_dummy'
 				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
-			else:
+			else: # TODO: Add something here as placeholder for curation
 				continue
 			org_subreaction_matrix = \
 				pandas.concat([org_subreaction_matrix,
