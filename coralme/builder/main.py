@@ -2686,7 +2686,7 @@ class METroubleshooter(object):
 
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
 			self.me_model.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
-			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.me_model.solution.objective_value))
+			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
 
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
