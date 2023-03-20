@@ -553,15 +553,18 @@ def fill_builder(b,fill_with='CPLX_dummy',key=None,d=None,fieldname=None,warning
     else:
         pass
 
-def gap_find(me_model):
+def gap_find(me_model,de_type = None):
 	#from draft_coralme.util.helper_functions import find_gaps
-	logging.warning('  '*5 + 'Finding gaps from the M-model only...')
-	m_gaps = coralme.builder.helper_functions.find_gaps(me_model.gem)
 
 	logging.warning('  '*5 + 'Finding gaps in the ME-model...')
 	me_gaps = coralme.builder.helper_functions.find_gaps(me_model, growth_key = me_model.mu)
 
-	idx = list(set(me_gaps.index) - set(m_gaps.index))
+	if de_type == 'me_only':
+		logging.warning('  '*5 + 'Finding gaps from the M-model only...')
+		m_gaps = coralme.builder.helper_functions.find_gaps(me_model.gem)
+		idx = list(set(me_gaps.index) - set(m_gaps.index))
+	else:
+		idx = list(set(me_gaps.index))
 	new_gaps = me_gaps.loc[idx]
 
 	filt1 = new_gaps['p'] == 1
@@ -656,7 +659,9 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	return bf_gaps, no_gaps, True
 
 def get_mets_from_type(me_model,met_type):
-	if met_type == 'Deadends':
+	if met_type == 'ME-Deadends':
+		return set(coralme.builder.helper_functions.gap_find(me_model,de_type='me_only'))
+	if met_type == 'All-Deadends':
 		return set(coralme.builder.helper_functions.gap_find(me_model))
 	if met_type == 'Cofactors':
 		return set(coralme.builder.helper_functions.get_cofactors_in_me_model(me_model))
