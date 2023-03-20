@@ -1318,6 +1318,8 @@ class MEBuilder(object):
 		org_model = self.org.m_model
 		ref_model = self.ref.m_model
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
+		warn_mets = []
+		warn_cplxs = []
 		for subrxn,row in tqdm.tqdm(ref_subreaction_matrix.iterrows(),
 					'Updating subreaction matrix with homology...',
 					bar_format = bar_format,
@@ -1325,27 +1327,42 @@ class MEBuilder(object):
 			d = {}
 			d[subrxn] = {'Metabolites':'','Stoichiometry':''}
 			met = row['Metabolites'].split('_mod_')[0]
-			if met in org_model.metabolites:
+			if met in self.ref.complexes_df.index:
+				if met in ref_cplx_homolog:
+					if 'mod' in row['Metabolites']:
+						mods = '_mod_' + '_mod_'.join(row['Metabolites'].split('_mod_')[1:])
+					else:
+						mods = ''
+					d[subrxn]['Metabolites'] = ref_cplx_homolog[met] + mods
+				else:
+					warn_cplxs = []
+					d[subrxn]['Metabolites'] = 'CPLX_dummy'
+				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
+			else:
+				if not org_model.metabolites.has_id(met):
+					warn_mets.append(met)
 				d[subrxn]['Metabolites'] = met
 				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
-			elif met in ref_cplx_homolog:
-				if 'mod' in row['Metabolites']:
-					mods = '_mod_' + '_mod_'.join(row['Metabolites'].split('_mod_')[1:])
-				else:
-					mods = ''
-				d[subrxn]['Metabolites'] = ref_cplx_homolog[met] + mods
-				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
-			elif met not in ref_model.metabolites:
-				d[subrxn]['Metabolites'] = 'CPLX_dummy'
-				d[subrxn]['Stoichiometry'] = row['Stoichiometry']
-			else: # TODO: Add something here as placeholder for curation
-				continue
 			org_subreaction_matrix = \
 				pandas.concat([org_subreaction_matrix,
 							  pandas.DataFrame.from_dict(d).T],
 							 axis = 0, join = 'outer')
 		self.org.subreaction_matrix = org_subreaction_matrix
 		self.org.subreaction_matrix.index.name = 'Reaction'
+		self.org.subreaction_matrix.to_csv(self.org.directory + 'subreaction_matrix.txt')
+		
+		if warn_mets:
+			self.curation_notes['update_subreaction_matrix'].append({
+				'msg':'Some metabolites in subreaction_matrix were added from reference but are not in M-model',
+				'triggered_by':warn_mets,
+				'importance':'high',
+				'to_do':'Map these metabolites or replace the subreaction'})
+		if warn_cplxs:
+			self.curation_notes['update_subreaction_matrix'].append({
+				'msg':'Some complexes in subreaction_matrix of reference could not be mapped',
+				'triggered_by':warn_cplxs,
+				'importance':'high',
+				'to_do':'Map these complexes or replace the subreaction'})
 
 	def update_from_homology(self):
 		self.update_enzyme_stoichiometry()

@@ -419,7 +419,7 @@ def summarize_reactions(model,met_id,only_types=(),ignore_types = ()):
 			'reaction':r.reaction,
 			'notes':r.notes if r.notes else ''
 		}
-	return pandas.DataFrame.from_dict(d).T
+	return pandas.DataFrame.from_dict(d).T[['name','gene_reaction_rule','reaction','notes']]
 
 
 def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
