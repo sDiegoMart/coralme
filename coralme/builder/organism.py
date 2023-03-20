@@ -227,7 +227,7 @@ class Organism(object):
         self.phospholipids = self.get_phospholipids()
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
-        logging.warning("Identifying non-metabolic metabolites in M-model")
+        logging.warning("Complementing non-metabolic metabolites in M-model")
         self.get_nonmetabolic()
 
         logging.warning("Purging genes in M-model")
@@ -1256,6 +1256,8 @@ class Organism(object):
         m_model = self.m_model
         queries = ['ACP','trna']
         for m in m_model.metabolites.query('|'.join(queries)):
+            if m.id in self.me_mets.index:
+                continue
             tmp = {m.id:{
                 'me_id':'',
                 'name':'',
