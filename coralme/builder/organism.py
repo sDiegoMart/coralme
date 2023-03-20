@@ -227,6 +227,8 @@ class Organism(object):
         self.phospholipids = self.get_phospholipids()
         logging.warning("Updating peptide release factors with BioCyc")
         self.get_peptide_release_factors()
+        logging.warning("Identifying non-metabolic metabolites in M-model")
+        self.get_nonmetabolic()
 
         logging.warning("Purging genes in M-model")
         self.purge_genes_in_model()
@@ -1250,6 +1252,19 @@ class Organism(object):
             if not peptide_release_factors["UGA"]['enzyme'] and rf.str.contains("2").any():
                 peptide_release_factors["UGA"]['enzyme'] = rf[rf.str.contains("2")].index[0]
                 generics["generic_RF"]['enzymes'].append(peptide_release_factors["UGA"]['enzyme'])
+    def get_nonmetabolic(self):
+        m_model = self.m_model
+        queries = ['ACP','trna']
+        for m in m_model.metabolites.query('|'.join(queries)):
+            tmp = {m.id:{
+                'me_id':'',
+                'name':'',
+                'formula':'',
+                'compartment':'',
+                'type':'CURATE'
+            }}
+            self.me_mets = self._add_entry_to_df(self.me_mets,tmp)
+        return None
 
     def gb_to_faa(self, org_id, outdir = False, element_types = {"CDS"}):
         ## Create FASTA file with AA sequences for BLAST

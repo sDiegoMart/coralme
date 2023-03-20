@@ -931,8 +931,9 @@ class MEBuilder(object):
 						continue
 					else:
 						warn_found.append(ref_m)
-			if ref_m in me_mets.index:
+			if ref_m in me_mets.index and me_mets.loc[ref_m]['type'] != 'CURATE':
 				continue
+			me_mets.drop(ref_m,inplace=True)
 			ref_me = row["me_id"]
 			ref_changetype = row['type']
 			d[ref_m] = {}
