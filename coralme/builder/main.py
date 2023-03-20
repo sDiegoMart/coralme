@@ -931,9 +931,10 @@ class MEBuilder(object):
 						continue
 					else:
 						warn_found.append(ref_m)
-			if ref_m in me_mets.index and me_mets.loc[ref_m]['type'] != 'CURATE':
-				continue
-			me_mets.drop(ref_m,inplace=True)
+			if ref_m in me_mets.index:
+				if me_mets.loc[ref_m]['type'] != 'CURATE':
+					continue
+				me_mets.drop(ref_m,inplace=True)
 			ref_me = row["me_id"]
 			ref_changetype = row['type']
 			d[ref_m] = {}
@@ -1347,7 +1348,7 @@ class MEBuilder(object):
 							 axis = 0, join = 'outer')
 		self.org.subreaction_matrix = org_subreaction_matrix
 		self.org.subreaction_matrix.index.name = 'Reaction'
-		self.org.subreaction_matrix.to_csv(self.org.directory + 'subreaction_matrix.txt')
+# 		self.org.subreaction_matrix.to_csv(self.org.directory + 'subreaction_matrix.txt')
 		
 		if warn_mets:
 			self.curation_notes['update_subreaction_matrix'].append({
