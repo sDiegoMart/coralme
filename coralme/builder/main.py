@@ -919,7 +919,6 @@ class MEBuilder(object):
 		d = {}
 		warn_skip = []
 		warn_found = []
-		warn_skip_2 = []
 		for ref_m, row in tqdm.tqdm(ref_me_mets.iterrows(),
 					'Mapping M-metabolites to E-metabolites...',
 					bar_format = bar_format,
@@ -953,20 +952,18 @@ class MEBuilder(object):
 			df.index.name = "id"
 			me_mets = pandas.concat([me_mets, df], axis = 0, join = 'outer')
 			self.org.me_mets = me_mets.fillna('')
-		# Warnings
-		if warn_skip or warn_found or warn_skip_2:
-			if warn_skip:
-				self.org.curation_notes['update_me_mets'].append({
-					'msg':'Some metabolites in me_metabolites.txt are not in m_model, so they were skipped.',
-					'triggered_by':warn_skip,
-					'importance':'medium',
-					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.txt'})
-			if warn_found:
-				self.org.curation_notes['update_me_mets'].append({
-					'msg':'Some metabolites in me_metabolites.txt were found in reference m_model after replacing __ with _',
-					'triggered_by':warn_found,
-					'importance':'medium',
-					'to_do':'Confirm these metabolites are correctly defined in me_metabolites.txt'})
+		if warn_skip:
+			self.org.curation_notes['update_me_mets'].append({
+				'msg':'Some metabolites in me_metabolites.txt are not in m_model, so they were skipped.',
+				'triggered_by':warn_skip,
+				'importance':'medium',
+				'to_do':'Confirm these metabolites are correctly defined in me_metabolites.txt'})
+		if warn_found:
+			self.org.curation_notes['update_me_mets'].append({
+				'msg':'Some metabolites in me_metabolites.txt were found in reference m_model after replacing __ with _',
+				'triggered_by':warn_found,
+				'importance':'medium',
+				'to_do':'Confirm these metabolites are correctly defined in me_metabolites.txt'})
 
 	def update_generics_from_homology(self):
 		generic_dict = self.org.generic_dict
@@ -1417,6 +1414,16 @@ class MEBuilder(object):
 									'importance':'high',
 									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.txt'
 				})
+		
+		me_mets = self.org.me_mets
+		warn_mets = list(me_mets[me_mets['type'] == 'CURATE'].index)
+		# Warnings
+		if warn_mets:
+			self.org.curation_notes['check'].append({
+				'msg':'Some metabolites in me_metabolites.txt need curation',
+				'triggered_by':warn_mets,
+				'importance':'medium',
+				'to_do':'Map or remove these metabolites in me_metabolites.txt'})
 
 	def load(self, directory):
 		with open(directory, "rb") as f:
