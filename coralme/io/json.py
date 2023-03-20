@@ -5,6 +5,7 @@ import sympy
 import jsonschema
 from collections import OrderedDict
 
+import pandas
 import cobra
 import coralme
 
@@ -33,7 +34,7 @@ def get_schema():
 	with open(os.path.join(cur_dir, 'JSONSCHEMA'), 'r') as f:
 		return json.load(f)
 
-def save_json_me_model(model, file_name, sort = False):
+def save_json_me_model(model, file_name, sort = True):
 	"""
 	Save a full JSON version of the ME-model. Saving/loading a model in this
 	format can then be loaded to return a ME-model identical to the one saved,
@@ -68,8 +69,15 @@ def save_json_me_model(model, file_name, sort = False):
 	#if should_close:
 		#file_name.close()
 
+	def set_default(obj):
+		if isinstance(obj, set):
+			return list(obj)
+		if isinstance(obj, pandas.DataFrame):
+			return obj.to_dict()
+		#raise TypeError
+
 	with open(file_name, 'w') as outfile:
-		json.dump(model_dict, outfile, indent = 2, sort_keys = sort)
+		json.dump(model_dict, outfile, indent = 2, sort_keys = sort, default = set_default)
 
 def load_json_me_model(file_name):
 	"""
