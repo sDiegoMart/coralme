@@ -7,7 +7,7 @@ def add_iron_sulfur_modifications(me_model):
 	fes_transfers = me_model.global_info['complex_cofactors']['fes_transfers']
 	for fes in ['2fe2s', '4fe4s']:
 		name = 'generic_{:s}_transfer_complex'.format(fes)
-		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers.values()) if x != '' ]
+		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers) if x != '' ]
 		generic_fes_transfer = coralme.core.processdata.GenericData(name, me_model, components)
 		generic_fes_transfer.create_reactions()
 

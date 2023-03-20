@@ -1549,10 +1549,10 @@ class MEReconstruction(MEBuilder):
 			config['other_lipids'] = self.org.lipid_modifications.get('other_lipids', 'CPLX_dummy')
 			logging.warning('The apolipoprotein N-acyltransferase homolog was set from homology data.')
 
-			lst = self.org.generic_dict.get('generic_fes_transfers_complex', {'enzymes' : []})['enzymes'] # ecolime = ['CPLX0-7617', 'CPLX0-7824', 'IscA_tetra']
-			if len(lst) != 3:
-				lst = lst + ['CPLX_dummy'] * (3 - len(lst))
-			config['complex_cofactors']['fes_transfers'] = { k:v for k,v in zip([ 'erpA', 'sufA', 'iscA' ], lst)}
+			lst = self.org.generic_dict.get('generic_fes_transfers_complex', {'enzymes' : ['CPLX_dummy']})['enzymes'] # ecolime = ['CPLX0-7617', 'CPLX0-7824', 'IscA_tetra']
+# 			if len(lst) != 3:
+# 				lst = lst + ['CPLX_dummy'] * (3 - len(lst))
+			config['complex_cofactors']['fes_transfers'] = lst
 			logging.warning('The iron-sulfur cluster insertion homologs were set from homology data.')
 
 			self.org.get_reaction_keffs() # saves a file to <out_directory>/building_data/reaction_median_keffs.txt
@@ -1899,7 +1899,7 @@ class MEReconstruction(MEBuilder):
 		rxn.add_metabolites({'protein_biomass': -mass, 'protein_dummy': -1, met: mass})
 
 		# Add CPLX_dummy_mod_2fe2s(1) and CPLX_dummy_mod_4fe4s(1) if fes_transfers is {'CPLX_dummy'}
-		if 'CPLX_dummy' in list(me.global_info['complex_cofactors']['fes_transfers'].values()):
+		if 'CPLX_dummy' in me.global_info['complex_cofactors']['fes_transfers']:
 			for fes in ['2fe2s', '4fe4s']:
 				coralme.util.building.add_complex_to_model(me, 'CPLX_dummy_mod_{:s}(1)'.format(fes), { 'protein_dummy' : 1.0, fes + '_c': 1.0})
 			list(me.complex_data)[-2].create_complex_formation()
