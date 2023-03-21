@@ -141,9 +141,7 @@ _METABOLITE_TYPE_DEPENDENCIES = {
 		]
 	}
 
-mu_temp = sympy.Symbol('mu')
-
-def get_sympy_expression(value):
+def get_sympy_expression(value, growth_key):
 	"""
 	Return sympy expression from json string using sympify
 
@@ -162,9 +160,13 @@ def get_sympy_expression(value):
 		Numeric representation of string with coralme's mu symbol substituted
 
 	"""
-
+	# The json file includes the 'mu' key in dct['global_info']['growth_key'] as a string
+	# We use dct['global_info']['growth_key'] to set a sympy.Symbol called 'growth_key'
 	expression_value = sympy.sympify(value)
-	return expression_value.subs(mu_temp, sympy.Symbol('mu', positive = True))
+	if isinstance(expression_value, (sympy.core.numbers.Float, sympy.core.numbers.One, sympy.core.numbers.NegativeOne, sympy.core.numbers.Integer)):
+		return float(expression_value)
+	else:
+		return expression_value.subs(str(growth_key), growth_key)
 
 def get_numeric_from_string(string):
 	"""
@@ -443,7 +445,7 @@ def _add_reaction_from_dict(model, reaction_info):
 		# upper and lower bounds may contain mu values. Handle that here
 		value = reaction_info[attribute]
 		if attribute in ['upper_bound', 'lower_bound']:
-			value = get_sympy_expression(value)
+			value = get_sympy_expression(value, model.global_info['growth_key'])
 		setattr(reaction_obj, attribute, value)
 
 	# Some reactions are added to model when ME-models are initialized
@@ -458,7 +460,7 @@ def _add_reaction_from_dict(model, reaction_info):
 	# stoichiometries set explicitly .
 	if reaction_type in ['SummaryVariable', 'MEReaction']:
 		for key, value in reaction_info['metabolites'].items():
-			reaction_obj.add_metabolites({model.metabolites.get_by_id(key): get_sympy_expression(value)}, combine=False)
+			reaction_obj.add_metabolites({model.metabolites.get_by_id(key): get_sympy_expression(value, model.global_info['growth_key'])}, combine=False)
 
 	for attribute in _REACTION_TYPE_DEPENDENCIES.get(reaction_type, []):
 		# Spontaneous reactions do no require complex_data
@@ -493,6 +495,8 @@ def me_model_from_dict(obj):
 	for k, v in obj.items():
 		if k in {'id', 'name', 'global_info'}:
 			setattr(model, k, v)
+
+	model.global_info['growth_key'] = sympy.Symbol(model.global_info['growth_key'], positive = True)
 
 	for metabolite in tqdm.tqdm(obj['metabolites'], 'Adding Metabolites into the ME-model...', bar_format = bar_format):
 		_add_metabolite_from_dict(model, metabolite)
