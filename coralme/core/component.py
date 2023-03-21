@@ -1,5 +1,6 @@
 import cobra
 import coralme
+from collections import Counter
 
 class MEComponent(cobra.core.metabolite.Metabolite):
 	"""
@@ -111,6 +112,15 @@ class TranscribedGene(MEComponent):
 
 	#def __repr__(self):
 		#return 'TranscribedGene'
+
+	@property
+	def codon_usage(self):
+		if self.RNA_type == 'mRNA':
+			seq = self.nucleotide_sequence
+			codons = [ str(seq[pos:pos+3]) for pos in range(0, len(seq), 3) ]
+			return Counter(codons)
+		else:
+			return None
 
 	@property
 	def nucleotide_count(self):
