@@ -2679,7 +2679,7 @@ class METroubleshooter(object):
 		if works == False:
 # 			logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
 
-			met_types = ['ME-Deadends','All-Deadends', 'Cofactors', 'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
+			met_types = ['ME-Deadends', 'Cofactors','All-Deadends', 'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
 
 			for idx,met_type in enumerate(met_types):
 				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
