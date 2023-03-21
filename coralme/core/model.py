@@ -13,6 +13,9 @@ import scipy
 import sympy
 import cobra
 import coralme
+# due to a circular import
+from coralme.core.component import Metabolite as Metabolite
+from coralme.core.reaction import MEReaction as MEReaction
 
 def _update(MEReaction):
 	"""updates all component reactions"""
@@ -28,14 +31,14 @@ class MEModel(cobra.core.model.Model):
 
 			'kt' : 4.5,
 			'r0' : 0.087,
-			'k_deg' : 12,
+			'k_deg' : 12.0,
 			'm_rr' : 1453.0,
 			'm_aa' : 0.109,
 			'm_nt' : 0.324,
 			'f_rRNA' : 0.86,
 			'f_mRNA' : 0.02,
 			'f_tRNA' : 0.12,
-			'm_tRNA' : 25.000,
+			'm_tRNA' : 25.0,
 			'temperature' : 37,
 			'propensity_scaling' : 0.45,
 
@@ -421,13 +424,13 @@ class MEModel(cobra.core.model.Model):
 
 	def add_boundary(
 		self,
-		metabolite: coralme.core.component.Metabolite,
+		metabolite: Metabolite,
 		type: str = "exchange",
 		reaction_id: typing.Optional[str] = None,
 		lb: typing.Optional[float] = None,
 		ub: typing.Optional[float] = None,
 		sbo_term: typing.Optional[str] = None,
-	) -> coralme.core.reaction.MEReaction:
+	) -> MEReaction:
 		"""
 		Add a boundary reaction for a given metabolite.
 
@@ -521,7 +524,7 @@ class MEModel(cobra.core.model.Model):
 		if reaction_id in self.reactions:
 			raise ValueError(f"Boundary reaction '{reaction_id}' already exists.")
 		name = f"{metabolite.name} {type}"
-		rxn = coralme.core.reaction.MEReaction(id=reaction_id, name=name)
+		rxn = MEReaction(id=reaction_id, name=name)
 		rxn.lower_bound = lb
 		rxn.upper_bound = ub
 		rxn.add_metabolites({metabolite: -1})
