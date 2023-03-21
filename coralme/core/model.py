@@ -419,6 +419,118 @@ class MEModel(cobra.core.model.Model):
 				for group in associated_groups:
 					group.remove_members(reaction)
 
+	def add_boundary(
+		self,
+		metabolite: coralme.core.component.Metabolite,
+		type: str = "exchange",
+		reaction_id: typing.Optional[str] = None,
+		lb: typing.Optional[float] = None,
+		ub: typing.Optional[float] = None,
+		sbo_term: typing.Optional[str] = None,
+	) -> coralme.core.reaction.MEReaction:
+		"""
+		Add a boundary reaction for a given metabolite.
+
+		There are three different types of pre-defined boundary reactions:
+		exchange, demand, and sink reactions.
+		An exchange reaction is a reversible, unbalanced reaction that adds
+		to or removes an extracellular metabolite from the extracellular
+		compartment.
+		A demand reaction is an irreversible reaction that consumes an
+		intracellular metabolite.
+		A sink is similar to an exchange but specifically for intracellular
+		metabolites, i.e., a reversible reaction that adds or removes an
+		intracellular metabolite.
+
+		If you set the reaction `type` to something else, you must specify the
+		desired identifier of the created reaction along with its upper and
+		lower bound. The name will be given by the metabolite name and the
+		given `type`.
+
+		The change is reverted upon exit when using the model as a context.
+
+		Parameters
+		----------
+		metabolite : cobra.Metabolite
+			Any given metabolite. The compartment is not checked but you are
+			encouraged to stick to the definition of exchanges and sinks.
+		type : {"exchange", "demand", "sink"}
+			Using one of the pre-defined reaction types is easiest. If you
+			want to create your own kind of boundary reaction choose
+			any other string, e.g., 'my-boundary' (default "exchange").
+		reaction_id : str, optional
+			The ID of the resulting reaction. This takes precedence over the
+			auto-generated identifiers but beware that it might make boundary
+			reactions harder to identify afterwards when using `model.boundary`
+			or specifically `model.exchanges` etc. (default None).
+		lb : float, optional
+			The lower bound of the resulting reaction (default None).
+		ub : float, optional
+			The upper bound of the resulting reaction (default None).
+		sbo_term : str, optional
+			A correct SBO term is set for the available types. If a custom
+			type is chosen, a suitable SBO term should also be set (default None).
+
+		Returns
+		-------
+		cobra.Reaction
+			The created boundary reaction.
+
+		Examples
+		--------
+		>>> from cobra.io load_model
+		>>> model = load_model("textbook")
+		>>> demand = model.add_boundary(model.metabolites.atp_c, type="demand")
+		>>> demand.id
+		'DM_atp_c'
+		>>> demand.name
+		'ATP demand'
+		>>> demand.bounds
+		(0, 1000.0)
+		>>> demand.build_reaction_string()
+		'atp_c --> '
+
+		"""
+		ub = cobra.Configuration().upper_bound if ub is None else ub
+		lb = cobra.Configuration().lower_bound if lb is None else lb
+		types = {
+			"exchange": ("EX", lb, ub, cobra.medium.sbo_terms["exchange"]),
+			"demand": ("DM", 0, ub, cobra.medium.sbo_terms["demand"]),
+			"sink": ("SK", lb, ub, cobra.medium.sbo_terms["sink"]),
+		}
+		if type == "exchange":
+			external = cobra.medium.find_external_compartment(self)
+			if metabolite.compartment != external:
+				raise ValueError(
+					f"The metabolite is not an external metabolite (compartment is "
+					f"`{metabolite.compartment}` but should be `{external}`). "
+					f"Did you mean to add a demand or sink? If not, either change"
+					f" its compartment or rename the model compartments to fix this."
+				)
+		if type in types:
+			prefix, lb, ub, default_term = types[type]
+			if reaction_id is None:
+				reaction_id = f"{prefix}_{metabolite.id}"
+			if sbo_term is None:
+				sbo_term = default_term
+		if reaction_id is None:
+			raise ValueError(
+				"Custom types of boundary reactions require a custom "
+				"identifier. Please set the `reaction_id`."
+			)
+		if reaction_id in self.reactions:
+			raise ValueError(f"Boundary reaction '{reaction_id}' already exists.")
+		name = f"{metabolite.name} {type}"
+		rxn = coralme.core.reaction.MEReaction(id=reaction_id, name=name)
+		rxn.lower_bound = lb
+		rxn.upper_bound = ub
+		rxn.add_metabolites({metabolite: -1})
+		if sbo_term:
+			rxn.annotation["sbo"] = sbo_term
+		self.add_reactions([rxn])
+		return rxn
+
+	# WARNING: (modified) functions from cobrame again
 	def add_biomass_constraints_to_model(self, biomass_types):
 		for biomass_type in tqdm.tqdm(biomass_types, 'Adding biomass constraint(s) into the ME-model...', bar_format = bar_format):
 			if '_biomass' not in biomass_type:
