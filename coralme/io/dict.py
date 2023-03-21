@@ -507,6 +507,7 @@ def me_model_from_dict(obj):
 	for reaction in tqdm.tqdm(obj['reactions'], 'Adding Reactions into the ME-model...', bar_format = bar_format):
 		_add_reaction_from_dict(model, reaction)
 
+	coralme.builder.compartments.add_compartments_to_model(model)
 	model.update()
 
 	return model
