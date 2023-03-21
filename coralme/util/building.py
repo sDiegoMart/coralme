@@ -548,8 +548,10 @@ def build_reactions_from_genbank(
 					continue
 
 				# Add the codon usage
-				codons = [ str(seq[pos:pos+3]) for pos in range(0, len(seq), 3) ]
-				codon_usage.update(Counter(codons))
+				if len(seq) % 3 != 0:
+					logging.warning('Gene \'{:s}\' was not used to determine the codon usage.'.format(bnum))
+					codons = [ str(seq[pos:pos+3]) for pos in range(0, len(seq), 3) ]
+					codon_usage.update(Counter(codons))
 
 			me_model.global_info['transl_tables'] = transl_tables
 			me_model.global_info['start_codons'] = start_codons
