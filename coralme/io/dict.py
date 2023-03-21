@@ -21,7 +21,8 @@ _REACTION_TYPE_DEPENDENCIES = {
 	'MetabolicReaction': [
 		'complex_data',
 		'stoichiometric_data',
-		'reverse'
+		'reverse',
+		'keff'
 		],
 	'ComplexFormation': [
 		'_complex_id',
