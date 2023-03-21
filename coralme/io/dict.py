@@ -1,3 +1,6 @@
+import tqdm
+bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+
 import sympy
 import coralme
 
@@ -455,7 +458,6 @@ def _add_reaction_from_dict(model, reaction_info):
 	# stoichiometries set explicitly .
 	if reaction_type in ['SummaryVariable', 'MEReaction']:
 		for key, value in reaction_info['metabolites'].items():
-			print(key, value)
 			reaction_obj.add_metabolites({model.metabolites.get_by_id(key): get_sympy_expression(value)}, combine=False)
 
 	for attribute in _REACTION_TYPE_DEPENDENCIES.get(reaction_type, []):
@@ -492,15 +494,15 @@ def me_model_from_dict(obj):
 		if k in {'id', 'name', 'global_info'}:
 			setattr(model, k, v)
 
-	for metabolite in obj['metabolites']:
+	for metabolite in tqdm.tqdm(obj['metabolites'], 'Adding Metabolites into the ME-model...', bar_format = bar_format):
 		_add_metabolite_from_dict(model, metabolite)
 
-	for process_data in obj['process_data']:
+	for process_data in tqdm.tqdm(obj['process_data'], 'Adding ProcessData into the ME-model...', bar_format = bar_format):
 		_add_process_data_from_dict(model, process_data)
 
-	for reaction in obj['reactions']:
+	for reaction in tqdm.tqdm(obj['reactions'], 'Adding Reactions into the ME-model...', bar_format = bar_format):
 		_add_reaction_from_dict(model, reaction)
-	return model
-	#model.update()
 
-	#return model
+	model.update()
+
+	return model
