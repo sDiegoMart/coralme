@@ -1,3 +1,6 @@
+import tqdm
+bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+
 import sympy
 import coralme
 
@@ -18,7 +21,8 @@ _REACTION_TYPE_DEPENDENCIES = {
 	'MetabolicReaction': [
 		'complex_data',
 		'stoichiometric_data',
-		'reverse'
+		'reverse',
+		'keff'
 		],
 	'ComplexFormation': [
 		'_complex_id',
@@ -61,13 +65,17 @@ _PROCESS_DATA_TYPE_DEPENDENCIES = {
 		'subreactions',
 		'nucleotide_sequence',
 		'RNA_products',
-		'RNA_polymerase'
+		'RNA_polymerase',
+		'organelle'
 		],
 	'TranslationData': [
 		'subreactions',
 		'nucleotide_sequence',
 		'mRNA',
-		'protein'
+		'protein',
+		'transl_table',
+		'translation',
+		'organelle'
 		],
 	'tRNAData': [
 		'subreactions',
@@ -134,9 +142,7 @@ _METABOLITE_TYPE_DEPENDENCIES = {
 		]
 	}
 
-mu_temp = sympy.Symbol('mu')
-
-def get_sympy_expression(value):
+def get_sympy_expression(value, growth_key):
 	"""
 	Return sympy expression from json string using sympify
 
@@ -155,9 +161,13 @@ def get_sympy_expression(value):
 		Numeric representation of string with coralme's mu symbol substituted
 
 	"""
-
+	# The json file includes the 'mu' key in dct['global_info']['growth_key'] as a string
+	# We use dct['global_info']['growth_key'] to set a sympy.Symbol called 'growth_key'
 	expression_value = sympy.sympify(value)
-	return expression_value.subs(mu_temp, coralme.util.mu)
+	if isinstance(expression_value, (sympy.core.numbers.Float, sympy.core.numbers.One, sympy.core.numbers.NegativeOne, sympy.core.numbers.Integer)):
+		return float(expression_value)
+	else:
+		return expression_value.subs(str(growth_key), growth_key)
 
 def get_numeric_from_string(string):
 	"""
@@ -341,14 +351,14 @@ def _add_metabolite_from_dict(model, metabolite_info):
 	if metabolite_type == 'ProcessedProtein':
 		unprocessed_id = metabolite_type_dict['ProcessedProtein']['unprocessed_protein_id']
 
-		metabolite_obj = getattr(coralme, metabolite_type)(metabolite_info['id'], unprocessed_id)
+		metabolite_obj = getattr(coralme.core.component, metabolite_type)(metabolite_info['id'], unprocessed_id)
 
 	elif metabolite_type == 'TranscribedGene':
 		rna_type = metabolite_type_dict['TranscribedGene']['RNA_type']
 		nucleotide_sequence = metabolite_type_dict['TranscribedGene']['nucleotide_sequence']
-		metabolite_obj = getattr(coralme, metabolite_type)(metabolite_info['id'], rna_type, nucleotide_sequence)
+		metabolite_obj = getattr(coralme.core.component, metabolite_type)(metabolite_info['id'], rna_type, nucleotide_sequence)
 	else:
-		metabolite_obj = getattr(coralme, metabolite_type)(metabolite_info['id'])
+		metabolite_obj = getattr(coralme.core.component, metabolite_type)(metabolite_info['id'])
 
 	for attribute in _REQUIRED_METABOLITE_ATTRIBUTES:
 		setattr(metabolite_obj, attribute, metabolite_info[attribute])
@@ -382,23 +392,23 @@ def _add_process_data_from_dict(model, process_data_dict):
 	if process_data_type == 'TranslationData':
 		mrna = process_data_info['mRNA']
 		protein = process_data_info['protein']
-		process_data = getattr(coralme, process_data_type)(id, model, mrna, protein)
+		process_data = getattr(coralme.core.processdata, process_data_type)(id, model, mrna, protein)
 	elif process_data_type == 'tRNAData':
 		amino_acid = process_data_info['amino_acid']
 		rna = process_data_info['RNA']
 		codon = process_data_info['codon']
-		process_data = getattr(coralme, process_data_type)(id, model, amino_acid, rna, codon)
+		process_data = getattr(coralme.core.processdata, process_data_type)(id, model, amino_acid, rna, codon)
 	elif process_data_type == 'PostTranslationData':
 		processed_protein_id = process_data_info['processed_protein_id']
 		unprocessed_protein_id = process_data_info['unprocessed_protein_id']
-		process_data = getattr(coralme, process_data_type)(id, model, processed_protein_id, unprocessed_protein_id)
+		process_data = getattr(coralme.core.processdata, process_data_type)(id, model, processed_protein_id, unprocessed_protein_id)
 	elif process_data_type == 'GenericData':
 		component_list = process_data_info['component_list']
-		process_data = getattr(coralme, process_data_type)(id, model, component_list)
+		process_data = getattr(coralme.core.processdata, process_data_type)(id, model, component_list)
 		# Create reaction from generic process data
 		process_data.create_reactions()
 	else:
-		process_data = getattr(coralme, process_data_type)(id, model)
+		process_data = getattr(coralme.core.processdata, process_data_type)(id, model)
 
 	# Set all of the required attributes using information in info dictionary
 	for attribute in _REQUIRED_PROCESS_DATA_ATTRIBUTES:
@@ -423,7 +433,7 @@ def _add_reaction_from_dict(model, reaction_info):
 
 	if len(reaction_type_dict) == 1:
 		reaction_type = list(reaction_type_dict.keys())[0]
-		reaction_obj = getattr(coralme, reaction_type)(reaction_info['id'])
+		reaction_obj = getattr(coralme.core.reaction, reaction_type)(reaction_info['id'])
 	else:
 		raise Exception('Only 1 reaction_type in valid json')
 
@@ -436,7 +446,7 @@ def _add_reaction_from_dict(model, reaction_info):
 		# upper and lower bounds may contain mu values. Handle that here
 		value = reaction_info[attribute]
 		if attribute in ['upper_bound', 'lower_bound']:
-			value = get_sympy_expression(value)
+			value = get_sympy_expression(value, model.global_info['growth_key'])
 		setattr(reaction_obj, attribute, value)
 
 	# Some reactions are added to model when ME-models are initialized
@@ -451,7 +461,7 @@ def _add_reaction_from_dict(model, reaction_info):
 	# stoichiometries set explicitly .
 	if reaction_type in ['SummaryVariable', 'MEReaction']:
 		for key, value in reaction_info['metabolites'].items():
-			reaction_obj.add_metabolites({key: get_sympy_expression(value)}, combine=False)
+			reaction_obj.add_metabolites({model.metabolites.get_by_id(key): get_sympy_expression(value, model.global_info['growth_key'])}, combine=False)
 
 	for attribute in _REACTION_TYPE_DEPENDENCIES.get(reaction_type, []):
 		# Spontaneous reactions do no require complex_data
@@ -487,15 +497,18 @@ def me_model_from_dict(obj):
 		if k in {'id', 'name', 'global_info'}:
 			setattr(model, k, v)
 
-	for metabolite in obj['metabolites']:
+	model.global_info['growth_key'] = sympy.Symbol(model.global_info['growth_key'], positive = True)
+
+	for metabolite in tqdm.tqdm(obj['metabolites'], 'Adding Metabolites into the ME-model...', bar_format = bar_format):
 		_add_metabolite_from_dict(model, metabolite)
 
-	for process_data in obj['process_data']:
+	for process_data in tqdm.tqdm(obj['process_data'], 'Adding ProcessData into the ME-model...', bar_format = bar_format):
 		_add_process_data_from_dict(model, process_data)
 
-	for reaction in obj['reactions']:
+	for reaction in tqdm.tqdm(obj['reactions'], 'Adding Reactions into the ME-model...', bar_format = bar_format):
 		_add_reaction_from_dict(model, reaction)
 
+	coralme.builder.compartments.add_compartments_to_model(model)
 	model.update()
 
 	return model
