@@ -108,7 +108,7 @@ class Organism(object):
         if os.path.isfile(filename):
             return pandas.read_csv(
                 filename, index_col=0, sep="\t"
-            )
+            ).fillna('')
         else:
             return self.generate_complexes_df()
 
