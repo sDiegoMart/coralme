@@ -72,9 +72,6 @@ class Organism(object):
         else:
             self.locus_tag = config.get('locus_tag','locus_tag')
         
-        
-        
-        
         data = \
             'code,interpretation,gram\n' \
             'CCI-CW-BAC-POS-GP,Cell_Wall,pos\n' \
@@ -1640,10 +1637,10 @@ class Organism(object):
                            'Adding protein location...',
                            bar_format = bar_format,
                            total=complexes_df.shape[0]):
-            if c in cplx_location:
-                c_loc = cplx_location[c]
-            else:
+            
+            if c not in cplx_location:
                 continue
+            c_loc = cplx_location[c]
             for gene_string in complexes_df["genes"][c].split(' AND '):
                 protein_location = self._add_entry_to_protein_location(
                                                     c,
