@@ -78,6 +78,7 @@ class Organism(object):
             'CCI-OUTER-MEM-GN,Outer_Membrane,neg\n' \
             'CCI-PM-BAC-NEG-GN,Inner_Membrane,neg\n' \
             'CCI-PM-BAC-POS-GP,Plasma_Membrane,pos\n' \
+            'CCI-EXTRACELLULAR-GP,Extracellular_Space,pos\n' \
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
@@ -1583,10 +1584,13 @@ class Organism(object):
         for k, v in location.items():
             if not v or isinstance(v, float):
                 continue
+            locations = []
             for loc in v.split(" // "):
-                if loc in location_interpreter.index:
-                    new_location[k] = location_interpreter["interpretation"][loc]
-                    break
+                if loc not in location_interpreter.index:
+                    continue
+                locations.append(location_interpreter["interpretation"][loc])
+            if locations:
+                new_location[k] = locations[0]
         return new_location
 
     def _add_entry_to_protein_location(self,
@@ -1597,7 +1601,7 @@ class Organism(object):
                                       protein_location,
                                       gene_location):
         gene = re.findall('.*(?=\(\d*\))', gene_string)[0]
-        if gene not in gene_dictionary:
+        if gene not in gene_dictionary.index:
             return protein_location
         gene = gene_dictionary.loc[[gene]]["Gene Name"]
         for gene_ in gene: # In case of duplicates
