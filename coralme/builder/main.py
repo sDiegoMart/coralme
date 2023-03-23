@@ -1289,8 +1289,7 @@ class MEBuilder(object):
 					bar_format = bar_format,
 					total=len(ref_translocation_pathways)):
 			if k not in org_translocation_pathways:
-				org_translocation_pathways[k] = v.copy()
-			org_translocation_pathways[k]["enzymes"] = {}
+				org_translocation_pathways[k] = {"enzymes":{}}#v.copy()
 			for ref_cplx, ref_dict in v["enzymes"].items():
 				if ref_cplx in ref_cplx_homolog:
 					org_cplx = ref_cplx_homolog[ref_cplx]
