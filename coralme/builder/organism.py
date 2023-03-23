@@ -71,12 +71,16 @@ class Organism(object):
             self.locus_tag = config.get('reference_tag','locus_tag')
         else:
             self.locus_tag = config.get('locus_tag','locus_tag')
-
+        
+        
+        
+        
         data = \
             'code,interpretation,gram\n' \
             'CCI-CW-BAC-POS-GP,Cell_Wall,pos\n' \
             'CCI-OUTER-MEM-GN,Outer_Membrane,neg\n' \
             'CCI-PM-BAC-NEG-GN,Inner_Membrane,neg\n' \
+            'CCI-PERI-BAC-GN,Periplasm,neg\n' \
             'CCI-PM-BAC-POS-GP,Plasma_Membrane,pos\n' \
             'CCI-EXTRACELLULAR-GP,Extracellular_Space,pos\n' \
             'CCO-MEMBRANE,Membrane,'
