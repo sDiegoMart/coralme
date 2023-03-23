@@ -94,6 +94,8 @@ class MEManualCuration(object):
         self.org.subreaction_matrix = self.load_subreaction_matrix()
         logging.warning("Loading reaction matrix")
         self.org.reaction_matrix = self.load_reaction_matrix()
+        logging.warning("Loading stable RNAs")
+        self.org.stable_RNAs = self.load_stable_RNAs()
         logging.warning("Loading orphan reactions")
         self.org.orphan_and_spont_reactions = self.load_orphan_and_spont_reactions()
         logging.warning("Loading enzyme-reaction-association")
@@ -741,7 +743,19 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df
-
+    
+    def _create_stable_RNAs(self):
+        return pandas.DataFrame(columns=[
+            'id'
+        ]).set_index('id')
+    def load_stable_RNAs(self):
+        create_file = self._create_stable_RNAs()
+        df =  self._get_manual_curation(
+                "stable_RNAs.txt",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return df.index.to_list()
 
     def _create_orphan_and_spont_reactions(self):
         return pandas.DataFrame(columns=[
