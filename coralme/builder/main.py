@@ -1349,7 +1349,7 @@ class MEBuilder(object):
 		self.org.subreaction_matrix = org_subreaction_matrix
 		self.org.subreaction_matrix.index.name = 'Reaction'
 # 		self.org.subreaction_matrix.to_csv(self.org.directory + 'subreaction_matrix.txt')
-		
+
 		if warn_mets:
 			self.curation_notes['update_subreaction_matrix'].append({
 				'msg':'Some metabolites in subreaction_matrix were added from reference but are not in M-model',
@@ -1416,7 +1416,7 @@ class MEBuilder(object):
 									'importance':'high',
 									'to_do':'Fill in translocation pathways in org.translocation_pathways or in translocation_pathways.txt'
 				})
-		
+
 		me_mets = self.org.me_mets
 		warn_mets = list(me_mets[me_mets['type'] == 'CURATE'].index)
 		# Warnings
@@ -1888,7 +1888,7 @@ class MEReconstruction(MEBuilder):
 		#
 		# This includes the Transcription, Translation, ComplexFormation, and Metabolic reactions for a dummy RNA/protein/complex. Sequence for *dummy RNA* is based on the prevalence of each codon found in the genbank file.
 
-		coralme.util.building.add_dummy_reactions(me, update = True)
+		coralme.util.building.add_dummy_reactions(me, me.global_info['transl_tables']['c'], update = True)
 
 		# The 'dummy protein' is associated to orphan reactions.
 		# This ensures that orphan reactions will not become favored to fulfil unmodeled protein fraction requirement.

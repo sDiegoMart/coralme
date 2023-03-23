@@ -803,7 +803,7 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 
 	return None
 
-def add_dummy_reactions(me_model, update = True):
+def add_dummy_reactions(me_model, transl_table, update = True):
 	"""
 	Add all reactions necessary to produce a dummy reaction catalyzed by
 	'CPLX_dummy'.
@@ -824,8 +824,9 @@ def add_dummy_reactions(me_model, update = True):
 		dummy reactions.
 
 	"""
-	stop_codons = me_model.global_info['stop_codons']
-	stop_codons = [ x.replace('U', 'T') for x in stop_codons ]
+	#stop_codons = me_model.global_info['stop_codons']
+	stop_codons = Bio.Data.CodonTable.generic_by_id[list(transl_table)[0]].stop_codons
+	stop_codons = set([ x.replace('U', 'T') for x in stop_codons ])
 
 	df_codons = pandas.DataFrame(data = me_model.global_info['codon_usage'].values(), index = me_model.global_info['codon_usage'].keys())
 	df_codons['per_1000'] = df_codons / df_codons.sum() * 1000
