@@ -588,7 +588,7 @@ class MEManualCuration(object):
             "rna_modification.txt",
             create_file = create_file,
             no_file_return = create_file,
-            sep = '\t')
+            sep = '\t').astype(str)
         return self._modify_rna_modification_from_load(df)
 
 #     def _process_rna_modification_targets(self,
