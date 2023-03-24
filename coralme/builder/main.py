@@ -631,6 +631,8 @@ class MEBuilder(object):
 								coeff = ""
 							cofs.append(cof)
 							coeffs.append(coeff)
+						if cplx in self.org.protein_mod.index:
+							continue
 						protein_mod_dict[cplx] = {}
 						protein_mod_dict[cplx]["Core_enzyme"] = c
 						protein_mod_dict[cplx]["Modifications"] = " AND ".join(
