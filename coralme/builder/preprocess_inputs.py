@@ -297,12 +297,14 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
 			#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
-			if '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None]):
+			filter1 = '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None])
+			filter2 = tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None])
+			filter3 = 'generic_{:s}'.format(tag) in dct and mods in dct.get('generic_{:s}'.format(tag), [None])
+
+			if filter1 or filter2 or filter3:
 				return 'ribosome:1'
-			if tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None]):
-				return 'ribosome:1'
-			if 'generic_{:s}'.format(tag) in dct and mods in dct.get('generic_{:s}'.format(tag), [None]):
-				return 'ribosome:1'
+			elif mods == 'acetyl(1)':
+				return 'ribosome:2'
 
 	dct = {}
 	for x in [ x for y in [builder.org.ribosome_stoich[x]['stoich'].keys() for x in ['30_S_assembly', '50_S_assembly']] for x in y ]:
