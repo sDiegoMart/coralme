@@ -926,6 +926,7 @@ def add_subreaction_data(me_model, modification_id, modification_stoichiometry, 
 			modification_data._element_contribution = modification_data.calculate_element_contribution()
 		except:
 			modification_data._element_contribution = {}
+		logging.warning('SubReaction \'{:s}\' was created in the ME-model.'.format(modification_id))
 
 	return None
 
