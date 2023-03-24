@@ -7,26 +7,28 @@ nm2_per_m2 = 1e18  # used to convert nm^2 to m^2
 def add_translocation_data_and_reaction(model, pathways, preprocessed_id, processed_id, compartment, peptide_data, multipliers, membrane_constraints, alt = False):
 	suffix = '_alt' if alt else ''
 
-	data = coralme.core.processdata.PostTranslationData('translocation_' + preprocessed_id + '_' + compartment + suffix, model, processed_id, preprocessed_id)
-	data.translocation = pathways
-	#data.translocation_multipliers = multipliers_protein_keys.get(preprocessed_id, {})
-	data.translocation_multipliers = multipliers.get(preprocessed_id, {})
+	data_id = 'translocation_' + preprocessed_id + '_' + compartment + suffix
+	if not model.process_data.has_id(data_id):
+		data = coralme.core.processdata.PostTranslationData(data_id, model, processed_id, preprocessed_id)
+		data.translocation = pathways
+		#data.translocation_multipliers = multipliers_protein_keys.get(preprocessed_id, {})
+		data.translocation_multipliers = multipliers.get(preprocessed_id, {})
 
-	# Add protein surface area constraint
-	if membrane_constraints and compartment != 'Periplasm':
-		protein = peptide_data.protein
-		protein_met = model.metabolites.get_by_id('protein_' + protein)
-		mass = protein_met.formula_weight / 1000.  # in kDa
-		membrane_thickness = model.global_info['membrane_thickness']
-		thickness = membrane_thickness[compartment]
-		# Relationship uses protein molecular in kDa
-		# Adds surface area constraint in units of m^2/mmol
-		data.surface_area['SA_protein_' + compartment] = (1.21 / thickness * 2.) * mass * mmol / nm2_per_m2
+		# Add protein surface area constraint
+		if membrane_constraints and compartment != 'Periplasm':
+			protein = peptide_data.protein
+			protein_met = model.metabolites.get_by_id('protein_' + protein)
+			mass = protein_met.formula_weight / 1000.  # in kDa
+			membrane_thickness = model.global_info['membrane_thickness']
+			thickness = membrane_thickness[compartment]
+			# Relationship uses protein molecular in kDa
+			# Adds surface area constraint in units of m^2/mmol
+			data.surface_area['SA_protein_' + compartment] = (1.21 / thickness * 2.) * mass * mmol / nm2_per_m2
 
-	rxn = coralme.core.reaction.PostTranslationReaction('translocation_' + peptide_data.id + '_' + compartment + suffix)
-	rxn.posttranslation_data = data
-	model.add_reactions([rxn])
-	rxn.update()
+		rxn = coralme.core.reaction.PostTranslationReaction('translocation_' + peptide_data.id + '_' + compartment + suffix)
+		rxn.posttranslation_data = data
+		model.add_reactions([rxn])
+		rxn.update()
 
 def add_translocation_pathways(model, pathways_df, abbreviation_to_pathway, multipliers, membrane_constraints = False):
 	# loop through all translation data and add translocation rxns/surface area constraints if they are membrane proteins
