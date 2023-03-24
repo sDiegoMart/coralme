@@ -824,7 +824,7 @@ def get_df_protloc(df, filter_in = set(), generics = False):
 
 		tmp = tmp[['Monomer ID', 'Complex Location', 'Gene Locus ID', 'Subunit Location', 'Translocation Pathway']]
 		tmp.columns = ['Complex', 'Complex_compartment', 'Protein', 'Protein_compartment', 'translocase_pathway']
-		tmp = tmp.drop_duplicates(subset = ['Protein', 'Protein_compartment'], keep = 'first').set_index('Complex')
+		tmp = tmp.drop_duplicates(subset = ['Complex', 'Protein', 'Protein_compartment'], keep = 'first').set_index('Complex')
 
 		return tmp
 	else:
