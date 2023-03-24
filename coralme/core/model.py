@@ -73,8 +73,8 @@ class MEModel(cobra.core.model.Model):
 				'Translation_initiation_factor_InfA' : '',
 				'Translation_initiation_factor_InfC' : '',
 				'Translation_initiation_fmet_addition_at_START' : 'FMETTRS',
-				'Translation_initiation_gtp_factor_InfB' : 'atp_hydrolysis',
-				'Translation_elongation_FusA_mono' : 'atp_hydrolysis',
+				'Translation_initiation_gtp_factor_InfB' : 'gtp_hydrolysis',
+				'Translation_elongation_FusA_mono' : 'gtp_hydrolysis',
 				'Translation_elongation_Tuf_gtp_regeneration' : '',
 				'Translation_termination_PrfA_mono_mediated' : '',
 				'Translation_termination_PrfB_mono_mediated' : '',
@@ -109,56 +109,56 @@ class MEModel(cobra.core.model.Model):
 				'sec' : {
 					'abbrev' : 's',
 					'keff' : 4.0000,
-					'length_dependent_energy' : 'True',
+					'length_dependent_energy' : True,
 					'stoichiometry' : 'atp_hydrolysis_sec_pathway'
 					},
 				'secA' : {
 					'abbrev' : 'a',
 					'keff' : 4.0000,
-					'length_dependent_energy' : 'True',
+					'length_dependent_energy' : True,
 					'stoichiometry' : 'atp_hydrolysis_secA'
 					},
 				'tat' : {
 					'abbrev' : 't',
 					'keff' : 0.0125,
-					'length_dependent_energy' :
-					'False', 'stoichiometry' : ''
+					'length_dependent_energy' : False,
+					'stoichiometry' : ''
 					},
 				'tat_alt' : {
 					'abbrev' : 't',
 					'keff' : 0.0125,
-					'length_dependent_energy' :
-					'False', 'stoichiometry' : ''
+					'length_dependent_energy' : False,
+					'stoichiometry' : ''
 					},
 				'yidC' : {
 					'abbrev' : 'y',
 					'keff' : 20.000,
-					'length_dependent_energy' : 'False',
+					'length_dependent_energy' : False,
 					'stoichiometry' : 'gtp_hydrolysis'
 					},
 				'srp' : {
 					'abbrev' : 'r',
 					'keff' : 20.000,
-					'length_dependent_energy' : 'False',
+					'length_dependent_energy' : False,
 					'stoichiometry' : 'gtp_hydrolysis_srp_pathway',
 					'FtsY' : 'FtsY-MONOMER'
 					},
 				'srp_yidC' : {
 					'abbrev' : 'p',
 					'keff' : 20.000,
-					'length_dependent_energy' : 'False',
+					'length_dependent_energy' : False,
 					'stoichiometry' : 'gtp_hydrolysis'
 					},
 				'lol' : {
 					'abbrev' : 'l',
 					'keff' : 0.9000,
-					'length_dependent_energy' : 'False',
+					'length_dependent_energy' : False,
 					'stoichiometry' : 'atp_hydrolysis'
 					},
 				'bam' : {
 					'abbrev' : 'b',
 					'keff' : 0.0270,
-					'length_dependent_energy' : 'False',
+					'length_dependent_energy' : False,
 					'stoichiometry' : ''
 					}
 				},
