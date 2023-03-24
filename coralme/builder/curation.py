@@ -96,6 +96,8 @@ class MEManualCuration(object):
         self.org.reaction_matrix = self.load_reaction_matrix()
         logging.warning("Loading stable RNAs")
         self.org.stable_RNAs = self.load_stable_RNAs()
+        logging.warning("Loading Rho-dependent genes")
+        self.org.rho_dependent = self.load_rho_dependent()
         logging.warning("Loading orphan reactions")
         self.org.orphan_and_spont_reactions = self.load_orphan_and_spont_reactions()
         logging.warning("Loading enzyme-reaction-association")
@@ -752,6 +754,19 @@ class MEManualCuration(object):
         create_file = self._create_stable_RNAs()
         df =  self._get_manual_curation(
                 "stable_RNAs.txt",
+                create_file = create_file,
+                no_file_return = create_file,
+                sep = '\t')
+        return df.index.to_list()
+    
+    def _create_rho_dependent(self):
+        return pandas.DataFrame(columns=[
+            'id'
+        ]).set_index('id')
+    def load_rho_dependent(self):
+        create_file = self._create_rho_dependent()
+        df =  self._get_manual_curation(
+                "rho_dependent.txt",
                 create_file = create_file,
                 no_file_return = create_file,
                 sep = '\t')
