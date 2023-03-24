@@ -631,13 +631,15 @@ class MEBuilder(object):
 								coeff = ""
 							cofs.append(cof)
 							coeffs.append(coeff)
+						if cplx in self.org.protein_mod.index:
+							continue
 						protein_mod_dict[cplx] = {}
 						protein_mod_dict[cplx]["Core_enzyme"] = c
 						protein_mod_dict[cplx]["Modifications"] = " AND ".join(
 							"{}({})".format(cof, coeff)
 							for cof, coeff in zip(cofs, coeffs)
 						)
-						protein_mod_dict[cplx]["Source"] = "E_coli_homology"
+						protein_mod_dict[cplx]["Source"] = "Homology"
 						ref_cplx_homolog[row["Modified_enzyme"]] = cplx
 						cplx_homolog[cplx] = row["Modified_enzyme"]
 		protein_mod = pandas.DataFrame.from_dict(protein_mod_dict).T
