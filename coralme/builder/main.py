@@ -1954,7 +1954,7 @@ class MEReconstruction(MEBuilder):
 				me.add_reactions([rxn])
 				rxn.add_metabolites({met: -1 * requirement, 'lipid_biomass': component_mass * requirement})
 				rxn.lower_bound = me.mu # coralme.util.mu
-				rxn.upper_bound = 1000. # coralme.util.mu?
+				rxn.upper_bound = me.mu # coralme.util.mu
 			except:
 				msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
 				logging.warning(msg.format(met))
@@ -2292,6 +2292,20 @@ class MEReconstruction(MEBuilder):
 		dct = dict([(v, [k + '_translocation' for k,v1 in dct.items() if v1 == v]) for v in set(dct.values())])
 		dct = { k:(v[0] if len(v) == 1 else v) for k,v in dct.items() } # tat pathways should be a list, but not the others
 
+		# Check if the user added the reactions for translocation data
+		if not me.process_data.has_id('atp_hydrolysis_sec_pathway'):
+			stoichiometry = {'atp_c' : -0.04, 'h2o_c' : -0.04, 'adp_c' : +0.04, 'pi_c' : +0.04}
+			coralme.util.building.add_subreaction_data(
+				me, modification_id = 'atp_hydrolysis_sec_pathway', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+		if not me.process_data.has_id('atp_hydrolysis_secA'):
+			stoichiometry = {'atp_c' : -1/75, 'h2o_c' : -1/75, 'adp_c' : +1/75, 'pi_c' : +1/75}
+			coralme.util.building.add_subreaction_data(
+				me, modification_id = 'atp_hydrolysis_secA', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+		if not me.process_data.has_id('gtp_hydrolysis_srp_pathway'):
+			stoichiometry = {'gtp_c' : -2.0, 'h2o_c' : -2.0, 'gdp_c' : +2.0, 'pi_c' : +2.0}
+			coralme.util.building.add_subreaction_data(
+				me, modification_id = 'gtp_hydrolysis_srp_pathway', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
+
 		# for pathway, info in coralme.translocation.pathway.items():
 		for pathway, info in me.global_info['translocation_pathway'].items():
 			if me.global_info['translocation_pathway'][pathway].get('enzymes', None) is not None:
@@ -2325,6 +2339,8 @@ class MEReconstruction(MEBuilder):
 		for cplx, stoich in new_stoich.items():
 			complex_data = me.process_data.get_by_id(cplx)
 			complex_data.stoichiometry.update(new_stoich[cplx])
+			# remove zeroes from complex_data.stoichiometry
+			complex_data.stoichiometry = { k:v for k,v in complex_data.stoichiometry.items() if v != 0 }
 			complex_data.formation.update()
 
 			# Complex IDs in protein compartment file don't include modifications
