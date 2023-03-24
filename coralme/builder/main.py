@@ -2701,7 +2701,7 @@ class METroubleshooter(object):
 
 			for idx,met_type in enumerate(met_types):
 				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
-				if idx > 2:
+				if idx > 3:
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
