@@ -604,7 +604,7 @@ class MEModel(cobra.core.model.Model):
 			self.add_reactions([coralme.core.reaction.SummaryVariable('ATPM')])
 			self.reactions.ATPM.add_metabolites(atp_hydrolysis)
 		self.reactions.ATPM.lower_bound = value
-		self.reactions.ATPM.upper_bound = value
+		self.reactions.ATPM.upper_bound = 1000.
 		self._ngam = value
 
 		# check stoichiometry
