@@ -1583,7 +1583,7 @@ class Organism(object):
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
         return df
 
-    def _is_cytosol_in_locations(locs):
+    def _is_cytosol_in_locations(self,locs):
         for i in locs:
             if 'CCI-CYTOSOL' in i:
                 return True
