@@ -2347,6 +2347,8 @@ class MEReconstruction(MEBuilder):
 			# Some have multiple alternative modifications so must loop through these
 			for complex_data in me.process_data.query('^{:s}_mod_'.format(cplx)):
 				complex_data.stoichiometry.update(new_stoich[cplx])
+				# remove zeroes from complex_data.stoichiometry
+				complex_data.stoichiometry = { k:v for k,v in complex_data.stoichiometry.items() if v != 0 }
 				complex_data.formation.update()
 
 		# ## Part 6: Add Cell Wall Components
