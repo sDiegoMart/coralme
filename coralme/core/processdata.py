@@ -937,7 +937,7 @@ class TranslationData(ProcessData):
 		last_codon = self.last_codon
 		term_enzyme = translation_terminator_dict.get(last_codon, None)
 		if term_enzyme:
-			termination_subreaction_id = last_codon + '_' + term_enzyme + '_mediated_termination'
+			termination_subreaction_id = last_codon + '_' + term_enzyme + '_mediated_termination_c'
 			try:
 				self._model.process_data.get_by_id(termination_subreaction_id)
 			except KeyError:
