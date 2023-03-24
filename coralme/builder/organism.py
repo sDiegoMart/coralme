@@ -1508,7 +1508,7 @@ class Organism(object):
         TUs = self.TUs
         gene_dictionary = self.gene_dictionary
         rpod = self.rpod
-        rho_dependent = self.rho_dependent
+        rho_independent = self.rho_independent
         TU_dict = {}
         warn_genes = []
         warn_tus = []
@@ -1552,7 +1552,7 @@ class Organism(object):
             tu_name = "{}_from_{}".format(tu, sigma)
             TU_dict[tu_name] = {}
             TU_dict[tu_name]["genes"] =  ','.join(genes)
-            TU_dict[tu_name]["rho_dependent"] = True if tu in rho_dependent else False
+            TU_dict[tu_name]["rho_dependent"] = False if tu in rho_independent else True
             TU_dict[tu_name]["rnapol"] = sigma
             TU_dict[tu_name]["tss"] = None
             TU_dict[tu_name]["strand"] = row["Direction"] if row["Direction"] else '+'
