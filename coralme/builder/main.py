@@ -2235,7 +2235,7 @@ class MEReconstruction(MEBuilder):
 			for x in me.global_info['translation_subreactions'].keys()
 			if x.startswith('Protein_processing')
 			]
-		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k]]['Gene Locus ID'].tolist() for k in processing_pathways }
+		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k].str.match('True|true')]['Gene Locus ID'].tolist() for k in processing_pathways }
 
 		# Add the translation subreaction data objects to the ME-model
 		coralme.builder.translation.add_subreactions_to_model(
@@ -2263,7 +2263,7 @@ class MEReconstruction(MEBuilder):
 		for transcription_data in tqdm.tqdm(list(me.transcription_data), 'Adding Transcription SubReactions...', bar_format = bar_format):
 			# Assume false if not in tu_df
 			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, False)
-			rho = 'dependent' if rho_dependent else 'independent'
+			rho = 'dependent' if rho_dependent in ['True', 'true'] else 'independent'
 			stable = 'stable' if transcription_data.codes_stable_rna else 'normal'
 			if 'Transcription_{:s}_rho_{:s}'.format(stable, rho) in me.global_info['transcription_subreactions']:
 				transcription_data.subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
