@@ -136,10 +136,11 @@ Q	THIOREDOXIN_mod_Oxidized(1)	+1.0
 # cmo5U
 # Changed stoichiometry per PMIDs: 23676670, 25855808, 26681692.
 # per PMID 31253794, trhO hydroxylates two adjacent uridines using molecular oxygen
-cmo5U	amet_c	-1.0
-cmo5U	ahcys_c	+1.0
+cmo5U	amet_c	-2.0
+cmo5U	ahcys_c	2.0
 cmo5U	pphn_c	-1.0
-cmo5U	h2o_c	+1.0
+cmo5U	h2o_c	1.0
+cmo5U	phpyr_c	1.0
 cmo5U	o2_c	-1.0
 
 # k2C
