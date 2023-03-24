@@ -3,6 +3,8 @@ import os
 import re
 import random
 import io
+import anyconfig
+
 
 from collections import defaultdict
 
@@ -53,8 +55,13 @@ class Organism(object):
         if is_reference:
             if bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 self.id = 'iJL1678b'
-            elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
+            elif not bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 self.id = config['user_reference']
+                config = config.copy()
+                for input_file in [config['user_reference'] + "/organism.json", \
+                                    config['user_reference'] + "/input.json"]:
+                    with open(input_file, 'r') as infile:
+                        config.update(anyconfig.load(infile))
             elif bool(config.get('dev_reference', False)) and bool(config.get('user_reference', False)):
                 logging.warning('The \'dev_reference\' and \'user-reference\' options are mutually exclusive.')
                 self.id = 'iJL1678b'
@@ -62,8 +69,7 @@ class Organism(object):
                 self.id = 'iJL1678b'
         else:
             self.id = config['ME-Model-ID']
-
-
+        
         self.is_reference = is_reference
         self.curation_notes = defaultdict(list)
         self.config = config
@@ -147,7 +153,7 @@ class Organism(object):
 
     @property
     def _m_model(self):
-        if self.is_reference:
+        if self.id == 'iJL1678b':
             model = self.directory + 'm_model.json'
         else:
             model = self.config['m-model-path']
@@ -167,7 +173,7 @@ class Organism(object):
     def get_organism(self):
         sep = '~ '*1
         print("{}Processing files for {}...".format(sep,self.id))
-        if self.id != 'iJL1678b':
+        if not self.is_reference:
             logging.warning('Checking folder')
             self.check_folder()
         logging.warning("Loading M-model")
@@ -238,7 +244,7 @@ class Organism(object):
         print("Reading {} done...".format(self.id))
 
     def get_genbank_contigs(self):
-        if self.is_reference:
+        if self.id == 'iJL1678b':
             gb_it = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
         else:
             gb_it = Bio.SeqIO.parse(self.config['genbank-path'], "gb")
