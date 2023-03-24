@@ -1583,7 +1583,11 @@ class Organism(object):
                         'to_do':'If those TUs contain genes that are supposed to be in the model, fill them in TUs.txt and genes.txt'})
         return df
 
-
+    def _is_cytosol_in_locations(locs):
+        for i in locs:
+            if 'CCI-CYTOSOL' in i:
+                return True
+        return False
     def _process_location_dict(self,
                                location,
                                location_interpreter):
@@ -1596,6 +1600,8 @@ class Organism(object):
                 if loc not in location_interpreter.index:
                     continue
                 locations.append(location_interpreter["interpretation"][loc])
+            if self._is_cytosol_in_locations(locations):
+                continue
             if locations:
                 new_location[k] = locations[0]
         return new_location
