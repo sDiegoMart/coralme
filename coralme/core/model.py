@@ -91,7 +91,7 @@ class MEModel(cobra.core.model.Model):
 				},
 
 			'complex_cofactors' : {
-				'fes_transfers' : { 'erpA' : '', 'iscA' : '', 'sufA' : '' },
+				'fes_transfers' : [],
 				'biotin_subreactions' : { 'mod_btn_c' : [ 'biotin_ligase' ] },
 				'lipoate_subreactions' : { 'mod_lipoyl_c' : [ 'lipoyl_denovo', 'lipoyl_scavenging' ] },
 				'fes_chaperones' : {},
@@ -141,7 +141,7 @@ class MEModel(cobra.core.model.Model):
 					'keff' : 20.000,
 					'length_dependent_energy' : False,
 					'stoichiometry' : 'gtp_hydrolysis_srp_pathway',
-					'FtsY' : 'FtsY-MONOMER'
+					'FtsY' : 'FtsY_MONOMER'
 					},
 				'srp_yidC' : {
 					'abbrev' : 'p',
@@ -580,7 +580,7 @@ class MEModel(cobra.core.model.Model):
 			logging.warning('Adding GAM (ATP requirement for growth) reaction into the ME-model.')
 			self.add_reactions([coralme.core.reaction.SummaryVariable('GAM')])
 			self.reactions.GAM.lower_bound = self.mu
-			self.reactions.GAM.upper_bound = self.mu
+			self.reactions.GAM.upper_bound = 1000.
 		#atp_hydrolysis = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'h_c': 1, 'pi_c': 1} # charges: -4, 0 => -3, +1, -2
 		atp_hydrolysis = self.process_data.get_by_id('atp_hydrolysis').stoichiometry
 		for met, coeff in atp_hydrolysis.items():
@@ -616,61 +616,80 @@ class MEModel(cobra.core.model.Model):
 	# GenericData, tRNAData, TranslocationData, PostTranslationData, SubreactionData
 	@property
 	def stoichiometric_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.StoichiometricData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.StoichiometricData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.StoichiometricData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def complex_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.ComplexData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.ComplexData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.ComplexData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def translation_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.TranslationData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.TranslationData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.TranslationData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def transcription_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.TranscriptionData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.TranscriptionData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.TranscriptionData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def generic_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.GenericData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.GenericData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.GenericData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def tRNA_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.tRNAData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.tRNAData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.tRNAData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def translocation_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.TranslocationData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.TranslocationData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.TranslocationData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def posttranslation_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.PostTranslationData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.PostTranslationData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.PostTranslationData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def subreaction_data(self):
-		for data in self.process_data:
-			if isinstance(data, coralme.core.processdata.SubreactionData):
-				yield data
+		#for data in self.process_data:
+			#if isinstance(data, coralme.core.processdata.SubreactionData):
+				#yield data
+		lst = [ x for x in self.process_data if isinstance(x, coralme.core.processdata.SubreactionData)]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def all_genes(self):
-		return [g for g in self.metabolites if isinstance(g,coralme.core.component.TranscribedGene)]
+		lst = [ g for g in self.metabolites if isinstance(g, coralme.core.component.TranscribedGene) ]
+		return cobra.core.dictlist.DictList(lst)
 
 	@property
 	def find_complex(m):
