@@ -1144,7 +1144,7 @@ class Organism(object):
 
     def _is_base_complex_in_list(self,cplx,lst):
         return cplx in set(i.split('_mod_')[0] for i in lst)
-
+        
     def _get_genes_of_cplx(self,cplx):
         d = {}
         for i in self.complexes_df.loc[cplx]['genes'].split(' AND '):

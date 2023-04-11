@@ -1234,7 +1234,10 @@ class MEBuilder(object):
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
 				if i not in defined_cplxs:
 					defined_cplxs.append(i)
-
+					
+	def _is_base_complex_in_list(self,cplx,lst):
+		return cplx in set(i.split('_mod_')[0] for i in lst)
+	
 	def update_rna_modification_from_homology(self):
 		ref_rna_modification = self.ref.rna_modification
 		org_rna_modification = self.org.rna_modification
@@ -1245,9 +1248,12 @@ class MEBuilder(object):
 					total=len(ref_rna_modification)):
 			if k not in ref_cplx_homolog: continue
 			org_cplx = ref_cplx_homolog[k]
+			if self._is_base_complex_in_list(org_cplx,list(org_rna_modification.keys())):
+				continue
 			if org_cplx not in org_rna_modification:
 				org_rna_modification[org_cplx] = []
-			org_rna_modification[org_cplx] = v.copy()
+			org_rna_modification[org_cplx] += v.copy()
+			org_rna_modification[org_cplx] = set(org_rna_modification[org_cplx])
 
 	def update_lipid_modifications_from_homology(self):
 		ref_lipid_modifications = self.ref.lipid_modifications
@@ -1262,8 +1268,10 @@ class MEBuilder(object):
 			for i in v:
 				if i not in ref_cplx_homolog: continue
 				org_cplx = ref_cplx_homolog[i]
-				if org_cplx not in org_lipid_modifications[k]:
-					org_lipid_modifications[k].append(org_cplx)
+# 				if org_cplx not in org_lipid_modifications[k]:
+				if self._is_base_complex_in_list(org_cplx,org_lipid_modifications[k]):
+					continue
+				org_lipid_modifications[k].append(org_cplx)
 
 	def update_transcription_subreactions_from_homology(self):
 		ref_transcription_subreactions = self.ref.transcription_subreactions
@@ -1279,8 +1287,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if self._is_base_complex_in_list(i,defined_cplxs):
+					continue
+				defined_cplxs.append(i)
 
 	def update_translocation_pathways_from_homology(self):
 		ref_translocation_pathways = self.ref.translocation_pathways
