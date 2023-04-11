@@ -814,10 +814,10 @@ class MEModel(cobra.core.model.Model):
 		if not skip:
 			skip = []
 
-		inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
-		for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
-			logging.warning('Removing inactive MetabolicReaction {}'.format(r.id))
-			r.remove_from_model(remove_orphans = False)
+# 		inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
+# 		for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
+# 			logging.warning('Removing inactive MetabolicReaction {}'.format(r.id))
+# 			r.remove_from_model(remove_orphans = False)
 
 		complex_data_list = [ i.id for i in self.complex_data if i.id not in skip ]
 		for c_d in tqdm.tqdm(complex_data_list, 'Pruning unnecessary ComplexData reactions...', bar_format = bar_format):
