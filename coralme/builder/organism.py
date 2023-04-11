@@ -1956,7 +1956,6 @@ class Organism(object):
     def prune_genbank(self):
         if self.is_reference:
             return
-        # TODO: Use kompare to check the behavior of this function.
         contigs = self.contigs
         exclude_prune_types = list(element_types) #+ ['source','gene']
         new_contigs = []
@@ -1991,11 +1990,10 @@ class Organism(object):
                     warn_sequence.append(d)
 
                 locus_tag = self._get_feature_locus_tag(feature)
-                if locus_tag is None:
-                    continue
-                feature.qualifiers[self.locus_tag] = [locus_tag]
+                if locus_tag is not None:
+                    feature.qualifiers[self.locus_tag] = [locus_tag]
+                    self.all_genes_in_gb.append(locus_tag)
                 new_contig.features.append(feature)
-                self.all_genes_in_gb.append(locus_tag)
             if len(new_contig.features) <= 1:
                 # only source, no feature
                 continue
