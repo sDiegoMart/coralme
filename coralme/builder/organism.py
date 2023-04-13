@@ -115,7 +115,7 @@ class Organism(object):
         filename = self.directory + "protein_complexes.txt"
         if os.path.isfile(filename):
             return pandas.read_csv(
-                filename, index_col=0, sep="\t"
+                filename, index_col=0, sep="\t",comment='#'
             ).fillna('')
         else:
             return self.generate_complexes_df()
@@ -125,7 +125,7 @@ class Organism(object):
         filename = self.directory + "protein_modification.txt"
         if os.path.isfile(filename):
             return pandas.read_csv(
-                filename, index_col=0, sep="\t"
+                filename, index_col=0, sep="\t",comment='#'
             )
         else:
             return pandas.DataFrame.from_dict(
