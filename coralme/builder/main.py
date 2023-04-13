@@ -1213,8 +1213,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if self._is_base_complex_in_list(i,defined_cplxs):
+					continue 
+				defined_cplxs.append(i)
 
 	def update_special_modifications_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_modifications
@@ -1232,12 +1233,13 @@ class MEBuilder(object):
 			for i in org_cplxs:
 				if v["stoich"]:
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
-					
+				if self._is_base_complex_in_list(i,defined_cplxs):
+					continue 
+				defined_cplxs.append(i)
+
 	def _is_base_complex_in_list(self,cplx,lst):
 		return cplx in set(i.split('_mod_')[0] for i in lst)
-	
+
 	def update_rna_modification_from_homology(self):
 		ref_rna_modification = self.ref.rna_modification
 		org_rna_modification = self.org.rna_modification
