@@ -939,9 +939,13 @@ class Organism(object):
         ribo_df = complexes_df.loc[
             complexes_df["name"].str.contains("ribosomal.*(?:subunit)?.* protein", regex=True)
         ]
+
         ribosome_stoich = self.ribosome_stoich
         ribo_30S = ribosome_stoich["30_S_assembly"]["stoich"]
         ribo_50S = ribosome_stoich["50_S_assembly"]["stoich"]
+        trigger_factor = list(complexes_df[complexes_df['name'].str.contains('[T,t]rigger factor',regex=True)].index)
+        if trigger_factor:
+            ribo_50S[trigger_factor[0]] = 1
         warn_proteins = []
         for p, row in tqdm.tqdm(ribo_df.iterrows(),
                            'Gathering ribosome stoichiometry...',
