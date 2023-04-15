@@ -43,7 +43,10 @@ class ListHandler(logging.Handler):
 		self.log_list = log_list
 	def emit(self, record):
 		# record.message is the log message
-		self.log_list.append((record.asctime, record.message))
+		try:
+			self.log_list.append((record.asctime, record.message))
+		except:
+			pass
 	def print_and_log(msg):
 		print(msg)
 		logging.warning(msg)
