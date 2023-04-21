@@ -611,3 +611,6 @@ EG11910-MONOMER_dimer_EG11911-MONOMER_mod_glycyl(1)	EG11910-MONOMER_dimer_EG1191
 ATPSYN-CPLX_EG10106-MONOMER_mod_mg2(1)	ATPSYN-CPLX_EG10106-MONOMER	mg2(1)	Manual
 QueG_mono_mod_4fe4s(2)	QueG_mono	4fe4s(2)	Manual
 YdaO_dim_mod_4fe4s(1)	YdaO_dim	4fe4s(1)	Manual
+CPLX0-782_mod_4fe4s(2)	CPLX0-782	4fe4s(2)	M_protein_recon
+CPLX0-246_CPLX0-1342_mod_pydx5p(1)	CPLX0-246_CPLX0-1342	pydx5p(1)	M_protein_recon
+IscS_mod_pydx5p(2)	IscS	pydx5p(2)	M_protein_recon
