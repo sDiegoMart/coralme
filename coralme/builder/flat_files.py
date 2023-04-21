@@ -67,18 +67,18 @@ def get_reaction_matrix_dict(matrix_df, compartments = {}, complex_set = set()) 
 def get_complex_modifications(reaction_matrix, protein_complexes, complex_mods, compartments = set()) -> dict:
 	"""
 	"""
-	complex_dct = get_complex_subunit_stoichiometry(protein_complexes)
-	complex_set = set(complex_dct.keys())
+	#complex_dct = get_complex_subunit_stoichiometry(protein_complexes)
+	#complex_set = set(complex_dct.keys())
 
-	ignored_complexes = set()
-	for met_stoich in coralme.builder.flat_files.get_reaction_matrix_dict(reaction_matrix).values():
-		for met, value in met_stoich.items():
-			if len(met.split('_mod_')[1:]) >= 1:
-				ignored_complexes.add(met)
+	#ignored_complexes = set()
+	#for met_stoich in coralme.builder.flat_files.get_reaction_matrix_dict(reaction_matrix).values():
+		#for met, value in met_stoich.items():
+			#if len(met.split('_mod_')[1:]) >= 1:
+				#ignored_complexes.add(met)
 
-	# correct ignored complexes
-	ignored_complexes = [ x for x in ignored_complexes
-		if x.split('_mod_')[1:] != ['pydx5p(1)'] and x.split('_mod_')[1:] != ['pydx5p(2)'] and x.split('_mod_')[1:] != ['4fe4s(2)']]
+	## correct ignored complexes
+	#ignored_complexes = [ x for x in ignored_complexes
+		#if x.split('_mod_')[1:] != ['pydx5p(1)'] and x.split('_mod_')[1:] != ['pydx5p(2)'] and x.split('_mod_')[1:] != ['4fe4s(2)']]
 
 	new_mod_dict = {}
 	for key, value in complex_mods.T.to_dict().items():
