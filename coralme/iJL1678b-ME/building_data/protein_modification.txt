@@ -491,13 +491,7 @@ GLUTAREDOXIN-MONOMER_mod_Oxidized(1)	GLUTAREDOXIN-MONOMER	Oxidized(1)	M_protein_
 GRXB-MONOMER_mod_Oxidized(1)	GRXB-MONOMER	Oxidized(1)	M_protein_recon
 CPLX0-7817_mod_Oxidized(1)	CPLX0-7817	Oxidized(1)	M_protein_recon
 GRXC-MONOMER_mod_Oxidized(1)	GRXC-MONOMER	Oxidized(1)	M_protein_recon
-IscU_mod_2fe2s(1)	IscU	2fe2s(1)	M_protein_recon
-IscU_mod_2fe2s(2)	IscU	2fe2s(2)	M_protein_recon
-IscU_mod_4fe4s(1)	IscU	4fe4s(1)	M_protein_recon
 CPLX0-246_CPLX0-1342_mod_SH(1)	CPLX0-246_CPLX0-1342	SH(1)	M_protein_recon
-CPLX0-1341_mod_2fe2s(1)	CPLX0-1341	2fe2s(1)	M_protein_recon
-CPLX0-1341_mod_2fe2s(2)	CPLX0-1341	2fe2s(2)	M_protein_recon
-CPLX0-1341_mod_4fe4s(1)	CPLX0-1341	4fe4s(1)	M_protein_recon
 EG10544-MONOMER_mod_palmitate(1)	EG10544-MONOMER	palmitate(1)	M_protein_recon
 DSBG-CPLX_mod_Oxidized(1)	DSBG-CPLX	Oxidized(1)	M_protein_recon
 DSBD-MONOMER_mod_Oxidized(1)	DSBD-MONOMER	Oxidized(1)	M_protein_recon
@@ -598,29 +592,11 @@ MnmEG_cplx_mod_fad(1)_mod_k(2)	MnmEG_cplx	fad(1) AND k(2)	2011_Updated_E_recon
 Rph_mono_mod_mg2(1)	Rph_mono	mg2(1)	2011_Updated_E_recon
 QueG_mono_mod_adocbl(1)	QueG_mono	adocbl(1)	2011_Updated_E_recon
 EG11653-MONOMER_mod_fe2(1)	EG11653-MONOMER	fe2(1)	M_protein_recon
-IscA_tetra_mod_4fe4s(1)	IscA_tetra	4fe4s(1)	M_protein_recon
-CPLX0-1341_mod_2fe2s(1)_mod_2fe1s(1)	CPLX0-1341	2fe2s(1) AND 2fe1s(1)	M_protein_recon
 CPLX-7524_mod_2fe2s(1)_mod_mn2(1)	CPLX-7524	2fe2s(1) AND mn2(1)	M_protein_recon
-IscS_mod_pydx5p(2)_mod_SH(1)	IscS	pydx5p(2) AND SH(1)	M_protein_recon
 CPLX0-1341_mod_fe2(1)	CPLX0-1341	fe2(1)	M_protein_recon
 IscU_mod_fe2(1)	IscU	fe2(1)	M_protein_recon
-CPLX0-1341_mod_2fe2s(1)_mod_fe2(2)	CPLX0-1341	2fe2s(1) AND fe2(2)	M_protein_recon
-CPLX0-246_CPLX0-1342_mod_pydx5p(1)	CPLX0-246_CPLX0-1342	pydx5p(1)	M_protein_recon
-CPLX0-1341_mod_2fe1s(1)	CPLX0-1341	2fe1s(1)	M_protein_recon
-CPLX0-7824_mod_4fe4s(1)	CPLX0-7824	4fe4s(1)	M_protein_recon
-CPLX0-782_mod_4fe4s(2)	CPLX0-782	4fe4s(2)	M_protein_recon
-CPLX0-782_mod_2fe2s(1)_mod_4fe4s(1)	CPLX0-782	2fe2s(1) AND 4fe4s(1)	M_protein_recon
-IscU_mod_2fe2s(1)_mod_fe2(2)	IscU	2fe2s(1) AND fe2(2)	M_protein_recon
 CPLX-7524_mod_4fe4s(1)_mod_mn2(1)	CPLX-7524	4fe4s(1) AND mn2(1)	M_protein_recon
-CPLX0-7824_mod_2fe2s(1)	CPLX0-7824	2fe2s(1)	M_protein_recon
-CPLX0-246_CPLX0-1342_mod_pydx5p(1)_mod_SH(1)	CPLX0-246_CPLX0-1342	pydx5p(1) AND SH(1)	M_protein_recon
-CPLX0-1341_mod_2fe2s(1)_mod_fe2(1)	CPLX0-1341	2fe2s(1) AND fe2(1)	M_protein_recon
-IscU_mod_2fe2s(1)_mod_fe2(1)	IscU	2fe2s(1) AND fe2(1)	M_protein_recon
 IscU_mod_fe2(2)	IscU	fe2(2)	M_protein_recon
-IscU_mod_2fe1s(1)	IscU	2fe1s(1)	M_protein_recon
-IscA_tetra_mod_2fe2s(1)	IscA_tetra	2fe2s(1)	M_protein_recon
-IscS_mod_pydx5p(2)	IscS	pydx5p(2)	M_protein_recon
-IscU_mod_2fe2s(1)_mod_2fe1s(1)	IscU	2fe2s(1) AND 2fe1s(1)	M_protein_recon
 CPLX0-1341_mod_fe2(2)	CPLX0-1341	fe2(2)	M_protein_recon
 NAPAB-CPLX_NAPC-MONOMER_mod_bmocogdp(1)	NAPAB-CPLX_NAPC-MONOMER	bmocogdp(1)	M_protein_recon
 NAP-CPLX_mod_bmocogdp(1)	NAP-CPLX	bmocogdp(1)	M_protein_recon
