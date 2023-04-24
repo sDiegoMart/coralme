@@ -83,8 +83,8 @@ def get_complex_modifications(reaction_matrix, protein_complexes, complex_mods, 
 	new_mod_dict = {}
 	for key, value in complex_mods.T.to_dict().items():
 		# QueG_mono_mod_4fe4s(2), CPLX0-782_mod_4fe4s(2), CPLX0-246_CPLX0-1342_mod_pydx5p(1) and IscS_mod_pydx5p(2) must be exceptions
-		if key in ignored_complexes:
-			continue
+# 		if key in ignored_complexes:
+# 			continue
 		key = key.replace('_DASH_', '__')
 		new_mod_dict[key] = {}
 		new_mod_dict[key]['core_enzyme'] = value['Core_enzyme']
