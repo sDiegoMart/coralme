@@ -413,6 +413,8 @@ def summarize_reactions(model,met_id,only_types=(),ignore_types = ()):
 								 ignore_types=ignore_types,verbose=False)
 	d = {}
 	for r in reactions:
+		if r.bounds == (0,0):
+			continue
 		d[r.id] = {
 			'name':r.name,
 			'gene_reaction_rule':r.gene_reaction_rule,
