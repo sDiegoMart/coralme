@@ -394,7 +394,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
 				if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
-					return 'Ribosome_' + key
+					return 'Ribosome_' + key if 'Ribosome_' not in key else key
 
 	dct = { k:[ x.split('_mod_')[0] for x in [v['enzyme']] ] for k,v in builder.org.ribosome_subreactions.items() }
 	data['ME-model SubReaction'] = data.apply(lambda x: get_ribosome_subrxns(x, dct), axis = 1)
