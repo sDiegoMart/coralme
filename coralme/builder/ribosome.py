@@ -21,6 +21,10 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 			rrna_mod.stoichiometry = me_model.process_data.get_by_id(mod_data.modification).stoichiometry
 			rrna_mod.keff = 65. # iOL uses 65. for all RNA mods
 
+			for met, stoich in rrna_mod.stoichiometry.items():
+				if isinstance(me_model.metabolites.get_by_id(met), coralme.core.component.Complex) and stoich < 0:
+					rrna_mod.enzyme.append(met)
+
 			# Add element contribution from modification to rRNA
 			#rrna_mod._element_contribution = modification_info[mod_data.modification]['elements']
 			rrna_mod._element_contribution = me_model.process_data.get_by_id(mod_data.modification).calculate_element_contribution()
@@ -34,7 +38,7 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 
 	for subreaction_id in ribosome_subreactions:
 		if not me_model.process_data.has_id('gtp_hydrolysis_era'):
-			stoichiometry = {'gtp_c': -2, 'h2o_c': -2, 'gdp_c': 2, 'pi_c': 2}
+			stoichiometry = {'gtp_c': -2.0, 'h2o_c': -2.0, 'gdp_c': 2.0, 'h_c': +2.0, 'pi_c': +2.0}
 			coralme.util.building.add_subreaction_data(
 				me_model, modification_id = 'gtp_hydrolysis_era', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
@@ -42,14 +46,14 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 		if me_model.process_data.has_id(subreaction_id):
 			subreaction = me_model.process_data.get_by_id(subreaction_id)
 		else:
-			subreaction = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
-			#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']
+		subreaction = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
+		#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']
 			#reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
-			reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
-			if bool(reaction_id):
-				subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
-			else:
-				subreaction.stoichiometry = {}
+		reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
+		if bool(reaction_id):
+			subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
+		else:
+			subreaction.stoichiometry = {}
 		subreaction.enzyme = ribosome_subreactions[subreaction_id]['enzymes']
 		# account for subreactions in complex data. num_mods is always 1
 		ribosome_complex.subreactions[subreaction.id] = 1
