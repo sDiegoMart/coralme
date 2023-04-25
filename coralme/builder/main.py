@@ -2292,20 +2292,20 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 5: Add in Translocation reactions
 
-		v1 = { 'length_dependent' : True, 'fixed_keff' : False } # default
-		v2 = { 'length_dependent' : False, 'fixed_keff' : True } # only for FtsY in the SRP pathway
-		v3 = { 'length_dependent' : False, 'fixed_keff' : False } # for all the lol and bam pathways enzymes
+		v1 = { 'fixed_keff' : False, 'length_dependent' : True } # default
+		v2 = { 'fixed_keff' : True,  'length_dependent' : False } # only for FtsY in the SRP pathway
+		v3 = { 'fixed_keff' : False, 'length_dependent' : False } # for all the enzymes from the tat, tat_alt, lol and bam pathways
 
 		for key, value in me.global_info['translocation_pathway'].items():
 			if 'translocation_pathway_' + key in df_transpaths.index:
-				value['enzymes'] = {
-					k:(v2 if k == value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) \
+				me.global_info['translocation_pathway'][key]['enzymes'] = {
+					k:(v2 if k == value.get('FtsY', None) else v1 if (key.lower() not in ['tat', 'tat_alt', 'lol', 'bam']) else v3) \
 						for k in df_transpaths.loc['translocation_pathway_' + key].tolist()[0] }
 
 			# TO ADD PATHWAYS WITHOUT HOMOLOGS
 			# Check if the user wants to add dummies to the translocation pathways
 			elif bool(me.global_info.get('add_translocases', False)) and value.get('enzymes', None) is None:
-				value['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) }
+				me.global_info['translocation_pathway'][key]['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['tat', 'tat_alt', 'lol', 'bam']) else v3) }
 				logging.warning('The component \'CPLX_dummy\' was associated to translocation pathways without defined homologs.')
 
 		dct = { k:v['abbrev'] for k,v in me.global_info['translocation_pathway'].items() }
