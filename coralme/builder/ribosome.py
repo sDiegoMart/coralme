@@ -48,11 +48,9 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 			reaction_id = me_model.global_info['translation_subreactions'].get(subreaction_id,None)
 			if reaction_id is None:
 				# If reaction_id is not in global_info it must have been defined in subreaction_matrix
-				reaction_id = subreaction_id
-			if bool(reaction_id):
-				subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
-			else:
 				subreaction.stoichiometry = {}
+			else:
+				subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
 		subreaction.enzyme = ribosome_subreactions[subreaction_id]['enzymes']
 		# account for subreactions in complex data. num_mods is always 1
 		ribosome_complex.subreactions[subreaction.id] = 1
