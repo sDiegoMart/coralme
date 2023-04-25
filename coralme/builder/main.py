@@ -2163,7 +2163,7 @@ class MEReconstruction(MEBuilder):
 
 		# .25 water equivalent for ATP hydrolysis per nucleotide
 		data = coralme.core.processdata.SubreactionData('RNA_degradation_atp_requirement', me)
-		data.stoichiometry = { 'atp_c': -0.25, 'h2o_c': -0.25, 'adp_c': 0.25, 'pi_c': 0.25 }
+		data.stoichiometry = { 'atp_c': -0.25, 'h2o_c': -0.25, 'adp_c': +0.25, 'h_c': +0.25, 'pi_c': +0.25 }
 
 		for excision_type in me.global_info['excision_machinery']:
 			stoichiometry = coralme.builder.preprocess_inputs.excision_machinery_stoichiometry(df_data, excision_type)
@@ -2314,15 +2314,15 @@ class MEReconstruction(MEBuilder):
 
 		# Check if the user added the reactions for translocation data
 		if not me.process_data.has_id('atp_hydrolysis_sec_pathway'):
-			stoichiometry = {'atp_c' : -0.04, 'h2o_c' : -0.04, 'adp_c' : +0.04, 'pi_c' : +0.04}
+			stoichiometry = {'atp_c': -0.04, 'h2o_c': -0.04, 'adp_c': +0.04, 'h_c': +0.04, 'pi_c' : +0.04}
 			coralme.util.building.add_subreaction_data(
 				me, modification_id = 'atp_hydrolysis_sec_pathway', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 		if not me.process_data.has_id('atp_hydrolysis_secA'):
-			stoichiometry = {'atp_c' : -1/75, 'h2o_c' : -1/75, 'adp_c' : +1/75, 'pi_c' : +1/75}
+			stoichiometry = {'atp_c': -1/75, 'h2o_c': -1/75, 'adp_c': +1/75, 'h_c': +1/75, 'pi_c': +1/75}
 			coralme.util.building.add_subreaction_data(
 				me, modification_id = 'atp_hydrolysis_secA', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 		if not me.process_data.has_id('gtp_hydrolysis_srp_pathway'):
-			stoichiometry = {'gtp_c' : -2.0, 'h2o_c' : -2.0, 'gdp_c' : +2.0, 'pi_c' : +2.0}
+			stoichiometry = {'gtp_c': -2.0, 'h2o_c': -2.0, 'gdp_c': +2.0, 'h_c': +2.0, 'pi_c': +2.0}
 			coralme.util.building.add_subreaction_data(
 				me, modification_id = 'gtp_hydrolysis_srp_pathway', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
