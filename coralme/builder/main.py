@@ -175,6 +175,8 @@ class MEBuilder(object):
 				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
 
 				def execute(cmd):
+					if os.name == 'nt':
+						cmd = 'cmd /c {:s}'.format(cmd)
 					cmd = re.findall(r'(?:[^\s,"]|"+(?:=|\\.|[^"])*"+)+', cmd)
 					out, err = subprocess.Popen(cmd, shell = False, stdout = subprocess.PIPE, stderr = subprocess.PIPE).communicate()
 
