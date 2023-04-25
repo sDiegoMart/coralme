@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import re
+import sys
 import copy
 
 import logging
@@ -583,7 +584,14 @@ def gap_find(me_model,de_type = None):
 		logging.warning('  '*6 + '{:s}: {:s}'.format(met, 'Missing metabolite in the M-model.' if name == '' else name))
 	return deadends
 
-def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.001 }, met_types = 'Metabolite'):
+def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.1 }, met_types = 'Metabolite'):
+	if sys.platform == 'win32':
+		self.me_model.get_solution = self.me_model.opt_gurobi
+		self.me_model.get_feasibility = self.me_model.feas_gurobi
+	else:
+		self.me_model.get_solution = self.me_model.optimize
+		self.me_model.get_feasibility = self.me_model.feasibility
+
 	if len(deadends) != 0:
 		logging.warning('  '*5 + 'Adding a sink reaction for each identified deadend metabolite...')
 		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends)
@@ -593,7 +601,7 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 
 	logging.warning('  '*5 + 'Optimizing gapfilled ME-model...')
 
-	if me_model.feasibility(keys = growth_key_and_value):
+	if me_model.get_feasibility(keys = growth_key_and_value):
 		#logging.warning('  '*5 + 'The ME-model is feasible.')
 		logging.warning('  '*5 + 'Gapfilled ME-model is feasible with growth rate {:g} 1/h.'.format(list(growth_key_and_value.values())[0]))
 		return True
@@ -603,11 +611,18 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 		return False
 
 def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
+	if sys.platform == 'win32':
+		me_model.get_solution = me_model.opt_gurobi
+		me_model.get_feasibility = me_model.feas_gurobi
+	else:
+		me_model.get_solution = me_model.optimize
+		me_model.get_feasibility = me_model.feasibility
+
 	logging.warning('  '*5 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
 	existing_sinks = [r.id for r in me_model.reactions.query('^SK_')]
 	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
 
-	if me_model.feasibility(keys = growth_key_and_value):
+	if me_model.get_feasibility(keys = growth_key_and_value):
 		pass
 	else:
 		return metabolites_to_add, [], False
@@ -632,7 +647,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 
 	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
 
-	# reaction ID : position in the model.reactions DictList object
+	# reaction_id:position in the model.reactions DictList object
 	rxns = rxns + rxns_to_append# Try present SKs the last.
 	ridx = []
 	for r in rxns:
@@ -640,14 +655,19 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 # 	ridx = { k:v for k,v in me_model.reactions._dict.items() if k in rxns }
 
 	# populate with stoichiometry
-	Sf, Se, lb, ub, b, c, cs, atoms = me_model.construct_lp_problem(keys = growth_key_and_value)
+	Sf, Se, lb, ub, b, c, cs, atoms, lambdas = me_model.construct_lp_problem()
+
+	if lambdas is None:
+		Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, Se, lb, ub, growth_key_and_value, atoms)
+	else:
+		Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, lambdas, lb, ub, growth_key_and_value, atoms)
 
 	res = []
 	msg = 'Processed: {:s}/{:d}, Gaps: {:d}. The ME-model is {:s}feasible if {:s} is closed.'
 	for idx, (rxn, pos) in enumerate(ridx):
 		lb[pos] = 0
 		ub[pos] = 0
-		if me_model.feasibility(keys = growth_key_and_value, **{'lp' : [Sf, dict(), lb, ub, b, c, cs, set()]}):
+		if me_model.get_feasibility(keys = growth_key_and_value, **{'lp' : [Sf, dict(), lb, ub, b, c, cs, set(), lambdas]}):
 			res.append(False)
 			logging.warning('{:s} {:s}'.format('  '*6, msg.format(str(idx+1).rjust(len(str(len(ridx)))), len(ridx), len([ x for x in res if x ]), '', rxn)))
 		else:
@@ -708,6 +728,15 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite', skip =
 
 	mets = set(mets).difference(skip)
 	return coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
+
+def evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms):
+	lb = [ x(*[ keys[x] for x in list(atoms) ]) if hasattr(x, '__call__') else float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in lb ]
+	ub = [ x(*[ keys[x] for x in list(atoms) ]) if hasattr(x, '__call__') else float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in ub ]
+	Se = { k:x(*[ keys[x] for x in list(atoms) ]) if hasattr(x, '__call__') else float(x.xreplace(keys)) if hasattr(x, 'subs') else x for k,x in Se.items() }
+
+	Sf.update(Se)
+
+	return Sf, Se, lb, ub
 
 def get_next_from_type(l,t):
     try:
