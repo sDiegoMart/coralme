@@ -45,7 +45,10 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 			subreaction = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
 			#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']
 			#reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
-			reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
+			reaction_id = me_model.global_info['translation_subreactions'].get(subreaction_id,None)
+			if reaction_id is None:
+				# If reaction_id is not in global_info it must have been defined in subreaction_matrix
+				reaction_id = subreaction_id
 			if bool(reaction_id):
 				subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
 			else:
