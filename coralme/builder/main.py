@@ -1927,7 +1927,7 @@ class MEReconstruction(MEBuilder):
 
 		# Associate a reaction id with the ME-model complex id (including modifications)
 		rxn_to_cplx_dict = coralme.builder.flat_files.get_reaction_to_complex(m_model, df_enz2rxn)
-		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'].str.match('True|true')].index.values)
+		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'].str.match('1|TRUE|True|true')].index.values)
 		# Correct rxn_to_cplx_dict with spontaneous reactions
 		for key in spontaneous_rxns:
 			if rxn_to_cplx_dict.get(key, None) is None:
@@ -2255,7 +2255,7 @@ class MEReconstruction(MEBuilder):
 			for x in me.global_info['translation_subreactions'].keys()
 			if x.startswith('Protein_processing')
 			]
-		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k].str.match('True|true')]['Gene Locus ID'].tolist() for k in processing_pathways }
+		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k].str.match('1|TRUE|True|true')]['Gene Locus ID'].tolist() for k in processing_pathways }
 
 		# Add the translation subreaction data objects to the ME-model
 		coralme.builder.translation.add_subreactions_to_model(
