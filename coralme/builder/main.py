@@ -2794,8 +2794,8 @@ class METroubleshooter(object):
 
 			# delete added sink reactions with lb == 0 and ub == 0
 			for rxn in self.me_model.reactions.query('^SK_'):
-				f = self.me_model.solution.fluxes[rxn.id]
-				if rxn.lower_bound == 0 and rxn.upper_bound == 0 or f == 0:
+				#f = self.me_model.solution.fluxes[rxn.id]
+				if rxn.lower_bound == 0 and rxn.upper_bound == 0:# or f == 0:
 					self.me_model.remove_reactions([rxn])
 
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
