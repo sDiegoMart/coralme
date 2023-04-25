@@ -32,8 +32,8 @@ except:
 import logging
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
-# Inherit from logging.Handler
-class ListHandler(logging.Handler):
+
+class ListHandler(logging.Handler): # Inherit from logging.Handler
 	def __init__(self, log_list):
 		# run the regular Handler __init__
 		logging.Handler.__init__(self)
@@ -2127,9 +2127,9 @@ class MEReconstruction(MEBuilder):
 				me.add_metabolites(rnap_obj)
 			else:
 				if not me.metabolites.has_id(components['sigma_factor']):
-					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['sigma_factor']))
+					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in the configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['sigma_factor']))
 				if not me.metabolites.has_id(components['polymerase']):
-					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['polymerase']))
+					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in the configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['polymerase']))
 
 		# Add polymerase complexes in the model
 		coralme.builder.transcription.add_rna_polymerase_complexes(me, rna_polymerases, verbose = False)
@@ -2200,7 +2200,7 @@ class MEReconstruction(MEBuilder):
 			if me.metabolites.has_id('dpm_c'):
 				me.remove_metabolites([me.metabolites.dpm_c])
 
-		# TODO: use a different ID for spontaneous modification vs enzymatic modification (?)
+		# WARNING: use a different ID for spontaneous modification vs enzymatic modification (?)
 		# biotin from the free metabolite in malonate decarboxylase (EC 7.2.4.4); don't remove biotin from the model (EC 4.1.1.88 is biotin-independent)
 		# biotin from the free metabolite in acetyl-CoA carboxylase, but using biotin---[acetyl-CoA-carboxylase] ligase
 		if me.process_data.has_id('mod_btn_c'):
@@ -2425,7 +2425,7 @@ class MEReconstruction(MEBuilder):
 				rxn = coralme.core.reaction.SummaryVariable('core_structural_demand_brauns_{:s}'.format(brauns_lipoprotein))
 				murein5px4p = me.metabolites.get_by_id(brauns_lipid_mod)
 				murein5px4p_mass = murein5px4p.formula_weight / 1000.
-				# Ecolime: 1.0 protein_b1677_lipoprotein_Outer_Membrane --> 1.0 EG10544-MONOMER (brauns_lipoprotein ID)
+				# ecolime: 1.0 protein_b1677_lipoprotein_Outer_Membrane --> 1.0 EG10544-MONOMER (brauns_lipoprotein ID)
 				lipoprotein = me.metabolites.get_by_id(brauns_lipoprotein)
 				me.add_reactions([rxn])
 
@@ -2443,7 +2443,7 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		mapped_keffs = {}
-		if "complex" not in df_keffs.columns: #df_keffs.empty: TODO:
+		if "complex" not in df_keffs.columns: #df_keffs.empty:
 			logging.warning("Estimating effective turnover rates...")
 			reaction_median_keffs = df_keffs
 			#sasa_list = []
@@ -2506,7 +2506,7 @@ class MEReconstruction(MEBuilder):
 				if idx in rxns.keys():
 					mapped_keffs[rxns[idx]] = 3000 if float(row['keff']) > 3000 else 0.01 if float(row['keff']) < 0.01 else row['keff']
 				else:
-					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Check if the reaction or subreaction is in the ME-model.'.format(idx))
+					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Please check if the reaction or subreaction is in the ME-model.'.format(idx))
 
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
