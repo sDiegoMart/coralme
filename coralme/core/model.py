@@ -13,6 +13,7 @@ import scipy
 import sympy
 import cobra
 import coralme
+
 # due to a circular import
 from coralme.core.component import Metabolite as Metabolite
 from coralme.core.reaction import MEReaction as MEReaction
@@ -247,6 +248,9 @@ class MEModel(cobra.core.model.Model):
 		#self._me_genes = values
 
 	# WARNING: MODIFIED FUNCTIONS FROM COBRAPY
+	def merge(self, right, prefix_existing=None, inplace=True, objective='left'):
+		return NotImplemented
+
 	def add_metabolites(self, metabolite_list):
 		"""Will add a list of metabolites to the model object and add new
 		constraints accordingly.
@@ -814,10 +818,10 @@ class MEModel(cobra.core.model.Model):
 		if not skip:
 			skip = []
 
-# 		inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
-# 		for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
-# 			logging.warning('Removing inactive MetabolicReaction {}'.format(r.id))
-# 			r.remove_from_model(remove_orphans = False)
+		#inactive_reactions = [ x for x in self.reactions if x.lower_bound == 0 and x.upper_bound == 0 ]
+		#for r in tqdm.tqdm(inactive_reactions, 'Pruning inactive MetabolicReaction\'s...', bar_format = bar_format):
+			#logging.warning('Removing inactive MetabolicReaction {}'.format(r.id))
+			#r.remove_from_model(remove_orphans = False)
 
 		complex_data_list = [ i.id for i in self.complex_data if i.id not in skip ]
 		for c_d in tqdm.tqdm(complex_data_list, 'Pruning unnecessary ComplexData reactions...', bar_format = bar_format):
@@ -1025,12 +1029,10 @@ class MEModel(cobra.core.model.Model):
 		res = [ x for y in res for x in y ]
 		return res
 
-	def construct_lp_problem(self, keys = False):
+	def construct_lp_problem(self, lambdify = False):
 		# populate empty dictionaries with stoichiometry
-		Sf = dict()
-		Se = dict()
-
-		#types = (sympy.core.add.Add, sympy.core.mul.Mul)
+		Sf = dict() # floats
+		Se = dict() # expressions
 
 		# check how many variables are in the ME-model
 		atoms = set()
@@ -1046,20 +1048,19 @@ class MEModel(cobra.core.model.Model):
 
 		lb, ub = zip(*[ rxn.bounds for rxn in self.reactions ])
 		b = [ m._bound for m in self.metabolites ] # accumulation
-		#c = [ r.objective_coefficient for r in self.reactions ]
-		c = [ 0 for r in self.reactions ]
-		# constraint sense eventually will be in the metabolite...
+		c = [ r.objective_coefficient for r in self.reactions ]
+		# constraint sense eventually will be in the metabolite object
 		cs = [ 'E' for m in self.metabolites ]
 
-		if keys:
-			# replace symbols before calling the solver
-			Se = { k:float(x.xreplace(keys)) if hasattr(x, 'subs') else x for k,x in Se.items() }
-			lb = [ float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in lb ]
-			ub = [ float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in ub ]
+		if lambdify:
+			fn = numpy.vectorize(lambda x: sympy.lambdify(list(atoms), x))
+			lb = [ x for x in fn(lb) ]
+			ub = [ x for x in fn(ub) ]
+			lambdas = { k:v for k,v in zip(Se.keys(), fn(list(Se.values()))) }
+		else:
+			lambdas = None
 
-			Sf.update(Se)
-
-		return Sf, Se, lb, ub, b, c, cs, atoms
+		return Sf, Se, lb, ub, b, c, cs, atoms, lambdas
 
 	def optimize(self,
 		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
@@ -1070,17 +1071,11 @@ class MEModel(cobra.core.model.Model):
 		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
 
 		# populate with stoichiometry, no replacement of mu's
-		Sf, Se, lb, ub, b, c, cs, atoms = self.construct_lp_problem()
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
 
 		if len(atoms) > 1:
 			print('Use `me_model.map_feasibility()` to obtain the boundary of feasible solutions.')
 			print('Optimization will proceed replacing all growth keys with the same value.')
-
-		if lambdify:
-			fn = numpy.vectorize(lambda x: sympy.lambdify(list(atoms), x))
-			lambdas = { k:v for k,v in zip(Se.keys(), fn(list(Se.values()))) }
-		else:
-			lambdas = None
 
 		from coralme.solver.solver import ME_NLP
 		#me_nlp = ME_NLP(me)
@@ -1093,16 +1088,16 @@ class MEModel(cobra.core.model.Model):
 				precision = precision,
 				verbose = verbose)
 
-		#f = sum([ rxn.objective_coefficient * xopt[idx] for idx, rxn in enumerate(self.reactions) ])
-		x_primal = xopt[ 0:len(self.reactions) ]   # The remainder are the slacks
-		x_dict = { rxn.id : xopt[idx] for idx, rxn in enumerate(self.reactions) }
-		#y = pi
-		# J = [S; c]
-		y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
-		z_dict = { rxn.id : zopt[idx] for idx, rxn in enumerate(self.reactions) }
-		#y_dict['linear_objective'] = y[len(y)-1]
-
 		if stat == 'optimal':
+			#f = sum([ rxn.objective_coefficient * xopt[idx] for idx, rxn in enumerate(self.reactions) ])
+			x_primal = xopt[ 0:len(self.reactions) ]   # The remainder are the slacks
+			x_dict = { rxn.id : xopt[idx] for idx, rxn in enumerate(self.reactions) }
+			#y = pi
+			# J = [S; c]
+			y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
+			z_dict = { rxn.id : zopt[idx] for idx, rxn in enumerate(self.reactions) }
+			#y_dict['linear_objective'] = y[len(y)-1]
+
 			#self.me.solution = Solution(f, x_primal, x_dict, y, y_dict, 'qminos', time_elapsed, status)
 			self.solution = cobra.core.Solution(
 				objective_value = muopt,
@@ -1113,20 +1108,229 @@ class MEModel(cobra.core.model.Model):
 				)
 			return True
 		else:
+			if hasattr(self, 'solution'):
+				del self.solution
 			return False
 
-	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 0.001 }, tolerance = 1e-6, precision = 'quad', **kwargs):
+	# WARNING: Experimental. We could not compile qminos under WinOS, and qminos has a licence restriction for its source code
+	def optimize_windows(self,
+		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
+		tolerance = 1e-6, precision = 'quad', verbose = True, solver = 'gurobi'):
+
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
-		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+		solver = solver if solver in [ 'gurobi', 'cplex' ] else 'gurobi'
+
+		if solver == 'gurobi':
+			self.check_feasibility = self.feas_gurobi
+		elif solver == 'cplex':
+			self.check_feasibility = self.feas_cplex
+		else:
+			print('The \'solver\' must be \'gurobi\' or \'cplex\'.')
+			return None
+
+		# populate with stoichiometry with replacement of mu's (Sf contains Se)
+		# for multiple evaluations of the LP problem, replacement in lambdify'ed Se is faster overall
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
+
+		# test max_mu
+		self.check_feasibility(keys = { self.mu:max_mu }, precision = 'quad', **{ 'lp' : [Sf, Se, lb, ub, b, c, cs, atoms, lambdas] })
+		if hasattr(self, 'solution') and self.solution.status == 'optimal':
+			return True
+		else:
+			for idx in range(1, maxIter + 1):
+				# Just a sequence of feasibility checks
+				muf = (min_mu + max_mu) / 2.
+				self.check_feasibility(keys = { self.mu:muf }, precision = 'quad', **{ 'lp' : [Sf, Se, lb, ub, b, c, cs, atoms, lambdas] })
+
+				if hasattr(self, 'solution') and self.solution.status == 'optimal':
+					stat_new = 'optimal'
+					min_mu = muf
+				else:
+					stat_new = 1
+					max_mu = muf
+
+				if verbose:
+					print('{:s}\t{:.16f}\t{:s}'.format(str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
+
+				if abs(max_mu - min_mu) <= tolerance and stat_new == 'optimal':
+					return True
+
+				if max_mu <= tolerance:
+					return False
+
+	def feas_windows(solver = 'gurobi'):
+		if solver == 'gurobi':
+			self.check_feasibility = self.feas_gurobi
+		elif solver == 'cplex':
+			self.check_feasibility = self.feas_cplex
+		else:
+			print('The \'solver\' must be \'gurobi\' or \'cplex\'.')
+			return None
+
+	# WARNING: Experimental. We could not compile qminos under WinOS, and qminos has a licence restriction for its source code
+	def feas_cplex(self, keys = { sympy.Symbol('mu', positive = True) : 0.1 }, **kwargs):
+		# check options
 		for key in list(keys.keys()):
 			if isinstance(key, sympy.Symbol):
 				pass
 			else:
 				keys[sympy.Symbol(key, positive = True)] = keys.pop(key)
 
-		# populate with stoichiometry with replacement of mu's
-		Sf, Se, lb, ub, b, c, cs, atoms = kwargs.get('lp', self.construct_lp_problem(keys = keys))
+		# populate with stoichiometry with replacement of mu's (Sf contains Se)
+		# for single evaluations of the LP problem, direct replacement is faster than lambdify
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = kwargs.get('lp', self.construct_lp_problem(lambdify = False))
+
+		if lambdas is None:
+			Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms)
+		else:
+			Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, lambdas, lb, ub, keys, atoms)
+
+		from docplex.mp.model import Model
+
+		# create a cplex model
+		mpModel = Model(float_precision = 17)
+
+		# Define decision variables
+		x = {}
+		for idx, rxn in enumerate(self.reactions):
+			x[idx] = mpModel.continuous_var(lb = lb[idx], ub = ub[idx], name = rxn.id)
+
+		# Set objective function
+		lst = [ x[idx] for idx, rxn in enumerate(self.reactions) if rxn.objective_coefficient != 0 ]
+		mpModel.maximize(mpModel.sum(lst))
+
+		# Add constraints for system of linear equations
+		for jdx, met in enumerate(self.metabolites):
+			lhs = mpModel.linear_expr()
+			for idx, rxn in enumerate(self.reactions):
+				if (jdx, idx) in Sf: # Sf is a dictionary
+					lhs += Sf[(jdx, idx)] * x[idx]
+			mpModel.add_constraint(lhs == 0, ctname = met.id)
+
+		mpModel.solve()
+
+		# output solution
+		if mpModel.solve_details.status == 'optimal':
+			#x_primal = gpModel.x[ 0:len(self.reactions) ]
+			x_dict = { rxn.id:mpModel.get_var_by_name(rxn.id).solution_value for idx,rxn in enumerate(self.reactions) }
+			y_dict = { met.id:mpModel.get_constraint_by_name(met.id).dual_value for idx,met in enumerate(self.metabolites) }
+			z_dict = { rxn.id:mpModel.get_var_by_name(rxn.id).reduced_cost for idx,rxn in enumerate(self.reactions) }
+
+			self.solution = cobra.core.Solution(
+				objective_value = list(keys.values())[0],
+				status = 'optimal',
+				fluxes = x_dict,
+				shadow_prices = y_dict,
+				reduced_costs = z_dict,
+				)
+			return True
+		else:
+			if hasattr(self, 'solution'):
+				del self.solution
+			return False
+
+	# WARNING: Experimental. We could not compile qminos under WinOS, and qminos has a licence restriction for its source code
+	def feas_gurobi(self, keys = { sympy.Symbol('mu', positive = True) : 0.1 }, precision = 'quad', **kwargs):
+		# check options
+		precision = precision if precision in [ 'quad', None, False ] else 'quad'
+
+		for key in list(keys.keys()):
+			if isinstance(key, sympy.Symbol):
+				pass
+			else:
+				keys[sympy.Symbol(key, positive = True)] = keys.pop(key)
+
+		# populate with stoichiometry with replacement of mu's (Sf contains Se)
+		# for single evaluations of the LP problem, direct replacement is faster than lambdify
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = kwargs.get('lp', self.construct_lp_problem(lambdify = False))
+
+		if lambdas is None:
+			Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms)
+		else:
+			Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, lambdas, lb, ub, keys, atoms)
+
+		import gurobipy as gp
+		from gurobipy import GRB
+
+		# create a gurobi model
+		gpModel = gp.Model()
+
+		# Set params
+		gpModel.Params.OutputFlag = 0
+		gpModel.Params.Presolve = 0
+		if precision == 'quad':
+			gpModel.Params.Quad = 1
+		gpModel.Params.NumericFocus = 3
+		gpModel.Params.FeasibilityTol = 1e-9
+		gpModel.Params.IntFeasTol = 1e-9
+		gpModel.Params.OptimalityTol = 1e-9
+		gpModel.Params.Method = 0
+		gpModel.Params.BarQCPConvTol = 1.
+		#gpModel.Params.PivotTolG = 10.
+		#gpModel.Params.UpdateTol = 10.
+		#gpModel.Params.SingularTol = 1e-30
+		gpModel.Params.BarHomogeneous = 1.
+
+		# Define decision variables
+		x = {}
+		for idx, rxn in enumerate(self.reactions):
+			x[idx] = gpModel.addVar(lb = lb[idx], ub = ub[idx], name = rxn.id, vtype = GRB.CONTINUOUS)
+
+		# Set objective function
+		lst = [ x[idx] for idx, rxn in enumerate(self.reactions) if rxn.objective_coefficient != 0 ]
+		gpModel.setObjective(gp.quicksum(lst), gp.GRB.MAXIMIZE)
+
+		# Add constraints for system of linear equations
+		for jdx, met in enumerate(self.metabolites):
+			lhs = gp.LinExpr()
+			for idx, rxn in enumerate(self.reactions):
+				if (jdx, idx) in Sf: # Sf is a dictionary
+					lhs += Sf[(jdx, idx)] * x[idx]
+			gpModel.addConstr(lhs == 0)
+
+		# Optimize the model
+		gpModel.optimize()
+
+		# output solution
+		if gpModel.status == gp.GRB.OPTIMAL:
+			x_primal = gpModel.x[ 0:len(self.reactions) ]
+			x_dict = { rxn.id : gpModel.x[idx] for idx, rxn in enumerate(self.reactions) }
+			y_dict = { met.id : gpModel.pi[idx] for idx, met in enumerate(self.metabolites) }
+			z_dict = { rxn.id : gpModel.RC[idx] for idx, rxn in enumerate(self.reactions) }
+
+			self.solution = cobra.core.Solution(
+				objective_value = list(keys.values())[0],
+				status = 'optimal',
+				fluxes = x_dict,
+				reduced_costs = z_dict,
+				shadow_prices = y_dict,
+				)
+			return True
+		else:
+			if hasattr(self, 'solution'):
+				del self.solution
+			return False
+
+	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 0.001 }, tolerance = 1e-6, precision = 'quad', **kwargs):
+		# check options
+		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
+		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+
+		for key in list(keys.keys()):
+			if isinstance(key, sympy.Symbol):
+				pass
+			else:
+				keys[sympy.Symbol(key, positive = True)] = keys.pop(key)
+
+		# populate with stoichiometry with replacement of mu's (Sf contains Se)
+		# for single evaluations of the LP problem, direct replacement is faster than lambdify
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = kwargs.get('lp', self.construct_lp_problem(lambdify = False))
+
+		if lambdas is None:
+			Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms)
+		else:
+			Sf, Se, lb, ub = coralme.builder.helper_functions.evaluate_lp_problem(Sf, lambdas, lb, ub, keys, atoms)
 
 		from coralme.solver.solver import ME_NLP
 		#me_nlp = ME_NLP(me)
@@ -1139,16 +1343,16 @@ class MEModel(cobra.core.model.Model):
 				precision = precision,
 				verbose = False)
 
-		#f = sum([ rxn.objective_coefficient * xopt[idx] for idx, rxn in enumerate(self.reactions) ])
-		x_primal = xopt[ 0:len(self.reactions) ]   # The remainder are the slacks
-		x_dict = { rxn.id : xopt[idx] for idx, rxn in enumerate(self.reactions) }
-		#y = pi
-		# J = [S; c]
-		y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
-		z_dict = { rxn.id : zopt[idx] for idx, rxn in enumerate(self.reactions) }
-		#y_dict['linear_objective'] = y[len(y)-1]
-
 		if stat == 'optimal':
+			#f = sum([ rxn.objective_coefficient * xopt[idx] for idx, rxn in enumerate(self.reactions) ])
+			x_primal = xopt[ 0:len(self.reactions) ]   # The remainder are the slacks
+			x_dict = { rxn.id : xopt[idx] for idx, rxn in enumerate(self.reactions) }
+			#y = pi
+			# J = [S; c]
+			y_dict = { met.id : yopt[idx] for idx, met in enumerate(self.metabolites) }
+			z_dict = { rxn.id : zopt[idx] for idx, rxn in enumerate(self.reactions) }
+			#y_dict['linear_objective'] = y[len(y)-1]
+
 			#self.me.solution = Solution(f, x_primal, x_dict, y, y_dict, 'qminos', time_elapsed, status)
 			self.solution = cobra.core.Solution(
 				objective_value = list(keys.values())[0],
@@ -1159,6 +1363,8 @@ class MEModel(cobra.core.model.Model):
 				)
 			return True
 		else:
+			if hasattr(self, 'solution'):
+				del self.solution
 			return False
 
 	def map_feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 1. }, tolerance = 1e-6, precision = 'quad'):
@@ -1178,74 +1384,3 @@ class MEModel(cobra.core.model.Model):
 				rxn.lower_bound = 0
 			elif rxn.lower_bound < 0:
 				rxn.lower_bound = -1000
-
-	# A copy from METroubleshooter without curation notes or logging capability
-	def troubleshoot(self, growth_key_and_value = None, skip = set()):
-		if growth_key_and_value is None:
-			growth_key_and_value = { self.mu : 0.001 }
-
-		growth_key, growth_value = zip(*growth_key_and_value.items())
-
-		print('~ '*1 + 'Troubleshooting started...')
-		print('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
-		if self.me_model.feasibility(keys = growth_key_and_value):
-			print('  '*1 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
-			works = True
-		else:
-			print('  '*1 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
-			works = False
-
-		# Step 1. Find topological gaps
-		print('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-		deadends = coralme.builder.helper_functions.gap_find(self)
-		deadends = set(deadends).difference(set(skip))
-
-		# Step 2. Test feasibility adding all topological gaps
-		if len(deadends) != 0:
-			print('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-			print('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-			works = coralme.builder.helper_functions.gap_fill(self, deadends = deadends, growth_key_and_value = growth_key_and_value)
-
-		if len(deadends) == 0 and works == False:
-			print('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
-
-		if works == False:
-			met_type = 'Metabolite'
-			print('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_type, skip = skip)
-
-			# close sink reactions that are not gaps
-			if no_gaps:
-				self.remove_reactions(no_gaps)
-
-		# Step 3. Test different sets of MEComponents
-		e_gaps = []
-		if works == False:
-			print('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
-
-			met_types = [ 'Complex', 'GenerictRNA', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
-			for met_type in met_types:
-				print('  '*5 + 'Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(met_type))
-
-				self.relax_bounds()
-				self.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-
-				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self, growth_key_and_value, met_type, skip = skip)
-				if no_gaps:
-					self.me_model.remove_reactions(no_gaps)
-				if works:
-					e_gaps.append(bf_gaps)
-					break
-
-		if works: # Meaning it can grow in any case
-			print('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
-			self.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
-			print('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f}.'.format(self.solution.objective_value))
-
-			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(self.global_info['out_directory'], self.id), 'wb') as outfile:
-				pickle.dump(self, outfile)
-
-			print('\nME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(self.global_info['out_directory'], self.id))
-		else:
-			print('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
-		return None

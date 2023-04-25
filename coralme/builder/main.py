@@ -32,8 +32,8 @@ except:
 import logging
 #https://stackoverflow.com/questions/36408496/python-logging-handler-to-append-to-list
 #Here is a naive, non thread-safe implementation:
-# Inherit from logging.Handler
-class ListHandler(logging.Handler):
+
+class ListHandler(logging.Handler): # Inherit from logging.Handler
 	def __init__(self, log_list):
 		# run the regular Handler __init__
 		logging.Handler.__init__(self)
@@ -175,6 +175,8 @@ class MEBuilder(object):
 				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
 
 				def execute(cmd):
+					if os.name == 'nt':
+						cmd = 'cmd /c {:s}'.format(cmd)
 					cmd = re.findall(r'(?:[^\s,"]|"+(?:=|\\.|[^"])*"+)+', cmd)
 					out, err = subprocess.Popen(cmd, shell = False, stdout = subprocess.PIPE, stderr = subprocess.PIPE).communicate()
 
@@ -287,6 +289,8 @@ class MEBuilder(object):
 		logging.warning("Generating new configuration file")
 		self.input_data(self.org.m_model, overwrite)
 		ListHandler.print_and_log("{}File processing done...".format(sep))
+
+		logging.shutdown()
 
 		# We will remove duplicates entries in the log output
 		with open('{:s}/MEBuilder-{:s}.log'.format(config.get('log_directory', '.'), config.get('ME-Model-ID', 'coralME')), 'w') as outfile:
@@ -1221,8 +1225,8 @@ class MEBuilder(object):
 			]
 			for i in org_cplxs:
 				if self._is_base_complex_in_list(i,defined_cplxs):
-					continue 
-				defined_cplxs.append(i)
+					continue
+					defined_cplxs.append(i)
 
 	def update_special_modifications_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_modifications
@@ -1241,8 +1245,8 @@ class MEBuilder(object):
 				if v["stoich"]:
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
 				if self._is_base_complex_in_list(i,defined_cplxs):
-					continue 
-				defined_cplxs.append(i)
+					continue
+					defined_cplxs.append(i)
 
 	def _is_base_complex_in_list(self,cplx,lst):
 		return cplx in set(i.split('_mod_')[0] for i in lst)
@@ -1495,7 +1499,7 @@ class MEBuilder(object):
 	def build_me_model(self, update = True, prune = True, overwrite = False):
 		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite)
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set()):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
@@ -1593,7 +1597,7 @@ class MEReconstruction(MEBuilder):
 
 		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
 			if hasattr(self, 'org'):
-				config['lipid_modifications'] = [ x for x in self.org.lipids if x.endswith('_p') and (x.startswith('pg') or x.startswith('pe')) and not x.startswith('pgp') ]
+				config['lipid_modifications'] = [ x for x in self.org.lipids if x.endswith('_p') and x.startswith('pg') and not x.startswith('pgp') ]
 				logging.warning('Lipid modifications were set from M-model metabolites.')
 
 		if config.get('lipoprotein_precursors', None) is None or len(config.get('lipoprotein_precursors')) == 0:
@@ -1922,14 +1926,14 @@ class MEReconstruction(MEBuilder):
 		if 'CPLX_dummy' in me.global_info['complex_cofactors']['fes_transfers']:
 			for fes in ['2fe2s', '4fe4s']:
 				coralme.util.building.add_complex_to_model(me, 'CPLX_dummy_mod_{:s}(1)'.format(fes), { 'protein_dummy' : 1.0, fes + '_c': 1.0})
-			list(me.complex_data)[-2].create_complex_formation()
-			list(me.complex_data)[-1].create_complex_formation()
+			me.complex_data.query('CPLX_dummy_mod_2fe2s\(1\)')[0].create_complex_formation()
+			me.complex_data.query('CPLX_dummy_mod_4fe4s\(1\)')[0].create_complex_formation()
 
 		# ### 7) Associate Complexes to Metabolic reactions and build the ME-model metabolic network
 
 		# Associate a reaction id with the ME-model complex id (including modifications)
 		rxn_to_cplx_dict = coralme.builder.flat_files.get_reaction_to_complex(m_model, df_enz2rxn)
-		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'].str.match('True|true')].index.values)
+		spontaneous_rxns = [me.global_info['dummy_rxn_id']] + list(df_rxns[df_rxns['is_spontaneous'].str.match('1|TRUE|True|true')].index.values)
 		# Correct rxn_to_cplx_dict with spontaneous reactions
 		for key in spontaneous_rxns:
 			if rxn_to_cplx_dict.get(key, None) is None:
@@ -1953,33 +1957,40 @@ class MEReconstruction(MEBuilder):
 				setattr(me, key, me.global_info[key])
 
 		biomass_constituents = me.global_info.get('flux_of_biomass_constituents', {})
+		# remove metabolites not in the model or without molecular weight
+		biomass_constituents = { k:v for k,v in biomass_constituents.items() if me.metabolites.has_id(k) and me.metabolites.get_by_id(k).formula_weight }
+
+		problems = list(set(me.global_info.get('flux_of_biomass_constituents', {})).difference(biomass_constituents))
+		if problems:
+			logging.warning('The following biomass constituents are not in the ME-model or have no formula: {:s}.'.format(', '.join(problems)))
 
 		rxn = coralme.core.reaction.SummaryVariable('biomass_constituent_demand')
 		me.add_reactions([rxn])
 		rxn.add_metabolites({ k:-(abs(v)) for k,v in biomass_constituents.items() })
 		rxn.lower_bound = me.mu # coralme.util.mu
 		rxn.upper_bound = me.mu # coralme.util.mu
-		constituent_mass = sum(me.metabolites.get_by_id(c).formula_weight / 1000. * abs(v) for c,v in biomass_constituents.items())
-		rxn.add_metabolites({me.metabolites.constituent_biomass: constituent_mass})
+		constituent_mass = sum([me.metabolites.get_by_id(c).formula_weight / 1000. * abs(v) for c,v in biomass_constituents.items()])
+		rxn.add_metabolites({me.metabolites.get_by_id('constituent_biomass'): constituent_mass})
 
 		# ### 2. Lipid Demand Requirements
 		# Metabolites and coefficients from biomass objective function
 
-		lipid_demand = {}
-		for key, value in me.global_info.get('flux_of_lipid_constituents', {}).items():
-			lipid_demand[key] = abs(value)
+		lipid_demand = me.global_info.get('flux_of_lipid_constituents', {})
+		#for key, value in me.global_info.get('flux_of_lipid_constituents', {}).items():
+			#lipid_demand[key] = abs(value)
 
-		for met, requirement in lipid_demand.items():
-			try:
-				component_mass = me.metabolites.get_by_id(met).formula_weight / 1000.
-				rxn = coralme.core.reaction.SummaryVariable('DM_' + met)
-				me.add_reactions([rxn])
-				rxn.add_metabolites({met: -1 * requirement, 'lipid_biomass': component_mass * requirement})
-				rxn.lower_bound = me.mu # coralme.util.mu
-				rxn.upper_bound = me.mu # coralme.util.mu
-			except:
-				msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
-				logging.warning(msg.format(met))
+		if lipid_demand:
+			for met, requirement in lipid_demand.items():
+				try:
+					component_mass = me.metabolites.get_by_id(met).formula_weight / 1000.
+					rxn = coralme.core.reaction.SummaryVariable('DM_' + met)
+					me.add_reactions([rxn])
+					rxn.add_metabolites({met: -1 * abs(requirement), 'lipid_biomass': component_mass * abs(requirement)})
+					rxn.lower_bound = me.mu # coralme.util.mu
+					rxn.upper_bound = 1000. # coralme.util.mu?
+				except:
+					msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
+					logging.warning(msg.format(met))
 
 		# ### 3. DNA Demand Requirements
 		# Added based on growth rate dependent DNA levels as in [O'brien EJ et al 2013](https://www.ncbi.nlm.nih.gov/pubmed/24084808) (*E. coli* data)
@@ -2069,13 +2080,17 @@ class MEReconstruction(MEBuilder):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
 		# Correct 'translation_stop_dict' if PrfA and/or PrfB homologs were not identified
-		if me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
-			me.global_info['translation_stop_dict']['UGA'] = 'PrfA_mono' # originally assigned to PrfB_mono
-			me.global_info['translation_stop_dict']['UAA'] = 'PrfA_mono' # originally assigned to generic_RF
-		if not me.metabolites.has_id('PrfA_mono') and me.metabolites.has_id('PrfB_mono'):
-			me.global_info['translation_stop_dict']['UAG'] = 'PrfB_mono' # originally assigned to PrfA_mono
-			me.global_info['translation_stop_dict']['UAA'] = 'PrfB_mono' # originally assigned to generic_RF
-		if not me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
+		PrfA_mono = me.global_info['translation_stop_dict']['UAG']
+		PrfB_mono = me.global_info['translation_stop_dict']['UGA']
+		generic_RF = me.global_info['translation_stop_dict']['UAA']
+
+		if     me.metabolites.has_id(PrfA_mono) and not me.metabolites.has_id(PrfB_mono):
+			me.global_info['translation_stop_dict']['UGA'] = PrfA_mono # originally assigned to PrfB_mono
+			me.global_info['translation_stop_dict']['UAA'] = PrfA_mono # originally assigned to generic_RF
+		if not me.metabolites.has_id(PrfA_mono) and     me.metabolites.has_id(PrfB_mono):
+			me.global_info['translation_stop_dict']['UAG'] = PrfB_mono # originally assigned to PrfA_mono
+			me.global_info['translation_stop_dict']['UAA'] = PrfB_mono # originally assigned to generic_RF
+		if not me.metabolites.has_id(PrfA_mono) and not me.metabolites.has_id(PrfB_mono):
 			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy' # originally assigned to PrfA_mono
 			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy' # originally assigned to PrfB_mono
 
@@ -2129,9 +2144,9 @@ class MEReconstruction(MEBuilder):
 				me.add_metabolites(rnap_obj)
 			else:
 				if not me.metabolites.has_id(components['sigma_factor']):
-					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['sigma_factor']))
+					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in the configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['sigma_factor']))
 				if not me.metabolites.has_id(components['polymerase']):
-					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['polymerase']))
+					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in the configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['polymerase']))
 
 		# Add polymerase complexes in the model
 		coralme.builder.transcription.add_rna_polymerase_complexes(me, rna_polymerases, verbose = False)
@@ -2145,6 +2160,12 @@ class MEReconstruction(MEBuilder):
 			except KeyError as e:
 				logging.warning('Transcription Unit \'{:s}\' is missing from ProcessData. Check if it is the correct behavior.'.format(tu_id))
 				pass
+
+		# WARNING: Without a TUs file, the 'most common' polymerase should be an empty string
+		most_common = collections.Counter([ x.RNA_polymerase for x in me.transcription_data ]).most_common(1)[0][0]
+		for transcription_data in me.transcription_data:
+			if transcription_data.RNA_polymerase == '':
+				transcription_data.RNA_polymerase = most_common
 
 		# ### 7) Add Transcription Metacomplexes: Degradosome (both for RNA degradation and RNA splicing)
 
@@ -2165,7 +2186,7 @@ class MEReconstruction(MEBuilder):
 
 		# .25 water equivalent for ATP hydrolysis per nucleotide
 		data = coralme.core.processdata.SubreactionData('RNA_degradation_atp_requirement', me)
-		data.stoichiometry = { 'atp_c': -0.25, 'h2o_c': -0.25, 'adp_c': 0.25, 'pi_c': 0.25 }
+		data.stoichiometry = { 'atp_c': -0.25, 'h2o_c': -0.25, 'adp_c': +0.25, 'h_c': +0.25, 'pi_c': +0.25 }
 
 		for excision_type in me.global_info['excision_machinery']:
 			stoichiometry = coralme.builder.preprocess_inputs.excision_machinery_stoichiometry(df_data, excision_type)
@@ -2202,7 +2223,7 @@ class MEReconstruction(MEBuilder):
 			if me.metabolites.has_id('dpm_c'):
 				me.remove_metabolites([me.metabolites.dpm_c])
 
-		# TODO: use a different ID for spontaneous modification vs enzymatic modification (?)
+		# WARNING: use a different ID for spontaneous modification vs enzymatic modification (?)
 		# biotin from the free metabolite in malonate decarboxylase (EC 7.2.4.4); don't remove biotin from the model (EC 4.1.1.88 is biotin-independent)
 		# biotin from the free metabolite in acetyl-CoA carboxylase, but using biotin---[acetyl-CoA-carboxylase] ligase
 		if me.process_data.has_id('mod_btn_c'):
@@ -2257,7 +2278,7 @@ class MEReconstruction(MEBuilder):
 			for x in me.global_info['translation_subreactions'].keys()
 			if x.startswith('Protein_processing')
 			]
-		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k].str.match('True|true')]['Gene Locus ID'].tolist() for k in processing_pathways }
+		protein_processing = { k:df_data[~df_data[k].isnull() & df_data[k].str.match('1|TRUE|True|true')]['Gene Locus ID'].tolist() for k in processing_pathways }
 
 		# Add the translation subreaction data objects to the ME-model
 		coralme.builder.translation.add_subreactions_to_model(
@@ -2284,8 +2305,8 @@ class MEReconstruction(MEBuilder):
 
 		for transcription_data in tqdm.tqdm(list(me.transcription_data), 'Adding Transcription SubReactions...', bar_format = bar_format):
 			# Assume false if not in tu_df
-			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, False)
-			rho = 'dependent' if rho_dependent in ['True', 'true'] else 'independent'
+			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, 'False')
+			rho = 'dependent' if rho_dependent in ['1', 'TRUE', 'True', 'true'] else 'independent'
 			stable = 'stable' if transcription_data.codes_stable_rna else 'normal'
 			if 'Transcription_{:s}_rho_{:s}'.format(stable, rho) in me.global_info['transcription_subreactions']:
 				transcription_data.subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
@@ -2294,20 +2315,20 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 5: Add in Translocation reactions
 
-		v1 = { 'length_dependent' : True, 'fixed_keff' : False } # default
-		v2 = { 'length_dependent' : False, 'fixed_keff' : True } # only for FtsY in the SRP pathway
-		v3 = { 'length_dependent' : False, 'fixed_keff' : False } # for all the lol and bam pathways enzymes
+		v1 = { 'fixed_keff' : False, 'length_dependent' : True } # default
+		v2 = { 'fixed_keff' : True,  'length_dependent' : False } # only for FtsY in the SRP pathway
+		v3 = { 'fixed_keff' : False, 'length_dependent' : False } # for all the enzymes from the tat, tat_alt, lol and bam pathways
 
 		for key, value in me.global_info['translocation_pathway'].items():
 			if 'translocation_pathway_' + key in df_transpaths.index:
-				value['enzymes'] = {
-					k:(v2 if k == value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) \
+				me.global_info['translocation_pathway'][key]['enzymes'] = {
+					k:(v2 if k == value.get('FtsY', None) else v1 if (key.lower() not in ['tat', 'tat_alt', 'lol', 'bam']) else v3) \
 						for k in df_transpaths.loc['translocation_pathway_' + key].tolist()[0] }
 
 			# TO ADD PATHWAYS WITHOUT HOMOLOGS
 			# Check if the user wants to add dummies to the translocation pathways
 			elif bool(me.global_info.get('add_translocases', False)) and value.get('enzymes', None) is None:
-				value['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['lol', 'bam']) else v3) }
+				me.global_info['translocation_pathway'][key]['enzymes'] = { 'CPLX_dummy':(v2 if value.get('FtsY', None) else v1 if (key.lower() not in ['tat', 'tat_alt', 'lol', 'bam']) else v3) }
 				logging.warning('The component \'CPLX_dummy\' was associated to translocation pathways without defined homologs.')
 
 		dct = { k:v['abbrev'] for k,v in me.global_info['translocation_pathway'].items() }
@@ -2316,15 +2337,15 @@ class MEReconstruction(MEBuilder):
 
 		# Check if the user added the reactions for translocation data
 		if not me.process_data.has_id('atp_hydrolysis_sec_pathway'):
-			stoichiometry = {'atp_c' : -0.04, 'h2o_c' : -0.04, 'adp_c' : +0.04, 'pi_c' : +0.04}
+			stoichiometry = {'atp_c': -0.04, 'h2o_c': -0.04, 'adp_c': +0.04, 'h_c': +0.04, 'pi_c' : +0.04}
 			coralme.util.building.add_subreaction_data(
 				me, modification_id = 'atp_hydrolysis_sec_pathway', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 		if not me.process_data.has_id('atp_hydrolysis_secA'):
-			stoichiometry = {'atp_c' : -1/75, 'h2o_c' : -1/75, 'adp_c' : +1/75, 'pi_c' : +1/75}
+			stoichiometry = {'atp_c': -1/75, 'h2o_c': -1/75, 'adp_c': +1/75, 'h_c': +1/75, 'pi_c': +1/75}
 			coralme.util.building.add_subreaction_data(
 				me, modification_id = 'atp_hydrolysis_secA', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 		if not me.process_data.has_id('gtp_hydrolysis_srp_pathway'):
-			stoichiometry = {'gtp_c' : -2.0, 'h2o_c' : -2.0, 'gdp_c' : +2.0, 'pi_c' : +2.0}
+			stoichiometry = {'gtp_c': -2.0, 'h2o_c': -2.0, 'gdp_c': +2.0, 'h_c': +2.0, 'pi_c': +2.0}
 			coralme.util.building.add_subreaction_data(
 				me, modification_id = 'gtp_hydrolysis_srp_pathway', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
@@ -2427,7 +2448,7 @@ class MEReconstruction(MEBuilder):
 				rxn = coralme.core.reaction.SummaryVariable('core_structural_demand_brauns_{:s}'.format(brauns_lipoprotein))
 				murein5px4p = me.metabolites.get_by_id(brauns_lipid_mod)
 				murein5px4p_mass = murein5px4p.formula_weight / 1000.
-				# Ecolime: 1.0 protein_b1677_lipoprotein_Outer_Membrane --> 1.0 EG10544-MONOMER (brauns_lipoprotein ID)
+				# ecolime: 1.0 protein_b1677_lipoprotein_Outer_Membrane --> 1.0 EG10544-MONOMER (brauns_lipoprotein ID)
 				lipoprotein = me.metabolites.get_by_id(brauns_lipoprotein)
 				me.add_reactions([rxn])
 
@@ -2445,7 +2466,7 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 7: Set keffs
 		mapped_keffs = {}
-		if "complex" not in df_keffs.columns: #df_keffs.empty: TODO:
+		if "complex" not in df_keffs.columns: #df_keffs.empty:
 			logging.warning("Estimating effective turnover rates...")
 			reaction_median_keffs = df_keffs
 			#sasa_list = []
@@ -2508,7 +2529,7 @@ class MEReconstruction(MEBuilder):
 				if idx in rxns.keys():
 					mapped_keffs[rxns[idx]] = 3000 if float(row['keff']) > 3000 else 0.01 if float(row['keff']) < 0.01 else row['keff']
 				else:
-					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Check if the reaction or subreaction is in the ME-model.'.format(idx))
+					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Please check if the reaction or subreaction is in the ME-model.'.format(idx))
 
 		if mapped_keffs:
 			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
@@ -2551,33 +2572,88 @@ class MEReconstruction(MEBuilder):
 
 				data.subreactions[subreaction_id] = abs(value)
 
-		# ### 3. Add remaining complex formulas and compartments to the ME-model
+		# ### 3. Update ME-model
+		# trick to obtain shadow prices and reduced costs
+		me.reactions.dummy_reaction_FWD_SPONT.objective_coefficient = 1.
 
-		# Update a second time to incorporate all of the metabolite formulas correctly
-		for r in tqdm.tqdm(me.reactions.query('formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
+		if update:
+			me.update()
+
+		# ### 4. Add remaining complex formulas and compartments to the ME-model
+		for r in tqdm.tqdm(me.reactions.query('^formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
 			r.update()
 
-		# Update complex formulas
-		modification_formulas = df_mets[df_mets['type'].str.match('MOD')]
+		modification_formulas = df_mets[df_mets['type'].str.match('COFACTOR|MOD|MODIFICATION')]
 		modification_formulas = dict(zip(modification_formulas['me_id'], modification_formulas['formula']))
+
+		# Correct formula of complexes based on their base complex
 		# This will add the formula to complexes not formed from a complex formation reaction (e.g. CPLX + na2_c -> CPLX_mod_na2(1))
-		coralme.builder.formulas.add_remaining_complex_formulas(me, modification_formulas)
+		#coralme.builder.formulas.add_remaining_complex_formulas(me, modification_formulas)
+		for met in [ x for x in me.metabolites if '_mod_' in x.id and isinstance(x, coralme.core.component.Complex)]:
+			met.formula = None
+			met.elements = {}
+
+			base_complex = met.id.split('_mod_')[0]
+			base_complex_elements = collections.Counter(me.metabolites.get_by_id(base_complex).elements)
+
+			for mod in met.id.split('_mod_')[1:]:
+				for num in range(int(mod.rstrip(')').split('(')[1])):
+					mod_elements = None
+					mod_name = mod.split('(')[0]
+					if mod_name in modification_formulas:
+						mod_elements = coralme.builder.helper_functions.parse_composition(modification_formulas[mod_name])
+						if me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is None:
+							me.metabolites.get_by_id(mod_name + '_c').formula = modification_formulas[mod_name]
+					elif me.metabolites.has_id(mod_name + '_c'):
+						mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
+					# WARNING: flavodoxin homologs might have a different base_complex ID compared to ecolime model
+					# Negative contributions cannot be set in the metabolites.txt input file
+					elif 'Oxidized(1)' in mod and 'FLAVODOXIN' not in base_complex:
+						mod_elements = {'H': -2}
+					elif 'glycyl(1)' in mod:
+						mod_elements = {'H': -1}
+					elif 'cosh(1)' in mod:
+						mod_elements = {'H': +1, 'O': -1, 'S': +1}
+
+					if mod_elements:
+						mod_elements = collections.Counter(mod_elements)
+						base_complex_elements.update(mod_elements)
+					else:
+						logging.warning('Attempt to correct the \'{:s}\' stoichiometry failed. Please check if it is the correct behaviour or if the modification \'{:s}_c\' exists as a metabolite in the ME-model or a formula is included in the me_mets.txt file.'.format(met.id, mod_name))
+
+			complex_elements = { k:base_complex_elements[k] for k in sorted(base_complex_elements) if base_complex_elements[k] != 0 }
+			met.formula = ''.join([ '{:s}{:d}'.format(k, v) for k,v in complex_elements.items() ])
+			met.elements = coralme.builder.helper_functions.parse_composition(met.formula)
+
+		# Update a second time to incorporate all of the metabolite formulas correctly
+		for data in tqdm.tqdm(me.subreaction_data, 'Recalculation of the elemental contribution in SubReactions...', bar_format = bar_format):
+			data._element_contribution = data.calculate_element_contribution()
 
 		# Update reactions affected by formula update
+		for r in tqdm.tqdm(me.reactions.query('^formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
+			r.update()
+
 		for r in tqdm.tqdm(me.reactions.query('_mod_lipoyl'), 'Updating FormationReactions involving a lipoyl prosthetic group...', bar_format = bar_format):
 			r.update()
 
 		for r in tqdm.tqdm(me.reactions.query('_mod_glycyl'), 'Updating FormationReactions involving a glycyl radical...', bar_format = bar_format):
 			r.update()
 
-		# add metabolite compartments
+		# update biomass_constituent_demand reaction
+		constituent_mass = sum(me.metabolites.get_by_id(c).formula_weight / 1000. * abs(v) for c,v in biomass_constituents.items())
+		rxn = me.reactions.get_by_id('biomass_constituent_demand')
+		rxn.add_metabolites({ k:-(abs(v)) for k,v in biomass_constituents.items() }, combine = False)
+		rxn.add_metabolites({me.metabolites.get_by_id('constituent_biomass'): constituent_mass}, combine = False)
+
+		# ### 5. Add metabolite compartments
 		coralme.builder.compartments.add_compartments_to_model(me)
 
-		# ## Part 9: Update ME-model, prune reactions and save
-		if update:
-			me.update()
+		# ### 6. Prune reactions from ME-model
+		# WARNING: Do it recursively to reduce further the size of the model.
 		if prune:
 			me.prune()
+
+		# Part 9. Save and report
 
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(out_directory, model), 'wb') as outfile:
 			pickle.dump(me, outfile)
@@ -2595,6 +2671,8 @@ class MEReconstruction(MEBuilder):
 		ListHandler.print_and_log('Number of metabolites in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_mets, new_mets, len(me.gem.metabolites)))
 		ListHandler.print_and_log('Number of reactions in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_rxns, new_rxns, len(me.gem.reactions)))
 		ListHandler.print_and_log('Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
+
+		logging.shutdown()
 
 		with open('{:s}/MEReconstruction-{:s}.log'.format(log_directory, model), 'w') as outfile:
 			for filename in [
@@ -2634,7 +2712,14 @@ class METroubleshooter(object):
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set()):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = None):
+		if sys.platform == 'win32' or platform == 'win32':
+			self.me_model.get_solution = self.me_model.optimize_windows
+			self.me_model.check_feasibility = self.me_model.feas_windows(solver = solver)
+		else:
+			self.me_model.get_solution = self.me_model.optimize
+			self.me_model.check_feasibility = self.me_model.feasibility
+
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		out_directory = config.get('out_directory', '.')
@@ -2657,69 +2742,34 @@ class METroubleshooter(object):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		logging.warning('~ '*1 + 'Troubleshooting started...')
+
+		# Step 1. Test if current ME-model is feasible
 		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
-		if self.me_model.feasibility(keys = growth_key_and_value):
+		if self.me_model.check_feasibility(keys = growth_key_and_value):
 			logging.warning('  '*1 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = True
 		else:
 			logging.warning('  '*1 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
-# 		# Step 1. # TODO: Try cofactors
-# 		cofactors = []
-# 		if works == False:
-# 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-# 			cofactors = coralme.builder.helper_functions.find_cofactors(self.me_model)
-# 			# Step 2. Test feasibility adding all topological gaps
-# 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-# 			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-# 			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
-
-# 		# Step 1. Find topological gaps
-# 		deadends = []
-# 		if works == False:
-# 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-# 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
-# 			deadends = set(deadends).difference(set(skip))
-
-# 			if len(deadends) != 0:
-# 				self.curation_notes['troubleshoot'].append({
-# 					'msg':'Some deadends were identified',
-# 					'triggered_by':list(deadends),
-# 					'importance':'high',
-# 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
-# 			# Step 2. Test feasibility adding all topological gaps
-# 				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-# 				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-# 				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
-
-# 		if len(deadends) == 0 and works == False:
-# 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
-
-# 		if works == False:
-# 			met_type = 'Metabolite'
-# 			logging.warning('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-# 			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
-
-# 			# close sink reactions that are not gaps
-# 			if no_gaps:
-# 				self.me_model.remove_reactions(no_gaps)
-
-# 			if bf_gaps and (len(bf_gaps) != 0 or bf_gaps[0]):
-# 				self.curation_notes['troubleshoot'].append({
-# 					'msg':'Additional deadends were identified',
-# 					'triggered_by':list(bf_gaps),
-# 					'importance':'high',
-# 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
-
-		# Step 3. Test different sets of MEComponents
+		# Step 2. Test different sets of MEComponents
 		e_gaps = []
 		if works == False:
-# 			logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+			met_types = [
+				'ME-Deadends',
+				'Cofactors',
+				'All-Deadends',
+				'Metabolite',
+				'GenerictRNA',
+				'Complex',
+				'TranscribedGene',
+				'TranslatedGene',
+				'ProcessedProtein',
+				'GenericComponent'
+				]
 
-			met_types = ['ME-Deadends', 'Cofactors','All-Deadends', 'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
-
-			for idx,met_type in enumerate(met_types):
+			for idx, met_type in enumerate(met_types):
 				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
 				if idx > 3:
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
@@ -2749,7 +2799,7 @@ class METroubleshooter(object):
 					self.me_model.remove_reactions([rxn])
 
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
-			self.me_model.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
+			self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False)
 			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
 
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
@@ -2758,6 +2808,8 @@ class METroubleshooter(object):
 			logging.warning('ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id))
 		else:
 			logging.warning('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
+
+		logging.shutdown()
 
 		# We will remove duplicates entries in the log output
 		with open('{:s}/METroubleshooter-{:s}.log'.format(log_directory, model), 'w') as outfile:
