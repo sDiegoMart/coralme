@@ -985,7 +985,7 @@ class MEBuilder(object):
 					total=len(ref_generic_dict)):
 			if k not in generic_dict:
 				continue
-			if generic_dict[k]:
+			if generic_dict[k]['enzymes']:
 				continue
 			ref_cplxs = v['enzymes']
 			for i in ref_cplxs:
