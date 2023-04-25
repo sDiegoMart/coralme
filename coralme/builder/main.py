@@ -2556,17 +2556,60 @@ class MEReconstruction(MEBuilder):
 		if update:
 			me.update()
 
-		# Update a second time to incorporate all of the metabolite formulas correctly
-		for r in tqdm.tqdm(me.reactions.query('formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
+		# ### 4. Add remaining complex formulas and compartments to the ME-model
+		for r in tqdm.tqdm(me.reactions.query('^formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
 			r.update()
 
-		# Update complex formulas
-		modification_formulas = df_mets[df_mets['type'].str.match('MOD')]
+		modification_formulas = df_mets[df_mets['type'].str.match('COFACTOR|MOD|MODIFICATION')]
 		modification_formulas = dict(zip(modification_formulas['me_id'], modification_formulas['formula']))
+
+		# Correct formula of complexes based on their base complex
 		# This will add the formula to complexes not formed from a complex formation reaction (e.g. CPLX + na2_c -> CPLX_mod_na2(1))
-		coralme.builder.formulas.add_remaining_complex_formulas(me, modification_formulas)
+		#coralme.builder.formulas.add_remaining_complex_formulas(me, modification_formulas)
+		for met in [ x for x in me.metabolites if '_mod_' in x.id and isinstance(x, coralme.core.component.Complex)]:
+			met.formula = None
+			met.elements = {}
+
+			base_complex = met.id.split('_mod_')[0]
+			base_complex_elements = collections.Counter(me.metabolites.get_by_id(base_complex).elements)
+
+			for mod in met.id.split('_mod_')[1:]:
+				for num in range(int(mod.rstrip(')').split('(')[1])):
+					mod_elements = None
+					mod_name = mod.split('(')[0]
+					if mod_name in modification_formulas:
+						mod_elements = coralme.builder.helper_functions.parse_composition(modification_formulas[mod_name])
+						if me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is None:
+							me.metabolites.get_by_id(mod_name + '_c').formula = modification_formulas[mod_name]
+					elif me.metabolites.has_id(mod_name + '_c'):
+						mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
+					# WARNING: flavodoxin homologs might have a different base_complex ID compared to ecolime model
+					# Negative contributions cannot be set in the metabolites.txt input file
+					elif 'Oxidized(1)' in mod and 'FLAVODOXIN' not in base_complex:
+						mod_elements = {'H': -2}
+					elif 'glycyl(1)' in mod:
+						mod_elements = {'H': -1}
+					elif 'cosh(1)' in mod:
+						mod_elements = {'H': +1, 'O': -1, 'S': +1}
+
+					if mod_elements:
+						mod_elements = collections.Counter(mod_elements)
+						base_complex_elements.update(mod_elements)
+					else:
+						logging.warning('Attempt to correct the \'{:s}\' stoichiometry failed. Please check if it is the correct behaviour or if the modification \'{:s}_c\' exists as a metabolite in the ME-model or a formula is included in the me_mets.txt file.'.format(met.id, mod_name))
+
+			complex_elements = { k:base_complex_elements[k] for k in sorted(base_complex_elements) if base_complex_elements[k] != 0 }
+			met.formula = ''.join([ '{:s}{:d}'.format(k, v) for k,v in complex_elements.items() ])
+			met.elements = coralme.builder.helper_functions.parse_composition(met.formula)
+
+		# Update a second time to incorporate all of the metabolite formulas correctly
+		for data in tqdm.tqdm(me.subreaction_data, 'Recalculation of the elemental contribution in SubReactions...', bar_format = bar_format):
+			data._element_contribution = data.calculate_element_contribution()
 
 		# Update reactions affected by formula update
+		for r in tqdm.tqdm(me.reactions.query('^formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
+			r.update()
+
 		for r in tqdm.tqdm(me.reactions.query('_mod_lipoyl'), 'Updating FormationReactions involving a lipoyl prosthetic group...', bar_format = bar_format):
 			r.update()
 
@@ -2576,9 +2619,8 @@ class MEReconstruction(MEBuilder):
 		# add metabolite compartments
 		coralme.builder.compartments.add_compartments_to_model(me)
 
-		# ## Part 9: Update ME-model, prune reactions and save
-		if update:
-			me.update()
+		# ### 6. Prune reactions from ME-model
+		# WARNING: Do it recursively to reduce further the size of the model.
 		if prune:
 			me.prune()
 
