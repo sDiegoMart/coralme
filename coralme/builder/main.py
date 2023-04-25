@@ -1221,7 +1221,7 @@ class MEBuilder(object):
 			]
 			for i in org_cplxs:
 				if self._is_base_complex_in_list(i,defined_cplxs):
-					continue 
+					continue
 					defined_cplxs.append(i)
 
 	def update_special_modifications_from_homology(self):
@@ -1241,7 +1241,7 @@ class MEBuilder(object):
 				if v["stoich"]:
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
 				if self._is_base_complex_in_list(i,defined_cplxs):
-					continue 
+					continue
 					defined_cplxs.append(i)
 
 	def _is_base_complex_in_list(self,cplx,lst):
@@ -2144,6 +2144,12 @@ class MEReconstruction(MEBuilder):
 				logging.warning('Transcription Unit \'{:s}\' is missing from ProcessData. Check if it is the correct behavior.'.format(tu_id))
 				pass
 
+		# WARNING: Without a TUs file, the 'most common' polymerase should be an empty string
+		most_common = collections.Counter([ x.RNA_polymerase for x in me.transcription_data ]).most_common(1)[0][0]
+		for transcription_data in me.transcription_data:
+			if transcription_data.RNA_polymerase == '':
+				transcription_data.RNA_polymerase = most_common
+
 		# ### 7) Add Transcription Metacomplexes: Degradosome (both for RNA degradation and RNA splicing)
 
 		degradosome_id = me.global_info['degradosome_id']
@@ -2283,7 +2289,7 @@ class MEReconstruction(MEBuilder):
 		for transcription_data in tqdm.tqdm(list(me.transcription_data), 'Adding Transcription SubReactions...', bar_format = bar_format):
 			# Assume false if not in tu_df
 			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, False)
-			rho = 'dependent' if rho_dependent in ['True', 'true'] else 'independent'
+			rho = 'dependent' if rho_dependent in ['1', 'TRUE', 'True', 'true'] else 'independent'
 			stable = 'stable' if transcription_data.codes_stable_rna else 'normal'
 			if 'Transcription_{:s}_rho_{:s}'.format(stable, rho) in me.global_info['transcription_subreactions']:
 				transcription_data.subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
