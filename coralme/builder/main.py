@@ -979,6 +979,10 @@ class MEBuilder(object):
 					'Updating generics from homology...',
 					bar_format = bar_format,
 					total=len(ref_generic_dict)):
+			if k not in generic_dict:
+				continue
+			if generic_dict[k]:
+				continue
 			ref_cplxs = v['enzymes']
 			for i in ref_cplxs:
 				if i in ref_cplx_homolog:
@@ -1288,6 +1292,8 @@ class MEBuilder(object):
 					total=len(ref_transcription_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_transcription_subreactions[k]["enzymes"]
+			if defined_cplxs:
+				continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
