@@ -1951,30 +1951,37 @@ class MEReconstruction(MEBuilder):
 				setattr(me, key, me.global_info[key])
 
 		biomass_constituents = me.global_info.get('flux_of_biomass_constituents', {})
+		# remove metabolites not in the model or without molecular weight
+		biomass_constituents = { k:v for k,v in biomass_constituents.items() if me.metabolites.has_id(k) and me.metabolites.get_by_id(k).formula_weight }
+
+		problems = list(set(me.global_info.get('flux_of_biomass_constituents', {})).difference(biomass_constituents))
+		if problems:
+			logging.warning('The following biomass constituents are not in the ME-model or have no formula: {:s}.'.format(', '.join(problems)))
 
 		rxn = coralme.core.reaction.SummaryVariable('biomass_constituent_demand')
 		me.add_reactions([rxn])
 		rxn.add_metabolites({ k:-(abs(v)) for k,v in biomass_constituents.items() })
 		rxn.lower_bound = me.mu # coralme.util.mu
 		rxn.upper_bound = me.mu # coralme.util.mu
-		constituent_mass = sum(me.metabolites.get_by_id(c).formula_weight / 1000. * abs(v) for c,v in biomass_constituents.items())
-		rxn.add_metabolites({me.metabolites.constituent_biomass: constituent_mass})
+		constituent_mass = sum([me.metabolites.get_by_id(c).formula_weight / 1000. * abs(v) for c,v in biomass_constituents.items()])
+		rxn.add_metabolites({me.metabolites.get_by_id('constituent_biomass'): constituent_mass})
 
 		# ### 2. Lipid Demand Requirements
 		# Metabolites and coefficients from biomass objective function
 
-		lipid_demand = {}
-		for key, value in me.global_info.get('flux_of_lipid_constituents', {}).items():
-			lipid_demand[key] = abs(value)
+		lipid_demand = me.global_info.get('flux_of_lipid_constituents', {})
+		#for key, value in me.global_info.get('flux_of_lipid_constituents', {}).items():
+			#lipid_demand[key] = abs(value)
 
+		if lipid_demand:
 			for met, requirement in lipid_demand.items():
 				try:
 					component_mass = me.metabolites.get_by_id(met).formula_weight / 1000.
 					rxn = coralme.core.reaction.SummaryVariable('DM_' + met)
 					me.add_reactions([rxn])
-				rxn.add_metabolites({met: -1 * requirement, 'lipid_biomass': component_mass * requirement})
+					rxn.add_metabolites({met: -1 * abs(requirement), 'lipid_biomass': component_mass * abs(requirement)})
 					rxn.lower_bound = me.mu # coralme.util.mu
-				rxn.upper_bound = me.mu # coralme.util.mu
+					rxn.upper_bound = 1000. # coralme.util.mu?
 				except:
 					msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
 					logging.warning(msg.format(met))
