@@ -2549,7 +2549,12 @@ class MEReconstruction(MEBuilder):
 
 				data.subreactions[subreaction_id] = abs(value)
 
-		# ### 3. Add remaining complex formulas and compartments to the ME-model
+		# ### 3. Update ME-model
+		# trick to obtain shadow prices and reduced costs
+		me.reactions.dummy_reaction_FWD_SPONT.objective_coefficient = 1.
+
+		if update:
+			me.update()
 
 		# Update a second time to incorporate all of the metabolite formulas correctly
 		for r in tqdm.tqdm(me.reactions.query('formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
