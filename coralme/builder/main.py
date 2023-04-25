@@ -2299,7 +2299,7 @@ class MEReconstruction(MEBuilder):
 
 		for transcription_data in tqdm.tqdm(list(me.transcription_data), 'Adding Transcription SubReactions...', bar_format = bar_format):
 			# Assume false if not in tu_df
-			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, False)
+			rho_dependent = df_tus.rho_dependent.get(transcription_data.id, 'False')
 			rho = 'dependent' if rho_dependent in ['1', 'TRUE', 'True', 'true'] else 'independent'
 			stable = 'stable' if transcription_data.codes_stable_rna else 'normal'
 			if 'Transcription_{:s}_rho_{:s}'.format(stable, rho) in me.global_info['transcription_subreactions']:
