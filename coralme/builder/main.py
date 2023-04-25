@@ -2616,7 +2616,13 @@ class MEReconstruction(MEBuilder):
 		for r in tqdm.tqdm(me.reactions.query('_mod_glycyl'), 'Updating FormationReactions involving a glycyl radical...', bar_format = bar_format):
 			r.update()
 
-		# add metabolite compartments
+		# update biomass_constituent_demand reaction
+		constituent_mass = sum(me.metabolites.get_by_id(c).formula_weight / 1000. * abs(v) for c,v in biomass_constituents.items())
+		rxn = me.reactions.get_by_id('biomass_constituent_demand')
+		rxn.add_metabolites({ k:-(abs(v)) for k,v in biomass_constituents.items() }, combine = False)
+		rxn.add_metabolites({me.metabolites.get_by_id('constituent_biomass'): constituent_mass}, combine = False)
+
+		# ### 5. Add metabolite compartments
 		coralme.builder.compartments.add_compartments_to_model(me)
 
 		# ### 6. Prune reactions from ME-model
