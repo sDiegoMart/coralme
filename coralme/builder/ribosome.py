@@ -46,7 +46,7 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 			#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']
 			#reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
 			reaction_id = me_model.global_info['translation_subreactions'].get(subreaction_id,None)
-			if reaction_id is None:
+			if reaction_id == '' or reaction_id is None:
 				# If reaction_id is not in global_info it must have been defined in subreaction_matrix
 				subreaction.stoichiometry = {}
 			else:
