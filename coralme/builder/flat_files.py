@@ -170,8 +170,8 @@ def process_m_model(
 
 	for rxn_id in reaction_matrix_dict:
 		if rxn_id in m_model.reactions:
-			logging.warning('The MetabolicReaction \'{:s}\' (using \'reaction_matrix.txt\') is already present in the M-model and won\'t be replaced.'.format(rxn_id))
-			continue
+			logging.warning('The MetabolicReaction \'{:s}\' (using \'reaction_matrix.txt\') is already present in the M-model and it will be replaced.'.format(rxn_id))
+			m_model.remove_reactions([rxn_id], remove_orphans = False)
 
 		# Metabolites need to be added into the M-model first
 		rxn_stoichiometry = reaction_matrix_dict[rxn_id]
@@ -201,7 +201,7 @@ def process_m_model(
 		else:
 			reversible = 'True'
 			logging.warning('Unable to determine MetabolicReaction \'{:s}\' reversibility. Default value is \'True\'.'.format(rxn_id))
-		rxn.lower_bound = -1000 if reversible.lower() == 'true' else 0
+		rxn.lower_bound = -1000.0 if reversible.lower() == 'true' else 0.0
 		logging.warning('The MetabolicReaction \'{:s}\' was created into the M-model (using \'reaction_matrix.txt\').'.format(rxn_id))
 
 	# m_to_me_map DataFrame
