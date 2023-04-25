@@ -290,6 +290,8 @@ class MEBuilder(object):
 		self.input_data(self.org.m_model, overwrite)
 		ListHandler.print_and_log("{}File processing done...".format(sep))
 
+		logging.shutdown()
+
 		# We will remove duplicates entries in the log output
 		with open('{:s}/MEBuilder-{:s}.log'.format(config.get('log_directory', '.'), config.get('ME-Model-ID', 'coralME')), 'w') as outfile:
 			logger = self.logger['MEBuilder'].log_list
@@ -1491,7 +1493,7 @@ class MEBuilder(object):
 	def build_me_model(self, update = True, prune = True, overwrite = False):
 		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite)
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set()):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = None):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
@@ -2575,6 +2577,8 @@ class MEReconstruction(MEBuilder):
 		if prune:
 			me.prune()
 
+		# Part 9. Save and report
+
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(out_directory, model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 
@@ -2591,6 +2595,8 @@ class MEReconstruction(MEBuilder):
 		ListHandler.print_and_log('Number of metabolites in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_mets, new_mets, len(me.gem.metabolites)))
 		ListHandler.print_and_log('Number of reactions in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_rxns, new_rxns, len(me.gem.reactions)))
 		ListHandler.print_and_log('Number of genes in the ME-model is {:d} (+{:.2f}%, from {:d})'.format(n_genes, new_genes, len(me.gem.genes)))
+
+		logging.shutdown()
 
 		with open('{:s}/MEReconstruction-{:s}.log'.format(log_directory, model), 'w') as outfile:
 			for filename in [
@@ -2726,6 +2732,8 @@ class METroubleshooter(object):
 			logging.warning('ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id))
 		else:
 			logging.warning('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
+
+		logging.shutdown()
 
 		# We will remove duplicates entries in the log output
 		with open('{:s}/METroubleshooter-{:s}.log'.format(log_directory, model), 'w') as outfile:
