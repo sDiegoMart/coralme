@@ -1218,7 +1218,7 @@ class MEBuilder(object):
 			for i in org_cplxs:
 				if self._is_base_complex_in_list(i,defined_cplxs):
 					continue 
-				defined_cplxs.append(i)
+					defined_cplxs.append(i)
 
 	def update_special_modifications_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_modifications
@@ -1238,7 +1238,7 @@ class MEBuilder(object):
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
 				if self._is_base_complex_in_list(i,defined_cplxs):
 					continue 
-				defined_cplxs.append(i)
+					defined_cplxs.append(i)
 
 	def _is_base_complex_in_list(self,cplx,lst):
 		return cplx in set(i.split('_mod_')[0] for i in lst)
@@ -1963,17 +1963,17 @@ class MEReconstruction(MEBuilder):
 		for key, value in me.global_info.get('flux_of_lipid_constituents', {}).items():
 			lipid_demand[key] = abs(value)
 
-		for met, requirement in lipid_demand.items():
-			try:
-				component_mass = me.metabolites.get_by_id(met).formula_weight / 1000.
-				rxn = coralme.core.reaction.SummaryVariable('DM_' + met)
-				me.add_reactions([rxn])
+			for met, requirement in lipid_demand.items():
+				try:
+					component_mass = me.metabolites.get_by_id(met).formula_weight / 1000.
+					rxn = coralme.core.reaction.SummaryVariable('DM_' + met)
+					me.add_reactions([rxn])
 				rxn.add_metabolites({met: -1 * requirement, 'lipid_biomass': component_mass * requirement})
-				rxn.lower_bound = me.mu # coralme.util.mu
+					rxn.lower_bound = me.mu # coralme.util.mu
 				rxn.upper_bound = me.mu # coralme.util.mu
-			except:
-				msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
-				logging.warning(msg.format(met))
+				except:
+					msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
+					logging.warning(msg.format(met))
 
 		# ### 3. DNA Demand Requirements
 		# Added based on growth rate dependent DNA levels as in [O'brien EJ et al 2013](https://www.ncbi.nlm.nih.gov/pubmed/24084808) (*E. coli* data)
@@ -2628,7 +2628,14 @@ class METroubleshooter(object):
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set()):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = None):
+		if sys.platform == 'win32' or platform == 'win32':
+			self.me_model.get_solution = self.me_model.optimize_windows
+			self.me_model.check_feasibility = self.me_model.feas_windows(solver = solver)
+		else:
+			self.me_model.get_solution = self.me_model.optimize
+			self.me_model.check_feasibility = self.me_model.feasibility
+
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		out_directory = config.get('out_directory', '.')
@@ -2651,69 +2658,34 @@ class METroubleshooter(object):
 		growth_key, growth_value = zip(*growth_key_and_value.items())
 
 		logging.warning('~ '*1 + 'Troubleshooting started...')
+
+		# Step 1. Test if current ME-model is feasible
 		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
-		if self.me_model.feasibility(keys = growth_key_and_value):
+		if self.me_model.check_feasibility(keys = growth_key_and_value):
 			logging.warning('  '*1 + 'Original ME-model is feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = True
 		else:
 			logging.warning('  '*1 + 'Original ME-model is not feasible with a tested growth rate of {:f} 1/h'.format(list(growth_value)[0]))
 			works = False
 
-# 		# Step 1. # TODO: Try cofactors
-# 		cofactors = []
-# 		if works == False:
-# 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-# 			cofactors = coralme.builder.helper_functions.find_cofactors(self.me_model)
-# 			# Step 2. Test feasibility adding all topological gaps
-# 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-# 			logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-# 			works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
-
-# 		# Step 1. Find topological gaps
-# 		deadends = []
-# 		if works == False:
-# 			logging.warning('~ '*1 + 'Step 1. Find topological gaps in the ME-model.')
-# 			deadends = coralme.builder.helper_functions.gap_find(self.me_model)
-# 			deadends = set(deadends).difference(set(skip))
-
-# 			if len(deadends) != 0:
-# 				self.curation_notes['troubleshoot'].append({
-# 					'msg':'Some deadends were identified',
-# 					'triggered_by':list(deadends),
-# 					'importance':'high',
-# 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
-# 			# Step 2. Test feasibility adding all topological gaps
-# 				logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with all identified deadend metabolites.')
-# 				logging.warning('  '*5 + 'Attempt optimization gapfilling the identified metabolites from Step 1')
-# 				works = coralme.builder.helper_functions.gap_fill(self.me_model, deadends = deadends, growth_key_and_value = growth_key_and_value)
-
-# 		if len(deadends) == 0 and works == False:
-# 			logging.warning('~ '*1 + 'Step 2. Solve gap-filled ME-model with provided sink reactions for deadend metabolites.')
-
-# 		if works == False:
-# 			met_type = 'Metabolite'
-# 			logging.warning('  '*5 + 'Checking reactions that provide components of type \'{:s}\' using brute force...'.format(met_type))
-# 			bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
-
-# 			# close sink reactions that are not gaps
-# 			if no_gaps:
-# 				self.me_model.remove_reactions(no_gaps)
-
-# 			if bf_gaps and (len(bf_gaps) != 0 or bf_gaps[0]):
-# 				self.curation_notes['troubleshoot'].append({
-# 					'msg':'Additional deadends were identified',
-# 					'triggered_by':list(bf_gaps),
-# 					'importance':'high',
-# 					'to_do':'Fix metabolic deadends by adding reactions or solving other warnings.'})
-
-		# Step 3. Test different sets of MEComponents
+		# Step 2. Test different sets of MEComponents
 		e_gaps = []
 		if works == False:
-# 			logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+			met_types = [
+				'ME-Deadends',
+				'Cofactors',
+				'All-Deadends',
+				'Metabolite',
+				'GenerictRNA',
+				'Complex',
+				'TranscribedGene',
+				'TranslatedGene',
+				'ProcessedProtein',
+				'GenericComponent'
+				]
 
-			met_types = ['ME-Deadends', 'Cofactors','All-Deadends', 'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
-
-			for idx,met_type in enumerate(met_types):
+			for idx, met_type in enumerate(met_types):
 				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
 				if idx > 3:
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
@@ -2743,7 +2715,7 @@ class METroubleshooter(object):
 					self.me_model.remove_reactions([rxn])
 
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
-			self.me_model.optimize(max_mu = 3.0, precision = 1e-6, verbose = False)
+			self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False)
 			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
 
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
