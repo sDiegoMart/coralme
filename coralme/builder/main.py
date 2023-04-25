@@ -2074,13 +2074,17 @@ class MEReconstruction(MEBuilder):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
 		# Correct 'translation_stop_dict' if PrfA and/or PrfB homologs were not identified
-		if me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
-			me.global_info['translation_stop_dict']['UGA'] = 'PrfA_mono' # originally assigned to PrfB_mono
-			me.global_info['translation_stop_dict']['UAA'] = 'PrfA_mono' # originally assigned to generic_RF
-		if not me.metabolites.has_id('PrfA_mono') and me.metabolites.has_id('PrfB_mono'):
-			me.global_info['translation_stop_dict']['UAG'] = 'PrfB_mono' # originally assigned to PrfA_mono
-			me.global_info['translation_stop_dict']['UAA'] = 'PrfB_mono' # originally assigned to generic_RF
-		if not me.metabolites.has_id('PrfA_mono') and not me.metabolites.has_id('PrfB_mono'):
+		PrfA_mono = me.global_info['translation_stop_dict']['UAG']
+		PrfB_mono = me.global_info['translation_stop_dict']['UGA']
+		generic_RF = me.global_info['translation_stop_dict']['UAA']
+
+		if     me.metabolites.has_id(PrfA_mono) and not me.metabolites.has_id(PrfB_mono):
+			me.global_info['translation_stop_dict']['UGA'] = PrfA_mono # originally assigned to PrfB_mono
+			me.global_info['translation_stop_dict']['UAA'] = PrfA_mono # originally assigned to generic_RF
+		if not me.metabolites.has_id(PrfA_mono) and     me.metabolites.has_id(PrfB_mono):
+			me.global_info['translation_stop_dict']['UAG'] = PrfB_mono # originally assigned to PrfA_mono
+			me.global_info['translation_stop_dict']['UAA'] = PrfB_mono # originally assigned to generic_RF
+		if not me.metabolites.has_id(PrfA_mono) and not me.metabolites.has_id(PrfB_mono):
 			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy' # originally assigned to PrfA_mono
 			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy' # originally assigned to PrfB_mono
 
