@@ -39,16 +39,20 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 				me_model, modification_id = 'gtp_hydrolysis_era', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
 		# add subreaction to model
-		subreaction = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
-		#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']
-		#reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
-		reaction_id = me_model.global_info['translation_subreactions'].get(subreaction_id,None)
-		if reaction_id is None:
-			reaction_id = subreaction_id
-		if bool(reaction_id):
-			subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
+		if me_model.process_data.has_id(subreaction_id):
+			subreaction = me_model.process_data.get_by_id(subreaction_id)
 		else:
-			subreaction.stoichiometry = {}
+			subreaction = coralme.core.processdata.SubreactionData(subreaction_id, me_model)
+			#subreaction.stoichiometry = ribosome_subreactions[subreaction_id]['stoich']
+			#reaction_id = me_model.global_info['translation_subreactions'][subreaction_id]
+			reaction_id = me_model.global_info['translation_subreactions'].get(subreaction_id,None)
+			if reaction_id is None:
+				# If reaction_id is not in global_info it must have been defined in subreaction_matrix
+				reaction_id = subreaction_id
+			if bool(reaction_id):
+				subreaction.stoichiometry = me_model.process_data.get_by_id(reaction_id).stoichiometry
+			else:
+				subreaction.stoichiometry = {}
 		subreaction.enzyme = ribosome_subreactions[subreaction_id]['enzymes']
 		# account for subreactions in complex data. num_mods is always 1
 		ribosome_complex.subreactions[subreaction.id] = 1
