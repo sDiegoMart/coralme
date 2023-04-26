@@ -1,16 +1,16 @@
-import pandas
 import os
-import coralme
-from coralme.builder import dictionaries
 import re
 
 import logging
 log = logging.getLogger(__name__)
 
 import tqdm
-import cobra
-
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
+
+import coralme
+import cobra
+import pandas
+
 class MEManualCuration(object):
     """MEManualCuration class for loading manual curation from files
 
@@ -110,6 +110,7 @@ class MEManualCuration(object):
                              no_file_return=pandas.DataFrame(),
                              sep = '\t',
                              pathtype = 'relative'):
+
         if pathtype == 'absolute':
             filepath = filename
         else:
@@ -261,7 +262,7 @@ class MEManualCuration(object):
     def _process_ribosome_stoich(self,
                                df):
         from copy import deepcopy
-        ribosome_stoich = deepcopy(dictionaries.ribosome_stoich)
+        ribosome_stoich = deepcopy(coralme.builder.dictionaries.ribosome_stoich)
         for s, row in df.iterrows():
             proteins = row["proteins"]
             if proteins:
@@ -289,7 +290,7 @@ class MEManualCuration(object):
         return self._process_ribosome_stoich(df)
 
     def _create_ribosome_subreactions(self):
-        return pandas.DataFrame.from_dict(dictionaries.ribosome_subreactions.copy()).T.rename_axis('subreaction')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.ribosome_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_ribosome_subreactions_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -311,7 +312,7 @@ class MEManualCuration(object):
         return self._modify_ribosome_subreactions_from_load(df)
 
     def _create_generic_dict(self):
-        return pandas.DataFrame.from_dict(dictionaries.generics.copy()).T.rename_axis('generic_component')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.generics.copy()).T.rename_axis('generic_component')
     def _modify_generic_dict_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -337,7 +338,7 @@ class MEManualCuration(object):
         return self._modify_generic_dict_from_load(df)
 
 #     def _create_rrna_modifications(self):
-#         return pandas.DataFrame.from_dict(dictionaries.rrna_modifications.copy()).T.rename_axis('modification')
+#         return pandas.DataFrame.from_dict(coralme.builder.dictionaries.rrna_modifications.copy()).T.rename_axis('modification')
 #     def _modify_rrna_modifications_for_save(self,df):
 #         df = df.copy()
 #         for r, row in df.iterrows():
@@ -360,7 +361,7 @@ class MEManualCuration(object):
 
     def _create_amino_acid_trna_synthetase(self):
         return pandas.DataFrame.from_dict(
-            {"enzyme": dictionaries.amino_acid_trna_synthetase.copy()}).rename_axis('amino_acid')
+            {"enzyme": coralme.builder.dictionaries.amino_acid_trna_synthetase.copy()}).rename_axis('amino_acid')
     def load_amino_acid_trna_synthetase(self):
         create_file = self._create_amino_acid_trna_synthetase()
         return self._get_manual_curation(
@@ -370,7 +371,7 @@ class MEManualCuration(object):
                 sep = '\t').to_dict()['enzyme']
 
     def _create_peptide_release_factors(self):
-        return pandas.DataFrame.from_dict(dictionaries.translation_stop_dict.copy()).T.rename_axis('release_factor')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.translation_stop_dict.copy()).T.rename_axis('release_factor')
     def _modify_peptide_release_factors_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -396,7 +397,7 @@ class MEManualCuration(object):
         return self._modify_peptide_release_factors_from_load(df)
 
     def _create_initiation_subreactions(self):
-        return pandas.DataFrame.from_dict(dictionaries.initiation_subreactions.copy()).T.rename_axis('subreaction')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.initiation_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_initiation_subreactions_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -426,7 +427,7 @@ class MEManualCuration(object):
         return self._modify_initiation_subreactions_from_load(df)
 
     def _create_elongation_subreactions(self):
-        return pandas.DataFrame.from_dict(dictionaries.elongation_subreactions.copy()).T.rename_axis('subreaction')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.elongation_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_elongation_subreactions_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -452,7 +453,7 @@ class MEManualCuration(object):
         return self._modify_elongation_subreactions_from_load(df)
 
     def _create_termination_subreactions(self):
-        df = pandas.DataFrame.from_dict(dictionaries.termination_subreactions.copy()).T.rename_axis('subreaction')
+        df = pandas.DataFrame.from_dict(coralme.builder.dictionaries.termination_subreactions.copy()).T.rename_axis('subreaction')
         df[["element_contribution"]] = df[["element_contribution"]].applymap(
                 lambda x: {} if pandas.isnull(x) else x
             )
@@ -486,11 +487,11 @@ class MEManualCuration(object):
         return self._modify_termination_subreactions_from_load(df)
 
     def _create_special_trna_subreactions(self):
-        df = pandas.DataFrame.from_dict(dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
+        df = pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
         df[["element_contribution"]] = df[["element_contribution"]].applymap(
             lambda x: {} if pandas.isnull(x) else x
         )
-        return pandas.DataFrame.from_dict(dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
     def _modify_special_trna_subreactions_for_save(self,df):
 
         df = df.copy()
@@ -521,7 +522,7 @@ class MEManualCuration(object):
         return self._modify_special_trna_subreactions_from_load(df)
 
     def _create_excision_machinery(self):
-        return pandas.DataFrame.from_dict(dictionaries.excision_machinery.copy()).T.rename_axis('type')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.excision_machinery.copy()).T.rename_axis('type')
     def _modify_excision_machinery_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -547,7 +548,7 @@ class MEManualCuration(object):
         return self._modify_excision_machinery_from_load(df)
 
     def _create_special_modifications(self):
-        return pandas.DataFrame.from_dict(dictionaries.special_modifications.copy()).T.rename_axis('modification')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_modifications.copy()).T.rename_axis('modification')
     def _modify_special_modifications_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -574,12 +575,15 @@ class MEManualCuration(object):
 
     def _modify_rna_modification_from_load(self,df):
         d = {}
-        for mod,row in df.iterrows():
-            mods = ['{}_at_{}'.format(mod,i) for i in row['positions'].split(',')]
+        for idx,row in df.iterrows():
+            mods = ['{}_at_{}'.format(idx,i) for i in row['positions'].split(',')]
             for enz in row['enzymes'].split(' AND '):
-                if enz not in d: d[enz] = []
-                d[enz] = mods
+                #if enz not in d: d[enz] = []
+                #d[enz] = mods
+                for mod in mods:
+                    d.setdefault(enz, []).append(mod)
         return d
+
     def load_rna_modification(self):
         create_file = pandas.DataFrame(columns=[
             'modification','positions','type','enzymes','source'
@@ -618,7 +622,7 @@ class MEManualCuration(object):
             sep = '\t')
 
     def _create_folding_dict(self):
-        return pandas.DataFrame.from_dict(dictionaries.folding_dict.copy()).T.rename_axis('mechanism')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.folding_dict.copy()).T.rename_axis('mechanism')
     def _modify_folding_dict_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -644,7 +648,7 @@ class MEManualCuration(object):
         return self._modify_folding_dict_from_load(df)
 
     def _create_transcription_subreactions(self):
-        return pandas.DataFrame.from_dict(dictionaries.transcription_subreactions.copy()).T.rename_axis('mechanism')
+        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.transcription_subreactions.copy()).T.rename_axis('mechanism')
     def _modify_transcription_subreactions_for_save(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -745,7 +749,7 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df
-    
+
     def _create_stable_RNAs(self):
         return pandas.DataFrame(columns=[
             'id'
@@ -758,7 +762,7 @@ class MEManualCuration(object):
                 no_file_return = create_file,
                 sep = '\t')
         return df.index.to_list()
-    
+
     def _create_rho_independent(self):
         return pandas.DataFrame(columns=[
             'id'
