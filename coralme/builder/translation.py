@@ -11,26 +11,26 @@ from collections import Counter
 
 def add_subreactions_to_model(me_model, subreactions):
 	if not me_model.process_data.has_id('DEF'):
-		stoichiometry = {'h2o_c': -1, 'for_c': +1}
+		stoichiometry = { 'h2o_c': -1.0, 'for_c': +1.0 }
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'DEF', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
 	if not me_model.process_data.has_id('MAP'):
-		stoichiometry = {'h2o_c': -1, 'met__L_c': +1}
+		stoichiometry = { 'h2o_c': -1.0, 'h_c': +1.0, 'met__L_c': +1.0 }
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'MAP', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
 	if not me_model.process_data.has_id('FMETTRS'):
 		stoichiometry = {
-			'generic_tRNA_START_met__L_c': -1,
-			me_model.metabolites.query('^10fthf')[0].id: -1,
-			me_model.metabolites.query('^thf')[0].id: +1
+			'generic_tRNA_START_met__L_c': -1.0,
+			me_model.metabolites.query('^10fthf')[0].id: -1.0,
+			me_model.metabolites.query('^thf')[0].id: +1.0
 			}
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'FMETTRS', modification_stoichiometry = stoichiometry, modification_enzyme = 'CPLX_dummy')
 
 	if not me_model.process_data.has_id('atp_hydrolysis_groel'):
-		stoichiometry = {'atp_c': -7, 'h2o_c': -7, 'adp_c': +7, 'pi_c': +7}
+		stoichiometry = { 'atp_c': -7.0, 'h2o_c': -7.0, 'adp_c': +7.0, 'h_c': +7.0, 'pi_c': +7.0 }
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'atp_hydrolysis_groel', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
@@ -73,12 +73,12 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 	#for codon, aa in { k:v for k,v in me_model.global_info['codon_table'].forward_table.items() if 'U' not in k }.items():
 	for codon, aa in { k:v for k,v in codon_table.forward_table.items() if 'U' not in k }.items():
 		if not me_model.process_data.has_id('atp_hydrolysis_trna_loading'):
-			stoichiometry = {'atp_c': -1, 'h2o_c': -1, 'amp_c': +1, 'ppi_c': +1}
+			stoichiometry = { 'atp_c': -1.0, 'h2o_c': -1.0, 'amp_c': +1.0, 'h_c': +1.0, 'ppi_c': +1.0 }
 			coralme.util.building.add_subreaction_data(
 				me_model, modification_id = 'atp_hydrolysis_trna_loading', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
 		if not me_model.process_data.has_id('gtp_hydrolysis'):
-			stoichiometry = {'gtp_c': -1, 'h2o_c': -1, 'gdp_c': +1, 'pi_c': +1}
+			stoichiometry = { 'gtp_c': -1.0, 'h2o_c': -1.0, 'gdp_c': +1.0, 'h_c': +1.0, 'pi_c': +1.0 }
 			coralme.util.building.add_subreaction_data(
 				me_model, modification_id = 'gtp_hydrolysis', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
@@ -108,5 +108,5 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 	if me_model.metabolites.has_id('generic_tRNA_UGA_ser__L_c'):
 		data = coralme.core.processdata.SubreactionData('sec_addition_at_UGA', me_model)
 		data.enzyme = selenocysteine_enzymes
-		data.stoichiometry = { 'generic_tRNA_UGA_ser__L_c': -1.0, 'h_c': 1.0, 'pi_c': 1.0, 'selnp_c': -1.0 }
+		data.stoichiometry = { 'generic_tRNA_UGA_ser__L_c': -1.0, 'selnp_c': -1.0, 'h_c': +1.0, 'pi_c': +1.0 }
 		#data._element_contribution = values[0].get('element_contribution', {})
