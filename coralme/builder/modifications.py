@@ -74,7 +74,7 @@ def _replace_modification(dct, me_model):
 		cplx_data.complex_id = data.complex_id
 		cplx_data.stoichiometry = data.stoichiometry
 		cplx_data.subreactions = data.subreactions.copy()
-		# remove mod_btn_c and replace it with the new subreaction id
+		# e.g.: remove mod_btn_c and replace it with the new subreaction id
 		cplx_data.subreactions[new_mod_data.id] = cplx_data.subreactions.pop(modification)
 		#cplx_data.create_complex_formation() # the cplx_data already exists
 
@@ -93,6 +93,14 @@ def add_2tpr3dpcoa_modifications(me_model):
 def add_glycyl_modifications(me_model):
 	# dct = { "mod_glycyl_c" : [ "gre_activation" ] }
 	dct = me_model.global_info['complex_cofactors'].get('glycyl_subreactions', {})
+
+	if dct:
+		# WARNING: Do we need to correct all the modification.enzyme properties (biotin, 2tpr3dpcoa, pan4p)?
+		data = me_model.subreaction_data.get_by_id(list(dct.values())[0][0])
+		for met, stoich in data.stoichiometry.items():
+			if isinstance(me_model.metabolites.get_by_id(met), coralme.core.component.Complex) and stoich < 0:
+				data.enzyme.add(met)
+
 	if bool(dct):
 		_replace_modification(dct, me_model)
 
