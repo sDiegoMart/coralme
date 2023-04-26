@@ -26,7 +26,7 @@ import coralme
 # use this because recursive import leads to a parcial import and an error
 from coralme.core.component import Metabolite as Metabolite
 
-from collections import defaultdict
+from collections import defaultdict, Counter
 from operator import attrgetter
 import re
 
@@ -114,13 +114,20 @@ class MEReaction(cobra.core.reaction.Reaction):
 			{element: number_of_elemental_imbalances}
 
 		"""
-		mass_balance = self.check_mass_balance()
+		#mass_balance = self.check_mass_balance()
 
-		# ME-model is not currently charge balanced
-		if 'charge' in mass_balance:
-			mass_balance.pop('charge')
+		## ME-model is not currently charge balanced
+		#if 'charge' in mass_balance:
+			#mass_balance.pop('charge')
 
-		return {met: value for met, value in mass_balance.items() if abs(value) > 1e-11}
+		#return {met: value for met, value in mass_balance.items() if abs(value) > 1e-11}
+
+		mass_balance = Counter()
+		for met, value in self.metabolites.items():
+			value = value if isinstance(value, float) else float(value.subs(self._model.mu, 0))
+			mass_balance.update({ k:(v*value) for k,v in Counter(met.elements).items() })
+		mass_balance = { k:mass_balance[k] for k in sorted(mass_balance) if mass_balance[k] != 0 }
+		return mass_balance
 
 	def add_subreactions(self, process_data_id, stoichiometry, scale = 1.):
 		"""
@@ -799,7 +806,7 @@ class MetabolicReaction(MEReaction):
 		try:
 			self.add_metabolites(object_stoichiometry)
 		except:
-			print('core/reaction.py:756 ' + str(object_stoichiometry))
+			print('core/reaction.py:809 ' + str(object_stoichiometry))
 
 		# Set the bounds
 		if self.reverse:
@@ -808,6 +815,7 @@ class MetabolicReaction(MEReaction):
 		else:
 			self.lower_bound = max(0, +self.stoichiometric_data.lower_bound)
 			self.upper_bound = max(0, +self.stoichiometric_data.upper_bound)
+
 	@property
 	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
@@ -1151,9 +1159,11 @@ class PostTranslationReaction(MEReaction):
 			raise ValueError('If SubReactions in PostTranslationData modify the protein, the \'biomass_type\' must be provided.')
 
 		self.add_metabolites(object_stoichiometry, combine = False)
+
 	@property
 	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
+
 class TranscriptionReaction(MEReaction):
 	"""Transcription of a TU to produced TranscribedGene.
 
@@ -1389,9 +1399,11 @@ class TranscriptionReaction(MEReaction):
 			self.add_metabolites({metabolites.mRNA_biomass: mrna_mass}, combine = False)
 		if tmrna_mass > 0:
 			self.add_metabolites({metabolites.tmRNA_biomass: tmrna_mass}, combine = False)
+
 	@property
 	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
+
 class GenericFormationReaction(MEReaction):
 	"""
 	Some components in an ME-model can perform exactly the same function. To
@@ -1631,7 +1643,7 @@ class TranslationReaction(MEReaction):
 		# old code; now set as a global_info and a subreaction
 		#atp_hydrolysis = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'pi_c': 1, 'h_c': 1}
 		if not self._model.process_data.has_id('atp_hydrolysis'):
-			stoichiometry = {'atp_c': -1, 'h2o_c': -1, 'adp_c': 1, 'pi_c': 1}
+			stoichiometry = {'atp_c': -1.0, 'h2o_c': -1.0, 'adp_c': +1.0, 'h_c': +1.0, 'pi_c': +1.0}
 			coralme.util.building.add_subreaction_data(self._model, modification_id = 'atp_hydrolysis', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
 		atp_hydrolysis = self._model.process_data.get_by_id('atp_hydrolysis').stoichiometry
@@ -1680,9 +1692,11 @@ class TranslationReaction(MEReaction):
 		# RNA biomass consumed due to degradation
 		mrna_mass = transcript.formula_weight / 1000.  # kDa
 		self.add_metabolites({metabolites.mRNA_biomass: (-mrna_mass * deg_amount)}, combine = False)
+
 	@property
 	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
+
 class tRNAChargingReaction(MEReaction):
 	"""
 	Reaction class for the charging of a tRNA with an amino acid
@@ -1786,9 +1800,11 @@ class tRNAChargingReaction(MEReaction):
 
 		# Replace reaction stoichiometry with updated stoichiometry
 		self.add_metabolites(object_stoichiometry)
+
 	@property
 	def genes(self):
 		return _get_genes_from_reaction_metabolites(self)
+
 class SummaryVariable(MEReaction):
 	"""
 	SummaryVariables are reactions that impose global constraints on the model.
