@@ -1,9 +1,13 @@
 import os
+import sys
 import copy
 import json
 import sympy
 import jsonschema
 from collections import OrderedDict
+
+import logging
+log_format = '%(asctime)s %(message)s' #%(clientip)-15s %(user)-8s
 
 import pandas
 import cobra
@@ -56,7 +60,19 @@ def save_json_me_model(model, file_name, sort = True):
 		#file_name = open(file_name, 'w')
 		#should_close = True
 
+	# set logger
+	log = logging.getLogger() # root logger
+	for hdlr in log.handlers[:]: # remove all old handlers
+		log.removeHandler(hdlr)
+
+	# Old code works in a separate script; but it works if we remove the old handler
+	logging.basicConfig(level = logging.WARNING, format = log_format)
+	#log.addHandler(logging.StreamHandler(sys.stdout))
+	logging.captureWarnings(True)
+
 	model_dict = coralme.io.dict.me_model_to_dict(model)
+
+	logging.shutdown()
 
 	# Confirm that dictionary representation of model adheres to JSONSCHEMA
 	try:
@@ -96,6 +112,17 @@ def load_json_me_model(file_name):
 		A full ME-model
 
 	"""
+	# set logger
+	log = logging.getLogger() # root logger
+	for hdlr in log.handlers[:]: # remove all old handlers
+		log.removeHandler(hdlr)
+
+	# Old code works in a separate script; but it works if we remove the old handler
+	logging.basicConfig(filename = 'MELoader.log', filemode = 'w', level = logging.WARNING, format = log_format)
+	log.addHandler(coralme.builder.main.ListHandler([]))
+	#log.addHandler(logging.StreamHandler(sys.stdout))
+	logging.captureWarnings(True)
+
 	if isinstance(file_name, str):
 		with open(file_name, 'r') as f:
 			model_dict = json.load(f)
@@ -107,7 +134,19 @@ def load_json_me_model(file_name):
 	except jsonschema.ValidationError:
 		raise Exception('Must pass valid ME-model json file')
 
-	return coralme.io.dict.me_model_from_dict(model_dict)
+	model = coralme.io.dict.me_model_from_dict(model_dict)
+
+	logging.shutdown()
+
+	# We will remove duplicates entries in the log output
+	with open('MELoader.log', 'w') as outfile:
+		logger = log.handlers[1].log_list
+
+		tmp = pandas.DataFrame(logger)
+		for idx, data in tmp.drop_duplicates(subset = 1).iterrows():
+			outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
+
+	return model
 
 # -----------------------------------------------------------------------------
 # Functions below here facilitate json dumping/loading of reduced ME-models
