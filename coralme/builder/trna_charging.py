@@ -24,12 +24,9 @@ def add_trna_modification_procedures(me_model, trna_mods):
 				trna_mod.stoichiometry = {}
 			trna_mod.keff = 65.  # iOL uses 65 for all tRNA mods
 
-			# TODO: Modify to identify 'carriers' in SubReaction data
-			#if 'carriers' in modification_info[mod_data.modification].keys():
-				#for carrier, stoich in modification_info[mod_data.modification]['carriers'].items():
-					#if stoich < 0:
-						#trna_mod.enzyme += [carrier]
-					#trna_mod.stoichiometry[carrier] = stoich
+			for met, stoich in trna_mod.stoichiometry.items():
+				if isinstance(me_model.metabolites.get_by_id(met), coralme.core.component.Complex) and stoich < 0:
+					trna_mod.enzyme.append(met)
 
 		# Add element contribution from modification to tRNA
 		#trna_mod._element_contribution = modification_info[mod_data.modification]['elements']
