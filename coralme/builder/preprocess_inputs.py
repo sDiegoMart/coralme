@@ -316,7 +316,8 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		subrxns = []
 		for key, subdct in dct.items():
 			mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
-			tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
+			#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
+			tags = [ x['Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
 				#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
