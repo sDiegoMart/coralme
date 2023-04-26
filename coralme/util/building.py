@@ -212,7 +212,7 @@ def convert_aa_codes_and_add_charging(me_model, trna_to_aa, trna_to_codon, organ
 
 	# add in all the tRNA charging reactions
 	for tRNA, aa in trna_to_aa.items():
-		# trna_to_codon contains all the tRNAs found in the organism, not per organelle
+		# trna_to_codon contains all the tRNAs found in the organism, not a subset of tRNAs per organelle
 		if tRNA not in trna_to_codon.keys() or isinstance(aa, str):
 			continue
 
@@ -459,9 +459,9 @@ def build_reactions_from_genbank(
 
 			# Some features might lack a locus tag
 			if not feature.qualifiers.get(me_model.global_info.get('locus_tag', 'locus_tag'), False):
-				logging.warning('The feature \'{:s}\' of type \'{:s}\', located at \'{:s}\' misses a \'{:s}\' qualifier.'.format(feature.qualifiers.get('product', ['\'no product name\''])[0], feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
-				filter1 = feature.qualifiers.get('gene', ['\'no product name\''])[0].startswith('tRNA-')
-				filter2 = feature.qualifiers.get('product', ['\'no product name\''])[0].startswith('tRNA-')
+				logging.warning('The feature \'{:s}\' of type \'{:s}\', located at \'{:s}\' misses a \'{:s}\' qualifier.'.format(feature.qualifiers.get('product', ['no product name'])[0], feature.type, str(feature.location), me_model.global_info.get('locus_tag', 'locus_tag')))
+				filter1 = feature.qualifiers.get('gene', ['no product name'])[0].startswith('tRNA-')
+				filter2 = feature.qualifiers.get('product', ['no product name'])[0].startswith('tRNA-')
 				if filter1 or filter2:
 					feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')] = new_locus_tag = ['CORALME_{:03d}'.format(new_locus_tag_counter)]
 					logging.warning('The feature was identified as a tRNA and assigned the Gene Locus ID \'{:s}\'.'.format(new_locus_tag[0]))
@@ -644,30 +644,30 @@ def build_reactions_from_genbank(
 	if me_model.global_info['trna_to_codon'] != {}:
 		pass
 	else:
-		for organelle, aa2trna_dct in aa2trna.items():
-			aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
-			aa2trna_df = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
-			aa2trna_df = aa2trna_df.groupby(0).agg({1: lambda x: x.tolist()})
+	for organelle, aa2trna_dct in aa2trna.items():
+		aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
+		aa2trna_df = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
+		aa2trna_df = aa2trna_df.groupby(0).agg({1: lambda x: x.tolist()})
+		if 'fMet' in aa2trna_df.index:
+			aa2trna_df.loc['Met'] = aa2trna_df.loc['fMet'] + aa2trna_df.loc['Met']
+
+		aa2trna[organelle] = aa2trna_df
+
+		if not aa2trna_df.empty:
+			# assign START tRNAs to every fMet-tRNA (Met-tRNA if not) and check if at least one tRNA was identified
 			if 'fMet' in aa2trna_df.index:
-				aa2trna_df.loc['Met'] = aa2trna_df.loc['fMet'] + aa2trna_df.loc['Met']
-
-			aa2trna[organelle] = aa2trna_df
-
-			if not aa2trna_df.empty:
-				# assign START tRNAs to every fMet-tRNA (Met-tRNA if not) and check if at least one tRNA was identified
-				if 'fMet' in aa2trna_df.index:
-					if len(me_model.global_info['START_tRNA']) == 0:
-						me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['fMet'])[0]
-
-				if 'Met' in aa2trna_df.index:
-					if len(me_model.global_info['START_tRNA']) == 0:
-						me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['Met'])[0]
-
-				# final check
 				if len(me_model.global_info['START_tRNA']) == 0:
-					logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
-			else:
-				logging.warning('No tRNA genes were identified from their locus tags.')
+					me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['fMet'])[0]
+
+			if 'Met' in aa2trna_df.index:
+				if len(me_model.global_info['START_tRNA']) == 0:
+					me_model.global_info['START_tRNA'] = list(aa2trna_df.loc['Met'])[0]
+
+			# final check
+			if len(me_model.global_info['START_tRNA']) == 0:
+				logging.warning('Unable to identify at least one \'tRNA-Met\' or \'tRNA-fMet\' annotation from the \'Definition\' column in the organism-specific matrix.')
+		else:
+			logging.warning('No tRNA genes were identified from their locus tags.')
 
 		# DataFrame mapping tRNAs (list) and the encoded amino acid (index), per organelle
 		# aa2trna derives from trna_to_aa, so it also accounts for misacylation: { 'organelle ID' : 'DataFrame of amino acid to load into the tRNA' }
@@ -719,7 +719,7 @@ def build_reactions_from_genbank(
 			else:
 				# Here we replace inferred data with user input. User input should be a subset of the inferred data
 				for trna, codons in trna_to_codon.items():
-					trna_to_codon[trna] = user_input.get(trna, codons)
+						trna_to_codon[trna] = user_input.get(trna, codons)
 
 			me_model.global_info['trna_to_codon'][organelle] = trna_to_codon
 
@@ -1017,7 +1017,7 @@ def add_metabolic_reaction_to_model(me_model, stoichiometric_data_id, directiona
 		raise Exception('StoichiometricData for \'{:s}\' has not been added to ME-model.'.format(stoichiometric_data_id))
 
 	# Get complex data and id based on arguments passed into function
-	if isinstance(complex_id, str) and complex_id != 'dummy_MONOMER':
+	if isinstance(complex_id, str) and complex_id != 'dummy_MONOMER': # WARNING: Shouldn't it be "CPLX_dummy"¨?
 		complex_data = me_model.process_data.get_by_id(complex_id)
 
 	elif complex_id is None and spontaneous is True:
