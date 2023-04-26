@@ -253,13 +253,15 @@ class ME_NLP:
 
         # self.mu is a set of sympy Symbols
         dct = { symbol:muf for symbol in self.mu }
-        xl = [ float(x.xreplace(dct)) if hasattr(x, 'subs') else x for x in self.xl ]
-        xu = [ float(x.xreplace(dct)) if hasattr(x, 'subs') else x for x in self.xu ]
 
         if self.fn is None:
+            xl = [ float(x.xreplace(dct)) if hasattr(x, 'subs') else x for x in self.xl ]
+            xu = [ float(x.xreplace(dct)) if hasattr(x, 'subs') else x for x in self.xu ]
             Se = { k:float(x.xreplace(dct)) if hasattr(x, 'subs') else x for k,x in self.Se.items() }
             self.Sf.update(Se)
         else:
+            xl = [ fn(*[muf]*len(dct)) for fn in self.xl ]
+            xu = [ fn(*[muf]*len(dct)) for fn in self.xu ]
             Se = { k:fn(*[muf]*len(dct)) for k,fn in self.fn.items() }
             self.Sf.update(Se)
 
