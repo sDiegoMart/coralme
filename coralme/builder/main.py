@@ -2607,7 +2607,7 @@ class MEReconstruction(MEBuilder):
 					elif me.metabolites.has_id(mod_name + '_c'):
 						mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
 					# WARNING: flavodoxin homologs might have a different base_complex ID compared to ecolime model
-					# Negative contributions cannot be set in the metabolites.txt input file
+					# WARNING: Negative elemental contributions cannot be set in the metabolites.txt input file
 					elif 'Oxidized(1)' in mod and 'FLAVODOXIN' not in base_complex:
 						mod_elements = {'H': -2}
 					elif 'glycyl(1)' in mod:
