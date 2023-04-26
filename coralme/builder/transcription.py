@@ -2,7 +2,7 @@ import coralme
 
 def add_subreactions_to_model(me_model, subreactions):
 	if not me_model.process_data.has_id('atp_hydrolysis_rho'):
-		stoichiometry = {'atp_c': -3, 'h2o_c': -3, 'adp_c': 3, 'pi_c': 3}
+		stoichiometry = {'atp_c': -3.0, 'h2o_c': -3.0, 'adp_c': +3.0, 'h_c': +3.0, 'pi_c': +3.0}
 		coralme.util.building.add_subreaction_data(
 			me_model, modification_id = 'atp_hydrolysis_rho', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
@@ -49,7 +49,6 @@ def add_rna_splicing(me_model):
 		n_excised = sum(data.excised_bases.values())
 		n_cuts = len(data.RNA_products) * 2
 		if n_excised == 0 or n_cuts == 0:
-		#if n_cuts == 0:
 			continue
 
 		rna_types = list(data.RNA_types)
