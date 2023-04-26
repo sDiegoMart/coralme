@@ -240,7 +240,7 @@ class SubreactionData(ProcessData):
 
 			# elements lost in conversion are added to complex, protein, etc.
 			if not met_obj.elements and not isinstance(met_obj, coralme.core.component.GenerictRNA):
-				logging.warning('Metabolite \'{:s}\' does not have a formula. Please set a formula in metabolites.txt input.'.format(met_obj.id))
+				logging.warning('Metabolite \'{:s}\' does not have a formula. Please set a formula in the M-model or in the metabolites.txt input file.'.format(met_obj.id))
 
 			for e, n in met_obj.elements.items():
 				elements[e] -= n * coefficient
