@@ -352,7 +352,7 @@ def build_reactions_from_genbank(
 	# RNA_products will be added so no need to update now
 	for tu_id in tqdm.tqdm(tu_frame.index, 'Adding Transcriptional Units into the ME-model...', bar_format = bar_format):
 		# in rare cases, transcription units have no genes associated to them
-		if tu_frame.genes[tu_id] is '': # we read df_tus as strings
+		if tu_frame.genes[tu_id] == '': # we read df_tus as strings
 			logging.warning('The transcription unit \'{:s}\' has no genes associated to it. Please check if it is the correct behavior.'.format(tu_id))
 			continue
 
@@ -409,11 +409,12 @@ def build_reactions_from_genbank(
 			else:
 				add_transcription_reaction(me_model, tu_id, set(), str(dna), organelle, update = False)
 
-	# Dictionary of tRNA locus ID to the model.metabolite object. It accounts for misacylation
 	canonical_aas = [
 		'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile',
 		'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val'
 		]
+
+	# Dictionary of tRNA locus ID to the model.metabolite object. It accounts for misacylation
 	trna_to_aa = {}
 
 	# Dictionary of tRNA locus ID to amino acid, one dict of tRNAs per organelle type
@@ -446,8 +447,6 @@ def build_reactions_from_genbank(
 				organelle = feature.qualifiers.get('organelle', [None])[0]
 				continue
 
-			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
-
 			# Optionally add pseudo genes into the ME-model
 			if not me_model.global_info['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
 				logging.warning('The feature {:s} is a pseudogene. Use \'include_pseudo_genes : True\' to add the feature into the model.'.format(bnum))
@@ -469,6 +468,8 @@ def build_reactions_from_genbank(
 				else:
 					logging.warning('The gene identified will be ignored from the reconstruction.')
 					continue
+
+			bnum = feature.qualifiers[me_model.global_info.get('locus_tag', 'locus_tag')][0]
 
 			if me_model.process_data.has_id(bnum):
 				logging.warning('A gene with a Gene Locus ID \'{:s}\' was added previously. Please, check the GenBank file and correct it accordingly.'.format(bnum))
@@ -574,7 +575,8 @@ def build_reactions_from_genbank(
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
 
 			# Deal with the complicated tRNA biology
-			if me_model.global_info['trna_to_codon'] != {}: # variable is created empty during MEModel.__init__; completed during generate_files()
+			# me_model.global_info['trna_to_codon'] sub-dictionaries are created empty during MEModel.__init__; completed during generate_files()
+			if me_model.global_info['trna_to_codon'].get(organelle, {}) != {}:
 				continue
 			else:
 				# Create dict to use for adding tRNAChargingReactions later
@@ -641,9 +643,6 @@ def build_reactions_from_genbank(
 				# aa2trna derives from trna_to_aa, so it also accounts for misacylation: { 'organelle ID' : 'DataFrame of amino acid to load into the tRNA' }
 				#me_model.global_info['aa2trna'] = aa2trna
 
-	if me_model.global_info['trna_to_codon'] != {}:
-		pass
-	else:
 	for organelle, aa2trna_dct in aa2trna.items():
 		aa2trna_dct = { k:v.capitalize().split('_')[0] if 'fMet' not in v else 'fMet' for k,v in aa2trna_dct.items() }
 		aa2trna_df = pandas.DataFrame(data = [aa2trna_dct.values(), aa2trna_dct.keys()]).T
@@ -706,7 +705,7 @@ def build_reactions_from_genbank(
 
 			trna_to_codon = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 
-			# Read OSM to override data from the assumption "The tRNA-aa decodes all the codons for the specific amino acid"
+			# Read OSM to override data from the assumption "A tRNA-aa decodes all the codons for the specific amino acid"
 			with open(me_model.global_info['df_gene_cplxs_mods_rxns'], 'rb') as infile:
 				df_data = pandas.read_excel(infile)
 
@@ -714,15 +713,18 @@ def build_reactions_from_genbank(
 			user_input = user_input.to_dict()['tRNA-codon association']
 			user_input = { k:v.split(',') for k,v in user_input.items() }
 
-			if not user_input: # empty dictionary is False
+			if not bool(user_input): # an empty dictionary is False
 				logging.warning('User input did not provide tRNA to codon associations and the derived from the GenBank file will be used.')
 			else:
 				# Here we replace inferred data with user input. User input should be a subset of the inferred data
 				for trna, codons in trna_to_codon.items():
+					if not set(user_input.get(trna, codons)) == set(codons):
 						trna_to_codon[trna] = user_input.get(trna, codons)
+						logging.warning('{} replaced with {}'.format(','.join(codons), ','.join(user_input[trna])))
 
 			me_model.global_info['trna_to_codon'][organelle] = trna_to_codon
 
+	# DO NOT REMOVE FOR-LOOP
 	for organelle, trna_to_codon in me_model.global_info['trna_to_codon'].items():
 		convert_aa_codes_and_add_charging(me_model, me_model.global_info['trna_to_aa'], trna_to_codon, organelle, verbose = verbose)
 
