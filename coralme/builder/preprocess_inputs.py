@@ -319,16 +319,17 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		for key, subdct in dct.items():
 			mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 			#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
-			tags = [ x['Complex ID'] ]
+			tags = [ x['Complex ID'], x['Generic Complex ID'] ]
 			tags = [ str(x).split(';') for x in tags ]
 			for tag in [ x for y in tags for x in y ]:
 				#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
 				filter1 = '{:s}-MONOMER'.format(tag) in subdct and mods in subdct.get('{:s}-MONOMER'.format(tag), [None])
 				filter2 = tag.split(':')[0] in subdct and mods in subdct.get(tag.split(':')[0], [None])
-				filter3 = 'generic_{:s}'.format(tag) in subdct and mods in subdct.get('generic_{:s}'.format(tag), [None])
+				filter3 = 'generic_{:s}'.format(tag) in subdct #and mods in subdct.get('generic_{:s}'.format(tag), [None])
 
 				if filter1 or filter2 or filter3:
 					subrxns.append(key + ':1')
+
 		if len(subrxns) != 0:
 			return subrxns
 
