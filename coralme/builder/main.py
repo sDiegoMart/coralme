@@ -1255,6 +1255,10 @@ class MEBuilder(object):
 		ref_rna_modification = self.ref.rna_modification
 		org_rna_modification = self.org.rna_modification
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
+		defined_mods = set()
+		for _,v in org_rna_modification.items():
+			for i in v:
+				defined_mods.add(i)
 		for k, v in tqdm.tqdm(ref_rna_modification.items(),
 					'Updating RNA modification machinery from homology...',
 					bar_format = bar_format,
@@ -1265,8 +1269,8 @@ class MEBuilder(object):
 				continue
 			if org_cplx not in org_rna_modification:
 				org_rna_modification[org_cplx] = []
-			org_rna_modification[org_cplx] += v.copy()
-			org_rna_modification[org_cplx] = set(org_rna_modification[org_cplx])
+			org_rna_modification[org_cplx] += [i for i in v.copy() if i not in defined_mods]
+			org_rna_modification[org_cplx] = list(set(org_rna_modification[org_cplx]))
 
 	def update_lipid_modifications_from_homology(self):
 		ref_lipid_modifications = self.ref.lipid_modifications
