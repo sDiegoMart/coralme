@@ -1271,6 +1271,7 @@ class MEBuilder(object):
 				org_rna_modification[org_cplx] = []
 			org_rna_modification[org_cplx] += [i for i in v.copy() if i not in defined_mods]
 			org_rna_modification[org_cplx] = list(set(org_rna_modification[org_cplx]))
+		org_rna_modification = {k:v for k,v in org_rna_modification.items() if v}
 
 	def update_lipid_modifications_from_homology(self):
 		ref_lipid_modifications = self.ref.lipid_modifications
