@@ -46,8 +46,11 @@ def add_rna_splicing(me_model):
 	# Loop through transcription reactions and add appropriate splicing
 	# machinery based on RNA types and number of splices required
 	for data in me_model.transcription_data:
-		n_excised = sum(data.excised_bases.values())
-		n_cuts = len(data.RNA_products) * 2
+		#n_excised = sum(data.excised_bases.values())
+		#n_cuts = len(data.RNA_products) * 2
+		n_excised = data.n_excised
+		n_cuts = data.n_cuts
+
 		if n_excised == 0 or n_cuts == 0:
 			continue
 

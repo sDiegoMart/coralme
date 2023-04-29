@@ -157,6 +157,9 @@ class MEReaction(cobra.core.reaction.Reaction):
 		"""
 		process_info = self._model.process_data.get_by_id(process_data_id)
 		for subreaction_id, count in process_info.subreactions.items():
+			if not self._model.process_data.has_id(subreaction_id):
+				continue
+
 			subreaction_data = self._model.process_data.get_by_id(subreaction_id)
 
 			if isinstance(subreaction_data.enzyme, list) or isinstance(subreaction_data.enzyme, set):

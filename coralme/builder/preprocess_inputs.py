@@ -359,7 +359,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		for tag in [ x for y in tags for x in y ]:
 			filter1 = '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None])
 			filter2 = tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None])
-			filter3 = 'generic_{:s}'.format(tag) in dct #and mods in dct.get('generic_{:s}'.format(tag), [None])
+			filter3 = 'generic_{:s}'.format(tag) in dct and mods in dct.get('generic_{:s}'.format(tag), [None])
 
 			if filter1 or filter2 or filter3:
 				return 'RNA_modifier_enzyme'

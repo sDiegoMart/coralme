@@ -2202,7 +2202,9 @@ class MEReconstruction(MEBuilder):
 				logging.warning('The components of the excision complex for {:s} was not identified from homology and was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
 
 		# add excision machineries into TranscriptionData
-		coralme.builder.transcription.add_rna_splicing(me)
+		# WARNING: degradation of nucleotides during transcription is updated using prune
+		if prune == False:
+			coralme.builder.transcription.add_rna_splicing(me)
 
 		# ## Part 3: Add remaining modifications (including iron clusters and lipoate)
 
@@ -2659,7 +2661,6 @@ class MEReconstruction(MEBuilder):
 			me.prune()
 
 		# Part 9. Save and report
-
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(out_directory, model), 'wb') as outfile:
 			pickle.dump(me, outfile)
 

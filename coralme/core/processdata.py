@@ -441,13 +441,52 @@ class TranscriptionData(ProcessData):
 		required for the transcription unit to be transcribed
 
 	"""
-	def __init__(self, id, model, rna_products=set()):
+	def __init__(self, id, model, rna_products = set()):
 		ProcessData.__init__(self, id, model)
 		self.nucleotide_sequence = ''
 		self.RNA_products = rna_products
+		self.original_RNA_products = rna_products
 		self.RNA_polymerase = ''
 		# {SubreactionData.id : number}
-		self.subreactions = collections.defaultdict(int)
+		self._subreactions = collections.defaultdict(int)
+
+	@property
+	def n_cuts(self):
+		if len(self.RNA_products) == 1:
+			return 0
+		return len(self.RNA_products) * 2
+
+	@property
+	def n_excised(self):
+		return sum(self.excised_bases.values())
+
+	@property
+	def subreactions(self):
+		data = self._subreactions
+		n_excised = self.n_excised
+		n_cuts = self.n_cuts
+
+		#if n_excised == 0 or n_cuts == 0:
+			#return {}
+
+		rna_types = list(self.RNA_types)
+		n_trna = rna_types.count('tRNA')
+
+		if 'rRNA' in set(rna_types):
+			data['rRNA_containing_excision'] = n_cuts
+		elif n_trna == 1:
+			data['monocistronic_excision'] = n_cuts
+		elif n_trna > 1:
+			data['polycistronic_wout_rRNA_excision'] = n_cuts
+		else: # only applies to rnpB
+			data['monocistronic_excision'] = n_cuts
+
+		# The non functional RNA segments need degraded back to nucleotides
+		# TODO check if RNA_degradation requirement is per nucleotide
+		data['RNA_degradation_machine'] = n_cuts
+		data['RNA_degradation_atp_requirement'] = n_excised
+
+		return data
 
 	@property
 	def nucleotide_count(self):
@@ -519,8 +558,9 @@ class TranscriptionData(ProcessData):
 			return {}
 
 		# Skip if TU only codes for mRNA
-		if rna_types == {'mRNA'}:
-			return {}
+		# WARNING: It assumes that if a TU contains a single mRNA, there are no excised bases
+		#if rna_types == {'mRNA'}:
+			#return {}
 
 		# Get dictionary of all nucleotide counts for TU
 		seq = self.nucleotide_sequence

@@ -47,7 +47,8 @@ def add_transcription_reaction(me_model, tu_name, locus_ids, sequence, organelle
 	transcription.transcription_data = coralme.core.processdata.TranscriptionData(tu_name, me_model)
 	transcription.transcription_data.nucleotide_sequence = sequence
 	transcription.transcription_data.RNA_products = {'RNA_' + i for i in locus_ids}
-	# Necessary for eukaryotes where transcription can occur in the nucleus, mitochondria or chloroplasts
+	transcription.transcription_data.original_RNA_products = {'RNA_' + i for i in locus_ids}
+	# Necessary for eukaryotes because transcription can occur in the nucleus, mitochondria or chloroplasts
 	transcription.transcription_data.organelle = organelle
 
 	me_model.add_reactions([transcription])
@@ -563,7 +564,7 @@ def build_reactions_from_genbank(
 			## Associate the TranscribedGene to TU(s)
 			# old code does not consider that a gene can start at the "end" of the genome and finish at the "start" of it
 			#parent_tu = tu_frame[(tu_frame.start - 1 <= left_pos) & (tu_frame.stop >= right_pos) & (tu_frame.strand == strand)].index
-			parent_tu = tu_frame[[ True if bnum in x.split(',') else False for x in tu_frame.genes.values ]].index
+			parent_tu = tu_frame[[ True if bnum in x.split(',') else False for x in tu_frame.genes.values ]].index.tolist()
 
 			if len(parent_tu) == 0:
 				tu_id = 'TU_' + bnum
@@ -573,6 +574,7 @@ def build_reactions_from_genbank(
 
 			for TU_id in parent_tu:
 				me_model.process_data.get_by_id(TU_id).RNA_products.add('RNA_' + bnum)
+				me_model.process_data.get_by_id(TU_id).original_RNA_products.add('RNA_' + bnum)
 
 			# Deal with the complicated tRNA biology
 			# me_model.global_info['trna_to_codon'] sub-dictionaries are created empty during MEModel.__init__; completed during generate_files()
