@@ -34,7 +34,7 @@ def add_ribosome(me_model, ribosome_stoich, ribosome_subreactions, rrna_mods, ve
 
 	for subreaction_id in ribosome_subreactions:
 		if not me_model.process_data.has_id('gtp_hydrolysis_era'):
-			stoichiometry = {'gtp_c': -2, 'h2o_c': -2, 'gdp_c': 2, 'pi_c': 2}
+			stoichiometry = { 'gtp_c': -2.0, 'h2o_c': -2.0, 'gdp_c': 2.0, 'pi_c': 2.0 }
 			coralme.util.building.add_subreaction_data(
 				me_model, modification_id = 'gtp_hydrolysis_era', modification_stoichiometry = stoichiometry, modification_enzyme = None)
 
