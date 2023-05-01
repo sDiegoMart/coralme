@@ -2611,8 +2611,10 @@ class MEReconstruction(MEBuilder):
 						mod_elements = coralme.builder.helper_functions.parse_composition(modification_formulas[mod_name])
 						if me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is None:
 							me.metabolites.get_by_id(mod_name + '_c').formula = modification_formulas[mod_name]
+
 					elif me.metabolites.has_id(mod_name + '_c'):
 						mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
+
 					# WARNING: flavodoxin homologs might have a different base_complex ID compared to ecolime model
 					# WARNING: Negative elemental contributions cannot be set in the metabolites.txt input file
 					elif 'Oxidized(1)' in mod and 'FLAVODOXIN' not in base_complex:
