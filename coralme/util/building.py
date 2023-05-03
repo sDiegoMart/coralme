@@ -294,6 +294,7 @@ def build_reactions_from_genbank(
 		for contig in SeqIO.parse(infile, 'gb'):
 			contigs.append(contig)
 	full_seqs = { x.id:x.seq for x in contigs }
+	me_model.global_info['full_seqs'] = full_seqs
 
 	# GC Content
 	if me_model.global_info.get('GC_fraction', None) is None:
@@ -358,8 +359,8 @@ def build_reactions_from_genbank(
 			continue
 
 		if any(x in tu_frame.genes[tu_id].split(',') for x in genes_to_add):
-			starts = tu_frame.start[tu_id]
-			stops = tu_frame.stop[tu_id]
+			start = tu_frame.start[tu_id]
+			stop = tu_frame.stop[tu_id]
 			strand = 1 if tu_frame.strand[tu_id] == '+' else -1
 			organelle = tu_frame.organelle[tu_id] if 'organelle' in tu_frame.columns else None
 
@@ -374,19 +375,16 @@ def build_reactions_from_genbank(
 				#seq = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(
 					#SeqFeature.ExactPosition(int(start)-1), SeqFeature.ExactPosition(int(stop)), strand = strand))
 
-			seqs = []
-			for start, stop in zip(starts.split(','), stops.split(',')):
-				if int(start) < int(stop):
-					# nicely defined locus in reference of the genome sequence
-					seqs.append(SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand))
-				else:
-					# the feature must be split in two
-					print(tu_id, start, stop)
-					try:
-						loc1 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, len(full_seqs[tu_frame.replicon[tu_id]])), strand = strand)
-						loc2 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(0, int(stop)), strand = strand)
-					except:
-						print('failed')
+			seqfeatures = []
+			#for start, stop in zip(starts.split(','), stops.split(',')):
+			if int(start) < int(stop):
+				# nicely defined locus in reference of the genome sequence
+				seqfeatures.append([SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand)])
+			else:
+				# the feature must be split in two
+				loc1 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, len(full_seqs[tu_frame.replicon[tu_id]])), strand = strand)
+				loc2 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(0, int(stop)), strand = strand)
+				seqfeatures.append([loc1, loc2])
 
 			#sequence = coralme.util.dogma.extract_sequence(
 				#full_seqs[tu_frame.replicon[tu_id]],
@@ -399,11 +397,12 @@ def build_reactions_from_genbank(
 			replicons = tu_frame.replicon[tu_id].split(',')
 			#print(tu_id, replicons)
 			dna = ''
-			for replicon_id, seq in zip(replicons, seqs):
+			for replicon_id, seqs in zip(replicons, seqfeatures):
 				#print(replicon_id, seq)
 				# Deprecated in Biopython 1.80
 				#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
-				dna += seq.extract(full_seqs[replicon_id]).replace('-', '')
+				for seq in seqs:
+					dna += seq.extract(full_seqs[replicon_id]).replace('-', '')
 
 			if len(seq) == 0:
 				logging.warning('The knockouts dictionary instructed to completely delete \'{:s}\' from the ME-model.'.format(tu_id))
