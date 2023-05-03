@@ -1,4 +1,5 @@
 import Bio
+import pandas
 import cobra
 import coralme
 
@@ -461,8 +462,31 @@ class TranscriptionData(ProcessData):
 		return sum(self.excised_bases.values())
 
 	@property
+	def n_overlapping(self):
+		import pyranges
+
+		ranges = []
+		for rna in self.RNA_products:
+			data = self.model.metabolites.get_by_id(rna)
+			ranges.append(['X', data.left_pos[0], data.right_pos[0], data.strand])
+
+		df = pandas.DataFrame(ranges, columns = ['Chromosome', 'Start', 'End', 'Strand'])
+		ranges = pyranges.PyRanges(df)
+
+		# add overlapping ranges to df
+		res = ranges.intersect(ranges, strandedness = 'same').df
+
+		# remove original ranges
+		tmp = pandas.merge(res, ranges.df, how = 'outer', indicator = True)
+		tmp = tmp[tmp['_merge'] == 'left_only'].drop_duplicates()
+
+		# return total length of the overlaps
+		return abs(tmp['Start'] - tmp['End']).sum().sum()
+
+	@property
 	def subreactions(self):
 		data = self._subreactions
+		n_overlapping = self.n_overlapping
 		n_excised = self.n_excised
 		n_cuts = self.n_cuts
 
@@ -484,7 +508,7 @@ class TranscriptionData(ProcessData):
 		# The non functional RNA segments need degraded back to nucleotides
 		# TODO check if RNA_degradation requirement is per nucleotide
 		data['RNA_degradation_machine'] = n_cuts
-		data['RNA_degradation_atp_requirement'] = n_excised
+		data['RNA_degradation_atp_requirement'] = n_excised + n_overlapping
 
 		return data
 
