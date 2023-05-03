@@ -2199,7 +2199,7 @@ class MEReconstruction(MEBuilder):
 				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, stoichiometry)
 			else:
 				coralme.builder.transcription.add_rna_excision_machinery(me, excision_type, { 'CPLX_dummy' : 1 })
-				logging.warning('The components of the excision complex for {:s} was not identified from homology and was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
+				logging.warning('All the components of the excision complex for \'{:s}\' was not identified from homology and it was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
 
 		# add excision machineries into TranscriptionData
 		# WARNING: degradation of nucleotides during transcription is updated using prune
