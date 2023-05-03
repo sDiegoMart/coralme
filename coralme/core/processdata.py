@@ -463,6 +463,9 @@ class TranscriptionData(ProcessData):
 
 	@property
 	def n_overlapping(self):
+		if self.id == 'RNA_dummy':
+			return 0
+
 		import pyranges
 
 		ranges = []
