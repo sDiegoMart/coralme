@@ -471,7 +471,9 @@ class TranscriptionData(ProcessData):
 		ranges = []
 		for rna in self.RNA_products:
 			data = self.model.metabolites.get_by_id(rna)
-			ranges.append(['X', data.left_pos[0], data.right_pos[0], data.strand])
+			left_pos = data.left_pos[0].replace('>', '').replace('<', '')
+			right_pos = data.right_pos[0].replace('>', '').replace('<', '')
+			ranges.append(['X', left_pos, right_pos, data.strand])
 
 		df = pandas.DataFrame(ranges, columns = ['Chromosome', 'Start', 'End', 'Strand'])
 		ranges = pyranges.PyRanges(df)
