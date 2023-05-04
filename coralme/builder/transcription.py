@@ -48,10 +48,11 @@ def add_rna_splicing(me_model):
 	for data in me_model.transcription_data:
 		#n_excised = sum(data.excised_bases.values())
 		#n_cuts = len(data.RNA_products) * 2
+		n_overlapping = data.n_overlapping
 		n_excised = data.n_excised
 		n_cuts = data.n_cuts
 
-		if n_excised == 0 or n_cuts == 0:
+		if (n_excised + n_overlapping) == 0 or n_cuts == 0:
 			continue
 
 		rna_types = list(data.RNA_types)
@@ -69,4 +70,4 @@ def add_rna_splicing(me_model):
 		# The non functional RNA segments need degraded back to nucleotides
 		# TODO check if RNA_degradation requirement is per nucleotide
 		data.subreactions['RNA_degradation_machine'] = n_cuts
-		data.subreactions['RNA_degradation_atp_requirement'] = n_excised
+		data.subreactions['RNA_degradation_atp_requirement'] = n_excised + n_overlapping
