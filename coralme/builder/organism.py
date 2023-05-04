@@ -1544,10 +1544,10 @@ class Organism(object):
                     warn_genes.append(g)
                     continue
                 genes.append(gene_dictionary["Accession-1"][g])
-                #sites.append(int(gene_dictionary["Left-End-Position"][g]))
-                #sites.append(int(gene_dictionary["Right-End-Position"][g]))
-                start.append(int(gene_dictionary["Left-End-Position"][g]))
-                stop.append(int(gene_dictionary["Right-End-Position"][g]))
+                sites.append(int(gene_dictionary["Left-End-Position"][g]))
+                sites.append(int(gene_dictionary["Right-End-Position"][g]))
+#                 start.append(int(gene_dictionary["Left-End-Position"][g]))
+#                 stop.append(int(gene_dictionary["Right-End-Position"][g]))
                 replicons.append(gene_dictionary["replicon"][g])
             if not genes:
                 warn_tus.append(tu)
@@ -1560,10 +1560,10 @@ class Organism(object):
             TU_dict[tu_name]["rnapol"] = sigma
             TU_dict[tu_name]["tss"] = None
             TU_dict[tu_name]["strand"] = row["Direction"] if row["Direction"] else '+'
-            #TU_dict[tu_name]["start"] = int(min(sites))+1
-            TU_dict[tu_name]["start"] = ','.join([ str(x+1) for x in start ])
-            #TU_dict[tu_name]["stop"] = int(max(sites))
-            TU_dict[tu_name]["stop"] = ','.join([ str(x) for x in stop ])
+            TU_dict[tu_name]["start"] = int(min(sites))+1
+#             TU_dict[tu_name]["start"] = ','.join([ str(x+1) for x in start ])
+            TU_dict[tu_name]["stop"] = int(max(sites))
+#             TU_dict[tu_name]["stop"] = ','.join([ str(x) for x in stop ])
             TU_dict[tu_name]["replicon"] = ','.join(replicons) if set(replicons) != {''} else None
         df = pandas.DataFrame.from_dict(TU_dict).T[
             #["start", "stop", "tss", "strand", "rho_dependent", "rnapol","replicon"]
