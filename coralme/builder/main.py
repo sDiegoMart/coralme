@@ -2202,9 +2202,8 @@ class MEReconstruction(MEBuilder):
 				logging.warning('All the components of the excision complex for \'{:s}\' were not identified from homology and it was assigned to the \'CPLX_dummy\' complex.'.format(excision_type))
 
 		# add excision machineries into TranscriptionData
-		# WARNING: degradation of nucleotides during transcription is updated using prune
-		if prune == False:
-			coralme.builder.transcription.add_rna_splicing(me)
+		# WARNING: subreactions is now a property of the TranscriptionData recalculated when accessed
+		#coralme.builder.transcription.add_rna_splicing(me)
 
 		# ## Part 3: Add remaining modifications (including iron clusters and lipoate)
 
