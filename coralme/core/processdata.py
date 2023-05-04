@@ -493,7 +493,7 @@ class TranscriptionData(ProcessData):
 		n_excised = self.n_excised
 		n_cuts = self.n_cuts
 
-		#if n_excised == 0 or n_cuts == 0:
+		#if (n_excised + n_overlapping) == 0 or n_cuts == 0:
 			#return {}
 
 		rna_types = list(self.RNA_types)
@@ -513,7 +513,7 @@ class TranscriptionData(ProcessData):
 		data['RNA_degradation_machine'] = n_cuts
 		data['RNA_degradation_atp_requirement'] = n_excised + n_overlapping
 
-		return data
+		return { k:v for k,v in data.items() if v != 0 }
 
 	@property
 	def nucleotide_count(self):
