@@ -52,7 +52,7 @@ def add_rna_splicing(me_model):
 		n_excised = data.n_excised
 		n_cuts = data.n_cuts
 
-		if (n_excised + n_overlapping) == 0 or n_cuts == 0:
+		if n_excised == 0 or (n_excised + n_overlapping) == 0 or n_cuts == 0:
 			continue
 
 		rna_types = list(data.RNA_types)
@@ -64,7 +64,7 @@ def add_rna_splicing(me_model):
 			data.subreactions['monocistronic_excision'] = n_cuts
 		elif n_trna > 1:
 			data.subreactions['polycistronic_wout_rRNA_excision'] = n_cuts
-		else:  # only applies to rnpB
+		else: # only applies to rnpB (RNase P catalytic RNA component)
 			data.subreactions['monocistronic_excision'] = n_cuts
 
 		# The non functional RNA segments need degraded back to nucleotides
