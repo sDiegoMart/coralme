@@ -129,7 +129,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 		mass_balance = { k:mass_balance[k] for k in sorted(mass_balance) if mass_balance[k] != 0 }
 		return mass_balance
 
-	def add_subreactions(self, process_data_id, stoichiometry, scale = 1.):
+	def add_subreactions(self, process_data_id, stoichiometry, scale = 1., old_stoich = {}):
 		"""
 		Function to add subreaction process data to reaction stoichiometry
 
@@ -162,14 +162,19 @@ class MEReaction(cobra.core.reaction.Reaction):
 
 			subreaction_data = self._model.process_data.get_by_id(subreaction_id)
 
+			if isinstance(subreaction_data.enzyme, str):
+				subreaction_data.enzyme = [subreaction_data.enzyme]
+
 			if isinstance(subreaction_data.enzyme, list) or isinstance(subreaction_data.enzyme, set):
 				for enzyme in subreaction_data.enzyme:
-					value = self.metabolites[self._model.metabolites.get_by_id(enzyme)]
-					if value > 0: continue
-					stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale
+					if old_stoich:
+						# WARNING: Applies only to MetabolicReaction
+						stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale if old_stoich[enzyme] < 0 else 0
+					else:
+						stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale
 
-			elif isinstance(subreaction_data.enzyme, str):
-				stoichiometry[subreaction_data.enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale
+			#elif isinstance(subreaction_data.enzyme, str):
+				#stoichiometry[subreaction_data.enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale
 
 			for met, stoich in subreaction_data.stoichiometry.items():
 				stoichiometry[met] += count * stoich * scale
@@ -789,6 +794,9 @@ class MetabolicReaction(MEReaction):
 			Prints when new metabolites are added to the model when executing
 			update()
 		"""
+		# WARNING: To write correctly dilution coefficient in the side of the substrates
+		old_stoich = { k.id:v for k,v in self.metabolites.items() }
+
 		self.clear_metabolites()
 		new_stoichiometry = defaultdict(float)
 		stoichiometric_data = self.stoichiometric_data
@@ -802,7 +810,7 @@ class MetabolicReaction(MEReaction):
 		for component, value in stoichiometric_data.stoichiometry.items():
 			new_stoichiometry[component] += value * sign
 
-		new_stoichiometry = self.add_subreactions(stoichiometric_data.id, new_stoichiometry)
+		new_stoichiometry = self.add_subreactions(stoichiometric_data.id, new_stoichiometry, old_stoich = old_stoich)
 
 		# Convert component ids to cobra metabolites
 		object_stoichiometry = self.get_components_from_ids(new_stoichiometry, verbose = verbose)
