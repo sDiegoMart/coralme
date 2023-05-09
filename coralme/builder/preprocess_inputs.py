@@ -237,7 +237,9 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	# final dictionary: (Complex, Cofactors) : Reaction ID
 	dct = { k:v['Reaction'] for k,v in dct.iterrows() }
 
-	data['M-model Reaction ID'] = data.apply(lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), None), axis = 1)
+	fn = lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None]) + dct.get((str(x['Generic Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None])
+
+	data['M-model Reaction ID'] = data.apply(lambda x: fn(x), axis = 1)
 	data = data.explode('M-model Reaction ID')
 	data['Reaction Name'] = data['M-model Reaction ID'].apply(lambda x: model.reactions.get_by_id(x).name if model.reactions.has_id(x) else None)
 	data['Reversibility'] = data['M-model Reaction ID'].apply(lambda x: str(model.reactions.get_by_id(x).reversibility) if model.reactions.has_id(x) else None)
@@ -774,6 +776,7 @@ def get_df_ptms(df):
 
 def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp = df.copy(deep = True)
+	tmp = correct_input(tmp)
 	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
 	tmp = tmp[tmp['M-model Reaction ID'].notna()]
 
@@ -785,6 +788,7 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
 	# collapse
+	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
