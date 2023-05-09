@@ -41,6 +41,7 @@ gre_activation	met__L_c	1.0
 
 # CoA-[4'-phosphopantetheine]:apo-[acyl-carrier protein] 4'-pantetheinephosphotransferase
 acpP_activation	coa_c	-1.0
+acpP_activation	h_c	+1.0
 acpP_activation	pap_c	+1.0
 
 # lipid modifications
