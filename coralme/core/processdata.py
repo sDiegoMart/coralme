@@ -453,13 +453,16 @@ class TranscriptionData(ProcessData):
 
 	@property
 	def n_cuts(self):
-		if len(self.RNA_products) == 1:
-			return 0
-		return len(self.RNA_products) * 2
+		# Number of cuts depends on the type of the RNAs in the TU
+		return len([ x for x in self.RNA_types if x in ['rRNA', 'tRNA']]) * 2
 
 	@property
 	def n_excised(self):
-		return sum(self.excised_bases.values())
+		# Number of excised bases depends on the type of the RNAs in the TU
+		if set(self.RNA_types) == {'mRNA'}:
+			return 0
+		else:
+			return sum(self.excised_bases.values())
 
 	@property
 	def n_overlapping(self):
@@ -482,6 +485,7 @@ class TranscriptionData(ProcessData):
 		res = ranges.intersect(ranges, strandedness = 'same').df
 
 		# remove original ranges
+		# WARNING: What does happen if a gene overlaps completely another?
 		tmp = pandas.merge(res, ranges.df, how = 'outer', indicator = True)
 		tmp = tmp[tmp['_merge'] == 'left_only'].drop_duplicates()
 
@@ -491,12 +495,20 @@ class TranscriptionData(ProcessData):
 	@property
 	def subreactions(self):
 		data = self._subreactions
+
+		# Number of cuts and excised bases depend on the type of the RNAs in the TU
+		if 'rRNA' not in set(self.RNA_types) and 'tRNA' not in set(self.RNA_types):
+			return data
+
 		n_overlapping = self.n_overlapping
 		n_excised = self.n_excised
 		n_cuts = self.n_cuts
 
-		#if (n_excised + n_overlapping) == 0 or n_cuts == 0:
-			#return {}
+		# WARNING: Because first 'if', n_cuts cannot be zero
+		#if n_excised == 0 or (n_excised + n_overlapping) == 0 or n_cuts == 0:
+			#return data
+		if n_excised == 0:
+			n_cuts = 0
 
 		rna_types = list(self.RNA_types)
 		n_trna = rna_types.count('tRNA')
@@ -507,7 +519,7 @@ class TranscriptionData(ProcessData):
 			data['monocistronic_excision'] = n_cuts
 		elif n_trna > 1:
 			data['polycistronic_wout_rRNA_excision'] = n_cuts
-		else: # only applies to rnpB
+		else: # only applies to rnpB (RNase P catalytic RNA component)
 			data['monocistronic_excision'] = n_cuts
 
 		# The non functional RNA segments need degraded back to nucleotides
@@ -584,13 +596,14 @@ class TranscriptionData(ProcessData):
 
 		# Skip if TU does not have any annotated RNA Products
 		if len(rna_types) == 0:
-			return {}
+			return {'amp_c': 0, 'gmp_c': 0, 'ump_c': 0, 'cmp_c': 0}
 
 		# Skip if TU only codes for mRNA
-		# WARNING: It assumes that if a TU contains a single mRNA, there are no excised bases
-		#if rna_types == {'mRNA'}:
-			#return {}
+		# WARNING: The GenBank can contain other types of RNAs that break the condition of only mRNAs in the TU
+		if rna_types == {'mRNA'}:
+			return {'amp_c': 0, 'gmp_c': 0, 'ump_c': 0, 'cmp_c': 0}
 
+		# WARNING: Features in the TU can overlap, thus this calculation must be corrected
 		# Get dictionary of all nucleotide counts for TU
 		seq = self.nucleotide_sequence
 		#counts = { i: seq.count(i) for i in ('A', 'T', 'G', 'C') }
@@ -609,7 +622,6 @@ class TranscriptionData(ProcessData):
 		# triphosphate bases when transcribing, but excise monophosphate bases.
 		#monophosphate_counts = { coralme.util.dogma.transcription_table[k].replace('tp_c', 'mp_c'):v for k,v in counts.items() }
 		monophosphate_counts = { coralme.util.dogma.transcription_table['c'][k].replace('tp_c', 'mp_c'):v for k,v in counts.items() }
-
 		return monophosphate_counts
 
 	@property
