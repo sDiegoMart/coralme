@@ -2568,7 +2568,7 @@ class MEReconstruction(MEBuilder):
 				continue
 
 			for met, value in data.stoichiometry.items():
-				if not isinstance(me.metabolites.get_by_id(met), coralme.core.component.Complex) or value > 0:
+				if not isinstance(me.metabolites.get_by_id(met), coralme.core.component.Complex):
 					continue
 
 				subreaction_id = met + '_carrier_activity'

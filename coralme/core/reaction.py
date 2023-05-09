@@ -164,6 +164,8 @@ class MEReaction(cobra.core.reaction.Reaction):
 
 			if isinstance(subreaction_data.enzyme, list) or isinstance(subreaction_data.enzyme, set):
 				for enzyme in subreaction_data.enzyme:
+					value = self.metabolites[self._model.metabolites.get_by_id(enzyme)]
+					if value > 0: continue
 					stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale
 
 			elif isinstance(subreaction_data.enzyme, str):
