@@ -1570,7 +1570,7 @@ class MEReconstruction(MEBuilder):
 		# Inferred information
 		if hasattr(self, 'org'):
 			config['selenocysteine_enzymes'] = self.org.special_trna_subreactions['sec_addition_at_UGA']['enzymes']
-			logging.warning('Selenocysteine complex SelAB was set from homology data.')
+			logging.warning('The selenocysteine complex SelAB was set from homology data.')
 
 			config['pg_pe_160'] = self.org.lipid_modifications.get('pg_pe_160', 'CPLX_dummy')
 			logging.warning('The prolipoprotein diacylglyceryl transferase and the signal peptidase homologs were set from homology data.')
@@ -1591,7 +1591,7 @@ class MEReconstruction(MEBuilder):
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
 			if hasattr(self, 'org'):
 				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
-				logging.warning('RNA Polymerases (core enzyme and sigma factors) information was set from homology data.')
+				logging.warning('The RNA Polymerases (core enzyme and sigma factors) information was set from homology data.')
 
 			## replace IDs
 			#for name, rnap in config['rna_polymerases'].items():
@@ -1603,22 +1603,22 @@ class MEReconstruction(MEBuilder):
 		if config.get('lipid_modifications', None) is None or len(config.get('lipid_modifications')) == 0:
 			if hasattr(self, 'org'):
 				config['lipid_modifications'] = [ x for x in self.org.lipids if x.endswith('_p') and x.startswith('pg') and not x.startswith('pgp') ]
-				logging.warning('Lipid modifications were set from M-model metabolites.')
+				logging.warning('The lipid modifications were set from M-model metabolites.')
 
 		if config.get('lipoprotein_precursors', None) is None or len(config.get('lipoprotein_precursors')) == 0:
 			if hasattr(self, 'org'):
 				config['lipoprotein_precursors'] = self.org.lipoprotein_precursors
-				logging.warning('Lipoprotein precursors were set from homology data.')
+				logging.warning('The lipoprotein precursors were set from homology data.')
 
 		if config.get('ngam', None) is None:
 			if hasattr(self, 'org'):
 				config['ngam'] = self.org.NGAM
-				logging.warning('ATPM (ATP requirement for maintenance) was set from the M-model.')
+				logging.warning('The ATPM value (ATP requirement for maintenance; also NGAM) was set from the M-model.')
 
 		if config.get('gam', None) is None:
 			if hasattr(self, 'org'):
 				config['gam'] = self.org.GAM
-				logging.warning('GAM (ATP requirement for growth) was set from the M-model or default value.')
+				logging.warning('The GAM value (ATP requirement for growth) was set from the M-model or default value.')
 
 		# modify options
 		#config['create_files'] = False
@@ -1627,11 +1627,11 @@ class MEReconstruction(MEBuilder):
 
 		if hasattr(self, 'org') and len(config.get('translocation_multipliers', {})) == 0:
 			config['translocation_multipliers'] = { k:{ k:v for k,v in v.items() if v != 0 } for k,v in self.org.translocation_multipliers.items() }
-			logging.warning('Translocation multipliers for yidC and tat homologs were set from homology data.')
+			logging.warning('The translocation multipliers for yidC and tat homologs were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('amino_acid_trna_synthetase', {})) == 0:
 			config['amino_acid_trna_synthetase'] = self.org.amino_acid_trna_synthetase
-			logging.warning('tRNA synthetases were set from homology data.')
+			logging.warning('The tRNA synthetases were set from homology data.')
 
 		if hasattr(self, 'org') and len(config.get('defer_to_rxn_matrix', [])) == 0:
 			config['defer_to_rxn_matrix'] = [self.org.biomass] if self.org.biomass is not None else []
@@ -1640,6 +1640,7 @@ class MEReconstruction(MEBuilder):
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
 			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
+
 		if not 'ATPM' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('ATPM')
 			logging.warning('The ATPM reaction from the M-model will be replaced by a SummaryVariable during the ME-model reconstruction steps.')
@@ -2604,29 +2605,29 @@ class MEReconstruction(MEBuilder):
 
 			for mod in met.id.split('_mod_')[1:]:
 				for num in range(int(mod.rstrip(')').split('(')[1])):
-					mod_elements = None
-					mod_name = mod.split('(')[0]
-					if mod_name in modification_formulas:
-						mod_elements = coralme.builder.helper_functions.parse_composition(modification_formulas[mod_name])
-						if me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is None:
-							me.metabolites.get_by_id(mod_name + '_c').formula = modification_formulas[mod_name]
+				mod_elements = None
+				mod_name = mod.split('(')[0]
+				if mod_name in modification_formulas:
+					mod_elements = coralme.builder.helper_functions.parse_composition(modification_formulas[mod_name])
+					if me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is None:
+						me.metabolites.get_by_id(mod_name + '_c').formula = modification_formulas[mod_name]
 
 					elif me.metabolites.has_id(mod_name + '_c'):
-						mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
+					mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
 
 					# WARNING: flavodoxin homologs might have a different base_complex ID compared to ecolime model
-					# WARNING: Negative elemental contributions cannot be set in the metabolites.txt input file
+				# WARNING: Negative elemental contributions cannot be set in the metabolites.txt input file
 					elif 'Oxidized(1)' in mod and 'FLAVODOXIN' not in base_complex:
-						mod_elements = {'H': -2}
+					mod_elements = {'H': -2}
 					elif 'glycyl(1)' in mod:
-						mod_elements = {'H': -1}
+					mod_elements = {'H': -1}
 					elif 'cosh(1)' in mod:
-						mod_elements = {'H': +1, 'O': -1, 'S': +1}
+					mod_elements = {'H': +1, 'O': -1, 'S': +1}
 
-					if mod_elements:
-						mod_elements = collections.Counter(mod_elements)
-						base_complex_elements.update(mod_elements)
-					else:
+				if mod_elements:
+					mod_elements = collections.Counter(mod_elements)
+					base_complex_elements.update(mod_elements)
+				else:
 						logging.warning('Attempt to correct the \'{:s}\' stoichiometry failed. Please check if it is the correct behaviour or if the modification \'{:s}_c\' exists as a metabolite in the ME-model or a formula is included in the me_mets.txt file.'.format(met.id, mod_name))
 
 			complex_elements = { k:base_complex_elements[k] for k in sorted(base_complex_elements) if base_complex_elements[k] != 0 }
