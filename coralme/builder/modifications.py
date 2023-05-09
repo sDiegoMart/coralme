@@ -111,21 +111,26 @@ def add_pan4p_modifications(me_model):
 		_replace_modification(dct, me_model)
 
 def add_FeFe_and_NiFe_modifications(me_model):
-	fefe_and_nife_modifications = me_model.global_info['complex_cofactors']['FeFe/NiFe']
+	# dct = { "mod_FeFe_cofactor_c" : [ "base_complex" ], "mod_NiFe_cofactor_c" : [ "base_complex" ] }
+	dct = me_model.global_info['complex_cofactors'].get('FeFe/NiFe', {})
 
-	for mod, base_complex in fefe_and_nife_modifications.items():
-		if base_complex != '' and me_model.process_data.has_id(mod):
-			complex_data = list(me_model.process_data.get_by_id(mod).get_complex_data())
-			if len(complex_data) > 0:
-				for data in complex_data:
-					cplx_data = me_model.process_data.get_by_id(data.id)
-					cplx_data.complex_id = data.complex_id
-					cplx_data.stoichiometry = { base_complex : 1 }
-					cplx_data.subreactions[mod] = 0
+	for mod, base_complexes in dct.items():
+		for base_complex in base_complexes:
+			if base_complex != '' and me_model.process_data.has_id(mod):
+				complex_data = list(me_model.process_data.get_by_id(mod).get_complex_data())
+				if len(complex_data) > 0:
+					for data in complex_data:
+						cplx_data = me_model.process_data.get_by_id(data.id)
+						cplx_data.complex_id = data.complex_id
+						cplx_data.stoichiometry = { base_complex + '_' + mod[:-2] + '(1)' : 1 }
+						# The modifications occurs now as follow:
+						# base_complex + FeFe/NiFe => base_complex_mod_FeFe/NiFe
+						# base_complex_mod_FeFe/NiFe + other cofactors => final modified complex
+						cplx_data.subreactions[mod] = 0
+				else:
+					logging.warning('The ID \'{:s}\' in the configuration file has no base complexes assigned to it.'.format(mod))
 			else:
-				logging.warning('The ID \'{:s}\' in the configuration file has no base complexes assigned to it.'.format(mod))
-		else:
-			logging.warning('The ID \'{:s}\' in the configuration file does not exist in the ME-model.'.format(mod))
+				logging.warning('The ID \'{:s}\' in the configuration file does not exist in the ME-model.'.format(mod))
 
 	return None
 
