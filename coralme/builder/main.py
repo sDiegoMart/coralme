@@ -1637,6 +1637,10 @@ class MEReconstruction(MEBuilder):
 			config['defer_to_rxn_matrix'] = [self.org.biomass] if self.org.biomass is not None else []
 			logging.warning('The biomass reaction will be skipped during the ME reconstruction steps.')
 
+		if hasattr(self, 'org') and len(config.get('peptide_release_factors', [])) == 0:
+			config['peptide_release_factors'] = { k:v['enzyme'] for k,v in self.org.peptide_release_factors.items() }
+			logging.warning('The peptide release factors were set from homology data.')
+
 		if not 'FMETTRS' in config.get('defer_to_rxn_matrix', []):
 			config['defer_to_rxn_matrix'].append('FMETTRS')
 			logging.warning('The FMETTRS reaction from the M-model will be replaced by a SubReaction during the ME-model reconstruction steps.')
@@ -2086,29 +2090,29 @@ class MEReconstruction(MEBuilder):
 			data.synthetase = str(aa_synthetase_dict.get(data.amino_acid, 'CPLX_dummy'))
 
 		# Correct 'translation_stop_dict' if PrfA and/or PrfB homologs were not identified
-		PrfA_mono = me.global_info['translation_stop_dict']['UAG']
-		PrfB_mono = me.global_info['translation_stop_dict']['UGA']
-		generic_RF = me.global_info['translation_stop_dict']['UAA']
+		PrfA_mono = me.global_info['peptide_release_factors']['UAG']
+		PrfB_mono = me.global_info['peptide_release_factors']['UGA']
+		generic_RF = me.global_info['peptide_release_factors']['UAA']
 
 		if     me.metabolites.has_id(PrfA_mono) and not me.metabolites.has_id(PrfB_mono):
-			me.global_info['translation_stop_dict']['UGA'] = PrfA_mono # originally assigned to PrfB_mono
-			me.global_info['translation_stop_dict']['UAA'] = PrfA_mono # originally assigned to generic_RF
+			me.global_info['peptide_release_factors']['UGA'] = PrfA_mono # originally assigned to PrfB_mono
+			me.global_info['peptide_release_factors']['UAA'] = PrfA_mono # originally assigned to generic_RF
 		if not me.metabolites.has_id(PrfA_mono) and     me.metabolites.has_id(PrfB_mono):
-			me.global_info['translation_stop_dict']['UAG'] = PrfB_mono # originally assigned to PrfA_mono
-			me.global_info['translation_stop_dict']['UAA'] = PrfB_mono # originally assigned to generic_RF
+			me.global_info['peptide_release_factors']['UAG'] = PrfB_mono # originally assigned to PrfA_mono
+			me.global_info['peptide_release_factors']['UAA'] = PrfB_mono # originally assigned to generic_RF
 		if not me.metabolites.has_id(PrfA_mono) and not me.metabolites.has_id(PrfB_mono):
-			me.global_info['translation_stop_dict']['UAG'] = 'CPLX_dummy' # originally assigned to PrfA_mono
-			me.global_info['translation_stop_dict']['UGA'] = 'CPLX_dummy' # originally assigned to PrfB_mono
+			me.global_info['peptide_release_factors']['UAG'] = 'CPLX_dummy' # originally assigned to PrfA_mono
+			me.global_info['peptide_release_factors']['UGA'] = 'CPLX_dummy' # originally assigned to PrfB_mono
 
-		if me.global_info['translation_stop_dict']['UAG'] == 'CPLX_dummy' and me.global_info['translation_stop_dict']['UGA'] == 'CPLX_dummy':
-			me.global_info['translation_stop_dict']['UAA'] = 'CPLX_dummy'
+		if me.global_info['peptide_release_factors']['UAG'] == 'CPLX_dummy' and me.global_info['peptide_release_factors']['UGA'] == 'CPLX_dummy':
+			me.global_info['peptide_release_factors']['UAA'] = 'CPLX_dummy'
 
 		# charged tRNAs
 		for organelle, transl_table in me.global_info['transl_tables'].items():
 			if len(transl_table) == 0:
 				continue
 
-			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['translation_stop_dict'], selenocysteine_enzymes = me.global_info.get('selenocysteine_enzymes', []))
+			coralme.builder.translation.add_charged_trna_subreactions(me, organelle, transl_table, translation_stop_dict = me.global_info['peptide_release_factors'], selenocysteine_enzymes = me.global_info.get('selenocysteine_enzymes', []))
 
 		# ### 4) Add tRNA modifications into the ME-model and associate them with tRNA charging reactions
 
@@ -2137,7 +2141,7 @@ class MEReconstruction(MEBuilder):
 		for data in tqdm.tqdm(list(me.translation_data), 'Adding SubReactions into TranslationReactions...', bar_format = bar_format):
 			data.add_initiation_subreactions(start_codons = me.global_info['start_codons'], start_subreactions = initiation_subreactions)
 			data.add_elongation_subreactions(elongation_subreactions = elongation_subreactions)
-			data.add_termination_subreactions(translation_terminator_dict = me.global_info['translation_stop_dict'])
+			data.add_termination_subreactions(translation_terminator_dict = me.global_info['peptide_release_factors'])
 
 		# ### 6) Add Transcription Metacomplexes: RNA Polymerase(s)
 
@@ -2274,7 +2278,7 @@ class MEReconstruction(MEBuilder):
 				formation.update()
 			else:
 				data.create_complex_formation()
-				logging.warning('Added ComplexFormation for \'{:s}\'.'.format(data.id))
+				logging.warning('Added a ComplexFormation reaction for \'{:s}\'.'.format(data.id))
 
 		# ## Part 4: Add remaining subreactions
 		# ### 1. Add translation related subreactions
@@ -2299,7 +2303,7 @@ class MEReconstruction(MEBuilder):
 			# This block was run above, but it should be run again to incorporate any subreactions not added previously
 			data.add_initiation_subreactions(start_codons = me.global_info['start_codons'], start_subreactions = initiation_subreactions)
 			data.add_elongation_subreactions(elongation_subreactions = elongation_subreactions)
-			data.add_termination_subreactions(translation_terminator_dict = me.global_info['translation_stop_dict'])
+			data.add_termination_subreactions(translation_terminator_dict = me.global_info['peptide_release_factors'])
 
 			# Add organism specific subreactions associated with peptide processing
 			for subrxn in me.global_info['peptide_processing_subreactions']:
@@ -2316,7 +2320,7 @@ class MEReconstruction(MEBuilder):
 			rho = 'dependent' if rho_dependent in ['1', 'TRUE', 'True', 'true'] else 'independent'
 			stable = 'stable' if transcription_data.codes_stable_rna else 'normal'
 			if 'Transcription_{:s}_rho_{:s}'.format(stable, rho) in me.global_info['transcription_subreactions']:
-				transcription_data.subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
+				transcription_data._subreactions['Transcription_{:s}_rho_{:s}'.format(stable, rho)] = 1
 			else:
 				logging.warning('The SubReaction \'Transcription_{:s}_rho_{:s}\' is not defined in the organism-specific matrix.'.format(stable, rho))
 
@@ -2396,6 +2400,13 @@ class MEReconstruction(MEBuilder):
 			# Complex IDs in protein compartment file don't include modifications
 			# Some have multiple alternative modifications so must loop through these
 			for complex_data in me.process_data.query('^{:s}_mod_'.format(cplx)):
+				# WARNING: FeFe and NiFe cofactors reform the formation reactions as follow:
+				# requires a formation -> base_complex + FeFe/NiFe => base_complex_mod_FeFe/NiFe <- should not have a formation reaction
+				# base_complex_mod_FeFe/NiFe + other cofactors => final modified complex
+				lst = [ type(me.metabolites.get_by_id(x)) for x in complex_data.stoichiometry.keys() ]
+				if coralme.core.component.Complex in lst:
+					continue
+
 				complex_data.stoichiometry.update(new_stoich[cplx])
 				# remove zeroes from complex_data.stoichiometry
 				complex_data.stoichiometry = { k:v for k,v in complex_data.stoichiometry.items() if v != 0 }
@@ -2569,24 +2580,25 @@ class MEReconstruction(MEBuilder):
 				continue
 
 			for met, value in data.stoichiometry.items():
+				# This will add any complex to the list of enzymes
 				if not isinstance(me.metabolites.get_by_id(met), coralme.core.component.Complex):
 					continue
 
 				subreaction_id = met + '_carrier_activity'
 				if subreaction_id not in me.process_data:
-					sub = coralme.core.processdata.SubreactionData(met + '_carrier_activity', me)
+					sub = coralme.core.processdata.SubreactionData(subreaction_id, me)
 					sub.enzyme = met
 
 				data.subreactions[subreaction_id] = abs(value)
 
 		# ### 3. Update ME-model
-		# trick to obtain shadow prices and reduced costs
+		# trick to obtain shadow prices and reduced costs from the optimizer
 		me.reactions.dummy_reaction_FWD_SPONT.objective_coefficient = 1.
 
 		if update:
 			me.update()
 
-		# ### 4. Add remaining complex formulas and compartments to the ME-model
+		# ### 4. Add remaining formulas and compartments to the ME-model
 		for r in tqdm.tqdm(me.reactions.query('^formation_'), 'Updating all FormationReactions...', bar_format = bar_format):
 			r.update()
 
@@ -2604,35 +2616,41 @@ class MEReconstruction(MEBuilder):
 			base_complex_elements = collections.Counter(me.metabolites.get_by_id(base_complex).elements)
 
 			for mod in met.id.split('_mod_')[1:]:
-				for num in range(int(mod.rstrip(')').split('(')[1])):
+				#for num in range(int(mod.rstrip(')').split('(')[1])):
 				mod_elements = None
 				mod_name = mod.split('(')[0]
+
 				if mod_name in modification_formulas:
 					mod_elements = coralme.builder.helper_functions.parse_composition(modification_formulas[mod_name])
 					if me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is None:
 						me.metabolites.get_by_id(mod_name + '_c').formula = modification_formulas[mod_name]
 
-					elif me.metabolites.has_id(mod_name + '_c'):
+				elif me.metabolites.has_id(mod_name + '_c') and me.metabolites.get_by_id(mod_name + '_c').formula is not None:
 					mod_elements = me.metabolites.get_by_id(mod_name + '_c').elements
 
-					# WARNING: flavodoxin homologs might have a different base_complex ID compared to ecolime model
+				# WARNING: flavodoxin homologs might have a different base_complex ID compared to the ecolime model
 				# WARNING: Negative elemental contributions cannot be set in the metabolites.txt input file
-					elif 'Oxidized(1)' in mod and 'FLAVODOXIN' not in base_complex:
+				elif 'Oxidized(1)' == mod and 'FLAVODOXIN' not in base_complex:
 					mod_elements = {'H': -2}
-					elif 'glycyl(1)' in mod:
+				elif 'Oxidized(1)' == mod and 'FLAVODOXIN' in base_complex: # TODO: is the fmn cofactor in flavodoxin neutral?
+					mod_elements = {'H': 0}
+
+				elif 'glycyl(1)' == mod:
 					mod_elements = {'H': -1}
-					elif 'cosh(1)' in mod:
+				elif 'cosh(1)' == mod:
 					mod_elements = {'H': +1, 'O': -1, 'S': +1}
 
 				if mod_elements:
 					mod_elements = collections.Counter(mod_elements)
+					mod_elements = { k:v * int(mod.rstrip(')').split('(')[1]) for k,v in mod_elements.items() }
 					base_complex_elements.update(mod_elements)
 				else:
-						logging.warning('Attempt to correct the \'{:s}\' stoichiometry failed. Please check if it is the correct behaviour or if the modification \'{:s}_c\' exists as a metabolite in the ME-model or a formula is included in the me_mets.txt file.'.format(met.id, mod_name))
+					logging.warning('Attempt to calculate a corrected formula for \'{:s}\' failed. Please check if it is the correct behaviour, or if the modification \'{:s}_c\' exists as a metabolite in the ME-model or a formula is included in the me_mets.txt file.'.format(met.id, mod_name))
 
 			complex_elements = { k:base_complex_elements[k] for k in sorted(base_complex_elements) if base_complex_elements[k] != 0 }
 			met.formula = ''.join([ '{:s}{:d}'.format(k, v) for k,v in complex_elements.items() ])
 			met.elements = coralme.builder.helper_functions.parse_composition(met.formula)
+			logging.warning('Setting new formula for \'{:s}\' to \'{:s}\' successfully.'.format(met.id, met.formula))
 
 		# Update a second time to incorporate all of the metabolite formulas correctly
 		for data in tqdm.tqdm(me.subreaction_data, 'Recalculation of the elemental contribution in SubReactions...', bar_format = bar_format):
@@ -2658,7 +2676,7 @@ class MEReconstruction(MEBuilder):
 		coralme.builder.compartments.add_compartments_to_model(me)
 
 		# ### 6. Prune reactions from ME-model
-		# WARNING: Do it recursively to reduce further the size of the model.
+		# WARNING: Do it recursively to reduce further the size of the ME-model.
 		if prune:
 			me.prune()
 
