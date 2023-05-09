@@ -296,7 +296,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	def get_ribosome(x, dct):
 		mods = '' if x['Cofactors in Modified Complex'] is None else x['Cofactors in Modified Complex']
 		#tags = [ x['Gene Locus ID'], x['Old Locus Tag'], x['BioCyc'], x['Complex ID'], x['Generic Complex ID'] ]
-		tags = [ x['Complex ID'] ]
+		tags = [ x['Complex ID'], x['Generic Complex ID'] ]
 		tags = [ str(x).split(';') for x in tags ]
 		for tag in [ x for y in tags for x in y ]:
 			#if '{:s}-MONOMER'.format(tag) in lst or tag.split(':')[0] in lst or 'generic_{:s}'.format(tag) in lst:
@@ -304,9 +304,9 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 			filter2 = tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None])
 			filter3 = 'generic_{:s}'.format(tag) in dct #and mods in dct.get('generic_{:s}'.format(tag), [None])
 
-			if filter1 or filter2 or filter3:
+			if (filter1 or filter2 or filter3) and mods == '':
 				return 'ribosome:1'
-			elif mods == 'acetyl(1)':
+			elif (filter1 or filter2 or filter3) and mods == 'acetyl(1)':
 				return 'ribosome:2'
 
 	dct = {}
@@ -697,7 +697,10 @@ def get_subreactions(df, key: str):
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
 	# collapse
-	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
+	if key.startswith('Translation_termination'):
+		pass # PrfA and PrfB should be corrected
+	else:
+		tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
