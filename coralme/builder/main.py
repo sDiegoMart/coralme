@@ -1954,6 +1954,15 @@ class MEReconstruction(MEBuilder):
 		coralme.util.building.add_reactions_from_stoichiometric_data(
 			me, rxn_to_cplx_dict, is_spontaneous = spontaneous_rxns, update = True)
 
+		# correct the enzyme list of a subreaction if it matches the component_list of a generic
+		# WARNING: This allows the use of generics in subreactions
+		# e.g.: acpP_activation is associated to EG12221-MONOMER OR HOLO-ACP-SYNTH-CPLX_mod_mg2(1) OR HOLO-ACP-SYNTH-CPLX_mod_mn2(1)
+		# e.g.: EG12221-MONOMER OR HOLO-ACP-SYNTH-CPLX_mod_mg2(1) OR HOLO-ACP-SYNTH-CPLX_mod_mn2(1) is associated to generic_acp_synthase
+		for data in list(me.subreaction_data):
+			for generic in list(me.generic_data):
+				if data.enzyme == set(generic.component_list):
+					data.enzyme = set(generic.id)
+
 		# ### 8) Incorporate remaining biomass constituents
 		# ### 1. General Demand Requirements
 		# There are leftover components from the biomass equation that either:

@@ -776,7 +776,7 @@ def get_df_ptms(df):
 
 def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp = df.copy(deep = True)
-	tmp = correct_input(tmp)
+	#tmp = correct_input(tmp)
 	#tmp = tmp[~tmp['Feature Type'].isin(['pseudo'])]
 	tmp = tmp[tmp['M-model Reaction ID'].notna()]
 
@@ -788,7 +788,7 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
 	# collapse
-	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
+	#tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
