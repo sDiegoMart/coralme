@@ -1961,7 +1961,7 @@ class MEReconstruction(MEBuilder):
 		for data in list(me.subreaction_data):
 			for generic in list(me.generic_data):
 				if data.enzyme == set(generic.component_list):
-					data.enzyme = set(generic.id)
+					data.enzyme = set([generic.id])
 
 		# ### 8) Incorporate remaining biomass constituents
 		# ### 1. General Demand Requirements
