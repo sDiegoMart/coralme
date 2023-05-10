@@ -23,7 +23,7 @@ def _return_compartments_of_complexes(model, cplx):
 	# if only one membrane is represented in protein subunits, use this membrane for the compartment
 	elif len(mem_dict) == 1:
 		return mem_dict.popitem()[0]
-	# if multiple membrane compartements are represented, use generic "m" for "membrane" for now
+	# if multiple membrane compartments are represented, use generic "m" for "membrane" for now
 	else:
 		return 'm'
 
