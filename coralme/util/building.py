@@ -95,8 +95,9 @@ def create_transcribed_gene(me_model, locus_id, rna_type, seq, left_pos = None, 
 			Metabolite object for the RNA product
 	"""
 	gene = coralme.core.component.TranscribedGene('RNA_' + locus_id, rna_type, seq)
-	gene.left_pos = sorted(left_pos.split(','), key = lambda x: int(x)) if left_pos is not None else None
-	gene.right_pos = sorted(right_pos.split(','), key = lambda x: int(x)) if right_pos is not None else None
+	fn = lambda x: int(x.replace('>', '').replace('<', ''))
+	gene.left_pos = sorted(left_pos.split(','), key = fn) if left_pos is not None else None
+	gene.right_pos = sorted(right_pos.split(','), key = fn) if right_pos is not None else None
 	gene.strand = strand
 
 	if len(me_model.metabolites.query('^RNA_{:s}$'.format(locus_id))) != 0:
