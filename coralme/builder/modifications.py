@@ -8,10 +8,14 @@ def add_iron_sulfur_modifications(me_model):
 	for fes in ['2fe2s', '4fe4s']:
 		name = 'generic_{:s}_transfer_complex'.format(fes)
 		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers) if x != '' ]
+		for component in components:
+			if not me_model.metabolites.has_id(component):
+				me_model.add_metabolites([coralme.core.component.Complex(component)])
+
 		generic_fes_transfer = coralme.core.processdata.GenericData(name, me_model, components)
 		generic_fes_transfer.create_reactions()
 
-		# add metabolite to the model if it doesn't exist
+		# add 2fe2s or 4fe4s to the model if it doesn't exist
 		me_model.add_metabolites([coralme.core.component.Metabolite(fes + '_c')])
 
 		# create unloading reactions
