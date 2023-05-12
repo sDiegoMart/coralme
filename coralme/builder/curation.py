@@ -202,7 +202,8 @@ class MEManualCuration(object):
         df = self._get_manual_curation(
             "subsystem_classification.txt",
             create_file = create_file,
-            no_file_return = pandas.DataFrame())
+            no_file_return = pandas.DataFrame(),
+            sep = '\t')
 
         d = {}
         for c in df.columns:
