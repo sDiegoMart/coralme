@@ -168,8 +168,11 @@ class MEReaction(cobra.core.reaction.Reaction):
 			if isinstance(subreaction_data.enzyme, list) or isinstance(subreaction_data.enzyme, set):
 				for enzyme in subreaction_data.enzyme:
 					if old_stoich:
+						coeff = old_stoich[enzyme]
+						if hasattr(coeff,'subs'):
+							coeff = coeff.subs([(self._model.mu, 1e-6)])
 						# WARNING: Applies only to MetabolicReaction
-						stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale if old_stoich[enzyme] < 0 else 0
+						stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale if coeff < 0 else 0
 					else:
 						stoichiometry[enzyme] -= self._model.mu / subreaction_data.keff / 3600. * count * scale
 
