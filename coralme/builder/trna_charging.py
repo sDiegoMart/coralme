@@ -1,6 +1,7 @@
 import tqdm
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
 import coralme
+import logging
 
 #def add_trna_modification_procedures(me_model, trna_mods, modification_info):
 def add_trna_modification_procedures(me_model, trna_mods):
@@ -25,6 +26,10 @@ def add_trna_modification_procedures(me_model, trna_mods):
 			trna_mod.keff = 65.  # iOL uses 65 for all tRNA mods
 
 			for met, stoich in trna_mod.stoichiometry.items():
+				if not me_model.metabolites.has_id(met):
+					logging.warning("Creating metabolite {} in {}".format(met,trna_mod.id))
+					met_obj = coralme.core.component.Metabolite(met)
+					me_model.add_metabolites([met_obj])
 				if isinstance(me_model.metabolites.get_by_id(met), coralme.core.component.Complex) and stoich < 0:
 					trna_mod.enzyme.append(met)
 
