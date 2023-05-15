@@ -151,6 +151,7 @@ class MEBuilder(object):
 		# Read organism
 		self.org = coralme.builder.organism.Organism(config, is_reference = False)
 		self.org.get_organism()
+		self.curation_notes = self.org.curation_notes
 		# self.org.rpod = ''
 		# self.org.get_rna_polymerase(force_RNAP_as='')
 
@@ -271,7 +272,6 @@ class MEBuilder(object):
 
 		# Update notes
 		logging.warning("Generating curation notes")
-		self.curation_notes = self.org.curation_notes
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
 				self.configuration['out_directory'] + 'curation_notes.json'
