@@ -420,13 +420,13 @@ class MEReaction(cobra.core.reaction.Reaction):
 				self._metabolites.pop(metabolite)
 
 	def _check_bounds(self, lb, ub):
-		#logging.warning('New cobraME \'_check_bounds\' method superseeds \'_check_bounds\' from cobrapy')
+		#logging.warning('New cobraME \'_check_bounds\' method supersedes \'_check_bounds\' from cobrapy')
 		if isinstance(lb, float) and isinstance(ub, float):
 			if lb > ub:
 				raise ValueError('The lower bound must be less than or equal to the upper bound ({:s} <= {:s}).'.format(lb, ub))
 
 	def update_variable_bounds(self):
-		#logging.warning('New cobraME \'update_variable_bounds\' method superseeds \'update_variable_bounds\' from cobrapy')
+		#logging.warning('New cobraME \'update_variable_bounds\' method supersedes \'update_variable_bounds\' from cobrapy')
 
 		if self.model is None:
 			return
