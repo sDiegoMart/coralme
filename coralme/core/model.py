@@ -1068,7 +1068,7 @@ class MEModel(cobra.core.model.Model):
 
 	def optimize(self,
 		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
-		tolerance = 1e-6, precision = 'quad', verbose = True, fva = False):
+		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
 
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
@@ -1084,20 +1084,11 @@ class MEModel(cobra.core.model.Model):
 		from coralme.solver.solver import ME_NLP
 		#me_nlp = ME_NLP(me)
 		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
-		if fva:
-			if verbose: print('Running FVA for {} reactions'.format(len(fva)))
-			if not self.solution:
-				self.optimize(max_mu = max_mu,
-							  min_mu = min_mu,
-							  maxIter = maxIter,
-							  lambdify = lambdify,
-							  tolerance = tolerance,
-							  precision = precision,
-							  verbose = verbose,
-							  fva = False)
+		if fva.get('reactions',None) is not None:
+			if verbose: print('Running FVA for {} reactions'.format(len(fva['reactions'])))
 			me_nlp.me = self
-			mu_fixed = self.solution.objective_value
-			rxns_fva0 = fva
+			mu_fixed = fva['mu_fixed']
+			rxns_fva0 = fva['reactions']
 			return me_nlp.varyme(mu_fixed, rxns_fva0, basis=None, verbosity=verbose)
 
 		muopt, xopt, yopt, zopt, basis, stat = me_nlp.bisectmu(
