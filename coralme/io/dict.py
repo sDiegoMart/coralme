@@ -16,6 +16,7 @@ _REQUIRED_REACTION_ATTRIBUTES = {
 	"lower_bound",
 	"upper_bound",
 	"objective_coefficient",
+	"subsystem"
 	#"variable_kind"
 	}
 
