@@ -347,7 +347,7 @@ class MEBuilder(object):
 			logging.warning('Could not identify biomass reaction')
 
 
-		self.org.GAM = self.configuration.get('GAM',None)
+		self.org.GAM = self.configuration.get('gam',None)
 		# Get GAM
 		if self.org.GAM is None:
 			adp = m_model.metabolites.adp_c
@@ -360,7 +360,7 @@ class MEBuilder(object):
 					'msg':'GAM could not be identified from biomass reaction, setting a standard value of 45. adp_c is not present as a product.',
 					'importance':'high',
 					'to_do':'Check whether the biomass reaction was read or defined correctly. You can define GAM with me_builder.org.GAM = GAM_value'})
-		self.org.NGAM = self.configuration.get('NGAM',None)
+		self.org.NGAM = self.configuration.get('ngam',None)
 		if self.org.NGAM is None:
 			# Get NGAM
 			NGAMs = ['NGAM','ATPM']
