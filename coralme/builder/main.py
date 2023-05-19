@@ -2579,7 +2579,7 @@ class MEReconstruction(MEBuilder):
 				continue
 
 			for parent_rxn in data.parent_reactions:
-				rxn.subsystem = parent_rxn.subsystem
+				parent_rxn.subsystem = rxn.subsystem
 
 		# ### 2. Add enzymatic coupling for "carriers"
 		# These are enzyme complexes that act as metabolites in a metabolic reaction.
