@@ -380,11 +380,11 @@ def build_reactions_from_genbank(
 			#for start, stop in zip(starts.split(','), stops.split(',')):
 			if int(start) < int(stop):
 				# nicely defined locus in reference of the genome sequence
-				seqfeatures.append([SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)), strand = strand)])
+				seqfeatures.append([SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, int(stop)))])
 			else:
 				# the feature must be split in two
-				loc1 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, len(full_seqs[tu_frame.replicon[tu_id]])), strand = strand)
-				loc2 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(0, int(stop)), strand = strand)
+				loc1 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(int(start)-1, len(full_seqs[tu_frame.replicon[tu_id]])))
+				loc2 = SeqFeature.SeqFeature(SeqFeature.SimpleLocation(0, int(stop)))
 				seqfeatures.append([loc1, loc2])
 
 			#sequence = coralme.util.dogma.extract_sequence(
@@ -400,12 +400,13 @@ def build_reactions_from_genbank(
 			dna = ''
 			for replicon_id, seqs in zip(replicons, seqfeatures):
 				#print(replicon_id, seq)
-				# Deprecated in Biopython 1.80
+				# 'ungap' method and 'strand' argument are deprecated in Biopython 1.80
 				#seq = seq.extract(full_seqs[tu_frame.replicon[tu_id]]).ungap()
 				for seq in seqs:
+					seq.strand = strand
 					dna += seq.extract(full_seqs[replicon_id]).replace('-', '')
 
-			if len(seq) == 0:
+			if len(dna) == 0:
 				logging.warning('The knockouts dictionary instructed to completely delete \'{:s}\' from the ME-model.'.format(tu_id))
 			else:
 				add_transcription_reaction(me_model, tu_id, set(), str(dna), organelle, update = False)
