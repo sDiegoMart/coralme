@@ -790,9 +790,10 @@ def get_next_from_type(l,t):
 def find_complexes(m, seen = set()):
     if not m:
         return set()
+#     print(m.id)
     if m in seen:
         return set()
-#     print(m.id,type(m))
+#     print(type(m))
     
     seen.add(m)
     
@@ -800,6 +801,8 @@ def find_complexes(m, seen = set()):
     if isinstance(m,coralme.core.component.TranslatedGene):
         cplxs = set()
         for r in m.reactions:
+            if substitute_value(m,r.metabolites[m] > 0):
+                continue
             cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
     if isinstance(m,coralme.core.component.TranscribedGene):
@@ -808,16 +811,21 @@ def find_complexes(m, seen = set()):
             return find_complexes(m._model.metabolites.get_by_id(translated_protein), seen=seen)
         cplxs = set()
         for r in m.reactions:
+            if substitute_value(m,r.metabolites[m] > 0):
+                continue
             cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
     if isinstance(m,coralme.core.component.ProcessedProtein):
         cplxs = set()
         for r in m.reactions:
+            if substitute_value(m,r.metabolites[m] > 0):
+                continue
             cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
     
     if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent) or isinstance(m,coralme.core.component.GenerictRNA):
         other_formations = [r for r in m.reactions if (isinstance(r,coralme.core.reaction.ComplexFormation) or isinstance(r,coralme.core.reaction.GenericFormationReaction)) and substitute_value(m,r.metabolites[m]) < 0]
+#         print(other_formations)
         if other_formations:
             cplxs = set()
             for r in other_formations:
