@@ -792,7 +792,11 @@ def find_complexes(m, seen = set()):
         return set()
     if m in seen:
         return set()
+#     print(m.id,type(m))
+    
     seen.add(m)
+    
+    # Metabolite objects
     if isinstance(m,coralme.core.component.TranslatedGene):
         cplxs = set()
         for r in m.reactions:
@@ -806,16 +810,11 @@ def find_complexes(m, seen = set()):
         for r in m.reactions:
             cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
-    if isinstance(m,coralme.core.reaction.PostTranslationReaction):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein), seen=seen)
     if isinstance(m,coralme.core.component.ProcessedProtein):
-        return find_complexes(get_next_from_type(m.reactions,coralme.core.reaction.ComplexFormation), seen=seen)
-    if isinstance(m,coralme.core.reaction.ComplexFormation):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex), seen=seen)
-    if isinstance(m,coralme.core.reaction.GenericFormationReaction):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
-    if isinstance(m,coralme.core.reaction.tRNAChargingReaction):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenerictRNA), seen=seen)
+        cplxs = set()
+        for r in m.reactions:
+            cplxs = cplxs | find_complexes(r, seen=seen)
+        return cplxs
     
     if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent) or isinstance(m,coralme.core.component.GenerictRNA):
         other_formations = [r for r in m.reactions if (isinstance(r,coralme.core.reaction.ComplexFormation) or isinstance(r,coralme.core.reaction.GenericFormationReaction)) and substitute_value(m,r.metabolites[m]) < 0]
@@ -825,6 +824,17 @@ def find_complexes(m, seen = set()):
                 cplxs = cplxs | find_complexes(r, seen=seen)
             return cplxs
         return set([m])
+    
+    # Reaction objects
+    if isinstance(m,coralme.core.reaction.PostTranslationReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein), seen=seen)
+    if isinstance(m,coralme.core.reaction.ComplexFormation):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex), seen=seen)
+    if isinstance(m,coralme.core.reaction.GenericFormationReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
+    if isinstance(m,coralme.core.reaction.tRNAChargingReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenerictRNA), seen=seen)
+    
     return set()
 
 def get_functions(cplx):
@@ -844,6 +854,8 @@ def get_functions(cplx):
 			functions.add('tRNA-Charging')
 		elif isinstance(r,coralme.core.reaction.PostTranslationReaction):
 			functions.add('Post-translation')
+		elif isinstance(r,coralme.core.reaction.SummaryVariable):
+			functions.add('Biomass')
 	return functions
 
 def dict_to_defaultdict(dct):
