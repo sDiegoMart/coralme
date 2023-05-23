@@ -2688,7 +2688,12 @@ class MEReconstruction(MEBuilder):
 		# ### 6. Prune reactions from ME-model
 		# WARNING: Do it recursively to reduce further the size of the ME-model.
 		if prune:
-			me.prune()
+			rnum = len(me.reactions)
+			delta = 1
+			while delta > 0:
+				me.prune()
+				delta = rnum - len(me.reactions)
+				rnum = len(me.reactions)
 
 		# Part 9. Save and report
 		with open('{:s}/MEModel-step2-{:s}.pkl'.format(out_directory, model), 'wb') as outfile:
