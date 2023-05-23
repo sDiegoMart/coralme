@@ -774,41 +774,55 @@ def evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms):
 
 	return Sf, Se, lb, ub
 
+def substitute_value(m,coeff):
+    if not hasattr(coeff,'subs'):
+        return coeff
+    return coeff.subs([(m._model.mu, 1e-6)])
+
 def get_next_from_type(l,t):
     try:
+        if isinstance(l,dict):
+            return next(i for i,v in l.items() if isinstance(i,t) and substitute_value(i,v) > 0)
         return next(i for i in l if isinstance(i,t))
     except:
         return set()
 
-def find_complexes(m):
-#     print(m.id,type(m))
+def find_complexes(m, seen = set()):
+    if not m:
+        return set()
+    if m in seen:
+        return set()
+    seen.add(m)
     if isinstance(m,coralme.core.component.TranslatedGene):
         cplxs = set()
         for r in m.reactions:
-            cplxs = cplxs | find_complexes(r)
+            cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
     if isinstance(m,coralme.core.component.TranscribedGene):
         translated_protein = m.id.replace('RNA_','protein_')
         if translated_protein in m._model.metabolites:
-            return find_complexes(m._model.metabolites.get_by_id(translated_protein))
+            return find_complexes(m._model.metabolites.get_by_id(translated_protein), seen=seen)
         cplxs = set()
         for r in m.reactions:
-            cplxs = cplxs | find_complexes(r)
+            cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
     if isinstance(m,coralme.core.reaction.PostTranslationReaction):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein))
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein), seen=seen)
     if isinstance(m,coralme.core.component.ProcessedProtein):
-        return find_complexes(get_next_from_type(m.reactions,coralme.core.reaction.ComplexFormation))
+        return find_complexes(get_next_from_type(m.reactions,coralme.core.reaction.ComplexFormation), seen=seen)
     if isinstance(m,coralme.core.reaction.ComplexFormation):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex))
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex), seen=seen)
     if isinstance(m,coralme.core.reaction.GenericFormationReaction):
-        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent))
-    if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent):
-        other_formations = [r for r in m.reactions if isinstance(r,coralme.core.reaction.ComplexFormation) if m in r.reactants]
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
+    if isinstance(m,coralme.core.reaction.tRNAChargingReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenerictRNA), seen=seen)
+    
+    if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent) or isinstance(m,coralme.core.component.GenerictRNA):
+        other_formations = [r for r in m.reactions if (isinstance(r,coralme.core.reaction.ComplexFormation) or isinstance(r,coralme.core.reaction.GenericFormationReaction)) and substitute_value(m,r.metabolites[m]) < 0]
         if other_formations:
             cplxs = set()
             for r in other_formations:
-                cplxs = cplxs | find_complexes(r)
+                cplxs = cplxs | find_complexes(r, seen=seen)
             return cplxs
         return set([m])
     return set()

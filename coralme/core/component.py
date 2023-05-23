@@ -46,7 +46,7 @@ class MEComponent(cobra.core.metabolite.Metabolite):
 
 	@property
 	def complexes(self):
-		return coralme.builder.helper_functions.find_complexes(self)
+		return coralme.builder.helper_functions.find_complexes(self,seen= set())
 	@property
 	def functions(self):
 		cplxs = self.complexes
