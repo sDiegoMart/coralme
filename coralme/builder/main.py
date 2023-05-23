@@ -1666,7 +1666,8 @@ class MEReconstruction(MEBuilder):
 			if set(columns).issubset(set(df.columns)):
 				return df
 			else:
-				logging.warning('Column names in \'{:s}\' does not comply default values: {:s}.'.format(filename, ','.join(columns)))
+				#logging.warning('Column names in \'{:s}\' does not comply default values: {:s}.'.format(filename, ', '.join(columns)))
+				raise Exception('Column names in \'{:s}\' does not comply default values: {:s}.'.format(filename, ', '.join(columns)))
 
 		# User inputs
 		# Transcriptional Units
@@ -1682,7 +1683,7 @@ class MEReconstruction(MEBuilder):
 		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', cols)
 
 		# Orphan and Spontaneous reaction metadata
-		cols = ['name', 'description', 'is_reversible', 'is_spontaneous']
+		cols = ['name', 'description', 'subsystems', 'is_reversible', 'is_spontaneous']
 		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', cols).set_index('name', inplace = False)
 
 		# Metabolites metadata
@@ -2572,7 +2573,7 @@ class MEReconstruction(MEBuilder):
 		# ### 1. Subsystems
 
 		# Add reaction subsystems from M-model to ME-model
-		for rxn in tqdm.tqdm(me.gem.reactions, 'Adding reaction subsystems from M-model into the ME-model...', bar_format = bar_format):
+		for rxn in tqdm.tqdm(me.processed_m_model.reactions, 'Adding reaction subsystems from M-model into the ME-model...', bar_format = bar_format):
 			if rxn.id in me.process_data:
 				data = me.process_data.get_by_id(rxn.id)
 			else:

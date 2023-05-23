@@ -198,11 +198,16 @@ def process_m_model(
 		rxn.add_metabolites(rxn_stoichiometry)
 		if rxn_id in rxns_data.index:
 			reversible = rxns_data.loc[rxn_id, 'is_reversible']
+			subsystem = 'Not Determined' if rxns_data.loc[rxn_id, 'subsystems'] == 'False' else rxns_data.loc[rxn_id, 'subsystems']
 		else:
 			reversible = 'True'
 			logging.warning('Unable to determine MetabolicReaction \'{:s}\' reversibility. Default value is \'True\'.'.format(rxn_id))
+			subsystem = 'Not Determined'
+			logging.warning('Unable to determine MetabolicReaction \'{:s}\' subsystem. Default value is \'Not Determined\'.'.format(rxn_id))
+
 		rxn.lower_bound = -1000.0 if reversible.lower() == 'true' else 0.0
 		logging.warning('The MetabolicReaction \'{:s}\' was created into the M-model (using \'reaction_matrix.txt\').'.format(rxn_id))
+		rxn.subsystem = subsystem
 
 	# m_to_me_map DataFrame
 	#m_to_me_map.columns = ['me_name']
