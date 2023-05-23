@@ -796,6 +796,7 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 		if reaction.id.startswith('EX_') or reaction.id.startswith('DM_') or reaction.id.startswith('SK_'):
 			new_reaction = coralme.core.reaction.MEReaction(reaction.id)
 			me_model.add_reactions([new_reaction])
+			new_reaction.subsystem = reaction.subsystem
 			new_reaction.lower_bound = reaction.lower_bound
 			new_reaction.upper_bound = reaction.upper_bound
 			for met, stoichiometry in reaction.metabolites.items():
