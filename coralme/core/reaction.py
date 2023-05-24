@@ -1681,15 +1681,20 @@ class TranslationReaction(MEReaction):
 
 		# --------------- Add Protein to Stoichiometry ------------------------
 		# Add protein to model if not already included. Replace protein if it is not of the correct type
+		# OLD CODE
 		#try:
 			#protein = metabolites.get_by_id(protein_id)
 		#except KeyError:
+			#protein = coralme.core.component.TranslatedGene(protein_id)
+
 		protein = coralme.core.component.TranslatedGene(protein_id)
 		if metabolites.has_id(protein_id):
 			if isinstance(metabolites.get_by_id(protein_id), coralme.core.component.Metabolite):
 				metabolites._replace_on_id(protein)
 		else:
-			model.add_metabolites([protein])
+			model.add_metabolites(protein)
+
+		protein = metabolites.get_by_id(protein_id)
 		new_stoichiometry[protein.id] = 1
 
 		# ------- Convert ids to metabolites and add to model -----------------
