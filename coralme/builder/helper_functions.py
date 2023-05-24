@@ -826,12 +826,12 @@ def find_complexes(m, seen = set()):
     if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent) or isinstance(m,coralme.core.component.GenerictRNA):
         other_formations = [r for r in m.reactions if (isinstance(r,coralme.core.reaction.ComplexFormation) or isinstance(r,coralme.core.reaction.GenericFormationReaction)) and substitute_value(m,r.metabolites[m]) < 0]
 #         print(other_formations)
+        cplxs = set([m])
         if other_formations:
-            cplxs = set()
             for r in other_formations:
                 cplxs = cplxs | find_complexes(r, seen=seen)
-            return cplxs
-        return set([m])
+        return cplxs
+#         return set([m])
     
     # Reaction objects
     if isinstance(m,coralme.core.reaction.PostTranslationReaction):
