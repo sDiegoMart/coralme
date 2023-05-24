@@ -1905,7 +1905,9 @@ class Organism(object):
             for mod,row in mod_df.items():
                 positions = row['positions'].split(',')
                 for g in genes:
-                    gene_mods = mod_targets.loc[[g]]
+                    g = pd.DataFrame()
+                    if g in mod_targets.index:
+                        gene_mods = mod_targets.loc[[g]]
                     d = {}
                     for p in positions:
                         if not gene_mods.empty and gene_mods['position'].eq(p).any():
