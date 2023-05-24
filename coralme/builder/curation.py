@@ -78,7 +78,7 @@ class MEManualCuration(object):
         logging.warning("Loading special modifications")
         self.org.special_modifications = self.load_special_modifications()
         logging.warning("Loading rna modifications and targets")
-        self.org.rna_modification = self.load_rna_modification()
+        self.org.rna_modification_df = self.load_rna_modification()
         self.org.rna_modification_targets = self.load_rna_modification_targets()
         logging.warning("Loading folding information of proteins")
         self.org.folding_dict = self.load_folding_dict()
@@ -574,17 +574,6 @@ class MEManualCuration(object):
             sep = '\t')
         return self._modify_special_modifications_from_load(df)
 
-    def _modify_rna_modification_from_load(self,df):
-        d = {}
-        for idx,row in df.iterrows():
-            mods = ['{}_at_{}'.format(idx,i) for i in row['positions'].split(',')]
-            for enz in row['enzymes'].split(' AND '):
-                #if enz not in d: d[enz] = []
-                #d[enz] = mods
-                for mod in mods:
-                    d.setdefault(enz, []).append(mod)
-        return d
-
     def load_rna_modification(self):
         create_file = pandas.DataFrame(columns=[
             'modification','positions','type','enzymes','source'
@@ -594,7 +583,8 @@ class MEManualCuration(object):
             create_file = create_file,
             no_file_return = create_file,
             sep = '\t').astype(str)
-        return self._modify_rna_modification_from_load(df)
+        return df
+#         return self._modify_rna_modification_from_load(df)
 
 #     def _process_rna_modification_targets(self,
 #                                df):
