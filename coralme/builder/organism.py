@@ -1905,7 +1905,7 @@ class Organism(object):
             for mod,row in mod_df.items():
                 positions = row['positions'].split(',')
                 for g in genes:
-                    df = pandas.DataFrame()
+                    gene_mods = pandas.DataFrame()
                     if g in mod_targets.index:
                         gene_mods = mod_targets.loc[[g]]
                     d = {}
