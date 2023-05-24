@@ -1704,6 +1704,9 @@ class MEReconstruction(MEBuilder):
 		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', cols)
 
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficients
+		# Detect first if the subreaction matrix file was modified with inferred data
+		rxns = '{:s}/building_data/subreaction_matrix.txt'.format(config.get('out_directory', '.'))
+		config['df_matrix_subrxn_stoich'] = rxns if pathlib.Path(rxns).exists() else config['df_matrix_subrxn_stoich']
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
 		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', cols)
 
