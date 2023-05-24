@@ -778,6 +778,8 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 			#new_met = me_model.metabolites.get_by_id(met.id)
 		elif met.id.startswith('generic_tRNA'):
 			new_met = coralme.core.component.GenerictRNA(met.id)
+		elif met.id.startswith('generic_'):
+			new_met = coralme.core.component.GenericComponent(met.id)
 		else:
 			new_met = coralme.core.component.Metabolite(met.id)
 
