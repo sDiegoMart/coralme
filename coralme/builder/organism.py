@@ -370,12 +370,13 @@ class Organism(object):
         ),inplace=True)
 
     def _get_product_type(self,
-                         row,
+                         gene_name,
+                         gene_dictionary,
                          complexes_df,
                          RNA_df,
-                         gene_id,
-                         gene_name,
-                         warn_genes):
+                         warn_genes = []):
+        row = gene_dictionary.loc[gene_name]
+        gene_id = row['Accession-1']
         product = row['Product'].split(' // ')[0]
         ### Try to get product type from gene id of type LOCUST_TAG-RNA
         product_type = ''
@@ -485,14 +486,21 @@ class Organism(object):
             if not gene_name or isinstance(gene_name,float):
                 warn_genes.append(gene_id)
                 continue
-
+            
             product,product_type = \
-                self._get_product_type(row,
-                     complexes_df,
-                     RNA_df,
-                     gene_id,
-                     gene_name,
-                     warn_genes)
+                self._get_product_type(
+                         gene_name,
+                         gene_dictionary,
+                         complexes_df,
+                         RNA_df,
+                         warn_genes)
+#             product,product_type = \
+#                 self._get_product_type(row,
+#                      complexes_df,
+#                      RNA_df,
+#                      gene_id,
+#                      gene_name,
+#                      warn_genes)
             if product is None:
                 warn_genes.append(gene_id)
                 continue
