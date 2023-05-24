@@ -225,26 +225,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data = data.explode('Cofactors in Modified Complex')
 	data = data.drop_duplicates()
 
-	# Add M-model Reaction IDs, names, and reversibility from builder
-	# It considers complex name and cofactors
-	dct = builder.org.enz_rxn_assoc_df.copy(deep = True)
-	dct['Complex'] = dct['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
-	dct['Cofactors'] = dct['Complexes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
-	dct['Reaction'] = dct.index
-
-	dct = dct.explode(['Complex', 'Cofactors']).replace('', 'None')
-	dct = dct.groupby(['Complex', 'Cofactors']).agg({'Reaction' : lambda x: x.tolist()})
-	# final dictionary: (Complex, Cofactors) : Reaction ID
-	dct = { k:v['Reaction'] for k,v in dct.iterrows() }
-
-	fn = lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None]) + dct.get((str(x['Generic Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None])
-
-	data['M-model Reaction ID'] = data.apply(lambda x: fn(x), axis = 1)
-	data = data.explode('M-model Reaction ID')
-	data['Reaction Name'] = data['M-model Reaction ID'].apply(lambda x: model.reactions.get_by_id(x).name if model.reactions.has_id(x) else None)
-	data['Reversibility'] = data['M-model Reaction ID'].apply(lambda x: str(model.reactions.get_by_id(x).reversibility) if model.reactions.has_id(x) else None)
-	data = data.drop_duplicates()
-
 	# ME-model generics
 	def generics_from_gene(x, dct):
 		generics = []
@@ -282,6 +262,37 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['Generic Complex ID'] = data.apply(lambda x: generics_from_gene(x, dct), axis = 1)
 	data['Generic Complex ID'].update(data.apply(lambda x: generics_from_complex(x, dct), axis = 1))
 	data = data.explode('Generic Complex ID')
+
+	# Add M-model Reaction IDs, names, and reversibility from builder
+	# It considers complex name and cofactors
+	dct = builder.org.enz_rxn_assoc_df.copy(deep = True)
+	dct['Complex'] = dct['Complexes'].apply(lambda gpr: [ x.split('_mod_')[0] for x in gpr.split(' OR ') ])
+	dct['Cofactors'] = dct['Complexes'].apply(lambda gpr: [ ' AND '.join(x.split('_mod_')[1:]) for x in gpr.split(' OR ') ])
+	dct['Reaction'] = dct.index
+
+	dct = dct.explode(['Complex', 'Cofactors']).replace('', 'None')
+	dct = dct.groupby(['Complex', 'Cofactors']).agg({'Reaction' : lambda x: x.tolist()})
+	# intermediate dictionary: (Complex, Cofactors) : Reaction ID
+	dct = { k:v['Reaction'] for k,v in dct.iterrows() }
+	# correction based on generics -> NEW complex <-> list of reactions
+	df = builder.org.complexes_df.copy(deep = True)
+	df = { idx:[ x[8:-2] for x in row['genes'].split(' AND ')] for idx,row in df[df['genes'].str.contains('generic')].iterrows() }
+	for cplx, generics in df.items():
+		for generic in generics:
+			dct.update({ (generic, 'None') : dct[(cplx, 'None')] })
+
+	fn = lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None]) + dct.get((str(x['Generic Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None])
+
+	data['M-model Reaction ID'] = data.apply(lambda x: fn(x), axis = 1)
+	data = data.explode('M-model Reaction ID')
+	data['Reaction Name'] = data['M-model Reaction ID'].apply(lambda x: model.reactions.get_by_id(x).name if model.reactions.has_id(x) else None)
+	data['Reversibility'] = data['M-model Reaction ID'].apply(lambda x: str(model.reactions.get_by_id(x).reversibility) if model.reactions.has_id(x) else None)
+	# correction based on generics -> NEW complex <-> list of reactions
+	fn = lambda x: 'CPLX_{:s}-0:1({:s})'.format(x['M-model Reaction ID'], x['Generic Complex ID']) if x['M-model Reaction ID'] is not None and x['Generic Complex ID'] is not None else x['Complex ID']
+	data['Complex ID'] = data.apply(lambda x: fn(x), axis = 1)
+	fn = lambda x: None if x['M-model Reaction ID'] is not None else x['Generic Complex ID']
+	data['Generic Complex ID'] = data.apply(lambda x: fn(x), axis = 1)
+	data = data.drop_duplicates()
 
 	# ME-model metacomplexes (e.g., ribosome)
 	def get_rnapol(x, lst):
