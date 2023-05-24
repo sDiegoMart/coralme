@@ -257,6 +257,8 @@ class MEBuilder(object):
 		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
+		logging.warning("Processing RNA modifications")
+		self.org.process_rna_modifications()
 		logging.warning("Getting tRNA to codon information")
 		self.get_trna_to_codon()
 
@@ -1252,26 +1254,49 @@ class MEBuilder(object):
 		return cplx in set(i.split('_mod_')[0] for i in lst)
 
 	def update_rna_modification_from_homology(self):
-		ref_rna_modification = self.ref.rna_modification
-		org_rna_modification = self.org.rna_modification
+		ref_rna_modification = self.ref.rna_modification_df
+		org_rna_modification = self.org.rna_modification_df
 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		defined_mods = set()
-		for _,v in org_rna_modification.items():
-			for i in v:
-				defined_mods.add(i)
-		for k, v in tqdm.tqdm(ref_rna_modification.items(),
-					'Updating RNA modification machinery from homology...',
-					bar_format = bar_format,
-					total=len(ref_rna_modification)):
-			if k not in ref_cplx_homolog: continue
-			org_cplx = ref_cplx_homolog[k]
-			if self._is_base_complex_in_list(org_cplx,list(org_rna_modification.keys())):
-				continue
-			if org_cplx not in org_rna_modification:
-				org_rna_modification[org_cplx] = []
-			org_rna_modification[org_cplx] += [i for i in v.copy() if i not in defined_mods]
-			org_rna_modification[org_cplx] = list(set(org_rna_modification[org_cplx]))
-		org_rna_modification = {k:v for k,v in org_rna_modification.items() if v}
+		for mod,row in ref_rna_modification.iterrows():
+			enzymes = set(row['enzymes'].split('AND'))
+			positions = row['positions'].split(',')
+			if mod in org_rna_modification.index:
+				df = org_rna_modification.loc[[mod]]
+				mod_type = row['type']
+				if df['type'].str.contains(mod_type).any():
+					continue
+			hits = enzymes.intersection(set(ref_cplx_homolog.keys()))
+			if len(hits) == len(enzymes):
+				row = row.copy()
+				row['enzymes'] = ' AND '.join([ref_cplx_homolog[i] for i in enzymes])
+				row['positions'] = ','.join(positions)
+				row['source'] = 'Homology'
+				df = pandas.DataFrame(row).T
+				org_rna_modification = pandas.concat([org_rna_modification,df])
+		org_rna_modification.index.name = 'modification'
+		self.org.rna_modification_df = org_rna_modification
+
+# 	def update_rna_modification_from_homology(self):
+# 		ref_rna_modification = self.ref.rna_modification
+# 		org_rna_modification = self.org.rna_modification
+# 		ref_cplx_homolog = self.homology.ref_cplx_homolog
+# 		defined_mods = set()
+# 		for _,v in org_rna_modification.items():
+# 			for i in v:
+# 				defined_mods.add(i)
+# 		for k, v in tqdm.tqdm(ref_rna_modification.items(),
+# 					'Updating RNA modification machinery from homology...',
+# 					bar_format = bar_format,
+# 					total=len(ref_rna_modification)):
+# 			if k not in ref_cplx_homolog: continue
+# 			org_cplx = ref_cplx_homolog[k]
+# 			if self._is_base_complex_in_list(org_cplx,list(org_rna_modification.keys())):
+# 				continue
+# 			if org_cplx not in org_rna_modification:
+# 				org_rna_modification[org_cplx] = []
+# 			org_rna_modification[org_cplx] += [i for i in v.copy() if i not in defined_mods]
+# 			org_rna_modification[org_cplx] = list(set(org_rna_modification[org_cplx]))
+# 		org_rna_modification = {k:v for k,v in org_rna_modification.items() if v}
 
 	def update_lipid_modifications_from_homology(self):
 		ref_lipid_modifications = self.ref.lipid_modifications

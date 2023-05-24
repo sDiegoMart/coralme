@@ -220,6 +220,7 @@ class Organism(object):
 
         logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
+
         logging.warning("Generating transcription units dataframe")
         self.TU_df = self._TU_df
         self.get_TU_genes()
@@ -1873,7 +1874,48 @@ class Organism(object):
                 'importance':'high',
                 'to_do':'Curate and fill generics in generics.txt or directly in me_builder.org.generic_dict'})
 
-
+    def _modify_rna_modification_from_load(self,df):
+        d = {}
+        for idx,row in df.iterrows():
+            mods = ['{}_at_{}'.format(idx,i) for i in row['positions'].split(',')]
+            for enz in row['enzymes'].split(' AND '):
+                #if enz not in d: d[enz] = []
+                #d[enz] = mods
+                for mod in mods:
+                    d.setdefault(enz, []).append(mod)
+        return d
+    
+    def _get_rrna_genes(self):
+        rrnas = ['generic_5s_rRNAs','generic_16s_rRNAs','generic_23s_rRNAs']
+        generic_dict = self.generic_dict
+        d = {}
+        for key in rrnas:
+            rrnaid = key.split('_')[1].upper()
+            d[rrnaid] = [i[4:] for i in generic_dict[key]['enzymes']]
+        return d
+    
+    def process_rna_modifications(self): 
+        rna_mods = self.rna_modification_df
+        self.rna_modification = self._modify_rna_modification_from_load(rna_mods)
+        
+        mod_targets = self.rna_modification_targets
+        for subunit,genes in self._get_rrna_genes().items():
+            mod_df = rna_mods[rna_mods['type'].eq(subunit)].T
+            if mod_df.empty:continue
+            for mod,row in mod_df.items():
+                positions = row['positions'].split(',')
+                for g in genes:
+                    gene_mods = mod_targets.loc[[g]]
+                    d = {}
+                    for p in positions:
+                        if not gene_mods.empty and gene_mods['position'].eq(p).any():
+                            continue
+                        d[g] = {'modification':mod,'position':p}
+                        df = pandas.DataFrame.from_dict(d).T
+                        mod_targets = pandas.concat([mod_targets,df])
+        mod_targets.index.name = 'bnum'
+        self.rna_modification_targets = mod_targets
+            
     def _check_for_duplicates_within_datasets(self,
                                              info):
         import collections
