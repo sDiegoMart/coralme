@@ -1704,9 +1704,10 @@ class MEReconstruction(MEBuilder):
 		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', cols)
 
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficients
-		# Detect first if the subreaction matrix file was modified with inferred data
+		# Detect first if the user wants to use a manually curated file
 		rxns = '{:s}/building_data/subreaction_matrix.txt'.format(config.get('out_directory', '.'))
-		config['df_matrix_subrxn_stoich'] = rxns if pathlib.Path(rxns).exists() else config['df_matrix_subrxn_stoich']
+		#config['df_matrix_subrxn_stoich'] = rxns if pathlib.Path(rxns).exists() else config['df_matrix_subrxn_stoich']
+		config['df_matrix_subrxn_stoich'] = config['df_matrix_subrxn_stoich'] if pathlib.Path(config['df_matrix_subrxn_stoich']).exists() else rxns
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
 		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', cols)
 
@@ -1832,6 +1833,10 @@ class MEReconstruction(MEBuilder):
 		# Read user inputs
 		tmp1, tmp2 = coralme.builder.main.MEReconstruction.input_data(self, me.gem, overwrite)
 		(df_tus, df_rmsc, df_subs, df_mets, df_keffs), (df_data, df_rxns, df_cplxs, df_ptms, df_enz2rxn, df_rna_mods, df_protloc, df_transpaths) = tmp1, tmp2
+
+		me.internal_data = {}
+		for key in ['df_tus', 'df_rmsc', 'df_subs', 'df_mets', 'df_keffs', 'df_data', 'df_rxns', 'df_cplxs', 'df_ptms', 'df_enz2rxn', 'df_rna_mods', 'df_protloc', 'df_transpaths']:
+			exec('me.internal_data[\'{:s}\'] = {:s}'.format(key, key))
 
 		# Remove default ME-model SubReactions from global_info that are not mapped in the organism-specific matrix
 		subrxns = set(df_data[df_data['ME-model SubReaction'].notnull()]['ME-model SubReaction'])
