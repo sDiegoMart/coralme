@@ -371,10 +371,16 @@ class Organism(object):
 
     def _get_product_type(self,
                          gene_name,
-                         gene_dictionary,
-                         complexes_df,
-                         RNA_df,
+                         gene_dictionary = None,
+                         complexes_df = None,
+                         RNA_df = None,
                          warn_genes = []):
+        if gene_dictionary is None:
+            gene_dictionary = self.gene_dictionary
+        if complexes_df is None:
+            complexes_df = self.complexes_df
+        if RNA_df is None:
+            RNA_df = self.RNA_df
         row = gene_dictionary.loc[gene_name]
         gene_id = row['Accession-1']
         product = row['Product'].split(' // ')[0]
@@ -395,13 +401,15 @@ class Organism(object):
                 product_type = 'MONOMER'
             else:
                 warn_genes.append(gene_id)
-                return None,None
-        return product,product_type
+                return gene_id,None,None
+        return gene_id,product,product_type
 
     def _correct_product(self,
                         gene_name,
                         product_type,
-                        gene_dictionary):
+                        gene_dictionary = None):
+        if gene_dictionary is None:
+            gene_dictionary = self.gene_dictionary
         ## Correct product. Likely product is a description and not an actual
         ## product ID like GENE-MONOMER or GENE-tRNA
         product = '{}-{}'.format(gene_name,product_type)
@@ -487,20 +495,14 @@ class Organism(object):
                 warn_genes.append(gene_id)
                 continue
             
-            product,product_type = \
+            gene_id,product,product_type = \
                 self._get_product_type(
                          gene_name,
-                         gene_dictionary,
-                         complexes_df,
-                         RNA_df,
-                         warn_genes)
-#             product,product_type = \
-#                 self._get_product_type(row,
-#                      complexes_df,
-#                      RNA_df,
-#                      gene_id,
-#                      gene_name,
-#                      warn_genes)
+                         gene_dictionary=gene_dictionary,
+                         complexes_df=complexes_df,
+                         RNA_df=RNA_df,
+                         warn_genes=warn_genes)
+
             if product is None:
                 warn_genes.append(gene_id)
                 continue
@@ -1034,8 +1036,11 @@ class Organism(object):
                                        complexes_df,
                                        RNA_df,
                                        feature,
-                                       record):
-        gene_id = feature.qualifiers[self.locus_tag][0]
+                                       record,
+                                       product_types):
+        
+#         gene_id = feature.qualifiers[self.locus_tag][0]
+        gene_id = self._get_feature_locus_tag(feature)
         if ';' in gene_id:
             gene_id = gene_id.split(';')[0]
         left_end = min([i.start for i in feature.location.parts])
@@ -1050,6 +1055,7 @@ class Organism(object):
                         right_end)
 
         gene_names = gene_dictionary[gene_dictionary["Accession-1"].eq(gene_id)].index
+        warn_genes = []
         for gene_name in gene_names:
             complexes_df,RNA_df,product = \
                 self._add_entry_to_complexes_or_rna(
@@ -1063,6 +1069,25 @@ class Organism(object):
             gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
             gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
             gene_dictionary.at[gene_name,"replicon"] = record.id
+            
+            # Update product types
+            gid,product,product_type = \
+                self._get_product_type(
+                         gene_name,
+                         gene_dictionary = gene_dictionary,
+                         complexes_df = complexes_df,
+                         RNA_df = RNA_df,
+                         warn_genes = warn_genes)
+            if product is None:
+                warn_genes.append(gid)
+                continue
+            if ' ' in product or ('RNA' not in product and 'MONOMER' not in product):
+                product = \
+                    self._correct_product(
+                        gene_name,
+                        product_type)
+
+            product_types[gene_id] = product_type
 
         return gene_dictionary,complexes_df,RNA_df
 
@@ -1074,7 +1099,7 @@ class Organism(object):
         complexes_df = self.complexes_df
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
-
+        product_types = self.product_types
         warn_locus = []
         for record in tqdm.tqdm(self.contigs,
                            'Syncing optional files with genbank contigs...',
@@ -1082,10 +1107,7 @@ class Organism(object):
             for feature in record.features:
                 if feature.type not in element_types:
                     continue
-                if self.locus_tag not in feature.qualifiers:
-                    warn_locus.append(feature.qualifiers)
-                    continue
-                if not feature.qualifiers[self.locus_tag]:
+                if self._get_feature_locus_tag(feature) is None:
                     continue
                 gene_dictionary,complexes_df,RNA_df = \
                     self._add_entries_to_optional_files(
@@ -1093,7 +1115,8 @@ class Organism(object):
                                        complexes_df,
                                        RNA_df,
                                        feature,
-                                       record)
+                                       record,
+                                       product_types)
         self.complexes_df = complexes_df
         gene_dictionary.index.name = "Gene Name"
         self.gene_dictionary = gene_dictionary
