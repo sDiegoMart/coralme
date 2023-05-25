@@ -507,8 +507,8 @@ class TranscriptionData(ProcessData):
 		# WARNING: Because first 'if', n_cuts cannot be zero
 		#if n_excised == 0 or (n_excised + n_overlapping) == 0 or n_cuts == 0:
 			#return data
-		if n_excised == 0:
-			n_cuts = 0
+		#if n_excised == 0:
+			#n_cuts = 0
 
 		rna_types = list(self.RNA_types)
 		n_trna = rna_types.count('tRNA')
