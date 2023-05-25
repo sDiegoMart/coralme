@@ -52,8 +52,8 @@ def add_rna_splicing(me_model):
 		n_excised = data.n_excised
 		n_cuts = data.n_cuts
 
-		if n_excised == 0 or (n_excised + n_overlapping) == 0 or n_cuts == 0:
-			continue
+		#if n_excised == 0 or (n_excised + n_overlapping) == 0 or n_cuts == 0:
+			#continue
 
 		rna_types = list(data.RNA_types)
 		n_trna = rna_types.count('tRNA')
