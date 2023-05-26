@@ -718,12 +718,12 @@ def get_subreactions(df, key: str):
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
 	# Correct Translation_termination_generic_RF_mediated
-	if key.startswith('Translation_termination'):
+	if key.startswith('Translation_termination_generic_RF_mediated'):
 		cplxs = tmp[tmp['ME-model SubReaction'].str.match('Translation_termination_generic_RF_mediated')]['Complex ID'].tolist()
 		cplxs = set([ x.split(':')[0] for x in cplxs ])
 
 	tmp = tmp.groupby(['ME-model SubReaction']).agg({'Gene Locus ID': lambda x: x.tolist()})
-	if key.startswith('Translation_termination'):
+	if key.startswith('Translation_termination_generic_RF_mediated'):
 		tmp = tmp.apply(lambda x: [['generic_RF']] if set(x['Gene Locus ID']) == cplxs else x, axis = 1)
 
 	return { k : {'enzymes' : list(set(v)), 'stoich': {}, 'element_contribution' : {}, 'keff' : []}
