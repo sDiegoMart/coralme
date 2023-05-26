@@ -372,13 +372,13 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		for tag in [ x for y in tags for x in y ]:
 			filter1 = '{:s}-MONOMER'.format(tag) in dct and mods in dct.get('{:s}-MONOMER'.format(tag), [None])
 			filter2 = tag.split(':')[0] in dct and mods in dct.get(tag.split(':')[0], [None])
-			filter3 = 'generic_{:s}'.format(tag) in dct and mods in dct.get('generic_{:s}'.format(tag), [None])
+			filter3 = 'generic_{:s}'.format(tag) in dct #and mods in dct.get('generic_{:s}'.format(tag), [None])
 
 			if filter1 or filter2 or filter3:
 				return 'RNA_modifier_enzyme'
 
 	dct = { k.split('_mod_')[0]:' AND '.join(k.split('_mod_')[1:]) for k,v in builder.org.rna_modification.items() }
-	dct = { k:v for k,v in dct.items() if v != '' } # just in case of empty values
+	dct = { k:v for k,v in dct.items() } # if v != '' } # just in case of empty values
 	data['MetaComplex ID'].update(data.apply(lambda x: get_rna_modifiers(x, dct), axis = 1))
 
 	# set RNA modifiers (CDS<->mod_at_position). Part2: Add 'modification' list in 'RNA mods/enzyme' column
@@ -390,19 +390,19 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		for tag in [ x for y in tags for x in y ]:
 			filter1 = ('{:s}-MONOMER'.format(tag), mods) in dct
 			filter2 = (tag.split(':')[0], mods) in dct
-			filter3 = ('generic_{:s}'.format(tag), mods) in dct
+			filter3 = ('generic_{:s}'.format(tag), '') in dct
 
 			if filter1 or filter2 or filter3:
 				mod_at_pos.add(dct.get(('{:s}-MONOMER'.format(tag), mods), None))
 				mod_at_pos.add(dct.get((tag.split(':')[0], mods), None))
-				mod_at_pos.add(dct.get(('generic_{:s}'.format(tag), mods), None))
+				mod_at_pos.add(dct.get(('generic_{:s}'.format(tag), ''), None))
 
 		lst = list(set([ x for x in mod_at_pos if x is not None ]))
 		if len(lst) != 0:
 			return ','.join(lst)
 
 	dct = { (k.split('_mod_')[0], ' AND '.join(k.split('_mod_')[1:])):','.join(v) for k,v in builder.org.rna_modification.items() }
-	dct = { k:v for k,v in dct.items() if v != '' } # just in case of empty values
+	dct = { k:v for k,v in dct.items() } # if v != '' } # just in case of empty values
 	data['RNA mods/enzyme'].update(data.apply(lambda x: get_rna_modifications(x, dct), axis = 1))
 
 	def get_transpaths(x, dct):
