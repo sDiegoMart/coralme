@@ -2189,7 +2189,7 @@ class MEReconstruction(MEBuilder):
 		initiation_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_initiation')
 		elongation_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_elongation')
 		termination_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_termination')
-		termination_subreactions.update(coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_termination_generic_RF_mediated'))
+		#termination_subreactions.update(coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Translation_termination_generic_RF_mediated'))
 		processing_subreactions = coralme.builder.preprocess_inputs.get_subreactions(df_data, 'Protein_processing')
 
 		for data in tqdm.tqdm(list(me.translation_data), 'Adding SubReactions into TranslationReactions...', bar_format = bar_format):

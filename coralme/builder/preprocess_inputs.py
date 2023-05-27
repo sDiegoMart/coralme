@@ -710,10 +710,7 @@ def get_subreactions(df, key: str):
 	tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
 	# collapse
-	if key.startswith('Translation_termination'):
-		pass # PrfA and PrfB should be corrected
-	else:
-		tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
+	tmp['Modified Complex'].update(tmp['Generic Complex ID']) # inplace
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
