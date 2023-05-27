@@ -1203,6 +1203,7 @@ class Organism(object):
             return None
 
         org_amino_acid_trna_synthetase = self.amino_acid_trna_synthetase
+        manually_curated_aa = [k for k,v in org_amino_acid_trna_synthetase.items() if v]
         generic_dict = self.generic_dict
         complexes_df = self.complexes_df
         warn_generic = []
@@ -1219,13 +1220,14 @@ class Organism(object):
                         warn_generic.append(v)
                         d[k] = set()
                         continue
-                    d[k] = set(generic_dict[v]['enzymes'])
-                    continue
+#                     d[k] = set(generic_dict[v]['enzymes'])
+#                     continue
                 d[k] = set([v])
         trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']
         for cplx, trna_string in trna_ligases.items():
             aa = find_aminoacid(trna_string)
             if aa is None:continue
+            if aa in manually_curated_aa: continue
             if self._is_base_complex_in_list(cplx,d[aa]): continue
             d[aa].add(cplx)
         trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
