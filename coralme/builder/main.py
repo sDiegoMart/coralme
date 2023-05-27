@@ -1024,14 +1024,15 @@ class MEBuilder(object):
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[v["enzyme"]]
 				defined_cplx = org_ribosome_subreactions[k]["enzyme"]
-				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
-					org_ribosome_subreactions[k]["enzyme"] = org_cplx
-				else:
-					warn_proteins.append({
-						'subreaction':k,
-						'defined_complex':defined_cplx,
-						'inferred_complex':org_cplx
-					})
+				if defined_cplx: continue
+# 				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
+				org_ribosome_subreactions[k]["enzyme"] = org_cplx
+# 				else:
+				warn_proteins.append({
+					'subreaction':k,
+					'defined_complex':defined_cplx,
+					'inferred_complex':org_cplx
+				})
 		# Warnings
 		if warn_proteins:
 			self.org.curation_notes['update_ribosome_subreactions_from_homology'].append({
@@ -1082,14 +1083,15 @@ class MEBuilder(object):
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[v]
 				defined_cplx = org_amino_acid_trna_synthetase[k]
-				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
-					org_amino_acid_trna_synthetase[k] = org_cplx
-				else:
-					warn_proteins.append({
-						'amino_acid':k,
-						'defined_ligase':defined_cplx,
-						'inferred_ligase':org_cplx
-					})
+				if defined_cplx: continue
+# 				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
+				org_amino_acid_trna_synthetase[k] = org_cplx
+# 				else:
+				warn_proteins.append({
+					'amino_acid':k,
+					'defined_ligase':defined_cplx,
+					'inferred_ligase':org_cplx
+				})
 		# Warnings
 		if warn_proteins:
 			self.org.curation_notes['update_amino_acid_trna_synthetases_from_homology'].append({
@@ -1111,14 +1113,15 @@ class MEBuilder(object):
 			if ref_cplx in ref_cplx_homolog:
 				org_cplx = ref_cplx_homolog[ref_cplx]
 				defined_cplx = org_peptide_release_factors[k]['enzyme']
-				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
-					org_peptide_release_factors[k]['enzyme'] = org_cplx
-				else:
-					warn_proteins.append({
-						'subreaction':k,
-						'defined_complex':defined_cplx,
-						'inferred_complex':org_cplx
-					})
+				if defined_cplx: continue
+# 				if not defined_cplx or defined_cplx in org_cplx or 'CPLX_dummy' in defined_cplx:
+				org_peptide_release_factors[k]['enzyme'] = org_cplx
+# 				else:
+				warn_proteins.append({
+					'subreaction':k,
+					'defined_complex':defined_cplx,
+					'inferred_complex':org_cplx
+				})
 		# Warnings
 		if warn_proteins:
 			self.org.curation_notes['update_peptide_release_factors_from_homology'].append({
@@ -1137,6 +1140,7 @@ class MEBuilder(object):
 					total=len(ref_initiation_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_initiation_subreactions[k]["enzymes"]
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
@@ -1154,6 +1158,7 @@ class MEBuilder(object):
 					total=len(ref_elongation_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_elongation_subreactions[k]["enzymes"]
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
@@ -1171,6 +1176,7 @@ class MEBuilder(object):
 					total=len(ref_termination_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_termination_subreactions[k]["enzymes"]
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
@@ -1188,6 +1194,7 @@ class MEBuilder(object):
 					total=len(ref_special_trna_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_special_trna_subreactions[k]["enzymes"]
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
@@ -1205,6 +1212,7 @@ class MEBuilder(object):
 					total=len(ref_rna_degradosome)):
 			ref_cplxs = v['enzymes']
 			defined_cplxs = org_rna_degradosome[k]['enzymes']
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
@@ -1222,6 +1230,7 @@ class MEBuilder(object):
 					total=len(ref_excision_machinery)):
 			ref_cplxs = v['enzymes']
 			defined_cplxs = org_excision_machinery[k]['enzymes']
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
@@ -1240,6 +1249,7 @@ class MEBuilder(object):
 					total=len(ref_special_trna_subreactions)):
 			ref_cplxs = v["enzymes"]
 			defined_cplxs = org_special_trna_subreactions[k]["enzymes"]
+			if defined_cplxs: continue
 			org_cplxs = [
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
