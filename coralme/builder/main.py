@@ -1145,8 +1145,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_elongation_subreactions_from_homology(self):
 		ref_elongation_subreactions = self.ref.elongation_subreactions
@@ -1163,8 +1164,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_termination_subreactions_from_homology(self):
 		ref_termination_subreactions = self.ref.termination_subreactions
@@ -1181,8 +1183,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_special_trna_subreactions_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_trna_subreactions
@@ -1217,8 +1220,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_excision_machinery_from_homology(self):
 		ref_excision_machinery = self.ref.excision_machinery
@@ -1237,7 +1241,7 @@ class MEBuilder(object):
 			for i in org_cplxs:
 				if self._is_base_complex_in_list(i,defined_cplxs):
 					continue
-					defined_cplxs.append(i)
+				defined_cplxs.append(i)
 
 	def update_special_modifications_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_modifications
@@ -1258,7 +1262,7 @@ class MEBuilder(object):
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
 				if self._is_base_complex_in_list(i,defined_cplxs):
 					continue
-					defined_cplxs.append(i)
+				defined_cplxs.append(i)
 
 	def _is_base_complex_in_list(self,cplx,lst):
 		return cplx in set(i.split('_mod_')[0] for i in lst)
