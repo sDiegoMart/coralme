@@ -274,24 +274,34 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	dct = dct.groupby(['Complex', 'Cofactors']).agg({'Reaction' : lambda x: x.tolist()})
 	# intermediate dictionary: (Complex, Cofactors) : Reaction ID
 	dct = { k:v['Reaction'] for k,v in dct.iterrows() }
-	# correction based on generics -> NEW complex <-> list of reactions
-	df = builder.org.complexes_df.copy(deep = True)
-	df = { idx:[ x[8:-2] for x in row['genes'].split(' AND ')] for idx,row in df[df['genes'].str.contains('generic')].iterrows() }
-	for cplx, generics in df.items():
-		for generic in generics:
-			dct.update({ (generic, 'None') : dct[(cplx, 'None')] })
 
-	fn = lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None]) + dct.get((str(x['Generic Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None])
+	# correction based on generics -> NEW complex <-> list of reactions
+	tmp1 = builder.org.protein_mod
+	tmp1 = { v['Core_enzyme']:k for k,v in tmp1.iterrows() }
+
+	tmp2 = builder.org.complexes_df.copy(deep = True)
+	tmp2 = { k:{ x.split('(')[0]:x.split('(')[1][:-1] if x.split('(')[1][:-1] != '' else '1' for x in v['genes'].split(' AND ') } for k,v in tmp2.iterrows() }
+
+	tmp3 = builder.org.complexes_df.copy(deep = True)
+	tmp3 = { idx:[ x.split('(')[0][8:] for x in row['genes'].split(' AND ') if 'generic' in x ] for idx,row in tmp3[tmp3['genes'].str.contains('generic')].iterrows() }
+	for cplx, generics in tmp3.items():
+		for generic in generics:
+			dct.update({ (generic, 'None') : dct[(cplx, ' AND '.join(tmp1.get(cplx, 'None_mod_None').split('_mod_')[1:]))] })
+
+	fn = lambda x: dct.get((str(x['Complex ID']).split(':')[0], str(x['Cofactors in Modified Complex'])), [None]) + dct.get((str(x['Generic Complex ID']), str(x['Cofactors in Modified Complex'])), [None])
 
 	data['M-model Reaction ID'] = data.apply(lambda x: fn(x), axis = 1)
 	data = data.explode('M-model Reaction ID')
 	data['Reaction Name'] = data['M-model Reaction ID'].apply(lambda x: model.reactions.get_by_id(x).name if model.reactions.has_id(x) else None)
 	data['Reversibility'] = data['M-model Reaction ID'].apply(lambda x: str(model.reactions.get_by_id(x).reversibility) if model.reactions.has_id(x) else None)
+
 	# correction based on generics -> NEW complex <-> list of reactions
 	fn = lambda x: 'CPLX_{:s}-0:1({:s})'.format(x['M-model Reaction ID'], x['Generic Complex ID']) if x['M-model Reaction ID'] is not None and x['Generic Complex ID'] is not None else x['Complex ID']
 	data['Complex ID'] = data.apply(lambda x: fn(x), axis = 1)
 	fn = lambda x: None if x['M-model Reaction ID'] is not None else x['Generic Complex ID']
 	data['Generic Complex ID'] = data.apply(lambda x: fn(x), axis = 1)
+	#fn = lambda x: None
+	#data['Cofactors in Modified Complex'] = data.apply(lambda x: fn(x), axis = 1)
 	data = data.drop_duplicates()
 
 	# ME-model metacomplexes (e.g., ribosome)
