@@ -2893,7 +2893,7 @@ class METroubleshooter(object):
 			if isinstance(e_gaps, list) and e_gaps:
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Some metabolites are necessary for growth',
-					'triggered_by':[ x for y in e_gaps for x in y ],
+					'triggered_by':e_gaps,#[ x for y in e_gaps for x in y ],
 					'importance':'critical',
 					'to_do':'Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!'})
 
@@ -2904,8 +2904,10 @@ class METroubleshooter(object):
 					self.me_model.remove_reactions([rxn])
 
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
-			self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False)
-			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
+			if self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False):
+				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
+			else:
+				logging.warning('  '*1 + 'Error: Gapfilled ME-model is not feasible ?')
 
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
