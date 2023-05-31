@@ -854,9 +854,9 @@ def get_functions(cplx):
 	for r in cplx.reactions:
 		if isinstance(r,coralme.core.reaction.MetabolicReaction) and hasattr(r,'subsystem'):
 			if r.subsystem:
-				functions.add(r.subsystem)
+				functions.add('Metabolic:' + r.subsystem)
 				continue
-			functions.add('metabolic_no_subsystem')
+			functions.add('Metabolic: No subsystem')
 			continue
 		if isinstance(r,coralme.core.reaction.TranslationReaction):
 			functions.add('Translation')
