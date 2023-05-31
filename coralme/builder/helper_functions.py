@@ -842,6 +842,10 @@ def find_complexes(m, seen = set()):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
     if isinstance(m,coralme.core.reaction.tRNAChargingReaction):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenerictRNA), seen=seen)
+    if isinstance(m,coralme.core.reaction.MetabolicReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex), seen=seen) | \
+                find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
+            
     
     return set()
 
