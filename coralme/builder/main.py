@@ -2700,7 +2700,7 @@ class MEReconstruction(MEBuilder):
 			with open('{:s}/building_data/reaction_median_keffs.txt'.format(me.global_info['out_directory']), 'r') as infile:
 				reaction_median_keffs = pandas.read_csv(infile, sep = '\t').set_index('reaction')
 
-		for rxn in tqdm.tqdm(reaction_ids, 'Estimating effective turnover rates for reaction using the SASA method...'):
+		for rxn in tqdm.tqdm(reaction_ids, 'Estimating effective turnover rates for reactions using the SASA method...', bar_format = bar_format):
 			logging.warning('Estimating effective turnover rates for reaction \'{:s}\''.format(rxn.id))
 
 			base_id = rxn._stoichiometric_data.id
@@ -2715,7 +2715,7 @@ class MEReconstruction(MEBuilder):
 			mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
 
 		# Step 3: Replace user values if they match
-		for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...'):
+		for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
 			if row['direction'] == '' and row['complex'] == '' and row['mods'] == '':
 				# subreactions have ID = reaction_name
 				idx = row['reaction']
