@@ -91,7 +91,8 @@ def main():
 			'pandas',
 			'sympy',
 			'jsonschema',
-			'anyconfig'
+			'anyconfig',
+			'pyranges'
 			],
 
 		# WARNING: seems to be bdist_wheel only
