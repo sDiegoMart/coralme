@@ -630,7 +630,7 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 
 	if len(deadends) != 0:
 		logging.warning('  '*5 + 'Adding a sink reaction for each identified deadend metabolite...')
-		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends)
+		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends, prefix='TS_')
 	else:
 		logging.warning('  '*5 + 'Empty set of deadends metabolites to test.')
 		return None
@@ -655,8 +655,8 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 		me_model.get_feasibility = me_model.feasibility
 
 	logging.warning('  '*5 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
-	existing_sinks = [r.id for r in me_model.reactions.query('^SK_')]
-	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
+	existing_sinks = [r.id for r in me_model.reactions.query('^TS_')]
+	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add, prefix='TS_')
 
 	if me_model.get_feasibility(keys = growth_key_and_value):
 		pass
@@ -670,7 +670,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	for r in sk_rxns:
 		idx = r.id
 		flux = me_model.solution.fluxes[idx]
-		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
+		if idx.startswith('TS_') and idx.split('TS_')[1] in metabolites_to_add:
 			if r.id in existing_sinks:
 				rxns_to_append.append(idx)
 				continue
