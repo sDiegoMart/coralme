@@ -1170,11 +1170,11 @@ class MEModel(cobra.core.model.Model):
 				if max_mu <= tolerance:
 					return False
 
-	def feas_windows(solver = 'gurobi'):
+	def feas_windows(self, solver = 'gurobi'):
 		if solver == 'gurobi':
-			self.check_feasibility = self.feas_gurobi
+			return self.feas_gurobi
 		elif solver == 'cplex':
-			self.check_feasibility = self.feas_cplex
+			return self.feas_cplex
 		else:
 			print('The \'solver\' must be \'gurobi\' or \'cplex\'.')
 			return None

@@ -621,8 +621,8 @@ def gap_find(me_model,de_type = None):
 	return deadends
 
 def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.1 }, met_types = 'Metabolite'):
-	if sys.platform == 'win32':
-		self.me_model.get_solution = self.me_model.opt_gurobi
+	if sys.platform in ['win32', 'darwin']:
+		self.me_model.get_solution = self.me_model.optimize_windows
 		self.me_model.get_feasibility = self.me_model.feas_gurobi
 	else:
 		self.me_model.get_solution = self.me_model.optimize
@@ -794,9 +794,9 @@ def find_complexes(m, seen = set()):
     if m in seen:
         return set()
 #     print(type(m))
-    
+
     seen.add(m)
-    
+
     # Metabolite objects
     if isinstance(m,coralme.core.component.TranslatedGene):
         cplxs = set()
@@ -822,7 +822,7 @@ def find_complexes(m, seen = set()):
                 continue
             cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
-    
+
     if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent) or isinstance(m,coralme.core.component.GenerictRNA):
         other_formations = [r for r in m.reactions if (isinstance(r,coralme.core.reaction.ComplexFormation) or isinstance(r,coralme.core.reaction.GenericFormationReaction)) and substitute_value(m,r.metabolites[m]) < 0]
 #         print(other_formations)
@@ -832,7 +832,7 @@ def find_complexes(m, seen = set()):
                 cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
 #         return set([m])
-    
+
     # Reaction objects
     if isinstance(m,coralme.core.reaction.PostTranslationReaction):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein), seen=seen)
@@ -845,8 +845,8 @@ def find_complexes(m, seen = set()):
     if isinstance(m,coralme.core.reaction.MetabolicReaction):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex), seen=seen) | \
                 find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
-            
-    
+
+
     return set()
 
 def get_functions(cplx):
