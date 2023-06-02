@@ -2818,7 +2818,7 @@ class METroubleshooter(object):
 		solver: 'gurobi' (default) or 'cplex'
 		"""
 
-		if sys.platform == 'win32' or platform == 'win32':
+		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:
 			self.me_model.get_solution = self.me_model.optimize_windows
 			self.me_model.check_feasibility = self.me_model.feas_windows(solver = solver)
 		else:
