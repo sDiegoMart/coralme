@@ -2694,6 +2694,7 @@ class MEReconstruction(MEBuilder):
 		reaction_ids = [
 			rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction)
 			if rxn.id not in [ 'dummy_reaction_FWD_SPONT', 'dummy_reaction_REV_SPONT' ]
+			if rxn._complex_data is not None
 			]
 
 		if 'complex' in df_keffs.columns: # user provided a file with keffs
