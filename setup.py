@@ -92,7 +92,8 @@ def main():
 			'sympy',
 			'jsonschema',
 			'anyconfig',
-			'pyranges'
+			'pyranges',
+			'xlsxwriter'
 			],
 
 		# WARNING: seems to be bdist_wheel only
