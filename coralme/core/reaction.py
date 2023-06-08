@@ -423,7 +423,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 		#logging.warning('New cobraME \'_check_bounds\' method supersedes \'_check_bounds\' from cobrapy')
 		if isinstance(lb, float) and isinstance(ub, float):
 			if lb > ub:
-				raise ValueError('The lower bound must be less than or equal to the upper bound ({:s} <= {:s}).'.format(lb, ub))
+				raise ValueError('The lower bound must be less than or equal to the upper bound ({:f} <= {:f}).'.format(lb, ub))
 
 	def update_variable_bounds(self):
 		#logging.warning('New cobraME \'update_variable_bounds\' method supersedes \'update_variable_bounds\' from cobrapy')
