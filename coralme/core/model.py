@@ -1067,8 +1067,10 @@ class MEModel(cobra.core.model.Model):
 		return Sf, Se, lb, ub, b, c, cs, atoms, lambdas
 
 	def optimize(self,
-		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
+		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
+		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
+		# https://www.nature.com/articles/s41564-019-0423-8
 
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
