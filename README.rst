@@ -24,7 +24,7 @@ coralME was tested with the following package versions:
 - COBRApy version 0.25.0
 - GUROBIpy version 9.5.2 (no license required)
 - Ubuntu 22.04 is recommended (gfortran is required)
-- Windows and MacOS users require to install `Gurobi`_ or IBM CPLEX Optimizer.
+- Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_.
 
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
