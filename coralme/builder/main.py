@@ -413,12 +413,12 @@ class MEBuilder(object):
 		# Dictionary of tRNA locus ID to amino acid, one dict of tRNAs per organelle type
 		# aa2trna does not account for misacylation
 		aa2trna = { 'c' : {} } # prokaryotes and eukaryotes
-		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+		if self.configuration['domain'].lower() not in ['prokaryote', 'bacteria']:
 			aa2trna.update({'m' : {}, 'h' : {}}) # mitochondria and plastids
 
 		# Translation tables, one table per organelle type
 		transl_tables = { 'c' : set() } # prokaryotes and eukaryotes
-		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+		if self.configuration['domain'].lower() not in ['prokaryote', 'bacteria']:
 			transl_tables.update({'m' : set(), 'h' : set()}) # mitochondria and plastids
 
 		# Messages
