@@ -1066,6 +1066,18 @@ class MEModel(cobra.core.model.Model):
 
 		return Sf, Se, lb, ub, b, c, cs, atoms, lambdas
 
+	def rank(self, mu = 0.001):
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem()
+		Sp = scipy.sparse.dok_matrix((len(b), len(c)))
+
+		for idx, idj in Sf.keys():
+		    Sp[idx, idj] = Sf[idx, idj]
+		    
+		for idx, idj in Se.keys():
+		    Sp[idx, idj] = float(Se[idx, idj].subs({ self.mu : mu }))
+		    
+		return numpy.linalg.matrix_rank(Sp.todense())
+
 	def optimize(self,
 		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
