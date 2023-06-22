@@ -2068,7 +2068,7 @@ class MEReconstruction(MEBuilder):
 					me.add_reactions([rxn])
 					rxn.add_metabolites({met: -1 * abs(requirement), 'lipid_biomass': component_mass * abs(requirement)})
 					rxn.lower_bound = me.mu # coralme.util.mu
-					rxn.upper_bound = 1000. # coralme.util.mu?
+					rxn.upper_bound = me.mu # originally 1000.
 				except:
 					msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
 					logging.warning(msg.format(met))
