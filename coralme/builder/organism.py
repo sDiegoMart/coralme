@@ -89,6 +89,7 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
+        self.manual_curation = cobra.core.dictlist.DictList()
 #         self.get_organism()
 
     @property
