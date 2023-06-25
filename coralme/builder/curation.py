@@ -11,6 +11,7 @@ import coralme
 import cobra
 import pandas
 import json
+import copy
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(cur_dir, 'column_format.json'), 'r') as f:
@@ -31,6 +32,7 @@ class CurationInfo(object):
         self.org = org
         self.config = config
         self.data = self.load()
+        self.org.__setattr__(id,copy.copy(self.data))
     
     def read(self):
         if self.config["pathtype"] == 'absolute':
@@ -123,7 +125,7 @@ class TranslocationMultipliers(CurationInfo):
                  file=""):
         if not file:
             file = id + ".txt"
-        create_file = pd.DataFrame()
+        create_file = pandas.DataFrame()
         if not config:
             config = {
                      "create_file" : create_file,
@@ -158,7 +160,7 @@ class LipoproteinPrecursors(CurationInfo):
                         config = config,
                         file = file)
     def _modify_from_load(self):
-        return self.data.to_dict()
+        return self.data.to_dict()[self.columns[1]]
     
 class CleavedMethionine(CurationInfo):
     def __init__(self,
@@ -270,14 +272,14 @@ class RNADegradosome(CurationInfo):
                         file = file)
     
     def _modify_from_load(self):
-        return {"rna_degradosome" : self.data.index.to_list()}
+        return {"rna_degradosome" : {"enzymes" : self.data.index.to_list()}}
     
 class RNAModificationMachinery(CurationInfo):
     def __init__(self,
                  org,
-                 id = "rna_modification",
+                 id = "rna_modification_df",
                  config={},
-                 file=""):
+                 file="rna_modification.txt"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -299,9 +301,9 @@ class RNAModificationMachinery(CurationInfo):
 class RNAModificationTargets(CurationInfo):
     def __init__(self,
                  org,
-                 id = "post_transcriptional_modification_of_RNA",
+                 id = "rna_modification_targets",
                  config={},
-                 file=""):
+                 file="post_transcriptional_modification_of_RNA.txt"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -1012,6 +1014,7 @@ class MEManualCuration(object):
         self.org.manual_curation = cobra.core.dictlist.DictList()
         self.org.manual_curation.append(ReactionCorrections(self.org))
         self.org.manual_curation.append(ProteinLocation(self.org))
+        self.org.manual_curation.append(TranslocationMultipliers(self.org))
         self.org.manual_curation.append(LipoproteinPrecursors(self.org))
         self.org.manual_curation.append(CleavedMethionine(self.org))
         self.org.manual_curation.append(ManualComplexes(self.org))

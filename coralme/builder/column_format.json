@@ -19,6 +19,7 @@
         "stoich"
     ],
     "lipoprotein_precursors.txt": [
+        "name",
         "gene"
     ],
     "special_modifications.txt": [
