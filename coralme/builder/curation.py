@@ -22,12 +22,16 @@ class CurationInfo(object):
                  id,
                  org,
                  config = {},
-                 file = ''):
+                 file = "",
+                 name = ""):
+        
+        logging.warning("Loading {}".format(name))
         self.id = id
+        self.name = name
         if file:
             self.file = file
         else:
-            self.file = id + '.txt'
+            self.file = id + ".txt"
         self.directory = org.directory
         self.org = org
         self.config = config
@@ -78,7 +82,8 @@ class ReactionCorrections(CurationInfo):
                  org,
                  id = "reaction_corrections",
                  config={},
-                 file=""):
+                 file="",
+                 name="Reaction corrections"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -101,7 +106,8 @@ class ProteinLocation(CurationInfo):
                  org,
                  id = "protein_location",
                  config={},
-                 file="peptide_compartment_and_pathways.txt"):
+                 file="peptide_compartment_and_pathways.txt",
+                 name="Protein location"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -122,7 +128,8 @@ class TranslocationMultipliers(CurationInfo):
                  org,
                  id = "translocation_multipliers",
                  config={},
-                 file=""):
+                 file="",
+                 name="Translocation multipliers"):
         if not file:
             file = id + ".txt"
         create_file = pandas.DataFrame()
@@ -144,7 +151,8 @@ class LipoproteinPrecursors(CurationInfo):
                  org,
                  id = "lipoprotein_precursors",
                  config={},
-                 file=""):
+                 file="",
+                 name="Lipoprotein precursors"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -167,7 +175,8 @@ class CleavedMethionine(CurationInfo):
                  org,
                  id = "cleaved_methionine",
                  config={},
-                 file=""):
+                 file="",
+                 name="Proteins with N-terminal methionine cleavage"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -190,7 +199,8 @@ class ManualComplexes(CurationInfo):
                  org,
                  id = "manual_complexes",
                  config={},
-                 file="protein_corrections.txt"):
+                 file="protein_corrections.txt",
+                 name="Protein corrections"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -211,7 +221,8 @@ class Sigmas(CurationInfo):
                  org,
                  id = "sigmas",
                  config={},
-                 file="sigma_factors.txt"):
+                 file="sigma_factors.txt",
+                 name="Sigma factors"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -232,7 +243,8 @@ class RhoIndependent(CurationInfo):
                  org,
                  id = "rho_independent",
                  config={},
-                 file=""):
+                 file="",
+                 name="Genes with rho-independent termination"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -255,7 +267,8 @@ class RNADegradosome(CurationInfo):
                  org,
                  id = "rna_degradosome",
                  config={},
-                 file=""):
+                 file="",
+                 name="RNA degradosome composition"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -279,7 +292,8 @@ class RNAModificationMachinery(CurationInfo):
                  org,
                  id = "rna_modification_df",
                  config={},
-                 file="rna_modification.txt"):
+                 file="rna_modification.txt",
+                 name="RNA Modification machinery"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -303,7 +317,8 @@ class RNAModificationTargets(CurationInfo):
                  org,
                  id = "rna_modification_targets",
                  config={},
-                 file="post_transcriptional_modification_of_RNA.txt"):
+                 file="post_transcriptional_modification_of_RNA.txt",
+                 name="RNA modification targets"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -324,7 +339,8 @@ class EnzymeReactionAssociation(CurationInfo):
                  org,
                  id = "enz_rxn_assoc_df",
                  config={},
-                 file="enzyme_reaction_association.txt"):
+                 file="enzyme_reaction_association.txt",
+                 name="Enzyme-reaction associations"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -345,7 +361,8 @@ class MEMetabolites(CurationInfo):
                  org,
                  id = "me_mets",
                  config={},
-                 file="me_metabolites.txt"):
+                 file="me_metabolites.txt",
+                 name="Metabolites to substitute from M-model"):
         if not file:
             file = id + ".txt"        
         self.file = file
@@ -366,7 +383,8 @@ class SubreactionMatrix(CurationInfo):
                  org,
                  id = "subreaction_matrix",
                  config={},
-                 file=""):
+                 file="",
+                 name="Matrix of subreaction stoichiometries"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -387,7 +405,8 @@ class ReactionMatrix(CurationInfo):
                  org,
                  id = "reaction_matrix",
                  config={},
-                 file=""):
+                 file="",
+                 name="Matrix of reaction stoichiometries"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -408,7 +427,8 @@ class OrphanSpontReactions(CurationInfo):
                  org,
                  id = "orphan_and_spont_reactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Orphan and spontaneous reactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -429,7 +449,8 @@ class SubsystemClassification(CurationInfo):
                  org,
                  id = "subsystem_classification",
                  config={},
-                 file=""):
+                 file="",
+                 name="Classification of subsystems"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -458,7 +479,8 @@ class TranslocationPathways(CurationInfo):
                  org,
                  id = "translocation_pathways",
                  config={},
-                 file=""):
+                 file="",
+                 name="Translocation pathways"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -497,7 +519,8 @@ class LipodModifications(CurationInfo):
                  org,
                  id = "lipid_modifications",
                  config={},
-                 file=""):
+                 file="",
+                 name="Lipid modifications"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -521,7 +544,8 @@ class StableRNAs(CurationInfo):
                  org,
                  id = "stable_RNAs",
                  config={},
-                 file=""):
+                 file="",
+                 name="Stable RNAs"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -545,7 +569,8 @@ class RibosomeStoich(CurationInfo):
                  org,
                  id = "ribosome_stoich",
                  config={},
-                 file="ribosomal_proteins.txt"):
+                 file="ribosomal_proteins.txt",
+                 name="Ribosomal proteins"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -582,7 +607,8 @@ class RibosomeSubreactions(CurationInfo):
                  org,
                  id = "ribosome_subreactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Ribosomal subreactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -606,7 +632,8 @@ class GenericDict(CurationInfo):
                  org,
                  id = "generic_dict",
                  config={},
-                 file=""):
+                 file="",
+                 name="Dictionary of generic complexes"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -642,7 +669,8 @@ class AminoacidtRNASynthetase(CurationInfo):
                  org,
                  id = "amino_acid_trna_synthetase",
                  config={},
-                 file=""):
+                 file="",
+                 name="Amino acid to tRNA synthetase associations"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -668,7 +696,8 @@ class PeptideReleaseFactors(CurationInfo):
                  org,
                  id = "peptide_release_factors",
                  config={},
-                 file=""):
+                 file="",
+                 name="Peptide release factors"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -705,7 +734,8 @@ class InitiationSubreactions(CurationInfo):
                  org,
                  id = "initiation_subreactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Translation initiation subreactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -741,7 +771,8 @@ class ElongationSubreactions(CurationInfo):
                  org,
                  id = "elongation_subreactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Translation elongation subreactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -777,7 +808,8 @@ class TerminationSubreactions(CurationInfo):
                  org,
                  id = "termination_subreactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Translation termination subreactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -813,7 +845,8 @@ class SpecialtRNASubreactions(CurationInfo):
                  org,
                  id = "special_trna_subreactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Special tRNA subreactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -849,7 +882,8 @@ class TranscriptionSubreactions(CurationInfo):
                  org,
                  id = "transcription_subreactions",
                  config={},
-                 file=""):
+                 file="",
+                 name="Transcription subreactions"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -885,7 +919,8 @@ class SpecialModifications(CurationInfo):
                  org,
                  id = "special_modifications",
                  config={},
-                 file=""):
+                 file="",
+                 name="Special protein modifications"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -920,7 +955,8 @@ class ExcisionMachinery(CurationInfo):
                  org,
                  id = "excision_machinery",
                  config={},
-                 file=""):
+                 file="",
+                 name="Excision machinery"):
         if not file:
             file = id + ".txt"
         self.file = file
@@ -957,7 +993,8 @@ class FoldingDict(CurationInfo):
                  org,
                  id = "folding_dict",
                  config={},
-                 file=""):
+                 file="",
+                 name="Protein to folding machinery associations"):
         if not file:
             file = id + ".txt"
         self.file = file
