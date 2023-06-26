@@ -272,6 +272,10 @@ class MEBuilder(object):
 		logging.warning("Performing final checks of files")
 		self.check()
 
+		# Update manual curation files for user reference
+		logging.warning("Generating filled manual curation files")
+		self.org.manual_curation.save()
+
 		# Update notes
 		logging.warning("Generating curation notes")
 		coralme.builder.helper_functions.save_curation_notes(
