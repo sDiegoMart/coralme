@@ -114,6 +114,30 @@ class CurationInfo(object):
     def org_data(self):
         """Final dataset stored in Organism instance"""
         return self.org.__getattribute__(self.id)
+    
+    def _repr_html_(self) -> str:
+            """Generate html representation of reaction.
+
+            Returns
+            -------
+            str
+                HTML representation of the reaction.
+            """
+            id = cobra.util.util.format_long_string(str(self.id), 500)
+            file = cobra.util.util.format_long_string(str(self.file), 500)
+            name = cobra.util.util.format_long_string(str(self.name), 500)
+            directory = cobra.util.util.format_long_string(str(self.directory), 500)
+            data = cobra.util.util.format_long_string(str(self.data), 500)
+            org_data = cobra.util.util.format_long_string(str(self.org_data), 500)
+
+            return f"""
+            <table>
+                <tr><td><strong>Identifier</strong></td><td>{id}</td></tr>
+                <tr><td><strong>File</strong></td><td>{file}</td></tr>
+                <tr><td><strong>Name</strong></td><td>{name}</td></tr>
+                <tr><td><strong>Directory</strong></td><td>{directory}</td></tr>
+            </table>
+        """
 
 class ReactionCorrections(CurationInfo):
     """Reads manual input to modify reactions in the M-model.
@@ -377,6 +401,19 @@ class ManualComplexes(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    @property
+    def org_data(self):
+        # Manual complexes must be retrieved from complexes_df
+        df = self.org.complexes_df
+        flag = (df["source"].str.contains(self.org.m_model.id)) | (df["source"].str.contains("Manual"))
+        manual_complexes = df[flag].rename_axis("complex_id")
+        manual_complexes = manual_complexes.drop("source",axis=1)
+        manual_complexes["mod"] = [''] * manual_complexes.shape[0]
+        manual_complexes["replace"] = [''] * manual_complexes.shape[0]
+        return manual_complexes
+    def _modify_for_save(self):
+        return self.org_data
+    
     
 class Sigmas(CurationInfo):
     """Reads manual input to modify or add sigma factors.
