@@ -386,7 +386,7 @@ class ME_NLP:
 
         # test mumax
         x_new, y_new, z_new, stat_new, hs_new = self.solvelp(mumax, basis, precision)
-        if stat_new == 'optimal':
+        if stat_new == 'optimal' and verbose:
             print('{:s}\t{:.16f}\t{:s}'.format(
                         str(0).rjust(9), mumax, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
             return mumax, x_new, y_new, z_new, basis, stat_new
