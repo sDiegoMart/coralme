@@ -89,7 +89,7 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
-        self.manual_curation = cobra.core.dictlist.DictList()
+        self.manual_curation = coralme.builder.curation.CurationList()
 #         self.get_organism()
 
     @property

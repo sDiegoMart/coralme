@@ -871,6 +871,7 @@ class MEBuilder(object):
 									}
 								}).T
 				protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+		protein_location.index.name = 'Complex'
 		self.org.protein_location = protein_location
 
 	def update_translocation_multipliers(self):
@@ -1358,12 +1359,19 @@ class MEBuilder(object):
 					'Updating translocation machinery from homology...',
 					bar_format = bar_format,
 					total=len(ref_translocation_pathways)):
+			ref_cplxs = v["enzymes"]
 			if k not in org_translocation_pathways:
-				org_translocation_pathways[k] = {"enzymes":{}}#v.copy()
-			for ref_cplx, ref_dict in v["enzymes"].items():
-				if ref_cplx in ref_cplx_homolog:
-					org_cplx = ref_cplx_homolog[ref_cplx]
-					org_translocation_pathways[k]["enzymes"][org_cplx] = ref_dict.copy()
+				org_translocation_pathways[k] = {"enzymes":[]}#v.copy()
+			defined_cplxs = org_translocation_pathways[k]["enzymes"]
+			if defined_cplxs:
+				continue
+			org_cplxs = [
+				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
+			]
+			for i in org_cplxs:
+				if self._is_base_complex_in_list(i,defined_cplxs):
+					continue
+				defined_cplxs.append(i)
 
 	def update_m_model(self):
 		org_model = self.org.m_model

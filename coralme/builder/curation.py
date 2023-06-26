@@ -13,9 +13,16 @@ import pandas
 import json
 import copy
 
+from cobra.core.dictlist import DictList
+
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(cur_dir, 'column_format.json'), 'r') as f:
     column_format = json.load(f)
+    
+class CurationList(DictList):
+    def save(self):
+        for i in self:
+            i.save()
 
 class CurationInfo(object):
     """CurationInfo class for handling manual curation files.
@@ -49,7 +56,19 @@ class CurationInfo(object):
         self.org = org
         self.config = config
         self.data = self.load()
-        self.org.__setattr__(id,copy.copy(self.data))
+        self.org.__setattr__(id,copy.deepcopy(self.data))
+        self.sep = config["sep"]
+        
+    def _modify_from_load(self):
+        """Convert manual curation file into a coralME dataset"""
+        return self.data
+    def _modify_for_save(self):
+        """Convert coralME dataset into a manual curation file"""
+        # Modify this function to add save the file.
+        return None
+    def _modify_for_create(self,df):
+        """Modify dataset to create file when not provided"""
+        return df
     
     def read(self):
         """Read manual curation file"""
@@ -78,23 +97,23 @@ class CurationInfo(object):
             self.data.to_csv(self.filepath,sep=self.config["sep"])
         self.data = self._modify_from_load()
         return self.data
-    
     def save(self):
-        """Save new manual curation file for user reference"""
-        return
-    def _modify_from_load(self):
-        """Convert manual curation file into a coralME dataset"""
-        return self.data
-    def _modify_for_save(self):
-        """Convert coralME dataset into a manual curation file"""
-        return self.data
-    def _modify_for_create(self,df):
-        """Modify dataset to create file when not provided"""
-        return df
-    
+        """Save complemented dataset from Organism for user reference"""
+        mod = self._modify_for_save()
+        if mod is None:
+            return
+        out_dir = self.directory + "reference_files/"
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
+        mod[self.columns[1:]].to_csv(out_dir + self.file,sep=self.sep)    
     @property
     def columns(self):
+        """Default columns that are coralME-compliant"""
         return column_format[self.file]
+    @property
+    def org_data(self):
+        """Final dataset stored in Organism instance"""
+        return self.org.__getattribute__(self.id)
 
 class ReactionCorrections(CurationInfo):
     """Reads manual input to modify reactions in the M-model.
@@ -140,8 +159,6 @@ class ReactionCorrections(CurationInfo):
                         file = file)
     def _modify_from_load(self):
         return self.data.T.to_dict()
-    def _modify_for_save(self):
-        return self.data
     
 class ProteinLocation(CurationInfo):
     """Reads manual input to add protein locations.
@@ -185,6 +202,8 @@ class ProteinLocation(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    def _modify_for_save(self):
+        return self.org_data
     
 class TranslocationMultipliers(CurationInfo):
     """
@@ -210,6 +229,9 @@ class TranslocationMultipliers(CurationInfo):
                         file = file)
     def _modify_from_load(self):
         return self.data.to_dict()
+    
+    def _modify_for_save(self):
+        return None
     
 class LipoproteinPrecursors(CurationInfo):
     """Reads manual input to add lipoprotein precursors.
@@ -254,6 +276,9 @@ class LipoproteinPrecursors(CurationInfo):
                         file = file)
     def _modify_from_load(self):
         return self.data.to_dict()[self.columns[1]]
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(
+            {self.columns[1]:self.org_data}).rename_axis(self.columns[0])
     
 class CleavedMethionine(CurationInfo):
     """Reads manual input to mark proteins that undergo 
@@ -300,6 +325,9 @@ class CleavedMethionine(CurationInfo):
                         file = file)
     def _modify_from_load(self):
         return self.data.index.to_list()
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(
+            {self.columns[0]:self.org_data}).set_index(self.columns[0])
     
 class ManualComplexes(CurationInfo):
     """Reads manual input to modify or add complexes.
@@ -392,6 +420,8 @@ class Sigmas(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    def _modify_for_save(self):
+        return self.org_data
 
 class RhoIndependent(CurationInfo):
     """
@@ -418,6 +448,9 @@ class RhoIndependent(CurationInfo):
                         file = file)
     def _modify_from_load(self):
         return self.data.index.to_list()
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(
+            {self.columns[0]:self.org_data}).set_index(self.columns[0])
     
 class RNADegradosome(CurationInfo):
     """Reads manual input to add RNA degradosome composition.
@@ -463,6 +496,10 @@ class RNADegradosome(CurationInfo):
     
     def _modify_from_load(self):
         return {"rna_degradosome" : {"enzymes" : self.data.index.to_list()}}
+    def _modify_for_save(self):
+        l = self.org_data["rna_degradosome"]["enzymes"]
+        return pandas.DataFrame.from_dict(
+            {self.columns[0]:l}).set_index(self.columns[0])
     
 class RNAModificationMachinery(CurationInfo):
     """Reads manual input to add RNA modification machinery.
@@ -509,6 +546,8 @@ class RNAModificationMachinery(CurationInfo):
     
     def _modify_from_load(self):
         return self.data.astype(str)
+    def _modify_for_save(self):
+        return self.org_data
     
 class RNAModificationTargets(CurationInfo):
     """Reads manual input to add RNA modification targets.
@@ -551,6 +590,8 @@ class RNAModificationTargets(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    def _modify_for_save(self):
+        return self.org_data
     
 class EnzymeReactionAssociation(CurationInfo):
     """Reads manual input to specify enzyme-reaction associations.
@@ -594,6 +635,8 @@ class EnzymeReactionAssociation(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    def _modify_for_save(self):
+        return self.org_data
     
 class MEMetabolites(CurationInfo):
     """Reads manual input to replace metabolites in the M-model.
@@ -637,6 +680,8 @@ class MEMetabolites(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    def _modify_for_save(self):
+        return self.org_data
     
 class SubreactionMatrix(CurationInfo):
     """Reads manual input to add subreactions.
@@ -680,6 +725,8 @@ class SubreactionMatrix(CurationInfo):
                         org,
                         config = config,
                         file = file)
+    def _modify_for_save(self):
+        return self.org_data
     
 class ReactionMatrix(CurationInfo):
     """Reads manual input to add reactions to the ME-model.
@@ -842,10 +889,10 @@ class TranslocationPathways(CurationInfo):
     Examples
     --------
     translocation_pathways.txt :
-        pathway	keff	length_dependent_energy	stoichiometry	enzyme	length_dependent	fixed_keff
-        sec	4.0	True	atp_c:-0.04,h2o_c:-0.04,adp_c:0.04,pi_c:0.04,h_c:0.04	SecB_tetra	True	False
-        sec	4.0	True	atp_c:-0.04,h2o_c:-0.04,adp_c:0.04,pi_c:0.04,h_c:0.04	SecA_MONOMER	True	False
-        sec	4.0	True	atp_c:-0.04,h2o_c:-0.04,adp_c:0.04,pi_c:0.04,h_c:0.04	Sec-CPLX	True	False
+        pathway	enzyme
+        sec	BSU27650-MONOMER
+        sec	BSU35300-MONOMER
+        sec	secYEG
         ...
     """
     def __init__(self,
@@ -879,13 +926,15 @@ class TranslocationPathways(CurationInfo):
         for p in df.index.unique():
             d[p] = {}
             pdf = df.loc[[p]]
-            d[p]["enzymes"] = {}
-            for _, row in pdf.iterrows():
-                d[p]["enzymes"][row["enzyme"]] = {
-                    "length_dependent": row["length_dependent"],
-                    "fixed_keff": row["fixed_keff"],
-                }
+            d[p]["enzymes"] = pdf["enzyme"].to_list()
         return d
+    def _modify_for_save(self):
+        df = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        for k,v in self.org_data.items():
+            for i in v["enzymes"]:
+                df1 = pandas.DataFrame.from_dict({k:{self.columns[1]:i}}).T.rename_axis(self.columns[0])
+                df = pandas.concat([df,df1],axis=0)
+        return df
     
 class LipidModifications(CurationInfo):
     """Reads manual input to define lipid modification machinery.
@@ -932,6 +981,9 @@ class LipidModifications(CurationInfo):
     def _modify_from_load(self):
         df = self.data
         return {k:v.split(',') for k,v in df['enzymes'].to_dict().items()}
+    def _modify_for_save(self):
+        d = {k:','.join(v) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class StableRNAs(CurationInfo):
     """
@@ -1005,8 +1057,7 @@ class RibosomeStoich(CurationInfo):
                         file = file)
     def _modify_from_load(self):
         df = self.data
-        from copy import deepcopy
-        ribosome_stoich = deepcopy(coralme.builder.dictionaries.ribosome_stoich)
+        ribosome_stoich = copy.deepcopy(coralme.builder.dictionaries.ribosome_stoich)
         for s, row in df.iterrows():
             proteins = row["proteins"]
             if proteins:
@@ -1017,6 +1068,9 @@ class RibosomeStoich(CurationInfo):
                     elif s == "50S":
                         ribosome_stoich["50_S_assembly"]["stoich"][p] = 1
         return ribosome_stoich
+    def _modify_for_save(self):
+        d = {k.split("_S_assembly")[0]+"S":','.join(list(v["stoich"].keys())) for k,v in self.org_data.items() if "assembly" in k}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class RibosomeSubreactions(CurationInfo):
     """Reads manual input to define ribosome subreactions.
@@ -1063,6 +1117,8 @@ class RibosomeSubreactions(CurationInfo):
                         file = file)    
     def _modify_from_load(self):
         return self.data.T.to_dict()
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(self.org_data).T.rename_axis(self.columns[0])
         
 class GenericDict(CurationInfo):
     """Reads manual input to define generics.
@@ -1120,6 +1176,9 @@ class GenericDict(CurationInfo):
             else:
                 d[k]['enzymes'] = []
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class AminoacidtRNASynthetase(CurationInfo):
     """Reads manual input to define amino acid tRNA ligases.
@@ -1167,6 +1226,9 @@ class AminoacidtRNASynthetase(CurationInfo):
         return self.data.to_dict()['enzyme']
     def _modify_for_create(self,df):
         return df
+    def _modify_for_save(self):
+        d = {self.columns[1]:self.org_data}
+        return pandas.DataFrame.from_dict(d).rename_axis(self.columns[0])
     
 class PeptideReleaseFactors(CurationInfo):
     """Reads manual input to define peptide release factors.
@@ -1225,6 +1287,8 @@ class PeptideReleaseFactors(CurationInfo):
             else:
                 d[k]['enzyme'] = ''
         return d
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(self.org_data).T.rename_axis(self.columns[0])
     
 class InitiationSubreactions(CurationInfo):
     """Reads manual input to define translation initiation subreactions.
@@ -1283,6 +1347,9 @@ class InitiationSubreactions(CurationInfo):
             if "" in v["enzymes"]:
                 v["enzymes"].remove("")
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class ElongationSubreactions(CurationInfo):
     """Reads manual input to define translation elongation subreactions.
@@ -1341,6 +1408,9 @@ class ElongationSubreactions(CurationInfo):
             if "" in v["enzymes"]:
                 v["enzymes"].remove("")
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class TerminationSubreactions(CurationInfo):
     """Reads manual input to define translation termination subreactions.
@@ -1399,6 +1469,9 @@ class TerminationSubreactions(CurationInfo):
             if "" in v["enzymes"]:
                 v["enzymes"].remove("")
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class SpecialtRNASubreactions(CurationInfo):
     """Reads manual input to define special tRNA subreactions.
@@ -1457,6 +1530,9 @@ class SpecialtRNASubreactions(CurationInfo):
             if "" in v["enzymes"]:
                 v["enzymes"].remove("")
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class TranscriptionSubreactions(CurationInfo):
     """Reads manual input to define transcription subreactions.
@@ -1516,6 +1592,9 @@ class TranscriptionSubreactions(CurationInfo):
             if "" in v["enzymes"]:
                 v["enzymes"].remove("")
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class SpecialModifications(CurationInfo):
     """Reads manual input to define machinery for special modifications.
@@ -1574,6 +1653,9 @@ class SpecialModifications(CurationInfo):
             if "" in v["enzymes"]:
                 v["enzymes"].remove("")
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class ExcisionMachinery(CurationInfo):
     """Reads manual input to define machinery for excision.
@@ -1632,6 +1714,9 @@ class ExcisionMachinery(CurationInfo):
             else:
                 d[k]['enzymes'] = []
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
 
 class FoldingDict(CurationInfo):
     """Reads manual input to define folding pathways for proteins.
@@ -1690,6 +1775,9 @@ class FoldingDict(CurationInfo):
             else:
                 d[k]['enzymes'] = []
         return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
         
 class MEManualCuration(object):
     """MEManualCuration class for loading manual curation from files
@@ -1713,7 +1801,7 @@ class MEManualCuration(object):
         self.configuration = self.org.config
 
     def load_manual_curation(self):
-        self.org.manual_curation = cobra.core.dictlist.DictList()
+        self.org.manual_curation = coralme.builder.curation.CurationList()
         self.org.manual_curation.append(ReactionCorrections(self.org))
         self.org.manual_curation.append(ProteinLocation(self.org))
         self.org.manual_curation.append(TranslocationMultipliers(self.org))

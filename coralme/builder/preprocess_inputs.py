@@ -416,7 +416,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		if len(pathways) != 0:
 			return pathways
 
-	dct = { k:list(v['enzymes'].keys()) for k,v in builder.org.translocation_pathways.items() if len(v['enzymes']) != 0 }
+	dct = { k:v['enzymes'] for k,v in builder.org.translocation_pathways.items() if len(v['enzymes']) != 0 }
 	data['MetaComplex ID'].update(data.apply(lambda x: get_transpaths(x, dct), axis = 1))
 	data = data.explode('MetaComplex ID')
 

@@ -1,12 +1,10 @@
 {
     "termination_subreactions.txt": [
         "subreaction",
-        "enzymes",
-        "stoich",
-        "element_contribution"
+        "enzymes"
     ],
     "peptide_release_factors.txt": [
-        "release_factor",
+        "codon",
         "enzyme"
     ],
     "rna_degradosome.txt": [
@@ -14,9 +12,7 @@
     ],
     "special_trna_subreactions.txt": [
         "subreaction",
-        "element_contribution",
-        "enzymes",
-        "stoich"
+        "element_contribution"
     ],
     "lipoprotein_precursors.txt": [
         "name",
@@ -24,8 +20,7 @@
     ],
     "special_modifications.txt": [
         "modification",
-        "enzymes",
-        "stoich"
+        "enzymes"
     ],
     "excision_machinery.txt": [
         "type",
@@ -54,12 +49,7 @@
     ],
     "translocation_pathways.txt": [
         "pathway",
-        "keff",
-        "length_dependent_energy",
-        "stoichiometry",
-        "enzyme",
-        "length_dependent",
-        "fixed_keff"
+        "enzyme"
     ],
     "rna_modification.txt": [
         "modification",
@@ -103,8 +93,7 @@
     ],
     "elongation_subreactions.txt": [
         "subreaction",
-        "enzymes",
-        "stoich"
+        "enzymes"
     ],
     "subsystem_classification.txt": [
         "subsystem",
@@ -129,9 +118,7 @@
     ],
     "initiation_subreactions.txt": [
         "subreaction",
-        "enzymes",
-        "stoich",
-        "element_contribution"
+        "enzymes"
     ],
     "post_transcriptional_modification_of_RNA.txt": [
         "bnum",
@@ -151,8 +138,7 @@
     ],
     "transcription_subreactions.txt": [
         "mechanism",
-        "enzymes",
-        "stoich"
+        "enzymes"
     ],
     "generic_dict.txt": [
         "generic_component",
@@ -160,9 +146,7 @@
     ],
     "ribosome_subreactions.txt": [
         "subreaction",
-        "enzyme",
-        "stoich",
-        "num_mods"
+        "enzyme"
     ],
     "reaction_corrections.txt": [
         "reaction_id",
