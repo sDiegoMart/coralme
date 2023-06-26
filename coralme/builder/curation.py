@@ -487,8 +487,8 @@ class RhoIndependent(CurationInfo):
     """Reads manual input to define genes with rho independent 
     termination.
 
-    This class creates the property "sigmas" from
-    the manual inputs in sigma_factors.txt in an 
+    This class creates the property "rho_independent" from
+    the manual inputs in rho_independent.txt in an 
     instance of Organism.
     
     Input here will mark genes with rho independent transcription
@@ -501,7 +501,7 @@ class RhoIndependent(CurationInfo):
         
     Examples
     --------
-    sigma_factors.txt :
+    rho_independent.txt :
         id
         b0344
         ...
