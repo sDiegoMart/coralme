@@ -64,7 +64,7 @@ class CurationInfo(object):
         return self.data
     def _modify_for_save(self):
         """Convert coralME dataset into a manual curation file"""
-        # Modify this function to add save the file.
+        # Modify this function to save the file.
         return None
     def _modify_for_create(self,df):
         """Modify dataset to create file when not provided"""
@@ -180,7 +180,8 @@ class ReactionCorrections(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.T.to_dict()
     
@@ -225,12 +226,32 @@ class ProteinLocation(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_save(self):
         return self.org_data
     
 class TranslocationMultipliers(CurationInfo):
-    """
+    """Reads manual input to define translocation multipliers.
+
+    This class creates the property "translocation_multipliers" from
+    the manual inputs in translocation_multipliers.txt in an 
+    instance of Organism.
+    
+    Input here will modify how many pores are required for
+    the translocation of a protein.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    translocation_multipliers.txt :
+        Gene,YidC_MONOMER,TatE_MONOMER,TatA_MONOMER
+        b1855,2.0,0.0,0.0
+        ...
     """
     def __init__(self,
                  org,
@@ -250,12 +271,10 @@ class TranslocationMultipliers(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.to_dict()
-    
-    def _modify_for_save(self):
-        return None
     
 class LipoproteinPrecursors(CurationInfo):
     """Reads manual input to add lipoprotein precursors.
@@ -297,7 +316,8 @@ class LipoproteinPrecursors(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.to_dict()[self.columns[1]]
     def _modify_for_save(self):
@@ -346,7 +366,8 @@ class CleavedMethionine(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.index.to_list()
     def _modify_for_save(self):
@@ -400,7 +421,8 @@ class ManualComplexes(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     @property
     def org_data(self):
         # Manual complexes must be retrieved from complexes_df
@@ -456,12 +478,33 @@ class Sigmas(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_save(self):
         return self.org_data
 
 class RhoIndependent(CurationInfo):
-    """
+    """Reads manual input to define genes with rho independent 
+    termination.
+
+    This class creates the property "sigmas" from
+    the manual inputs in sigma_factors.txt in an 
+    instance of Organism.
+    
+    Input here will mark genes with rho independent transcription
+    termination.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    sigma_factors.txt :
+        id
+        b0344
+        ...
     """
     def __init__(self,
                  org,
@@ -482,7 +525,8 @@ class RhoIndependent(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.index.to_list()
     def _modify_for_save(self):
@@ -529,7 +573,8 @@ class RNADegradosome(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     
     def _modify_from_load(self):
         return {"rna_degradosome" : {"enzymes" : self.data.index.to_list()}}
@@ -579,7 +624,8 @@ class RNAModificationMachinery(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     
     def _modify_from_load(self):
         return self.data.astype(str)
@@ -626,7 +672,8 @@ class RNAModificationTargets(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_save(self):
         return self.org_data
     
@@ -671,7 +718,8 @@ class EnzymeReactionAssociation(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_save(self):
         return self.org_data
     
@@ -716,7 +764,8 @@ class MEMetabolites(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_save(self):
         return self.org_data
     
@@ -761,7 +810,8 @@ class SubreactionMatrix(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_save(self):
         return self.org_data
     
@@ -810,7 +860,8 @@ class ReactionMatrix(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     
 class OrphanSpontReactions(CurationInfo):
     """Reads manual input to add reactions to the ME-model.
@@ -854,7 +905,8 @@ class OrphanSpontReactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     
 class SubsystemClassification(CurationInfo):
     """Reads manual input to classify subsystems for Keff estimation.
@@ -898,7 +950,8 @@ class SubsystemClassification(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         subsystems = set(r.subsystem for r in self.org.m_model.reactions if r.subsystem)
         df = self.data
@@ -951,7 +1004,8 @@ class TranslocationPathways(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1014,7 +1068,8 @@ class LipidModifications(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         df = self.data
         return {k:v.split(',') for k,v in df['enzymes'].to_dict().items()}
@@ -1023,8 +1078,9 @@ class LipidModifications(CurationInfo):
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
     
 class StableRNAs(CurationInfo):
+    """ Defines stable RNAs
     """
-    """
+    # Not necessary anymore, but kept here for reference.
     def __init__(self,
                  org,
                  id = "stable_RNAs",
@@ -1044,7 +1100,8 @@ class StableRNAs(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.index.to_list()
 
@@ -1091,7 +1148,8 @@ class RibosomeStoich(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         df = self.data
         ribosome_stoich = copy.deepcopy(coralme.builder.dictionaries.ribosome_stoich)
@@ -1151,7 +1209,8 @@ class RibosomeSubreactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)    
+                        file = file,
+                        name = name)    
     def _modify_from_load(self):
         return self.data.T.to_dict()
     def _modify_for_save(self):
@@ -1197,7 +1256,8 @@ class GenericDict(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1258,7 +1318,8 @@ class AminoacidtRNASynthetase(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_from_load(self):
         return self.data.to_dict()['enzyme']
     def _modify_for_create(self,df):
@@ -1308,7 +1369,8 @@ class PeptideReleaseFactors(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1370,7 +1432,8 @@ class InitiationSubreactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1431,7 +1494,8 @@ class ElongationSubreactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1492,7 +1556,8 @@ class TerminationSubreactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1553,7 +1618,8 @@ class SpecialtRNASubreactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1615,7 +1681,8 @@ class TranscriptionSubreactions(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1676,7 +1743,8 @@ class SpecialModifications(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1735,7 +1803,8 @@ class ExcisionMachinery(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1796,7 +1865,8 @@ class FoldingDict(CurationInfo):
         super().__init__(id,
                         org,
                         config = config,
-                        file = file)
+                        file = file,
+                        name = name)
     def _modify_for_create(self,df):
         df = df.copy()
         for r, row in df.iterrows():
@@ -1858,7 +1928,7 @@ class MEManualCuration(object):
         self.org.manual_curation.append(SubsystemClassification(self.org))
         self.org.manual_curation.append(TranslocationPathways(self.org))
         self.org.manual_curation.append(LipidModifications(self.org))
-        self.org.manual_curation.append(StableRNAs(self.org))
+        #self.org.manual_curation.append(StableRNAs(self.org))
         self.org.manual_curation.append(RibosomeStoich(self.org))
         self.org.manual_curation.append(RibosomeSubreactions(self.org))
         self.org.manual_curation.append(GenericDict(self.org))

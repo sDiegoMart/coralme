@@ -775,70 +775,70 @@ class MEBuilder(object):
 		self.org.protein_mod = protein_mod
 
 	def update_TU_df(self):
-		return
-		org_TU_to_genes = self.org.TU_to_genes
-		org_TUs = self.org.TUs
-		org_sigmas = self.org.sigmas
-		org_complexes_df = self.org.complexes_df
-		ref_TUs = self.ref.TUs
-		ref_TU_df = self.ref.TU_df
-		gene_dictionary = self.org.gene_dictionary
-		mutual_hits = self.homology.mutual_hits
-		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		rpod = self.org.rpod
-		ref_genes_to_TU = self.ref.genes_to_TU
-		ref_sigmas = self.ref.sigmas
-		TU_df = self.org.TU_df
-		remove_TUs = []
-		TU_dict = {}
-		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
-					'Updating TUs from homology...',
-					bar_format = bar_format,
-					total=TU_df.shape[0]):
-			tu = tu_id.split("_from_")[0]
-			rho_dependent = True
-			sigma = rpod
-			genes = org_TU_to_genes[tu]
-			if set(genes).issubset(mutual_hits):
-				ref_TU = [
-					ref_genes_to_TU[mutual_hits[g]]
-					for g in genes
-					if mutual_hits[g] in ref_genes_to_TU
-				]
-				if (
-					len(ref_TU) == 1
-				):  # All mapped genes are from only one TU. TU identified!
-					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
-					if not TU_hit.empty:
-						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
-						ref_sigma = TU_hit["rnapol"].tolist()[0]
-						if ref_sigma in ref_cplx_homolog:
-							sigma = ref_cplx_homolog[ref_sigma]
-							if sigma not in org_sigmas.index:
-								org_sigmas = org_sigmas.append(
-									pandas.DataFrame.from_dict(
-										{
-											sigma: {
-												"complex": "RNAP_{}".format(sigma),
-												"genes": org_complexes_df.loc[sigma]["genes"],
-												"name": org_complexes_df.loc[sigma]["name"],
-											}
-										}
-									).T
-								)
-				tu_name = "{}_from_{}".format(tu, sigma)
-				if tu_name not in TU_df.index:
-					remove_TUs.append(tu_id)
-					TU_df.loc[tu_name] = [0, 0, 0, 0, 0, 0]
-					TU_df.loc[tu_name]["strand"] = row["strand"]
-					TU_df.loc[tu_name]["start"] = int(row["start"])
-					TU_df.loc[tu_name]["stop"] = int(row["stop"])
-					TU_df.loc[tu_name]["tss"] = None
-				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
-				TU_df.loc[tu_name]["rnapol"] = sigma
-		self.org.TU_df = TU_df
-		org_sigmas.index.name = "sigma"
-		self.org.sigmas = org_sigmas
+		return NotImplemented
+# 		org_TU_to_genes = self.org.TU_to_genes
+# 		org_TUs = self.org.TUs
+# 		org_sigmas = self.org.sigmas
+# 		org_complexes_df = self.org.complexes_df
+# 		ref_TUs = self.ref.TUs
+# 		ref_TU_df = self.ref.TU_df
+# 		gene_dictionary = self.org.gene_dictionary
+# 		mutual_hits = self.homology.mutual_hits
+# 		ref_cplx_homolog = self.homology.ref_cplx_homolog
+# 		rpod = self.org.rpod
+# 		ref_genes_to_TU = self.ref.genes_to_TU
+# 		ref_sigmas = self.ref.sigmas
+# 		TU_df = self.org.TU_df
+# 		remove_TUs = []
+# 		TU_dict = {}
+# 		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
+# 					'Updating TUs from homology...',
+# 					bar_format = bar_format,
+# 					total=TU_df.shape[0]):
+# 			tu = tu_id.split("_from_")[0]
+# 			rho_dependent = True
+# 			sigma = rpod
+# 			genes = org_TU_to_genes[tu]
+# 			if set(genes).issubset(mutual_hits):
+# 				ref_TU = [
+# 					ref_genes_to_TU[mutual_hits[g]]
+# 					for g in genes
+# 					if mutual_hits[g] in ref_genes_to_TU
+# 				]
+# 				if (
+# 					len(ref_TU) == 1
+# 				):  # All mapped genes are from only one TU. TU identified!
+# 					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
+# 					if not TU_hit.empty:
+# 						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
+# 						ref_sigma = TU_hit["rnapol"].tolist()[0]
+# 						if ref_sigma in ref_cplx_homolog:
+# 							sigma = ref_cplx_homolog[ref_sigma]
+# 							if sigma not in org_sigmas.index:
+# 								org_sigmas = org_sigmas.append(
+# 									pandas.DataFrame.from_dict(
+# 										{
+# 											sigma: {
+# 												"complex": "RNAP_{}".format(sigma),
+# 												"genes": org_complexes_df.loc[sigma]["genes"],
+# 												"name": org_complexes_df.loc[sigma]["name"],
+# 											}
+# 										}
+# 									).T
+# 								)
+# 				tu_name = "{}_from_{}".format(tu, sigma)
+# 				if tu_name not in TU_df.index:
+# 					remove_TUs.append(tu_id)
+# 					TU_df.loc[tu_name] = [0, 0, 0, 0, 0, 0]
+# 					TU_df.loc[tu_name]["strand"] = row["strand"]
+# 					TU_df.loc[tu_name]["start"] = int(row["start"])
+# 					TU_df.loc[tu_name]["stop"] = int(row["stop"])
+# 					TU_df.loc[tu_name]["tss"] = None
+# 				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
+# 				TU_df.loc[tu_name]["rnapol"] = sigma
+# 		self.org.TU_df = TU_df
+# 		org_sigmas.index.name = "sigma"
+# 		self.org.sigmas = org_sigmas
 
 	def protein_location_from_homology(self):
 		protein_location = self.org.protein_location
