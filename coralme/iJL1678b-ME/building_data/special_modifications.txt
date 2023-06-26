@@ -1,4 +1,4 @@
-	enzymes	stoich
+modification	enzymes	stoich
 fes_transfer	CPLX0-7617,IscA_tetra,CPLX0-7824	
 fes_chaperones	G6712-MONOMER	
 generic_2fe2s_transfer_complex	CPLX0-7617_mod_2fe2s(1),CPLX0-7824_mod_2fe2s(1),IscA_tetra_mod_2fe2s(1)	
