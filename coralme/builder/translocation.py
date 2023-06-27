@@ -95,7 +95,7 @@ def add_lipoprotein_formation(model, compartment_dict, lipoprotein_precursors, l
 
 		# Add Reaction to model and associated it with its data
 		rxn = coralme.core.reaction.PostTranslationReaction(reaction_prefix + '_' + second_lipid)
-		model.add_reaction(rxn)
+		model.add_reactions([rxn])
 		rxn.posttranslation_data = data
 
 		if update:

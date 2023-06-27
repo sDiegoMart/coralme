@@ -1720,12 +1720,15 @@ class MEReconstruction(MEBuilder):
 			if len(lst) != 0:
 				logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(', '.join(lst)))
 
-		def read(filecode, input_type, columns = []):
+		def read(filecode, input_type, default, columns = []):
 			filename = config.get(filecode, '')
 			if pathlib.Path(filename).is_file():
 				file_to_read = filename
 			else:
-				return pandas.DataFrame(columns = columns)
+				#return pandas.DataFrame(columns = columns)
+				if filecode == 'df_reaction_keff_consts':
+					return pandas.DataFrame(columns = columns)
+				file_to_read = '{:}/building_data/{:s}'.format(config.get('out_directory', '.'), default)
 
 			df = coralme.builder.flat_files.read(file_to_read)
 			if set(columns).issubset(set(df.columns)):
@@ -1737,31 +1740,30 @@ class MEReconstruction(MEBuilder):
 		# User inputs
 		# Transcriptional Units
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
-		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', cols).set_index('TU_id', inplace = False)
+		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs_from_biocyc.txt', cols)
+		df_tus = df_tus.set_index('TU_id', inplace = False)
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficients
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', cols)
+		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
 
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficients
-		# Detect first if the user wants to use a manually curated file
-		rxns = '{:s}/building_data/subreaction_matrix.txt'.format(config.get('out_directory', '.'))
-		#config['df_matrix_subrxn_stoich'] = rxns if pathlib.Path(rxns).exists() else config['df_matrix_subrxn_stoich']
-		config['df_matrix_subrxn_stoich'] = config['df_matrix_subrxn_stoich'] if pathlib.Path(config['df_matrix_subrxn_stoich']).exists() else rxns
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', cols)
+		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
 
 		# Orphan and Spontaneous reaction metadata
 		cols = ['name', 'description', 'subsystems', 'is_reversible', 'is_spontaneous']
-		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', cols).set_index('name', inplace = False)
+		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols)
+		df_rxns = df_rxns.set_index('name', inplace = False)
 
 		# Metabolites metadata
 		cols = ['id', 'me_id', 'name', 'formula', 'compartment', 'type']
-		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', cols).set_index('id', inplace = False)
+		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols)
+		df_mets = df_mets.set_index('id', inplace = False)
 
 		# Effective turnover rates
 		cols = ['reaction', 'direction', 'complex', 'mods', 'keff']
-		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols)
+		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', 'reaction_median_keffs.txt', cols)
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -2688,17 +2690,17 @@ class MEReconstruction(MEBuilder):
 				x.id:( x.formula_weight ** (3. / 4.) if x.formula_weight else 0, x.id if not x.formula_weight else False )
 				for x in me.metabolites if type(x) == coralme.core.component.Complex
 				}
-	
+
 			for met in [ v[1] for k,v in sasa_dct.items() ]:
 				if met:
 					logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
 					logging.warning('Please, set a value in the keff input file for reactions associated to the \'{:s}\' complex.'.format(met))
-	
+
 			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
-	
+
 			me.global_info['median_sasa'] = median_sasa
 			me.global_info['sasa_estimation'] = sasa_dct
-	
+
 			# Step 2: Estimate keff for all the reactions in the model
 			mapped_keffs = {}
 			#if "complex" not in df_keffs.columns: #df_keffs.empty: # This avoid the estimation if the user uses an "incomplete" input
@@ -2709,25 +2711,25 @@ class MEReconstruction(MEBuilder):
 				if rxn.id not in [ 'dummy_reaction_FWD_SPONT', 'dummy_reaction_REV_SPONT' ]
 				if rxn._complex_data is not None
 				]
-	
+
 			if 'complex' in df_keffs.columns: # user provided a file with keffs
 				with open('{:s}/building_data/reaction_median_keffs.txt'.format(me.global_info['out_directory']), 'r') as infile:
 					reaction_median_keffs = pandas.read_csv(infile, sep = '\t').set_index('reaction')
-	
+
 			for rxn in tqdm.tqdm(reaction_ids, 'Estimating effective turnover rates for reactions using the SASA method...', bar_format = bar_format):
 				logging.warning('Estimating effective turnover rates for reaction \'{:s}\''.format(rxn.id))
-	
+
 				base_id = rxn._stoichiometric_data.id
 				cplx_id = me.metabolites.get_by_id(rxn._complex_data.id).id
-	
+
 				if base_id not in reaction_median_keffs.index:
 					continue
-	
+
 				median_keff = reaction_median_keffs.T[base_id]['keff']
 				sasa = sasa_dct[cplx_id][0]
 				keff = sasa * median_keff / median_sasa
 				mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
-	
+
 			# Step 3: Replace user values if they match
 			for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
 				if row['direction'] == '' and row['complex'] == '' and row['mods'] == '':
@@ -2738,13 +2740,13 @@ class MEReconstruction(MEBuilder):
 					idx = '{:s}_{:s}_{:s}'.format(row['reaction'], row['direction'], row['complex'])
 					if row['mods'] != '':
 						idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
-	
+
 				if idx in rxns_to_map.keys():
 					mapped_keffs[rxns_to_map[idx]] = 3000 if float(row['keff']) > 3000 else 0.01 if float(row['keff']) < 0.01 else row['keff']
 					logging.warning('Mapping of the effective turnover rate for \'{:}\' with a user provided value.'.format(idx))
 				else:
 					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Please check if the reaction or subreaction is in the ME-model.'.format(idx))
-	
+
 			# Step 4: Set keffs
 			if mapped_keffs:
 				for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
