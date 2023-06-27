@@ -12,7 +12,7 @@
     ],
     "special_trna_subreactions.txt": [
         "subreaction",
-        "element_contribution"
+        "enzymes"
     ],
     "lipoprotein_precursors.txt": [
         "name",
