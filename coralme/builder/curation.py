@@ -20,6 +20,11 @@ with open(os.path.join(cur_dir, 'column_format.json'), 'r') as f:
     column_format = json.load(f)
     
 class CurationList(DictList):
+    """Stores CurationInfo instances in a cobra DictList object.
+
+    This class stores the generated CurationInfo instances from the
+    provided manual curation files.
+    """
     def save(self):
         for i in self:
             i.save()
@@ -1975,4 +1980,15 @@ def _str_to_dict(d):
 
 def _dict_to_str(d):
     return ",".join(["{}:{}".format(k, v) for k, v in d.items()])
+
+
+
+
+
+
+
+
+
+
+
 
