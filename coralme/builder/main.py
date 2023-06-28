@@ -2875,8 +2875,10 @@ class METroubleshooter(object):
 
 		# Step 2. Test different sets of MEComponents
 		e_gaps = []
+		history = dict()
 		if works == False:
 			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+			 # TODO: Include previous iterations in gap fill sink closing algorithm
 			met_types = [
 				'ME-Deadends',
 				'Cofactors',
@@ -2896,8 +2898,8 @@ class METroubleshooter(object):
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-
-				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
+				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip , history=history)
+				bf_gaps, no_gaps, works = output
 				# close sink reactions that are not gaps
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)

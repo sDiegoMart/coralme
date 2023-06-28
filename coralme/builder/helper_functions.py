@@ -681,10 +681,11 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 				rxns_to_drop.append(idx)
 				me_model.reactions.get_by_id(idx).bounds = (0, 0)
 
-	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
+	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites.'.format(len(rxns)))
 
 	# reaction_id:position in the model.reactions DictList object
 	rxns = rxns + rxns_to_append# Try present SKs the last.
+	logging.warning('  '*6 + 'Will try a total of {:d} metabolites including previous iterations:'.format(len(rxns)))
 	ridx = []
 	for r in rxns:
 		ridx.append((r,me_model.reactions._dict[r]))
@@ -735,19 +736,15 @@ def get_mets_from_type(me_model,met_type):
 			mets.add(met.id)
 	return mets
 
-def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite', skip = set()):
-	if isinstance(met_types, str):
-		met_types = [met_types]
+def _append_metabolites(mets,new_mets):
+	return mets + [m for m in new_mets if m not in mets]
 
-	mets = set()
-	for met_type in met_types:
-		mets = mets | get_mets_from_type(me_model,met_type)
-
-	if 'Metabolite' in met_types:
+def brute_check(me_model, growth_key_and_value, met_type, skip = set(), history = dict()):
+	mets = get_mets_from_type(me_model,met_type)
+	if met_type == 'Metabolite':
 		#remove from the metabolites to test that are fed into the model through transport reactions
 		medium = set([ '{:s}_c'.format(x[3:-2]) for x in me_model.gem.medium.keys() ])
 		mets = set(mets).difference(medium)
-
 		# filter out manually
 		mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
 		mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
@@ -761,9 +758,15 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite', skip =
 		mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
 		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 		mets = set(mets).difference(set(['coa_c']))
-
 	mets = set(mets).difference(skip)
-	return coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
+	history[met_type] =  mets
+
+	mets_to_check = []
+	for k,v in history.items():
+		mets_to_check = _append_metabolites(mets_to_check,v)
+	return history,coralme.builder.helper_functions.brute_force_check(me_model,
+															  mets_to_check[::-1],
+															  growth_key_and_value)
 
 def evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms):
 	lb = [ x(*[ keys[x] for x in list(atoms) ]) if hasattr(x, '__call__') else float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in lb ]
