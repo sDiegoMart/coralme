@@ -1521,6 +1521,7 @@ class Organism(object):
         return df['name'].str.contains("beta(\'|.*prime)|rpoc",regex=True,case=False).any()
 
     def get_rna_polymerase(self, force_RNAP_as=""):
+        # TODO: Allow user to define RNAP, skip inferring?
         protein_mod = self.protein_mod
         RNAP = ""
         if force_RNAP_as:
