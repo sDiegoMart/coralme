@@ -692,7 +692,7 @@ class MEModel(cobra.core.model.Model):
 
 	@property
 	def all_genes(self):
-		lst = [ g for g in self.metabolites if isinstance(g, coralme.core.component.TranscribedGene) ]
+		lst = [ g for g in self.metabolites if isinstance(g, coralme.core.component.TranscribedGene) and "dummy" not in g.id]
 		return cobra.core.dictlist.DictList(lst)
 
 	@property
