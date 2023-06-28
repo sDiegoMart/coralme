@@ -16,5 +16,6 @@
   "log_directory": "./helper_files/pputida_tutorial",
   "run_bbh_blast": true,
   "dev_reference": true,
-  "include_pseudo_genes": true
+  "include_pseudo_genes": true,
+  "locus_tag": "locus_tag"
 }
