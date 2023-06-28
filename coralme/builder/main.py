@@ -2914,9 +2914,9 @@ class METroubleshooter(object):
 					'to_do':'Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!'})
 
 			# delete added sink reactions with lb == 0 and ub == 0
-            sinks = []
+			sinks = []
 			for rxn in self.me_model.reactions.query('^TS_'):
-                sinks.append(rxn.id)
+				sinks.append(rxn.id)
 				#f = self.me_model.solution.fluxes[rxn.id]
 				if rxn.lower_bound == 0 and rxn.upper_bound == 0:# or f == 0:
 					self.me_model.remove_reactions([rxn])
