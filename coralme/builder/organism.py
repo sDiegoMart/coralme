@@ -1252,7 +1252,7 @@ class Organism(object):
         generic_dict = self.generic_dict
         complexes_df = self.complexes_df
         warn_generic = []
-        d = {}
+        d = defaultdict(set)
         for k,v in org_amino_acid_trna_synthetase.copy().items():
             if isinstance(v,list):
                 d[k] = set(v)
@@ -1273,17 +1273,21 @@ class Organism(object):
             aa = find_aminoacid(trna_string)
             if aa is None:continue
             if aa in manually_curated_aa: continue
+#             if aa not in d: d[aa] = set()
             if self._is_base_complex_in_list(cplx,d[aa]): continue
             d[aa].add(cplx)
         trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
-        new_cplxs = {k:dict() for k in d.copy()}
+#         new_cplxs = {k:dict() for k in d.copy()}
+        new_cplxs = defaultdict(dict)
         for cplx,trna_string in trna_ligases_from_subunits.items():
             trna_string = self._extract_trna_string(trna_string)
             aa = find_aminoacid(trna_string)
             if aa is None:continue
-            if d[aa]: continue
+            if aa not in d: d[aa] = set()
+#             if d[aa]: continue
             cplx_genes = self._get_genes_of_cplx(cplx)
             for k,v in cplx_genes.items():
+#                 if aa not in new_cplxs: new_cplxs[aa] = dict()
                 new_cplxs[aa][k] = v
 #             new_cplxs[aa].add(cplx)
         
