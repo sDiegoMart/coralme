@@ -2920,9 +2920,9 @@ class METroubleshooter(object):
 				#f = self.me_model.solution.fluxes[rxn.id]
 				if rxn.lower_bound == 0 and rxn.upper_bound == 0:# or f == 0:
 					self.me_model.remove_reactions([rxn])
-            if sinks:
-                logging.warning('~ '*1 + 'Troubleshooter added the following sinks:')
-                logging.warning('\n'.join(sinks))
+			if sinks:
+				logging.warning('~ '*1 + 'Troubleshooter added the following sinks:')
+				logging.warning('\n'.join(sinks))
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
 			if self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False):
 				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
