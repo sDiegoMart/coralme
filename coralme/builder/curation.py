@@ -432,12 +432,13 @@ class ManualComplexes(CurationInfo):
     def org_data(self):
         # Manual complexes must be retrieved from complexes_df
         df = self.org.complexes_df
-        flag = (df["source"].str.contains(self.org.m_model.id)) | (df["source"].str.contains("Manual"))
-        manual_complexes = df[flag].rename_axis("complex_id")
-        manual_complexes = manual_complexes.drop("source",axis=1)
-        manual_complexes["mod"] = [''] * manual_complexes.shape[0]
-        manual_complexes["replace"] = [''] * manual_complexes.shape[0]
-        return manual_complexes
+        flag = (df["source"].str.contains(self.org.m_model.id) | df["source"].str.contains("Inferred"))
+        new_complexes = df[flag].rename_axis("complex_id")
+        new_complexes = new_complexes.drop("source",axis=1)
+        new_complexes["mod"] = [''] * new_complexes.shape[0]
+        new_complexes["replace"] = [''] * new_complexes.shape[0]
+        return pandas.concat([self.data,new_complexes],axis=0)
+    
     def _modify_for_save(self):
         return self.org_data
     
