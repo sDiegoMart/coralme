@@ -1283,8 +1283,8 @@ class Organism(object):
             trna_string = self._extract_trna_string(trna_string)
             aa = find_aminoacid(trna_string)
             if aa is None:continue
-            if aa not in d: d[aa] = set()
-#             if d[aa]: continue
+#             if aa not in d: d[aa] = set()
+            if d[aa]: continue
             cplx_genes = self._get_genes_of_cplx(cplx)
             for k,v in cplx_genes.items():
 #                 if aa not in new_cplxs: new_cplxs[aa] = dict()
@@ -1314,7 +1314,7 @@ class Organism(object):
             else:
                 d[aa] = 'CPLX_dummy'
                 warn_ligases.append(aa)
-        self.amino_acid_trna_synthetase = d
+        self.amino_acid_trna_synthetase = dict(d)
         self.complexes_df = complexes_df
 
         # Warnings
