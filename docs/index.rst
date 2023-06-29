@@ -30,8 +30,8 @@ Content
    GettingStarted
    BasicInputs
    coralMEArquitecture
-   HowToBuild
    ManualCuration
+   FAQ
 
 Indices and tables
 ~~~~~~~~~~~~~~~~~~
