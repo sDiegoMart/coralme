@@ -655,7 +655,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 		me_model.get_feasibility = me_model.feasibility
 
 	logging.warning('  '*5 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
-	existing_sinks = [r.id for r in me_model.reactions.query('^TS_')]
+# 	existing_sinks = [r.id for r in me_model.reactions.query('^TS_')]
 	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add, prefix='TS_')
 
 	if me_model.get_feasibility(keys = growth_key_and_value):
@@ -665,15 +665,15 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 
 	rxns = []
 	rxns_to_drop = []
-	rxns_to_append = []
+# 	rxns_to_append = []
 # 	for idx, flux in me_model.solution.fluxes.items():
 	for r in sk_rxns:
 		idx = r.id
 		flux = me_model.solution.fluxes[idx]
 		if idx.startswith('TS_') and idx.split('TS_')[1] in metabolites_to_add:
-			if r.id in existing_sinks:
-				rxns_to_append.append(idx)
-				continue
+# 			if r.id in existing_sinks:
+# 				rxns_to_append.append(idx)
+# 				continue
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
@@ -684,8 +684,8 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites.'.format(len(rxns)))
 
 	# reaction_id:position in the model.reactions DictList object
-	rxns = rxns + rxns_to_append# Try present SKs the last.
-	logging.warning('  '*6 + 'Will try a total of {:d} metabolites including previous iterations:'.format(len(rxns)))
+# 	rxns = rxns + rxns_to_append# Try present SKs the last.
+# 	logging.warning('  '*6 + 'Will try a total of {:d} metabolites including previous iterations:'.format(len(rxns)))
 	ridx = []
 	for r in rxns:
 		ridx.append((r,me_model.reactions._dict[r]))
