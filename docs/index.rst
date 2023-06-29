@@ -1,8 +1,5 @@
-.. image:: logo.png
-
-*************************
-Documentation for coralME
-*************************
+Welcome to coralME documentation!
+======================================
 
 Description
 ~~~~~~~~~~~
@@ -29,7 +26,8 @@ Content
 .. toctree::
    :numbered:
    :maxdepth: 2
-
+    
+   GettingStarted
    BasicInputs
    coralMEArquitecture
    HowToBuild
