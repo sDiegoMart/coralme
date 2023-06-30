@@ -657,37 +657,41 @@ class MEReaction(cobra.core.reaction.Reaction):
 		return reaction_string
 
 	def _repr_html_(self) -> str:
-			"""Generate html representation of reaction.
+		"""Generate html representation of reaction.
 
-			Returns
-			-------
-			str
-				HTML representation of the reaction.
-			"""
-			rxn = cobra.util.util.format_long_string(str(self.id), 500)
-			name = cobra.util.util.format_long_string(str(self.name), 500)
-			subs = cobra.util.util.format_long_string(self.build_reaction_string(), 1000)
-			prod = cobra.util.util.format_long_string(self.build_reaction_string(True), 1000)
-			gpr = cobra.util.util.format_long_string(self.gene_reaction_rule, 500)
-			lower = self.lower_bound
-			upper = self.upper_bound
-			rxn_type = repr(type(self))
+		Returns
+		-------
+		str
+			HTML representation of the reaction.
+		"""
+		rxn = cobra.util.util.format_long_string(str(self.id), 500)
+		name = cobra.util.util.format_long_string(str(self.name), 500)
+		subs = cobra.util.util.format_long_string(self.build_reaction_string(), 1000)
+		prod = cobra.util.util.format_long_string(self.build_reaction_string(True), 1000)
+		gpr = cobra.util.util.format_long_string(self.gene_reaction_rule, 500)
+		lower = self.lower_bound
+		upper = self.upper_bound
+		rxn_type = str(type(self))[8:-2]
+		flux = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.fluxes[self.id], self._model.solution.fluxes['biomass_dilution']) if hasattr(self._model, 'solution') else 'ME-model not optimized/feasible'
+		cost = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.reduced_costs[self.id], self._model.solution.fluxes['biomass_dilution']) if hasattr(self._model, 'solution') else 'ME-model not optimized/feasible'
 
-			return f"""
-			<table>
-				<tr><td><strong>Reaction identifier</strong></td><td>{rxn}</td></tr>
-				<tr><td><strong>Name</strong></td><td>{name}</td></tr>
-				<tr><td><strong>Memory address</strong></td><td>{f'{id(self):#x}'}</td></tr>
-				<tr><td><strong>Stoichiometry</strong>
-				</td><td>
-					<p style='text-align:right'>{subs}</p>
-					<p style='text-align:right'>{prod}</p>
-				</td></tr>
-				<tr><td><strong>GPR</strong></td><td>{gpr}</td></tr>
-				<tr><td><strong>Lower bound</strong></td><td>{lower}</td></tr>
-				<tr><td><strong>Upper bound</strong></td><td>{upper}</td></tr>
-				<tr><td><strong>Type</strong></td><td>{rxn_type}</td></tr>
-			</table>
+		return f"""
+		<table>
+			<tr><td><strong>Reaction identifier</strong></td><td>{rxn}</td></tr>
+			<tr><td><strong>Name</strong></td><td>{name}</td></tr>
+			<tr><td><strong>Memory address</strong></td><td>{f'{id(self):#x}'}</td></tr>
+			<tr><td><strong>Stoichiometry</strong>
+			</td><td>
+				<p style='text-align:right'>{subs}</p>
+				<p style='text-align:right'>{prod}</p>
+			</td></tr>
+			<tr><td><strong>GPR</strong></td><td>{gpr}</td></tr>
+			<tr><td><strong>Lower bound</strong></td><td>{lower}</td></tr>
+			<tr><td><strong>Upper bound</strong></td><td>{upper}</td></tr>
+			<tr><td><strong>Reaction type</strong></td><td>{rxn_type}</td></tr>
+			<tr><td><strong>Flux</strong></td><td>{flux}</td></tr>
+			<tr><td><strong>Reduced cost</strong></td><td>{cost}</td></tr>
+		</table>
 		"""
 
 	@property
