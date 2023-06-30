@@ -28,6 +28,10 @@ RUN python -m pip install matplotlib
 RUN python -m pip install tqdm
 RUN python -m pip install cobra==0.25.0
 RUN python -m pip install python-libsbml
+RUN python -m pip install Biopython==1.80
+RUN python -m pip install anyconfig
+RUN python -m pip install pyranges
+RUN python -m pip install xlsxwriter
 
 # Install jupyter notebook extensions
 RUN python3 -m pip install jupyter_nbextensions_configurator nbserverproxy
@@ -38,10 +42,11 @@ WORKDIR /opt/notebooks/coralme-tutorial
 RUN git init
 RUN git remote add -f origin https://github.com/ZenglerLab/coralme
 RUN git config core.sparseCheckout true
-RUN echo "tutorial" >> .git/info/sparse-checkout
+RUN echo "docs" >> .git/info/sparse-checkout
 RUN git pull origin master
-RUN mv tutorial/* .
-RUN rm -rf tutorial .git
+RUN mv docs/GettingStarted.ipynb .
+RUN mv docs/helper_files .
+RUN rm -rf docs .git
 
 # Set the working directory
 WORKDIR /opt/notebooks
