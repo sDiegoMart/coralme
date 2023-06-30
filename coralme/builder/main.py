@@ -70,7 +70,7 @@ class MEBuilder(object):
 		self.configuration = config
 		self.me_model = coralme.core.model.MEModel(config.get('ME-Model-ID', 'coralME'), config.get('growth_key', 'mu'))
 		self.curation_notes = coralme.builder.helper_functions.load_curation_notes(
-			self.configuration['out_directory'] + 'curation_notes.json'
+			self.configuration['out_directory'] + '/curation_notes.json'
 		)
 		self.logger = {
 			'MEBuilder' : coralme.builder.main.ListHandler([]),
@@ -280,11 +280,11 @@ class MEBuilder(object):
 		logging.warning("Generating curation notes")
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory'] + 'curation_notes.json'
+				self.configuration['out_directory'] + '/curation_notes.json'
 			)
 		coralme.builder.helper_functions.publish_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory']+ 'curation_notes.txt'
+				self.configuration['out_directory']+ '/curation_notes.txt'
 			)
 
 		logging.warning("Saving modified M-model")
@@ -1573,11 +1573,11 @@ class MEBuilder(object):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory'] + 'curation_notes.json'
+				self.configuration['out_directory'] + '/curation_notes.json'
 			)
 		coralme.builder.helper_functions.publish_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory']+ 'curation_notes.txt'
+				self.configuration['out_directory']+ '/curation_notes.txt'
 			)
 
 	def input_data(self, gem, overwrite):
