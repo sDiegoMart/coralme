@@ -458,6 +458,109 @@ class MEReaction(cobra.core.reaction.Reaction):
 				self.reverse_variable.set_bounds(lb = 0, ub = None if numpy.isinf(self.lower_bound) else -self.lower_bound)
 
 	@property
+	def flux(self) -> float:
+		"""
+		Get the flux value in the most recent solution.
+
+		Flux is the primal value of the corresponding variable in the model.
+
+		Returns
+		-------
+		flux: float
+			Flux is the primal value of the corresponding variable in the model.
+
+		Warnings
+		--------
+		* Accessing reaction fluxes through a `Solution` object is the safer,
+			preferred, and only guaranteed to be correct way. You can see how to
+			do so easily in the examples.
+		* Reaction flux is retrieved from the currently defined
+			`self._model.solver`. The solver status is checked but there are no
+			guarantees that the current solver state is the one you are looking
+			for.
+		* If you modify the underlying model after an optimization, you will
+			retrieve the old optimization values.
+
+		Raises
+		------
+		RuntimeError
+			If the underlying model was never optimized beforehand or the
+			reaction is not part of a model.
+		OptimizationError
+			If the solver status is anything other than 'optimal'.
+		AssertionError
+			If the flux value is not within the bounds.
+
+		Examples
+		--------
+		>>> from cobra.io import load_model
+		>>> model = load_model("textbook")
+		>>> solution = model.optimize()
+		>>> model.reactions.PFK.flux
+		7.477381962160283
+		>>> solution.fluxes.PFK
+		7.4773819621602833
+		"""
+		if hasattr(self._model, 'solution'):
+			try:
+				return self._model.solution.to_frame().loc[self.id].fluxes
+			except KeyError:
+				raise RuntimeError(f"reaction '{self.id}' is not part of a model")
+		else:
+			raise RuntimeError(f"ME-model has not been optimize or it is not feasible.")
+
+	@property
+	def reduced_cost(self) -> float:
+		"""
+		Get the reduced cost in the most recent solution.
+
+		Reduced cost is the dual value of the corresponding variable in the
+		model.
+
+		Returns
+		-------
+		reducd_cost: float
+			A float representing the reduced cost.
+
+		Warnings
+		--------
+		* Accessing reduced costs through a `Solution` object is the safer,
+			preferred, and only guaranteed to be correct way. You can see how to
+			do so easily in the examples.
+		* Reduced cost is retrieved from the currently defined
+			`self._model.solver`. The solver status is checked but there are no
+			guarantees that the current solver state is the one you are looking
+			for.
+		* If you modify the underlying model after an optimization, you will
+			retrieve the old optimization values.
+
+		Raises
+		------
+		RuntimeError
+			If the underlying model was never optimized beforehand or the
+			reaction is not part of a model.
+		OptimizationError
+			If the solver status is anything other than 'optimal'.
+
+		Examples
+		--------
+		>>> from cobra.io import load_model
+		>>> model = load_model("textbook")
+		>>> solution = model.optimize()
+		>>> model.reactions.PFK.reduced_cost
+		-8.673617379884035e-18
+		>>> solution.reduced_costs.PFK
+		-8.6736173798840355e-18
+		"""
+		if hasattr(self._model, 'solution'):
+			try:
+				return self._model.solution.to_frame().loc[self.id].reduced_costs
+			except KeyError:
+				raise RuntimeError(f"reaction '{self.id}' is not part of a model")
+		else:
+			raise RuntimeError(f"ME-model has not been optimize or it is not feasible.")
+
+	@property
 	def lower_bound(self) -> float:
 		"""Get the lower bound.
 
@@ -657,37 +760,41 @@ class MEReaction(cobra.core.reaction.Reaction):
 		return reaction_string
 
 	def _repr_html_(self) -> str:
-			"""Generate html representation of reaction.
+		"""Generate html representation of reaction.
 
-			Returns
-			-------
-			str
-				HTML representation of the reaction.
-			"""
-			rxn = cobra.util.util.format_long_string(str(self.id), 500)
-			name = cobra.util.util.format_long_string(str(self.name), 500)
-			subs = cobra.util.util.format_long_string(self.build_reaction_string(), 1000)
-			prod = cobra.util.util.format_long_string(self.build_reaction_string(True), 1000)
-			gpr = cobra.util.util.format_long_string(self.gene_reaction_rule, 500)
-			lower = self.lower_bound
-			upper = self.upper_bound
-			rxn_type = repr(type(self))
+		Returns
+		-------
+		str
+			HTML representation of the reaction.
+		"""
+		rxn = cobra.util.util.format_long_string(str(self.id), 500)
+		name = cobra.util.util.format_long_string(str(self.name), 500)
+		subs = cobra.util.util.format_long_string(self.build_reaction_string(), 1000)
+		prod = cobra.util.util.format_long_string(self.build_reaction_string(True), 1000)
+		gpr = cobra.util.util.format_long_string(self.gene_reaction_rule, 500)
+		lower = self.lower_bound
+		upper = self.upper_bound
+		rxn_type = str(type(self))[8:-2]
+		flux = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.fluxes[self.id], self._model.solution.fluxes['biomass_dilution']) if hasattr(self._model, 'solution') else 'ME-model not optimized/feasible'
+		cost = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.reduced_costs[self.id], self._model.solution.fluxes['biomass_dilution']) if hasattr(self._model, 'solution') else 'ME-model not optimized/feasible'
 
-			return f"""
-			<table>
-				<tr><td><strong>Reaction identifier</strong></td><td>{rxn}</td></tr>
-				<tr><td><strong>Name</strong></td><td>{name}</td></tr>
-				<tr><td><strong>Memory address</strong></td><td>{f'{id(self):#x}'}</td></tr>
-				<tr><td><strong>Stoichiometry</strong>
-				</td><td>
-					<p style='text-align:right'>{subs}</p>
-					<p style='text-align:right'>{prod}</p>
-				</td></tr>
-				<tr><td><strong>GPR</strong></td><td>{gpr}</td></tr>
-				<tr><td><strong>Lower bound</strong></td><td>{lower}</td></tr>
-				<tr><td><strong>Upper bound</strong></td><td>{upper}</td></tr>
-				<tr><td><strong>Type</strong></td><td>{rxn_type}</td></tr>
-			</table>
+		return f"""
+		<table>
+			<tr><td><strong>Reaction identifier</strong></td><td>{rxn}</td></tr>
+			<tr><td><strong>Name</strong></td><td>{name}</td></tr>
+			<tr><td><strong>Memory address</strong></td><td>{f'{id(self):#x}'}</td></tr>
+			<tr><td><strong>Stoichiometry</strong>
+			</td><td>
+				<p style='text-align:right'>{subs}</p>
+				<p style='text-align:right'>{prod}</p>
+			</td></tr>
+			<tr><td><strong>GPR</strong></td><td>{gpr}</td></tr>
+			<tr><td><strong>Lower bound</strong></td><td>{lower}</td></tr>
+			<tr><td><strong>Upper bound</strong></td><td>{upper}</td></tr>
+			<tr><td><strong>Reaction type</strong></td><td>{rxn_type}</td></tr>
+			<tr><td><strong>Flux</strong></td><td>{flux}</td></tr>
+			<tr><td><strong>Reduced cost</strong></td><td>{cost}</td></tr>
+		</table>
 		"""
 
 	@property
