@@ -621,8 +621,8 @@ def gap_find(me_model,de_type = None):
 	return deadends
 
 def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu', positive = True) : 0.1 }, met_types = 'Metabolite'):
-	if sys.platform == 'win32':
-		self.me_model.get_solution = self.me_model.opt_gurobi
+	if sys.platform in ['win32', 'darwin']:
+		self.me_model.get_solution = self.me_model.optimize_windows
 		self.me_model.get_feasibility = self.me_model.feas_gurobi
 	else:
 		self.me_model.get_solution = self.me_model.optimize
@@ -630,7 +630,7 @@ def gap_fill(me_model, deadends = [], growth_key_and_value = { sympy.Symbol('mu'
 
 	if len(deadends) != 0:
 		logging.warning('  '*5 + 'Adding a sink reaction for each identified deadend metabolite...')
-		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends)
+		coralme.builder.helper_functions.add_exchange_reactions(me_model, deadends, prefix='TS_')
 	else:
 		logging.warning('  '*5 + 'Empty set of deadends metabolites to test.')
 		return None
@@ -655,8 +655,8 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 		me_model.get_feasibility = me_model.feasibility
 
 	logging.warning('  '*5 + 'Adding sink reactions for {:d} metabolites...'.format(len(metabolites_to_add)))
-	existing_sinks = [r.id for r in me_model.reactions.query('^SK_')]
-	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add)
+# 	existing_sinks = [r.id for r in me_model.reactions.query('^TS_')]
+	sk_rxns = coralme.builder.helper_functions.add_exchange_reactions(me_model, metabolites_to_add, prefix='TS_')
 
 	if me_model.get_feasibility(keys = growth_key_and_value):
 		pass
@@ -665,15 +665,15 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 
 	rxns = []
 	rxns_to_drop = []
-	rxns_to_append = []
+# 	rxns_to_append = []
 # 	for idx, flux in me_model.solution.fluxes.items():
 	for r in sk_rxns:
 		idx = r.id
 		flux = me_model.solution.fluxes[idx]
-		if idx.startswith('SK_') and idx.split('SK_')[1] in metabolites_to_add:
-			if r.id in existing_sinks:
-				rxns_to_append.append(idx)
-				continue
+		if idx.startswith('TS_') and idx.split('TS_')[1] in metabolites_to_add:
+# 			if r.id in existing_sinks:
+# 				rxns_to_append.append(idx)
+# 				continue
 			if abs(flux) > 0:
 				rxns.append(idx)
 			else:
@@ -681,10 +681,11 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 				rxns_to_drop.append(idx)
 				me_model.reactions.get_by_id(idx).bounds = (0, 0)
 
-	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites:'.format(len(rxns)))
+	logging.warning('  '*6 + 'Sink reactions shortlisted to {:d} metabolites.'.format(len(rxns)))
 
 	# reaction_id:position in the model.reactions DictList object
-	rxns = rxns + rxns_to_append# Try present SKs the last.
+# 	rxns = rxns + rxns_to_append# Try present SKs the last.
+# 	logging.warning('  '*6 + 'Will try a total of {:d} metabolites including previous iterations:'.format(len(rxns)))
 	ridx = []
 	for r in rxns:
 		ridx.append((r,me_model.reactions._dict[r]))
@@ -735,19 +736,15 @@ def get_mets_from_type(me_model,met_type):
 			mets.add(met.id)
 	return mets
 
-def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite', skip = set()):
-	if isinstance(met_types, str):
-		met_types = [met_types]
+def _append_metabolites(mets,new_mets):
+	return mets + [m for m in new_mets if m not in mets]
 
-	mets = set()
-	for met_type in met_types:
-		mets = mets | get_mets_from_type(me_model,met_type)
-
-	if 'Metabolite' in met_types:
+def brute_check(me_model, growth_key_and_value, met_type, skip = set(), history = dict()):
+	mets = get_mets_from_type(me_model,met_type)
+	if met_type == 'Metabolite':
 		#remove from the metabolites to test that are fed into the model through transport reactions
 		medium = set([ '{:s}_c'.format(x[3:-2]) for x in me_model.gem.medium.keys() ])
 		mets = set(mets).difference(medium)
-
 		# filter out manually
 		mets = set(mets).difference(set(['ppi_c', 'ACP_c', 'h_c']))
 		mets = set(mets).difference(set(['adp_c', 'amp_c', 'atp_c']))
@@ -761,9 +758,15 @@ def brute_check(me_model, growth_key_and_value, met_types = 'Metabolite', skip =
 		mets = set(mets).difference(set(['5fthf_c', '10fthf_c', '5mthf_c', 'dhf_c', 'methf_c', 'mlthf_c', 'thf_c']))
 		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 		mets = set(mets).difference(set(['coa_c']))
-
 	mets = set(mets).difference(skip)
-	return coralme.builder.helper_functions.brute_force_check(me_model, sorted(mets, key = str.casefold), growth_key_and_value)
+	history[met_type] =  mets
+
+	mets_to_check = []
+	for k,v in history.items():
+		mets_to_check = _append_metabolites(mets_to_check,v)
+	return history,coralme.builder.helper_functions.brute_force_check(me_model,
+															  mets_to_check[::-1],
+															  growth_key_and_value)
 
 def evaluate_lp_problem(Sf, Se, lb, ub, keys, atoms):
 	lb = [ x(*[ keys[x] for x in list(atoms) ]) if hasattr(x, '__call__') else float(x.xreplace(keys)) if hasattr(x, 'subs') else x for x in lb ]
@@ -794,9 +797,9 @@ def find_complexes(m, seen = set()):
     if m in seen:
         return set()
 #     print(type(m))
-    
+
     seen.add(m)
-    
+
     # Metabolite objects
     if isinstance(m,coralme.core.component.TranslatedGene):
         cplxs = set()
@@ -822,7 +825,7 @@ def find_complexes(m, seen = set()):
                 continue
             cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
-    
+
     if isinstance(m,coralme.core.component.Complex) or isinstance(m,coralme.core.component.GenericComponent) or isinstance(m,coralme.core.component.GenerictRNA):
         other_formations = [r for r in m.reactions if (isinstance(r,coralme.core.reaction.ComplexFormation) or isinstance(r,coralme.core.reaction.GenericFormationReaction)) and substitute_value(m,r.metabolites[m]) < 0]
 #         print(other_formations)
@@ -832,7 +835,7 @@ def find_complexes(m, seen = set()):
                 cplxs = cplxs | find_complexes(r, seen=seen)
         return cplxs
 #         return set([m])
-    
+
     # Reaction objects
     if isinstance(m,coralme.core.reaction.PostTranslationReaction):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.ProcessedProtein), seen=seen)
@@ -842,7 +845,11 @@ def find_complexes(m, seen = set()):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
     if isinstance(m,coralme.core.reaction.tRNAChargingReaction):
         return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenerictRNA), seen=seen)
-    
+    if isinstance(m,coralme.core.reaction.MetabolicReaction):
+        return find_complexes(get_next_from_type(m.metabolites,coralme.core.component.Complex), seen=seen) | \
+                find_complexes(get_next_from_type(m.metabolites,coralme.core.component.GenericComponent), seen=seen)
+
+
     return set()
 
 def get_functions(cplx):
@@ -850,9 +857,9 @@ def get_functions(cplx):
 	for r in cplx.reactions:
 		if isinstance(r,coralme.core.reaction.MetabolicReaction) and hasattr(r,'subsystem'):
 			if r.subsystem:
-				functions.add(r.subsystem)
+				functions.add('Metabolic:' + r.subsystem)
 				continue
-			functions.add('metabolic_no_subsystem')
+			functions.add('Metabolic: No subsystem')
 			continue
 		if isinstance(r,coralme.core.reaction.TranslationReaction):
 			functions.add('Translation')

@@ -91,7 +91,9 @@ def main():
 			'pandas',
 			'sympy',
 			'jsonschema',
-			'anyconfig'
+			'anyconfig',
+			'pyranges',
+			'xlsxwriter'
 			],
 
 		# WARNING: seems to be bdist_wheel only

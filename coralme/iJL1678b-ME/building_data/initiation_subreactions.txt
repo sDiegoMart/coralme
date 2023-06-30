@@ -1,4 +1,4 @@
-	enzymes	stoich	element_contribution
+subreaction	enzymes	stoich	element_contribution
 Translation_initiation_factor_InfA	InfA_mono
 Translation_initiation_factor_InfC	InfC_mono
 Translation_gtp_initiation_factor_InfB	InfB_mono	gtp_c:-1,h2o_c:-1,h_c:1,pi_c:1,gdp_c:1

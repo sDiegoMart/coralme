@@ -426,7 +426,7 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		if len(pathways) != 0:
 			return pathways
 
-	dct = { k:list(v['enzymes'].keys()) for k,v in builder.org.translocation_pathways.items() if len(v['enzymes']) != 0 }
+	dct = { k:v['enzymes'] for k,v in builder.org.translocation_pathways.items() if len(v['enzymes']) != 0 }
 	data['MetaComplex ID'].update(data.apply(lambda x: get_transpaths(x, dct), axis = 1))
 	data = data.explode('MetaComplex ID')
 
@@ -533,8 +533,8 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	data['DnaK_dependent_folding'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
 	lst = builder.org.cleaved_methionine
 	data['N_terminal_methionine_cleavage'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
-	lst = builder.org.stable_RNAs
-	data['RNA stability'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
+# 	lst = builder.org.stable_RNAs
+# 	data['RNA stability'] = data.apply(lambda x: get_processing_targets(x, lst), axis = 1)
 
 	# tRNA to codon association from GenBank data
 	dct = { k:','.join(v) for x in [ v for k,v in builder.me_model.global_info['trna_to_codon'].items() ] for k,v in x.items() }

@@ -89,6 +89,7 @@ class Organism(object):
             'CCO-MEMBRANE,Membrane,'
 
         self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col=0)
+        self.manual_curation = coralme.builder.curation.CurationList()
 #         self.get_organism()
 
     @property
@@ -171,6 +172,9 @@ class Organism(object):
         return set(g for g,t in product_types.items() if 'RNA' in t)
 
     def get_organism(self):
+        """ Processes input files, and creates an instance of
+        Organism. 
+        """
         sep = '~ '*1
         print("{}Processing files for {}...".format(sep,self.id))
         if not self.is_reference:
@@ -245,6 +249,8 @@ class Organism(object):
         print("Reading {} done...".format(self.id))
 
     def get_genbank_contigs(self):
+        """ Reads GenBank file as a list of contigs. 
+        """
         if self.id == 'iJL1678b':
             gb_it = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
         else:
@@ -253,6 +259,8 @@ class Organism(object):
 
 
     def check_folder(self):
+        """ Checks that the necessary directories are present. 
+        """
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
             logging.warning("{} directory was created.".format(self.directory))
@@ -262,6 +270,8 @@ class Organism(object):
 
 
     def check_m_model(self):
+        """ Performs checks on the M-model
+        """
         m_model = self.m_model
 
         # Metabolites
@@ -326,6 +336,8 @@ class Organism(object):
                 'to_do':'Make sure these metabolites are removed or connected properly'})
 
     def load_optional_files(self):
+        """ Loads optional files.
+        """
         logging.warning("Loading gene dictionary")
         self.gene_dictionary = self.read_gene_dictionary(
             self.config.get('biocyc.genes', self.directory + "genes.txt")
@@ -347,10 +359,14 @@ class Organism(object):
         )
 
     def load_manual_curation(self):
+        """ Loads manual curation to Organism instance 
+        """
         MEManualCuration(self).load_manual_curation()
 
 
     def purge_genes_in_file(self):
+        """ Checks genes in files and purges problematic ones.
+        """
         if self.is_reference:
             return
 
@@ -478,6 +494,8 @@ class Organism(object):
 
 
     def sync_files(self):
+        """ Syncs provided files.
+        """
         if self.is_reference:
             return
 
@@ -641,6 +659,8 @@ class Organism(object):
             return product_type
 
     def update_genbank_from_files(self):
+        """ Complements GenBank file from optional files.
+        """
         if self.is_reference:
             return
         contigs = self.contigs
@@ -740,6 +760,9 @@ class Organism(object):
                 "source" : "BioCyc"}
 
     def generate_complexes_df(self):
+        """ Creates a DataFrame containing complex composition
+        information from the provided files.
+        """
         proteins_df = self.proteins_df
 
         if proteins_df.empty:
@@ -784,6 +807,8 @@ class Organism(object):
         return complexes_df.fillna({"name": ""})
 
     def read_optional_file(self,filetype,filename,columns):
+        """ Method for reading an optional file.
+        """
         if os.path.isfile(filename):
             file = pandas.read_csv(filename, sep="\t",index_col=0)
         else:
@@ -795,6 +820,8 @@ class Organism(object):
         return file.fillna('')
 
     def read_gene_dictionary(self,filename):
+        """ Loads the genes file.
+        """
         gene_dictionary = self.read_optional_file(
             'genes',
             filename,
@@ -836,6 +863,8 @@ class Organism(object):
                         'to_do':'Complete Accession-1 IDs in genes.txt if those genes are important.'})
         return gene_dictionary
     def read_proteins_df(self,filename):
+        """ Loads the proteins file.
+        """
         return self.read_optional_file(
             'proteins',
             filename,
@@ -847,6 +876,8 @@ class Organism(object):
             ]
         )
     def read_gene_sequences(self,filename):
+        """ Loads the gene sequences file.
+        """
         if os.path.isfile(filename):
             d = {}
             for i in Bio.SeqIO.parse(filename,'fasta'):
@@ -855,6 +886,8 @@ class Organism(object):
             return d
         return {}
     def read_RNA_df(self,filename):
+        """ Loads the RNAs file.
+        """
         return self.read_optional_file(
             'RNAs',
             filename,
@@ -865,6 +898,8 @@ class Organism(object):
             ]
         )
     def read_TU_df(self,filename):
+        """ Loads the TUs file.
+        """
         return self.read_optional_file(
             'TUs',
             filename,
@@ -876,6 +911,8 @@ class Organism(object):
         )
 
     def check_gene_overlap(self):
+        """ Assesses gene identifier overlap between files.
+        """
         if self.is_reference:
             return
 
@@ -943,6 +980,8 @@ class Organism(object):
                 'to_do':'Check if translation tables are correct.'})
 
     def update_ribosome_stoich(self):
+        """ Updated ribosome composition from files.
+        """
         if self.is_reference:
             return
         complexes_df = self.complexes_df
@@ -1092,6 +1131,8 @@ class Organism(object):
         return gene_dictionary,complexes_df,RNA_df
 
     def update_complexes_genes_with_genbank(self):
+        """ Complements complexes and genes with genome
+        """
         if self.is_reference:
             return
 
@@ -1130,6 +1171,8 @@ class Organism(object):
                 'to_do':'Check whether these features are necessary, and correct their locus_tag. If they have been completed from other provided files, ignore.'})
 
     def purge_genes_in_model(self):
+        """ Purges problematic genes in the M-model
+        """
         m_model = self.m_model
         gene_dictionary = self.gene_dictionary
         RNA_df = self.RNA_df
@@ -1192,6 +1235,8 @@ class Organism(object):
 #                 for i in self.complexes_df.loc[cplx]['genes'].split(' AND ')]
     
     def get_trna_synthetase(self):
+        """ Gets tRNA synthetases from files.
+        """
         if self.is_reference:
             return
 
@@ -1203,10 +1248,11 @@ class Organism(object):
             return None
 
         org_amino_acid_trna_synthetase = self.amino_acid_trna_synthetase
+        manually_curated_aa = [k for k,v in org_amino_acid_trna_synthetase.items() if v]
         generic_dict = self.generic_dict
         complexes_df = self.complexes_df
         warn_generic = []
-        d = {}
+        d = defaultdict(set)
         for k,v in org_amino_acid_trna_synthetase.copy().items():
             if isinstance(v,list):
                 d[k] = set(v)
@@ -1219,24 +1265,29 @@ class Organism(object):
                         warn_generic.append(v)
                         d[k] = set()
                         continue
-                    d[k] = set(generic_dict[v]['enzymes'])
-                    continue
+#                     d[k] = set(generic_dict[v]['enzymes'])
+#                     continue
                 d[k] = set([v])
         trna_ligases = self._get_ligases_from_regex(complexes_df).to_dict()['name']
         for cplx, trna_string in trna_ligases.items():
             aa = find_aminoacid(trna_string)
             if aa is None:continue
+            if aa in manually_curated_aa: continue
+#             if aa not in d: d[aa] = set()
             if self._is_base_complex_in_list(cplx,d[aa]): continue
             d[aa].add(cplx)
         trna_ligases_from_subunits = self._get_ligases_subunits_from_regex(complexes_df).to_dict()['name']
-        new_cplxs = {k:dict() for k in d.copy()}
+#         new_cplxs = {k:dict() for k in d.copy()}
+        new_cplxs = defaultdict(dict)
         for cplx,trna_string in trna_ligases_from_subunits.items():
             trna_string = self._extract_trna_string(trna_string)
             aa = find_aminoacid(trna_string)
             if aa is None:continue
+#             if aa not in d: d[aa] = set()
             if d[aa]: continue
             cplx_genes = self._get_genes_of_cplx(cplx)
             for k,v in cplx_genes.items():
+#                 if aa not in new_cplxs: new_cplxs[aa] = dict()
                 new_cplxs[aa][k] = v
 #             new_cplxs[aa].add(cplx)
         
@@ -1263,7 +1314,7 @@ class Organism(object):
             else:
                 d[aa] = 'CPLX_dummy'
                 warn_ligases.append(aa)
-        self.amino_acid_trna_synthetase = d
+        self.amino_acid_trna_synthetase = dict(d)
         self.complexes_df = complexes_df
 
         # Warnings
@@ -1282,6 +1333,8 @@ class Organism(object):
                 'to_do':'Fix the definition in generic_dict'})
 
     def get_peptide_release_factors(self):
+        """ Gets peptide release factors from files.
+        """
         if self.is_reference:
             return
 
@@ -1297,6 +1350,8 @@ class Organism(object):
                 peptide_release_factors["UGA"]['enzyme'] = rf[rf.str.contains("2")].index[0]
                 generics["generic_RF"]['enzymes'].append(peptide_release_factors["UGA"]['enzyme'])
     def get_nonmetabolic(self):
+        """ Gets nonmetabolic metabolites in M-model.
+        """
         m_model = self.m_model
         queries = ['ACP','trna']
         for m in m_model.metabolites.query('|'.join(queries)):
@@ -1313,6 +1368,8 @@ class Organism(object):
         return None
 
     def gb_to_faa(self, org_id, outdir = False, element_types = {"CDS"}):
+        """ Generates a protein FASTA from genome for BLAST
+        """
         ## Create FASTA file with AA sequences for BLAST
         contigs = self.contigs
 
@@ -1347,6 +1404,8 @@ class Organism(object):
             name = "_".join(row["genes"])
         return "RNAP_" + name
     def get_sigma_factors(self):
+        """ Gets sigma factors from files.
+        """
         complexes_df = self.complexes_df
 
         sigma_df = complexes_df.loc[
@@ -1379,6 +1438,8 @@ class Organism(object):
 
 
     def get_rpod(self):
+        """ Gets RpoD from files.
+        """
         sigma_df = self.sigmas
         rpod = sigma_df[sigma_df["name"].str.contains("RpoD")].index.to_list()
         if not rpod:
@@ -1460,6 +1521,7 @@ class Organism(object):
         return df['name'].str.contains("beta(\'|.*prime)|rpoc",regex=True,case=False).any()
 
     def get_rna_polymerase(self, force_RNAP_as=""):
+        # TODO: Allow user to define RNAP, skip inferring?
         protein_mod = self.protein_mod
         RNAP = ""
         if force_RNAP_as:
@@ -1518,6 +1580,8 @@ class Organism(object):
         self.rna_polymerases = list(self.rna_polymerase_id_by_sigma_factor.keys())
 
     def get_TU_genes(self):
+        """ Gets TU composition from files.
+        """
         TUs = self.TUs
         gene_dictionary = self.gene_dictionary
         genes_to_TU = {}
@@ -1541,6 +1605,8 @@ class Organism(object):
         self.TU_to_genes = TU_to_genes
 
     def get_TU_df(self):
+        """ Generates TUs_from_biocyc.
+        """
         TUs = self.TUs
         gene_dictionary = self.gene_dictionary
         rpod = self.rpod
@@ -1666,6 +1732,8 @@ class Organism(object):
         return protein_location
 
     def get_protein_location(self):
+        """ Gets protein location from files.
+        """
         complexes_df = self.complexes_df
         proteins_df = self.proteins_df
         gene_dictionary = self.gene_dictionary
@@ -1701,6 +1769,8 @@ class Organism(object):
 
     # TODO: New format of keffs file
     def get_reaction_keffs(self):
+        """ Gets reaction Keffs from files.
+        """
         if self.is_reference:
             return None
         # Keff estimator from https://pubs.acs.org/doi/10.1021/bi2002289
@@ -1743,110 +1813,19 @@ class Organism(object):
         return self.reaction_median_keffs['keff'].to_dict()
 
     def get_phospholipids(self):
+        """ Gets phospholipids from M-model.
+        """
         m_model = self.m_model
         return [
             str(m.id) for m in m_model.metabolites.query(re.compile("^pg[0-9]{2,3}_.$"))
         ]
     def get_lipids(self):
+        """ Gets lipids from M-model.
+        """
         m_model = self.m_model
         return [
             str(m.id) for m in m_model.metabolites.query(re.compile("^[a-z]*[0-9]{2,3}_.$"))
         ]
-
-#     def generate_metabolites_file(self):
-#         m_model = self.m_model
-#         d = {}
-#         seen = set()
-#         for m in tqdm.tqdm(m_model.metabolites,
-#                            'Saving M-model metabolites...',
-#                            bar_format = bar_format):
-#             if m in seen:
-#                 continue
-#             m_root = m.id[:-2]
-#             same_mets = m_model.metabolites.query(
-#                 re.compile("^" + m_root + "_[a-z]{1}$")
-#             )
-#             compartment_string = " AND ".join(
-#                 m_model.compartments[i.compartment] for i in same_mets
-#             )
-#             d[m_root] = {
-#                 "name": m.name,
-#                 "formula": m.formula,
-#                 "compartment": compartment_string,
-#                 "data_source": m_model.id,
-#             }
-#             seen = seen | set(same_mets)
-#         self.metabolites = pandas.DataFrame.from_dict(d).T
-#         self.metabolites.index.name = "id"
-
-#     def generate_reactions_file(self):
-#         def is_spontaneous(r):
-#             return (
-#                 1
-#                 if "spontaneous" in r.name or "diffusion" in r.name and not r.genes
-#                 else 0
-#             )
-
-#         m_model = self.m_model
-#         d = {}
-#         for r in tqdm.tqdm(m_model.reactions,
-#                            'Saving M-model reactions...',
-#                            bar_format = bar_format):
-#             d[r.id] = {
-#                 "description": r.name,
-#                 "is_reversible": int(r.reversibility),
-#                 "data_source": m_model.id,
-#                 "is_spontaneous": is_spontaneous(r),
-#             }
-#         self.reactions = pandas.DataFrame.from_dict(d).T
-#         self.reactions.index.name = "name"
-
-
-#     def generate_reaction_matrix(self):
-#         m_model = self.m_model
-#         m_to_me = self.m_to_me_mets
-#         df = pandas.DataFrame.from_dict(
-#             {"Reaction": {}, "Metabolites": {}, "Compartment": {}, "Stoichiometry": {}}
-#         ).set_index("Reaction")
-#         warn_rxns = []
-#         for rxn in tqdm.tqdm(m_model.reactions,
-#                            'Creating M-model reaction matrix...',
-#                            bar_format = bar_format):
-#             if set(
-#                 [
-#                     m_to_me.loc[met.id, "me_name"]
-#                     for met in rxn.metabolites
-#                     if met.id in m_to_me.index
-#                 ]
-#             ) == set(["eliminate"]):
-#                 warn_rxns.append(rxn.id)
-#                 continue
-#             for metabolite in rxn.metabolites:
-#                 compartment = m_model.compartments[metabolite.compartment]
-#                 met = metabolite.id[:-2]
-#                 if metabolite.id in m_to_me.index:
-#                     if m_to_me.loc[metabolite.id, "me_name"] == "eliminate":
-#                         continue
-#                     met = m_to_me.loc[metabolite.id, "me_name"]
-#                 coefficient = rxn.get_coefficient(metabolite)
-#                 tmp = pandas.DataFrame.from_dict({
-#                     rxn.id: {
-#                         "Metabolites": met,
-#                         "Compartment": compartment,
-#                         "Stoichiometry": coefficient,
-#                         }}).T
-#                 df = pandas.concat([df, tmp], axis = 0, join = 'outer')
-#         df.index.name = "Reaction"
-#         self.reaction_matrix = df
-
-#         df.to_csv(self.directory + 'reaction_matrix.txt')
-#         # Warnings
-#         if warn_rxns:
-#             self.curation_notes['org.generate_reaction_matrix'].append({
-#                 'msg':'Some reactions consisted only of metabolites marked for elimination in m_to_me_mets.txt, so they were removed',
-#                 'triggered_by':warn_rxns,
-#                 'importance':'high',
-#                 'to_do':'Some of these reactions can be essential for growth. If you want to keep any of these reactions, or modify them, add them to reaction_corrections.txt'})
 
     def _get_feature_locus_tag(self,
                                feature):
@@ -1877,6 +1856,8 @@ class Organism(object):
             generic_dict[cat]['enzymes'].append(gene)
 
     def get_generics_from_genbank(self):
+        """ Gets generics from genome.
+        """
         if self.is_reference:
             return None
         contigs = self.contigs
@@ -1925,7 +1906,9 @@ class Organism(object):
             d[rrnaid] = [i[4:] for i in generic_dict[key]['enzymes']]
         return d
     
-    def process_rna_modifications(self): 
+    def process_rna_modifications(self):
+        """ Processes RNA modification information.
+        """
         rna_mods = self.rna_modification_df
         self.rna_modification = self._modify_rna_modification_from_load(rna_mods)
         
@@ -2013,6 +1996,8 @@ class Organism(object):
 
 
     def check_for_duplicates(self):
+        """ Checks for problematic duplicates in provided files.
+        """
         # Duplicates within datasets
         info = {
             'complexes_df' : list(self.complexes_df.index),
@@ -2033,6 +2018,8 @@ class Organism(object):
         return not bool(len(f.extract(contig).seq.replace('-', '')) % 3)
 
     def prune_genbank(self):
+        """ Prunes and cleans genome file
+        """
         if self.is_reference:
             return
         contigs = self.contigs
@@ -2086,6 +2073,8 @@ class Organism(object):
                     'to_do':'Check whether any of these genes are translated in your final ME-model. If so, fix the positions of the gene in genome_modified.gb'})
 
     def modify_metabolic_reactions(self):
+        """ Modifies metabolic reactions from manual input
+        """
         if self.is_reference:
             return
         m_model = self.m_model
@@ -2116,6 +2105,8 @@ class Organism(object):
                     rxn.name = info["name"]
 
     def add_manual_complexes(self):
+        """ Modifies complexes from manual input
+        """
         if self.is_reference:
             return
         manual_complexes = self.manual_complexes
@@ -2136,11 +2127,6 @@ class Organism(object):
                                new_complex,
                                complexes_df,
                                "Manual")
-#                     complexes_df = complexes_df.append(
-#                         pandas.DataFrame.from_dict(
-#                             {new_complex: {"name": "", "genes": "", "source": "Manual"}}
-#                         ).T
-#                     )
                 complexes_df.loc[new_complex, "genes"] = info["genes"]
                 complexes_df.loc[new_complex, "name"] = str(info["name"])
             
@@ -2170,17 +2156,6 @@ class Organism(object):
                                                              new_complex,
                                                              info["mod"],
                                                              "Manual")
-#                 protein_mod = protein_mod.append(
-#                     pandas.DataFrame.from_dict(
-#                         {
-#                             mod_complex: {
-#                                 "Core_enzyme": new_complex,
-#                                 "Modifications": info["mod"],
-#                                 "Source": "Manual",
-#                             }
-#                         }
-#                     ).T
-#                 )
         complexes_df.index.name = "complex"
 
         self.complexes_df = complexes_df
@@ -2202,6 +2177,8 @@ class Organism(object):
                     'to_do':'Check whether the marked modified protein in protein_corrections.txt for replacement is correctly defined.'})
 
     def generate_curation_notes(self):
+        """ Generates Curation Notes
+        """
         import json
         curation_notes = self.curation_notes
         filename = self.directory + '/curation_notes.txt'
@@ -2228,6 +2205,8 @@ class Organism(object):
         file.close()
 
     def publish_curation_notes(self):
+        """ Saves Curation Notes to file.
+        """
         import json
         curation_notes = self.curation_notes
         filename = self.directory + '/curation_notes.txt'

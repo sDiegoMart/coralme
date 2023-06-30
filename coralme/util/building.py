@@ -599,10 +599,12 @@ def build_reactions_from_genbank(
 
 					msg = 'The tRNA \'{:s}\' is associated to two amino acids. The \'trna_misacylation\' dictionary was modified to attempt load the correct amino acid.'
 					# Special tRNA(Asx) that can be loaded with Asn (EC 6.1.1.22) or Asp (EC 6.1.1.12)
+					# If loaded with Asp, it is converted into Asn (EC 6.3.5.6)
 					if aa == 'Asx':
 						trna_misacylation['Asx'] = 'Asp'
 						logging.warning(msg.format(bnum))
 					# Special tRNA(Glx) that can be loaded with Gln (EC 6.1.1.18) or Glu (EC 6.1.1.17)
+					# If loaded with Glu, it is converted into Gln (EC 6.3.5.7)
 					if aa == 'Glx':
 						trna_misacylation['Glx'] = 'Glu'
 						logging.warning(msg.format(bnum))
@@ -621,6 +623,7 @@ def build_reactions_from_genbank(
 							trna_to_aa[bnum] = trna_misacylation[aa]
 							if aa.endswith('x'):
 								logging.warning(msg2.format(bnum, aa, trna_misacylation[aa], aa))
+								#aa = trna_misacylation[aa]
 							else:
 								logging.warning(msg1.format(bnum, aa, trna_misacylation[aa], aa, trna_misacylation[aa], aa, aa, aa))
 						else:

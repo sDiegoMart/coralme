@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Getting started &mdash; coralME 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Description of Inputs" href="BasicInputs.html" />
+    <link rel="prev" title="Welcome to coralME documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> coralME
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Download-files-from-BioCyc">1.1. Download files from BioCyc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Initialize-the-folder-for-your-organism">1.2. Initialize the folder for your organism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Reconstruct-with-coralME">1.3. Reconstruct with coralME</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Curate-manually">1.4. Curate manually</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="BasicInputs.html">2. Description of Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coralMEArquitecture.html">3. Arquitecture of coralME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ManualCuration.html">4. How to manually curate a ME-model using coralME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">5. Frequently Asked Questions|</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">coralME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Getting started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GettingStarted.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Getting-started">
+<h1><span class="section-number">1. </span>Getting started<a class="headerlink" href="#Getting-started" title="Permalink to this heading"></a></h1>
+<p>For details on inputs go to <a class="reference internal" href="BasicInputs.html"><span class="doc">Description of Inputs</span></a>.</p>
+<p>For information about coralME architecture go to <a class="reference internal" href="coralMEArquitecture.html"><span class="doc">Arquitecture of coralME</span></a>.</p>
+<section id="Download-files-from-BioCyc">
+<h2><span class="section-number">1.1. </span>Download files from BioCyc<a class="headerlink" href="#Download-files-from-BioCyc" title="Permalink to this heading"></a></h2>
+<p>BioCyc files are optional but useful, you should download them after having your gene id consistent M-model and genbank files.</p>
+<p>The quickest way to do this is to copy one of the genes from the genbank file into the BioCyc search bar. Your organism should appear in the list if it is available in BioCyc.</p>
+<p>To download:</p>
+<p>Go to Tools&gt;Special SmartTables</p>
+<p><img alt="Drawing" src="_images/1.png" /></p>
+<p>From here you can download the 5 optional BioCyc files for your organism.</p>
+<p><img alt="Drawing" src="_images/2.png" /></p>
+<p>Download genes.txt and sequences.fasta</p>
+<p><img alt="Drawing" src="_images/3.png" /></p>
+<p>The same process of genes.txt applies to proteins.txt, RNAs.txt and TUs.txt.</p>
+<p>Some columns must be added manually using BioCyc’s dropdown lists <strong>ADD PROPERTY COLUMN</strong> and <strong>ADD TRANSFORM COLUMN</strong> within the SmartTable editing webpage.</p>
+<p><img alt="Drawing" src="_images/4.png" /></p>
+<p>Download proteins.txt</p>
+<p>The index (Proteins Complexes) is in the SmartTable by default, but you need to add the columns Common-Name, Genes of polypeptide, complex, or RNA, and Locations.</p>
+<ul class="simple">
+<li><p>Common-Name is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong></p></li>
+<li><p>Genes of polypeptide, complex, or RNA is available in the dropdown list <strong>ADD TRANSFORM COLUMN</strong></p></li>
+<li><p>Locations is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong>.</p></li>
+</ul>
+<p>Download RNAs.txt</p>
+<p>The index (All-tRNAs Misc-RNAs rRNAs) is in the SmartTable by default, but you need to add the columns Common-Name, and Gene.</p>
+<ul class="simple">
+<li><p>Common-Name is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong></p></li>
+<li><p>Gene is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong>.</p></li>
+</ul>
+<p>Download TUs.txt</p>
+<p>The index Transcription-Units is in the SmartTable by default, but you need to add the columns Genes of transcription unit, and Direction.</p>
+<ul class="simple">
+<li><p>Genes of transcription unit is available in the dropdown list <strong>ADD TRANSFORM COLUMN</strong></p></li>
+<li><p>Direction is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong>.</p></li>
+</ul>
+</section>
+<section id="Initialize-the-folder-for-your-organism">
+<h2><span class="section-number">1.2. </span>Initialize the folder for your organism<a class="headerlink" href="#Initialize-the-folder-for-your-organism" title="Permalink to this heading"></a></h2>
+<p>Copy your files to create your initial folder</p>
+<p><img alt="Drawing" src="_images/folder.png" /></p>
+<p>Define inputs in <strong>input.json</strong>. See an example of <a class="reference external" href="./helper_files/pputida_tutorial/input.json">input.json</a></p>
+<p>Define model ID in <strong>organism.json</strong>. See an example of <a class="reference external" href="./helper_files/pputida_tutorial/organism.json">organism.json</a></p>
+</section>
+<section id="Reconstruct-with-coralME">
+<h2><span class="section-number">1.3. </span>Reconstruct with coralME<a class="headerlink" href="#Reconstruct-with-coralME" title="Permalink to this heading"></a></h2>
+<p>Import packages</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coralme.builder.main</span> <span class="kn">import</span> <span class="n">MEBuilder</span>
+</pre></div>
+</div>
+</div>
+<p>Define organism and inputs</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org</span> <span class="o">=</span> <span class="s1">&#39;pputida_tutorial&#39;</span>
+<span class="n">organism</span> <span class="o">=</span> <span class="s1">&#39;./helper_files/</span><span class="si">{:s}</span><span class="s1">/organism.json&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">org</span><span class="p">)</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="s1">&#39;./helper_files/</span><span class="si">{:s}</span><span class="s1">/input.json&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">org</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Create builder</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span> <span class="o">=</span> <span class="n">MEBuilder</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">organism</span><span class="p">,</span> <span class="n">inputs</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>Generate files</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span><span class="o">.</span><span class="n">generate_files</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Build ME-model</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span><span class="o">.</span><span class="n">build_me_model</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Troubleshoot ME-model</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builder</span><span class="o">.</span><span class="n">troubleshoot</span><span class="p">(</span><span class="n">growth_key_and_value</span> <span class="o">=</span> <span class="p">{</span> <span class="n">builder</span><span class="o">.</span><span class="n">me_model</span><span class="o">.</span><span class="n">mu</span> <span class="p">:</span> <span class="mf">0.001</span> <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Note:</strong> We set 0.001 as a standard value for feasibility checking, but feel free to modify it! Sometimes too high a value could put a significant strain on the model and give too many gaps to start with. Too low a value might not show you all the gaps needed.</p>
+</section>
+<section id="Curate-manually">
+<h2><span class="section-number">1.4. </span>Curate manually<a class="headerlink" href="#Curate-manually" title="Permalink to this heading"></a></h2>
+<p>For details on manual curation go to <a class="reference internal" href="ManualCuration.html"><span class="doc">How to manually curate a ME-model using coralME</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to coralME documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="BasicInputs.html" class="btn btn-neutral float-right" title="2. Description of Inputs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Juan D. Tibocha-Bonilla, Rodrigo Santibanez-Palominos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

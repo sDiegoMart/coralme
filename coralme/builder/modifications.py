@@ -44,7 +44,7 @@ def add_iron_sulfur_modifications(me_model):
 		mod_3fe4s.stoichiometry = { '4fe4s_c': -1, 'fe2_c': 1 }
 		mod_3fe4s._element_contribution = { 'Fe': 3, 'S': 4 }
 
-	fes_chaperones = me_model.global_info['complex_cofactors']['fes_chaperones']
+	fes_chaperones = me_model.global_info['complex_cofactors'].get('fes_chaperones', {})
 	for chaperone in set(fes_chaperones.values()):
 		new_mod = coralme.core.processdata.SubreactionData('mod_2fe2s_c_' + chaperone, me_model)
 		new_mod.enzyme = [ chaperone, 'generic_2fe2s_transfer_complex' ]

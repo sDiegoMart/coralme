@@ -23,10 +23,13 @@ coralME was tested with the following package versions:
 - Python versions 3.7, 3.8, 3.9, or 3.10
 - COBRApy version 0.25.0
 - GUROBIpy version 9.5.2 (no license required)
-- Linux is recommended.
+- Ubuntu 22.04 is recommended (gfortran is required)
+- Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_.
 
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
 .. _ECOLIme: https://github.com/SBRG/ecolime
 .. _solveME: https://github.com/SBRG/solvemepy
 .. _readthedocs: https://coralme.readthedocs.io/
+.. _Gurobi: https://www.gurobi.com/
+.. _cplex: https://www.ibm.com/products/ilog-cplex-optimization-studio/cplex-optimizer

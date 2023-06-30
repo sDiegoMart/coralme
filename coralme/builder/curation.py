@@ -10,7 +10,1888 @@ bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{e
 import coralme
 import cobra
 import pandas
+import json
+import copy
 
+from cobra.core.dictlist import DictList
+
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(cur_dir, 'column_format.json'), 'r') as f:
+    column_format = json.load(f)
+    
+class CurationList(DictList):
+    """Stores CurationInfo instances in a cobra DictList object.
+
+    This class stores the generated CurationInfo instances from the
+    provided manual curation files.
+    """
+    def save(self):
+        for i in self:
+            i.save()
+
+class CurationInfo(object):
+    """CurationInfo class for handling manual curation files.
+
+    This class loads manual curation files and stores them
+    as properties in an Organism instance.
+    
+    As a general rule, adding information in input files will
+    prevent the MEBuilder instance from updating from homology.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+    """
+    def __init__(self,
+                 id,
+                 org,
+                 config = {},
+                 file = "",
+                 name = ""):
+        
+        logging.warning("Loading {}".format(name))
+        self.id = id
+        self.name = name
+        if file:
+            self.file = file
+        else:
+            self.file = id + ".txt"
+        self.directory = org.directory
+        self.org = org
+        self.config = config
+        self.data = self.load()
+        self.org.__setattr__(id,copy.deepcopy(self.data))
+        self.sep = config["sep"]
+        
+    def _modify_from_load(self):
+        """Convert manual curation file into a coralME dataset"""
+        return self.data
+    def _modify_for_save(self):
+        """Convert coralME dataset into a manual curation file"""
+        # Modify this function to save the file.
+        return None
+    def _modify_for_create(self,df):
+        """Modify dataset to create file when not provided"""
+        return df
+    
+    def read(self):
+        """Read manual curation file"""
+        if self.config["pathtype"] == 'absolute':
+            self.filepath = self.file
+        else:
+            self.filepath = self.directory + self.file
+        if os.path.isfile(self.filepath):
+            return pandas.read_csv(self.filepath,
+                                   index_col=0,
+                                   sep=self.config["sep"],
+                                   comment='#',
+                                   skip_blank_lines=True).fillna("")
+        return None
+    
+    def load(self):
+        """Load and convert manual curation file into a coralME dataset"""
+        self.data = self.read()
+        if self.data is None:
+            self.org.curation_notes['org._get_manual_curation'].append({
+                'msg':'No {} file found'.format(self.id),
+                'importance':'low',
+                'to_do':'Fill in {}'.format(self.filepath)
+            })
+            self.data = self._modify_for_create(self.config["create_file"])
+            self.data.to_csv(self.filepath,sep=self.config["sep"])
+        self.data = self._modify_from_load()
+        return self.data
+    def save(self):
+        """Save complemented dataset from Organism for user reference"""
+        mod = self._modify_for_save()
+        if mod is None:
+            return
+        out_dir = self.directory + "reference_files/"
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
+        mod[self.columns[1:]].to_csv(out_dir + self.file,sep=self.sep)    
+    @property
+    def columns(self):
+        """Default columns that are coralME-compliant"""
+        return column_format[self.file]
+    @property
+    def org_data(self):
+        """Final dataset stored in Organism instance"""
+        return self.org.__getattribute__(self.id)
+    
+    def _repr_html_(self) -> str:
+            """Generate html representation of reaction.
+
+            Returns
+            -------
+            str
+                HTML representation of the reaction.
+            """
+            id = cobra.util.util.format_long_string(str(self.id), 500)
+            file = cobra.util.util.format_long_string(str(self.file), 500)
+            name = cobra.util.util.format_long_string(str(self.name), 500)
+            directory = cobra.util.util.format_long_string(str(self.directory), 500)
+            data = cobra.util.util.format_long_string(str(self.data), 500)
+            org_data = cobra.util.util.format_long_string(str(self.org_data), 500)
+
+            return f"""
+            <table>
+                <tr><td><strong>Identifier</strong></td><td>{id}</td></tr>
+                <tr><td><strong>File</strong></td><td>{file}</td></tr>
+                <tr><td><strong>Name</strong></td><td>{name}</td></tr>
+                <tr><td><strong>Directory</strong></td><td>{directory}</td></tr>
+            </table>
+        """
+
+class ReactionCorrections(CurationInfo):
+    """Reads manual input to modify reactions in the M-model.
+
+    This class creates the property "reaction_corrections" from
+    the manual inputs in reaction_corrections.txt in an 
+    instance of Organism.
+    
+    Input here will modify reactions at the M-model stage
+    before ME-model building.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    reaction_corrections.txt :
+        reaction_id,name,gene_reaction_rule,reaction,notes
+        COBALT2tpp,cobalt transport in via permease (no H+),BSU24740,cobalt2_e --> cobalt2_c,No notes
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "reaction_corrections",
+                 config={},
+                 file="reaction_corrections.txt",
+                 name="Reaction corrections"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : ',',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.T.to_dict()
+    
+class ProteinLocation(CurationInfo):
+    """Reads manual input to add protein locations.
+
+    This class creates the property "protein_location" from
+    the manual inputs in peptide_compartment_and_pathways.txt in an 
+    instance of Organism.
+    
+    Input here will modify protein locations, and translocation
+    pathways in the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    peptide_compartment_and_pathways.txt :
+        Complex	Complex_compartment	Protein	Protein_compartment	translocase_pathway
+        BSU02690-MONOMER	Plasma_Membrane	BSU02690()	Plasma_Membrane	s
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "protein_location",
+                 config={},
+                 file="peptide_compartment_and_pathways.txt",
+                 name="Protein location"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_save(self):
+        return self.org_data
+    
+class TranslocationMultipliers(CurationInfo):
+    """Reads manual input to define translocation multipliers.
+
+    This class creates the property "translocation_multipliers" from
+    the manual inputs in translocation_multipliers.txt in an 
+    instance of Organism.
+    
+    Input here will modify how many pores are required for
+    the translocation of a protein.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    translocation_multipliers.txt :
+        Gene,YidC_MONOMER,TatE_MONOMER,TatA_MONOMER
+        b1855,2.0,0.0,0.0
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "translocation_multipliers",
+                 config={},
+                 file="translocation_multipliers.txt",
+                 name="Translocation multipliers"):
+        if not file:
+            file = id + ".txt"
+        create_file = pandas.DataFrame()
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : ',',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.to_dict()
+    
+class LipoproteinPrecursors(CurationInfo):
+    """Reads manual input to add lipoprotein precursors.
+
+    This class creates the property "lipoprotein_precursors" from
+    the manual inputs in lipoprotein_precursors.txt in an 
+    instance of Organism.
+    
+    Input here will add lipoprotein precursors.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    lipoprotein_precursors.txt :
+        name,gene
+        AcrA,b0463
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "lipoprotein_precursors",
+                 config={},
+                 file="lipoprotein_precursors.txt",
+                 name="Lipoprotein precursors"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : ',',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.to_dict()[self.columns[1]]
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(
+            {self.columns[1]:self.org_data}).rename_axis(self.columns[0])
+    
+class CleavedMethionine(CurationInfo):
+    """Reads manual input to mark proteins that undergo 
+    N-terminal methionine cleavage.
+
+    This class creates the property "cleaved_methionine" from
+    the manual inputs in cleaved_methionine.txt in an 
+    instance of Organism.
+    
+    Input here will mark proteins for N-terminal methionine
+    cleavage in the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    cleaved_methionine.txt :
+        cleaved_methionine_genes
+        b4154
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "cleaved_methionine",
+                 config={},
+                 file="cleaved_methionine.txt",
+                 name="Proteins with N-terminal methionine cleavage"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.index.to_list()
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(
+            {self.columns[0]:self.org_data}).set_index(self.columns[0])
+    
+class ManualComplexes(CurationInfo):
+    """Reads manual input to modify or add complexes.
+
+    This class creates the property "manual_complexes" from
+    the manual inputs in protein_corrections.txt in an 
+    instance of Organism.
+    
+    Input here will add, modify complexes in the ME-model,
+    as well as add, modify their modifications. You can
+    add a complex modification ID in the replace column,
+    which will remove that modified complex and replace 
+    it with your manually added one.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    This example adds SufBCD with their subunits and 
+    modifications, while removing SufBCD_mod_2fe3s(1).
+    
+    protein_corrections.txt :
+        complex_id,name,genes,mod,replace
+        SufBCD,SufBC2D Fe-S cluster scaffold complex,BSU32670(1) AND BSU32710(2) AND BSU32700(1),2fe2s(1),SufBCD_mod_2fe3s(1)
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "manual_complexes",
+                 config={},
+                 file="protein_corrections.txt",
+                 name="Protein corrections"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : ',',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    @property
+    def org_data(self):
+        # Manual complexes must be retrieved from complexes_df
+        df = self.org.complexes_df
+        flag = (df["source"].str.contains(self.org.m_model.id) | df["source"].str.contains("Inferred"))
+        new_complexes = df[flag].rename_axis("complex_id")
+        new_complexes = new_complexes.drop("source",axis=1)
+        new_complexes["mod"] = [''] * new_complexes.shape[0]
+        new_complexes["replace"] = [''] * new_complexes.shape[0]
+        return pandas.concat([self.data,new_complexes],axis=0)
+    
+    def _modify_for_save(self):
+        return self.org_data
+    
+    
+class Sigmas(CurationInfo):
+    """Reads manual input to modify or add sigma factors.
+
+    This class creates the property "sigmas" from
+    the manual inputs in sigma_factors.txt in an 
+    instance of Organism.
+    
+    Input here will mark proteins for N-terminal methionine
+    cleavage in the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    sigma_factors.txt :
+        sigma,complex,genes,name
+        RpoH_mono,RNAP_32H,b3461,"RNA polymerase, sigma 32 (sigma H) factor"
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "sigmas",
+                 config={},
+                 file="sigma_factors.txt",
+                 name="Sigma factors"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : ',',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_save(self):
+        return self.org_data
+
+class RhoIndependent(CurationInfo):
+    """Reads manual input to define genes with rho independent 
+    termination.
+
+    This class creates the property "rho_independent" from
+    the manual inputs in rho_independent.txt in an 
+    instance of Organism.
+    
+    Input here will mark genes with rho independent transcription
+    termination.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    rho_independent.txt :
+        id
+        b0344
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "rho_independent",
+                 config={},
+                 file="rho_independent.txt",
+                 name="Genes with rho-independent termination"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.index.to_list()
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(
+            {self.columns[0]:self.org_data}).set_index(self.columns[0])
+    
+class RNADegradosome(CurationInfo):
+    """Reads manual input to add RNA degradosome composition.
+
+    This class creates the property "rna_degradosome" from
+    the manual inputs in rna_degradosome.txt in an 
+    instance of Organism.
+    
+    Input here will define the composition of the RNA degradosome.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    rna_degradosome.txt :
+        enzymes
+        Eno_dim_mod_mg2(4)
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "rna_degradosome",
+                 config={},
+                 file="rna_degradosome.txt",
+                 name="RNA degradosome composition"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    
+    def _modify_from_load(self):
+        return {"rna_degradosome" : {"enzymes" : self.data.index.to_list()}}
+    def _modify_for_save(self):
+        l = self.org_data["rna_degradosome"]["enzymes"]
+        return pandas.DataFrame.from_dict(
+            {self.columns[0]:l}).set_index(self.columns[0])
+    
+class RNAModificationMachinery(CurationInfo):
+    """Reads manual input to add RNA modification machinery.
+
+    This class creates the property "rna_modification_df" from
+    the manual inputs in rna_modification.txt in an 
+    instance of Organism.
+    
+    Input here will define enzymes that perform RNA modifications
+    for either rRNA or tRNA in the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    rna_modification.txt :
+        modification	positions	type	enzymes	source
+        D	16,17,20,20A,21	tRNA	DusB_mono
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "rna_modification_df",
+                 config={},
+                 file="rna_modification.txt",
+                 name="RNA Modification machinery"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    
+    def _modify_from_load(self):
+        return self.data.astype(str)
+    def _modify_for_save(self):
+        return self.org_data
+    
+class RNAModificationTargets(CurationInfo):
+    """Reads manual input to add RNA modification targets.
+
+    This class creates the property "rna_modification_targets" from
+    the manual inputs in post_transcriptional_modification_of_RNA.txt in an 
+    instance of Organism.
+    
+    Input here will define RNA genes that undergo modifications.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    post_transcriptional_modification_of_RNA.txt :
+        bnum	position	modification
+        b0202	20A	D
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "rna_modification_targets",
+                 config={},
+                 file="post_transcriptional_modification_of_RNA.txt",
+                 name="RNA modification targets"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_save(self):
+        return self.org_data
+    
+class EnzymeReactionAssociation(CurationInfo):
+    """Reads manual input to specify enzyme-reaction associations.
+
+    This class creates the property "enz_rxn_assoc_df" from
+    the manual inputs in enzyme_reaction_association.txt in an 
+    instance of Organism.
+    
+    Input here will create the association between enzymes and
+    reactions in the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    enzyme_reaction_association.txt :
+        Reaction	Complexes
+        ADNt2pp	NUPG-MONOMER OR NUPC-MONOMER
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "enz_rxn_assoc_df",
+                 config={},
+                 file="enzyme_reaction_association.txt",
+                 name="Enzyme-reaction associations"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_save(self):
+        return self.org_data
+    
+class MEMetabolites(CurationInfo):
+    """Reads manual input to replace metabolites in the M-model.
+
+    This class creates the property "me_mets" from
+    the manual inputs in me_metabolites.txt in an 
+    instance of Organism.
+    
+    Input here will mark metabolites in the M-model for replacement
+    with their corrected E-matrix component.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    me_metabolites.txt :
+        id	me_id	name	formula	compartment	type
+        sufbcd_c	CPLX0-1341		SufBCD complex		REPLACE
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "me_mets",
+                 config={},
+                 file="me_metabolites.txt",
+                 name="Metabolites to substitute from M-model"):
+        if not file:
+            file = id + ".txt"        
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_save(self):
+        return self.org_data
+    
+class SubreactionMatrix(CurationInfo):
+    """Reads manual input to add subreactions.
+
+    This class creates the property "subreaction_matrix" from
+    the manual inputs in subreaction_matrix.txt in an 
+    instance of Organism.
+    
+    Input here will define subreactions in the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    subreaction_matrix.txt :
+        Reaction	Metabolites	Stoichiometry
+        mod_acetyl_c	accoa_c	-1.0
+        mod_acetyl_c	coa_c	+1.0
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "subreaction_matrix",
+                 config={},
+                 file="subreaction_matrix.txt",
+                 name="Matrix of subreaction stoichiometries"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_save(self):
+        return self.org_data
+    
+class ReactionMatrix(CurationInfo):
+    """Reads manual input to add reactions to the ME-model.
+
+    This class creates the property "reaction_matrix" from
+    the manual inputs in reaction_matrix.txt in an 
+    instance of Organism.
+    
+    Input here will define reactions directly in the 
+    ME-model. Definitions here will be added to the ME-model
+    after processing the M-model into the ME-model.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    reaction_matrix.txt :
+        Reaction	Metabolites	Stoichiometry
+        Cs_cyto_import	cs_p	-1.0
+        Cs_cyto_import	h_c	1.0
+        Cs_cyto_import	cs_c	1.0
+        Cs_cyto_import	h_p	-1.0
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "reaction_matrix",
+                 config={},
+                 file="reaction_matrix.txt",
+                 name="Matrix of reaction stoichiometries"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    
+class OrphanSpontReactions(CurationInfo):
+    """Reads manual input to add reactions to the ME-model.
+
+    This class creates the property "orphan_and_spont_reactions" from
+    the manual inputs in orphan_and_spont_reactions.txt in an 
+    instance of Organism.
+    
+    Input here will mark reactions as orphan or spontaneous. Orphan
+    reactions will be associated with CPLX_dummy, and spontaneous ones
+    will not require enzymes for flux.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    orphan_and_spont_reactions.txt :
+        name	description	is_reversible	is_spontaneous	subsystems
+        CODH_Fe_loading	Loading of Fe	false	true
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "orphan_and_spont_reactions",
+                 config={},
+                 file="orphan_and_spont_reactions.txt",
+                 name="Orphan and spontaneous reactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    
+class SubsystemClassification(CurationInfo):
+    """Reads manual input to classify subsystems for Keff estimation.
+
+    This class creates the property "subsystem_classification" from
+    the manual inputs in subsystem_classification.txt in an 
+    instance of Organism.
+    
+    Input here will classify subsystems in umbrella classifications which
+    are then used to set a median Keff and correct it with the 
+    complex SASA.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    subsystem_classification.txt :
+    subsystem	central_CE	central_AFN	intermediate	secondary	other
+    S_Amino_acids_and_related_molecules	0	1	0	0	0
+    ...
+    """
+    def __init__(self,
+                 org,
+                 id = "subsystem_classification",
+                 config={},
+                 file="subsystem_classification.txt",
+                 name="Classification of subsystems"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        subsystems = set(r.subsystem for r in self.org.m_model.reactions if r.subsystem)
+        df = self.data
+        d = {}
+        for c in df.columns:
+            for s in df[df[c] == 1].index:
+                d[s] = c
+        return d
+    
+class TranslocationPathways(CurationInfo):
+    """Reads manual input to define translocation pathways.
+
+    This class creates the property "translocation_pathways" from
+    the manual inputs in translocation_pathways.txt in an 
+    instance of Organism.
+    
+    Input here will define translocation pathways and their
+    machinery.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+
+    Examples
+    --------
+    translocation_pathways.txt :
+        pathway	enzyme
+        sec	BSU27650-MONOMER
+        sec	BSU35300-MONOMER
+        sec	secYEG
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "translocation_pathways",
+                 config={},
+                 file="translocation_pathways.txt",
+                 name="Translocation pathways"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = {}
+        for p in df.index.unique():
+            d[p] = {}
+            pdf = df.loc[[p]]
+            d[p]["enzymes"] = pdf["enzyme"].to_list()
+        return d
+    def _modify_for_save(self):
+        df = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        for k,v in self.org_data.items():
+            for i in v["enzymes"]:
+                df1 = pandas.DataFrame.from_dict({k:{self.columns[1]:i}}).T.rename_axis(self.columns[0])
+                df = pandas.concat([df,df1],axis=0)
+        return df
+    
+class LipidModifications(CurationInfo):
+    """Reads manual input to define lipid modification machinery.
+
+    This class creates the property "lipid_modifications" from
+    the manual inputs in lipid_modifications.txt in an 
+    instance of Organism.
+    
+    Input here will define enzymes that perform lipid 
+    modifications.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    lipid_modifications.txt :
+        lipid_mod	enzymes
+        pg_pe_160	Lgt_MONOMER,LspA_MONOMER
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "lipid_modifications",
+                 config={},
+                 file="lipid_modifications.txt",
+                 name="Lipid modifications"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        df = self.data
+        return {k:v.split(',') for k,v in df['enzymes'].to_dict().items()}
+    def _modify_for_save(self):
+        d = {k:','.join(v) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class StableRNAs(CurationInfo):
+    """ Defines stable RNAs
+    """
+    # Not necessary anymore, but kept here for reference.
+    def __init__(self,
+                 org,
+                 id = "stable_RNAs",
+                 config={},
+                 file="",
+                 name="Stable RNAs"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.index.to_list()
+
+        
+class RibosomeStoich(CurationInfo):
+    """Reads manual input to define ribosome composition.
+
+    This class creates the property "ribosome_stoich" from
+    the manual inputs in ribosomal_proteins.txt in an 
+    instance of Organism.
+    
+    Input here will define the composition of the ribosome.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    ribosomal_proteins.txt :
+        subunits	proteins
+        30S	RpsD_mono,...
+        50S	generic_23s_rRNAs,generic_5s_rRNAs,RplA_mono,...
+    """
+    def __init__(self,
+                 org,
+                 id = "ribosome_stoich",
+                 config={},
+                 file="ribosomal_proteins.txt",
+                 name="Ribosomal proteins"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            {"proteins": {"30S": "generic_16s_rRNAs",
+                          "50S": "generic_5s_rRNAs,generic_23s_rRNAs"}}).rename_axis('subunit')
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        df = self.data
+        ribosome_stoich = copy.deepcopy(coralme.builder.dictionaries.ribosome_stoich)
+        for s, row in df.iterrows():
+            proteins = row["proteins"]
+            if proteins:
+                proteins = proteins.split(",")
+                for p in proteins:
+                    if s == "30S":
+                        ribosome_stoich["30_S_assembly"]["stoich"][p] = 1
+                    elif s == "50S":
+                        ribosome_stoich["50_S_assembly"]["stoich"][p] = 1
+        return ribosome_stoich
+    def _modify_for_save(self):
+        d = {k.split("_S_assembly")[0]+"S":','.join(list(v["stoich"].keys())) for k,v in self.org_data.items() if "assembly" in k}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class RibosomeSubreactions(CurationInfo):
+    """Reads manual input to define ribosome subreactions.
+
+    This class creates the property "ribosome_subreactions" from
+    the manual inputs in ribosome_subreactions.txt in an 
+    instance of Organism.
+    
+    Input here will define enzymes that perform a ribosome 
+    subreaction.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    ribosome_subreactions.txt :
+        subreaction	enzyme
+        gtp_bound_30S_assembly_factor_phase1	BSU16650-MONOMER
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "ribosome_subreactions",
+                 config={},
+                 file="ribosome_subreactions.txt",
+                 name="Ribosomal subreactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(coralme.builder.dictionaries.ribosome_subreactions.copy()).T.rename_axis('subreaction')\
+                .drop("stoich",axis=1).drop("num_mods",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)    
+    def _modify_from_load(self):
+        return self.data.T.to_dict()
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(self.org_data).T.rename_axis(self.columns[0])
+        
+class GenericDict(CurationInfo):
+    """Reads manual input to define generics.
+
+    This class creates the property "generic_dict" from
+    the manual inputs in generic_dict.txt in an 
+    instance of Organism.
+    
+    Input here will define generics.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    generic_dict.txt :
+        generic_component	enzymes
+        generic_16Sm4Cm1402	RsmH_mono,RsmI_mono
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "generic_dict",
+                 config={},
+                 file="generic_dict.txt",
+                 name="Dictionary of generic complexes"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(coralme.builder.dictionaries.generics.copy()).T.rename_axis('generic_component')
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            d[k] = {}
+            if v['enzymes']:
+                d[k]['enzymes'] = v['enzymes'].split(",")
+            else:
+                d[k]['enzymes'] = []
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class AminoacidtRNASynthetase(CurationInfo):
+    """Reads manual input to define amino acid tRNA ligases.
+
+    This class creates the property "amino_acid_trna_synthetase" from
+    the manual inputs in amino_acid_trna_synthetase.txt in an 
+    instance of Organism.
+    
+    Input here will define amino acid tRNA ligases.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    amino_acid_trna_synthetase.txt :
+        amino_acid	enzyme
+        ala__L_c	Ala_RS_tetra_mod_zn2(4)
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "amino_acid_trna_synthetase",
+                 config={},
+                 file="amino_acid_trna_synthetase.txt",
+                 name="Amino acid to tRNA synthetase associations"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            {"enzyme": coralme.builder.dictionaries.amino_acid_trna_synthetase.copy()}).rename_axis('amino_acid')
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.to_dict()['enzyme']
+    def _modify_for_create(self,df):
+        return df
+    def _modify_for_save(self):
+        d = {self.columns[1]:self.org_data}
+        return pandas.DataFrame.from_dict(d).rename_axis(self.columns[0])
+    
+class PeptideReleaseFactors(CurationInfo):
+    """Reads manual input to define peptide release factors.
+
+    This class creates the property "peptide_release_factors" from
+    the manual inputs in peptide_release_factors.txt in an 
+    instance of Organism.
+    
+    Input here will define peptide release factors.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    peptide_release_factors.txt :
+        release_factor	enzyme
+        UAA	generic_RF
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "peptide_release_factors",
+                 config={},
+                 file="peptide_release_factors.txt",
+                 name="Peptide release factors"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.translation_stop_dict.copy()).T.rename_axis('release_factor')
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzyme"] = row["enzyme"]
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            d[k] = {}
+            if v['enzyme']:
+                d[k]['enzyme'] = v['enzyme']
+            else:
+                d[k]['enzyme'] = ''
+        return d
+    def _modify_for_save(self):
+        return pandas.DataFrame.from_dict(self.org_data).T.rename_axis(self.columns[0])
+    
+class InitiationSubreactions(CurationInfo):
+    """Reads manual input to define translation initiation subreactions.
+
+    This class creates the property "initiation_subreactions" from
+    the manual inputs in initiation_subreactions.txt in an 
+    instance of Organism.
+    
+    Input here will define translation initiation subreactions and their
+    machinery.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    initiation_subreactions.txt :
+        subreaction	enzymes
+        Translation_initiation_factor_InfA	InfA_mono
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "initiation_subreactions",
+                 config={},
+                 file="initiation_subreactions.txt",
+                 name="Translation initiation subreactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.initiation_subreactions.copy()).T.rename_axis('subreaction')\
+            .drop("stoich",axis=1).drop("element_contribution",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class ElongationSubreactions(CurationInfo):
+    """Reads manual input to define translation elongation subreactions.
+
+    This class creates the property "elongation_subreactions" from
+    the manual inputs in elongation_subreactions.txt in an 
+    instance of Organism.
+    
+    Input here will define translation elongation subreactions and their
+    machinery.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    elongation_subreactions.txt :
+        subreaction	enzymes
+        FusA_mono_elongation	FusA_mono
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "elongation_subreactions",
+                 config={},
+                 file="elongation_subreactions.txt",
+                 name="Translation elongation subreactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.elongation_subreactions.copy()).T.rename_axis('subreaction')\
+            .drop("stoich",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class TerminationSubreactions(CurationInfo):
+    """Reads manual input to define translation termination subreactions.
+
+    This class creates the property "termination_subreactions" from
+    the manual inputs in termination_subreactions.txt in an 
+    instance of Organism.
+    
+    Input here will define translation termination subreactions and their
+    machinery.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    termination_subreactions.txt :
+        subreaction	enzymes
+        PrfA_mono_mediated_termination	PrfA_mono
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "termination_subreactions",
+                 config={},
+                 file="termination_subreactions.txt",
+                 name="Translation termination subreactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.termination_subreactions.copy()).T.rename_axis('subreaction')\
+            .drop("stoich",axis=1).drop("element_contribution",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class SpecialtRNASubreactions(CurationInfo):
+    """Reads manual input to define special tRNA subreactions.
+
+    This class creates the property "special_trna_subreactions" from
+    the manual inputs in special_trna_subreactions.txt in an 
+    instance of Organism.
+    
+    Input here will define special tRNA subreactions, such as 
+    tRNA-Sec (selenocysteine) synthesis from tRNA-Ser.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    special_trna_subreactions.txt :
+        subreaction	enzymes
+        PrfA_mono_mediated_termination	PrfA_mono
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "special_trna_subreactions",
+                 config={},
+                 file="special_trna_subreactions.txt",
+                 name="Special tRNA subreactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')\
+            .drop("stoich",axis=1).drop("element_contribution",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class TranscriptionSubreactions(CurationInfo):
+    """Reads manual input to define transcription subreactions.
+
+    This class creates the property "transcription_subreactions" from
+    the manual inputs in transcription_subreactions.txt in an 
+    instance of Organism.
+    
+    Input here will define machinery for transcription subreactions. These
+    subreactions are a set of pre-defined subreactions that are used
+    in ME-models.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    transcription_subreactions.txt :
+        mechanism	enzymes
+        Transcription_normal_rho_independent	Mfd_mono_mod_mg2(1),NusA_mono,NusG_mono,GreA_mono,GreB_mono,RpoZ_mono_mod_mg2(1)
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "transcription_subreactions",
+                 config={},
+                 file="transcription_subreactions.txt",
+                 name="Transcription subreactions"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.transcription_subreactions.copy()).T.rename_axis('mechanism')\
+            .drop("stoich",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class SpecialModifications(CurationInfo):
+    """Reads manual input to define machinery for special modifications.
+
+    This class creates the property "special_modifications" from
+    the manual inputs in special_modifications.txt in an 
+    instance of Organism.
+    
+    Input here will define machinery for special modifications. These
+    modifications are a set of pre-defined modifications that are used
+    in ME-models.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    special_modifications.txt :
+        modification	enzymes	stoich
+        fes_transfer	CPLX0-7617,IscA_tetra,CPLX0-7824
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "special_modifications",
+                 config={},
+                 file="special_modifications.txt",
+                 name="Special protein modifications"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_modifications.copy()).T.rename_axis('modification')\
+            .drop("stoich",axis=1)
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            v["enzymes"] = v["enzymes"].split(",")
+            if "" in v["enzymes"]:
+                v["enzymes"].remove("")
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+    
+class ExcisionMachinery(CurationInfo):
+    """Reads manual input to define machinery for excision.
+
+    This class creates the property "excision_machinery" from
+    the manual inputs in excision_machinery.txt in an 
+    instance of Organism.
+    
+    Input here will define machinery for excision.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    excision_machinery.txt :
+        mechanism	enzymes
+        rRNA_containing	RNase_E_tetra_mod_zn2(2), ...
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "excision_machinery",
+                 config={},
+                 file="excision_machinery.txt",
+                 name="Excision machinery"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.excision_machinery.copy()).T.rename_axis('type')
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            d[k] = {}
+            if v['enzymes']:
+                d[k]['enzymes'] = v['enzymes'].split(",")
+            else:
+                d[k]['enzymes'] = []
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+
+class FoldingDict(CurationInfo):
+    """Reads manual input to define folding pathways for proteins.
+
+    This class creates the property "folding_dict" from
+    the manual inputs in folding_dict.txt in an 
+    instance of Organism.
+    
+    Input here will define folding pathways for proteins.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+        
+    Examples
+    --------
+    folding_dict.txt :
+        mechanism	enzymes
+        GroEL_dependent_folding	b0014, ...
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "folding_dict",
+                 config={},
+                 file="folding_dict.txt",
+                 name="Protein to folding machinery associations"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame.from_dict(
+            coralme.builder.dictionaries.folding_dict.copy()).T.rename_axis('mechanism')
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : '\t',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_for_create(self,df):
+        df = df.copy()
+        for r, row in df.iterrows():
+            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
+        return df
+    def _modify_from_load(self):
+        df = self.data
+        d = df.T.to_dict()
+        for k, v in d.items():
+            d[k] = {}
+            if v['enzymes']:
+                d[k]['enzymes'] = v['enzymes'].split(",")
+            else:
+                d[k]['enzymes'] = []
+        return d
+    def _modify_for_save(self):
+        d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
+        return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
+        
 class MEManualCuration(object):
     """MEManualCuration class for loading manual curation from files
 
@@ -33,778 +1914,40 @@ class MEManualCuration(object):
         self.configuration = self.org.config
 
     def load_manual_curation(self):
-        logging.warning("Loading protein location")
-        self.org.protein_location = self.load_protein_location()
-        logging.warning("Loading protein translocation multipliers")
-        self.org.translocation_multipliers = self.load_translocation_multipliers()
-        logging.warning("Loading lipoprotein precursors")
-        self.org.lipoprotein_precursors = self.load_lipoprotein_precursors()
-        logging.warning("Loading methionine cleaved proteins")
-        self.org.cleaved_methionine = self.load_cleaved_methionine()
-        logging.warning("Loading subsystem classification for Keffs")
-        self.org.subsystem_classification = self.load_subsystem_classification()
-        logging.warning("Loading manually added complexes")
-        self.org.manual_complexes = self.load_manual_complexes()
-        logging.warning("Loading reaction corrections")
-        self.org.reaction_corrections = self.load_reaction_corrections()
-        logging.warning("Loading sigma factors")
-        self.org.sigmas = self.load_sigmas()
-        logging.warning("Loading M to ME metabolites dictionary")
-        self.org.me_mets = self.load_me_mets()
-        logging.warning("Loading RNA degradosome")
-        self.org.rna_degradosome = self.load_rna_degradosome()
-        logging.warning("Reading ribosomal proteins")
-        self.org.ribosome_stoich = self.load_ribosome_stoich()
-        logging.warning("Loading ribosome subreactions")
-        self.org.ribosome_subreactions = self.load_ribosome_subreactions()
-        logging.warning("Loading generics")
-        self.org.generic_dict = self.load_generic_dict()
-#         logging.warning("Loading ribosome rrna modifications")
-#         self.org.rrna_modifications = self.load_rrna_modifications()
-        logging.warning("Loading amino acid tRNA synthetases")
-        self.org.amino_acid_trna_synthetase = self.load_amino_acid_trna_synthetase()
-        logging.warning("Loading peptide release factors")
-        self.org.peptide_release_factors = self.load_peptide_release_factors()
-        logging.warning("Loading translation initiation subreactions")
-        self.org.initiation_subreactions = self.load_initiation_subreactions()
-        logging.warning("Loading translation elongation subreactions")
-        self.org.elongation_subreactions = self.load_elongation_subreactions()
-        logging.warning("Loading translation termination subreactions")
-        self.org.termination_subreactions = self.load_termination_subreactions()
-        logging.warning("Loading special trna subreactions")
-        self.org.special_trna_subreactions = self.load_special_trna_subreactions()
-        logging.warning("Loading RNA excision machinery")
-        self.org.excision_machinery = self.load_excision_machinery()
-        logging.warning("Loading special modifications")
-        self.org.special_modifications = self.load_special_modifications()
-        logging.warning("Loading rna modifications and targets")
-        self.org.rna_modification_df = self.load_rna_modification()
-        self.org.rna_modification_targets = self.load_rna_modification_targets()
-        logging.warning("Loading folding information of proteins")
-        self.org.folding_dict = self.load_folding_dict()
-        logging.warning("Loading transcription subreactions")
-        self.org.transcription_subreactions = self.load_transcription_subreactions()
-        logging.warning("Loading protein translocation pathways")
-        self.org.translocation_pathways = self.load_translocation_pathways()
-        logging.warning("Loading lipid modifications")
-        self.org.lipid_modifications = self.load_lipid_modifications()
-
-        # Special input files
-        logging.warning("Loading subreaction matrix")
-        self.org.subreaction_matrix = self.load_subreaction_matrix()
-        logging.warning("Loading reaction matrix")
-        self.org.reaction_matrix = self.load_reaction_matrix()
-        logging.warning("Loading stable RNAs")
-        self.org.stable_RNAs = self.load_stable_RNAs()
-        logging.warning("Loading Rho-dependent genes")
-        self.org.rho_independent = self.load_rho_independent()
-        logging.warning("Loading orphan reactions")
-        self.org.orphan_and_spont_reactions = self.load_orphan_and_spont_reactions()
-        logging.warning("Loading enzyme-reaction-association")
-        self.org.enz_rxn_assoc_df = self.load_enz_rxn_assoc_df()
-
-
-    def _get_manual_curation(self,
-                             filename,
-                             create_file=None,
-                             no_file_return=pandas.DataFrame(),
-                             sep = '\t',
-                             pathtype = 'relative'):
-
-        if pathtype == 'absolute':
-            filepath = filename
-        else:
-            filepath = self.directory + filename
-        if os.path.isfile(filepath):
-            return pandas.read_csv(filepath,
-                                   index_col=0,
-                                   sep=sep,
-                                  comment='#',
-                                  skip_blank_lines=True).fillna("")
-
-        if create_file is not None:
-            create_file.to_csv(filepath,sep=sep)
-
-        self.curation_notes['org._get_manual_curation'].append({
-            'msg':'No {} file found'.format(filename),
-            'importance':'low',
-            'to_do':'Fill in {}'.format(filepath)
-        })
-        return no_file_return
-
-    def load_reaction_corrections(self):
-        create_file = pandas.DataFrame(columns = [
-                'reaction_id',
-                'name',
-                'gene_reaction_rule',
-                'reaction',
-                'notes',
-                ]).set_index('reaction_id')
-        return self._get_manual_curation(
-             "reaction_corrections.txt",
-             create_file = create_file,
-             no_file_return = create_file,
-             sep = ',').T.to_dict()
-
-    def load_protein_location(self):
-        create_file = pandas.DataFrame(columns = [
-                'Complex',
-                'Complex_compartment',
-                'Protein',
-                'Protein_compartment',
-                'translocase_pathway',
-                ]).set_index('Complex')
-        return self._get_manual_curation(
-             "peptide_compartment_and_pathways.txt",
-             create_file = create_file,
-             no_file_return = create_file)
-
-    def load_translocation_multipliers(self):
-        create_file = None
-        return self._get_manual_curation(
-             "translocation_multipliers.txt",
-            create_file=create_file,
-            no_file_return=pandas.DataFrame(),
-            sep=',').to_dict()
-
-    def load_lipoprotein_precursors(self):
-        create_file = pandas.DataFrame(columns=['gene'])
-        return self._get_manual_curation(
-            "lipoprotein_precursors.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep=',').to_dict()["gene"]
-
-    def load_cleaved_methionine(self):
-        create_file = pandas.DataFrame.from_dict({'cleaved_methionine_genes':{}}).set_index('cleaved_methionine_genes')
-        return self._get_manual_curation(
-            "cleaved_methionine.txt",
-            create_file = create_file,
-            no_file_return = create_file).index.to_list()
-
-    def _create_subsystem_classification(self,subsystems):
-        d = {}
-        for s in subsystems:
-            d[s] = {}
-            d[s]["central_CE"] = 0
-            d[s]["central_AFN"] = 0
-            d[s]["intermediate"] = 0
-            d[s]["secondary"] = 0
-            d[s]["other"] = 1
-        return pandas.DataFrame.from_dict(d).T
-    def load_subsystem_classification(self):
-        if self.is_reference:
-            return None
-
-        subsystems = set(r.subsystem for r in self.org.m_model.reactions if r.subsystem)
-        create_file = self._create_subsystem_classification(subsystems)
-
-        df = self._get_manual_curation(
-            "subsystem_classification.txt",
-            create_file = create_file,
-            no_file_return = pandas.DataFrame(),
-            sep = '\t')
-
-        d = {}
-        for c in df.columns:
-            for s in df[df[c] == 1].index:
-                d[s] = c
-        return d
-
-    def load_manual_complexes(self):
-        create_file = pandas.DataFrame.from_dict(
-                {"complex_id": {}, "name": {}, "genes": {}, "mod": {}, "replace": {}}
-            ).set_index("complex_id")
-        return self._get_manual_curation(
-            "protein_corrections.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = ',')
-
-    def load_sigmas(self):
-        create_file = pandas.DataFrame(columns = [
-                'sigma','complex','genes','name'
-            ]).set_index('sigma')
-        return self._get_manual_curation(
-            "sigma_factors.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = ',')
-
-    def load_me_mets(self):
-        create_file = pandas.DataFrame(columns = [
-                'id','me_id','name','formula','compartment','type'
-            ]).set_index('id')
-#         filename = self.configuration.get('df_metadata_metabolites', None)
-#         if filename is None or not filename:
-#             filename = self.org.directory + "me_metabolites.txt"
-        filename = self.org.directory + "me_metabolites.txt"
-        return self._get_manual_curation(
-            filename,
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t',
-            pathtype = 'absolute')
-
-    def load_rna_degradosome(self):
-        create_file = pandas.DataFrame(columns = [
-                'rna_degradosome'
-            ]).set_index('rna_degradosome')
-        df = self._get_manual_curation(
-            "rna_degradosome.txt",
-            create_file = create_file,
-            no_file_return = create_file)
-        return {
-            'rna_degradosome' : {
-                'enzymes' : list(df.index)
-            }
-        }
-
-    def _process_ribosome_stoich(self,
-                               df):
-        from copy import deepcopy
-        ribosome_stoich = deepcopy(coralme.builder.dictionaries.ribosome_stoich)
-        for s, row in df.iterrows():
-            proteins = row["proteins"]
-            if proteins:
-                proteins = proteins.split(",")
-                for p in proteins:
-                    if s == "30S":
-                        ribosome_stoich["30_S_assembly"]["stoich"][p] = 1
-                    elif s == "50S":
-                        ribosome_stoich["50_S_assembly"]["stoich"][p] = 1
-        return ribosome_stoich
-
-    def _create_ribosome_stoich(self):
-        return pandas.DataFrame.from_dict(
-            {"proteins": {"30S": "generic_16s_rRNAs",
-                          "50S": "generic_5s_rRNAs,generic_23s_rRNAs"}}).rename_axis('subunit')
-
-    def load_ribosome_stoich(self):
-        create_file = self._create_ribosome_stoich()
-        df = self._get_manual_curation(
-            "ribosomal_proteins.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-
-        return self._process_ribosome_stoich(df)
-
-    def _create_ribosome_subreactions(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.ribosome_subreactions.copy()).T.rename_axis('subreaction')
-    def _modify_ribosome_subreactions_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-        return df
-    def _modify_ribosome_subreactions_from_load(self,df):
-        d = df.T.to_dict()
-        for r, row in d.items():
-            d[r]["stoich"] = self._str_to_dict(row["stoich"])
-        return d
-    def load_ribosome_subreactions(self):
-        create_file = self._modify_ribosome_subreactions_for_save(
-                self._create_ribosome_subreactions())
-        df = self._get_manual_curation(
-            "ribosome_subreactions.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_ribosome_subreactions_from_load(df)
-
-    def _create_generic_dict(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.generics.copy()).T.rename_axis('generic_component')
-    def _modify_generic_dict_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-        return df
-    def _modify_generic_dict_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            d[k] = {}
-            if v['enzymes']:
-                d[k]['enzymes'] = v['enzymes'].split(",")
-            else:
-                d[k]['enzymes'] = []
-        return d
-    def load_generic_dict(self):
-        create_file = self._modify_generic_dict_for_save(
-                self._create_generic_dict())
-        df = self._get_manual_curation(
-            "generic_dict.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_generic_dict_from_load(df)
-
-#     def _create_rrna_modifications(self):
-#         return pandas.DataFrame.from_dict(coralme.builder.dictionaries.rrna_modifications.copy()).T.rename_axis('modification')
-#     def _modify_rrna_modifications_for_save(self,df):
-#         df = df.copy()
-#         for r, row in df.iterrows():
-#             df.loc[r, "metabolites"] = self._dict_to_str(row["metabolites"])
-#         return df
-#     def _modify_rrna_modifications_from_load(self,df):
-#         d = df.T.to_dict()
-#         for k, v in d.items():
-#             v["metabolites"] = self._str_to_dict(v["metabolites"])
-#         return d
-#     def load_rrna_modifications(self):
-#         create_file = self._modify_rrna_modifications_for_save(
-#                 self._create_rrna_modifications())
-#         df = self._get_manual_curation(
-#             "rrna_modifications.txt",
-#             create_file = create_file,
-#             no_file_return = create_file,
-#             sep = '\t')
-#         return self._modify_rrna_modifications_from_load(df)
-
-    def _create_amino_acid_trna_synthetase(self):
-        return pandas.DataFrame.from_dict(
-            {"enzyme": coralme.builder.dictionaries.amino_acid_trna_synthetase.copy()}).rename_axis('amino_acid')
-    def load_amino_acid_trna_synthetase(self):
-        create_file = self._create_amino_acid_trna_synthetase()
-        return self._get_manual_curation(
-                "amino_acid_trna_synthetase.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t').to_dict()['enzyme']
-
-    def _create_peptide_release_factors(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.translation_stop_dict.copy()).T.rename_axis('release_factor')
-    def _modify_peptide_release_factors_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzyme"] = row["enzyme"]
-        return df
-    def _modify_peptide_release_factors_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            d[k] = {}
-            if v['enzyme']:
-                d[k]['enzyme'] = v['enzyme']
-            else:
-                d[k]['enzyme'] = ''
-        return d
-    def load_peptide_release_factors(self):
-        create_file = self._modify_peptide_release_factors_for_save(
-                self._create_peptide_release_factors())
-        df = self._get_manual_curation(
-            "peptide_release_factors.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_peptide_release_factors_from_load(df)
-
-    def _create_initiation_subreactions(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.initiation_subreactions.copy()).T.rename_axis('subreaction')
-    def _modify_initiation_subreactions_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-            df.loc[r, "element_contribution"] = self._dict_to_str(
-                row["element_contribution"]
-            )
-        return df
-    def _modify_initiation_subreactions_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-            v["element_contribution"] = self._str_to_dict(v["element_contribution"])
-        return d
-    def load_initiation_subreactions(self):
-        create_file = self._modify_initiation_subreactions_for_save(
-                self._create_initiation_subreactions())
-        df = self._get_manual_curation(
-            "initiation_subreactions.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_initiation_subreactions_from_load(df)
-
-    def _create_elongation_subreactions(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.elongation_subreactions.copy()).T.rename_axis('subreaction')
-    def _modify_elongation_subreactions_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-        return df
-    def _modify_elongation_subreactions_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-        return d
-    def load_elongation_subreactions(self):
-        create_file = self._modify_elongation_subreactions_for_save(
-                self._create_elongation_subreactions())
-        df = self._get_manual_curation(
-            "elongation_subreactions.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_elongation_subreactions_from_load(df)
-
-    def _create_termination_subreactions(self):
-        df = pandas.DataFrame.from_dict(coralme.builder.dictionaries.termination_subreactions.copy()).T.rename_axis('subreaction')
-        df[["element_contribution"]] = df[["element_contribution"]].applymap(
-                lambda x: {} if pandas.isnull(x) else x
-            )
-        return df
-    def _modify_termination_subreactions_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-            df.loc[r, "element_contribution"] = self._dict_to_str(
-                row["element_contribution"]
-            )
-        return df
-    def _modify_termination_subreactions_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-            v["element_contribution"] = self._str_to_dict(v["element_contribution"])
-        return d
-    def load_termination_subreactions(self):
-        create_file = self._modify_termination_subreactions_for_save(
-                self._create_termination_subreactions())
-        df = self._get_manual_curation(
-            "termination_subreactions.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_termination_subreactions_from_load(df)
-
-    def _create_special_trna_subreactions(self):
-        df = pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
-        df[["element_contribution"]] = df[["element_contribution"]].applymap(
-            lambda x: {} if pandas.isnull(x) else x
-        )
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_trna_subreactions.copy()).T.rename_axis('subreaction')
-    def _modify_special_trna_subreactions_for_save(self,df):
-
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-            df.loc[r, "element_contribution"] = self._dict_to_str(
-                row["element_contribution"]
-            )
-        return df
-    def _modify_special_trna_subreactions_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-            v["element_contribution"] = self._str_to_dict(v["element_contribution"])
-        return d
-    def load_special_trna_subreactions(self):
-        create_file = self._modify_special_trna_subreactions_for_save(
-                self._create_special_trna_subreactions())
-        df = self._get_manual_curation(
-            "special_trna_subreactions.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_special_trna_subreactions_from_load(df)
-
-    def _create_excision_machinery(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.excision_machinery.copy()).T.rename_axis('type')
-    def _modify_excision_machinery_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-        return df
-    def _modify_excision_machinery_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            d[k] = {}
-            if v['enzymes']:
-                d[k]['enzymes'] = v['enzymes'].split(",")
-            else:
-                d[k]['enzymes'] = []
-        return d
-    def load_excision_machinery(self):
-        create_file = self._modify_excision_machinery_for_save(
-                self._create_excision_machinery())
-        df = self._get_manual_curation(
-            "excision_machinery.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_excision_machinery_from_load(df)
-
-    def _create_special_modifications(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.special_modifications.copy()).T.rename_axis('modification')
-    def _modify_special_modifications_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-        return df
-    def _modify_special_modifications_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-        return d
-    def load_special_modifications(self):
-        create_file = self._modify_special_modifications_for_save(
-                self._create_special_modifications())
-        df = self._get_manual_curation(
-            "special_modifications.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_special_modifications_from_load(df)
-
-    def load_rna_modification(self):
-        create_file = pandas.DataFrame(columns=[
-            'modification','positions','type','enzymes','source'
-        ]).set_index('modification')
-        df = self._get_manual_curation(
-            "rna_modification.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t').astype(str)
-        return df
-#         return self._modify_rna_modification_from_load(df)
-
-#     def _process_rna_modification_targets(self,
-#                                df):
-#         df = df.reset_index()
-#         trna_mod_dict = {}
-#         for mod in df.iterrows():
-#             mod = mod[1]
-#             mod_loc = "%s_at_%s" % (mod["modification"], mod["position"])
-#             if mod["bnum"] not in trna_mod_dict:
-#                 trna_mod_dict[mod["bnum"]] = {}
-#             trna_mod_dict[mod["bnum"]][mod_loc] = 1
-#         return trna_mod_dict
-
-    def _create_rna_modification_targets(self):
-        return pandas.DataFrame(columns=[
-            'bnum',
-            'position',
-            'modification'
-        ]).set_index('bnum')
-    def load_rna_modification_targets(self):
-        create_file = self._create_rna_modification_targets()
-        return self._get_manual_curation(
-            "post_transcriptional_modification_of_RNA.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-
-    def _create_folding_dict(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.folding_dict.copy()).T.rename_axis('mechanism')
-    def _modify_folding_dict_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-        return df
-    def _modify_folding_dict_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            d[k] = {}
-            if v['enzymes']:
-                d[k]['enzymes'] = v['enzymes'].split(",")
-            else:
-                d[k]['enzymes'] = []
-        return d
-    def load_folding_dict(self):
-        create_file = self._modify_folding_dict_for_save(
-                self._create_folding_dict())
-        df = self._get_manual_curation(
-            "folding_dict.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_folding_dict_from_load(df)
-
-    def _create_transcription_subreactions(self):
-        return pandas.DataFrame.from_dict(coralme.builder.dictionaries.transcription_subreactions.copy()).T.rename_axis('mechanism')
-    def _modify_transcription_subreactions_for_save(self,df):
-        df = df.copy()
-        for r, row in df.iterrows():
-            df.loc[r, "enzymes"] = ",".join(row["enzymes"])
-            df.loc[r, "stoich"] = self._dict_to_str(row["stoich"])
-        return df
-    def _modify_transcription_subreactions_from_load(self,df):
-        d = df.T.to_dict()
-        for k, v in d.items():
-            v["enzymes"] = v["enzymes"].split(",")
-            if "" in v["enzymes"]:
-                v["enzymes"].remove("")
-            v["stoich"] = self._str_to_dict(v["stoich"])
-        return d
-    def load_transcription_subreactions(self):
-        create_file = self._modify_transcription_subreactions_for_save(
-                self._create_transcription_subreactions())
-        df = self._get_manual_curation(
-            "transcription_subreactions.txt",
-            create_file = create_file,
-            no_file_return = create_file,
-            sep = '\t')
-        return self._modify_transcription_subreactions_from_load(df)
-
-    def _process_translocation_pathways(self,
-                                    df):
-        d = {}
-        for p in df.index.unique():
-            d[p] = {}
-            pdf = df.loc[[p]]
-            d[p]["keff"] = pdf["keff"][0]
-            d[p]["length_dependent_energy"] = pdf["length_dependent_energy"][0]
-            d[p]["stoichiometry"] = self._str_to_dict(pdf["stoichiometry"][0])
-            d[p]["enzymes"] = {}
-            for _, row in pdf.iterrows():
-                d[p]["enzymes"][row["enzyme"]] = {
-                    "length_dependent": row["length_dependent"],
-                    "fixed_keff": row["fixed_keff"],
-                }
-        return d
-    def load_translocation_pathways(self):
-        create_file = pandas.DataFrame(columns=
-                [
-                    "pathway",
-                    "keff",
-                    "length_dependent_energy",
-                    "stoichiometry",
-                    "enzyme",
-                    "length_dependent",
-                    "fixed_keff",
-                ]
-            ).set_index("pathway")
-        return self._process_translocation_pathways(
-            self._get_manual_curation(
-                "translocation_pathways.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t'))
-
-    def _modify_lipid_modifications_from_load(self,df):
-        return {k:v.split(',') for k,v in df['enzymes'].to_dict().items()}
-    def _create_lipid_modifications(self):
-        return pandas.DataFrame(columns=[
-            'lipid_mod',
-            'enzymes'
-        ]).set_index('lipid_mod')
-    def load_lipid_modifications(self):
-        create_file = self._create_lipid_modifications()
-        df =  self._get_manual_curation(
-                "lipid_modifications.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return self._modify_lipid_modifications_from_load(df)
-
-    def _create_subreaction_matrix(self):
-        return pandas.DataFrame(columns=[
-            'Reaction','Metabolites','Stoichiometry'
-        ]).set_index('Reaction')
-    def load_subreaction_matrix(self):
-        create_file = self._create_subreaction_matrix()
-        df =  self._get_manual_curation(
-                "subreaction_matrix.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return df
-
-    def _create_reaction_matrix(self):
-        return pandas.DataFrame(columns=[
-            'Reaction', 'Metabolites', 'Stoichiometry'
-        ]).set_index('Reaction')
-    def load_reaction_matrix(self):
-        create_file = self._create_reaction_matrix()
-        df =  self._get_manual_curation(
-                "reaction_matrix.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return df
-
-    def _create_stable_RNAs(self):
-        return pandas.DataFrame(columns=[
-            'id'
-        ]).set_index('id')
-    def load_stable_RNAs(self):
-        create_file = self._create_stable_RNAs()
-        df =  self._get_manual_curation(
-                "stable_RNAs.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return df.index.to_list()
-
-    def _create_rho_independent(self):
-        return pandas.DataFrame(columns=[
-            'id'
-        ]).set_index('id')
-    def load_rho_independent(self):
-        create_file = self._create_rho_independent()
-        df =  self._get_manual_curation(
-                "rho_independent.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return df.index.to_list()
-
-    def _create_orphan_and_spont_reactions(self):
-        return pandas.DataFrame(columns=[
-            'name', 'description', 'is_reversible', 'is_spontaneous'
-        ]).set_index('name')
-    def load_orphan_and_spont_reactions(self):
-        create_file = self._create_orphan_and_spont_reactions()
-        df =  self._get_manual_curation(
-                "orphan_and_spont_reactions.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return df
-
-    def _create_enz_rxn_assoc_df(self):
-        return pandas.DataFrame(columns=[
-            'Reaction','Complexes'
-        ]).set_index('Reaction')
-    def load_enz_rxn_assoc_df(self):
-        create_file = self._create_enz_rxn_assoc_df()
-        df =  self._get_manual_curation(
-                "enzyme_reaction_association.txt",
-                create_file = create_file,
-                no_file_return = create_file,
-                sep = '\t')
-        return df
-
-    def _str_to_dict(self,
-                    d):
-        regex = ":(?=[-]?\d+(?:$|\.))"
-        return (
-            {re.split(regex, i)[0]: float(re.split(regex, i)[1]) for i in d.split(",")}
-            if d
-            else {}
-        )
-
-    def _dict_to_str(self, d):
-        return ",".join(["{}:{}".format(k, v) for k, v in d.items()])
-
+        self.org.manual_curation = coralme.builder.curation.CurationList()
+        self.org.manual_curation.append(ReactionCorrections(self.org))
+        self.org.manual_curation.append(ProteinLocation(self.org))
+        self.org.manual_curation.append(TranslocationMultipliers(self.org))
+        self.org.manual_curation.append(LipoproteinPrecursors(self.org))
+        self.org.manual_curation.append(CleavedMethionine(self.org))
+        self.org.manual_curation.append(ManualComplexes(self.org))
+        self.org.manual_curation.append(Sigmas(self.org))
+        self.org.manual_curation.append(RhoIndependent(self.org))
+        self.org.manual_curation.append(RNADegradosome(self.org))
+        self.org.manual_curation.append(RNAModificationMachinery(self.org))
+        self.org.manual_curation.append(RNAModificationTargets(self.org))
+        self.org.manual_curation.append(EnzymeReactionAssociation(self.org))
+        self.org.manual_curation.append(MEMetabolites(self.org))
+        self.org.manual_curation.append(SubreactionMatrix(self.org))
+        self.org.manual_curation.append(ReactionMatrix(self.org))
+        self.org.manual_curation.append(OrphanSpontReactions(self.org))
+        self.org.manual_curation.append(SubsystemClassification(self.org))
+        self.org.manual_curation.append(TranslocationPathways(self.org))
+        self.org.manual_curation.append(LipidModifications(self.org))
+        #self.org.manual_curation.append(StableRNAs(self.org))
+        self.org.manual_curation.append(RibosomeStoich(self.org))
+        self.org.manual_curation.append(RibosomeSubreactions(self.org))
+        self.org.manual_curation.append(GenericDict(self.org))
+        self.org.manual_curation.append(AminoacidtRNASynthetase(self.org))
+        self.org.manual_curation.append(PeptideReleaseFactors(self.org))
+        self.org.manual_curation.append(InitiationSubreactions(self.org))
+        self.org.manual_curation.append(ElongationSubreactions(self.org))
+        self.org.manual_curation.append(TerminationSubreactions(self.org))
+        self.org.manual_curation.append(TranscriptionSubreactions(self.org))
+        self.org.manual_curation.append(SpecialtRNASubreactions(self.org))
+        self.org.manual_curation.append(SpecialModifications(self.org))
+        self.org.manual_curation.append(ExcisionMachinery(self.org))
+        self.org.manual_curation.append(FoldingDict(self.org))
 
 
 class MECurator(object):
@@ -823,112 +1966,30 @@ class MECurator(object):
                 org):
         self.org = org
 
-#     def curate(self):
-#         logging.warning("Integrating manual metabolic reactions")
-#         self.modify_metabolic_reactions()
-#         logging.warning("Integrating manual complexes")
-#         self.add_manual_complexes()
-
-#     def modify_metabolic_reactions(self):
-#         m_model = self.org.m_model
-#         new_reactions_dict = self.org.reaction_corrections
-
-#         for rxn_id, info in tqdm.tqdm(new_reactions_dict.items(),
-#                             'Modifying metabolic reactions with manual curation...',
-#                             bar_format = bar_format,
-#                             total=len(new_reactions_dict)):
-#             if info["reaction"] == "eliminate":
-#                 m_model.reactions.get_by_id(rxn_id).remove_from_model()
-#             else:
-#                 if rxn_id not in m_model.reactions:
-#                     rxn = cobra.Reaction(rxn_id)
-#                     m_model.add_reaction(rxn)
-#                 else:
-#                     rxn = m_model.reactions.get_by_id(rxn_id)
-#                 if info["reaction"]:
-#                     rxn.build_reaction_from_string(info["reaction"])
-#                     rxn.name = info["name"]
-#                     rxn.gene_reaction_rule = info["gene_reaction_rule"]
-#                 if info["gene_reaction_rule"]:
-#                     if info["gene_reaction_rule"] == "no_gene":
-#                         rxn.gene_reaction_rule = ""
-#                     else:
-#                         rxn.gene_reaction_rule = info["gene_reaction_rule"]
-#                 if info["name"]:
-#                     rxn.name = info["name"]
-
-#     def add_manual_complexes(self):
-#         manual_complexes = self.org.manual_complexes
-#         complexes_df = self.org.complexes_df
-#         protein_mod = self.org.protein_mod
-#         warn_manual_mod = []
-#         warn_replace = []
-#         for new_complex, info in tqdm.tqdm(manual_complexes.iterrows(),
-#                     'Adding manual curation of complexes...',
-#                     bar_format = bar_format,
-#                     total=manual_complexes.shape[0]):
-#             if info["genes"]:
-#                 if new_complex not in complexes_df:
-#                     complexes_df = complexes_df.append(
-#                         pandas.DataFrame.from_dict(
-#                             {new_complex: {"name": "", "genes": "", "source": "Manual"}}
-#                         ).T
-#                     )
-#                 complexes_df.loc[new_complex, "genes"] = info["genes"]
-#                 complexes_df.loc[new_complex, "name"] = str(info["name"])
-#             if info["mod"]:
-#                 mod_complex = (
-#                     new_complex
-#                     + "".join(
-#                         [
-#                             "_mod_{}".format(m)
-#                             for m in info['mod'].split(' AND ')
-#                         ]
-#                     )
-#                     if info["mod"]
-#                     else new_complex
-#                 )
-#                 if mod_complex in protein_mod.index:
-#                     warn_manual_mod.append(mod_complex)
-#                     continue
-#                 if info["replace"]:
-#                     if info["replace"] in protein_mod.index:
-#                         protein_mod = protein_mod.drop(info["replace"])
-#                     else:
-#                         warn_replace.append(mod_complex)
-#                 protein_mod = protein_mod.append(
-#                     pandas.DataFrame.from_dict(
-#                         {
-#                             mod_complex: {
-#                                 "Core_enzyme": new_complex,
-#                                 "Modifications": info["mod"],
-#                                 "Source": "Manual",
-#                             }
-#                         }
-#                     ).T
-#                 )
-#         complexes_df.index.name = "complex"
-
-#         self.org.complexes_df = complexes_df
-#         self.org.protein_mod = protein_mod
-
-#         # Warnings
-#         if warn_manual_mod or warn_replace:
-#             if warn_manual_mod:
-#                 self.org.curation_notes['add_manual_complexes'].append({
-#                     'msg':'Some modifications in protein_corrections.txt are already in me_builder.org.protein_mod and were skipped.',
-#                     'triggered_by':warn_manual_mod,
-#                     'importance':'low',
-#                     'to_do':'Check whether the protein modification specified in protein_corrections.txt is correct and not duplicated.'})
-#             if warn_replace:
-#                 self.org.curation_notes['add_manual_complexes'].append({
-#                     'msg':'Some modified proteins marked for replacement in protein_corrections.txt are not in me_builder.org.protein_mod. Did nothing.',
-#                     'triggered_by':warn_replace,
-#                     'importance':'low',
-#                     'to_do':'Check whether the marked modified protein in protein_corrections.txt for replacement is correctly defined.'})
-
     def find_issue_with_query(self,query):
         for k,v in self.org.curation_notes.items():
             coralme.builder.helper_functions.find_issue(query,v)
+
+            
+def _str_to_dict(d):
+    regex = ":(?=[-]?\d+(?:$|\.))"
+    return (
+        {re.split(regex, i)[0]: float(re.split(regex, i)[1]) for i in d.split(",")}
+        if d
+        else {}
+    )
+
+def _dict_to_str(d):
+    return ",".join(["{}:{}".format(k, v) for k, v in d.items()])
+
+
+
+
+
+
+
+
+
+
 
 

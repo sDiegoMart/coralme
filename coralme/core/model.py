@@ -692,7 +692,7 @@ class MEModel(cobra.core.model.Model):
 
 	@property
 	def all_genes(self):
-		lst = [ g for g in self.metabolites if isinstance(g, coralme.core.component.TranscribedGene) ]
+		lst = [ g for g in self.metabolites if isinstance(g, coralme.core.component.TranscribedGene) and "dummy" not in g.id]
 		return cobra.core.dictlist.DictList(lst)
 
 	@property
@@ -1066,9 +1066,23 @@ class MEModel(cobra.core.model.Model):
 
 		return Sf, Se, lb, ub, b, c, cs, atoms, lambdas
 
+	def rank(self, mu = 0.001):
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem()
+		Sp = scipy.sparse.dok_matrix((len(b), len(c)))
+
+		for idx, idj in Sf.keys():
+		    Sp[idx, idj] = Sf[idx, idj]
+		    
+		for idx, idj in Se.keys():
+		    Sp[idx, idj] = float(Se[idx, idj].subs({ self.mu : mu }))
+		    
+		return numpy.linalg.matrix_rank(Sp.todense())
+
 	def optimize(self,
-		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
+		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
+		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
+		# https://www.nature.com/articles/s41564-019-0423-8
 
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
@@ -1170,11 +1184,11 @@ class MEModel(cobra.core.model.Model):
 				if max_mu <= tolerance:
 					return False
 
-	def feas_windows(solver = 'gurobi'):
+	def feas_windows(self, solver = 'gurobi'):
 		if solver == 'gurobi':
-			self.check_feasibility = self.feas_gurobi
+			return self.feas_gurobi
 		elif solver == 'cplex':
-			self.check_feasibility = self.feas_cplex
+			return self.feas_cplex
 		else:
 			print('The \'solver\' must be \'gurobi\' or \'cplex\'.')
 			return None

@@ -9,12 +9,13 @@
   "df_gene_cplxs_mods_rxns": "./helper_files/pputida_tutorial/building_data/automated-org-with-refs.xlsx",
   "df_TranscriptionalUnits": "",
   "df_matrix_stoichiometry": "",
-  "df_matrix_subrxn_stoich": "./helper_files/pputida_tutorial/inputs/subreaction_matrix.txt",
+  "df_matrix_subrxn_stoich": "",
   "df_metadata_orphan_rxns": "",
   "df_metadata_metabolites": "",
   "out_directory": "./helper_files/pputida_tutorial",
   "log_directory": "./helper_files/pputida_tutorial",
   "run_bbh_blast": true,
   "dev_reference": true,
-  "include_pseudo_genes": true
+  "include_pseudo_genes": true,
+  "locus_tag": "locus_tag"
 }

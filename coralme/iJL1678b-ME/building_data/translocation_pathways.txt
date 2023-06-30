@@ -1,4 +1,4 @@
-	keff	length_dependent_energy	stoichiometry	enzyme	length_dependent	fixed_keff
+pathway	keff	length_dependent_energy	stoichiometry	enzyme	length_dependent	fixed_keff
 sec	4.0	True	atp_c:-0.04,h2o_c:-0.04,adp_c:0.04,pi_c:0.04,h_c:0.04	SecB_tetra	True	False
 sec	4.0	True	atp_c:-0.04,h2o_c:-0.04,adp_c:0.04,pi_c:0.04,h_c:0.04	SecA_MONOMER	True	False
 sec	4.0	True	atp_c:-0.04,h2o_c:-0.04,adp_c:0.04,pi_c:0.04,h_c:0.04	Sec-CPLX	True	False

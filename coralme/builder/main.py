@@ -70,7 +70,7 @@ class MEBuilder(object):
 		self.configuration = config
 		self.me_model = coralme.core.model.MEModel(config.get('ME-Model-ID', 'coralME'), config.get('growth_key', 'mu'))
 		self.curation_notes = coralme.builder.helper_functions.load_curation_notes(
-			self.configuration['out_directory'] + 'curation_notes.json'
+			self.configuration['out_directory'] + '/curation_notes.json'
 		)
 		self.logger = {
 			'MEBuilder' : coralme.builder.main.ListHandler([]),
@@ -272,15 +272,19 @@ class MEBuilder(object):
 		logging.warning("Performing final checks of files")
 		self.check()
 
+		# Update manual curation files for user reference
+		logging.warning("Generating filled manual curation files")
+		self.org.manual_curation.save()
+
 		# Update notes
 		logging.warning("Generating curation notes")
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory'] + 'curation_notes.json'
+				self.configuration['out_directory'] + '/curation_notes.json'
 			)
 		coralme.builder.helper_functions.publish_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory']+ 'curation_notes.txt'
+				self.configuration['out_directory']+ '/curation_notes.txt'
 			)
 
 		logging.warning("Saving modified M-model")
@@ -413,12 +417,12 @@ class MEBuilder(object):
 		# Dictionary of tRNA locus ID to amino acid, one dict of tRNAs per organelle type
 		# aa2trna does not account for misacylation
 		aa2trna = { 'c' : {} } # prokaryotes and eukaryotes
-		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+		if self.configuration.get('domain','prokaryote').lower() not in ['prokaryote', 'bacteria']:
 			aa2trna.update({'m' : {}, 'h' : {}}) # mitochondria and plastids
 
 		# Translation tables, one table per organelle type
 		transl_tables = { 'c' : set() } # prokaryotes and eukaryotes
-		if me_model.global_info['domain'].lower() not in ['prokaryote', 'bacteria']:
+		if self.configuration.get('domain','prokaryote') not in ['prokaryote', 'bacteria']:
 			transl_tables.update({'m' : set(), 'h' : set()}) # mitochondria and plastids
 
 		# Messages
@@ -771,70 +775,70 @@ class MEBuilder(object):
 		self.org.protein_mod = protein_mod
 
 	def update_TU_df(self):
-		return
-		org_TU_to_genes = self.org.TU_to_genes
-		org_TUs = self.org.TUs
-		org_sigmas = self.org.sigmas
-		org_complexes_df = self.org.complexes_df
-		ref_TUs = self.ref.TUs
-		ref_TU_df = self.ref.TU_df
-		gene_dictionary = self.org.gene_dictionary
-		mutual_hits = self.homology.mutual_hits
-		ref_cplx_homolog = self.homology.ref_cplx_homolog
-		rpod = self.org.rpod
-		ref_genes_to_TU = self.ref.genes_to_TU
-		ref_sigmas = self.ref.sigmas
-		TU_df = self.org.TU_df
-		remove_TUs = []
-		TU_dict = {}
-		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
-					'Updating TUs from homology...',
-					bar_format = bar_format,
-					total=TU_df.shape[0]):
-			tu = tu_id.split("_from_")[0]
-			rho_dependent = True
-			sigma = rpod
-			genes = org_TU_to_genes[tu]
-			if set(genes).issubset(mutual_hits):
-				ref_TU = [
-					ref_genes_to_TU[mutual_hits[g]]
-					for g in genes
-					if mutual_hits[g] in ref_genes_to_TU
-				]
-				if (
-					len(ref_TU) == 1
-				):  # All mapped genes are from only one TU. TU identified!
-					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
-					if not TU_hit.empty:
-						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
-						ref_sigma = TU_hit["rnapol"].tolist()[0]
-						if ref_sigma in ref_cplx_homolog:
-							sigma = ref_cplx_homolog[ref_sigma]
-							if sigma not in org_sigmas.index:
-								org_sigmas = org_sigmas.append(
-									pandas.DataFrame.from_dict(
-										{
-											sigma: {
-												"complex": "RNAP_{}".format(sigma),
-												"genes": org_complexes_df.loc[sigma]["genes"],
-												"name": org_complexes_df.loc[sigma]["name"],
-											}
-										}
-									).T
-								)
-				tu_name = "{}_from_{}".format(tu, sigma)
-				if tu_name not in TU_df.index:
-					remove_TUs.append(tu_id)
-					TU_df.loc[tu_name] = [0, 0, 0, 0, 0, 0]
-					TU_df.loc[tu_name]["strand"] = row["strand"]
-					TU_df.loc[tu_name]["start"] = int(row["start"])
-					TU_df.loc[tu_name]["stop"] = int(row["stop"])
-					TU_df.loc[tu_name]["tss"] = None
-				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
-				TU_df.loc[tu_name]["rnapol"] = sigma
-		self.org.TU_df = TU_df
-		org_sigmas.index.name = "sigma"
-		self.org.sigmas = org_sigmas
+		return NotImplemented
+# 		org_TU_to_genes = self.org.TU_to_genes
+# 		org_TUs = self.org.TUs
+# 		org_sigmas = self.org.sigmas
+# 		org_complexes_df = self.org.complexes_df
+# 		ref_TUs = self.ref.TUs
+# 		ref_TU_df = self.ref.TU_df
+# 		gene_dictionary = self.org.gene_dictionary
+# 		mutual_hits = self.homology.mutual_hits
+# 		ref_cplx_homolog = self.homology.ref_cplx_homolog
+# 		rpod = self.org.rpod
+# 		ref_genes_to_TU = self.ref.genes_to_TU
+# 		ref_sigmas = self.ref.sigmas
+# 		TU_df = self.org.TU_df
+# 		remove_TUs = []
+# 		TU_dict = {}
+# 		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
+# 					'Updating TUs from homology...',
+# 					bar_format = bar_format,
+# 					total=TU_df.shape[0]):
+# 			tu = tu_id.split("_from_")[0]
+# 			rho_dependent = True
+# 			sigma = rpod
+# 			genes = org_TU_to_genes[tu]
+# 			if set(genes).issubset(mutual_hits):
+# 				ref_TU = [
+# 					ref_genes_to_TU[mutual_hits[g]]
+# 					for g in genes
+# 					if mutual_hits[g] in ref_genes_to_TU
+# 				]
+# 				if (
+# 					len(ref_TU) == 1
+# 				):  # All mapped genes are from only one TU. TU identified!
+# 					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
+# 					if not TU_hit.empty:
+# 						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
+# 						ref_sigma = TU_hit["rnapol"].tolist()[0]
+# 						if ref_sigma in ref_cplx_homolog:
+# 							sigma = ref_cplx_homolog[ref_sigma]
+# 							if sigma not in org_sigmas.index:
+# 								org_sigmas = org_sigmas.append(
+# 									pandas.DataFrame.from_dict(
+# 										{
+# 											sigma: {
+# 												"complex": "RNAP_{}".format(sigma),
+# 												"genes": org_complexes_df.loc[sigma]["genes"],
+# 												"name": org_complexes_df.loc[sigma]["name"],
+# 											}
+# 										}
+# 									).T
+# 								)
+# 				tu_name = "{}_from_{}".format(tu, sigma)
+# 				if tu_name not in TU_df.index:
+# 					remove_TUs.append(tu_id)
+# 					TU_df.loc[tu_name] = [0, 0, 0, 0, 0, 0]
+# 					TU_df.loc[tu_name]["strand"] = row["strand"]
+# 					TU_df.loc[tu_name]["start"] = int(row["start"])
+# 					TU_df.loc[tu_name]["stop"] = int(row["stop"])
+# 					TU_df.loc[tu_name]["tss"] = None
+# 				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
+# 				TU_df.loc[tu_name]["rnapol"] = sigma
+# 		self.org.TU_df = TU_df
+# 		org_sigmas.index.name = "sigma"
+# 		self.org.sigmas = org_sigmas
 
 	def protein_location_from_homology(self):
 		protein_location = self.org.protein_location
@@ -871,6 +875,7 @@ class MEBuilder(object):
 									}
 								}).T
 				protein_location = pandas.concat([protein_location, tmp], axis = 0, join = 'outer')
+		protein_location.index.name = 'Complex'
 		self.org.protein_location = protein_location
 
 	def update_translocation_multipliers(self):
@@ -1145,8 +1150,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_elongation_subreactions_from_homology(self):
 		ref_elongation_subreactions = self.ref.elongation_subreactions
@@ -1163,8 +1169,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_termination_subreactions_from_homology(self):
 		ref_termination_subreactions = self.ref.termination_subreactions
@@ -1181,8 +1188,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_special_trna_subreactions_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_trna_subreactions
@@ -1217,8 +1225,9 @@ class MEBuilder(object):
 				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
 			]
 			for i in org_cplxs:
-				if i not in defined_cplxs:
-					defined_cplxs.append(i)
+				if i in defined_cplxs:
+					continue
+				defined_cplxs.append(i)
 
 	def update_excision_machinery_from_homology(self):
 		ref_excision_machinery = self.ref.excision_machinery
@@ -1237,7 +1246,7 @@ class MEBuilder(object):
 			for i in org_cplxs:
 				if self._is_base_complex_in_list(i,defined_cplxs):
 					continue
-					defined_cplxs.append(i)
+				defined_cplxs.append(i)
 
 	def update_special_modifications_from_homology(self):
 		ref_special_trna_subreactions = self.ref.special_modifications
@@ -1258,7 +1267,7 @@ class MEBuilder(object):
 					org_special_trna_subreactions[k]["stoich"] = v["stoich"]
 				if self._is_base_complex_in_list(i,defined_cplxs):
 					continue
-					defined_cplxs.append(i)
+				defined_cplxs.append(i)
 
 	def _is_base_complex_in_list(self,cplx,lst):
 		return cplx in set(i.split('_mod_')[0] for i in lst)
@@ -1354,12 +1363,19 @@ class MEBuilder(object):
 					'Updating translocation machinery from homology...',
 					bar_format = bar_format,
 					total=len(ref_translocation_pathways)):
+			ref_cplxs = v["enzymes"]
 			if k not in org_translocation_pathways:
-				org_translocation_pathways[k] = {"enzymes":{}}#v.copy()
-			for ref_cplx, ref_dict in v["enzymes"].items():
-				if ref_cplx in ref_cplx_homolog:
-					org_cplx = ref_cplx_homolog[ref_cplx]
-					org_translocation_pathways[k]["enzymes"][org_cplx] = ref_dict.copy()
+				org_translocation_pathways[k] = {"enzymes":[]}#v.copy()
+			defined_cplxs = org_translocation_pathways[k]["enzymes"]
+			if defined_cplxs:
+				continue
+			org_cplxs = [
+				ref_cplx_homolog[i] for i in ref_cplxs if i in ref_cplx_homolog
+			]
+			for i in org_cplxs:
+				if self._is_base_complex_in_list(i,defined_cplxs):
+					continue
+				defined_cplxs.append(i)
 
 	def update_m_model(self):
 		org_model = self.org.m_model
@@ -1557,11 +1573,11 @@ class MEBuilder(object):
 		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory'] + 'curation_notes.json'
+				self.configuration['out_directory'] + '/curation_notes.json'
 			)
 		coralme.builder.helper_functions.publish_curation_notes(
 				self.curation_notes,
-				self.configuration['out_directory']+ 'curation_notes.txt'
+				self.configuration['out_directory']+ '/curation_notes.txt'
 			)
 
 	def input_data(self, gem, overwrite):
@@ -1704,12 +1720,15 @@ class MEReconstruction(MEBuilder):
 			if len(lst) != 0:
 				logging.warning('The Braun\'s lipoprotein homologs list was set to \'{:s}\'.'.format(', '.join(lst)))
 
-		def read(filecode, input_type, columns = []):
+		def read(filecode, input_type, default, columns = []):
 			filename = config.get(filecode, '')
 			if pathlib.Path(filename).is_file():
 				file_to_read = filename
 			else:
-				return pandas.DataFrame(columns = columns)
+				#return pandas.DataFrame(columns = columns)
+				if filecode == 'df_reaction_keff_consts':
+					return pandas.DataFrame(columns = columns)
+				file_to_read = '{:}/building_data/{:s}'.format(config.get('out_directory', '.'), default)
 
 			df = coralme.builder.flat_files.read(file_to_read)
 			if set(columns).issubset(set(df.columns)):
@@ -1721,31 +1740,30 @@ class MEReconstruction(MEBuilder):
 		# User inputs
 		# Transcriptional Units
 		cols = ['TU_id', 'replicon', 'genes', 'start', 'stop', 'tss', 'strand', 'rho_dependent', 'rnapol']
-		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', cols).set_index('TU_id', inplace = False)
+		df_tus = read('df_TranscriptionalUnits', 'transcriptional units data', 'TUs_from_biocyc.txt', cols)
+		df_tus = df_tus.set_index('TU_id', inplace = False)
 
 		# Reaction Matrix: reactions, metabolites, compartments, stoichiometric coefficients
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', cols)
+		df_rmsc = read('df_matrix_stoichiometry', 'reaction stoichiometry data', 'reaction_matrix.txt', cols)
 
 		# SubReaction Matrix: subreactions, metabolites, compartments, stoichiometric coefficients
-		# Detect first if the user wants to use a manually curated file
-		rxns = '{:s}/building_data/subreaction_matrix.txt'.format(config.get('out_directory', '.'))
-		#config['df_matrix_subrxn_stoich'] = rxns if pathlib.Path(rxns).exists() else config['df_matrix_subrxn_stoich']
-		config['df_matrix_subrxn_stoich'] = config['df_matrix_subrxn_stoich'] if pathlib.Path(config['df_matrix_subrxn_stoich']).exists() else rxns
 		cols = ['Reaction', 'Metabolites', 'Stoichiometry']
-		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', cols)
+		df_subs = read('df_matrix_subrxn_stoich', 'subreaction stoichiometry data', 'subreaction_matrix.txt', cols)
 
 		# Orphan and Spontaneous reaction metadata
 		cols = ['name', 'description', 'subsystems', 'is_reversible', 'is_spontaneous']
-		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', cols).set_index('name', inplace = False)
+		df_rxns = read('df_metadata_orphan_rxns', 'new reactions metadata', 'orphan_and_spont_reactions.txt', cols)
+		df_rxns = df_rxns.set_index('name', inplace = False)
 
 		# Metabolites metadata
 		cols = ['id', 'me_id', 'name', 'formula', 'compartment', 'type']
-		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', cols).set_index('id', inplace = False)
+		df_mets = read('df_metadata_metabolites', 'new metabolites metadata', 'me_metabolites.txt', cols)
+		df_mets = df_mets.set_index('id', inplace = False)
 
 		# Effective turnover rates
 		cols = ['reaction', 'direction', 'complex', 'mods', 'keff']
-		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', cols)
+		df_keffs = read('df_reaction_keff_consts', 'effective turnover rates', 'reaction_median_keffs.txt', cols)
 
 		# set new options in the MEBuilder object
 		self.configuration.update(config)
@@ -2064,7 +2082,7 @@ class MEReconstruction(MEBuilder):
 					me.add_reactions([rxn])
 					rxn.add_metabolites({met: -1 * abs(requirement), 'lipid_biomass': component_mass * abs(requirement)})
 					rxn.lower_bound = me.mu # coralme.util.mu
-					rxn.upper_bound = 1000. # coralme.util.mu?
+					rxn.upper_bound = me.mu # originally 1000.
 				except:
 					msg = 'Metabolite \'{:s}\' lacks a formula. Please correct it in the M-model or the \'metabolites.txt\' metadata file.'
 					logging.warning(msg.format(met))
@@ -2667,73 +2685,75 @@ class MEReconstruction(MEBuilder):
 
 		# ## Part 8: Set keffs
 		# Step 1. Determine SASA and median SASA
-		sasa_dct = {
-			x.id:( x.formula_weight ** (3. / 4.) if x.formula_weight else 0, x.id if not x.formula_weight else False )
-			for x in me.metabolites if type(x) == coralme.core.component.Complex
-			}
+		if bool(config.get('estimate_keffs', True)):
+			sasa_dct = {
+				x.id:( x.formula_weight ** (3. / 4.) if x.formula_weight else 0, x.id if not x.formula_weight else False )
+				for x in me.metabolites if type(x) == coralme.core.component.Complex
+				}
 
-		for met in [ v[1] for k,v in sasa_dct.items() ]:
-			if met:
-				logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
-				logging.warning('Please, set a value in the keff input file for reactions associated to the \'{:s}\' complex.'.format(met))
+			for met in [ v[1] for k,v in sasa_dct.items() ]:
+				if met:
+					logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
+					logging.warning('Please, set a value in the keff input file for reactions associated to the \'{:s}\' complex.'.format(met))
 
-		median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
+			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
 
-		me.global_info['median_sasa'] = median_sasa
-		me.global_info['sasa_estimation'] = sasa_dct
+			me.global_info['median_sasa'] = median_sasa
+			me.global_info['sasa_estimation'] = sasa_dct
 
-		# Step 2: Estimate keff for all the reactions in the model
-		mapped_keffs = {}
-		#if "complex" not in df_keffs.columns: #df_keffs.empty: # This avoid the estimation if the user uses an "incomplete" input
-		# dictionary of reaction IDs : coralme.core.reaction objects
-		rxns_to_map = { x.id:x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') }
-		reaction_ids = [
-			rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction)
-			if rxn.id not in [ 'dummy_reaction_FWD_SPONT', 'dummy_reaction_REV_SPONT' ]
-			]
+			# Step 2: Estimate keff for all the reactions in the model
+			mapped_keffs = {}
+			#if "complex" not in df_keffs.columns: #df_keffs.empty: # This avoid the estimation if the user uses an "incomplete" input
+			# dictionary of reaction IDs : coralme.core.reaction objects
+			rxns_to_map = { x.id:x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') }
+			reaction_ids = [
+				rxn for rxn in me.reactions if isinstance(rxn, coralme.core.reaction.MetabolicReaction)
+				if rxn.id not in [ 'dummy_reaction_FWD_SPONT', 'dummy_reaction_REV_SPONT' ]
+				if rxn._complex_data is not None
+				]
 
-		if 'complex' in df_keffs.columns: # user provided a file with keffs
-			with open('{:s}/building_data/reaction_median_keffs.txt'.format(me.global_info['out_directory']), 'r') as infile:
-				reaction_median_keffs = pandas.read_csv(infile, sep = '\t').set_index('reaction')
+			if 'complex' in df_keffs.columns: # user provided a file with keffs
+				with open('{:s}/building_data/reaction_median_keffs.txt'.format(me.global_info['out_directory']), 'r') as infile:
+					reaction_median_keffs = pandas.read_csv(infile, sep = '\t').set_index('reaction')
 
-		for rxn in tqdm.tqdm(reaction_ids, 'Estimating effective turnover rates for reaction using the SASA method...'):
-			logging.warning('Estimating effective turnover rates for reaction \'{:s}\''.format(rxn.id))
+			for rxn in tqdm.tqdm(reaction_ids, 'Estimating effective turnover rates for reactions using the SASA method...', bar_format = bar_format):
+				logging.warning('Estimating effective turnover rates for reaction \'{:s}\''.format(rxn.id))
 
-			base_id = rxn._stoichiometric_data.id
-			cplx_id = me.metabolites.get_by_id(rxn._complex_data.id).id
+				base_id = rxn._stoichiometric_data.id
+				cplx_id = me.metabolites.get_by_id(rxn._complex_data.id).id
 
-			if base_id not in reaction_median_keffs.index:
-				continue
+				if base_id not in reaction_median_keffs.index:
+					continue
 
-			median_keff = reaction_median_keffs.T[base_id]['keff']
-			sasa = sasa_dct[cplx_id][0]
-			keff = sasa * median_keff / median_sasa
-			mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
+				median_keff = reaction_median_keffs.T[base_id]['keff']
+				sasa = sasa_dct[cplx_id][0]
+				keff = sasa * median_keff / median_sasa
+				mapped_keffs[rxn] = 3000 if keff > 3000 else 0.01 if keff < 0.01 else keff
 
-		# Step 3: Replace user values if they match
-		for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...'):
-			if row['direction'] == '' and row['complex'] == '' and row['mods'] == '':
-				# subreactions have ID = reaction_name
-				idx = row['reaction']
-			else:
-				# metabolic reactions have ID = reaction_name + direction + complex
-				idx = '{:s}_{:s}_{:s}'.format(row['reaction'], row['direction'], row['complex'])
-				if row['mods'] != '':
-					idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
+			# Step 3: Replace user values if they match
+			for idx, row in tqdm.tqdm(list(df_keffs.iterrows()), 'Mapping effective turnover rates from user input...', bar_format = bar_format):
+				if row['direction'] == '' and row['complex'] == '' and row['mods'] == '':
+					# subreactions have ID = reaction_name
+					idx = row['reaction']
+				else:
+					# metabolic reactions have ID = reaction_name + direction + complex
+					idx = '{:s}_{:s}_{:s}'.format(row['reaction'], row['direction'], row['complex'])
+					if row['mods'] != '':
+						idx = '{:s}_mod_{:s}'.format(idx, '_mod_'.join(row['mods'].split(' AND ')))
 
-			if idx in rxns_to_map.keys():
-				mapped_keffs[rxns_to_map[idx]] = 3000 if float(row['keff']) > 3000 else 0.01 if float(row['keff']) < 0.01 else row['keff']
-				logging.warning('Mapping of the effective turnover rate for \'{:}\' with a user provided value.'.format(idx))
-			else:
-				logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Please check if the reaction or subreaction is in the ME-model.'.format(idx))
+				if idx in rxns_to_map.keys():
+					mapped_keffs[rxns_to_map[idx]] = 3000 if float(row['keff']) > 3000 else 0.01 if float(row['keff']) < 0.01 else row['keff']
+					logging.warning('Mapping of the effective turnover rate for \'{:}\' with a user provided value.'.format(idx))
+				else:
+					logging.warning('Mapping of the effective turnover rate for \'{:}\' reaction failed. Please check if the reaction or subreaction is in the ME-model.'.format(idx))
 
-		# Step 4: Set keffs
-		if mapped_keffs:
-			for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
-				rxn.keff = float(keff)
-				if hasattr(rxn, 'update'): # subreactions has no update attribute
-					rxn.update()
-				logging.warning('Setting the effective turnover rate for \'{:s}\' in {:f} successfully.'.format(rxn.id, float(keff)))
+			# Step 4: Set keffs
+			if mapped_keffs:
+				for rxn, keff in tqdm.tqdm(sorted(mapped_keffs.items(), key = lambda x: x[0].id), 'Setting the effective turnover rates using user input...', bar_format = bar_format):
+					rxn.keff = float(keff)
+					if hasattr(rxn, 'update'): # subreactions has no update attribute
+						rxn.update()
+					logging.warning('Setting the effective turnover rate for \'{:s}\' in {:f} successfully.'.format(rxn.id, float(keff)))
 
 		# ### 5. Add metabolite compartments
 		coralme.builder.compartments.add_compartments_to_model(me)
@@ -2814,7 +2834,7 @@ class METroubleshooter(object):
 		solver: 'gurobi' (default) or 'cplex'
 		"""
 
-		if sys.platform == 'win32' or platform == 'win32':
+		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:
 			self.me_model.get_solution = self.me_model.optimize_windows
 			self.me_model.check_feasibility = self.me_model.feas_windows(solver = solver)
 		else:
@@ -2855,8 +2875,10 @@ class METroubleshooter(object):
 
 		# Step 2. Test different sets of MEComponents
 		e_gaps = []
+		history = dict()
 		if works == False:
 			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
+			 # TODO: Include previous iterations in gap fill sink closing algorithm
 			met_types = [
 				'ME-Deadends',
 				'Cofactors',
@@ -2876,8 +2898,8 @@ class METroubleshooter(object):
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-
-				bf_gaps, no_gaps, works = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip)
+				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip , history=history)
+				bf_gaps, no_gaps, works = output
 				# close sink reactions that are not gaps
 				if no_gaps:
 					self.me_model.remove_reactions(no_gaps)
@@ -2889,19 +2911,25 @@ class METroubleshooter(object):
 			if isinstance(e_gaps, list) and e_gaps:
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Some metabolites are necessary for growth',
-					'triggered_by':[ x for y in e_gaps for x in y ],
+					'triggered_by':e_gaps,#[ x for y in e_gaps for x in y ],
 					'importance':'critical',
 					'to_do':'Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!'})
 
 			# delete added sink reactions with lb == 0 and ub == 0
-			for rxn in self.me_model.reactions.query('^SK_'):
+			sinks = []
+			for rxn in self.me_model.reactions.query('^TS_'):
+				sinks.append(rxn.id)
 				#f = self.me_model.solution.fluxes[rxn.id]
 				if rxn.lower_bound == 0 and rxn.upper_bound == 0:# or f == 0:
 					self.me_model.remove_reactions([rxn])
-
+			if sinks:
+				logging.warning('~ '*1 + 'Troubleshooter added the following sinks:')
+				logging.warning('\n'.join(sinks))
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
-			self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False)
-			logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
+			if self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False):
+				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
+			else:
+				logging.warning('  '*1 + 'Error: Gapfilled ME-model is not feasible ?')
 
 			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)

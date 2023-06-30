@@ -1,0 +1,169 @@
+{
+    "termination_subreactions.txt": [
+        "subreaction",
+        "enzymes"
+    ],
+    "peptide_release_factors.txt": [
+        "codon",
+        "enzyme"
+    ],
+    "rna_degradosome.txt": [
+        "rna_degradosome"
+    ],
+    "special_trna_subreactions.txt": [
+        "subreaction",
+        "enzymes"
+    ],
+    "lipoprotein_precursors.txt": [
+        "name",
+        "gene"
+    ],
+    "special_modifications.txt": [
+        "modification",
+        "enzymes"
+    ],
+    "excision_machinery.txt": [
+        "type",
+        "enzymes"
+    ],
+    "orphan_and_spont_reactions.txt": [
+        "name",
+        "description",
+        "is_reversible",
+        "is_spontaneous",
+        "subsystems"
+    ],
+    "enzyme_reaction_association.txt": [
+        "Reaction",
+        "Complexes"
+    ],
+    "peptide_compartment_and_pathways.txt": [
+        "Complex",
+        "Complex_compartment",
+        "Protein",
+        "Protein_compartment",
+        "translocase_pathway"
+    ],
+    "stable_RNAs.txt": [
+        "id"
+    ],
+    "translocation_pathways.txt": [
+        "pathway",
+        "enzyme"
+    ],
+    "rna_modification.txt": [
+        "modification",
+        "positions",
+        "type",
+        "enzymes",
+        "source"
+    ],
+    "ribosomal_proteins.txt": [
+        "subunit",
+        "proteins"
+    ],
+    "rho_independent.txt": [
+        "id"
+    ],
+    "sigma_factors.txt": [
+        "sigma",
+        "complex",
+        "genes",
+        "name"
+    ],
+    "cleaved_methionine.txt": [
+        "cleaved_methionine_genes"
+    ],
+    "folding_dict.txt": [
+        "mechanism",
+        "enzymes"
+    ],
+    "subreaction_matrix.txt": [
+        "Reaction",
+        "Metabolites",
+        "Stoichiometry"
+    ],
+    "me_metabolites.txt": [
+        "id",
+        "me_id",
+        "name",
+        "formula",
+        "compartment",
+        "type"
+    ],
+    "elongation_subreactions.txt": [
+        "subreaction",
+        "enzymes"
+    ],
+    "subsystem_classification.txt": [
+        "subsystem",
+        "central_CE",
+        "central_AFN",
+        "intermediate",
+        "secondary",
+        "other"
+    ],
+    "reaction_matrix.txt": [
+        "Reaction",
+        "Metabolites",
+        "Stoichiometry"
+    ],
+    "lipid_modifications.txt": [
+        "lipid_mod",
+        "enzymes"
+    ],
+    "amino_acid_trna_synthetase.txt": [
+        "amino_acid",
+        "enzyme"
+    ],
+    "initiation_subreactions.txt": [
+        "subreaction",
+        "enzymes"
+    ],
+    "post_transcriptional_modification_of_RNA.txt": [
+        "bnum",
+        "position",
+        "modification"
+    ],
+    "protein_corrections.txt": [
+        "complex_id",
+        "name",
+        "genes",
+        "mod",
+        "replace"
+    ],
+    "reaction_median_keffs.txt": [
+        "reaction",
+        "keff"
+    ],
+    "transcription_subreactions.txt": [
+        "mechanism",
+        "enzymes"
+    ],
+    "generic_dict.txt": [
+        "generic_component",
+        "enzymes"
+    ],
+    "ribosome_subreactions.txt": [
+        "subreaction",
+        "enzyme"
+    ],
+    "reaction_corrections.txt": [
+        "reaction_id",
+        "name",
+        "gene_reaction_rule",
+        "reaction",
+        "notes"
+    ],
+    "TUs_from_biocyc.txt": [
+        "TU_id",
+        "replicon",
+        "genes",
+        "start",
+        "stop",
+        "tss",
+        "strand",
+        "rho_dependent",
+        "rnapol"
+    ]
+}

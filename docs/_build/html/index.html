@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to coralME documentation! &mdash; coralME 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Getting started" href="GettingStarted.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> coralME
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BasicInputs.html">2. Description of Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coralMEArquitecture.html">3. Arquitecture of coralME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ManualCuration.html">4. How to manually curate a ME-model using coralME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">5. Frequently Asked Questions|</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">coralME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Welcome to coralME documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-coralme-documentation">
+<h1>Welcome to coralME documentation!<a class="headerlink" href="#welcome-to-coralme-documentation" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p>The <strong>COmprehensive Reconstruction ALgorithm for ME-models (coralME)</strong> is an automatic pipeline for the reconstruction of ME-models. coralME integrates existing ME-modeling packages <a class="reference external" href="https://github.com/SBRG/cobrame">COBRAme</a>, <a class="reference external" href="https://github.com/SBRG/ecolime">ECOLIme</a>, and <a class="reference external" href="https://github.com/SBRG/solvemepy">solveME</a>, generalizes their functions for implementation on any prokaryote, and processes readily available organism-specific inputs for the automatic generation of a working ME-model.</p>
+<p>coralME has four main objectives:</p>
+<ol class="arabic simple">
+<li><p><strong>Synchronize</strong> input files to remove contradictory entries.</p></li>
+<li><p><strong>Complement</strong> input files from homology with a template organism to complete the E-matrix.</p></li>
+<li><p><strong>Build</strong> a working ME-model</p></li>
+<li><p><strong>Inform</strong> the user about necessary steps to curate the ME-model.</p></li>
+</ol>
+<p>This resource is intended to:</p>
+<ol class="arabic simple">
+<li><p>Describe basic inputs required for ME-model reconstruction.</p></li>
+<li><p>Describe the architecture of coralME.</p></li>
+<li><p>Demonstrate how to build a ME-model with coralME.</p></li>
+<li><p>Describe how to perform manual curation guided by coralME’s curation notes.</p></li>
+</ol>
+</section>
+<section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">1. Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="GettingStarted.html#Download-files-from-BioCyc">1.1. Download files from BioCyc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GettingStarted.html#Initialize-the-folder-for-your-organism">1.2. Initialize the folder for your organism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GettingStarted.html#Reconstruct-with-coralME">1.3. Reconstruct with coralME</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GettingStarted.html#Curate-manually">1.4. Curate manually</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="BasicInputs.html">2. Description of Inputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="BasicInputs.html#Types-of-inputs">2.1. Types of inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BasicInputs.html#Description">2.2. Description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="coralMEArquitecture.html">3. Arquitecture of coralME</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="coralMEArquitecture.html#Organism()">3.1. Organism()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coralMEArquitecture.html#MEBuilder()">3.2. MEBuilder()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coralMEArquitecture.html#MEReconstruction()">3.3. MEReconstruction()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coralMEArquitecture.html#Homology()">3.4. Homology()</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ManualCuration.html">4. How to manually curate a ME-model using coralME</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ManualCuration.html#Manual-input-files">4.1. Manual input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ManualCuration.html#How-to-curate?">4.2. How to curate?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">5. Frequently Asked Questions|</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="FAQ.html#My-gene-identifiers-are-not-consistent,-what-should-I-do?">5.1. My gene identifiers are not consistent, what should I do?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="GettingStarted.html" class="btn btn-neutral float-right" title="1. Getting started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Juan D. Tibocha-Bonilla, Rodrigo Santibanez-Palominos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

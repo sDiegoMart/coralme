@@ -6,7 +6,7 @@ import coralme.core
 import coralme.io
 
 import sys
-if sys.platform == 'win32':
+if sys.platform in ['win32', 'darwin']:
 	pass
 else:
 	import coralme.solver.solver

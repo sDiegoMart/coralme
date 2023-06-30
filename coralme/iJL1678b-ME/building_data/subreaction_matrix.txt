@@ -82,9 +82,9 @@ mod_1st_pg181_p	g3p_c	+1.0
 # Pseudouridine (isomerization using an aspartate as acceptor/donor in the enzyme)
 Y	asp__L_c	0.0
 
-# m7G, m5U, Gm, Cm, Um, m1G, m6A, m2A, m3Y, m5C, m2G, m3U, m4Cm, m62A (Methylation)
-m7G,m5U,Gm,Cm,Um,m1G,m6A,m2A,m3Y,m5C,m2G,m3U,m4Cm,m62A	amet_c	-1.0
-m7G,m5U,Gm,Cm,Um,m1G,m6A,m2A,m3Y,m5C,m2G,m3U,m4Cm,m62A	ahcys_c	+1.0
+# m7G, m5U, Gm, Cm, Um, m1G, m6A, m2A, m3Y, m5C, m2G, m3U  (Methylation)
+m7G,m5U,Gm,Cm,Um,m1G,m6A,m2A,m3Y,m5C,m2G,m3U	amet_c	-1.0
+m7G,m5U,Gm,Cm,Um,m1G,m6A,m2A,m3Y,m5C,m2G,m3U	ahcys_c	+1.0
 
 # m4Cm, m62A (Dimethylation)
 m4Cm,m62A	amet_c	-2.0

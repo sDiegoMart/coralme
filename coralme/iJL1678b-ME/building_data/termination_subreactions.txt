@@ -1,4 +1,4 @@
-	enzymes	stoich	element_contribution
+subreaction	enzymes	stoich	element_contribution
 PrfA_mono_mediated_termination	PrfA_mono		
 PrfB_mono_mediated_termination	PrfB_mono		
 generic_RF_mediated_termination	generic_RF		

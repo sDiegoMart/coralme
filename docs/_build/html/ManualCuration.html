@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. How to manually curate a ME-model using coralME &mdash; coralME 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Frequently Asked Questions|" href="FAQ.html" />
+    <link rel="prev" title="3. Arquitecture of coralME" href="coralMEArquitecture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> coralME
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BasicInputs.html">2. Description of Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coralMEArquitecture.html">3. Arquitecture of coralME</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. How to manually curate a ME-model using coralME</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Manual-input-files">4.1. Manual input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#How-to-curate?">4.2. How to curate?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">5. Frequently Asked Questions|</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">coralME</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>How to manually curate a ME-model using coralME</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ManualCuration.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="How-to-manually-curate-a-ME-model-using-coralME">
+<h1><span class="section-number">4. </span>How to manually curate a ME-model using coralME<a class="headerlink" href="#How-to-manually-curate-a-ME-model-using-coralME" title="Permalink to this heading"></a></h1>
+<section id="Manual-input-files">
+<h2><span class="section-number">4.1. </span>Manual input files<a class="headerlink" href="#Manual-input-files" title="Permalink to this heading"></a></h2>
+<p>After you run coralME for the first time the following files are generated in building_data/. Most of them are also automatically filled by the algorithm and saved in building_data/reference_files/. These <em>reference files</em> are meant to guide manual curation as they contain all information mapped by coralME formatted as manual input files.</p>
+<p><strong>coralME does not overwrite any file in building_data/, but it will always overwrite files in building_data/reference_files/</strong></p>
+<ul class="simple">
+<li><p>termination_subreactions.txt Input here will define translation termination subreactions and their machinery.</p></li>
+<li><p>peptide_release_factors.txt Input here will define peptide release factors.</p></li>
+<li><p>rna_degradosome.txt Input here will define the composition of the RNA degradosome.</p></li>
+<li><p>special_trna_subreactions.txt Input here will define special tRNA subreactions, such as tRNA-Sec (selenocysteine) synthesis from tRNA-Ser.</p></li>
+<li><p>lipoprotein_precursors.txt Input here will add lipoprotein precursors.</p></li>
+<li><p>special_modifications.txt Input here will define machinery for special modifications. These modifications are a set of pre-defined modifications that are used in ME-models.</p></li>
+<li><p>excision_machinery.txt Input here will define machinery for excision.</p></li>
+<li><p>orphan_and_spont_reactions.txt Input here will mark reactions as orphan or spontaneous. Orphan reactions will be associated with CPLX_dummy, and spontaneous ones will not require enzymes for flux.</p></li>
+<li><p>enzyme_reaction_association.txt Input here will create the association between enzymes and reactions in the ME-model.</p></li>
+<li><p>peptide_compartment_and_pathways.txt Input here will modify protein locations, and translocation pathways in the ME-model.</p></li>
+<li><p>translocation_pathways.txt Input here will define translocation pathways and their machinery.</p></li>
+<li><p>rna_modification.txt Input here will define enzymes that perform RNA modifications for either rRNA or tRNA in the ME-model.</p></li>
+<li><p>ribosomal_proteins.txt Input here will define the composition of the ribosome.</p></li>
+<li><p>rho_independent.txt Input here will mark genes with rho independent transcription termination.</p></li>
+<li><p>sigma_factors.txt Input here will mark proteins for N-terminal methionine cleavage in the ME-model.</p></li>
+<li><p>cleaved_methionine.txt Input here will mark proteins for N-terminal methionine cleavage in the ME-model.</p></li>
+<li><p>folding_dict.txt Input here will define folding pathways for proteins.</p></li>
+<li><p>translocation_multipliers.txt Input here will modify how many pores are required for the translocation of a protein.</p></li>
+<li><p>subreaction_matrix.txt Input here will define subreactions in the ME-model.</p></li>
+<li><p>me_metabolites.txt Input here will mark metabolites in the M-model for replacement with their corrected E-matrix component.</p></li>
+<li><p>elongation_subreactions.txt Input here will define translation elongation subreactions and their machinery.</p></li>
+<li><p>subsystem_classification.txt Input here will classify subsystems in umbrella classifications which are then used to set a median Keff and correct it with the complex SASA.</p></li>
+<li><p>reaction_matrix.txt Input here will define reactions directly in the ME-model. Definitions here will be added to the ME-model after processing the M-model into the ME-model.</p></li>
+<li><p>lipid_modifications.txt Input here will define enzymes that perform lipid modifications.</p></li>
+<li><p>amino_acid_trna_synthetase.txt Input here will define amino acid tRNA ligases.</p></li>
+<li><p>initiation_subreactions.txt Input here will define translation initiation subreactions and their machinery.</p></li>
+<li><p>post_transcriptional_modification_of_RNA.txt Input here will define RNA genes that undergo modifications.</p></li>
+<li><p>protein_corrections.txt Input here will add, modify complexes in the ME-model, as well as add, modify their modifications. You can add a complex modification ID in the replace column, which will remove that modified complex and replace it with your manually added one.</p></li>
+<li><p>reaction_median_keffs.txt</p></li>
+<li><p>transcription_subreactions.txt Input here will define machinery for transcription subreactions. These subreactions are a set of pre-defined subreactions that are used in ME-models.</p></li>
+<li><p>generic_dict.txt Input here will define generics.</p></li>
+<li><p>ribosome_subreactions.txt Input here will define enzymes that perform a ribosome subreaction.</p></li>
+<li><p>reaction_corrections.txt Input here will modify reactions at the M-model stage before ME-model building.</p></li>
+<li><p>TUs_from_biocyc.txt Input here will modify transcriptional unit information.</p></li>
+</ul>
+</section>
+<section id="How-to-curate?">
+<h2><span class="section-number">4.2. </span>How to curate?<a class="headerlink" href="#How-to-curate?" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>If you have not run coralME yet, go back to <a class="reference internal" href="GettingStarted.html"><span class="doc">GettingStarted.ipynb</span></a>.</p></li>
+<li><p><strong>Copy</strong> all of the generated <em>reference files</em> in building_data/reference_files and replace accordingly in building_data/</p></li>
+<li><p><strong>Go one by one</strong> through the files in building_data/ curating as needed! Important flags are risen in curation_notes.json to further guide you through curation.</p></li>
+<li><p>Everytime you make a change, <strong>run the model through the troubleshooter!</strong> It will show you remaining gaps to look at, and the new curation notes might show new warnings.</p></li>
+<li><p><strong>Keep iterating!</strong> You will have finished when no gaps are present, and all remaining warnings in curation notes are irrelevant.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="coralMEArquitecture.html" class="btn btn-neutral float-left" title="3. Arquitecture of coralME" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="FAQ.html" class="btn btn-neutral float-right" title="5. Frequently Asked Questions|" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Juan D. Tibocha-Bonilla, Rodrigo Santibanez-Palominos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
