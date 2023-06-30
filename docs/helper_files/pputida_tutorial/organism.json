@@ -2,11 +2,7 @@
   "ME-Model-ID": "pputida_tutorial",
   "growth_key": "mu1",
   "complex_cofactors": {
-    "fes_transfers": {
-      "erpA": "",
-      "iscA": "",
-      "sufA": ""
-    },
+    "fes_transfers": [],
     "biotin_subreactions": {
       "mod_btn_c": [
         "biotin_ligase"
@@ -27,8 +23,6 @@
   },
   "lipoprotein_precursors": {},
   "lipid_modifications": [],
-  "ngam": 0.003285,
-  "gam": 25,
   "unmodeled_protein_fraction": 0.36,
   "flux_of_biomass_constituents": {},
   "flux_of_lipid_constituents": {},
