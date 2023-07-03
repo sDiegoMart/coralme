@@ -171,7 +171,8 @@ class MEBuilder(object):
 
 			folder = self.org.blast_directory
 			if bool(config.get('run_bbh_blast', True)):
-				ListHandler.print_and_log("~ Running BLAST...")
+				blast_threads = config.get('blast_threads', 4)
+				ListHandler.print_and_log("~ Running BLAST with {} threads...".format(blast_threads))
 				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.blast_directory)
 				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
 
@@ -186,8 +187,8 @@ class MEBuilder(object):
 				execute('makeblastdb -in {:s}/ref.faa -dbtype prot -out {:s}/ref'.format(folder, folder))
 
 				# bidirectional blast
-				execute('blastp -db {:s}/org -query {:s}/ref.faa -num_threads 4 -out {:s}/org_as_db.txt -outfmt 6'.format(folder, folder, folder))
-				execute('blastp -db {:s}/ref -query {:s}/org.faa -num_threads 4 -out {:s}/ref_as_db.txt -outfmt 6'.format(folder, folder, folder))
+				execute('blastp -db {:s}/org -query {:s}/ref.faa -num_threads {} -out {:s}/org_as_db.txt -outfmt 6'.format(folder, folder, blast_threads, folder))
+				execute('blastp -db {:s}/ref -query {:s}/org.faa -num_threads {} -out {:s}/ref_as_db.txt -outfmt 6'.format(folder, folder, blast_threads, folder))
 
 				#os.system('{}/auto_blast.sh {}'.format(self.directory,self.org.directory))
 				ListHandler.print_and_log('BLAST done.')
