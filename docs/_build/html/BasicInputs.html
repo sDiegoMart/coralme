@@ -181,7 +181,11 @@
 <h3><span class="section-number">2.2.1. </span>Genome (genome.gb)<a class="headerlink" href="#Genome-(genome.gb)" title="Permalink to this heading"></a></h3>
 <section id="id1">
 <h4><span class="section-number">2.2.1.1. </span>Description<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
-<p>The genome file contains provides coralME with: * Gene annotations. * Gene sequences.</p>
+<p>The genome file contains provides coralME with:</p>
+<ul class="simple">
+<li><p>Gene annotations.</p></li>
+<li><p>Gene sequences.</p></li>
+</ul>
 </section>
 <section id="Requirements">
 <h4><span class="section-number">2.2.1.2. </span>Requirements<a class="headerlink" href="#Requirements" title="Permalink to this heading"></a></h4>
@@ -198,11 +202,22 @@
 <h3><span class="section-number">2.2.2. </span>M-model (m_model.json)<a class="headerlink" href="#M-model-(m_model.json)" title="Permalink to this heading"></a></h3>
 <section id="id2">
 <h4><span class="section-number">2.2.2.1. </span>Description<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
-<p>The M-model provides coralME with the metabolic model components: * Metabolic network (M-matrix) * Gene-protein-reaction associations * Environmental and internal constraints * Reaction subsystems * Biomass composition</p>
+<p>The M-model provides coralME with the metabolic model components:</p>
+<ul class="simple">
+<li><p>Metabolic network (M-matrix)</p></li>
+<li><p>Gene-protein-reaction associations</p></li>
+<li><p>Environmental and internal constraints</p></li>
+<li><p>Reaction subsystems</p></li>
+<li><p>Biomass composition</p></li>
+</ul>
 </section>
 <section id="id3">
 <h4><span class="section-number">2.2.2.2. </span>Requirements<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. <strong>Gene identifiers MUST be consistent with genome.gb locus_tag or old_locus_tag</strong>. Make sure you download the same genome file that was used to reconstruct the M-model. 2. Has name m_model.json. 3. COBRApy-compliant. Must be read by cobrapy-0.25.0.</p>
+<ol class="arabic simple">
+<li><p><strong>Gene identifiers MUST be consistent with genome.gb locus_tag or old_locus_tag</strong>. Make sure you download the same genome file that was used to reconstruct the M-model.</p></li>
+<li><p>Has name m_model.json.</p></li>
+<li><p>COBRApy-compliant. Must be read by cobrapy-0.25.0.</p></li>
+</ol>
 <p>See an example of <a class="reference external" href="./helper_files/pputida_tutorial/inputs/m_model.json">m_model.json</a></p>
 </section>
 </section>
@@ -211,12 +226,36 @@
 <section id="id4">
 <h4><span class="section-number">2.2.3.1. </span>Description<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
 <p>genes.txt is a gene information table that can be downloaded from the <strong>All genes of organism SmartTable</strong> of the <a class="reference external" href="https://biocyc.org/">BioCyc</a> database. Click Export&gt;to Spreadsheet File&gt;frame IDs. This file is optional and is meant to complement the information from genome.gb in case the latter is missing genes.</p>
-<p>genes.txt provides coralME with: * Gene locus tags * Gene names * Gene annotations * Gene positions * Gene products (protein, tRNA, etc.)</p>
+<p>genes.txt provides coralME with:</p>
+<ul class="simple">
+<li><p>Gene locus tags</p></li>
+<li><p>Gene names</p></li>
+<li><p>Gene annotations</p></li>
+<li><p>Gene positions</p></li>
+<li><p>Gene products (protein, tRNA, etc.)</p></li>
+</ul>
 </section>
 <section id="id5">
 <h4><span class="section-number">2.2.3.2. </span>Requirements<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. Contains the index Gene Name and columns Accession-1, Left-End-Position, Right-End-Position, and Product. 2. <strong>Accession-1 MUST be consistent with the gene IDs in the GPRs of m_model.json and with the locus_tag (or old_locus_tag) in genome.gb</strong>. 3. Gene Name is consistent with: * Column Genes of polypeptide, complex, or RNA of proteins.txt * Column Gene of RNAs.txt * Column Genes of transcription unit of TUs.txt * Gene identifiers in
-sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index of RNAs.txt 5. Must be tab-separated</p>
+<ol class="arabic simple">
+<li><p>Contains the index Gene Name and columns Accession-1, Left-End-Position, Right-End-Position, and Product.</p></li>
+<li><p><strong>Accession-1 MUST be consistent with the gene IDs in the GPRs of m_model.json and with the locus_tag (or old_locus_tag) in genome.gb</strong>.</p></li>
+<li><p>Gene Name is consistent with:</p>
+<ul class="simple">
+<li><p>Column Genes of polypeptide, complex, or RNA of proteins.txt</p></li>
+<li><p>Column Gene of RNAs.txt</p></li>
+<li><p>Column Genes of transcription unit of TUs.txt</p></li>
+<li><p>Gene identifiers in sequences.fasta</p></li>
+</ul>
+</li>
+<li><p>Product is consistent with:</p>
+<ul class="simple">
+<li><p>Index of proteins.txt</p></li>
+<li><p>Index of RNAs.txt</p></li>
+</ul>
+</li>
+<li><p>Must be tab-separated</p></li>
+</ol>
 </section>
 <section id="Notes">
 <h4><span class="section-number">2.2.3.3. </span>Notes<a class="headerlink" href="#Notes" title="Permalink to this heading"></a></h4>
@@ -236,7 +275,20 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 </section>
 <section id="id7">
 <h4><span class="section-number">2.2.4.2. </span>Requirements<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. Contains the index (Proteins Complexes) and columns Common-Name, Genes of polypeptide, complex, or RNA, and Locations. 2. (Proteins Complexes) is consistent with: * Column Product of genes.txt 3. Genes of polypeptide, complex, or RNA is consistent with: * Index Gene Name of genes.txt 4. Must be tab-separated</p>
+<ol class="arabic simple">
+<li><p>Contains the index (Proteins Complexes) and columns Common-Name, Genes of polypeptide, complex, or RNA, and Locations.</p></li>
+<li><p>(Proteins Complexes) is consistent with:</p>
+<ul class="simple">
+<li><p>Column Product of genes.txt</p></li>
+</ul>
+</li>
+<li><p>Genes of polypeptide, complex, or RNA is consistent with:</p>
+<ul class="simple">
+<li><p>Index Gene Name of genes.txt</p></li>
+</ul>
+</li>
+<li><p>Must be tab-separated</p></li>
+</ol>
 </section>
 <section id="id8">
 <h4><span class="section-number">2.2.4.3. </span>Notes<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h4>
@@ -251,11 +303,28 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 <section id="id9">
 <h4><span class="section-number">2.2.5.1. </span>Description<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h4>
 <p>RNAs.txt is an RNA annotation table that can be downloaded from the All RNAs of organism SmartTable of the <a class="reference external" href="https://biocyc.org/">BioCyc</a> database. Click Export&gt;to Spreadsheet File&gt;frame IDs. This file is optional and is meant to complement the information from genome.gb.</p>
-<p>RNAs.txt provides coralME with: * Genes annotated as RNA products (e.g. tRNA, rRNA, etc.) * RNA gene annotations (e.g. amino acids - tRNA associations)</p>
+<p>RNAs.txt provides coralME with:</p>
+<ul class="simple">
+<li><p>Genes annotated as RNA products (e.g. tRNA, rRNA, etc.)</p></li>
+<li><p>RNA gene annotations (e.g. amino acids - tRNA associations)</p></li>
+</ul>
 </section>
 <section id="id10">
 <h4><span class="section-number">2.2.5.2. </span>Requirements<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. Contains the index (All-tRNAs Misc-RNAs rRNAs) and columns Common-Name, and Gene 2. (All-tRNAs Misc-RNAs rRNAs) is consistent with: * Column Product of genes.txt 3. Gene is consistent with: * Index Gene Name of genes.txt 4. Must be tab-separated</p>
+<ol class="arabic simple">
+<li><p>Contains the index (All-tRNAs Misc-RNAs rRNAs) and columns Common-Name, and Gene</p></li>
+<li><p>(All-tRNAs Misc-RNAs rRNAs) is consistent with:</p>
+<ul class="simple">
+<li><p>Column Product of genes.txt</p></li>
+</ul>
+</li>
+<li><p>Gene is consistent with:</p>
+<ul class="simple">
+<li><p>Index Gene Name of genes.txt</p></li>
+</ul>
+</li>
+<li><p>Must be tab-separated</p></li>
+</ol>
 </section>
 <section id="id11">
 <h4><span class="section-number">2.2.5.3. </span>Notes<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h4>
@@ -270,11 +339,24 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 <section id="id12">
 <h4><span class="section-number">2.2.6.1. </span>Description<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h4>
 <p>TUs.txt is a transcription unit annotation table that can be downloaded from the All TUs of organism SmartTable of the <a class="reference external" href="https://biocyc.org/">BioCyc</a> database. Click Export&gt;to Spreadsheet File&gt;frame IDs. This file is optional and is meant to complement the information from genome.gb.</p>
-<p>TUs.txt provides coralME with: * Co-transcribed genes (operons). * Direction of transcription. * TU IDs.</p>
+<p>TUs.txt provides coralME with:</p>
+<ul class="simple">
+<li><p>Co-transcribed genes (operons).</p></li>
+<li><p>Direction of transcription.</p></li>
+<li><p>TU IDs.</p></li>
+</ul>
 </section>
 <section id="id13">
 <h4><span class="section-number">2.2.6.2. </span>Requirements<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. Contains the index Transcription-Units and columns Genes of transcription unit, and Direction 2. Genes of transcription unit is consistent with: * Index Gene Name of genes.txt 3. Must be tab-separated</p>
+<ol class="arabic simple">
+<li><p>Contains the index Transcription-Units and columns Genes of transcription unit, and Direction</p></li>
+<li><p>Genes of transcription unit is consistent with:</p>
+<ul class="simple">
+<li><p>Index Gene Name of genes.txt</p></li>
+</ul>
+</li>
+<li><p>Must be tab-separated</p></li>
+</ol>
 </section>
 <section id="id14">
 <h4><span class="section-number">2.2.6.3. </span>Notes<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h4>
@@ -289,14 +371,21 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 <section id="id15">
 <h4><span class="section-number">2.2.7.1. </span>Description<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h4>
 <p>sequences.fasta is a nucleotide FASTA file that can be downloaded from the All genes of organism SmartTable of the <a class="reference external" href="https://biocyc.org/">BioCyc</a> database. Click Export&gt;FASTA&gt;Find sequences. This file is optional and is meant to complement the information from genome.gb in case the latter is missing genes.</p>
-<p>sequences.fasta provides coralME with: * Gene sequences</p>
+<p>sequences.fasta provides coralME with:</p>
+<ul class="simple">
+<li><p>Gene sequences</p></li>
+</ul>
 </section>
 <section id="id16">
 <h4><span class="section-number">2.2.7.2. </span>Requirements<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h4>
-<div class="line-block">
-<div class="line">This file should meet the following requirements: 1. Gene identifiers are consistent with: * Index Gene Name of genes.txt</div>
-<div class="line">2. Must be tab-separated</div>
-</div>
+<ol class="arabic simple">
+<li><p>Gene identifiers are consistent with:</p>
+<ul class="simple">
+<li><p>Index Gene Name of genes.txt</p></li>
+</ul>
+</li>
+<li><p>Must be tab-separated</p></li>
+</ol>
 </section>
 <section id="id17">
 <h4><span class="section-number">2.2.7.3. </span>Notes<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h4>
@@ -311,11 +400,18 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 <section id="id18">
 <h4><span class="section-number">2.2.8.1. </span>Description<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h4>
 <p>inputs.json is a JSON file containing paths to input files for coralME.</p>
-<p>inputs.json provides coralME with: * Paths to input files</p>
+<p>inputs.json provides coralME with:</p>
+<ul class="simple">
+<li><p>Paths to input files</p></li>
+</ul>
 </section>
 <section id="id19">
 <h4><span class="section-number">2.2.8.2. </span>Requirements<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. Must be JSON-compliant 2. Must contain paths to required files (M-model and Genome). 3. All defined files must exist.</p>
+<ol class="arabic simple">
+<li><p>Must be JSON-compliant</p></li>
+<li><p>Must contain paths to required files (M-model and Genome).</p></li>
+<li><p>All defined files must exist.</p></li>
+</ol>
 </section>
 <section id="id20">
 <h4><span class="section-number">2.2.8.3. </span>Notes<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h4>
@@ -329,11 +425,17 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 <section id="id21">
 <h4><span class="section-number">2.2.9.1. </span>Description<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h4>
 <p>organism.json is a JSON file containing paths to input files for coralME.</p>
-<p>organism.json provides coralME with: * ME-modeling parameters</p>
+<p>organism.json provides coralME with:</p>
+<ul class="simple">
+<li><p>ME-modeling parameters</p></li>
+</ul>
 </section>
 <section id="id22">
 <h4><span class="section-number">2.2.9.2. </span>Requirements<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h4>
-<p>This file should meet the following requirements: 1. Must be JSON-compliant 2. Must contain the standard fields.</p>
+<ol class="arabic simple">
+<li><p>Must be JSON-compliant</p></li>
+<li><p>Must contain the standard fields.</p></li>
+</ol>
 </section>
 <section id="id23">
 <h4><span class="section-number">2.2.9.3. </span>Notes<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h4>
