@@ -59,6 +59,7 @@
    "id": "85e9f705-8137-4736-bfc4-7e49d3194a8b",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "The genome file contains provides coralME with:\n",
     "* Gene annotations.\n",
     "* Gene sequences."
@@ -97,6 +98,7 @@
    "id": "9a65f985-9b1e-467c-aa4c-e5619bbc3dba",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "The M-model provides coralME with the metabolic model components:\n",
     "* Metabolic network (M-matrix)\n",
     "* Gene-protein-reaction associations\n",
@@ -138,7 +140,8 @@
    "id": "9ded3740-aaa4-41a6-bbb7-5a9409da7a31",
    "metadata": {},
    "source": [
-    "<code>genes.txt</code> is a gene information table that can be downloaded from the <b>All genes of <i>organism</i> SmartTable</b> of the <b>[BioCyc](https://biocyc.org/)</b> database. Click <code>Export</code>><code>to Spreadsheet File</code>><code>frame IDs</code>. <b>This file is optional and is meant to complement the information from <code>genome.gb</code> in case the latter is missing genes.</b>\n",
+    "#### Description\n",
+    "<code>genes.txt</code> is a gene information table that can be downloaded from the **All genes of <i>organism</i> SmartTable** of the <b>[BioCyc](https://biocyc.org/)</b> database. Click <code>Export</code>><code>to Spreadsheet File</code>><code>frame IDs</code>. <b>This file is optional and is meant to complement the information from <code>genome.gb</code> in case the latter is missing genes.</b>\n",
     "\n",
     "<code>genes.txt</code> provides coralME with:\n",
     "* Gene locus tags\n",
@@ -194,6 +197,7 @@
    "id": "4fb432b9-91fc-44d0-bea3-ff0f4502a8a0",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "<code>proteins.txt</code> is a protein complex information table that can be downloaded from the <b>All proteins of <i>organism</i> SmartTable</b> of the <b>[BioCyc](https://biocyc.org/)</b> database. Click <code>Export</code>><code>to Spreadsheet File</code>><code>frame IDs</code>. <b>This file is optional and is meant to complement the information from <code>genome.gb</code>.</b>\n",
     "\n",
     "<code>proteins.txt</code> provides coralME with:\n",
@@ -239,6 +243,7 @@
    "id": "0de2b032-94fb-4e5e-98d6-bd235b349627",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "<code>RNAs.txt</code> is an RNA annotation table that can be downloaded from the <b>All RNAs of <i>organism</i> SmartTable</b> of the <b>[BioCyc](https://biocyc.org/)</b> database. Click <code>Export</code>><code>to Spreadsheet File</code>><code>frame IDs</code>. <b>This file is optional and is meant to complement the information from <code>genome.gb</code>.</b>\n",
     "\n",
     "<code>RNAs.txt</code> provides coralME with:\n",
@@ -285,6 +290,7 @@
    "id": "5d1ea005-9fc3-4dbf-bf9b-200100dd23a9",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "<code>TUs.txt</code> is a transcription unit annotation table that can be downloaded from the <b>All TUs of <i>organism</i> SmartTable</b> of the <b>[BioCyc](https://biocyc.org/)</b> database. Click <code>Export</code>><code>to Spreadsheet File</code>><code>frame IDs</code>. <b>This file is optional and is meant to complement the information from <code>genome.gb</code>.</b>\n",
     "\n",
     "<code>TUs.txt</code> provides coralME with:\n",
@@ -330,6 +336,7 @@
    "id": "72361c99-fa06-4702-81be-3893e94df157",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "<code>sequences.fasta</code> is a nucleotide FASTA file that can be downloaded from the <b>All genes of <i>organism</i> SmartTable</b> of the <b>[BioCyc](https://biocyc.org/)</b> database. Click <code>Export</code>><code>FASTA</code>><code>Find sequences</code>. <b>This file is optional and is meant to complement the information from <code>genome.gb</code> in case the latter is missing genes.</b>\n",
     "\n",
     "<code>sequences.fasta</code> provides coralME with:\n",
@@ -373,6 +380,7 @@
    "id": "4a966960-a195-4752-8bc6-0ac4dbd6ec29",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "<code>inputs.json</code> is a JSON file containing paths to input files for coralME.\n",
     "\n",
     "<code>inputs.json</code> provides coralME with:\n",
@@ -407,6 +415,7 @@
    "id": "925659dd-87b8-4aa3-bb21-3529c8058ade",
    "metadata": {},
    "source": [
+    "#### Description\n",
     "<code>organism.json</code> is a JSON file containing paths to input files for coralME.\n",
     "\n",
     "<code>organism.json</code> provides coralME with:\n",
