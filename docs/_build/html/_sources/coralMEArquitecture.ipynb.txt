@@ -42,6 +42,15 @@
    ]
   },
   {
+   "cell_type": "raw",
+   "id": "9584494e-598a-473b-82fb-835fff00fa19",
+   "metadata": {},
+   "source": [
+    ".. autoclass:: coralme.builder.organism.Organism\n",
+    "   :noindex:"
+   ]
+  },
+  {
    "cell_type": "markdown",
    "id": "16ccfb3f-11bc-4f7b-804c-d7070b7737ca",
    "metadata": {},
@@ -53,25 +62,19 @@
   },
   {
    "cell_type": "markdown",
-   "id": "94cd08c9-4f86-45c5-beb4-408bc2f9e840",
-   "metadata": {},
-   "source": [
-    "### Parameters\n",
-    "<code>org:str</code>\n",
-    "\n",
-    "    Identifier of the main organism. Has to be the same as the containing folder name.\n",
-    "\n",
-    "<code>is_reference : bool</code>\n",
-    "\n",
-    "    If True, process as reference organism."
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "0866da79-a352-4364-abfe-d7b2e37b4df5",
    "metadata": {},
    "source": [
     "## <code>MEBuilder()</code>"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "id": "391b88a9-3170-4e73-8e65-2fc2fdd99276",
+   "metadata": {},
+   "source": [
+    ".. autoclass:: coralme.builder.main.MEBuilder\n",
+    "   :noindex:"
    ]
   },
   {
@@ -93,6 +96,15 @@
    ]
   },
   {
+   "cell_type": "raw",
+   "id": "49b53aff-7686-413b-aa71-b0f418748d89",
+   "metadata": {},
+   "source": [
+    ".. autoclass:: coralme.builder.main.MEReconstruction\n",
+    "   :noindex:"
+   ]
+  },
+  {
    "cell_type": "markdown",
    "id": "2e749025-6706-4dc7-bb20-190017141bcf",
    "metadata": {},
@@ -105,21 +117,19 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5478587d-4e6b-43aa-b240-819f2eb123bb",
-   "metadata": {},
-   "source": [
-    "### Parameters\n",
-    "<code>builder : coralme.reconstruction.MEBuilder</code>\n",
-    "\n",
-    "    MEBuilder object containing the final version of the class Organism.   "
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "70ec0fda-31df-472b-a0bf-fef5f78909d7",
    "metadata": {},
    "source": [
     "## <code>Homology()</code>"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "id": "44ec6a8e-e3e9-45b2-b41a-d22a702ddc98",
+   "metadata": {},
+   "source": [
+    ".. autoclass:: coralme.builder.homology.Homology\n",
+    "   :noindex:"
    ]
   },
   {
@@ -131,36 +141,13 @@
     "\n",
     "This class contains methods to predict and process homology of the main and reference organisms. Homology is inferred from the reciprocal best hits of a BLAST. The results are used to update and complement the attributes of the class Organism.      "
    ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "0c2c1758-104b-4285-8a0c-99661987009b",
-   "metadata": {},
-   "source": [
-    "### Parameters\n",
-    "<code>org : str</code>\n",
-    "\n",
-    "    Identifier of the main organism. Has to be the same as its\n",
-    "    containing folder name.\n",
-    "\n",
-    "<code>ref : str</code>\n",
-    "\n",
-    "    Identifier of the reference organism. Has to be the same as\n",
-    "    its containing folder name.\n",
-    "\n",
-    "<code>evalue : float</code>\n",
-    "\n",
-    "    E-value cutoff to call enzyme homologs from the BLAST. Two\n",
-    "    reciprocal best hits are considered homologs if their\n",
-    "    E-value is less than this parameter."
-   ]
   }
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "me_modeling_new",
+   "display_name": "coralme",
    "language": "python",
-   "name": "me_modeling_new"
+   "name": "coralme"
   },
   "language_info": {
    "codemirror_mode": {
