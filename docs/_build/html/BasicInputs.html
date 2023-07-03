@@ -50,6 +50,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#Types-of-inputs">2.1. Types of inputs</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Required">2.1.1. Required</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Optional">2.1.2. Optional</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Configuration">2.1.3. Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Description">2.2. Description</a><ul>
@@ -84,6 +85,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#Gene-sequences-(sequences.fasta)-[optional]">2.2.7. Gene sequences (sequences.fasta) [optional]</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id9">2.2.7.1. Requirements</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id10">2.2.7.2. Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Configuration-of-paths-to-files-(inputs.json)">2.2.8. Configuration of paths to files (inputs.json)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id11">2.2.8.1. Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">2.2.8.2. Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Configuration-of-parameters-(organism.json)">2.2.9. Configuration of parameters (organism.json)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">2.2.9.1. Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">2.2.9.2. Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -140,6 +151,13 @@
 <li><p><strong>Proteins file</strong>, by default:proteins.txt</p></li>
 <li><p><strong>TUs file</strong>, by default:TUs.txt.</p></li>
 <li><p><strong>Sequences file</strong>, by default:sequences.fasta</p></li>
+</ol>
+</section>
+<section id="Configuration">
+<h3><span class="section-number">2.1.3. </span>Configuration<a class="headerlink" href="#Configuration" title="Permalink to this heading"></a></h3>
+<ol class="arabic simple" start="8">
+<li><p><strong>inputs.json</strong></p></li>
+<li><p><strong>orgnanism.json</strong></p></li>
 </ol>
 <p><img alt="Drawing" src="_images/inputs.png" /></p>
 </section>
@@ -252,6 +270,36 @@ sequences.fasta 4. Product is consistent with: * Index of proteins.txt * Index o
 <li><p>Requirements 1, 2 and 3 regarding ID consistency should be directly met if the files are downloaded from the same BioCyc database.</p></li>
 </ul>
 <p>See an example of <a class="reference external" href="./helper_files/pputida_tutorial/inputs/sequences.fasta">sequences.fasta</a></p>
+</section>
+</section>
+<section id="Configuration-of-paths-to-files-(inputs.json)">
+<h3><span class="section-number">2.2.8. </span>Configuration of paths to files (inputs.json)<a class="headerlink" href="#Configuration-of-paths-to-files-(inputs.json)" title="Permalink to this heading"></a></h3>
+<p>inputs.json is a JSON file containing paths to input files for coralME.</p>
+<p>inputs.json provides coralME with: * Paths to input files</p>
+<section id="id11">
+<h4><span class="section-number">2.2.8.1. </span>Requirements<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h4>
+<p>This file should meet the following requirements: 1. Must be JSON-compliant 2. Must contain paths to required files (M-model and Genome). 3. All defined files must exist.</p>
+</section>
+<section id="id12">
+<h4><span class="section-number">2.2.8.2. </span>Notes<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p>See an example of <a class="reference external" href="./helper_files/pputida_tutorial/input.json">input.json</a></p></li>
+</ul>
+</section>
+</section>
+<section id="Configuration-of-parameters-(organism.json)">
+<h3><span class="section-number">2.2.9. </span>Configuration of parameters (organism.json)<a class="headerlink" href="#Configuration-of-parameters-(organism.json)" title="Permalink to this heading"></a></h3>
+<p>organism.json is a JSON file containing paths to input files for coralME.</p>
+<p>organism.json provides coralME with: * ME-modeling parameters</p>
+<section id="id13">
+<h4><span class="section-number">2.2.9.1. </span>Requirements<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h4>
+<p>This file should meet the following requirements: 1. Must be JSON-compliant 2. Must contain the standard fields.</p>
+</section>
+<section id="id14">
+<h4><span class="section-number">2.2.9.2. </span>Notes<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p>See an example of <a class="reference external" href="./helper_files/pputida_tutorial/organism.json">organism.json</a></p></li>
+</ul>
 </section>
 </section>
 </section>

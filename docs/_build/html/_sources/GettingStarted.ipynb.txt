@@ -194,7 +194,7 @@
    "id": "ce4370b2-16e6-44af-b97f-9c8aff623045",
    "metadata": {},
    "source": [
-    "Import packages"
+    "### Import packages"
    ]
   },
   {
@@ -212,7 +212,7 @@
    "id": "47329e86-82ef-475e-a0b2-1c795dd61647",
    "metadata": {},
    "source": [
-    "Define organism and inputs"
+    "### Define organism and inputs"
    ]
   },
   {
@@ -222,9 +222,37 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "org = 'pputida_tutorial'\n",
-    "organism = './helper_files/{:s}/organism.json'.format(org)\n",
-    "inputs = './helper_files/{:s}/input.json'.format(org)"
+    "org = \"./helper_files/pputida_tutorial/\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "94eda62d-0dd3-49a3-a3f3-5a82ab75ac12",
+   "metadata": {},
+   "source": [
+    "Load configuration files"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f0b13719-94fe-4d1f-a71e-96348a1d17f1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "os.chdir(org)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3c40401d-8820-4405-88a3-847f97907c10",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "organism = './organism.json'.format(org)\n",
+    "inputs = './input.json'.format(org)"
    ]
   },
   {
@@ -232,7 +260,16 @@
    "id": "4646d05b-be94-4136-bb7f-debf2f3aa95f",
    "metadata": {},
    "source": [
-    "Create builder"
+    "### Create builder"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "id": "fbf4b0fd-133a-4863-aa2a-b8a0e149596b",
+   "metadata": {},
+   "source": [
+    ".. autoclass:: coralme.builder.main.MEBuilder\n",
+    "   :noindex:"
    ]
   },
   {
@@ -257,7 +294,7 @@
    "id": "8a75a27a-92e2-4f56-8ca8-42ca48b03a1a",
    "metadata": {},
    "source": [
-    "Generate files"
+    "### Generate files"
    ]
   },
   {
@@ -278,7 +315,7 @@
    "id": "09f641ec-b47d-4356-8a7d-6e4087b35a7c",
    "metadata": {},
    "source": [
-    "Build ME-model"
+    "### Build ME-model"
    ]
   },
   {
@@ -303,7 +340,7 @@
    "id": "83ba4f6d-7a1d-49bd-91fe-f688c215d96c",
    "metadata": {},
    "source": [
-    "Troubleshoot ME-model"
+    "### Troubleshoot ME-model"
    ]
   },
   {
@@ -321,7 +358,9 @@
    "id": "48ceb309-6ef8-4623-8390-4d725e70d9d5",
    "metadata": {},
    "source": [
-    "__Note:__ We set 0.001 as a standard value for feasibility checking, but feel free to modify it! Sometimes too high a value could put a significant strain on the model and give too many gaps to start with. Too low a value might not show you all the gaps needed."
+    "<div class=\"alert alert-info\">\n",
+    "**Note**: We set 0.001 as a standard value for feasibility checking, but feel free to modify it! Sometimes too high a value could put a significant strain on the model and give too many gaps to start with. Too low a value might not show you all the gaps needed.\n",
+    "</div>"
    ]
   },
   {
