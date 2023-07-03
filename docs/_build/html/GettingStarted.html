@@ -51,8 +51,22 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">1. Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Download-files-from-BioCyc">1.1. Download files from BioCyc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Initialize-the-folder-for-your-organism">1.2. Initialize the folder for your organism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Download-files-from-BioCyc">1.1. Download files from BioCyc</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Go-to-Tools&gt;Special-SmartTables">1.1.1. Go to Tools&gt;Special SmartTables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Download-genes.txt-and-sequences.fasta">1.1.2. Download genes.txt and sequences.fasta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Download-proteins.txt,-RNAs.txt-and-TUs.txt">1.1.3. Download proteins.txt, RNAs.txt and TUs.txt</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Download-proteins.txt">1.1.3.1. Download proteins.txt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Download-RNAs.txt">1.1.3.2. Download RNAs.txt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Download-TUs.txt">1.1.3.3. Download TUs.txt</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Initialize-the-folder-for-your-organism">1.2. Initialize the folder for your organism</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Define-inputs-in-input.json.">1.2.1. Define inputs in <strong>input.json</strong>.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Define-parameters-in-organism.json.">1.2.2. Define parameters in <strong>organism.json</strong>.</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#Reconstruct-with-coralME">1.3. Reconstruct with coralME</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Import-packages">1.3.1. Import packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Define-organism-and-inputs">1.3.2. Define organism and inputs</a></li>
@@ -104,41 +118,63 @@
 <p>BioCyc files are optional but useful, you should download them after having your gene id consistent M-model and genbank files.</p>
 <p>The quickest way to do this is to copy one of the genes from the genbank file into the BioCyc search bar. Your organism should appear in the list if it is available in BioCyc.</p>
 <p>To download:</p>
-<p>Go to Tools&gt;Special SmartTables</p>
+<section id="Go-to-Tools&gt;Special-SmartTables">
+<h3><span class="section-number">1.1.1. </span>Go to Tools&gt;Special SmartTables<a class="headerlink" href="#Go-to-Tools>Special-SmartTables" title="Permalink to this heading"></a></h3>
 <p><img alt="Drawing" src="_images/1.png" /></p>
 <p>From here you can download the 5 optional BioCyc files for your organism.</p>
 <p><img alt="Drawing" src="_images/2.png" /></p>
-<p>Download genes.txt and sequences.fasta</p>
+</section>
+<section id="Download-genes.txt-and-sequences.fasta">
+<h3><span class="section-number">1.1.2. </span>Download genes.txt and sequences.fasta<a class="headerlink" href="#Download-genes.txt-and-sequences.fasta" title="Permalink to this heading"></a></h3>
 <p><img alt="Drawing" src="_images/3.png" /></p>
+</section>
+<section id="Download-proteins.txt,-RNAs.txt-and-TUs.txt">
+<h3><span class="section-number">1.1.3. </span>Download proteins.txt, RNAs.txt and TUs.txt<a class="headerlink" href="#Download-proteins.txt,-RNAs.txt-and-TUs.txt" title="Permalink to this heading"></a></h3>
 <p>The same process of genes.txt applies to proteins.txt, RNAs.txt and TUs.txt.</p>
 <p>Some columns must be added manually using BioCyc’s dropdown lists <strong>ADD PROPERTY COLUMN</strong> and <strong>ADD TRANSFORM COLUMN</strong> within the SmartTable editing webpage.</p>
 <p><img alt="Drawing" src="_images/4.png" /></p>
-<p>Download proteins.txt</p>
+<section id="Download-proteins.txt">
+<h4><span class="section-number">1.1.3.1. </span>Download proteins.txt<a class="headerlink" href="#Download-proteins.txt" title="Permalink to this heading"></a></h4>
 <p>The index (Proteins Complexes) is in the SmartTable by default, but you need to add the columns Common-Name, Genes of polypeptide, complex, or RNA, and Locations.</p>
 <ul class="simple">
 <li><p>Common-Name is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong></p></li>
 <li><p>Genes of polypeptide, complex, or RNA is available in the dropdown list <strong>ADD TRANSFORM COLUMN</strong></p></li>
 <li><p>Locations is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong>.</p></li>
 </ul>
-<p>Download RNAs.txt</p>
+</section>
+<section id="Download-RNAs.txt">
+<h4><span class="section-number">1.1.3.2. </span>Download RNAs.txt<a class="headerlink" href="#Download-RNAs.txt" title="Permalink to this heading"></a></h4>
 <p>The index (All-tRNAs Misc-RNAs rRNAs) is in the SmartTable by default, but you need to add the columns Common-Name, and Gene.</p>
 <ul class="simple">
 <li><p>Common-Name is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong></p></li>
 <li><p>Gene is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong>.</p></li>
 </ul>
-<p>Download TUs.txt</p>
+</section>
+<section id="Download-TUs.txt">
+<h4><span class="section-number">1.1.3.3. </span>Download TUs.txt<a class="headerlink" href="#Download-TUs.txt" title="Permalink to this heading"></a></h4>
 <p>The index Transcription-Units is in the SmartTable by default, but you need to add the columns Genes of transcription unit, and Direction.</p>
 <ul class="simple">
 <li><p>Genes of transcription unit is available in the dropdown list <strong>ADD TRANSFORM COLUMN</strong></p></li>
 <li><p>Direction is available in the dropdown list <strong>ADD PROPERTY COLUMN</strong>.</p></li>
 </ul>
 </section>
+</section>
+</section>
 <section id="Initialize-the-folder-for-your-organism">
 <h2><span class="section-number">1.2. </span>Initialize the folder for your organism<a class="headerlink" href="#Initialize-the-folder-for-your-organism" title="Permalink to this heading"></a></h2>
 <p>Copy your files to create your initial folder</p>
 <p><img alt="Drawing" src="_images/folder.png" /></p>
-<p>Define inputs in <strong>input.json</strong>. See an example of <a class="reference external" href="./helper_files/pputida_tutorial/input.json">input.json</a></p>
-<p>Define model ID in <strong>organism.json</strong>. See an example of <a class="reference external" href="./helper_files/pputida_tutorial/organism.json">organism.json</a></p>
+<section id="Define-inputs-in-input.json.">
+<h3><span class="section-number">1.2.1. </span>Define inputs in <strong>input.json</strong>.<a class="headerlink" href="#Define-inputs-in-input.json." title="Permalink to this heading"></a></h3>
+<p>See an example of <a class="reference external" href="./helper_files/pputida_tutorial/input.json">input.json</a></p>
+</section>
+<section id="Define-parameters-in-organism.json.">
+<h3><span class="section-number">1.2.2. </span>Define parameters in <strong>organism.json</strong>.<a class="headerlink" href="#Define-parameters-in-organism.json." title="Permalink to this heading"></a></h3>
+<p>See an example of <a class="reference external" href="./helper_files/pputida_tutorial/organism.json">organism.json</a></p>
+<div class="admonition note">
+<p><strong>Note</strong>: You do not need to modify these parameters right away. But once you are at the curation stage you will have to ensure these parameters are applicable to your organism.</p>
+</div>
+</section>
 </section>
 <section id="Reconstruct-with-coralME">
 <h2><span class="section-number">1.3. </span>Reconstruct with coralME<a class="headerlink" href="#Reconstruct-with-coralME" title="Permalink to this heading"></a></h2>
