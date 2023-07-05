@@ -430,13 +430,15 @@ class MEBuilder(object):
 
 		Parameters
 		----------
-		evalue : float
+		evalue : float, default 1e-10
 			Sets the E-value cutoff for calling protein
 			homologs using BLAST.
 		"""
 		self.homology = coralme.builder.homology.Homology(self.org, self.ref, evalue = evalue)
 
 	def get_trna_to_codon(self):
+		"""Gets tRNA to codon association from the Genome.
+		"""
 		import Bio
 		from Bio import SeqIO, Seq, SeqFeature, SeqUtils
 

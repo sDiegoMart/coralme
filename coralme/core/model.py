@@ -1081,6 +1081,38 @@ class MEModel(cobra.core.model.Model):
 	def optimize(self,
 		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
+
+		"""Solves the NLP problem to obtain reaction fluxes for a ME-model.
+
+		Parameters
+		----------
+		max_mu : float
+			Maximum growth rate for initializing the growth rate binary search (GRBS).
+		min_mu : float
+			Minimum growth rate for initializing GRBS.
+		maxIter : int
+			Maximum number of iterations for GRBS.
+		lambdify : bool
+			If True, # TODO
+		tolerance : float
+			Tolerance for the convergence of GRBS.
+		precision : str, {"quad", "double", "dq", "dqq"}
+			Precision (quad or double precision) for the GRBS
+		verbose : bool
+			If True, allow printing.
+		fva : dict
+			Settings for Flux Variability Analysis of the ME-model. Must specify
+			growth rate at which perform FVA ("mu_fixed") and list of reactions for
+			which calculate it ("reactions"). It must follow the form:
+			
+			e.g.
+			
+			fva = {
+				"mu_fixed" : 0.1,
+				"reactions" : ["RXN1", "RXN2"]
+				}
+		"""
+
 		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
 		# https://www.nature.com/articles/s41564-019-0423-8
 
@@ -1141,6 +1173,28 @@ class MEModel(cobra.core.model.Model):
 	def optimize_windows(self,
 		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, solver = 'gurobi'):
+
+		"""Solves the NLP problem to obtain reaction fluxes for a ME-model. This
+		method is used when setting a solver other than qMINOS. It allows to
+		use coralME in other OS than Linux.
+
+		Parameters
+		----------
+		max_mu : float
+			Maximum growth rate for initializing the growth rate binary search (GRBS).
+		min_mu : float
+			Minimum growth rate for initializing GRBS.
+		maxIter : int
+			Maximum number of iterations for GRBS.
+		lambdify : bool
+			If True, # TODO
+		tolerance : float
+			Tolerance for the convergence of GRBS.
+		precision : str, {"quad", "double", "dq", "dqq"}
+			Precision (quad or double precision) for the GRBS
+		verbose : bool
+			If True, allow printing.
+		"""
 
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
