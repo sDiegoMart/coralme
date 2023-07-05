@@ -1526,7 +1526,7 @@ class MEReconstruction(MEBuilder):
 	MEBuilder : coralme.builder.main.MEBuilder
 
 	"""
-	def __init__(self, builder, *args, **kwargs):
+	def __init__(self, builder):
 		# only if builder.generate_files() was run before builder.build_me_model()
 		if hasattr(builder, 'org'):
 			self.org = builder.org
