@@ -34,6 +34,10 @@ import logging
 #Here is a naive, non thread-safe implementation:
 
 class ListHandler(logging.Handler): # Inherit from logging.Handler
+	"""
+	ListHandler class to handle prints and logs.
+
+	"""
 	def __init__(self, log_list):
 		# run the regular Handler __init__
 		logging.Handler.__init__(self)
@@ -53,10 +57,16 @@ class ListHandler(logging.Handler): # Inherit from logging.Handler
 
 class MEBuilder(object):
 	"""
-	MEBuilder class to obtain input data from protein homology.
+	MEBuilder class to coordinate the reconstruction of ME-models.
 
 	Parameters
 	----------
+	*args:
+		Positional arguments are passed as paths to JSON files that
+		update the configuration of the parent class.
+	**kwargs:
+		Further keyword arguments are passed on as dictionaries
+		to update the configuration of the parent class.
 
 	"""
 	def __init__(self, *args, **kwargs):
@@ -252,10 +262,6 @@ class MEBuilder(object):
 					self.org.me_mets.to_csv(outfile, sep = '\t')
 					logging.warning('The M to ME metabolite mapping file was saved to the ./{:s} file.'.format(filename))
 
-# 		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
-# 		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
-# 		self.org.subreaction_matrix.to_csv(filename,sep='\t')
-		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
 		logging.warning("Processing RNA modifications")
@@ -507,8 +513,6 @@ class MEBuilder(object):
 					aa2trna['m'][bnum] = aa
 				elif organelle.lower() in ['chloroplast', 'plastid']:
 					aa2trna['h'][bnum] = aa
-				#old code
-				#trna_to_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
 
 		# trna_to_codon does not account for misacylation: { 'tRNA ID' : 'Amino acid to load into the tRNA' }
 		trna_to_aa = { k:v.replace('fMet', 'Met') for k,v in trna_to_aa.items() }
@@ -546,8 +550,6 @@ class MEBuilder(object):
 			if len(transl_table) == 0:
 				continue
 
-			#codon_table = Bio.Data.CodonTable.generic_by_id[me_model.global_info.get('translation_table', 11)]
-			#me_model.global_info['codon_table'] = codon_table
 			codon_table = Bio.Data.CodonTable.generic_by_id[list(transl_table)[0]]
 
 			dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
@@ -575,9 +577,6 @@ class MEBuilder(object):
 
 			trna_to_codon_organelle = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 			trna_to_codon[organelle] = trna_to_codon_organelle
-
-		#me_model.global_info['aa2codons'] = aa2codons
-		#me_model.global_info['aa2trna'] = aa2trna
 
 		me_model.global_info['trna_to_aa'] = trna_to_aa
 		me_model.global_info['trna_to_codon'] = trna_to_codon
@@ -660,13 +659,7 @@ class MEBuilder(object):
 		protein_mod.index.name = "Modified_enzyme"
 		self.org.protein_mod = pandas.concat([self.org.protein_mod,protein_mod])
 
-# 	def curate(self):
-# 		coralme.builder.curation.MECurator(self.org).curate()
-
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
-		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
-# 		if self.configuration.get('df_enzyme_reaction_association',None) is not None:
-# 			return
 		m_model = self.org.m_model
 		org_complexes_df = self.org.complexes_df
 		protein_mod = self.org.protein_mod
@@ -777,69 +770,6 @@ class MEBuilder(object):
 
 	def update_TU_df(self):
 		return NotImplemented
-# 		org_TU_to_genes = self.org.TU_to_genes
-# 		org_TUs = self.org.TUs
-# 		org_sigmas = self.org.sigmas
-# 		org_complexes_df = self.org.complexes_df
-# 		ref_TUs = self.ref.TUs
-# 		ref_TU_df = self.ref.TU_df
-# 		gene_dictionary = self.org.gene_dictionary
-# 		mutual_hits = self.homology.mutual_hits
-# 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-# 		rpod = self.org.rpod
-# 		ref_genes_to_TU = self.ref.genes_to_TU
-# 		ref_sigmas = self.ref.sigmas
-# 		TU_df = self.org.TU_df
-# 		remove_TUs = []
-# 		TU_dict = {}
-# 		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
-# 					'Updating TUs from homology...',
-# 					bar_format = bar_format,
-# 					total=TU_df.shape[0]):
-# 			tu = tu_id.split("_from_")[0]
-# 			rho_dependent = True
-# 			sigma = rpod
-# 			genes = org_TU_to_genes[tu]
-# 			if set(genes).issubset(mutual_hits):
-# 				ref_TU = [
-# 					ref_genes_to_TU[mutual_hits[g]]
-# 					for g in genes
-# 					if mutual_hits[g] in ref_genes_to_TU
-# 				]
-# 				if (
-# 					len(ref_TU) == 1
-# 				):  # All mapped genes are from only one TU. TU identified!
-# 					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
-# 					if not TU_hit.empty:
-# 						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
-# 						ref_sigma = TU_hit["rnapol"].tolist()[0]
-# 						if ref_sigma in ref_cplx_homolog:
-# 							sigma = ref_cplx_homolog[ref_sigma]
-# 							if sigma not in org_sigmas.index:
-# 								org_sigmas = org_sigmas.append(
-# 									pandas.DataFrame.from_dict(
-# 										{
-# 											sigma: {
-# 												"complex": "RNAP_{}".format(sigma),
-# 												"genes": org_complexes_df.loc[sigma]["genes"],
-# 												"name": org_complexes_df.loc[sigma]["name"],
-# 											}
-# 										}
-# 									).T
-# 								)
-# 				tu_name = "{}_from_{}".format(tu, sigma)
-# 				if tu_name not in TU_df.index:
-# 					remove_TUs.append(tu_id)
-# 					TU_df.loc[tu_name] = [0, 0, 0, 0, 0, 0]
-# 					TU_df.loc[tu_name]["strand"] = row["strand"]
-# 					TU_df.loc[tu_name]["start"] = int(row["start"])
-# 					TU_df.loc[tu_name]["stop"] = int(row["stop"])
-# 					TU_df.loc[tu_name]["tss"] = None
-# 				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
-# 				TU_df.loc[tu_name]["rnapol"] = sigma
-# 		self.org.TU_df = TU_df
-# 		org_sigmas.index.name = "sigma"
-# 		self.org.sigmas = org_sigmas
 
 	def protein_location_from_homology(self):
 		protein_location = self.org.protein_location
@@ -1593,9 +1523,10 @@ class MEReconstruction(MEBuilder):
 
 	Parameters
 	----------
+	MEBuilder : coralme.builder.main.MEBuilder
 
 	"""
-	def __init__(self, builder, *args, **kwargs):
+	def __init__(self, builder):
 		# only if builder.generate_files() was run before builder.build_me_model()
 		if hasattr(builder, 'org'):
 			self.org = builder.org
