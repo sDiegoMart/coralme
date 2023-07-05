@@ -136,6 +136,17 @@ class MEBuilder(object):
 		return None
 
 	def generate_files(self, overwrite = True):
+		"""Performs the Synchronize and Complement steps of the reconstruction.
+
+		This function will read the Organism and the Reference. It will 
+		synchronize the input files, complement them, and finally build
+		the OSM for the Organism.
+
+		Parameters
+		----------
+		overwrite : bool
+			If True, overwrite the OSM using the defined path in the configuration.
+		"""
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		directory = config.get('log_directory', '.')
@@ -206,7 +217,7 @@ class MEBuilder(object):
 			# #### Reciprocal hits
 			logging.warning("Getting homologs")
 
-			self.get_homology(evalue = 1e-10)
+			self.get_homology(evalue = self.org.config.get("e_value_cutoff", 1e-10))
 			self.homology.mutual_hits_df.to_csv('{:s}/mutual_hits.txt'.format(folder))
 			#self.homology.mutual_hits_df.to_csv(self.org.directory+'{:s}/mutual_hits.txt'.format(folder))
 
@@ -314,6 +325,15 @@ class MEBuilder(object):
 				outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
 
 	def prepare_model(self):
+		"""Performs initial preparation of the M-model.
+
+		This function will fix some known issues that M-models can 
+
+		Parameters
+		----------
+		overwrite : bool
+			If True, overwrite the OSM using the defined path in the configuration.
+		"""
 		m_model = self.org.m_model
 		target_compartments = {"c": "Cytosol", "e": "Extra-organism", "p": "Periplasm"}
 		new_dict = {}
@@ -406,6 +426,14 @@ class MEBuilder(object):
 				'to_do':'Check whether the compartment is correct. If not, change it in the reaction ID in the m_model.'})
 
 	def get_homology(self, evalue=1e-10):
+		"""Calculates homology between Organism and Reference.
+
+		Parameters
+		----------
+		evalue : float
+			Sets the E-value cutoff for calling protein
+			homologs using BLAST.
+		"""
 		self.homology = coralme.builder.homology.Homology(self.org, self.ref, evalue = evalue)
 
 	def get_trna_to_codon(self):
