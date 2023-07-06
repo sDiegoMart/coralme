@@ -1775,6 +1775,21 @@ class MEReconstruction(MEBuilder):
 		return (df_tus, df_rmsc, df_subs, df_mets, df_keffs), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
 
 	def build_me_model(self, update = True, prune = True, overwrite = False):
+		"""Performs the Build step of the reconstruction.
+
+		This function will read the synchronized and complemented information
+		in the OSM and build a ME-model.
+
+		Parameters
+		----------
+		update : bool
+			If True, runs the update method of all reactions after building.
+		prune : bool
+			If True, prunes unused reactions and metabolites after building.
+		overwrite : bool
+			If True, overwrites the OSM and other configuration files.
+
+		"""
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		out_directory = config.get('out_directory', '.')
