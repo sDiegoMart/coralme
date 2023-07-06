@@ -2804,11 +2804,24 @@ class METroubleshooter(object):
 		self.curation_notes = builder.curation_notes
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
-		"""
-		growth_key_and_value: dictionary of Sympy.Symbol and value to replace
-		skip: set of ME-components to not evaluate
-		platform: 'win32' to use gurobi (default) or cplex as solver
-		solver: 'gurobi' (default) or 'cplex'
+		"""Performs the Gap-finding step of the reconstruction.
+
+		This function will iterate through different parts of the M- 
+		and E-matrices, looking for a minimal set of sinks that 
+		allows for growth.
+
+		Parameters
+		----------
+		growth_key_and_value : A dictionary of Sympy.Symbol and value to replace
+			Defines the parameters for the feasibility checks in each iteration.
+		skip : set
+			A set of ME-components to not evaluate
+		overwrite : bool
+			If True, overwrites the OSM and other configuration files.
+		platform: str
+			'win32' to use gurobi (default) or cplex as solver
+		solver: str
+			Solver to use. Values: 'gurobi' (default) or 'cplex'
 		"""
 
 		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:
