@@ -1171,7 +1171,7 @@ class MEModel(cobra.core.model.Model):
 
 	# WARNING: Experimental. We could not compile qminos under WinOS, and qminos has a licence restriction for its source code
 	def optimize_windows(self,
-		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
+		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, solver = 'gurobi'):
 
 		"""Solves the NLP problem to obtain reaction fluxes for a ME-model. This
