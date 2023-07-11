@@ -411,7 +411,7 @@ class ME_NLP:
                     print('{:s}\t{:.16f}\t{:s}'.format(
                         str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
 
-                if abs(mumax - mumin) <= tolerance and stat_new == 'optimal':
+                if abs(mumax - mumin) <= tolerance:# and stat_new == 'optimal':
                     muf, x_new, y_new, z_new, basis, stat_new = current
                     break
 
