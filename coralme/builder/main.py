@@ -136,6 +136,17 @@ class MEBuilder(object):
 		return None
 
 	def generate_files(self, overwrite = True):
+		"""Performs the Synchronize and Complement steps of the reconstruction.
+
+		This function will read the Organism and the Reference. It will 
+		synchronize the input files, complement them, and finally build
+		the OSM for the Organism.
+
+		Parameters
+		----------
+		overwrite : bool
+			If True, overwrite the OSM using the defined path in the configuration.
+		"""
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		directory = config.get('log_directory', '.')
@@ -206,7 +217,7 @@ class MEBuilder(object):
 			# #### Reciprocal hits
 			logging.warning("Getting homologs")
 
-			self.get_homology(evalue = 1e-10)
+			self.get_homology(evalue = self.org.config.get("e_value_cutoff", 1e-10))
 			self.homology.mutual_hits_df.to_csv('{:s}/mutual_hits.txt'.format(folder))
 			#self.homology.mutual_hits_df.to_csv(self.org.directory+'{:s}/mutual_hits.txt'.format(folder))
 
@@ -314,6 +325,15 @@ class MEBuilder(object):
 				outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
 
 	def prepare_model(self):
+		"""Performs initial preparation of the M-model.
+
+		This function will fix some known issues that M-models can 
+
+		Parameters
+		----------
+		overwrite : bool
+			If True, overwrite the OSM using the defined path in the configuration.
+		"""
 		m_model = self.org.m_model
 		target_compartments = {"c": "Cytosol", "e": "Extra-organism", "p": "Periplasm"}
 		new_dict = {}
@@ -406,9 +426,19 @@ class MEBuilder(object):
 				'to_do':'Check whether the compartment is correct. If not, change it in the reaction ID in the m_model.'})
 
 	def get_homology(self, evalue=1e-10):
+		"""Calculates homology between Organism and Reference.
+
+		Parameters
+		----------
+		evalue : float, default 1e-10
+			Sets the E-value cutoff for calling protein
+			homologs using BLAST.
+		"""
 		self.homology = coralme.builder.homology.Homology(self.org, self.ref, evalue = evalue)
 
 	def get_trna_to_codon(self):
+		"""Gets tRNA to codon association from the Genome.
+		"""
 		import Bio
 		from Bio import SeqIO, Seq, SeqFeature, SeqUtils
 
@@ -1745,6 +1775,21 @@ class MEReconstruction(MEBuilder):
 		return (df_tus, df_rmsc, df_subs, df_mets, df_keffs), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
 
 	def build_me_model(self, update = True, prune = True, overwrite = False):
+		"""Performs the Build step of the reconstruction.
+
+		This function will read the synchronized and complemented information
+		in the OSM and build a ME-model.
+
+		Parameters
+		----------
+		update : bool
+			If True, runs the update method of all reactions after building.
+		prune : bool
+			If True, prunes unused reactions and metabolites after building.
+		overwrite : bool
+			If True, overwrites the OSM and other configuration files.
+
+		"""
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		out_directory = config.get('out_directory', '.')
@@ -2759,11 +2804,24 @@ class METroubleshooter(object):
 		self.curation_notes = builder.curation_notes
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
-		"""
-		growth_key_and_value: dictionary of Sympy.Symbol and value to replace
-		skip: set of ME-components to not evaluate
-		platform: 'win32' to use gurobi (default) or cplex as solver
-		solver: 'gurobi' (default) or 'cplex'
+		"""Performs the Gap-finding step of the reconstruction.
+
+		This function will iterate through different parts of the M- 
+		and E-matrices, looking for a minimal set of sinks that 
+		allows for growth.
+
+		Parameters
+		----------
+		growth_key_and_value : A dictionary of Sympy.Symbol and value to replace
+			Defines the parameters for the feasibility checks in each iteration.
+		skip : set
+			A set of ME-components to not evaluate
+		overwrite : bool
+			If True, overwrites the OSM and other configuration files.
+		platform: str
+			'win32' to use gurobi (default) or cplex as solver
+		solver: str
+			Solver to use. Values: 'gurobi' (default) or 'cplex'
 		"""
 
 		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:

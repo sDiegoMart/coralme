@@ -462,13 +462,23 @@ def summarize_reactions(model,met_id,only_types=(),ignore_types = ()):
 	return df[['name','gene_reaction_rule','reaction','notes']] if not df.empty else 'No reaction found'
 
 
-def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
+def flux_based_reactions(model,
+						 met_id,
+						 growth_key = 'mu',
+						 only_types=(),
+						 ignore_types = (),
+						 threshold = 0.,
+						 flux_dict=0,
+						 solution = None):
 	import tqdm
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
 		if not hasattr(model,'solution') or not model.solution:
-			print('No solution in model object')
-			flux_dict = {r.id:0. for r in model.reactions}
+			if solution is not None:
+				flux_dict = solution.fluxes
+			else:
+				print('No solution in model object')
+				flux_dict = {r.id:0. for r in model.reactions}
 		else:
 			flux_dict = model.solution.fluxes
 	reactions = get_reactions_of_met(model,met_id,only_types=only_types,

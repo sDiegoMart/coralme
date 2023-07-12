@@ -1814,7 +1814,10 @@ class TranslationReaction(MEReaction):
 		self.add_metabolites(object_stoichiometry, combine = False)
 
 		# -------------Update Element Dictionary and Formula-------------------
-		self._add_formula_to_protein(translation_data, protein)
+		# In organism with misacylation, the amino acid stoichiometry is corrected to reflect it.
+		# However, a second update modifies the molecular weight of the protein.
+		if protein.formula_weight == 0:
+			self._add_formula_to_protein(translation_data, protein)
 
 		# ------------------ Add biomass constraints --------------------------
 		# add biomass constraint for protein translated

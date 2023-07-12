@@ -11,6 +11,7 @@
   "out_directory": "./",
   "log_directory": "./",
   "run_bbh_blast": true,
+  "e_value_cutoff": 1e-10,
   "dev_reference": true,
   "include_pseudo_genes": true,
   "locus_tag" : "old_locus_tag"
