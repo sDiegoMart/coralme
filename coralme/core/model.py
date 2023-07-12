@@ -1093,7 +1093,8 @@ class MEModel(cobra.core.model.Model):
 		maxIter : int
 			Maximum number of iterations for GRBS.
 		lambdify : bool
-			If True, # TODO
+			If True, returns a dictionary of lambda functions for each symbolic 
+   			stoichiometric coefficient
 		tolerance : float
 			Tolerance for the convergence of GRBS.
 		precision : str, {"quad", "double", "dq", "dqq"}
@@ -1187,7 +1188,8 @@ class MEModel(cobra.core.model.Model):
 		maxIter : int
 			Maximum number of iterations for GRBS.
 		lambdify : bool
-			If True, # TODO
+			If True, returns a dictionary of lambda functions for each symbolic 
+   			stoichiometric coefficient
 		tolerance : float
 			Tolerance for the convergence of GRBS.
 		precision : str, {"quad", "double", "dq", "dqq"}
