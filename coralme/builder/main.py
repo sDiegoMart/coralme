@@ -2816,8 +2816,6 @@ class METroubleshooter(object):
 			Defines the parameters for the feasibility checks in each iteration.
 		skip : set
 			A set of ME-components to not evaluate
-		overwrite : bool
-			If True, overwrites the OSM and other configuration files.
 		platform: str
 			'win32' to use gurobi (default) or cplex as solver
 		solver: str
