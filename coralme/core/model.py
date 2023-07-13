@@ -1078,9 +1078,73 @@ class MEModel(cobra.core.model.Model):
 
 		return numpy.linalg.matrix_rank(Sp.todense())
 
+	def fva(self,
+		reactions, mu_fixed = 2.8100561374051836, maxIter = 100, lambdify = True,
+		tolerance = 1e-6, precision = 'quad', verbose = True):
+
+		"""Solves the NLP problem to obtain reaction fluxes for a ME-model.
+
+		Parameters
+		----------
+		reactions : float
+			List of reactions IDs and/or reaction objects
+		mu_fixed : float
+			Growth rate at which perform FVA.
+		maxIter : int
+			Maximum number of iterations for GRBS.
+		lambdify : bool
+			If True, returns a dictionary of lambda functions for each symbolic
+   			stoichiometric coefficient
+		tolerance : float
+			Tolerance for the convergence of GRBS.
+		precision : str, {"quad", "double", "dq", "dqq"}
+			Precision (quad or double precision) for the GRBS
+		verbose : bool
+			If True, allow printing.
+		"""
+
+		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
+		# https://www.nature.com/articles/s41564-019-0423-8
+
+		# check options
+		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
+		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+
+		if verbose:
+			print('Running FVA for {:d} reactions'.format(len(fva['reactions'])))
+
+		# populate with stoichiometry, no replacement of mu's
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
+
+		from coralme.solver.solver import ME_NLP
+		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
+
+		# We need only reaction objects
+		rxns_fva = []
+		for rxn in reactions:
+			if isinstance(rxn, str) and self.reactions.has_id(rxn):
+				rxns_fva.append(self.reactions.get_by_id(rxn))
+			else:
+				rxns_fva.append(rxn)
+
+		obj_inds0 = [ self.reactions.index(rxn) for rxn in rxns_fva for j in range(0, 2) ]
+		obj_coeffs = [ ci for rxn in rxns_fva for ci in (1.0, -1.0)]
+
+		# varyME is a specialized method for multiple min/maximization problems
+		obj_inds0, nVary, obj_vals = me_nlp.varyme(mu_fixed, obj_inds0, obj_coeffs, basis = None, verbosity = verbose)
+
+		# Return result consistent with cobrapy FVA
+		fva_result = {
+			(self.reactions[obj_inds0[2*i]].id): {
+				'maximum':obj_vals[2*i],
+				'minimum':obj_vals[2*i+1]
+				} for i in range(0, nVary//2) }
+
+		return pandas.DataFrame(fva_result).T
+
 	def optimize(self,
 		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
-		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
+		tolerance = 1e-6, precision = 'quad', verbose = True):
 
 		"""Solves the NLP problem to obtain reaction fluxes for a ME-model.
 
@@ -1101,17 +1165,6 @@ class MEModel(cobra.core.model.Model):
 			Precision (quad or double precision) for the GRBS
 		verbose : bool
 			If True, allow printing.
-		fva : dict
-			Settings for Flux Variability Analysis of the ME-model. Must specify
-			growth rate at which perform FVA ("mu_fixed") and list of reactions for
-			which calculate it ("reactions"). It must follow the form:
-
-			e.g.
-
-			fva = {
-				"mu_fixed" : 0.1,
-				"reactions" : ["RXN1", "RXN2"]
-				}
 		"""
 
 		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
@@ -1129,38 +1182,7 @@ class MEModel(cobra.core.model.Model):
 			print('Optimization will proceed replacing all growth keys with the same value.')
 
 		from coralme.solver.solver import ME_NLP
-		#me_nlp = ME_NLP(me)
 		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
-
-		# varyME is a specialized method for multiple min/maximization problems
-		if fva.get('reactions', []) and fva.get('mu_fixed', None):
-			if verbose:
-				print('Running FVA for {:d} reactions'.format(len(fva['reactions'])))
-
-			mu_fixed = fva['mu_fixed']
-			rxns_fva0 = fva['reactions']
-
-			# We need only reaction objects
-			rxns_fva = []
-			for rxn in rxns_fva0:
-				if isinstance(rxn, str) and self.reactions.has_id(rxn):
-					rxns_fva.append(self.reactions.get_by_id(rxn))
-				else:
-					rxns_fva.append(rxn)
-
-			obj_inds0 = [ self.reactions.index(rxn) for rxn in rxns_fva for j in range(0, 2) ]
-			obj_coeffs = [ ci for rxn in rxns_fva for ci in (1.0, -1.0)]
-
-			obj_inds0, nVary, obj_vals = me_nlp.varyme(mu_fixed, obj_inds0, obj_coeffs, basis = None, verbosity = verbose)
-
-			# Return result consistent with cobrapy FVA
-			fva_result = {
-				(self.reactions[obj_inds0[2*i]].id): {
-					'maximum':obj_vals[2*i],
-					'minimum':obj_vals[2*i+1]
-					} for i in range(0, nVary//2) }
-
-			return fva_result
 
 		muopt, xopt, yopt, zopt, basis, stat = me_nlp.bisectmu(
 				mumax = max_mu,
