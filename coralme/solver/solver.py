@@ -5,7 +5,79 @@ import numpy
 import scipy
 import sympy
 
-from coralme.solver import qwarmLP, warmLP
+from coralme.solver import qwarmLP, warmLP, qvaryME
+
+def makeME_VA(S, b, c, xl, xu, csense, obj_inds, obj_coeffs):
+    """
+    Creates ME_LP data for qvaryME, solved using qMINOS with warm-start
+    obj_inds: obj column indices
+    obj_coeffs: explicitly state -1 or 1 for min or max
+    Thus, obj_inds & obj_coeffs have 2*n elements
+    [LY] 11 Aug 2015: first version
+    [RS] 13 Jul 2023: Adapted to new structure of arguments
+    """
+
+    # qMINOS requires an extra row holding the objective
+    # Put ANY non-zero for all columns that will be min/maxed
+    Sm, Sn = S.shape
+    c = [ 0. for j in range(0, Sn)]
+    for j, v in zip(obj_inds, obj_coeffs):
+        c[j] = 1.0
+
+    # Just change to 1-based indexing for Fortran
+    obj_indsf = [ i+1 for i in obj_inds ]
+
+    J, ne, P, I, V, bl, bu = makeME_LP(S, b, c, xl, xu, csense)
+
+    return J, ne, P, I, V, bl, bu, obj_indsf
+
+def makeME_LP(S, b, c, xl, xu, csense):
+    """
+    Create simple LP for qMINOS and MINOS
+    Inputs:
+    nlp_compat  Make matrices compatible with NLP so that basis can
+                be used to warm start NLP by setting
+    12 Aug 2015: first version
+    13 Jul 2023: Adapted to new structure of arguments by Rodrigo Santibanez
+    """
+
+    # c is added as a free (unbounded slacks) row,
+    # so that MINOS treats problem as an LP - Ding Ma
+    J = scipy.sparse.vstack((S, c), dtype = float).tocsc()
+    J.sort_indices()
+
+    b2 = b + [0.0]
+    m, n = J.shape
+    ne = J.nnz
+    # Finally, make the P, I, J, V, as well
+    # Row indices: recall fortran is 1-based indexing
+    I = [ i+1 for i in J.indices ]
+    V = J.data
+    # Pointers to start of each column
+    # Just change to 1-based indexing for Fortran
+    P = [ pi+1 for pi in J.indptr ]
+
+    # Make primal and slack bounds
+    bigbnd = 1e+40
+    # For csense==E rows (equality)
+    sl = [ bi for bi in b2 ]
+    su = [ bi for bi in b2 ]
+
+    # It can be avoided since csense contains always 'E'
+    for row, csen in enumerate(csense):
+        if csen == 'L':
+            sl[row] = -bigbnd
+        elif csen == 'G':
+            su[row] = +bigbnd
+
+    # Objective row has free bounds
+    sl[m - 1] = -bigbnd
+    su[m - 1] = +bigbnd
+
+    bl = scipy.vstack([ numpy.matrix(xl).transpose(), numpy.matrix(sl).transpose() ])
+    bu = scipy.vstack([ numpy.matrix(xu).transpose(), numpy.matrix(su).transpose() ])
+
+    return J, ne, P, I, V, bl, bu
 
 # Modified from solvemepy.me2
 class ME_NLP:
@@ -199,54 +271,7 @@ class ME_NLP:
 
         return stropts, intopts, realopts, intvals, realvals, nStrOpts, nIntOpts, nRealOpts
 
-    def makeME_LP(self, S, b, c, xl, xu, csense):
-        """
-        Create simple LP for qMINOS and MINOS
-        Inputs:
-        nlp_compat  Make matrices compatible with NLP so that basis can
-                    be used to warm start NLP by setting
-        12 Aug 2015: first version
-        """
-
-        # c is added as a free (unbounded slacks) row,
-        # so that MINOS treats problem as an LP - Ding Ma
-        J = scipy.sparse.vstack((S, c), dtype = float).tocsc()
-        J.sort_indices()
-
-        b2 = b + [0.0]
-        m, n = J.shape
-        ne = J.nnz
-        # Finally, make the P, I, J, V, as well
-        # Row indices: recall fortran is 1-based indexing
-        I = [ i+1 for i in J.indices ]
-        V = J.data
-        # Pointers to start of each column
-        # Just change to 1-based indexing for Fortran
-        P = [ pi+1 for pi in J.indptr ]
-
-        # Make primal and slack bounds
-        bigbnd = 1e+40
-        # For csense==E rows (equality)
-        sl = [ bi for bi in b2 ]
-        su = [ bi for bi in b2 ]
-
-        # It can be avoided since csense contains always 'E'
-        for row, csen in enumerate(csense):
-            if csen == 'L':
-                sl[row] = -bigbnd
-            elif csen == 'G':
-                su[row] = +bigbnd
-
-        # Objective row has free bounds
-        sl[m - 1] = -bigbnd
-        su[m - 1] = +bigbnd
-
-        bl = scipy.vstack([ numpy.matrix(xl).transpose(), numpy.matrix(sl).transpose() ])
-        bu = scipy.vstack([ numpy.matrix(xu).transpose(), numpy.matrix(su).transpose() ])
-
-        return J, ne, P, I, V, bl, bu
-
-    def make_lp(self, muf):
+    def make_lp(self, muf, obj_inds0 = None, obj_coeffs = None):
         """
         Construct LP problem for qMINOS or MINOS.
         """
@@ -269,7 +294,11 @@ class ME_NLP:
         for idx, idj in self.Sf.keys():
             Sp[idx, idj] = self.Sf[idx, idj]
 
-        J, ne, P, I, V, bl, bu = self.makeME_LP(Sp, self.b, self.c, xl, xu, self.cs)
+        if obj_inds0 and obj_coeffs:
+            J, ne, P, I, V, bl, bu, obj_inds = makeME_VA(Sp, self.b, self.c, xl, xu, self.cs, obj_inds0, obj_coeffs)
+        else:
+            J, ne, P, I, V, bl, bu           = makeME_LP(Sp, self.b, self.c, xl, xu, self.cs)
+            obj_inds = None
 
         # Solve a single LP
         m, n = J.shape
@@ -281,7 +310,7 @@ class ME_NLP:
         nb = m + n
         hs = numpy.zeros(nb, numpy.dtype('i4'))
 
-        return m, n, ha, ka, ad, bld, bud, hs
+        return m, n, ha, ka, ad, bld, bud, hs, obj_inds
 
     def solvelp(self, muf, basis, precision):
         """
@@ -301,7 +330,7 @@ class ME_NLP:
         """
         #me = self.me
 
-        m, n, ha, ka, ad, bld, bud, hs0 = self.make_lp(muf)
+        m, n, ha, ka, ad, bld, bud, hs0, _ = self.make_lp(muf)
 
         hs = basis
         if hs is None:
@@ -423,175 +452,40 @@ class ME_NLP:
 
             return muf, x_new, y_new, z_new, basis, stat_new
 
-    def varyme(self, mu_fixed, rxns_fva0, basis=None, verbosity=0):
+    def varyme(self, mu_fixed, obj_inds0, obj_coeffs, basis = None, verbosity = False):
         """
-        fva_result, fva_stats = varyme(self, mu_fixed, rxns_fva)
+        fva_result, fva_stats = varyme(self, mu_fixed, obj_inds0, obj_coeffs)
 
-        rxns_fva:  list of reactions to be varied (Reaction objects or ID)
+        rxns_fva0:  list of reactions to be varied (Reaction objects or ID)
 
         High-level interface for qvaryME (quad-prec FVA)
         12 Aug 2015: first version. Must fix bugs.
+        13 Jul 2023: Adapted to new structure of arguments by Rodrigo Santibanez
         """
-        from coralme.solver import qvaryME
-        import time as time
-        import six
 
-        me = self.me
+        m, n, ha, ka, ad, bld, bud, hs0, obj_inds = self.make_lp(mu_fixed, obj_inds0, obj_coeffs)
+
         hs = basis
-
-        if isinstance(rxns_fva0[0], six.string_types):
-            rxns_fva = [me.reactions.get_by_id(rid) for rid in rxns_fva0]
-        else:
-            rxns_fva = rxns_fva0
-
-        if hasattr(me, 'construct_s_matrix'):
-            S = me.construct_s_matrix(mu_fixed).tocsc()
-        else:
-            S = self.construct_S(mu_fixed).tocsc()
-
-        xl = numpy.matrix([r.lower_bound for r in me.reactions]).transpose()
-        xu = numpy.matrix([r.upper_bound for r in me.reactions]).transpose()
-        # Also substitute mu in bounds
-        for j,rxn in enumerate(me.reactions):
-            lb = rxn.lower_bound
-            ub = rxn.upper_bound
-            if hasattr(lb, 'subs'):
-                xl[j] = float(lb.subs(me.mu, mu_fixed))
-            if hasattr(ub, 'subs'):
-                xu[j] = float(ub.subs(me.mu, mu_fixed))
-
-        b = [m._bound for m in me.metabolites]
-        c = [r.objective_coefficient for r in me.reactions]
-
-        obj_inds0 = [me.reactions.index(rxn) for rxn in rxns_fva for j in range(0, 2)]
-        obj_coeffs = [ci for rxn in rxns_fva for ci in (1.0, -1.0)]
-        csense = ['E' for m in me.metabolites]
-#         csense = [m._constraint_sense for m in me.metabolites]
-
-        J,ne,P,I,V,bl,bu, obj_inds = makeME_VA(S, b, xl, xu, csense, obj_inds0, obj_coeffs)
-
-        m,n = J.shape
-        ha = I
-        ka = P
-        ad = V
-        bld = [bi for bi in bl.flat]
-        bud = [bi for bi in bu.flat]
-        nb = m + n
         if hs is None:
             warm = False
-            hs = numpy.zeros(nb, numpy.dtype('i4'))
+            hs = hs0
         else:
             warm = True
-            if verbosity > 0:
-                ('Warm-starting first run using basis of length %d' % len(hs))
 
         # Get MINOS options
-        if verbosity > 0:
-            print('Getting MINOS parameters for LP')
-        stropts,intopts,realopts,intvals,realvals,nStrOpts,nIntOpts,nRealOpts =\
-            self.get_solver_opts('lp')
+        stropts, intopts, realopts, intvals, realvals, nStrOpts, nIntOpts, nRealOpts = self.get_solver_opts('lp')
 
         nVary = len(obj_inds)
         obj_vals = numpy.zeros(nVary)
         fva_stats = numpy.zeros(nVary, numpy.dtype('i4'))
         probname = 'varyme'
 
-        tic = time.time()
-#         qvaryME.qvaryme(fva_stats, probname, m, ha, ka, ad, bld, bud,
-#                 obj_inds, obj_coeffs, obj_vals)
-        qvaryME.qvaryme(fva_stats, probname, m, ha, ka, ad, bld, bud, hs, warm,
-                obj_inds, obj_coeffs, obj_vals,
-                stropts, intopts, realopts, intvals, realvals,
-                nstropts = nStrOpts,
-                nintopts = nIntOpts,
-                nrealopts = nRealOpts)
+        qvaryME.qvaryme(
+            fva_stats, probname, m, ha, ka, ad, bld, bud, hs, warm,
+            obj_inds, obj_coeffs, obj_vals,
+            stropts, intopts, realopts, intvals, realvals,
+            nstropts = nStrOpts, nintopts = nIntOpts, nrealopts = nRealOpts
+            )
 
-        t_elapsed = time.time()-tic
-        if verbosity>0:
-            print('Finished varyME in %f seconds for %d rxns (%d quadLPs)' %
-                  (t_elapsed, len(rxns_fva), len(obj_inds)))
-
-        # Return result consistent with cobrame fva
-        fva_result = {
-            (self.me.reactions[obj_inds0[2*i]].id):{
-                'maximum':obj_vals[2*i], 
-                'minimum':obj_vals[2*i+1] } for i in range(0, nVary//2) }
-
-        # Save updated basis
-        self.hs = hs
-        self.lp_hs = hs
-
-        return fva_result, fva_stats
-
-def makeME_VA(S,b,xl,xu,csense,obj_inds,obj_coeffs):
-    """
-    Creates ME_LP data for qvaryME, solved using qMINOS with warm-start
-    obj_inds: obj column indices
-    obj_coeffs: explicitly state -1 or 1 for min or max
-    Thus, obj_inds & obj_coeffs have 2*n elements
-    [LY] 11 Aug 2015: first version
-    """
-    import numpy as np
-    import scipy as sp
-    import scipy.sparse as sps
-    import time
-
-    # qMINOS requires an extra row holding the objective
-    # Put ANY non-zero for all columns that will be min/maxed 
-    Sm,Sn = S.shape
-    c = [0. for j in range(0,Sn)]
-    for j,v in zip(obj_inds, obj_coeffs):
-        c[j] = 1.0
-
-    tic = time.time()
-    J = sps.vstack((
-        S,
-        c)
-        ).tocsc()
-    toc = time.time() - tic
-    print('Stacking J took %f seconds' % toc)
-
-    # Sort indices
-    J.sort_indices()
-
-    b2 = b + [0.0]
-    m,n = J.shape
-    ne = J.nnz
-    # Finally, make the P, I, J, V, as well
-    # Row indices: recall fortran is 1-based indexing
-    tic = time.time()
-    I = [i+1 for i in J.indices]
-    V = J.data
-    toc = time.time()-tic
-    print('Making I & V took %f seconds' % toc)
-
-    # Pointers to start of each column
-    tic = time.time()
-    # Just change to 1-based indexing for Fortran
-    P = [pi+1 for pi in J.indptr]
-    toc = time.time() - tic
-    print('Making P took %f seconds' % toc)
-
-    # Make primal and slack bounds
-    bigbnd =   1e+40
-    # For csense==E rows (equality)
-    sl     =   np.matrix([bi for bi in b2]).transpose()
-    su     =   np.matrix([bi for bi in b2]).transpose()
-    for row,csen in enumerate(csense):
-        if csen == 'L':
-            sl[row] = -bigbnd
-        elif csen == 'G':
-            su[row] = bigbnd
-    # Objective row has free bounds
-    sl[m-1] = -bigbnd
-    su[m-1] = bigbnd
-
-    tic = time.time()
-    bl = sp.vstack([xl, sl])
-    bu = sp.vstack([xu, su])
-    toc = time.time()-tic
-    print('Stacking bl & bu took %f seconds' % toc)
-
-    obj_indsf = [i+1 for i in obj_inds]
-
-    return J, ne, P, I, V, bl, bu, obj_indsf
+        #return fva_result, fva_stats
+        return obj_inds0, nVary, obj_vals

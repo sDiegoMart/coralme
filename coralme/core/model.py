@@ -1072,10 +1072,10 @@ class MEModel(cobra.core.model.Model):
 
 		for idx, idj in Sf.keys():
 		    Sp[idx, idj] = Sf[idx, idj]
-		    
+
 		for idx, idj in Se.keys():
 		    Sp[idx, idj] = float(Se[idx, idj].subs({ self.mu : mu }))
-		    
+
 		return numpy.linalg.matrix_rank(Sp.todense())
 
 	def optimize(self,
@@ -1093,7 +1093,7 @@ class MEModel(cobra.core.model.Model):
 		maxIter : int
 			Maximum number of iterations for GRBS.
 		lambdify : bool
-			If True, returns a dictionary of lambda functions for each symbolic 
+			If True, returns a dictionary of lambda functions for each symbolic
    			stoichiometric coefficient
 		tolerance : float
 			Tolerance for the convergence of GRBS.
@@ -1105,9 +1105,9 @@ class MEModel(cobra.core.model.Model):
 			Settings for Flux Variability Analysis of the ME-model. Must specify
 			growth rate at which perform FVA ("mu_fixed") and list of reactions for
 			which calculate it ("reactions"). It must follow the form:
-			
+
 			e.g.
-			
+
 			fva = {
 				"mu_fixed" : 0.1,
 				"reactions" : ["RXN1", "RXN2"]
@@ -1131,12 +1131,36 @@ class MEModel(cobra.core.model.Model):
 		from coralme.solver.solver import ME_NLP
 		#me_nlp = ME_NLP(me)
 		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
-		if fva.get('reactions',None) is not None:
-			if verbose: print('Running FVA for {} reactions'.format(len(fva['reactions'])))
-			me_nlp.me = self
+
+		# varyME is a specialized method for multiple min/maximization problems
+		if fva.get('reactions', []) and fva.get('mu_fixed', None):
+			if verbose:
+				print('Running FVA for {:d} reactions'.format(len(fva['reactions'])))
+
 			mu_fixed = fva['mu_fixed']
 			rxns_fva0 = fva['reactions']
-			return me_nlp.varyme(mu_fixed, rxns_fva0, basis=None, verbosity=verbose)
+
+			# We need only reaction objects
+			rxns_fva = []
+			for rxn in rxns_fva0:
+				if isinstance(rxn, str) and self.reactions.has_id(rxn):
+					rxns_fva.append(self.reactions.get_by_id(rxn))
+				else:
+					rxns_fva.append(rxn)
+
+			obj_inds0 = [ self.reactions.index(rxn) for rxn in rxns_fva for j in range(0, 2) ]
+			obj_coeffs = [ ci for rxn in rxns_fva for ci in (1.0, -1.0)]
+
+			obj_inds0, nVary, obj_vals = me_nlp.varyme(mu_fixed, obj_inds0, obj_coeffs, basis = None, verbosity = verbose)
+
+			# Return result consistent with cobrapy FVA
+			fva_result = {
+				(self.reactions[obj_inds0[2*i]].id): {
+					'maximum':obj_vals[2*i],
+					'minimum':obj_vals[2*i+1]
+					} for i in range(0, nVary//2) }
+
+			return fva_result
 
 		muopt, xopt, yopt, zopt, basis, stat = me_nlp.bisectmu(
 				mumax = max_mu,
@@ -1188,7 +1212,7 @@ class MEModel(cobra.core.model.Model):
 		maxIter : int
 			Maximum number of iterations for GRBS.
 		lambdify : bool
-			If True, returns a dictionary of lambda functions for each symbolic 
+			If True, returns a dictionary of lambda functions for each symbolic
    			stoichiometric coefficient
 		tolerance : float
 			Tolerance for the convergence of GRBS.
