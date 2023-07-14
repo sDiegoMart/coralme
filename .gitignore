@@ -127,3 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Pickle
+*.pkl
+*.pickle
+
+# Figures
+*.svg
+*.png
+
+# Zip files
+*.zip
