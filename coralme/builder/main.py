@@ -138,7 +138,7 @@ class MEBuilder(object):
 	def generate_files(self, overwrite = True):
 		"""Performs the Synchronize and Complement steps of the reconstruction.
 
-		This function will read the Organism and the Reference. It will 
+		This function will read the Organism and the Reference. It will
 		synchronize the input files, complement them, and finally build
 		the OSM for the Organism.
 
@@ -327,7 +327,7 @@ class MEBuilder(object):
 	def prepare_model(self):
 		"""Performs initial preparation of the M-model.
 
-		This function will fix some known issues that M-models can 
+		This function will fix some known issues that M-models can
 
 		Parameters
 		----------
@@ -2803,11 +2803,12 @@ class METroubleshooter(object):
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(),
+		met_types = None, platform = None, solver = 'gurobi'):
 		"""Performs the Gap-finding step of the reconstruction.
 
-		This function will iterate through different parts of the M- 
-		and E-matrices, looking for a minimal set of sinks that 
+		This function will iterate through different parts of the M-
+		and E-matrices, looking for a minimal set of sinks that
 		allows for growth.
 
 		Parameters
@@ -2868,21 +2869,21 @@ class METroubleshooter(object):
 			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
 			 # TODO: Include previous iterations in gap fill sink closing algorithm
 			met_types = [
-				'ME-Deadends',
-				'Cofactors',
-				'All-Deadends',
-				'Metabolite',
-				'GenerictRNA',
-				'Complex',
-				'TranscribedGene',
-				'TranslatedGene',
-				'ProcessedProtein',
-				'GenericComponent'
+				('M-matrix', 'ME-Deadends',)
+				('M-matrix', 'Cofactors',)
+				('M-matrix', 'All-Deadends',)
+				('M-matrix', 'Metabolite',)
+				('E-matrix', 'GenerictRNA',)
+				('E-matrix', 'Complex',)
+				('E-matrix', 'TranscribedGene',)
+				('E-matrix', 'TranslatedGene',)
+				('E-matrix', 'ProcessedProtein',)
+				('E-matrix', 'GenericComponent',)
 				]
 
-			for idx, met_type in enumerate(met_types):
-				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
-				if idx > 3:
+			for matrix_type, met_type in met_types:
+				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1, met_type))
+				if matrix_type == 'E-matrix':
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
