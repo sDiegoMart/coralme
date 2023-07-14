@@ -2822,6 +2822,10 @@ class METroubleshooter(object):
 		solver: str
 			Solver to use. Values: 'gurobi' (default) or 'cplex'
 		"""
+		if not hasattr(self, 'me_model'):
+			me = self
+			self = coralme.builder.main.MEBuilder(**{'out_directory' : '.'})
+			self.me_model = me
 
 		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:
 			self.me_model.get_solution = self.me_model.optimize_windows
@@ -2869,25 +2873,25 @@ class METroubleshooter(object):
 			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
 			 # TODO: Include previous iterations in gap fill sink closing algorithm
 			met_types = [
-				('M-matrix', 'ME-Deadends',)
-				('M-matrix', 'Cofactors',)
-				('M-matrix', 'All-Deadends',)
-				('M-matrix', 'Metabolite',)
-				('E-matrix', 'GenerictRNA',)
-				('E-matrix', 'Complex',)
-				('E-matrix', 'TranscribedGene',)
-				('E-matrix', 'TranslatedGene',)
-				('E-matrix', 'ProcessedProtein',)
-				('E-matrix', 'GenericComponent',)
+				('M-matrix', 'ME-Deadends',),
+				('M-matrix', 'Cofactors',),
+				('M-matrix', 'All-Deadends',),
+				('M-matrix', 'Metabolite',),
+				('E-matrix', 'GenerictRNA',),
+				('E-matrix', 'Complex',),
+				('E-matrix', 'TranscribedGene',),
+				('E-matrix', 'TranslatedGene',),
+				('E-matrix', 'ProcessedProtein',),
+				('E-matrix', 'GenericComponent',),
 				]
 
-			for matrix_type, met_type in met_types:
-				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1, met_type))
-				if matrix_type == 'E-matrix':
+			for idx, met_type in enumerate(met_types):
+				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1, met_type[1]))
+				if met_type[0] == 'E-matrix':
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip , history=history)
+				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type[1], skip = skip , history=history)
 				bf_gaps, no_gaps, works = output
 				# close sink reactions that are not gaps
 				if no_gaps:
