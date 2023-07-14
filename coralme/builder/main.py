@@ -718,9 +718,9 @@ class MEBuilder(object):
 				enz_rxn_assoc = []
 				reaction_cplx_list = []
 				for rule_gene_list in rule_list:
-					identified_genes = []
-					for i in rule_gene_list:
-						identified_genes.append(i)
+					identified_genes = [i for i in rule_gene_list if i not in self.org.skip_genes]
+					if not identified_genes:
+						continue
 					cplx_id = coralme.builder.helper_functions.find_match(org_complexes_df["genes"].to_dict(),identified_genes)
 					if not cplx_id:
 						if len(identified_genes) > 1:
