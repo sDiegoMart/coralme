@@ -2804,7 +2804,7 @@ class METroubleshooter(object):
 		self.curation_notes = builder.curation_notes
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(),
-		met_types = None, platform = None, solver = 'gurobi'):
+		met_types = [], platform = None, solver = 'gurobi'):
 		"""Performs the Gap-finding step of the reconstruction.
 
 		This function will iterate through different parts of the M-
@@ -2822,6 +2822,21 @@ class METroubleshooter(object):
 		solver: str
 			Solver to use. Values: 'gurobi' (default) or 'cplex'
 		"""
+		types = {
+			'M-matrix' : ['ME-Deadends', 'Cofactors', 'All-Deadends', 'Metabolite' ],
+			'E-matrix' : ['GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
+			}
+
+		if len(met_types) > 0:
+			met_types = [ ('M-matrix', x) if x in types['M-matrix'] else ('E-matrix', x) if x in types['E-matrix'] else None for x in met_types ]
+			met_types = [ x for x in met_types if x is not None ]
+
+		if len(met_types) == 0:
+			met_types = []
+			for x, y in types.items():
+				for met in y:
+					met_types.append((x, met))
+
 		if not hasattr(self, 'me_model'):
 			me = self
 			self = coralme.builder.main.MEBuilder(**{'out_directory' : '.'})
@@ -2871,20 +2886,6 @@ class METroubleshooter(object):
 		history = dict()
 		if works == False:
 			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
-			 # TODO: Include previous iterations in gap fill sink closing algorithm
-			met_types = [
-				('M-matrix', 'ME-Deadends',),
-				('M-matrix', 'Cofactors',),
-				('M-matrix', 'All-Deadends',),
-				('M-matrix', 'Metabolite',),
-				('E-matrix', 'GenerictRNA',),
-				('E-matrix', 'Complex',),
-				('E-matrix', 'TranscribedGene',),
-				('E-matrix', 'TranslatedGene',),
-				('E-matrix', 'ProcessedProtein',),
-				('E-matrix', 'GenericComponent',),
-				]
-
 			for idx, met_type in enumerate(met_types):
 				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1, met_type[1]))
 				if met_type[0] == 'E-matrix':
