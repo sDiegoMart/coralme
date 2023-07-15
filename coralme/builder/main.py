@@ -2836,8 +2836,10 @@ class METroubleshooter(object):
 			met_types = [ ('M-matrix', x) if x in types['M-matrix'] else ('E-matrix', x) if x in types['E-matrix'] else None for x in set(met_types) ]
 			met_types = [ x for x in met_types if x is not None ]
 
+			if len(met_types) == 0:
+				print('Metabolite types valid values are {:s}. The predefined order of metabolites will be tested.\n'.format(', '.join(types['M-matrix'] + types['E-matrix'])))
+
 		if len(met_types) == 0:
-			print('Metabolite types valid values are {:s}. The predefined order of metabolites will be tested.\n'.format(', '.join(types['M-matrix'] + types['E-matrix'])))
 			met_types = []
 			for x, y in types.items():
 				for met in y:
