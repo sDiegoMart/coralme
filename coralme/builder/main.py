@@ -2849,6 +2849,8 @@ class METroubleshooter(object):
 			me = self
 			self = coralme.builder.main.MEBuilder(**{'out_directory' : '.'})
 			self.me_model = me
+			self.configuration['out_directory'] = './'
+			self.configuration['log_directory'] = './'
 
 		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:
 			self.me_model.get_solution = self.me_model.optimize_windows
@@ -2900,7 +2902,7 @@ class METroubleshooter(object):
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type[1], skip = skip , history=history)
+				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type[1], skip = skip, history = history)
 				bf_gaps, no_gaps, works = output
 				# close sink reactions that are not gaps
 				if no_gaps:
