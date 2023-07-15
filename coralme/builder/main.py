@@ -2813,12 +2813,17 @@ class METroubleshooter(object):
 
 		Parameters
 		----------
-		growth_key_and_value : A dictionary of Sympy.Symbol and value to replace
-			Defines the parameters for the feasibility checks in each iteration.
+		growth_key_and_value : dict
+			A dictionary of Sympy.Symbol and value(s) to evaluate. It defines
+			the parameters for the feasibility checks in each iteration.
 		skip : set
 			A set of ME-components to not evaluate
+		met_types: list
+			Any combination of 'ME-Deadends', 'Cofactors', 'All-Deadends',
+			'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene',
+			'TranslatedGene', 'ProcessedProtein', and/or 'GenericComponent'.
 		platform: str
-			'win32' to use gurobi (default) or cplex as solver
+			'win32' or 'darwin' to use gurobi (default) or cplex as solver
 		solver: str
 			Solver to use. Values: 'gurobi' (default) or 'cplex'
 		"""
@@ -2828,7 +2833,7 @@ class METroubleshooter(object):
 			}
 
 		if len(met_types) > 0:
-			met_types = [ ('M-matrix', x) if x in types['M-matrix'] else ('E-matrix', x) if x in types['E-matrix'] else None for x in met_types ]
+			met_types = [ ('M-matrix', x) if x in types['M-matrix'] else ('E-matrix', x) if x in types['E-matrix'] else None for x in set(met_types) ]
 			met_types = [ x for x in met_types if x is not None ]
 
 		if len(met_types) == 0:
