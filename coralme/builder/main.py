@@ -1513,8 +1513,8 @@ class MEBuilder(object):
 		coralme.builder.curation.MECurator(self.org).find_issue_with_query(query)
 
 	# shortcuts to methods in the MEReconstruction and METroubleshooter classes
-	def build_me_model(self, update = True, prune = True, overwrite = False):
-		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite)
+	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
+		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite, skip = skip)
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
 		"""
@@ -1774,7 +1774,7 @@ class MEReconstruction(MEBuilder):
 		# All other inputs and remove unnecessary genes from df_data
 		return (df_tus, df_rmsc, df_subs, df_mets, df_keffs), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
 
-	def build_me_model(self, update = True, prune = True, overwrite = False):
+	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
 		"""Performs the Build step of the reconstruction.
 
 		This function will read the synchronized and complemented information
@@ -2741,7 +2741,7 @@ class MEReconstruction(MEBuilder):
 			rnum = len(me.reactions)
 			delta = 1
 			while delta > 0:
-				me.prune()
+				me.prune(skip=skip)
 				delta = rnum - len(me.reactions)
 				rnum = len(me.reactions)
 
