@@ -944,3 +944,11 @@ def get_transport_reactions(model,met_id,comps=['e','c']):
     transport_rxn_ids = list(set(prod_rxns)&set(cons_rxns))
 
     return [model.reactions.get_by_id(rxn_id) for rxn_id in transport_rxn_ids]
+
+def get_all_transport_of_model(model):
+    transport_reactions = []
+    for r in tqdm(model.reactions):
+        comps = r.get_compartments()
+        if len(comps) > 1:
+            transport_reactions.append(r.id)
+    return list(set(transport_reactions))
