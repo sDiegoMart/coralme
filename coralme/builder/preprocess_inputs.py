@@ -774,6 +774,9 @@ def get_df_ptms(df):
 		fn = lambda x: x['Complex ID'].split(':')[0] + ''.join([ '_mod_{:s}'.format(x) for x in x['Cofactors in Modified Complex'].split(' AND ')])
 		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
+		# Modified complex names can be replaced using an alias
+		tmp['Modified Complex'].update(tmp['Complex Name'])
+
 		tmp = tmp[['Modified Complex', 'Complex ID', 'Cofactors in Modified Complex']]
 		tmp.columns = ['Modified_enzyme', 'Core_enzyme', 'Modifications']
 		tmp = tmp.drop_duplicates(keep = 'first').set_index('Modified_enzyme')
@@ -800,7 +803,12 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp['Complex ID'].update(tmp['Modified Complex']) # inplace
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
+	# Modified complex names can be replaced using an alias
+	tmp['Gene Locus ID'].update(tmp['Complex Name']) # inplace
+
 	tmp = tmp.groupby(['M-model Reaction ID']).agg({'Gene Locus ID': lambda x: ' OR '.join(sorted(set(x.tolist())))})
+	tmp.columns = ['Complexes']
+
 	return tmp
 
 def get_df_rna_enzs(df, filter_in = set(), generics = False):

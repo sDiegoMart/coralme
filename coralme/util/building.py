@@ -1028,7 +1028,7 @@ def add_metabolic_reaction_to_model(me_model, stoichiometric_data_id, directiona
 		raise Exception('StoichiometricData for \'{:s}\' has not been added to ME-model.'.format(stoichiometric_data_id))
 
 	# Get complex data and id based on arguments passed into function
-	if isinstance(complex_id, str) and complex_id != 'dummy_MONOMER': # WARNING: Shouldn't it be "CPLX_dummy"¨?
+	if isinstance(complex_id, str) and complex_id != 'dummy_MONOMER': # WARNING: Shouldn't it be "CPLX_dummy"?
 		complex_data = me_model.process_data.get_by_id(complex_id)
 
 	elif complex_id is None and spontaneous is True:
