@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3. Arquitecture of coralME &mdash; coralME 1.0 documentation</title>
+  <title>3. Arquitecture of coralME &mdash; coralME 1.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -31,14 +31,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> coralME
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            coralME
           </a>
               <div class="version">
-                1.0
+                1.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -48,23 +52,14 @@
 <li class="toctree-l1"><a class="reference internal" href="GettingStarted.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="BasicInputs.html">2. Description of Inputs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. Arquitecture of coralME</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Organism()">3.1. Organism()</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Parameters">3.1.1. Parameters</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#Organism()">3.1. Organism()</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#MEBuilder()">3.2. MEBuilder()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#MEReconstruction()">3.3. MEReconstruction()</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">3.3.1. Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#Homology()">3.4. Homology()</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">3.4.1. Parameters</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#MEReconstruction()">3.3. MEReconstruction()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Homology()">3.4. Homology()</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ManualCuration.html">4. How to manually curate a ME-model using coralME</a></li>
-<li class="toctree-l1"><a class="reference internal" href="FAQ.html">5. Frequently Asked Questions|</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">5. Frequently Asked Questions</a></li>
 </ul>
 
         </div>
@@ -80,7 +75,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active"><span class="section-number">3. </span>Arquitecture of coralME</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/coralMEArquitecture.ipynb.txt" rel="nofollow"> View page source</a>
@@ -106,61 +101,28 @@
 <p><img alt="Drawing" src="_images/pipeline.png" /></p>
 <section id="Organism()">
 <h2><span class="section-number">3.1. </span>Organism()<a class="headerlink" href="#Organism()" title="Permalink to this heading"></a></h2>
-<p>Role: Store information about an organism</p>
+.. autoclass:: coralme.builder.organism.Organism
+   :noindex:<p>Role: Store information about an organism</p>
 <p>This class acts as a database containing all necessary information to reconstruct a ME-model. It is used to retrieve and store information of the main (<strong>org</strong>) and the reference (<strong>ref</strong>) organisms. Information in Organism() is read and manipulated by methods in the MEBuilder() class. The reference can be set as any of the provided organisms in coralME, available <a class="reference external" href="../organisms/">here</a>, although we advise to choose <em>E. coli</em> and <em>B. subtilis</em> for gram-negative and gram-positive bacteria,
 respectively.</p>
-<section id="Parameters">
-<h3><span class="section-number">3.1.1. </span>Parameters<a class="headerlink" href="#Parameters" title="Permalink to this heading"></a></h3>
-<p>org:str</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Identifier of the main organism. Has to be the same as the containing folder name.
-</pre></div>
-</div>
-<p>is_reference : bool</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>If True, process as reference organism.
-</pre></div>
-</div>
-</section>
 </section>
 <section id="MEBuilder()">
 <h2><span class="section-number">3.2. </span>MEBuilder()<a class="headerlink" href="#MEBuilder()" title="Permalink to this heading"></a></h2>
-<p>Role: Coordinate the roles of other classes.</p>
+.. autoclass:: coralme.builder.main.MEBuilder
+   :noindex:<p>Role: Coordinate the roles of other classes.</p>
 <p>This class acts as the main coordinator between other objects, e.g. Organism, Homology, MEProcesser, and METroubleshooter. It contains methods to manipulate class Organism by using attributes in class Homology, and manually curated files in the folder containing the main organism. Moreover, it is called by objects to access stored information in other objects.</p>
 </section>
 <section id="MEReconstruction()">
 <h2><span class="section-number">3.3. </span>MEReconstruction()<a class="headerlink" href="#MEReconstruction()" title="Permalink to this heading"></a></h2>
-<p>Role: Reconstruct a ME-model from the information contained in class Organism.</p>
+.. autoclass:: coralme.builder.main.MEReconstruction
+   :noindex:<p>Role: Reconstruct a ME-model from the information contained in class Organism.</p>
 <p>This class was based almost entirely from the original <a class="reference external" href="https://github.com/SBRG/ecolime">ECOLIme</a> code in <a class="reference external" href="https://github.com/SBRG/ecolime/blob/master/ecolime/build_me_model.py">build_me_model.py</a>. Adaptations to this code were necessary to make it applicable to other organisms.</p>
-<section id="id1">
-<h3><span class="section-number">3.3.1. </span>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
-<p>builder : coralme.reconstruction.MEBuilder</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>MEBuilder object containing the final version of the class Organism.
-</pre></div>
-</div>
-</section>
 </section>
 <section id="Homology()">
 <h2><span class="section-number">3.4. </span>Homology()<a class="headerlink" href="#Homology()" title="Permalink to this heading"></a></h2>
-<p>Role: Generate and store information about homology of the main and reference organisms.</p>
+.. autoclass:: coralme.builder.homology.Homology
+   :noindex:<p>Role: Generate and store information about homology of the main and reference organisms.</p>
 <p>This class contains methods to predict and process homology of the main and reference organisms. Homology is inferred from the reciprocal best hits of a BLAST. The results are used to update and complement the attributes of the class Organism.</p>
-<section id="id2">
-<h3><span class="section-number">3.4.1. </span>Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
-<p>org : str</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Identifier of the main organism. Has to be the same as its
-containing folder name.
-</pre></div>
-</div>
-<p>ref : str</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Identifier of the reference organism. Has to be the same as
-its containing folder name.
-</pre></div>
-</div>
-<p>evalue : float</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>E-value cutoff to call enzyme homologs from the BLAST. Two
-reciprocal best hits are considered homologs if their
-E-value is less than this parameter.
-</pre></div>
-</div>
-</section>
 </section>
 </section>
 

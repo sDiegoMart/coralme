@@ -293,6 +293,13 @@ class Organism(object):
                 formulaweight_mets.append(m.id)
             if len(m.reactions) == 0:
                 deadend_mets.append(m.id)
+         
+        unused_genes = []
+        for g in tqdm.tqdm(m_model.genes,
+                           'Checking M-model genes...',
+                           bar_format = bar_format):
+            if not g.reactions:
+                unused_genes.append(g.id)
 
         # Reactions
         subsystem_RXNS = []
@@ -334,6 +341,12 @@ class Organism(object):
                 'triggered_by':deadend_mets,
                 'importance':'critical',
                 'to_do':'Make sure these metabolites are removed or connected properly'})
+        if unused_genes:
+            self.curation_notes['org.check_m_model'].append({
+                'msg':"Some genes have no reactions associated",
+                'triggered_by':unused_genes,
+                'importance':'critical',
+                'to_do':'Make sure these genes are removed or associated properly'})
 
     def load_optional_files(self):
         """ Loads optional files.
@@ -1187,20 +1200,21 @@ class Organism(object):
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
                 if product in RNA_df.index:
                     wrong_assoc.append(g)
-
-        cobra.manipulation.delete.remove_genes(m_model,
-                     gene_list + wrong_assoc,
-                     remove_reactions=False)
+            
+        self.skip_genes = [g.id for g in gene_list + wrong_assoc]
+#         cobra.manipulation.delete.remove_genes(m_model,
+#                      gene_list + wrong_assoc,
+#                      remove_reactions=False)
         # Warnings
         if gene_list:
             self.curation_notes['org.purge_genes_in_model'].append({
-                'msg':'Some genes in M-model were not found in genes.txt or genome.gb. These genes were skipped.',
+                'msg':'Some genes in M-model were not found in genes.txt or genome.gb. These genes will be skipped in reconstruction.',
                 'triggered_by':[g.id for g in gene_list],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, add it to genes.txt'})
         if wrong_assoc:
             self.curation_notes['org.purge_genes_in_model'].append({
-                'msg':'Some genes in M-model are RNAs. These genes were skipped.',
+                'msg':'Some genes in M-model are RNAs. These genes will be skipped in reconstruction.',
                 'triggered_by':[g.id for g in wrong_assoc],
                 'importance':'high',
                 'to_do':'Confirm the gene is correct in the m_model. If so, then annotation from GenBank or BioCyc marked them as a different type'})

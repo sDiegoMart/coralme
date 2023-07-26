@@ -34,6 +34,10 @@ import logging
 #Here is a naive, non thread-safe implementation:
 
 class ListHandler(logging.Handler): # Inherit from logging.Handler
+	"""
+	ListHandler class to handle prints and logs.
+
+	"""
 	def __init__(self, log_list):
 		# run the regular Handler __init__
 		logging.Handler.__init__(self)
@@ -53,10 +57,16 @@ class ListHandler(logging.Handler): # Inherit from logging.Handler
 
 class MEBuilder(object):
 	"""
-	MEBuilder class to obtain input data from protein homology.
+	MEBuilder class to coordinate the reconstruction of ME-models.
 
 	Parameters
 	----------
+	*args:
+		Positional arguments are passed as paths to JSON files that
+		update the configuration of the parent class.
+	**kwargs:
+		Further keyword arguments are passed on as dictionaries
+		to update the configuration of the parent class.
 
 	"""
 	def __init__(self, *args, **kwargs):
@@ -126,6 +136,17 @@ class MEBuilder(object):
 		return None
 
 	def generate_files(self, overwrite = True):
+		"""Performs the Synchronize and Complement steps of the reconstruction.
+
+		This function will read the Organism and the Reference. It will
+		synchronize the input files, complement them, and finally build
+		the OSM for the Organism.
+
+		Parameters
+		----------
+		overwrite : bool
+			If True, overwrite the OSM using the defined path in the configuration.
+		"""
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		directory = config.get('log_directory', '.')
@@ -171,7 +192,8 @@ class MEBuilder(object):
 
 			folder = self.org.blast_directory
 			if bool(config.get('run_bbh_blast', True)):
-				ListHandler.print_and_log("~ Running BLAST...")
+				blast_threads = config.get('blast_threads', 4)
+				ListHandler.print_and_log("~ Running BLAST with {} threads...".format(blast_threads))
 				self.org.gb_to_faa('org', element_types = {'CDS'}, outdir = self.org.blast_directory)
 				self.ref.gb_to_faa('ref', element_types = {'CDS'}, outdir = self.org.blast_directory)
 
@@ -186,8 +208,8 @@ class MEBuilder(object):
 				execute('makeblastdb -in {:s}/ref.faa -dbtype prot -out {:s}/ref'.format(folder, folder))
 
 				# bidirectional blast
-				execute('blastp -db {:s}/org -query {:s}/ref.faa -num_threads 4 -out {:s}/org_as_db.txt -outfmt 6'.format(folder, folder, folder))
-				execute('blastp -db {:s}/ref -query {:s}/org.faa -num_threads 4 -out {:s}/ref_as_db.txt -outfmt 6'.format(folder, folder, folder))
+				execute('blastp -db {:s}/org -query {:s}/ref.faa -num_threads {} -out {:s}/org_as_db.txt -outfmt 6'.format(folder, folder, blast_threads, folder))
+				execute('blastp -db {:s}/ref -query {:s}/org.faa -num_threads {} -out {:s}/ref_as_db.txt -outfmt 6'.format(folder, folder, blast_threads, folder))
 
 				#os.system('{}/auto_blast.sh {}'.format(self.directory,self.org.directory))
 				ListHandler.print_and_log('BLAST done.')
@@ -195,7 +217,7 @@ class MEBuilder(object):
 			# #### Reciprocal hits
 			logging.warning("Getting homologs")
 
-			self.get_homology(evalue = 1e-10)
+			self.get_homology(evalue = self.org.config.get("e_value_cutoff", 1e-10))
 			self.homology.mutual_hits_df.to_csv('{:s}/mutual_hits.txt'.format(folder))
 			#self.homology.mutual_hits_df.to_csv(self.org.directory+'{:s}/mutual_hits.txt'.format(folder))
 
@@ -251,10 +273,6 @@ class MEBuilder(object):
 					self.org.me_mets.to_csv(outfile, sep = '\t')
 					logging.warning('The M to ME metabolite mapping file was saved to the ./{:s} file.'.format(filename))
 
-# 		filename = self.org.config.get('df_matrix_subrxn_stoich', '')
-# 		filename = self.org.directory + "subreaction_matrix.txt" if filename == '' else filename
-# 		self.org.subreaction_matrix.to_csv(filename,sep='\t')
-		# ## enzyme_reaction_association.txt
 		logging.warning("Getting enzyme-reaction association")
 		self.get_enzyme_reaction_association()
 		logging.warning("Processing RNA modifications")
@@ -307,6 +325,15 @@ class MEBuilder(object):
 				outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
 
 	def prepare_model(self):
+		"""Performs initial preparation of the M-model.
+
+		This function will fix some known issues that M-models can
+
+		Parameters
+		----------
+		overwrite : bool
+			If True, overwrite the OSM using the defined path in the configuration.
+		"""
 		m_model = self.org.m_model
 		target_compartments = {"c": "Cytosol", "e": "Extra-organism", "p": "Periplasm"}
 		new_dict = {}
@@ -399,9 +426,19 @@ class MEBuilder(object):
 				'to_do':'Check whether the compartment is correct. If not, change it in the reaction ID in the m_model.'})
 
 	def get_homology(self, evalue=1e-10):
+		"""Calculates homology between Organism and Reference.
+
+		Parameters
+		----------
+		evalue : float, default 1e-10
+			Sets the E-value cutoff for calling protein
+			homologs using BLAST.
+		"""
 		self.homology = coralme.builder.homology.Homology(self.org, self.ref, evalue = evalue)
 
 	def get_trna_to_codon(self):
+		"""Gets tRNA to codon association from the Genome.
+		"""
 		import Bio
 		from Bio import SeqIO, Seq, SeqFeature, SeqUtils
 
@@ -506,8 +543,6 @@ class MEBuilder(object):
 					aa2trna['m'][bnum] = aa
 				elif organelle.lower() in ['chloroplast', 'plastid']:
 					aa2trna['h'][bnum] = aa
-				#old code
-				#trna_to_aa[bnum] = feature.qualifiers["product"][0].split('-')[1]
 
 		# trna_to_codon does not account for misacylation: { 'tRNA ID' : 'Amino acid to load into the tRNA' }
 		trna_to_aa = { k:v.replace('fMet', 'Met') for k,v in trna_to_aa.items() }
@@ -545,8 +580,6 @@ class MEBuilder(object):
 			if len(transl_table) == 0:
 				continue
 
-			#codon_table = Bio.Data.CodonTable.generic_by_id[me_model.global_info.get('translation_table', 11)]
-			#me_model.global_info['codon_table'] = codon_table
 			codon_table = Bio.Data.CodonTable.generic_by_id[list(transl_table)[0]]
 
 			dct = { k.replace('T', 'U'):SeqUtils.seq3(v) for k,v in codon_table.forward_table.items() if 'U' not in k }
@@ -574,9 +607,6 @@ class MEBuilder(object):
 
 			trna_to_codon_organelle = { k:v + ['START'] if k in me_model.global_info['START_tRNA'] else v for k,v in zip(df[1].values, df[0].values) }
 			trna_to_codon[organelle] = trna_to_codon_organelle
-
-		#me_model.global_info['aa2codons'] = aa2codons
-		#me_model.global_info['aa2trna'] = aa2trna
 
 		me_model.global_info['trna_to_aa'] = trna_to_aa
 		me_model.global_info['trna_to_codon'] = trna_to_codon
@@ -659,13 +689,7 @@ class MEBuilder(object):
 		protein_mod.index.name = "Modified_enzyme"
 		self.org.protein_mod = pandas.concat([self.org.protein_mod,protein_mod])
 
-# 	def curate(self):
-# 		coralme.builder.curation.MECurator(self.org).curate()
-
 	def get_enzyme_reaction_association(self, gpr_combination_cutoff = 100):
-		#from draft_cobrame.util.helper_functions import process_rule_dict, find_match
-# 		if self.configuration.get('df_enzyme_reaction_association',None) is not None:
-# 			return
 		m_model = self.org.m_model
 		org_complexes_df = self.org.complexes_df
 		protein_mod = self.org.protein_mod
@@ -694,9 +718,9 @@ class MEBuilder(object):
 				enz_rxn_assoc = []
 				reaction_cplx_list = []
 				for rule_gene_list in rule_list:
-					identified_genes = []
-					for i in rule_gene_list:
-						identified_genes.append(i)
+					identified_genes = [i for i in rule_gene_list if i not in self.org.skip_genes]
+					if not identified_genes:
+						continue
 					cplx_id = coralme.builder.helper_functions.find_match(org_complexes_df["genes"].to_dict(),identified_genes)
 					if not cplx_id:
 						if len(identified_genes) > 1:
@@ -776,69 +800,6 @@ class MEBuilder(object):
 
 	def update_TU_df(self):
 		return NotImplemented
-# 		org_TU_to_genes = self.org.TU_to_genes
-# 		org_TUs = self.org.TUs
-# 		org_sigmas = self.org.sigmas
-# 		org_complexes_df = self.org.complexes_df
-# 		ref_TUs = self.ref.TUs
-# 		ref_TU_df = self.ref.TU_df
-# 		gene_dictionary = self.org.gene_dictionary
-# 		mutual_hits = self.homology.mutual_hits
-# 		ref_cplx_homolog = self.homology.ref_cplx_homolog
-# 		rpod = self.org.rpod
-# 		ref_genes_to_TU = self.ref.genes_to_TU
-# 		ref_sigmas = self.ref.sigmas
-# 		TU_df = self.org.TU_df
-# 		remove_TUs = []
-# 		TU_dict = {}
-# 		for tu_id, row in tqdm.tqdm(TU_df.iterrows(),
-# 					'Updating TUs from homology...',
-# 					bar_format = bar_format,
-# 					total=TU_df.shape[0]):
-# 			tu = tu_id.split("_from_")[0]
-# 			rho_dependent = True
-# 			sigma = rpod
-# 			genes = org_TU_to_genes[tu]
-# 			if set(genes).issubset(mutual_hits):
-# 				ref_TU = [
-# 					ref_genes_to_TU[mutual_hits[g]]
-# 					for g in genes
-# 					if mutual_hits[g] in ref_genes_to_TU
-# 				]
-# 				if (
-# 					len(ref_TU) == 1
-# 				):  # All mapped genes are from only one TU. TU identified!
-# 					TU_hit = ref_TU_df[ref_TU_df.index.str.contains(ref_TU[0])]
-# 					if not TU_hit.empty:
-# 						rho_dependent = TU_hit["rho_dependent"].tolist()[0]
-# 						ref_sigma = TU_hit["rnapol"].tolist()[0]
-# 						if ref_sigma in ref_cplx_homolog:
-# 							sigma = ref_cplx_homolog[ref_sigma]
-# 							if sigma not in org_sigmas.index:
-# 								org_sigmas = org_sigmas.append(
-# 									pandas.DataFrame.from_dict(
-# 										{
-# 											sigma: {
-# 												"complex": "RNAP_{}".format(sigma),
-# 												"genes": org_complexes_df.loc[sigma]["genes"],
-# 												"name": org_complexes_df.loc[sigma]["name"],
-# 											}
-# 										}
-# 									).T
-# 								)
-# 				tu_name = "{}_from_{}".format(tu, sigma)
-# 				if tu_name not in TU_df.index:
-# 					remove_TUs.append(tu_id)
-# 					TU_df.loc[tu_name] = [0, 0, 0, 0, 0, 0]
-# 					TU_df.loc[tu_name]["strand"] = row["strand"]
-# 					TU_df.loc[tu_name]["start"] = int(row["start"])
-# 					TU_df.loc[tu_name]["stop"] = int(row["stop"])
-# 					TU_df.loc[tu_name]["tss"] = None
-# 				TU_df.loc[tu_name]["rho_dependent"] = rho_dependent
-# 				TU_df.loc[tu_name]["rnapol"] = sigma
-# 		self.org.TU_df = TU_df
-# 		org_sigmas.index.name = "sigma"
-# 		self.org.sigmas = org_sigmas
 
 	def protein_location_from_homology(self):
 		protein_location = self.org.protein_location
@@ -1552,8 +1513,8 @@ class MEBuilder(object):
 		coralme.builder.curation.MECurator(self.org).find_issue_with_query(query)
 
 	# shortcuts to methods in the MEReconstruction and METroubleshooter classes
-	def build_me_model(self, update = True, prune = True, overwrite = False):
-		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite)
+	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
+		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite, skip = skip)
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
 		"""
@@ -1592,9 +1553,10 @@ class MEReconstruction(MEBuilder):
 
 	Parameters
 	----------
+	MEBuilder : coralme.builder.main.MEBuilder
 
 	"""
-	def __init__(self, builder, *args, **kwargs):
+	def __init__(self, builder):
 		# only if builder.generate_files() was run before builder.build_me_model()
 		if hasattr(builder, 'org'):
 			self.org = builder.org
@@ -1812,7 +1774,22 @@ class MEReconstruction(MEBuilder):
 		# All other inputs and remove unnecessary genes from df_data
 		return (df_tus, df_rmsc, df_subs, df_mets, df_keffs), coralme.builder.preprocess_inputs.get_df_input_from_excel(df_data, df_rxns)
 
-	def build_me_model(self, update = True, prune = True, overwrite = False):
+	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
+		"""Performs the Build step of the reconstruction.
+
+		This function will read the synchronized and complemented information
+		in the OSM and build a ME-model.
+
+		Parameters
+		----------
+		update : bool
+			If True, runs the update method of all reactions after building.
+		prune : bool
+			If True, prunes unused reactions and metabolites after building.
+		overwrite : bool
+			If True, overwrites the OSM and other configuration files.
+
+		"""
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
 		out_directory = config.get('out_directory', '.')
@@ -2764,7 +2741,7 @@ class MEReconstruction(MEBuilder):
 			rnum = len(me.reactions)
 			delta = 1
 			while delta > 0:
-				me.prune()
+				me.prune(skip=skip)
 				delta = rnum - len(me.reactions)
 				rnum = len(me.reactions)
 
@@ -2826,13 +2803,54 @@ class METroubleshooter(object):
 		self.configuration = builder.configuration
 		self.curation_notes = builder.curation_notes
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(),
+		met_types = [], platform = None, solver = 'gurobi'):
+		"""Performs the Gap-finding step of the reconstruction.
+
+		This function will iterate through different parts of the M-
+		and E-matrices, looking for a minimal set of sinks that
+		allows for growth.
+
+		Parameters
+		----------
+		growth_key_and_value : dict
+			A dictionary of Sympy.Symbol and value(s) to evaluate. It defines
+			the parameters for the feasibility checks in each iteration.
+		skip : set
+			A set of ME-components to not evaluate
+		met_types: list
+			Any combination of 'ME-Deadends', 'Cofactors', 'All-Deadends',
+			'Metabolite', 'GenerictRNA', 'Complex', 'TranscribedGene',
+			'TranslatedGene', 'ProcessedProtein', and/or 'GenericComponent'.
+		platform: str
+			'win32' or 'darwin' to use gurobi (default) or cplex as solver
+		solver: str
+			Solver to use. Values: 'gurobi' (default) or 'cplex'
 		"""
-		growth_key_and_value: dictionary of Sympy.Symbol and value to replace
-		skip: set of ME-components to not evaluate
-		platform: 'win32' to use gurobi (default) or cplex as solver
-		solver: 'gurobi' (default) or 'cplex'
-		"""
+		types = {
+			'M-matrix' : ['ME-Deadends', 'Cofactors', 'All-Deadends', 'Metabolite' ],
+			'E-matrix' : ['GenerictRNA', 'Complex', 'TranscribedGene', 'TranslatedGene', 'ProcessedProtein', 'GenericComponent' ]
+			}
+
+		if len(met_types) > 0:
+			met_types = [ ('M-matrix', x) if x in types['M-matrix'] else ('E-matrix', x) if x in types['E-matrix'] else None for x in set(met_types) ]
+			met_types = [ x for x in met_types if x is not None ]
+
+			if len(met_types) == 0:
+				print('Metabolite types valid values are {:s}. The predefined order of metabolites will be tested.\n'.format(', '.join(types['M-matrix'] + types['E-matrix'])))
+
+		if len(met_types) == 0:
+			met_types = []
+			for x, y in types.items():
+				for met in y:
+					met_types.append((x, met))
+
+		if not hasattr(self, 'me_model'):
+			me = self
+			self = coralme.builder.main.MEBuilder(**{'out_directory' : '.'})
+			self.me_model = me
+			self.configuration['out_directory'] = './'
+			self.configuration['log_directory'] = './'
 
 		if sys.platform in ['win32', 'darwin'] or platform in ['win32', 'darwin']:
 			self.me_model.get_solution = self.me_model.optimize_windows
@@ -2878,27 +2896,13 @@ class METroubleshooter(object):
 		history = dict()
 		if works == False:
 			#logging.warning('~ '*1 + 'Step 3. Attempt gapfilling different groups of E-matrix components.')
-			 # TODO: Include previous iterations in gap fill sink closing algorithm
-			met_types = [
-				'ME-Deadends',
-				'Cofactors',
-				'All-Deadends',
-				'Metabolite',
-				'GenerictRNA',
-				'Complex',
-				'TranscribedGene',
-				'TranslatedGene',
-				'ProcessedProtein',
-				'GenericComponent'
-				]
-
 			for idx, met_type in enumerate(met_types):
-				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1,met_type))
-				if idx > 3:
+				logging.warning('  '*1 + 'Step {}. Gapfill reactions to provide components of type \'{:s}\' using brute force.'.format(idx + 1, met_type[1]))
+				if met_type[0] == 'E-matrix':
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip , history=history)
+				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type[1], skip = skip, history = history)
 				bf_gaps, no_gaps, works = output
 				# close sink reactions that are not gaps
 				if no_gaps:

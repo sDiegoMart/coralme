@@ -1064,7 +1064,7 @@ class MEModel(cobra.core.model.Model):
 		else:
 			lambdas = None
 
-		return Sf, Se, lb, ub, b, c, cs, atoms, lambdas
+		return Sf, Se, list(lb), list(ub), b, c, cs, atoms, lambdas
 
 	def rank(self, mu = 0.001):
 		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem()
@@ -1072,15 +1072,126 @@ class MEModel(cobra.core.model.Model):
 
 		for idx, idj in Sf.keys():
 		    Sp[idx, idj] = Sf[idx, idj]
-		    
+
 		for idx, idj in Se.keys():
 		    Sp[idx, idj] = float(Se[idx, idj].subs({ self.mu : mu }))
-		    
+
 		return numpy.linalg.matrix_rank(Sp.todense())
+
+	def fva(self,
+		reaction_list, fraction_of_optimum, mu_fixed = None,
+		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
+		tolerance = 1e-6, precision = 'quad', verbose = True):
+
+		"""
+		Determine the minimum and maximum flux value for each reaction constrained
+		to a fraction of the current growth rate (default = 1.0)
+
+		Parameters
+		----------
+		reaction_list : list of cobra.Reaction or str, optional
+			List of reactions IDs and/or reaction objects
+		fraction_of_optimum : float, optional
+			Must be <= 1.0. Requires that the objective value is at least the
+			fraction times maximum objective value. A value of 0.85 for instance
+			means that the objective has to be at least at 85% percent of its
+			maximum (default 1.0).
+		mu_fixed : float, optional
+			Set it to avoid the optimization of a ME-model. The growth rate must
+			be feasible. If not, the ME-model will be optimized with the following
+			options:
+
+			max_mu : float, optional
+				Maximum growth rate for initializing the growth rate binary search (GRBS).
+			min_mu : float, optional
+				Minimum growth rate for initializing GRBS.
+			maxIter : int
+				Maximum number of iterations for GRBS.
+			lambdify : bool
+				If True, returns a dictionary of lambda functions for each symbolic
+				stoichiometric coefficient
+			tolerance : float
+				Tolerance for the convergence of GRBS.
+			precision : str, {"quad", "double", "dq", "dqq"}
+				Precision (quad or double precision) for the GRBS
+
+		verbose : bool
+			If True, allow printing.
+		"""
+
+		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
+		# https://www.nature.com/articles/s41564-019-0423-8
+
+		# check options
+		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
+		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+		fraction_of_optimum = fraction_of_optimum if fraction_of_optimum <= 1.0 and fraction_of_optimum >= 0.0 else 1.0
+
+		# check if the ME-model has a solution
+		if mu_fixed is not None and not hasattr(self, 'solution'):
+			self.optimize(max_mu = max_mu, min_mu = min_mu, maxIter = maxIter, lambdify = lambdify,
+				tolerance = tolerance, precision = precision, verbose = verbose)
+
+		# set mu_fixed for replacement in a ME-model.
+		mu_fixed = self.solution.fluxes.get('biomass_dilution', mu_fixed) * fraction_of_optimum
+
+		if verbose:
+			print('Running FVA for {:d} reactions. Maximum growth rate fixed to {:g}'.format(len(reaction_list), mu_fixed))
+
+		# populate with stoichiometry, no replacement of mu's
+		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
+
+		from coralme.solver.solver import ME_NLP
+		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
+
+		# We need only reaction objects
+		rxns_fva = []
+		for rxn in reaction_list:
+			if isinstance(rxn, str) and self.reactions.has_id(rxn):
+				rxns_fva.append(self.reactions.get_by_id(rxn))
+			else:
+				rxns_fva.append(rxn)
+
+		obj_inds0 = [ self.reactions.index(rxn) for rxn in rxns_fva for j in range(0, 2) ]
+		obj_coeffs = [ ci for rxn in rxns_fva for ci in (1.0, -1.0) ]
+
+		# varyME is a specialized method for multiple min/maximization problems
+		obj_inds0, nVary, obj_vals = me_nlp.varyme(mu_fixed, obj_inds0, obj_coeffs, basis = None, verbosity = verbose)
+
+		# Return result consistent with cobrapy FVA
+		fva_result = {
+			(self.reactions[obj_inds0[2*i]].id): {
+				'maximum':obj_vals[2*i],
+				'minimum':obj_vals[2*i+1]
+				} for i in range(0, nVary//2) }
+
+		return pandas.DataFrame(fva_result).T
 
 	def optimize(self,
 		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
-		tolerance = 1e-6, precision = 'quad', verbose = True, fva = {}):
+		tolerance = 1e-6, precision = 'quad', verbose = True):
+
+		"""Solves the NLP problem to obtain reaction fluxes for a ME-model.
+
+		Parameters
+		----------
+		max_mu : float
+			Maximum growth rate for initializing the growth rate binary search (GRBS).
+		min_mu : float
+			Minimum growth rate for initializing GRBS.
+		maxIter : int
+			Maximum number of iterations for GRBS.
+		lambdify : bool
+			If True, returns a dictionary of lambda functions for each symbolic
+			stoichiometric coefficient
+		tolerance : float
+			Tolerance for the convergence of GRBS.
+		precision : str, {"quad", "double", "dq", "dqq"}
+			Precision (quad or double precision) for the GRBS
+		verbose : bool
+			If True, allow printing.
+		"""
+
 		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
 		# https://www.nature.com/articles/s41564-019-0423-8
 
@@ -1096,14 +1207,7 @@ class MEModel(cobra.core.model.Model):
 			print('Optimization will proceed replacing all growth keys with the same value.')
 
 		from coralme.solver.solver import ME_NLP
-		#me_nlp = ME_NLP(me)
 		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
-		if fva.get('reactions',None) is not None:
-			if verbose: print('Running FVA for {} reactions'.format(len(fva['reactions'])))
-			me_nlp.me = self
-			mu_fixed = fva['mu_fixed']
-			rxns_fva0 = fva['reactions']
-			return me_nlp.varyme(mu_fixed, rxns_fva0, basis=None, verbosity=verbose)
 
 		muopt, xopt, yopt, zopt, basis, stat = me_nlp.bisectmu(
 				mumax = max_mu,
@@ -1139,8 +1243,31 @@ class MEModel(cobra.core.model.Model):
 
 	# WARNING: Experimental. We could not compile qminos under WinOS, and qminos has a licence restriction for its source code
 	def optimize_windows(self,
-		max_mu = 1., min_mu = 0., maxIter = 100, lambdify = True,
+		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True, solver = 'gurobi'):
+
+		"""Solves the NLP problem to obtain reaction fluxes for a ME-model. This
+		method is used when setting a solver other than qMINOS. It allows to
+		use coralME in other OS than Linux.
+
+		Parameters
+		----------
+		max_mu : float
+			Maximum growth rate for initializing the growth rate binary search (GRBS).
+		min_mu : float
+			Minimum growth rate for initializing GRBS.
+		maxIter : int
+			Maximum number of iterations for GRBS.
+		lambdify : bool
+			If True, returns a dictionary of lambda functions for each symbolic
+   			stoichiometric coefficient
+		tolerance : float
+			Tolerance for the convergence of GRBS.
+		precision : str, {"quad", "double", "dq", "dqq"}
+			Precision (quad or double precision) for the GRBS
+		verbose : bool
+			If True, allow printing.
+		"""
 
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6

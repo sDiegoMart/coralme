@@ -462,13 +462,23 @@ def summarize_reactions(model,met_id,only_types=(),ignore_types = ()):
 	return df[['name','gene_reaction_rule','reaction','notes']] if not df.empty else 'No reaction found'
 
 
-def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_types = (),threshold = 0.,flux_dict=0):
+def flux_based_reactions(model,
+						 met_id,
+						 growth_key = 'mu',
+						 only_types=(),
+						 ignore_types = (),
+						 threshold = 0.,
+						 flux_dict=0,
+						 solution = None):
 	import tqdm
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
 		if not hasattr(model,'solution') or not model.solution:
-			print('No solution in model object')
-			flux_dict = {r.id:0. for r in model.reactions}
+			if solution is not None:
+				flux_dict = solution.fluxes
+			else:
+				print('No solution in model object')
+				flux_dict = {r.id:0. for r in model.reactions}
 		else:
 			flux_dict = model.solution.fluxes
 	reactions = get_reactions_of_met(model,met_id,only_types=only_types,
@@ -501,49 +511,48 @@ def flux_based_reactions(model,met_id,growth_key = 'mu',only_types=(),ignore_typ
 	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
 
 def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = False,growth_key='mu'):
-	import copy
-	met_stoich = 0
-	if only_types:
-		only_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in only_types])
-	elif ignore_types:
-		ignore_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in ignore_types])
-	reactions = []
+    import copy
+    met_stoich = 0
+    if only_types:
+        only_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in only_types])
+    elif ignore_types:
+        ignore_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in ignore_types])
+    reactions = []
 
-	if not hasattr(me.metabolites,met):
-		return reactions
-	for rxn in me.metabolites.get_by_id(met).reactions:
-		if only_types and not isinstance(rxn, only_reaction_types):
-			continue
-		elif ignore_types and isinstance(rxn, ignore_reaction_types):
-			continue
-		try:
-			met_obj = me.metabolites.get_by_id(met)
-			pos = 1 if get_met_coeff(rxn.metabolites[met_obj],0.1,growth_key=growth_key) > 1 else 0
-			rev = 1 if rxn.lower_bound < 0 else 0
-			fwd = 1 if rxn.upper_bound > 0 else 0
-		except:
-			if verbose:
-				print(rxn.id, ' could not parse')
-			else:
-				pass
+    if not hasattr(me.metabolites,met):
+        return reactions
+    for rxn in me.metabolites.get_by_id(met).reactions:
+        if only_types and not isinstance(rxn, only_reaction_types):
+            continue
+        elif ignore_types and isinstance(rxn, ignore_reaction_types):
+            continue
+        try:
+            met_obj = me.metabolites.get_by_id(met)
+            pos = 1 if get_met_coeff(rxn.metabolites[met_obj],0.1,growth_key=growth_key) > 0 else -1
+            rev = 1 if rxn.lower_bound < 0 else 0
+            fwd = 1 if rxn.upper_bound > 0 else 0
+        except:
+            if verbose:
+                print(rxn.id, ' could not parse')
+            else:
+                pass
+        try:
+            if not s:
+                reactions.append(rxn)
+                if verbose:
+                    print('(',rxn.id,rxn.lower_bound,rxn.upper_bound,')', '\t',rxn.reaction)
 
-		try:
-			if not s:
-				reactions.append(rxn)
-				if verbose:
-					print('(',rxn.id,rxn.lower_bound,rxn.upper_bound,')', '\t',rxn.reaction)
+            elif s == pos*fwd or s == -pos*rev:
+                reactions.append(rxn)
+                if verbose:
+                    print('(',rxn.id,rxn.lower_bound,rxn.upper_bound,')', '\t',rxn.reaction)
 
-			elif s == pos*fwd or s == -pos*rev:
-				reactions.append(rxn)
-				if verbose:
-					print('(',rxn.id,rxn.lower_bound,rxn.upper_bound,')', '\t',rxn.reaction)
-
-		except:
-			if verbose:
-				print(rxn.id, 'no reaction')
-			else:
-				pass
-	return reactions
+        except:
+            if verbose:
+                print(rxn.id, 'no reaction')
+            else:
+                pass
+    return reactions
 
 def find_issue(query,d,msg = ''):
     if isinstance(d,dict):
@@ -920,3 +929,18 @@ def get_cofactors_in_me_model(me):
 			if v < 0:
 				cofactors.add(k)
 	return list(cofactors)
+
+
+def get_transport_reactions(model,met_id,comps=['e','c']):
+    from_met = re.sub('_[a-z]$','_'+comps[0],met_id)
+    to_met = re.sub('_[a-z]$','_'+comps[1],met_id)
+    
+    if isinstance(model,coralme.core.model.MEModel):
+        reaction_type = ['MetabolicReaction']
+    else:
+        reaction_type = 0
+    prod_rxns = [rxn.id for rxn in get_reactions_of_met(model,to_met,s=1,verbose=0,only_types=reaction_type)]
+    cons_rxns = [rxn.id for rxn in get_reactions_of_met(model,from_met,s=-1,verbose=0,only_types=reaction_type)]
+    transport_rxn_ids = list(set(prod_rxns)&set(cons_rxns))
+
+    return [model.reactions.get_by_id(rxn_id) for rxn_id in transport_rxn_ids]
