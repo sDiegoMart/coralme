@@ -775,9 +775,9 @@ class MEReaction(cobra.core.reaction.Reaction):
 		lower = self.lower_bound
 		upper = self.upper_bound
 		rxn_type = str(type(self))[8:-2]
-		flux = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.fluxes[self.id], self._model.solution.fluxes['biomass_dilution']) 
+		flux = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.fluxes[self.id], self._model.solution.fluxes['biomass_dilution']) \
 			if hasattr(self._model, 'solution') and self._model.solution.fluxes.get(self.id, None) is not None else 'ME-model not optimized/feasible'
-		cost = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.reduced_costs[self.id], self._model.solution.fluxes['biomass_dilution']) 
+		cost = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.reduced_costs[self.id], self._model.solution.fluxes['biomass_dilution']) \
 			if hasattr(self._model, 'solution') and self._model.solution.fluxes.get(self.id, None) is not None else 'ME-model not optimized/feasible'
 
 		return f"""
