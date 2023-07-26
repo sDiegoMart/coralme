@@ -775,7 +775,7 @@ def get_df_ptms(df):
 		tmp['Modified Complex'] = tmp[['Complex ID', 'Cofactors in Modified Complex']].apply(fn, axis = 1)
 
 		# Modified complex names can be replaced using an alias
-		tmp['Modified Complex'].update(tmp['Complex Name'])
+		tmp['Modified Complex'].update(tmp['Complex Name'].str.replace(' ', '_')) # inplace
 
 		tmp = tmp[['Modified Complex', 'Complex ID', 'Cofactors in Modified Complex']]
 		tmp.columns = ['Modified_enzyme', 'Core_enzyme', 'Modifications']
@@ -804,7 +804,7 @@ def get_df_enz2rxn(df, filter_in = set(), generics = False):
 	tmp['Gene Locus ID'].update(tmp['Complex ID']) # inplace
 
 	# Modified complex names can be replaced using an alias
-	tmp['Gene Locus ID'].update(tmp['Complex Name']) # inplace
+	tmp['Gene Locus ID'].update(tmp['Complex Name'].str.replace(' ', '_')) # inplace
 
 	tmp = tmp.groupby(['M-model Reaction ID']).agg({'Gene Locus ID': lambda x: ' OR '.join(sorted(set(x.tolist())))})
 	tmp.columns = ['Complexes']
