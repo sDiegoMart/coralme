@@ -957,7 +957,7 @@ def format_kcats_from_DLKcat(df):
 # df = pandas.read_csv("./bacillus/building_data/bacillus_rxn_kcats.tsv",sep='\t',index_col=0).set_index("reaction")
 
     df2 = pandas.DataFrame(columns=["direction","complex","mods","keff"])
-    for r,keff in df['keff'].items():
+    for r,keff in df['Kcat value (1/s)'].items():
         d = {}
         rid,cplx = re.split("_FWD_|_REV_",r)
         base_cplx = cplx.split("_mod_")[0]
