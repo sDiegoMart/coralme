@@ -464,7 +464,6 @@ def summarize_reactions(model,met_id,only_types=(),ignore_types = ()):
 
 def flux_based_reactions(model,
 						 met_id,
-						 growth_key = 'mu',
 						 only_types=(),
 						 ignore_types = (),
 						 threshold = 0.,
@@ -482,7 +481,7 @@ def flux_based_reactions(model,
 		else:
 			flux_dict = model.solution.fluxes
 	reactions = get_reactions_of_met(model,met_id,only_types=only_types,
-									 ignore_types=ignore_types,verbose=False,growth_key=growth_key)
+									 ignore_types=ignore_types,verbose=False,growth_key=model.mu)
 	if len(reactions) == 0:
 		print('No reactions found for {}'.format(met_id))
 		return
@@ -496,7 +495,7 @@ def flux_based_reactions(model,
 		if f:
 			coeff = get_met_coeff(rxn.metabolites[met],
 								  g,
-									  growth_key=growth_key)
+									  growth_key=model.mu)
 		else:
 			coeff = 0
 		if coeff is None:
@@ -508,7 +507,8 @@ def flux_based_reactions(model,
 		result_dict[rxn.id]['met_flux'] = f*coeff
 		result_dict[rxn.id]['reaction'] = rxn.reaction
 	df = pandas.DataFrame.from_dict(result_dict).T
-	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
+	df = df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
+	return df[df['ub'] != 0]
 
 def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = False,growth_key='mu'):
     import copy
@@ -944,3 +944,34 @@ def get_transport_reactions(model,met_id,comps=['e','c']):
     transport_rxn_ids = list(set(prod_rxns)&set(cons_rxns))
 
     return [model.reactions.get_by_id(rxn_id) for rxn_id in transport_rxn_ids]
+
+def get_all_transport_of_model(model):
+    transport_reactions = []
+    for r in tqdm(model.reactions):
+        comps = r.get_compartments()
+        if len(comps) > 1:
+            transport_reactions.append(r.id)
+    return list(set(transport_reactions))
+
+
+def format_kcats_from_DLKcat(df):
+# df = pandas.read_csv("./bacillus/building_data/bacillus_rxn_kcats.tsv",sep='\t',index_col=0).set_index("reaction")
+
+    df2 = pandas.DataFrame(columns=["direction","complex","mods","keff"])
+    for r,keff in df['Kcat value (1/s)'].items():
+        d = {}
+        rid,cplx = re.split("_FWD_|_REV_",r)
+        base_cplx = cplx.split("_mod_")[0]
+        mods = cplx.split(base_cplx)[1]
+        mods = " AND ".join(mods.split("_mod_")[1:])
+        direc = "FWD" if "FWD" in r else "REV"
+        d[rid] = {
+            "direction":direc,
+            "complex":base_cplx,
+            "mods":mods,
+            "keff":keff
+        }
+        df2 = pandas.concat([df2,pandas.DataFrame.from_dict(d).T])
+    df2.index.name = 'reaction'
+    return df2
+#     df2.to_csv("./bacillus/building_data/keffs.txt",sep='\t')
