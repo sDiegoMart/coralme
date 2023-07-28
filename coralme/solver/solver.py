@@ -428,8 +428,8 @@ class ME_NLP:
                 #xopt, yopt, basis, stat = self.checkmu(muf, basis, precision)
                 x_new, y_new, z_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
 
+                current = (muf, x_new, y_new, z_new, basis, stat_new)
                 if stat_new == 'optimal':
-                    current = (muf, x_new, y_new, z_new, basis, stat_new)
                     basis = hs_new
                     mumin = muf
                 else:
