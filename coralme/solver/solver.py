@@ -428,8 +428,9 @@ class ME_NLP:
                 #xopt, yopt, basis, stat = self.checkmu(muf, basis, precision)
                 x_new, y_new, z_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
 
-                current = (muf, x_new, y_new, z_new, basis, stat_new)
+                current = None
                 if stat_new == 'optimal':
+                    current = (muf, x_new, y_new, z_new, basis, stat_new)
                     basis = hs_new
                     mumin = muf
                 else:
@@ -441,8 +442,11 @@ class ME_NLP:
                         str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
 
                 if abs(mumax - mumin) <= tolerance:# and stat_new == 'optimal':
-                    muf, x_new, y_new, z_new, basis, stat_new = current
-                    break
+                    if current is None:
+                        break
+                    else:
+                        muf, x_new, y_new, z_new, basis, stat_new = current
+                        break
 
                 if mumax <= tolerance:
                     break
