@@ -2,7 +2,7 @@ Modified_enzyme	Core_enzyme	Modifications	Source
 ACETYL-COA-CARBOXYLMULTI-CPLX_mod_btn(1)	ACETYL-COA-CARBOXYLMULTI-CPLX	btn(1)	M_protein_recon
 ACETOLACTSYNI-CPLX_mod_mg2(1)_mod_fad(1)_mod_thmpp(1)	ACETOLACTSYNI-CPLX	mg2(1) AND fad(1) AND thmpp(1)	M_protein_recon
 PABASYN-CPLX_mod_mg2(1)	PABASYN-CPLX	mg2(1)	M_protein_recon
-2OXOGLUTARATEDEH-CPLX_mod_mg2(1)_mod_lipo(1)	2OXOGLUTARATEDEH-CPLX	mg2(1) AND lipo(1)	M_protein_recon
+2OXOGLUTARATEDEH-CPLX_mod_mg2(1)_mod_lipoyl(1)	2OXOGLUTARATEDEH-CPLX	mg2(1) AND lipoyl(1)	M_protein_recon
 ANTHRANSYN-CPLX_mod_mg2(1)	ANTHRANSYN-CPLX	mg2(1)	M_protein_recon
 ANTHRANSYN-CPLX_mod_cobalt2(1)	ANTHRANSYN-CPLX	cobalt2(1)	M_protein_recon
 ANTHRANSYN-CPLX_mod_fe2(1)	ANTHRANSYN-CPLX	fe2(1)	M_protein_recon
@@ -29,7 +29,7 @@ FORMHYDROGI-CPLX_mod_ni2(1)_mod_4fe4s(1)	FORMHYDROGI-CPLX	ni2(1) AND 4fe4s(1)	M_
 FORMHYDROG2-CPLX_mod_ni2(1)_mod_fe2(1)	FORMHYDROG2-CPLX	ni2(1) AND fe2(1)	M_protein_recon
 NADH-DHI-CPLX_mod_2fe2s(1)_mod_4fe4s(1)_mod_fmn(1)	NADH-DHI-CPLX	2fe2s(1) AND 4fe4s(1) AND fmn(1)	M_protein_recon
 NITRITREDUCT-CPLX_mod_2fe2s(1)_mod_fad(1)_mod_sheme(1)	NITRITREDUCT-CPLX	2fe2s(1) AND fad(1) AND sheme(1)	M_protein_recon
-PYRUVATEDEH-CPLX_mod_mg2(1)_mod_fad(1)_mod_thmpp(1)_mod_lipo(1)	PYRUVATEDEH-CPLX	mg2(1) AND fad(1) AND thmpp(1) AND lipo(1)	M_protein_recon
+PYRUVATEDEH-CPLX_mod_mg2(1)_mod_fad(1)_mod_thmpp(1)_mod_lipoyl(1)	PYRUVATEDEH-CPLX	mg2(1) AND fad(1) AND thmpp(1) AND lipoyl(1)	M_protein_recon
 Phe_RS_tetra_mod_mg2(1)	Phe_RS_tetra	mg2(1)	M_protein_recon
 SUCC-DEHASE_mod_3fe4s(1)_mod_fad(1)_mod_2fe2s(1)_mod_4fe4s(1)	SUCC-DEHASE	3fe4s(1) AND fad(1) AND 2fe2s(1) AND 4fe4s(1)	M_protein_recon
 LTARTDEHYDRA-CPLX_mod_4fe4s(1)	LTARTDEHYDRA-CPLX	4fe4s(1)	M_protein_recon
@@ -452,7 +452,7 @@ EG10370-MONOMER_mod_mn2(1)	EG10370-MONOMER	mn2(1)	M_protein_recon
 NITRATREDUCTA-CPLX_mod_bmocogdp(1)_mod_3fe4s(1)_mod_4fe4s(1)	NITRATREDUCTA-CPLX	bmocogdp(1) AND 3fe4s(1) AND 4fe4s(1)	M_protein_recon
 FLAVONADPREDUCT-MONOMER_mod_fad(1)	FLAVONADPREDUCT-MONOMER	fad(1)	M_protein_recon
 NITRATREDUCTZ-CPLX_mod_bmocogdp(1)_mod_pheme(2)_mod_4fe4s(3)_mod_3fe4s(1)	NITRATREDUCTZ-CPLX	bmocogdp(1) AND pheme(2) AND 4fe4s(3) AND 3fe4s(1)	M_protein_recon
-GCVMULTI-CPLX_mod_lipo(1)	GCVMULTI-CPLX	lipo(1)	M_protein_recon
+GCVMULTI-CPLX_mod_lipoyl(1)	GCVMULTI-CPLX	lipoyl(1)	M_protein_recon
 IMIDHISTID-CPLX_mod_mn2(1)	IMIDHISTID-CPLX	mn2(1)	M_protein_recon
 CPLX0-341_mod_fmn(1)	CPLX0-341	fmn(1)	M_protein_recon
 CPLX0-341_mod_mg2(1)	CPLX0-341	mg2(1)	M_protein_recon

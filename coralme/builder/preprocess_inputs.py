@@ -201,9 +201,9 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 				mods = [ x for x in mods if not x.startswith('Oxidized') ] # metabolic modification in ferredoxin and other proteins
 				mods = [ x for x in mods if not x.startswith('palmitate') ] # metabolic modification from 2agpg160 in the lpp gene
 				mods = [ x.replace('LI', 'li') for x in mods ]
-				mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
-				logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
-				logging.warning('Add MetabolicReaction\'s to salvage or de novo synthesize lipoyl moieties. See https://www.genome.jp/pathway/map00785 for more information.')
+				#mods = [ x.replace('lipo', 'lipoyl') for x in mods ]
+				#logging.warning('The modification \'lipo\' was renamed to \'lipoyl\'.')
+				#logging.warning('Add MetabolicReaction\'s to salvage or de novo synthesize lipoyl moieties. See https://www.genome.jp/pathway/map00785 for more information.')
 
 				mods = [ x.replace('NiFeCoCN2', 'NiFe_cofactor') for x in mods ]
 				logging.warning('The modification \'NiFeCoCN2\' was renamed to \'NiFe_cofactor\'.')
