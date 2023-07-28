@@ -507,7 +507,8 @@ def flux_based_reactions(model,
 		result_dict[rxn.id]['met_flux'] = f*coeff
 		result_dict[rxn.id]['reaction'] = rxn.reaction
 	df = pandas.DataFrame.from_dict(result_dict).T
-	return df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
+	df = df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
+	return df[df['ub'] != 0]
 
 def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = False,growth_key='mu'):
     import copy
