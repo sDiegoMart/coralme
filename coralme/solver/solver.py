@@ -421,15 +421,16 @@ class ME_NLP:
             return mumax, x_new, y_new, z_new, basis, stat_new
 
         else:
+            res = []
             for idx in range(1, maxIter + 1):
                 # Just a sequence of feasibility checks
                 muf = (mumin + mumax) / 2.
                 # Retrieve evaluation from cache if it exists: golden section advantage
                 #xopt, yopt, basis, stat = self.checkmu(muf, basis, precision)
                 x_new, y_new, z_new, stat_new, hs_new = self.solvelp(muf, basis, precision)
+                res.append([muf, x_new, y_new, z_new, hs_new, stat_new])
 
                 if stat_new == 'optimal':
-                    current = (muf, x_new, y_new, z_new, basis, stat_new)
                     basis = hs_new
                     mumin = muf
                 else:
@@ -441,11 +442,14 @@ class ME_NLP:
                         str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
 
                 if abs(mumax - mumin) <= tolerance:# and stat_new == 'optimal':
-                    muf, x_new, y_new, z_new, basis, stat_new = current
-                    break
+                    valid_solutions = [ x for x in res if x[-1] == 'optimal' ]
+                    if len(valid_solutions) != 0:
+                        return valid_solutions[-1]
+                    else:
+                        return res[-1] # stat_new is not optimal
 
                 if mumax <= tolerance:
-                    break
+                    return res[-1] # stat_new is not optimal
 
             # # Save feasible basis
             # self.feas_basis = basis
