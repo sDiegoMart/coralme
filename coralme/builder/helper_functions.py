@@ -468,7 +468,8 @@ def flux_based_reactions(model,
 						 ignore_types = (),
 						 threshold = 0.,
 						 flux_dict=0,
-						 solution = None):
+						 solution = None,
+						 keffs=False):
 	import tqdm
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
@@ -506,6 +507,8 @@ def flux_based_reactions(model,
 		result_dict[rxn.id]['rxn_flux'] = f
 		result_dict[rxn.id]['met_flux'] = f*coeff
 		result_dict[rxn.id]['reaction'] = rxn.reaction
+		if keffs:
+			result_dict[rxn.id]['keff'] = rxn.keff if hasattr(rxn,'keff') else ''
 	df = pandas.DataFrame.from_dict(result_dict).T
 	df = df.loc[df['met_flux'].abs().sort_values(ascending=False).index]
 	return df[df['ub'] != 0]
@@ -946,6 +949,7 @@ def get_transport_reactions(model,met_id,comps=['e','c']):
     return [model.reactions.get_by_id(rxn_id) for rxn_id in transport_rxn_ids]
 
 def get_all_transport_of_model(model):
+    from tqdm import tqdm
     transport_reactions = []
     for r in tqdm(model.reactions):
         comps = r.get_compartments()
