@@ -18,7 +18,7 @@ from cobra.core.dictlist import DictList
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(cur_dir, 'column_format.json'), 'r') as f:
     column_format = json.load(f)
-    
+
 class CurationList(DictList):
     """Stores CurationInfo instances in a cobra DictList object.
 
@@ -34,7 +34,7 @@ class CurationInfo(object):
 
     This class loads manual curation files and stores them
     as properties in an Organism instance.
-    
+
     As a general rule, adding information in input files will
     prevent the MEBuilder instance from updating from homology.
 
@@ -49,7 +49,7 @@ class CurationInfo(object):
                  config = {},
                  file = "",
                  name = ""):
-        
+
         logging.warning("Loading {}".format(name))
         self.id = id
         self.name = name
@@ -63,7 +63,7 @@ class CurationInfo(object):
         self.data = self.load()
         self.org.__setattr__(id,copy.deepcopy(self.data))
         self.sep = config["sep"]
-        
+
     def _modify_from_load(self):
         """Convert manual curation file into a coralME dataset"""
         return self.data
@@ -74,7 +74,7 @@ class CurationInfo(object):
     def _modify_for_create(self,df):
         """Modify dataset to create file when not provided"""
         return df
-    
+
     def read(self):
         """Read manual curation file"""
         if self.config["pathtype"] == 'absolute':
@@ -88,7 +88,7 @@ class CurationInfo(object):
                                    comment='#',
                                    skip_blank_lines=True).fillna("")
         return None
-    
+
     def load(self):
         """Load and convert manual curation file into a coralME dataset"""
         self.data = self.read()
@@ -110,7 +110,7 @@ class CurationInfo(object):
         out_dir = self.directory + "reference_files/"
         if not os.path.exists(out_dir):
             os.mkdir(out_dir)
-        mod[self.columns[1:]].to_csv(out_dir + self.file,sep=self.sep)    
+        mod[self.columns[1:]].to_csv(out_dir + self.file,sep=self.sep)
     @property
     def columns(self):
         """Default columns that are coralME-compliant"""
@@ -119,7 +119,7 @@ class CurationInfo(object):
     def org_data(self):
         """Final dataset stored in Organism instance"""
         return self.org.__getattribute__(self.id)
-    
+
     def _repr_html_(self) -> str:
             """Generate html representation of reaction.
 
@@ -148,9 +148,9 @@ class ReactionCorrections(CurationInfo):
     """Reads manual input to modify reactions in the M-model.
 
     This class creates the property "reaction_corrections" from
-    the manual inputs in reaction_corrections.txt in an 
+    the manual inputs in reaction_corrections.txt in an
     instance of Organism.
-    
+
     Input here will modify reactions at the M-model stage
     before ME-model building.
 
@@ -158,7 +158,7 @@ class ReactionCorrections(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     reaction_corrections.txt :
@@ -189,14 +189,14 @@ class ReactionCorrections(CurationInfo):
                         name = name)
     def _modify_from_load(self):
         return self.data.T.to_dict()
-    
+
 class ProteinLocation(CurationInfo):
     """Reads manual input to add protein locations.
 
     This class creates the property "protein_location" from
-    the manual inputs in peptide_compartment_and_pathways.txt in an 
+    the manual inputs in peptide_compartment_and_pathways.txt in an
     instance of Organism.
-    
+
     Input here will modify protein locations, and translocation
     pathways in the ME-model.
 
@@ -204,7 +204,7 @@ class ProteinLocation(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     peptide_compartment_and_pathways.txt :
@@ -235,14 +235,14 @@ class ProteinLocation(CurationInfo):
                         name = name)
     def _modify_for_save(self):
         return self.org_data
-    
+
 class TranslocationMultipliers(CurationInfo):
     """Reads manual input to define translocation multipliers.
 
     This class creates the property "translocation_multipliers" from
-    the manual inputs in translocation_multipliers.txt in an 
+    the manual inputs in translocation_multipliers.txt in an
     instance of Organism.
-    
+
     Input here will modify how many pores are required for
     the translocation of a protein.
 
@@ -250,7 +250,7 @@ class TranslocationMultipliers(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     translocation_multipliers.txt :
@@ -280,21 +280,21 @@ class TranslocationMultipliers(CurationInfo):
                         name = name)
     def _modify_from_load(self):
         return self.data.to_dict()
-    
+
 class LipoproteinPrecursors(CurationInfo):
     """Reads manual input to add lipoprotein precursors.
 
     This class creates the property "lipoprotein_precursors" from
-    the manual inputs in lipoprotein_precursors.txt in an 
+    the manual inputs in lipoprotein_precursors.txt in an
     instance of Organism.
-    
+
     Input here will add lipoprotein precursors.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     lipoprotein_precursors.txt :
@@ -328,15 +328,15 @@ class LipoproteinPrecursors(CurationInfo):
     def _modify_for_save(self):
         return pandas.DataFrame.from_dict(
             {self.columns[1]:self.org_data}).rename_axis(self.columns[0])
-    
+
 class CleavedMethionine(CurationInfo):
-    """Reads manual input to mark proteins that undergo 
+    """Reads manual input to mark proteins that undergo
     N-terminal methionine cleavage.
 
     This class creates the property "cleaved_methionine" from
-    the manual inputs in cleaved_methionine.txt in an 
+    the manual inputs in cleaved_methionine.txt in an
     instance of Organism.
-    
+
     Input here will mark proteins for N-terminal methionine
     cleavage in the ME-model.
 
@@ -344,7 +344,7 @@ class CleavedMethionine(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     cleaved_methionine.txt :
@@ -378,30 +378,30 @@ class CleavedMethionine(CurationInfo):
     def _modify_for_save(self):
         return pandas.DataFrame.from_dict(
             {self.columns[0]:self.org_data}).set_index(self.columns[0])
-    
+
 class ManualComplexes(CurationInfo):
     """Reads manual input to modify or add complexes.
 
     This class creates the property "manual_complexes" from
-    the manual inputs in protein_corrections.txt in an 
+    the manual inputs in protein_corrections.txt in an
     instance of Organism.
-    
+
     Input here will add, modify complexes in the ME-model,
     as well as add, modify their modifications. You can
     add a complex modification ID in the replace column,
-    which will remove that modified complex and replace 
+    which will remove that modified complex and replace
     it with your manually added one.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
-    This example adds SufBCD with their subunits and 
+    This example adds SufBCD with their subunits and
     modifications, while removing SufBCD_mod_2fe3s(1).
-    
+
     protein_corrections.txt :
         complex_id,name,genes,mod,replace
         SufBCD,SufBC2D Fe-S cluster scaffold complex,BSU32670(1) AND BSU32710(2) AND BSU32700(1),2fe2s(1),SufBCD_mod_2fe3s(1)
@@ -437,10 +437,10 @@ class ManualComplexes(CurationInfo):
         new_complexes = new_complexes.drop("source",axis=1)
         new_complexes["mod"] = [''] * new_complexes.shape[0]
         new_complexes["replace"] = [''] * new_complexes.shape[0]
-        
+
         df = self.org.protein_mod
         new_mods = pandas.DataFrame(columns = new_complexes.columns)
-        flag = (df["Source"].str.contains("Homology"))
+        flag = (df["Source"].str.contains("Homology") & df["Source"].notna())
         protein_mod = df[flag]
         for cplx_id,row in protein_mod.iterrows():
             df = pandas.DataFrame.from_dict({
@@ -450,18 +450,18 @@ class ManualComplexes(CurationInfo):
                 })
             new_mods = pandas.concat([new_mods,df.T],axis=0)
         return pandas.concat([self.data,new_complexes,new_mods.fillna("")],axis=0).rename_axis("complex_id")
-    
+
     def _modify_for_save(self):
         return self.org_data
-    
-    
+
+
 class Sigmas(CurationInfo):
     """Reads manual input to modify or add sigma factors.
 
     This class creates the property "sigmas" from
-    the manual inputs in sigma_factors.txt in an 
+    the manual inputs in sigma_factors.txt in an
     instance of Organism.
-    
+
     Input here will mark proteins for N-terminal methionine
     cleavage in the ME-model.
 
@@ -469,7 +469,7 @@ class Sigmas(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     sigma_factors.txt :
@@ -502,13 +502,13 @@ class Sigmas(CurationInfo):
         return self.org_data
 
 class RhoIndependent(CurationInfo):
-    """Reads manual input to define genes with rho independent 
+    """Reads manual input to define genes with rho independent
     termination.
 
     This class creates the property "rho_independent" from
-    the manual inputs in rho_independent.txt in an 
+    the manual inputs in rho_independent.txt in an
     instance of Organism.
-    
+
     Input here will mark genes with rho independent transcription
     termination.
 
@@ -516,7 +516,7 @@ class RhoIndependent(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     rho_independent.txt :
@@ -550,21 +550,21 @@ class RhoIndependent(CurationInfo):
     def _modify_for_save(self):
         return pandas.DataFrame.from_dict(
             {self.columns[0]:self.org_data}).set_index(self.columns[0])
-    
+
 class RNADegradosome(CurationInfo):
     """Reads manual input to add RNA degradosome composition.
 
     This class creates the property "rna_degradosome" from
-    the manual inputs in rna_degradosome.txt in an 
+    the manual inputs in rna_degradosome.txt in an
     instance of Organism.
-    
+
     Input here will define the composition of the RNA degradosome.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     rna_degradosome.txt :
@@ -593,21 +593,21 @@ class RNADegradosome(CurationInfo):
                         config = config,
                         file = file,
                         name = name)
-    
+
     def _modify_from_load(self):
         return {"rna_degradosome" : {"enzymes" : self.data.index.to_list()}}
     def _modify_for_save(self):
         l = self.org_data["rna_degradosome"]["enzymes"]
         return pandas.DataFrame.from_dict(
             {self.columns[0]:l}).set_index(self.columns[0])
-    
+
 class RNAModificationMachinery(CurationInfo):
     """Reads manual input to add RNA modification machinery.
 
     This class creates the property "rna_modification_df" from
-    the manual inputs in rna_modification.txt in an 
+    the manual inputs in rna_modification.txt in an
     instance of Organism.
-    
+
     Input here will define enzymes that perform RNA modifications
     for either rRNA or tRNA in the ME-model.
 
@@ -615,7 +615,7 @@ class RNAModificationMachinery(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     rna_modification.txt :
@@ -644,26 +644,26 @@ class RNAModificationMachinery(CurationInfo):
                         config = config,
                         file = file,
                         name = name)
-    
+
     def _modify_from_load(self):
         return self.data.astype(str)
     def _modify_for_save(self):
         return self.org_data
-    
+
 class RNAModificationTargets(CurationInfo):
     """Reads manual input to add RNA modification targets.
 
     This class creates the property "rna_modification_targets" from
-    the manual inputs in post_transcriptional_modification_of_RNA.txt in an 
+    the manual inputs in post_transcriptional_modification_of_RNA.txt in an
     instance of Organism.
-    
+
     Input here will define RNA genes that undergo modifications.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     post_transcriptional_modification_of_RNA.txt :
@@ -694,14 +694,14 @@ class RNAModificationTargets(CurationInfo):
                         name = name)
     def _modify_for_save(self):
         return self.org_data
-    
+
 class EnzymeReactionAssociation(CurationInfo):
     """Reads manual input to specify enzyme-reaction associations.
 
     This class creates the property "enz_rxn_assoc_df" from
-    the manual inputs in enzyme_reaction_association.txt in an 
+    the manual inputs in enzyme_reaction_association.txt in an
     instance of Organism.
-    
+
     Input here will create the association between enzymes and
     reactions in the ME-model.
 
@@ -709,7 +709,7 @@ class EnzymeReactionAssociation(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     enzyme_reaction_association.txt :
@@ -740,14 +740,14 @@ class EnzymeReactionAssociation(CurationInfo):
                         name = name)
     def _modify_for_save(self):
         return self.org_data
-    
+
 class MEMetabolites(CurationInfo):
     """Reads manual input to replace metabolites in the M-model.
 
     This class creates the property "me_mets" from
-    the manual inputs in me_metabolites.txt in an 
+    the manual inputs in me_metabolites.txt in an
     instance of Organism.
-    
+
     Input here will mark metabolites in the M-model for replacement
     with their corrected E-matrix component.
 
@@ -755,7 +755,7 @@ class MEMetabolites(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     me_metabolites.txt :
@@ -770,7 +770,7 @@ class MEMetabolites(CurationInfo):
                  file="me_metabolites.txt",
                  name="Metabolites to substitute from M-model"):
         if not file:
-            file = id + ".txt"        
+            file = id + ".txt"
         self.file = file
         create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
         if not config:
@@ -786,21 +786,21 @@ class MEMetabolites(CurationInfo):
                         name = name)
     def _modify_for_save(self):
         return self.org_data
-    
+
 class SubreactionMatrix(CurationInfo):
     """Reads manual input to add subreactions.
 
     This class creates the property "subreaction_matrix" from
-    the manual inputs in subreaction_matrix.txt in an 
+    the manual inputs in subreaction_matrix.txt in an
     instance of Organism.
-    
+
     Input here will define subreactions in the ME-model.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     subreaction_matrix.txt :
@@ -832,15 +832,15 @@ class SubreactionMatrix(CurationInfo):
                         name = name)
     def _modify_for_save(self):
         return self.org_data
-    
+
 class ReactionMatrix(CurationInfo):
     """Reads manual input to add reactions to the ME-model.
 
     This class creates the property "reaction_matrix" from
-    the manual inputs in reaction_matrix.txt in an 
+    the manual inputs in reaction_matrix.txt in an
     instance of Organism.
-    
-    Input here will define reactions directly in the 
+
+    Input here will define reactions directly in the
     ME-model. Definitions here will be added to the ME-model
     after processing the M-model into the ME-model.
 
@@ -848,7 +848,7 @@ class ReactionMatrix(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     reaction_matrix.txt :
@@ -880,14 +880,14 @@ class ReactionMatrix(CurationInfo):
                         config = config,
                         file = file,
                         name = name)
-    
+
 class OrphanSpontReactions(CurationInfo):
     """Reads manual input to add reactions to the ME-model.
 
     This class creates the property "orphan_and_spont_reactions" from
-    the manual inputs in orphan_and_spont_reactions.txt in an 
+    the manual inputs in orphan_and_spont_reactions.txt in an
     instance of Organism.
-    
+
     Input here will mark reactions as orphan or spontaneous. Orphan
     reactions will be associated with CPLX_dummy, and spontaneous ones
     will not require enzymes for flux.
@@ -896,7 +896,7 @@ class OrphanSpontReactions(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     orphan_and_spont_reactions.txt :
@@ -925,23 +925,23 @@ class OrphanSpontReactions(CurationInfo):
                         config = config,
                         file = file,
                         name = name)
-    
+
 class SubsystemClassification(CurationInfo):
     """Reads manual input to classify subsystems for Keff estimation.
 
     This class creates the property "subsystem_classification" from
-    the manual inputs in subsystem_classification.txt in an 
+    the manual inputs in subsystem_classification.txt in an
     instance of Organism.
-    
+
     Input here will classify subsystems in umbrella classifications which
-    are then used to set a median Keff and correct it with the 
+    are then used to set a median Keff and correct it with the
     complex SASA.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     subsystem_classification.txt :
@@ -978,14 +978,14 @@ class SubsystemClassification(CurationInfo):
             for s in df[df[c] == 1].index:
                 d[s] = c
         return d
-    
+
 class TranslocationPathways(CurationInfo):
     """Reads manual input to define translocation pathways.
 
     This class creates the property "translocation_pathways" from
-    the manual inputs in translocation_pathways.txt in an 
+    the manual inputs in translocation_pathways.txt in an
     instance of Organism.
-    
+
     Input here will define translocation pathways and their
     machinery.
 
@@ -1044,22 +1044,22 @@ class TranslocationPathways(CurationInfo):
                 df1 = pandas.DataFrame.from_dict({k:{self.columns[1]:i}}).T.rename_axis(self.columns[0])
                 df = pandas.concat([df,df1],axis=0)
         return df
-    
+
 class LipidModifications(CurationInfo):
     """Reads manual input to define lipid modification machinery.
 
     This class creates the property "lipid_modifications" from
-    the manual inputs in lipid_modifications.txt in an 
+    the manual inputs in lipid_modifications.txt in an
     instance of Organism.
-    
-    Input here will define enzymes that perform lipid 
+
+    Input here will define enzymes that perform lipid
     modifications.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     lipid_modifications.txt :
@@ -1094,7 +1094,7 @@ class LipidModifications(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class StableRNAs(CurationInfo):
     """ Defines stable RNAs
     """
@@ -1123,21 +1123,21 @@ class StableRNAs(CurationInfo):
     def _modify_from_load(self):
         return self.data.index.to_list()
 
-        
+
 class RibosomeStoich(CurationInfo):
     """Reads manual input to define ribosome composition.
 
     This class creates the property "ribosome_stoich" from
-    the manual inputs in ribosomal_proteins.txt in an 
+    the manual inputs in ribosomal_proteins.txt in an
     instance of Organism.
-    
+
     Input here will define the composition of the ribosome.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     ribosomal_proteins.txt :
@@ -1184,22 +1184,22 @@ class RibosomeStoich(CurationInfo):
     def _modify_for_save(self):
         d = {k.split("_S_assembly")[0]+"S":','.join(list(v["stoich"].keys())) for k,v in self.org_data.items() if "assembly" in k}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class RibosomeSubreactions(CurationInfo):
     """Reads manual input to define ribosome subreactions.
 
     This class creates the property "ribosome_subreactions" from
-    the manual inputs in ribosome_subreactions.txt in an 
+    the manual inputs in ribosome_subreactions.txt in an
     instance of Organism.
-    
-    Input here will define enzymes that perform a ribosome 
+
+    Input here will define enzymes that perform a ribosome
     subreaction.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     ribosome_subreactions.txt :
@@ -1228,26 +1228,26 @@ class RibosomeSubreactions(CurationInfo):
                         org,
                         config = config,
                         file = file,
-                        name = name)    
+                        name = name)
     def _modify_from_load(self):
         return self.data.T.to_dict()
     def _modify_for_save(self):
         return pandas.DataFrame.from_dict(self.org_data).T.rename_axis(self.columns[0])
-        
+
 class GenericDict(CurationInfo):
     """Reads manual input to define generics.
 
     This class creates the property "generic_dict" from
-    the manual inputs in generic_dict.txt in an 
+    the manual inputs in generic_dict.txt in an
     instance of Organism.
-    
+
     Input here will define generics.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     generic_dict.txt :
@@ -1294,21 +1294,21 @@ class GenericDict(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class AminoacidtRNASynthetase(CurationInfo):
     """Reads manual input to define amino acid tRNA ligases.
 
     This class creates the property "amino_acid_trna_synthetase" from
-    the manual inputs in amino_acid_trna_synthetase.txt in an 
+    the manual inputs in amino_acid_trna_synthetase.txt in an
     instance of Organism.
-    
+
     Input here will define amino acid tRNA ligases.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     amino_acid_trna_synthetase.txt :
@@ -1345,21 +1345,21 @@ class AminoacidtRNASynthetase(CurationInfo):
     def _modify_for_save(self):
         d = {self.columns[1]:self.org_data}
         return pandas.DataFrame.from_dict(d).rename_axis(self.columns[0])
-    
+
 class PeptideReleaseFactors(CurationInfo):
     """Reads manual input to define peptide release factors.
 
     This class creates the property "peptide_release_factors" from
-    the manual inputs in peptide_release_factors.txt in an 
+    the manual inputs in peptide_release_factors.txt in an
     instance of Organism.
-    
+
     Input here will define peptide release factors.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     peptide_release_factors.txt :
@@ -1406,14 +1406,14 @@ class PeptideReleaseFactors(CurationInfo):
         return d
     def _modify_for_save(self):
         return pandas.DataFrame.from_dict(self.org_data).T.rename_axis(self.columns[0])
-    
+
 class InitiationSubreactions(CurationInfo):
     """Reads manual input to define translation initiation subreactions.
 
     This class creates the property "initiation_subreactions" from
-    the manual inputs in initiation_subreactions.txt in an 
+    the manual inputs in initiation_subreactions.txt in an
     instance of Organism.
-    
+
     Input here will define translation initiation subreactions and their
     machinery.
 
@@ -1421,7 +1421,7 @@ class InitiationSubreactions(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     initiation_subreactions.txt :
@@ -1468,14 +1468,14 @@ class InitiationSubreactions(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class ElongationSubreactions(CurationInfo):
     """Reads manual input to define translation elongation subreactions.
 
     This class creates the property "elongation_subreactions" from
-    the manual inputs in elongation_subreactions.txt in an 
+    the manual inputs in elongation_subreactions.txt in an
     instance of Organism.
-    
+
     Input here will define translation elongation subreactions and their
     machinery.
 
@@ -1483,7 +1483,7 @@ class ElongationSubreactions(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     elongation_subreactions.txt :
@@ -1530,14 +1530,14 @@ class ElongationSubreactions(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class TerminationSubreactions(CurationInfo):
     """Reads manual input to define translation termination subreactions.
 
     This class creates the property "termination_subreactions" from
-    the manual inputs in termination_subreactions.txt in an 
+    the manual inputs in termination_subreactions.txt in an
     instance of Organism.
-    
+
     Input here will define translation termination subreactions and their
     machinery.
 
@@ -1545,7 +1545,7 @@ class TerminationSubreactions(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     termination_subreactions.txt :
@@ -1592,22 +1592,22 @@ class TerminationSubreactions(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class SpecialtRNASubreactions(CurationInfo):
     """Reads manual input to define special tRNA subreactions.
 
     This class creates the property "special_trna_subreactions" from
-    the manual inputs in special_trna_subreactions.txt in an 
+    the manual inputs in special_trna_subreactions.txt in an
     instance of Organism.
-    
-    Input here will define special tRNA subreactions, such as 
+
+    Input here will define special tRNA subreactions, such as
     tRNA-Sec (selenocysteine) synthesis from tRNA-Ser.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     special_trna_subreactions.txt :
@@ -1654,14 +1654,14 @@ class SpecialtRNASubreactions(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class TranscriptionSubreactions(CurationInfo):
     """Reads manual input to define transcription subreactions.
 
     This class creates the property "transcription_subreactions" from
-    the manual inputs in transcription_subreactions.txt in an 
+    the manual inputs in transcription_subreactions.txt in an
     instance of Organism.
-    
+
     Input here will define machinery for transcription subreactions. These
     subreactions are a set of pre-defined subreactions that are used
     in ME-models.
@@ -1670,7 +1670,7 @@ class TranscriptionSubreactions(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     transcription_subreactions.txt :
@@ -1717,14 +1717,14 @@ class TranscriptionSubreactions(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class SpecialModifications(CurationInfo):
     """Reads manual input to define machinery for special modifications.
 
     This class creates the property "special_modifications" from
-    the manual inputs in special_modifications.txt in an 
+    the manual inputs in special_modifications.txt in an
     instance of Organism.
-    
+
     Input here will define machinery for special modifications. These
     modifications are a set of pre-defined modifications that are used
     in ME-models.
@@ -1733,7 +1733,7 @@ class SpecialModifications(CurationInfo):
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     special_modifications.txt :
@@ -1779,21 +1779,21 @@ class SpecialModifications(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-    
+
 class ExcisionMachinery(CurationInfo):
     """Reads manual input to define machinery for excision.
 
     This class creates the property "excision_machinery" from
-    the manual inputs in excision_machinery.txt in an 
+    the manual inputs in excision_machinery.txt in an
     instance of Organism.
-    
+
     Input here will define machinery for excision.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     excision_machinery.txt :
@@ -1846,16 +1846,16 @@ class FoldingDict(CurationInfo):
     """Reads manual input to define folding pathways for proteins.
 
     This class creates the property "folding_dict" from
-    the manual inputs in folding_dict.txt in an 
+    the manual inputs in folding_dict.txt in an
     instance of Organism.
-    
+
     Input here will define folding pathways for proteins.
 
     Parameters
     ----------
     org : coralme.builder.organism.Organism
         Organism object.
-        
+
     Examples
     --------
     folding_dict.txt :
@@ -1903,7 +1903,7 @@ class FoldingDict(CurationInfo):
     def _modify_for_save(self):
         d = {k:','.join(v["enzymes"]) for k,v in self.org_data.items()}
         return pandas.DataFrame.from_dict({self.columns[1]:d}).rename_axis(self.columns[0])
-        
+
 class MEManualCuration(object):
     """MEManualCuration class for loading manual curation from files
 
@@ -1982,7 +1982,7 @@ class MECurator(object):
         for k,v in self.org.curation_notes.items():
             coralme.builder.helper_functions.find_issue(query,v)
 
-            
+
 def _str_to_dict(d):
     regex = ":(?=[-]?\d+(?:$|\.))"
     return (
