@@ -759,6 +759,26 @@ class MEReaction(cobra.core.reaction.Reaction):
 		reaction_string += " + ".join(product_bits)
 		return reaction_string
 
+	@property
+	def bound_violation(self):
+		if hasattr(self._model, 'solution') and self._model.solution.fluxes.get(self.id, None) is not None:
+			if hasattr(self.lower_bound, 'subs'):
+				lower_bound = float(self.lower_bound.subs(self._model.mu, self._model.solution.fluxes['biomass_dilution']))
+			else:
+				lower_bound = self.lower_bound
+
+			if hasattr(self.upper_bound, 'subs'):
+				upper_bound = float(self.upper_bound.subs(self._model.mu, self._model.solution.fluxes['biomass_dilution']))
+			else:
+				upper_bound = self.upper_bound
+
+			if lower_bound <= self._model.solution.fluxes[self.id] <= upper_bound:
+				return False
+			else:
+				return (True, max(lower_bound - self._model.solution.fluxes[self.id], self._model.solution.fluxes[self.id] - upper_bound))
+		else:
+			return 'ME-model not optimized/feasible'
+
 	def _repr_html_(self) -> str:
 		"""Generate html representation of reaction.
 
@@ -775,10 +795,14 @@ class MEReaction(cobra.core.reaction.Reaction):
 		lower = self.lower_bound
 		upper = self.upper_bound
 		rxn_type = str(type(self))[8:-2]
-		flux = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.fluxes[self.id], self._model.solution.fluxes['biomass_dilution']) \
-			if hasattr(self._model, 'solution') and self._model.solution.fluxes.get(self.id, None) is not None else 'ME-model not optimized/feasible'
-		cost = '{:.6g} ($\mu$= {:f})'.format(self._model.solution.reduced_costs[self.id], self._model.solution.fluxes['biomass_dilution']) \
-			if hasattr(self._model, 'solution') and self._model.solution.fluxes.get(self.id, None) is not None else 'ME-model not optimized/feasible'
+
+		if hasattr(self._model, 'solution') and self._model.solution.fluxes.get(self.id, None) is not None:
+			mu = self._model.solution.fluxes['biomass_dilution']
+			flux = '{:g} ($\mu$= {:g})'.format(self._model.solution.fluxes[self.id], mu)
+			cost = '{:g} ($\mu$= {:g})'.format(self._model.solution.reduced_costs[self.id], mu)
+			viol = self.bound_violation
+		else:
+			flux = cost = viol = 'ME-model not optimized/feasible'
 
 		return f"""
 		<table>
@@ -796,6 +820,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 			<tr><td><strong>Reaction type</strong></td><td>{rxn_type}</td></tr>
 			<tr><td><strong>Flux</strong></td><td>{flux}</td></tr>
 			<tr><td><strong>Reduced cost</strong></td><td>{cost}</td></tr>
+			<tr><td><strong>Bound violation</strong></td><td>{viol}</td></tr>
 		</table>
 		"""
 
