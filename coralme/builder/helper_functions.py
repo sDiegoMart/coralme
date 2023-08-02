@@ -481,8 +481,9 @@ def flux_based_reactions(model,
 				flux_dict = {r.id:0. for r in model.reactions}
 		else:
 			flux_dict = model.solution.fluxes
+	mu = model.mu if hasattr(model,'mu') else ''
 	reactions = get_reactions_of_met(model,met_id,only_types=only_types,
-									 ignore_types=ignore_types,verbose=False,growth_key=model.mu)
+									 ignore_types=ignore_types,verbose=False,growth_key=mu)
 	if len(reactions) == 0:
 		print('No reactions found for {}'.format(met_id))
 		return
