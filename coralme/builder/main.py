@@ -2706,7 +2706,7 @@ class MEReconstruction(MEBuilder):
 
 			# Step 2: Estimate keff for all the reactions in the model
 			mapped_keffs = {}
-			#if "complex" not in df_keffs.columns: #df_keffs.empty: # This avoid the estimation if the user uses an "incomplete" input
+			#if "complex" not in df_keffs.columns: #df_keffs.empty: # The if True avoids the estimation if the user uses an "incomplete" input
 			# dictionary of reaction IDs : coralme.core.reaction objects
 			rxns_to_map = { x.id:x for x in me.reactions + me.subreaction_data if hasattr(x, 'keff') }
 			reaction_ids = [
@@ -2715,9 +2715,9 @@ class MEReconstruction(MEBuilder):
 				if rxn._complex_data is not None
 				]
 
-			if 'complex' in df_keffs.columns: # user provided a file with keffs
-				with open('{:s}/building_data/reaction_median_keffs.txt'.format(me.global_info['out_directory']), 'r') as infile:
-					reaction_median_keffs = pandas.read_csv(infile, sep = '\t').set_index('reaction')
+			#if 'complex' in df_keffs.columns: # user provided a file with keffs # This is always True because w/o a user file, df_keffs is empty
+			with open('{:s}/building_data/reaction_median_keffs.txt'.format(me.global_info['out_directory']), 'r') as infile:
+				reaction_median_keffs = pandas.read_csv(infile, sep = '\t').set_index('reaction')
 
 			for rxn in tqdm.tqdm(reaction_ids, 'Estimating effective turnover rates for reactions using the SASA method...', bar_format = bar_format):
 				logging.warning('Estimating effective turnover rates for reaction \'{:s}\''.format(rxn.id))
