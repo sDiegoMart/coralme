@@ -768,7 +768,7 @@ class MEModel(cobra.core.model.Model):
 		# initialize to 0
 		s_matrix = scipy.sparse.dok_matrix((len(self.metabolites), len(self.reactions)))
 		# populate with stoichiometry
-		for idx, rxn in tqdm.tqdm(enumerate(self.reactions), bar_format = bar_format):
+		for idx, rxn in tqdm.tqdm(list(enumerate(self.reactions)), 'Constructing stoichiometric matrix', bar_format = bar_format):
 			for met, value in rxn.metabolites.items():
 				met_index = self.metabolites.index(met)
 				if hasattr(value, 'subs'):
@@ -785,7 +785,7 @@ class MEModel(cobra.core.model.Model):
 		return numpy.array([
 			float(value.subs(self.mu, growth_rate))
 			if hasattr(value, 'subs') else float(value)
-			for value in tqdm.tqdm(self.reactions.list_attr(attr_name), bar_format = bar_format)
+			for value in tqdm.tqdm(self.reactions.list_attr(attr_name), 'Constructing vector of bounds', bar_format = bar_format)
 			])
 
 	def compute_solution_error(self, solution = None):
@@ -794,9 +794,9 @@ class MEModel(cobra.core.model.Model):
 		if solution is None:
 			solution = self.solution
 
-		s_matrix = self.construct_s_matrix(solution.f)
-		lb = self._construct_attribute_vector('lower_bound', solution.f)
-		ub = self._construct_attribute_vector('upper_bound', solution.f)
+		s_matrix = self.construct_s_matrix(solution.objective_value)
+		lb = self._construct_attribute_vector('lower_bound', solution.objective_value)
+		ub = self._construct_attribute_vector('upper_bound', solution.objective_value)
 		# old code
 		#x = numpy.array(solution.x)
 		x = numpy.array(list(solution.fluxes.values()))
@@ -1192,7 +1192,7 @@ class MEModel(cobra.core.model.Model):
 			If True, allow printing.
 		"""
 
-		# max_mu is constrained by the fastest-growing bacterium (14.8 doubling time)
+		# max_mu is constrained by the fastest-growing bacterium (14.8 min, doubling time)
 		# https://www.nature.com/articles/s41564-019-0423-8
 
 		# check options
