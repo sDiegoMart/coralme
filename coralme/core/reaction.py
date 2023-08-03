@@ -773,11 +773,11 @@ class MEReaction(cobra.core.reaction.Reaction):
 				upper_bound = self.upper_bound
 
 			if lower_bound <= self._model.solution.fluxes[self.id] <= upper_bound:
-				return False
+				return (False, )
 			else:
 				return (True, max(lower_bound - self._model.solution.fluxes[self.id], self._model.solution.fluxes[self.id] - upper_bound))
 		else:
-			return 'ME-model not optimized/feasible'
+			return ('ME-model not optimized/feasible')
 
 	def _repr_html_(self) -> str:
 		"""Generate html representation of reaction.
@@ -800,7 +800,7 @@ class MEReaction(cobra.core.reaction.Reaction):
 			mu = self._model.solution.fluxes['biomass_dilution']
 			flux = '{:g} ($\mu$= {:g})'.format(self._model.solution.fluxes[self.id], mu)
 			cost = '{:g} ($\mu$= {:g})'.format(self._model.solution.reduced_costs[self.id], mu)
-			viol = self.bound_violation
+			viol = '{:s} ($\Delta$= {:g})'.format(str(self.bound_violation[0]), self.bound_violation[1]) if self.bound_violation[0] else self.bound_violation[0]
 		else:
 			flux = cost = viol = 'ME-model not optimized/feasible'
 
