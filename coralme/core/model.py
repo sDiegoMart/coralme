@@ -214,6 +214,8 @@ class MEModel(cobra.core.model.Model):
 
 		# set growth rate symbolic variable
 		self.mu = sympy.Symbol(mu, positive = True)
+		# allows the change of symbolic variables through the ME-model object
+		self._mu_old = self.mu
 
 		# Create the biomass dilution constraint
 		self._biomass = coralme.core.component.Constraint('biomass')
@@ -237,6 +239,28 @@ class MEModel(cobra.core.model.Model):
 		protein
 		"""
 		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default/user value
+
+	@property
+	def mu(self):
+		return self._mu
+
+	@mu.setter
+	def mu(self, value):
+		# set growth rate symbolic variable
+		self._mu_old = self._mu
+		self._mu = sympy.Symbol(value, positive = True)
+
+		if self._mu_old == self._mu:
+			return # doing nothing because user changed to the current mu
+
+		for rxn in self.reactions:
+			if hasattr(rxn.lower_bound, 'subs'):
+				rxn._lower_bound = rxn.lower_bound.subs({ self._mu_old : self.mu })
+			if hasattr(rxn.upper_bound, 'subs'):
+				rxn._upper_bound = rxn.upper_bound.subs({ self._mu_old : self.mu })
+			for met, coeff in rxn.metabolites.items():
+				if hasattr(coeff, 'subs'):
+					rxn._metabolites[met] = coeff.subs({ self._mu_old : self.mu })
 
 	#TODO: set me.genes with [ x.id.split('RNA_')[1] for x in builder.me_model.metabolites.query(re.compile('^RNA_(?!biomass|dummy|degradosome)')) ]
 	#@property
