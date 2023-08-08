@@ -213,7 +213,7 @@ class MEModel(cobra.core.model.Model):
 		self.metabolites = cobra.core.dictlist.DictList()
 
 		# set growth rate symbolic variable
-		self.mu = sympy.Symbol(mu, positive = True)
+		self._mu = sympy.Symbol(mu, positive = True)
 		# allows the change of symbolic variables through the ME-model object
 		self._mu_old = self.mu
 
