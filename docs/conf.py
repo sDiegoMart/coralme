@@ -39,7 +39,9 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'nbsphinx'
+    'nbsphinx',
+    'myst_parser',
+    'jupyter_sphinx'
 ]
 
 nbsphinx_execute = 'never'
