@@ -6,8 +6,8 @@ coralME has four main objectives:
 
 1. **Synchronize** input files to remove contradictory entries.
 2. **Complement** input files from homology with a template organism to complete the E-matrix.
-3. **Build** a working ME-model.
-4. **Inform** the user about necessary steps to curate the ME-model.
+3. **Reconstruct** a ME-model.
+4. **Troubleshoot** the ME-model to make it functional.
 
 For more information on coralME's inputs, arquitecture and usage, see coralME's `readthedocs`_.
 
