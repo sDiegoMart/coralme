@@ -214,7 +214,7 @@
                   "TranscribedGene": {
                     "properties": {
                       "RNA_type": {
-                        "pattern": "mRNA|rRNA|tRNA|ncRNA|tmRNA",
+                        "pattern": "mRNA|rRNA|tRNA|ncRNA|tmRNA|.*RNA$",
                         "type": "string"
                       },
                       "left_pos": {
