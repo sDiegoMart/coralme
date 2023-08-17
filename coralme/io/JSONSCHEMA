@@ -86,8 +86,10 @@
             "type": "integer"
           },
           "compartment": {
-            "pattern": "[A-Za-z]{1,2}",
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "formula": {
             "type": [
