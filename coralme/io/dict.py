@@ -74,7 +74,7 @@ _PROCESS_DATA_TYPE_DEPENDENCIES = {
 		],
 	'TranslationData': [
 		'subreactions',
-		'nucleotide_sequence',
+		#'nucleotide_sequence', # to reduce size of the json file
 		'mRNA',
 		'protein',
 		'transl_table',
