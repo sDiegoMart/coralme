@@ -592,8 +592,12 @@ class MEModel(cobra.core.model.Model):
 				'before defining the unmodeled protein fraction'
 				)
 
-		# See the Biomass_formulations for an explanation
-		amount = value / (1 - value)
+		# See the Biomass_formulations for an explanation (https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006302)
+		if 0 <= value < 1.:
+			amount = value / (1 - value)
+		else:
+			raise('ValueError: The unmodeled protein fraction cannot be exactly 1 or greater.')
+
 		self.reactions.protein_biomass_to_biomass.add_metabolites({self.unmodeled_protein_biomass: -amount}, combine = False)
 		self.reactions.protein_biomass_to_biomass.add_metabolites({self._biomass: 1 + amount}, combine = False)
 		self._unmodeled_protein_fraction = value
