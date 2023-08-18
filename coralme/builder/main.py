@@ -2646,6 +2646,8 @@ class MEReconstruction(MEBuilder):
 				# WARNING: Negative elemental contributions cannot be set in the metabolites.txt input file
 				elif 'Oxidized(1)' == mod and 'FLAVODOXIN' not in base_complex:
 					mod_elements = {'H': -2}
+				elif 'Oxidized(2)' == mod and 'FLAVODOXIN' not in base_complex:
+					mod_elements = {'H': -4}
 				elif 'Oxidized(1)' == mod and 'FLAVODOXIN' in base_complex: # TODO: is the fmn cofactor in flavodoxin neutral?
 					mod_elements = {'H': 0}
 
