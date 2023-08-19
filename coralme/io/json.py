@@ -38,7 +38,7 @@ def get_schema():
 	with open(os.path.join(cur_dir, 'JSONSCHEMA'), 'r') as f:
 		return json.load(f)
 
-def save_json_me_model(model, file_name, sort = True):
+def save_json_me_model(model, file_name, sort = True, compress = False):
 	"""
 	Save a full JSON version of the ME-model. Saving/loading a model in this
 	format can then be loaded to return a ME-model identical to the one saved,
@@ -92,8 +92,14 @@ def save_json_me_model(model, file_name, sort = True):
 			return obj.to_dict()
 		#raise TypeError
 
-	with open(file_name, 'w') as outfile:
-		json.dump(model_dict, outfile, indent = 2, sort_keys = sort, default = set_default)
+	json_str = json.dumps(model_dict, indent = 2, sort_keys = sort, default = set_default)
+	if compress:
+		import gzip
+		with gzip.open(file_name + '.gz', 'w') as outfile:
+			outfile.write(json_str.encode('utf-8'))
+	else:
+		with open(file_name, 'w') as outfile:
+			outfile.write(json_str)
 
 def load_json_me_model(file_name):
 	"""
