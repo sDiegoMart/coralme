@@ -379,7 +379,10 @@
                   "TranscriptionData": {
                     "properties": {
                       "RNA_polymerase": {
-                        "type": "string"
+                        "type": [
+                          "string",
+                          "null"
+                        ]
                       },
                       "RNA_products": {
                         "items": {
