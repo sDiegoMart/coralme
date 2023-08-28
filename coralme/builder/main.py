@@ -2886,6 +2886,8 @@ class METroubleshooter(object):
 		else:
 			self.me_model.get_solution = self.me_model.optimize
 			self.me_model.check_feasibility = self.me_model.feasibility
+			self.troubleshooting = True
+			print('The MINOS and quad MINOS solvers are a courtesy of Prof Michael A. Saunders. Please cite Ma, D., Yang, L., Fleming, R. et al. Reliable and efficient solution of genome-scale models of Metabolism and macromolecular Expression. Sci Rep 7, 40863 (2017). https://doi.org/10.1038/srep40863')
 
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')

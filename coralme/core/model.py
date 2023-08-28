@@ -1211,7 +1211,7 @@ class MEModel(cobra.core.model.Model):
 			Maximum number of iterations for GRBS.
 		lambdify : bool
 			If True, returns a dictionary of lambda functions for each symbolic
-			stoichiometric coefficient
+			stoichiometric coefficient.
 		tolerance : float
 			Tolerance for the convergence of GRBS.
 		precision : str, {"quad", "double", "dq", "dqq"}
@@ -1224,8 +1224,13 @@ class MEModel(cobra.core.model.Model):
 		# https://www.nature.com/articles/s41564-019-0423-8
 
 		# check options
+		min_mu = min_mu if min_mu >= 0. else 0.
+		max_mu = max_mu if max_mu <= 2.8100561374051836 else 2.8100561374051836
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
 		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
+
+		if hasattr(self, 'troubleshooting') and not self.troubleshooting:
+			print('The MINOS and quad MINOS solvers are a courtesy of Prof Michael A. Saunders. Please cite Ma, D., Yang, L., Fleming, R. et al. Reliable and efficient solution of genome-scale models of Metabolism and macromolecular Expression. Sci Rep 7, 40863 (2017). https://doi.org/10.1038/srep40863')
 
 		# populate with stoichiometry, no replacement of mu's
 		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
