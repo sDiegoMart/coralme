@@ -27,6 +27,8 @@ class MEModel(cobra.core.model.Model):
 	def __init__(self, name = 'coralME', mu = 'mu'):
 		cobra.Model.__init__(self, name)
 
+		#self.model_version = coralme.__version__
+
 		self.global_info = {
 			'domain' : 'Prokaryote',
 
@@ -1229,8 +1231,8 @@ class MEModel(cobra.core.model.Model):
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
 		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
 
-		if hasattr(self, 'troubleshooting') and not self.troubleshooting:
-			print('The MINOS and quad MINOS solvers are a courtesy of Prof Michael A. Saunders. Please cite Ma, D., Yang, L., Fleming, R. et al. Reliable and efficient solution of genome-scale models of Metabolism and macromolecular Expression. Sci Rep 7, 40863 (2017). https://doi.org/10.1038/srep40863')
+		if hasattr(self, 'troubleshooting') and not self.troubleshooting or not hasattr(self, 'troubleshooting'):
+			print('The MINOS and quad MINOS solvers are a courtesy of Prof Michael A. Saunders. Please cite Ma, D., Yang, L., Fleming, R. et al. Reliable and efficient solution of genome-scale models of Metabolism and macromolecular Expression. Sci Rep 7, 40863 (2017). https://doi.org/10.1038/srep40863\n')
 
 		# populate with stoichiometry, no replacement of mu's
 		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)

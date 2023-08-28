@@ -2886,8 +2886,8 @@ class METroubleshooter(object):
 		else:
 			self.me_model.get_solution = self.me_model.optimize
 			self.me_model.check_feasibility = self.me_model.feasibility
-			self.troubleshooting = True
-			print('The MINOS and quad MINOS solvers are a courtesy of Prof Michael A. Saunders. Please cite Ma, D., Yang, L., Fleming, R. et al. Reliable and efficient solution of genome-scale models of Metabolism and macromolecular Expression. Sci Rep 7, 40863 (2017). https://doi.org/10.1038/srep40863')
+			self.me_model.troubleshooting = True
+			print('The MINOS and quad MINOS solvers are a courtesy of Prof Michael A. Saunders. Please cite Ma, D., Yang, L., Fleming, R. et al. Reliable and efficient solution of genome-scale models of Metabolism and macromolecular Expression. Sci Rep 7, 40863 (2017). https://doi.org/10.1038/srep40863\n')
 
 		config = self.configuration
 		model = config.get('ME-Model-ID', 'coralME')
@@ -2960,6 +2960,7 @@ class METroubleshooter(object):
 				logging.warning('~ '*1 + 'Troubleshooter added the following sinks:')
 				logging.warning('\n'.join(sinks))
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
+
 			if self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False):
 				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
 			else:
@@ -2982,4 +2983,5 @@ class METroubleshooter(object):
 			for idx, data in tmp.drop_duplicates(subset = 1).iterrows():
 				outfile.write('{:s} {:s}\n'.format(data[0], data[1]))
 
+		del self.me_model.troubleshooting
 		return None
