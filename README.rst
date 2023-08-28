@@ -27,7 +27,7 @@ coralME was tested with the following package versions:
 - Ubuntu 22.04 is recommended (libgfortran.so.5 is required to execute MINOS and quad MINOS)
 - Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_
 
-The `*.so` files under `coralme/solver` have been compiled using:
+The ``*.so`` files under ``coralme/solver`` have been compiled using:
 
 - Python3, versions 3.7, 3.8, 3.9, and 3.10
 - wheel 0.38.4
