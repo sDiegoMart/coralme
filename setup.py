@@ -27,7 +27,7 @@ def main():
 	setup(
 		name='coralME',
 		license='MIT',
-		version='0.0',
+		version='1.0',
 		#version=versioneer.get_version(),
 		description='Comprehensive Reconstruction Algorithm for ME-models (coralME)',
 		long_description=long_description,
@@ -86,14 +86,16 @@ def main():
 			'cobra==0.25.0',
 			'python-libsbml',
 			'Biopython==1.80',
-			'tqdm',
-			'scipy',
-			'pandas',
-			'sympy',
-			'jsonschema',
 			'anyconfig',
 			'pyranges',
-			'xlsxwriter'
+			'xlsxwriter',
+			'openpyxl'
+			'numpy',
+			'scipy',
+			'sympy',
+			'pandas==1.5.1',
+			'jsonschema',
+			'tqdm',
 			],
 
 		# WARNING: seems to be bdist_wheel only
