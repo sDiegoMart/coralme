@@ -114,7 +114,8 @@ def main():
 				'iJL1678b-ME/building_data/*',
 				'solver/*.so',
 				'io/JSONSCHEMA',
-				'builder/column_format.json'
+				'builder/column_format.json',
+				'licenses/*'
 				]
 			},
 
