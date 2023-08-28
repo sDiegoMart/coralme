@@ -112,7 +112,9 @@ def main():
 			'coralme' : [
 				'iJL1678b-ME/*',
 				'iJL1678b-ME/building_data/*',
-				'solver/*.so'
+				'solver/*.so',
+				'io/JSONSCHEMA',
+				'builder/column_format.json'
 				]
 			},
 
