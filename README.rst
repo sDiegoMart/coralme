@@ -9,7 +9,7 @@ coralME has four main objectives:
 3. **Reconstruct** a ME-model.
 4. **Troubleshoot** the ME-model to make it functional.
 
-For more information on coralME's inputs, arquitecture and usage, see coralME's `readthedocs`_.
+For more information on coralME's inputs, architecture and usage, see coralME's `readthedocs`_.
 
 Installation
 ------------
@@ -21,11 +21,11 @@ Requirements
 
 coralME was tested with the following package versions:
 
-- Python versions 3.7, 3.8, 3.9, or 3.10
+- Python versions 3.7, 3.8, 3.9, and 3.10
 - COBRApy version 0.25.0
-- GUROBIpy version 9.5.2 (no license required)
-- Ubuntu 22.04 is recommended (gfortran is required)
-- Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_.
+- GUROBIpy version 9.5.2 (license is required)
+- Ubuntu 22.04 is recommended (libgfortran.so.5 is required to execute MINOS and quad MINOS)
+- Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_
 
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
