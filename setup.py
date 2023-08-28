@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 # To use a consistent encoding
 from codecs import open
 from os import path, walk
-#import versioneer
+import versioneer
 
 def main():
 	# additional files
@@ -27,8 +27,11 @@ def main():
 	setup(
 		name='coralME',
 		license='MIT',
-		version='1.0',
-		#version=versioneer.get_version(),
+		#version='1.0',
+
+		version=versioneer.get_version(), # from versioneer
+		cmdclass=versioneer.get_cmdclass(), # from versioneer
+
 		description='Comprehensive Reconstruction Algorithm for ME-models (coralME)',
 		long_description=long_description,
 		long_description_content_type='text/markdown',
