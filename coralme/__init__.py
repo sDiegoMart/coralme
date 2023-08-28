@@ -12,3 +12,6 @@ else:
 	import coralme.solver.solver
 
 import coralme.util
+
+from . import _version
+__version__ = _version.get_versions()['version']
