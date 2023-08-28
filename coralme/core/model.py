@@ -27,7 +27,7 @@ class MEModel(cobra.core.model.Model):
 	def __init__(self, name = 'coralME', mu = 'mu'):
 		cobra.Model.__init__(self, name)
 
-		#self.model_version = coralme.__version__
+		self.model_version = coralme.__version__
 
 		self.global_info = {
 			'domain' : 'Prokaryote',
