@@ -22,7 +22,7 @@ Requirements
 coralME was tested with the following package versions:
 
 - Python versions 3.7, 3.8, 3.9, and 3.10
-- COBRApy version 0.25.0
+- COBRApy version 0.26.3
 - GUROBIpy version 9.5.2 (license is required)
 - Ubuntu 22.04 is recommended (libgfortran.so.5 is required to execute MINOS and quad MINOS)
 - Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_
