@@ -12,12 +12,11 @@ import versioneer
 def main():
 	# additional files
 	data_files = []
-	for dirpath, dirnames, filenames in walk('coralme/notebooks'):
+	for dirpath, dirnames, filenames in walk('coralme/iJL1678b-ME'):
 		tmp = []
 		for filename in filenames:
 			tmp.append(path.join(dirpath, filename))
 		data_files.append(('coralme', tmp))
-	#print(data_files)
 
 	# Get the long description from the README file
 	here = path.abspath(path.dirname(__file__))
@@ -27,7 +26,7 @@ def main():
 	setup(
 		name='coralME',
 		license='MIT',
-		#version='1.0',
+		#version='1.0', # use tags
 
 		version=versioneer.get_version(), # from versioneer
 		cmdclass=versioneer.get_cmdclass(), # from versioneer
@@ -92,7 +91,7 @@ def main():
 			'anyconfig',
 			'pyranges',
 			'xlsxwriter',
-			'openpyxl'
+			'openpyxl',
 			'numpy',
 			'scipy',
 			'sympy',
@@ -102,9 +101,25 @@ def main():
 			],
 
 		# WARNING: seems to be bdist_wheel only
-		packages=find_packages(exclude=('contrib', 'docs', 'tests', 'notebooks', 'templates')),
+		packages=find_packages(exclude=('contrib', 'docs', 'tests', 'iJL1678b-ME', 'templates')),
 		# using the MANIFEST.in file to exclude same folders from sdist
 		include_package_data=False,
+
+		# WARNING: use this way to install in the package folder and
+		# to have access to files using importlib_resources or importlib.resources
+		# bdist_wheel only
+		package_data = {
+			'coralme' : [
+				'iJL1678b-ME/*',
+				'iJL1678b-ME/building_data/*',
+				'solver/*.so'
+				]
+			},
+
+		# WARNING: do not use data_files as the installation path is hard to determine
+		# e.g.: ubuntu 18.04 installs to /usr/local/installation_path or /$USER/.local/installation_path
+		#data_files=[('installation_path', ['filename'])],
+		#data_files=data_files,
 
 		# others
 		project_urls={
