@@ -208,7 +208,9 @@
    "id": "94f363f7-acfe-4ee1-9ab9-0a213a63ba5d",
    "metadata": {},
    "source": [
-    "## Reconstruct with coralME"
+    "## Reconstruct with coralME\n",
+    "\n",
+    "Here we show an example to reconstruct a dME-model of *B. subtilis*"
    ]
   },
   {
@@ -244,7 +246,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "org = \"./helper_files/pputida_tutorial/\""
+    "org = \"./helper_files/tutorial/\""
    ]
   },
   {

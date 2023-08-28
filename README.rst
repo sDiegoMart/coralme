@@ -18,6 +18,7 @@ run ``pip install coralme``
 
 Requirements
 ------------
+
 coralME was tested with the following package versions:
 
 - Python versions 3.7, 3.8, 3.9, or 3.10
