@@ -29,7 +29,7 @@ coralME was tested with the following package versions:
 
 The ``*.so`` files under ``coralme/solver`` have been compiled using:
 
-- Python3, versions 3.7, 3.8, 3.9, and 3.10
+- Python3, versions 3.7.17, 3.8.17, 3.9.17, and 3.10.12
 - wheel 0.38.4
 - numpy 1.21.6
 - scipy 1.7.3
