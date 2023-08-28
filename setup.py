@@ -101,7 +101,7 @@ def main():
 			],
 
 		# WARNING: seems to be bdist_wheel only
-		packages=find_packages(exclude=('contrib', 'docs', 'tests', 'iJL1678b-ME', 'templates')),
+		packages=find_packages(exclude=('contrib', 'docs', 'tests', 'tutorials')),
 		# using the MANIFEST.in file to exclude same folders from sdist
 		include_package_data=False,
 
