@@ -92,7 +92,7 @@ def main():
 			'pyranges',
 			'xlsxwriter',
 			'openpyxl',
-			'numpy',
+			'numpy==1.23.5',
 			'scipy',
 			'sympy',
 			'pandas==1.5.1',
