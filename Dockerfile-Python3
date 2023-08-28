@@ -23,7 +23,6 @@ RUN python -m pip install numpy==1.23.0
 RUN python -m pip install scipy
 RUN python -m pip install sympy
 RUN python -m pip install pandas==1.5.1
-RUN python -m pip install biopython
 RUN python -m pip install jsonschema
 RUN python -m pip install ipykernel
 RUN python -m pip install matplotlib
