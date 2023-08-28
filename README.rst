@@ -36,8 +36,6 @@ Compiled MINOS and quad MINOS are provided here in ``*.so`` files under ``coralm
 - cython 0.29.32
 - cpython 0.0.6
 
-The MINOS and quad MINOS source code can be obtained from Prof. Michael A. Saunders at Stanford University
-
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
 .. _ECOLIme: https://github.com/SBRG/ecolime
