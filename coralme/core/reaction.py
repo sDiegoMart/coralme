@@ -1639,12 +1639,31 @@ class TranslationReaction(MEReaction):
 			for e, n in aa_obj.elements.items():
 				elements[e] += n * value
 
-		elements = coralme.util.massbalance.get_elements_from_process_data(self, translation_data, elements)
-
 		# subtract water from composition
 		protein_length = len(translation_data.amino_acid_sequence)
 		elements['H'] -= (protein_length - 1) * 2
 		elements['O'] -= (protein_length - 1)
+
+		#elements = coralme.util.massbalance.get_elements_from_process_data(self, translation_data, elements)
+		# subtract methionine if the protein is processed
+		if 'Protein_processing_N_terminal_methionine_cleavage' in self.translation_data.subreactions:
+			sub_obj = self._model.subreaction_data.get_by_id('Protein_processing_N_terminal_methionine_cleavage')
+			for e, n in sub_obj.element_contribution.items():
+				elements[e] += n
+		# convert serine into selenocysteine (change an oxygen by a selenium atom) if required
+		if 'sec_addition_at_UGA' in self.translation_data.subreactions:
+			sub_obj = self._model.process_data.get_by_id('sec_addition_at_UGA')
+			for e, n in sub_obj.element_contribution.items():
+				elements[e] += n
+		# elemental contribution of Met-tRNA to fMet-tRNA and deformylase might not cancel each out
+		if 'Translation_initiation_fmet_addition_at_START' in self.translation_data.subreactions:
+			sub_obj = self._model.subreaction_data.get_by_id('Translation_initiation_fmet_addition_at_START')
+			for e, n in sub_obj.element_contribution.items():
+				elements[e] += n
+		if 'Translation_termination_peptide_deformylase_processing' in self.translation_data.subreactions:
+			sub_obj = self._model.subreaction_data.get_by_id('Translation_termination_peptide_deformylase_processing')
+			for e, n in sub_obj.element_contribution.items():
+				elements[e] += n
 
 		coralme.util.massbalance.elements_to_formula(protein, elements)
 
@@ -1841,10 +1860,7 @@ class TranslationReaction(MEReaction):
 		self.add_metabolites(object_stoichiometry, combine = False)
 
 		# -------------Update Element Dictionary and Formula-------------------
-		# In organism with misacylation, the amino acid stoichiometry is corrected to reflect it.
-		# However, a second update modifies the molecular weight of the protein.
-		if protein.formula_weight == 0:
-			self._add_formula_to_protein(translation_data, protein)
+		self._add_formula_to_protein(translation_data, protein)
 
 		# ------------------ Add biomass constraints --------------------------
 		# add biomass constraint for protein translated

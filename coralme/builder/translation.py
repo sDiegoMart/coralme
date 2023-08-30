@@ -102,11 +102,11 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 		subreaction_data.stoichiometry = Counter({trna : -1})
 		subreaction_data.stoichiometry.update(me_model.process_data.get_by_id('atp_hydrolysis_trna_loading').stoichiometry)
 		subreaction_data.stoichiometry.update(me_model.process_data.get_by_id('gtp_hydrolysis').stoichiometry)
-		subreaction_data._element_contribution = subreaction_data.calculate_element_contribution()
+		subreaction_data._element_contribution = me_model.metabolites.get_by_id(full_aa + '_' + organelle).elements # subreaction_data.calculate_element_contribution()
 
-	# Add subreactions for start codon and selenocysteine
+	# Add subreactions for selenocysteine
 	if me_model.metabolites.has_id('generic_tRNA_UGA_ser__L_c'):
-		data = coralme.core.processdata.SubreactionData('sec_addition_at_UGA', me_model)
-		data.enzyme = selenocysteine_enzymes
-		data.stoichiometry = { 'generic_tRNA_UGA_ser__L_c': -1.0, 'selnp_c': -1.0, 'h_c': +1.0, 'pi_c': +1.0 }
-		#data._element_contribution = values[0].get('element_contribution', {})
+		subreaction_data = coralme.core.processdata.SubreactionData('sec_addition_at_UGA', me_model)
+		subreaction_data.enzyme = selenocysteine_enzymes
+		subreaction_data.stoichiometry = { 'generic_tRNA_UGA_ser__L_c': -1.0, 'selnp_c': -1.0, 'h_c': +1.0, 'pi_c': +1.0 }
+		subreaction_data._element_contribution = subreaction_data.calculate_element_contribution()

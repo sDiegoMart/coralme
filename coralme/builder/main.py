@@ -2669,7 +2669,7 @@ class MEReconstruction(MEBuilder):
 			logging.warning('Setting new formula for \'{:s}\' to \'{:s}\' successfully.'.format(met.id, met.formula))
 
 		# Update a second time to incorporate all of the metabolite formulas correctly
-		for data in tqdm.tqdm(me.subreaction_data, 'Recalculation of the elemental contribution in SubReactions...', bar_format = bar_format):
+		for data in tqdm.tqdm(me.subreaction_data.query('(?!^\w\w\w_addition_at_\w\w\w$)'), 'Recalculation of the elemental contribution in SubReactions...', bar_format = bar_format):
 			data._element_contribution = data.calculate_element_contribution()
 
 		# Update reactions affected by formula update
@@ -2701,7 +2701,7 @@ class MEReconstruction(MEBuilder):
 					logging.warning('The complex \'{:s}\' has no valid formula to determine its molecular weight.'.format(met))
 					logging.warning('Please, set a value in the keff input file for reactions associated to the \'{:s}\' complex.'.format(met))
 
-			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() ])
+			median_sasa = numpy.median([ v[0] for k,v in sasa_dct.items() if v[0] != 0 ])
 
 			me.global_info['median_sasa'] = median_sasa
 			me.global_info['sasa_estimation'] = sasa_dct
