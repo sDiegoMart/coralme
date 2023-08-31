@@ -14,7 +14,9 @@ For more information on coralME's inputs, architecture and usage, see coralME's 
 Installation
 ------------
 
-run ``pip install coralme``
+1. ``pip install -r requirements.txt``
+2. ``python3 setup.py clean build install``
+
 
 Requirements
 ------------
@@ -35,6 +37,11 @@ Compiled MINOS and quad MINOS are provided here in ``*.so`` files under ``coralm
 - scipy 1.7.3
 - cython 0.29.32
 - cpython 0.0.6
+
+Documentation
+-------------
+
+You can find the documentation as a combined [PDF](./coralME_Documentation.pdf).
 
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
