@@ -1643,6 +1643,7 @@ class MEReconstruction(MEBuilder):
 		# include rna_polymerases, lipids and lipoproteins from automated info and save new configuration file
 		if config.get('rna_polymerases', None) is None or config.get('rna_polymerases') == {}:
 			if hasattr(self, 'org'):
+				config['default_sigma_factor'] = self.org.rpod
 				config['rna_polymerases'] = self.org.rna_polymerase_id_by_sigma_factor
 				logging.warning('The RNA Polymerases (core enzyme and sigma factors) information was set from homology data.')
 
@@ -2262,12 +2263,18 @@ class MEReconstruction(MEBuilder):
 				pass
 
 		# WARNING: Without a TUs file, the 'most common' polymerase should be an empty string
-		counter = collections.Counter([ x.RNA_polymerase for x in me.transcription_data if x.RNA_polymerase])
-		most_common = me.global_info.get("most_common_polymerase",None)
-		if most_common is None:
-			most_common = max(counter, key=counter.get) if counter else ""
+		rnap_counter = collections.Counter([ x.RNA_polymerase for x in me.transcription_data ])
+		# override 'most_common' polymerase if it is empty
+		user_default_sigma = me.global_info.get('default_sigma_factor', '')
+		user_default_rnap = sigma_to_rnap.get(user_default_sigma, None)
+
+		if user_default_rnap is None:
+			most_common = max(rnap_counter, key = rnap_counter.get)
+		else:
+			most_common = user_default_rnap
+
 		for transcription_data in me.transcription_data:
-			if transcription_data.RNA_polymerase == '':
+			if transcription_data.RNA_polymerase == '' and most_common != '':
 				logging.warning("Assigning most common RNAP \'{:s}\' to missing polymerase in \'{:s}\'".format(most_common,transcription_data.id))
 				transcription_data.RNA_polymerase = most_common
 

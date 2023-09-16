@@ -70,7 +70,7 @@ class Organism(object):
                 self.id = 'iJL1678b'
         else:
             self.id = config['ME-Model-ID']
-        
+
         self.is_reference = is_reference
         self.curation_notes = defaultdict(list)
         self.config = config
@@ -78,7 +78,7 @@ class Organism(object):
             self.locus_tag = config.get('reference_tag','locus_tag')
         else:
             self.locus_tag = config.get('locus_tag','locus_tag')
-        
+
         data = \
             'code,interpretation,gram\n' \
             'CCI-CW-BAC-POS-GP,Cell_Wall,pos\n' \
@@ -174,7 +174,7 @@ class Organism(object):
 
     def get_organism(self):
         """ Processes input files, and creates an instance of
-        Organism. 
+        Organism.
         """
         sep = '~ '*1
         print("{}Processing files for {}...".format(sep,self.id))
@@ -225,7 +225,7 @@ class Organism(object):
 
         logging.warning("Updating generics with genbank")
         self.get_generics_from_genbank()
-        
+
         logging.warning("Generating transcription units dataframe")
         self.TU_df = self._TU_df
         self.get_TU_genes()
@@ -246,14 +246,14 @@ class Organism(object):
 
         logging.warning("Purging genes in M-model")
         self.purge_genes_in_model()
-        
+
         logging.warning("Getting enzyme-reaction association")
         self.get_enzyme_reaction_association()
 
         print("Reading {} done...".format(self.id))
 
     def get_genbank_contigs(self):
-        """ Reads GenBank file as a list of contigs. 
+        """ Reads GenBank file as a list of contigs.
         """
         if self.id == 'iJL1678b':
             gb_it = Bio.SeqIO.parse(self.directory + "genome.gb", "gb")
@@ -263,7 +263,7 @@ class Organism(object):
 
 
     def check_folder(self):
-        """ Checks that the necessary directories are present. 
+        """ Checks that the necessary directories are present.
         """
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
@@ -297,7 +297,7 @@ class Organism(object):
                 formulaweight_mets.append(m.id)
             if len(m.reactions) == 0:
                 deadend_mets.append(m.id)
-         
+
         unused_genes = []
         for g in tqdm.tqdm(m_model.genes,
                            'Checking M-model genes...',
@@ -376,7 +376,7 @@ class Organism(object):
         )
 
     def load_manual_curation(self):
-        """ Loads manual curation to Organism instance 
+        """ Loads manual curation to Organism instance
         """
         MEManualCuration(self).load_manual_curation()
 
@@ -529,7 +529,7 @@ class Organism(object):
             if not gene_name or isinstance(gene_name,float):
                 warn_genes.append(gene_id)
                 continue
-            
+
             gene_id,product,product_type = \
                 self._get_product_type(
                          gene_name,
@@ -1094,7 +1094,7 @@ class Organism(object):
                                        feature,
                                        record,
                                        product_types):
-        
+
 #         gene_id = feature.qualifiers[self.locus_tag][0]
         gene_id = self._get_feature_locus_tag(feature)
         if ';' in gene_id:
@@ -1125,7 +1125,7 @@ class Organism(object):
             gene_dictionary.at[gene_name,"Left-End-Position"] = left_end
             gene_dictionary.at[gene_name,"Right-End-Position"] = right_end
             gene_dictionary.at[gene_name,"replicon"] = record.id
-            
+
             # Update product types
             gid,product,product_type = \
                 self._get_product_type(
@@ -1204,7 +1204,7 @@ class Organism(object):
                 product = gene_dictionary[self.gene_dictionary['Accession-1'].eq(g.id)]['Product'].values[0]
                 if product in RNA_df.index:
                     wrong_assoc.append(g)
-            
+
         self.skip_genes = [g.id for g in gene_list + wrong_assoc]
 #         cobra.manipulation.delete.remove_genes(m_model,
 #                      gene_list + wrong_assoc,
@@ -1241,7 +1241,7 @@ class Organism(object):
 
     def _is_base_complex_in_list(self,cplx,lst):
         return cplx in set(i.split('_mod_')[0] for i in lst)
-        
+
     def _get_genes_of_cplx(self,cplx):
         d = {}
         for i in self.complexes_df.loc[cplx]['genes'].split(' AND '):
@@ -1251,7 +1251,7 @@ class Organism(object):
         return d
 #         return [re.findall('.*(?=\(\d*\))',i)[0] \
 #                 for i in self.complexes_df.loc[cplx]['genes'].split(' AND ')]
-    
+
     def get_trna_synthetase(self):
         """ Gets tRNA synthetases from files.
         """
@@ -1308,7 +1308,7 @@ class Organism(object):
 #                 if aa not in new_cplxs: new_cplxs[aa] = dict()
                 new_cplxs[aa][k] = v
 #             new_cplxs[aa].add(cplx)
-        
+
         for k,v in new_cplxs.items():
             if not v: continue
             cplx_id = "CPLX-tRNA-{}-LIGASE".format(k.upper()[:3])
@@ -1319,7 +1319,7 @@ class Organism(object):
                                complexes_df,
                                "Inferred from subunits")
             d[k] = set([cplx_id])
-        
+
         warn_ligases = []
         for aa,c_set in d.items():
             c_list = list(c_set)
@@ -1771,7 +1771,7 @@ class Organism(object):
                            'Adding protein location...',
                            bar_format = bar_format,
                            total=complexes_df.shape[0]):
-            
+
             if c not in cplx_location:
                 continue
             c_loc = cplx_location[c]
@@ -1914,7 +1914,7 @@ class Organism(object):
                 for mod in mods:
                     d.setdefault(enz, []).append(mod)
         return d
-    
+
     def _get_rrna_genes(self):
         rrnas = ['generic_5s_rRNAs','generic_16s_rRNAs','generic_23s_rRNAs']
         generic_dict = self.generic_dict
@@ -1923,13 +1923,13 @@ class Organism(object):
             rrnaid = key.split('_')[1].upper()
             d[rrnaid] = [i[4:] for i in generic_dict[key]['enzymes']]
         return d
-    
+
     def process_rna_modifications(self):
         """ Processes RNA modification information.
         """
         rna_mods = self.rna_modification_df
         self.rna_modification = self._modify_rna_modification_from_load(rna_mods)
-        
+
         mod_targets = self.rna_modification_targets
         for subunit,genes in self._get_rrna_genes().items():
             mod_df = rna_mods[rna_mods['type'].eq(subunit)].T
@@ -1949,7 +1949,7 @@ class Organism(object):
                         mod_targets = pandas.concat([mod_targets,df])
         mod_targets.index.name = 'bnum'
         self.rna_modification_targets = mod_targets
-            
+
     def _check_for_duplicates_within_datasets(self,
                                              info):
         import collections
@@ -2107,7 +2107,7 @@ class Organism(object):
             else:
                 if rxn_id not in m_model.reactions:
                     rxn = cobra.Reaction(rxn_id)
-                    m_model.add_reaction(rxn)
+                    m_model.add_reactions([rxn])
                 else:
                     rxn = m_model.reactions.get_by_id(rxn_id)
                 if info["reaction"]:
@@ -2147,7 +2147,7 @@ class Organism(object):
                                "Manual")
                 complexes_df.loc[new_complex, "genes"] = info["genes"]
                 complexes_df.loc[new_complex, "name"] = str(info["name"])
-            
+
             if info["replace"]:
                 if info["replace"] in protein_mod.index:
                     protein_mod = protein_mod.drop(info["replace"])
