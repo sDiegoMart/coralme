@@ -2262,9 +2262,13 @@ class MEReconstruction(MEBuilder):
 				pass
 
 		# WARNING: Without a TUs file, the 'most common' polymerase should be an empty string
-		most_common = collections.Counter([ x.RNA_polymerase for x in me.transcription_data ]).most_common(1)[0][0]
+		counter = collections.Counter([ x.RNA_polymerase for x in me.transcription_data if x.RNA_polymerase])
+		most_common = me.global_info.get("most_common_polymerase",None)
+		if most_common is None:
+			most_common = max(counter, key=counter.get) if counter else ""
 		for transcription_data in me.transcription_data:
 			if transcription_data.RNA_polymerase == '':
+				logging.warning("Assigning most common RNAP \'{:s}\' to missing polymerase in \'{:s}\'".format(most_common,transcription_data.id))
 				transcription_data.RNA_polymerase = most_common
 
 		# ### 7) Add Transcription Metacomplexes: Degradosome (both for RNA degradation and RNA splicing)
