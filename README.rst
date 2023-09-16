@@ -9,7 +9,7 @@ coralME has four main objectives:
 3. **Reconstruct** a ME-model.
 4. **Troubleshoot** the ME-model to make it functional.
 
-For more information on coralME's inputs, architecture and usage, see coralME's `readthedocs`_.
+For more information on coralME's inputs, architecture and usage, see coralME's documentation.
 
 Installation
 ------------
@@ -41,7 +41,7 @@ Compiled MINOS and quad MINOS are provided here in ``*.so`` files under ``coralm
 Documentation
 -------------
 
-You can find the documentation as a combined [PDF](./coralME_Documentation.pdf).
+You can find the documentation as a combined PDF called coralME_Documentation.pdf
 
 .. refs
 .. _COBRAme: https://github.com/SBRG/cobrame
