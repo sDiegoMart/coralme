@@ -2242,7 +2242,7 @@ class MEReconstruction(MEBuilder):
 			if me.metabolites.has_id(components['sigma_factor']) and me.metabolites.has_id(components['polymerase']):
 				rnap_obj = coralme.core.component.RNAP(rnap)
 				me.add_metabolites(rnap_obj)
-				logging.warning('The RNA Polymerase  \'{:s}\' was created in the ME-model successfully.'.format(rnap))
+				logging.warning('The RNA Polymerase \'{:s}\' was created in the ME-model successfully.'.format(rnap))
 			else:
 				if not me.metabolites.has_id(components['sigma_factor']):
 					logging.warning('The complex ID \'{:s}\' from \'rna_polymerases\' in the configuration does not exist in the organism-specific matrix. Please check if it is the correct behaviour.'.format(components['sigma_factor']))
