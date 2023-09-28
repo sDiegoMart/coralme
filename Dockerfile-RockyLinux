@@ -1,0 +1,73 @@
+# Use the rocky linux official image as parent image
+FROM rockylinux:8.8
+
+# set shell
+RUN export SHELL=/bin/bash
+
+# Update
+# RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN dnf upgrade -y
+RUN dnf install epel-release -y
+RUN dnf install -y dialog #apt-utils
+RUN dnf install -y htop git gcc nano make which
+RUN dnf install -y python38 python38-devel
+RUN dnf install -y gcc-gfortran #libgfortran5
+RUN dnf install -y glpk #libglpk-dev
+# RUN dnf install -y ncbi-blast+
+
+# Install ZenglerLab coralme software stack
+# general purpose
+ENV PYTHONPATH=$PYTHONPATH:/usr/local/lib64/python3.8/site-packages
+# RUN python3 -m pip install pip -U
+RUN python3 -m pip install wheel
+RUN python3 -m pip install cython
+RUN python3 -m pip install cpython
+
+# data manipulation
+RUN python3 -m pip install numpy==1.23.0
+RUN python3 -m pip install scipy
+RUN python3 -m pip install sympy
+RUN python3 -m pip install pandas==1.5.1
+
+# coralme
+RUN python3 -m pip install cobra==0.26.3
+RUN python3 -m pip install python-libsbml
+RUN python3 -m pip install Biopython==1.80
+RUN python3 -m pip install anyconfig
+RUN python3 -m pip install pyranges
+RUN python3 -m pip install xlsxwriter
+RUN python3 -m pip install openpyxl
+RUN python3 -m pip install jsonschema
+RUN python3 -m pip install tqdm
+
+# jupyter and plot
+RUN python3 -m pip install ipykernel
+RUN python3 -m pip install matplotlib
+RUN python3 -m pip install seaborn
+RUN python3 -m pip install notebook
+
+# Install jupyter notebook extensions
+# RUN python3 -m pip install jupyter_nbextensions_configurator nbserverproxy
+
+# Download the coralme tutorial
+# RUN mkdir -p /opt/notebooks/coralme-tutorial
+# WORKDIR /opt/notebooks/coralme-tutorial
+# RUN git init
+# RUN git remote add -f origin https://github.com/ZenglerLab/coralme
+# RUN git config core.sparseCheckout true
+# RUN echo "docs" >> .git/info/sparse-checkout
+# RUN git pull origin master
+# RUN mv docs/GettingStarted.ipynb .
+# RUN mv docs/helper_files .
+# RUN rm -rf docs .git
+
+# Set the working directory
+WORKDIR /opt/notebooks
+
+# Set jupyter configuration
+RUN jupyter notebook --generate-config
+# RUN wget https://raw.githubusercontent.com/glucksfall/zenglerlab/master/jupyter_notebook_config.json --directory-prefix=/root/.jupyter
+COPY ./jupyter_notebook_config.json /root/.jupyter/jupyter_notebook_config.json
+
+# Initiate jupyter server at runtime
+CMD ["jupyter", "notebook", "--notebook-dir=/opt/notebooks", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]

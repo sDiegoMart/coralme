@@ -1,0 +1,49 @@
+# Use the alpine image as parent image
+# FROM alpine-3.6
+FROM sbrg/cobrame:dependencies
+
+# compile glpk
+RUN apk add --no-cache file --force
+RUN apk add --no-cache swig --force
+
+ADD glpk-4.55.tar.gz /home
+WORKDIR /home/glpk-4.55
+RUN ./configure
+RUN make
+RUN make install
+WORKDIR /opt/coralme
+
+# Install ZenglerLab coralme software stack
+# RUN python -m pip install pip -U
+RUN python3 -m pip install numpy==1.14.3
+RUN python3 -m pip install jsonschema==2.6.0
+RUN python3 -m pip install matplotlib==2.2.2
+RUN python3 -m pip install tqdm
+RUN python3 -m pip install cobra==0.25.0 --no-deps
+RUN python3 -m pip install appdirs==1.4.4
+RUN python3 -m pip install optlang==1.6
+RUN python3 -m pip install Biopython
+RUN python3 -m pip install anyconfig
+RUN python3 -m pip install pyranges --no-deps
+RUN python3 -m pip install xlsxwriter
+RUN python3 -m pip install openpyxl
+
+# # Download the coralme tutorial
+# RUN mkdir -p /opt/coralme/coralme-tutorial
+# WORKDIR /opt/coralme/coralme-tutorial
+# RUN git init
+# RUN git remote add -f origin https://github.com/ZenglerLab/coralme
+# RUN git config core.sparseCheckout true
+# RUN echo "docs" >> .git/info/sparse-checkout
+# RUN git pull origin master
+# RUN mv docs/GettingStarted.ipynb .
+# RUN mv docs/helper_files .
+# RUN rm -rf docs .git
+
+# Set jupyter configuration
+# RUN jupyter notebook --generate-config
+# RUN wget https://raw.githubusercontent.com/glucksfall/zenglerlab/master/jupyter_notebook_config.json --directory-prefix=/root/.jupyter
+# COPY ./jupyter_notebook_config.json /root/.jupyter/jupyter_notebook_config.json
+
+# Initiate jupyter server at runtime
+# CMD ["jupyter", "notebook", "--notebook-dir=/opt/coralme", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]

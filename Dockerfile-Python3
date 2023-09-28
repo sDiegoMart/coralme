@@ -1,5 +1,5 @@
 # Use the python3 official image as parent image
-FROM python:3.7
+FROM python:3.8
 
 # set shell
 RUN export SHELL=/bin/bash
@@ -28,7 +28,7 @@ RUN python -m pip install sympy
 RUN python -m pip install pandas==1.5.1
 
 # coralme
-RUN python -m pip install cobra==0.25.0
+RUN python -m pip install cobra==0.26.3
 RUN python -m pip install python-libsbml
 RUN python -m pip install Biopython==1.80
 RUN python -m pip install anyconfig
@@ -42,21 +42,22 @@ RUN python -m pip install tqdm
 RUN python -m pip install ipykernel
 RUN python -m pip install matplotlib
 RUN python -m pip install seaborn
+RUN python -m pip install notebook
 
-# Install jupyter notebook extensions
-RUN python3 -m pip install jupyter_nbextensions_configurator nbserverproxy
+# Install jupyter notebook extensions (not working)
+# RUN python3 -m pip install jupyter_nbextensions_configurator nbserverproxy
 
 # Download the coralme tutorial
-RUN mkdir -p /opt/notebooks/coralme-tutorial
-WORKDIR /opt/notebooks/coralme-tutorial
-RUN git init
-RUN git remote add -f origin https://github.com/ZenglerLab/coralme
-RUN git config core.sparseCheckout true
-RUN echo "docs" >> .git/info/sparse-checkout
-RUN git pull origin master
-RUN mv docs/GettingStarted.ipynb .
-RUN mv docs/helper_files .
-RUN rm -rf docs .git
+# RUN mkdir -p /opt/notebooks/coralme-tutorial
+# WORKDIR /opt/notebooks/coralme-tutorial
+# RUN git init
+# RUN git remote add -f origin https://github.com/ZenglerLab/coralme
+# RUN git config core.sparseCheckout true
+# RUN echo "docs" >> .git/info/sparse-checkout
+# RUN git pull origin master
+# RUN mv docs/GettingStarted.ipynb .
+# RUN mv docs/helper_files .
+# RUN rm -rf docs .git
 
 # Set the working directory
 WORKDIR /opt/notebooks
