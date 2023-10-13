@@ -1006,39 +1006,52 @@ class Organism(object):
         ribo_df = complexes_df.loc[
             complexes_df["name"].str.contains("ribosomal.*(?:subunit)?.* protein", regex=True)
         ]
-
+        self.ribosomal_proteins = ribo_df
         ribosome_stoich = self.ribosome_stoich
         ribo_30S = ribosome_stoich["30_S_assembly"]["stoich"]
+        if [i for i in ribo_30S if "generic" not in i]:
+            update_30S = False
+        else:
+            update_30S = True
         ribo_50S = ribosome_stoich["50_S_assembly"]["stoich"]
+        if [i for i in ribo_50S if "generic" not in i]:
+            update_50S = False
+        else:
+            update_50S = True
+        if not(update_30S or update_50S):
+            # Only update if it has not been user-defined
+            return
         trigger_factor = list(complexes_df[complexes_df['name'].str.contains('[T,t]rigger factor',regex=True)].index)
         if trigger_factor:
             ribo_50S[trigger_factor[0]] = 1
         warn_proteins = []
+
         for p, row in tqdm.tqdm(ribo_df.iterrows(),
                            'Gathering ribosome stoichiometry...',
                            bar_format = bar_format,
                            total=ribo_df.shape[0]):
-
             p_mod_list = []
             if p in protein_mod.index:
                 p_mod_list = protein_mod.loc[[p]]['Modified_enzyme'].values
-            if "30S" in row["name"]:
+            if "30S" in row["name"] and update_30S:
                 if set(p_mod_list) & set(ribo_30S.keys()):
                     continue
                 ribo_30S[p] = 1
-            elif "50S" in row["name"]:
+            elif "50S" in row["name"] and update_50S:
                 if set(p_mod_list) & set(ribo_50S.keys()):
                     continue
                 ribo_50S[p] = 1
             else:
+                if set(p_mod_list) & set(ribo_50S.keys()):
+                    continue
+                ribo_50S[p] = 1 # Add it to stoichiometry but warn it might not be a good mapping
                 warn_proteins.append(p)
-        self.ribosomal_proteins = ribo_df
         if warn_proteins:
             self.curation_notes['org.update_ribosome_stoich'].append({
-                'msg':'Some ribosomal proteins do not contain subunit information (30S, 50S) so they could not be mapped.',
+                'msg':'Some ribosomal proteins do not contain subunit information (30S, 50S). Check whether they are ribosomal proteins!',
                 'triggered_by':warn_proteins,
                 'importance':'high',
-                'to_do':'Classify them in ribosomal_proteins.txt'})
+                'to_do':'Curate them in ribosomal_proteins.txt'})
 
     def _add_entry_to_gene_dictionary(self,
                                 gene_dictionary,
