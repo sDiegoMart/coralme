@@ -199,9 +199,13 @@ def append_graph(G,g):
 		for k,v in G.items():
 			G[k] = append_graph(v,g)
 		return G
-def concatenate_graphs(L,r=[]):
+def concatenate_graphs(L,r=[],threshold=100):
+	if L == "STOP":
+		return L
 	if r:
 		for i in r:
+			if get_size(L) > threshold:
+				return "STOP"
 			L = append_graph(L,i)
 		return L
 	elif isinstance(L,list):
@@ -210,10 +214,13 @@ def concatenate_graphs(L,r=[]):
 		else:
 			b = L[0]
 			r = L[1:]
-			L = concatenate_graphs(b,r)
+			L = concatenate_graphs(b,r,threshold=threshold)
 		return L
 
-def get_graph(T,G={}):
+def get_size(G):
+	return len(re.findall("\$",str(G)))
+
+def get_graph(T,G={},threshold=100):
 	if isinstance(T,str):
 		if T in G:
 			T = T + '_REPETITIONMARK_' + str(len(G))
@@ -224,8 +231,13 @@ def get_graph(T,G={}):
 			l = []
 			for i in T['and']:
 				d = {}
-				l.append(get_graph(i,d))
-			d = concatenate_graphs(l)
+				g = get_graph(i,d,threshold=threshold)
+				if g == "STOP":
+					return g
+				l.append(g)
+			d = concatenate_graphs(l,threshold=threshold)
+			if d == "STOP":
+				return d
 			for k,v in d.items():
 				if k in G:
 					k = k + '_REPETITIONMARK_' + str(len(G))
@@ -233,7 +245,9 @@ def get_graph(T,G={}):
 			return G
 		elif 'or' in T:
 			for i in T['or']:
-				G = get_graph(i,G)
+				G = get_graph(i,G,threshold=threshold)
+				if G == "STOP":
+					return d
 		return G
 
 def traverse_graph(G,L = [], C = []):
@@ -247,10 +261,12 @@ def traverse_graph(G,L = [], C = []):
 			l,C = traverse_graph(v,l,C)
 		return L,C
 
-def expand_gpr(rule):
+def expand_gpr(rule,threshold=100):
 	l = listify_gpr(rule)
 	T = get_tree(l,T={})
-	G = get_graph(T,G={})
+	G = get_graph(T,G={},threshold=threshold)
+	if G == "STOP":
+		return G
 	return traverse_graph(G,L=[],C=[])[1]
 
 def generify_gpr(l_gpr,rxn_id,d={},generic_gene_dict={}):

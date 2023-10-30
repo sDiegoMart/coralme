@@ -2233,8 +2233,8 @@ class Organism(object):
                 continue
             enz_rxn_assoc_dict[rxn.id] = []
             #rule_list = expand_gpr(listify_gpr(rule)).split(" or ")
-            rule_list = coralme.builder.helper_functions.expand_gpr(rule)
-            if len(rule_list) <= gpr_combination_cutoff:
+            rule_list = coralme.builder.helper_functions.expand_gpr(rule,threshold=gpr_combination_cutoff)
+            if rule_list != "STOP":
                 enz_rxn_assoc = []
                 reaction_cplx_list = []
                 for rule_gene_list in rule_list:
@@ -2274,7 +2274,7 @@ class Organism(object):
                         reaction_cplx_list.append(cplx_id)
                 enz_rxn_assoc_dict[rxn.id] = " OR ".join(reaction_cplx_list)
             else:
-                logging.warning('{} contains a GPR rule that has {} possible gene combinations. Generifying it.'.format(rxn.id,len(rule_list)))
+                logging.warning('{} contains a GPR rule that has more gene combinations than the specified cutoff ({}). Generifying it.'.format(rxn.id,gpr_combination_cutoff))
                 listified_gpr = coralme.builder.helper_functions.listify_gpr(rule)
                 n,rule_dict = coralme.builder.helper_functions.generify_gpr(listified_gpr,rxn.id,d={},generic_gene_dict=new_generics)
                 if not rule_dict: # n in gene_dictionary.index:
