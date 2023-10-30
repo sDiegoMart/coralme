@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import os
 import re
 import sys
 import copy
@@ -8,6 +9,7 @@ log = logging.getLogger(__name__)
 
 import sympy
 import pandas
+import tqdm
 
 from ast import parse as ast_parse, Name, And, Or, BitOr, BitAnd, BoolOp, Expression, NodeTransformer
 
@@ -94,7 +96,6 @@ def close_sink_and_solve(rxn_id):
 		return (rxn_id, True)
 
 def change_reaction_id(model,old_id,new_id):
-	import cobra
 	old_rxn = model.reactions.get_by_id(old_id)
 	rxn = cobra.Reaction(new_id)
 	model.add_reactions([rxn])
@@ -108,8 +109,6 @@ def change_reaction_id(model,old_id,new_id):
 	model.remove_reactions([old_rxn])
 
 def listify_gpr(expr,level = 0):
-	import cobra
-
 	if level == 0:
 		return listify_gpr(cobra.core.gene.parse_gpr(str(expr))[0], level = 1)
 	if isinstance(expr, cobra.core.gene.GPR):
@@ -395,8 +394,6 @@ def add_exchange_reactions(me, metabolites, prefix = 'SK_'):
 	return rxns
 
 def exchange_single_model(me, flux_dict = 0, solution=0):
-	import pandas as pd
-
 	complete_dict = {'id':[],'name':[],'reaction':[],'lower_bound':[],'upper_bound':[],'flux':[]}
 
 	if solution:
@@ -470,7 +467,7 @@ def flux_based_reactions(model,
 						 flux_dict=0,
 						 solution = None,
 						 keffs=False):
-	import tqdm
+
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
 		if not hasattr(model,'solution') or not model.solution:
@@ -519,7 +516,6 @@ def flux_based_reactions(model,
 	return df[df['ub'] != 0]
 
 def get_reactions_of_met(me,met,s = 0, ignore_types = (),only_types = (), verbose = False,growth_key='mu'):
-    import copy
     met_stoich = 0
     if only_types:
         only_reaction_types = tuple([getattr(coralme.core.reaction,i) for i in only_types])
@@ -894,21 +890,17 @@ def dict_to_defaultdict(dct):
     return collections.defaultdict(lambda: [], dct)
 
 def save_curation_notes(curation_notes,filepath):
-	import json
 	file = open(filepath,'w')
 	file.write(json.dumps(curation_notes, indent=4))
 	file.close()
 
 def load_curation_notes(filepath):
-	import json
-	import os
 	if not os.path.isfile(filepath):
 		return collections.defaultdict(list)
 	with open(filepath) as json_file:
 		return json.load(json_file,object_hook=dict_to_defaultdict)
 
 def publish_curation_notes(curation_notes,filepath):
-	import json
 	file = open(filepath,'w')
 	for k,v in curation_notes.items():
 		file.write('\n')
@@ -954,9 +946,8 @@ def get_transport_reactions(model,met_id,comps=['e','c']):
     return [model.reactions.get_by_id(rxn_id) for rxn_id in transport_rxn_ids]
 
 def get_all_transport_of_model(model):
-    from tqdm import tqdm
     transport_reactions = []
-    for r in tqdm(model.reactions):
+    for r in tqdm.tqdm(model.reactions):
         comps = r.get_compartments()
         if len(comps) > 1:
             transport_reactions.append(r.id)
