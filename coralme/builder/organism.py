@@ -1033,11 +1033,11 @@ class Organism(object):
             p_mod_list = []
             if p in protein_mod.index:
                 p_mod_list = protein_mod.loc[[p]]['Modified_enzyme'].values
-            if "30S" in row["name"] and update_30S:
+            if ("30S" in row["name"] or "small subunit" in row["name"]) and update_30S:
                 if set(p_mod_list) & set(ribo_30S.keys()):
                     continue
                 ribo_30S[p] = 1
-            elif "50S" in row["name"] and update_50S:
+            elif ("50S" in row["name"] or "large subunit" in row["name"]) and update_50S:
                 if set(p_mod_list) & set(ribo_50S.keys()):
                     continue
                 ribo_50S[p] = 1
