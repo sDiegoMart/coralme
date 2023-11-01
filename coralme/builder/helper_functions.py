@@ -247,7 +247,7 @@ def get_graph(T,G={},threshold=100):
 			for i in T['or']:
 				G = get_graph(i,G,threshold=threshold)
 				if G == "STOP":
-					return d
+					return G
 		return G
 
 def traverse_graph(G,L = [], C = []):
