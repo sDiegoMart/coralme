@@ -250,7 +250,7 @@ class Organism(object):
         logging.warning("Getting enzyme-reaction association")
         self.get_enzyme_reaction_association()
 
-        print("Reading {} done...".format(self.id))
+        print("Reading {} done.".format(self.id))
 
     def get_genbank_contigs(self):
         """ Reads GenBank file as a list of contigs.

@@ -312,7 +312,7 @@ class MEBuilder(object):
 
 		logging.warning("Generating new configuration file")
 		self.input_data(self.org.m_model, overwrite)
-		ListHandler.print_and_log("{}File processing done...".format(sep))
+		ListHandler.print_and_log("{}File processing done.".format(sep))
 
 		logging.shutdown()
 
@@ -470,10 +470,10 @@ class MEBuilder(object):
 			'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'Glu', 'Gly', 'His', 'Ile',
 			'Leu', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp', 'Tyr', 'Val'
 			]
+
 		for contig in contigs:
-			for feature in tqdm.tqdm(contig.features,
-									 'Getting tRNA to codon dictionary from {}'.format(contig.id),
-									 bar_format = bar_format):
+			iterator = tqdm.tqdm(contig.features, 'Getting tRNA to codon dictionary from {}'.format(contig.id), bar_format = bar_format) if len(contigs) < 10 else contig.features
+			for feature in iterator:
 				# Find organelle in source
 				if feature.type == 'source':
 					organelle = feature.qualifiers.get('organelle', [None])[0]

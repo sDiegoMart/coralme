@@ -443,7 +443,8 @@ def build_reactions_from_genbank(
 
 	# Associate each feature (RNA_product) with a TU and add translation reactions and demands
 	for contig in contigs:
-		for feature in tqdm.tqdm(contig.features, 'Adding features from contig {:s} into the ME-model...'.format(contig.id), bar_format = bar_format):
+		iterator = tqdm.tqdm(contig.features, 'Adding features from contig {:s} into the ME-model...'.format(contig.id), bar_format = bar_format) if len(contigs) < 10 else contig.features
+		for feature in iterator:
 			# Find organelle in source
 			if feature.type == 'source':
 				organelle = feature.qualifiers.get('organelle', [None])[0]
