@@ -2076,8 +2076,11 @@ class Organism(object):
                     continue
                 if feature.type not in exclude_prune_types:
                     continue
-                if not self.config.get('include_pseudo_genes', False) and 'pseudo' in feature.qualifiers:
-                    continue
+                if 'pseudo' in feature.qualifiers:
+                    if 'RNA' in feature.type:
+                        del feature.qualifiers['pseudo'] # pseudo RNA?
+                    elif not self.config.get('include_pseudo_genes', False):
+                        continue
                 if 'transl_table' not in feature.qualifiers and 'RNA' not in feature.type:
                     feature.qualifiers['transl_table'] = [self.transl_table]
                 if not self._is_sequence_divisible_by_three(new_contig,
