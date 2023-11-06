@@ -233,20 +233,20 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 		for key, lst in dct.items():
 			for tag in [ x for y in tags for x in y ]:
 				if tag + '-MONOMER' == key[0]:
-					generics.append(lst)
+					generics.append(lst[0])
 				if 'RNA_' + tag == key[0]:
-					generics.append(lst)
+					generics.append(lst[0])
 
 		if len(generics) != 0:
-			return generics
+			return [ x for y in generics for x in y ]
 
 	def generics_from_complex(x, dct):
 		generics = []
 		for key, lst in dct.items():
 			if str(x['Complex ID']).split(':')[0] == key[0] and str(x['Cofactors in Modified Complex']).split(':')[0] == key[1]:
-				generics.append(lst)
+				generics.append(lst[0])
 		if len(generics) != 0:
-			return generics
+			return [ x for y in generics for x in y ]
 
 	dct = pandas.DataFrame.from_dict({ k.replace('generic_', ''):v for k,v in builder.org.generic_dict.items() }).T
 	dct = dct.explode('enzymes')
@@ -257,10 +257,15 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	dct = dct.explode(['Complex', 'Cofactors']).replace('', 'None')
 	dct = dct.groupby(['Complex', 'Cofactors']).agg({'Generic' : lambda x: set(x.tolist())})
 	# final dictionary: (Complex, Cofactors) : Generic ID
-	dct = { k:list(v['Generic'])[0] for k,v in dct.iterrows() }
+	# we will repeat the Complex if it can form two or more generics
+	#dct = { k:list(v['Generic'])[0] for k,v in dct.iterrows() }
+	# final dictionary: (Complex, Cofactors) : [[Generic IDs]]
+	tmp = {}
+	for k,v in dct.iterrows():
+		tmp.setdefault(k, []).append(list(v['Generic']))
 
-	data['Generic Complex ID'] = data.apply(lambda x: generics_from_gene(x, dct), axis = 1)
-	data['Generic Complex ID'].update(data.apply(lambda x: generics_from_complex(x, dct), axis = 1))
+	data['Generic Complex ID'] = data.apply(lambda x: generics_from_gene(x, tmp), axis = 1)
+	data['Generic Complex ID'].update(data.apply(lambda x: generics_from_complex(x, tmp), axis = 1))
 	data = data.explode('Generic Complex ID')
 
 	# Add M-model Reaction IDs, names, and reversibility from builder
