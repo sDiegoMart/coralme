@@ -483,7 +483,8 @@ def flux_based_reactions(model,
 						 threshold = 0.,
 						 flux_dict=0,
 						 solution = None,
-						 keffs=False):
+						 keffs=False,
+						 verbose=False):
 
 	if not flux_dict:
 		#flux_dict = model.solution.x_dict
@@ -505,13 +506,15 @@ def flux_based_reactions(model,
 	met = model.metabolites.get_by_id(met_id)
 	result_dict = {}
 	g = flux_dict.get('biomass_dilution',None)
-	for rxn in tqdm.tqdm(reactions):
+	for rxn in (tqdm.tqdm(reactions) if verbose else reactions):
+	#for rxn in tqdm.tqdm(reactions):
 		f = flux_dict[rxn.id]
 		result_dict[rxn.id] = {}
 		if f:
 			coeff = get_met_coeff(rxn.metabolites[met],
-								  g,
-									  growth_key=model.mu)
+								g,
+								growth_key=model.mu if hasattr(model,"mu") else None)
+
 		else:
 			coeff = 0
 		if coeff is None:
