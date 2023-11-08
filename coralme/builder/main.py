@@ -1542,7 +1542,7 @@ class MEBuilder(object):
 	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
 		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite, skip = skip)
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi'):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi',savefile=None):
 		"""
 		growth_key_and_value:
 			dictionary of Sympy.Symbol and value to replace
@@ -1557,7 +1557,7 @@ class MEBuilder(object):
 			'gurobi' (default, if platform is 'win32') or 'cplex'
 		"""
 
-		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip)
+		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip, savefile=savefile)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
 				self.configuration['out_directory'] + '/curation_notes.json'
@@ -2843,7 +2843,7 @@ class METroubleshooter(object):
 		self.curation_notes = builder.curation_notes
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(),
-		met_types = [], platform = None, solver = 'gurobi'):
+		met_types = [], platform = None, solver = 'gurobi',savefile=None):
 		"""Performs the Gap-finding step of the reconstruction.
 
 		This function will iterate through different parts of the M-
@@ -2976,8 +2976,9 @@ class METroubleshooter(object):
 				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
 			else:
 				logging.warning('  '*1 + 'Error: Gapfilled ME-model is not feasible ?')
-
-			with open('{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id), 'wb') as outfile:
+			if savefile is None:
+				savefile = '{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id)
+			with open(savefile, 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
 			logging.warning('ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id))
