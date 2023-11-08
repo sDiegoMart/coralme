@@ -70,6 +70,10 @@ def add_charged_trna_subreactions(me_model, organelle = 'c', transl_table = set(
 
 	codon_table = Bio.Data.CodonTable.generic_by_id[list(transl_table)[0]]
 
+	# check if the defined amino_acid_loader (default generic_Tuf) exists in the model
+	if not me_model.metabolites.has_id(me_model.global_info['amino_acid_loader']):
+		me_model.global_info['amino_acid_loader'] = 'CPLX_dummy'
+
 	#for codon, aa in { k:v for k,v in me_model.global_info['codon_table'].forward_table.items() if 'U' not in k }.items():
 	for codon, aa in { k:v for k,v in codon_table.forward_table.items() if 'U' not in k }.items():
 		if not me_model.process_data.has_id('atp_hydrolysis_trna_loading'):
