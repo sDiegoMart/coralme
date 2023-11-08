@@ -2981,7 +2981,7 @@ class METroubleshooter(object):
 			with open(savefile, 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 
-			logging.warning('ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id))
+			logging.warning('ME-model was saved in {:s}'.format(savefile))
 		else:
 			logging.warning('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
 
