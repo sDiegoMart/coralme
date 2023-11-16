@@ -1549,16 +1549,16 @@ class Organism(object):
     def _is_beta_prime_in_RNAP(self,RNAP,complexes_df):
         genes = [re.findall('.*(?=\(\d*\))',i)[0] for i in complexes_df.loc[RNAP]['genes'].split(' AND ')]
         df = complexes_df[complexes_df['genes'].str.contains('|'.join(genes))]
-        return df['name'].str.contains("beta(\'|.*prime)|rpoc",regex=True,case=False).any()
+        return df['name'].str.contains("beta(\'|.*prime)|rpoc|RNA polymerase.*(subunit|chain).*beta",regex=True,case=False).any()
 
     def get_rna_polymerase(self, force_RNAP_as=""):
         # TODO: Allow user to define RNAP, skip inferring?
+        complexes_df = self.complexes_df
         protein_mod = self.protein_mod
         RNAP = ""
         if force_RNAP_as:
             RNAP = force_RNAP_as
         else:
-            complexes_df = self.complexes_df
             RNAP,flag = self._get_rna_polymerase_from_regex(complexes_df)
             if RNAP is None:
                 RNAP = random.choice(complexes_df.index)
