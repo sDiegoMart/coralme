@@ -512,7 +512,7 @@ def flux_based_reactions(model,
 		result_dict[rxn.id] = {}
 		if f:
 			coeff = get_met_coeff(rxn.metabolites[met],
-								g,
+								  g,
 								growth_key=model.mu if hasattr(model,"mu") else None)
 
 		else:
@@ -694,6 +694,7 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	if me_model.get_feasibility(keys = growth_key_and_value):
 		pass
 	else:
+		logging.warning('  '*5 + 'Provided metabolites through sink reactions cannot recover growth. Proceeding to next set of metabolites.')
 		return metabolites_to_add, [], False
 
 	rxns = []
@@ -752,22 +753,24 @@ def brute_force_check(me_model, metabolites_to_add, growth_key_and_value):
 	return bf_gaps, no_gaps, True
 
 def get_mets_from_type(me_model,met_type):
-	if met_type == 'ME-Deadends':
+	if met_type[1] == 'User guesses':
+		return set(met_type[0])
+	elif met_type == 'ME-Deadends':
 		return set(coralme.builder.helper_functions.gap_find(me_model,de_type='me_only'))
-	if met_type == 'All-Deadends':
+	elif met_type == 'All-Deadends':
 		return set(coralme.builder.helper_functions.gap_find(me_model))
-	if met_type == 'Cofactors':
+	elif met_type == 'Cofactors':
 		return set(coralme.builder.helper_functions.get_cofactors_in_me_model(me_model))
-
-	mets = set()
-	for met in me_model.metabolites:
-		filter1 = type(met) == getattr(coralme.core.component, met_type)
-		filter2 = met.id.startswith('trna')
-		filter3 = met.id.endswith('trna_c')
-		filter4 = met.id.endswith('_e')
-		if filter1 and not filter2 and not filter3 and not filter4:
-			mets.add(met.id)
-	return mets
+	else:
+		mets = set()
+		for met in me_model.metabolites:
+			filter1 = type(met) == getattr(coralme.core.component, met_type)
+			filter2 = met.id.startswith('trna')
+			filter3 = met.id.endswith('trna_c')
+			filter4 = met.id.endswith('_e')
+			if filter1 and not filter2 and not filter3 and not filter4:
+				mets.add(met.id)
+		return mets
 
 def _append_metabolites(mets,new_mets):
 	return mets + [m for m in new_mets if m not in mets]
@@ -792,7 +795,10 @@ def brute_check(me_model, growth_key_and_value, met_type, skip = set(), history 
 		mets = set(mets).difference(set(['fad_c', 'fadh2_c', 'fmn_c']))
 		mets = set(mets).difference(set(['coa_c']))
 	mets = set(mets).difference(skip)
-	history[met_type] =  mets
+	if met_type[1] == 'User guesses':
+		history['User guesses'] = mets
+	else:
+		history[met_type] = mets
 
 	mets_to_check = []
 	for k,v in history.items():

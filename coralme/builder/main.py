@@ -1542,7 +1542,7 @@ class MEBuilder(object):
 	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
 		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite, skip = skip)
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set(), platform = None, solver = 'gurobi',savefile=None):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), guesses = set(), platform = None, solver = 'gurobi', savefile = savefile):
 		"""
 		growth_key_and_value:
 			dictionary of Sympy.Symbol and value to replace
@@ -1550,14 +1550,20 @@ class MEBuilder(object):
 		skip:
 			set of ME-components to not evaluate during gapfilling
 
+		guesses:
+			set of ME-components to try first before any other set of components
+
 		platform:
 			'win32' to use gurobi (default) or cplex as solver
 
 		solver:
 			'gurobi' (default, if platform is 'win32') or 'cplex'
+
+		savefile:
+			file path (absolute or relative) to save the ME-model as a pickle file
 		"""
 
-		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip, savefile=savefile)
+		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip, guesses = guesses, platform = platform, solver = solver, savefile = savefile)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
 				self.configuration['out_directory'] + '/curation_notes.json'
@@ -2843,7 +2849,7 @@ class METroubleshooter(object):
 		self.curation_notes = builder.curation_notes
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(),
-		met_types = [], platform = None, solver = 'gurobi',savefile=None):
+		guesses = [], met_types = [], platform = None, solver = 'gurobi', savefile = None):
 		"""Performs the Gap-finding step of the reconstruction.
 
 		This function will iterate through different parts of the M-
@@ -2905,6 +2911,13 @@ class METroubleshooter(object):
 		out_directory = config.get('out_directory', '.')
 		log_directory = config.get('log_directory', '.')
 
+		# clean restart if troubleshooter is killed
+		if self.me_model.troubleshooted:
+			pass # do not remove TS reactions
+		else:
+			rxns = self.me_model.reactions.query('^TS_')
+			self.me_model.remove_reactions(rxns)
+
 		# set logger
 		log = logging.getLogger() # root logger
 		for hdlr in log.handlers[:]: # remove all old handlers
@@ -2933,6 +2946,11 @@ class METroubleshooter(object):
 			works = False
 
 		# Step 2. Test different sets of MEComponents
+		if len(guesses) > 0:
+			guesses = [ x for x in guesses if self.me_model.metabolites.has_id(x) ]
+			if len(guesses) > 0:
+				met_types.insert(0, (guesses, 'User guesses'))
+
 		e_gaps = []
 		history = dict()
 		if works == False:
@@ -2943,7 +2961,10 @@ class METroubleshooter(object):
 					logging.warning('  '*5 + 'Relaxing bounds for E-matrix gap-fill')
 					self.me_model.relax_bounds()
 					self.me_model.reactions.protein_biomass_to_biomass.lower_bound = growth_value[0]/100 # Needed to enforce protein production
-				history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type[1], skip = skip, history = history)
+				if met_type[1] == 'User guesses':
+					history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type, skip = skip, history = history)
+				else:
+					history, output = coralme.builder.helper_functions.brute_check(self.me_model, growth_key_and_value, met_type[1], skip = skip, history = history)
 				bf_gaps, no_gaps, works = output
 				# close sink reactions that are not gaps
 				if no_gaps:
@@ -2968,22 +2989,28 @@ class METroubleshooter(object):
 				if rxn.lower_bound == 0 and rxn.upper_bound == 0:# or f == 0:
 					self.me_model.remove_reactions([rxn])
 			if sinks:
-				logging.warning('~ '*1 + 'Troubleshooter added the following sinks:')
-				logging.warning('\n'.join(sinks))
+				logging.warning('~ '*1 + 'Troubleshooter added the following sinks: {:s}.'.format(', '.join(sinks)))
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
 
+			# final optimization
 			if self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False):
 				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
 			else:
 				logging.warning('  '*1 + 'Error: Gapfilled ME-model is not feasible ?')
+
+			# save model as a pickle file
 			if savefile is None:
 				savefile = '{:s}/MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id)
+				message = 'ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id)
+			else:
+				message = 'ME-model was saved to {:s}.'.format(savefile)
 			with open(savefile, 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
-
-			logging.warning('ME-model was saved in {:s}'.format(savefile))
+			logging.warning(message)
+			self.me_model.troubleshooted = True
 		else:
 			logging.warning('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
+			self.me_model.troubleshooted = False
 
 		logging.shutdown()
 

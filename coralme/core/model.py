@@ -242,6 +242,10 @@ class MEModel(cobra.core.model.Model):
 		"""
 		self._unmodeled_protein_fraction = self.global_info['unmodeled_protein_fraction'] # default/user value
 
+		# troubleshooting flags
+		self.troubleshooted = False
+		self.troubleshooting = False
+
 	@property
 	def mu(self):
 		return self._mu
