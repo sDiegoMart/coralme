@@ -799,7 +799,7 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 		if reaction.id.startswith('BIOMASS_'):
 			continue
 
-		if reaction.id.startswith(['EX_', 'DM_', 'SK_', 'sink_']):
+		if reaction.id.startswith(('EX_', 'DM_', 'SK_', 'sink_')):
 			new_reaction = coralme.core.reaction.MEReaction(reaction.id)
 			me_model.add_reactions([new_reaction])
 			new_reaction.subsystem = reaction.subsystem
