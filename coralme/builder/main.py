@@ -2057,17 +2057,27 @@ class MEReconstruction(MEBuilder):
 		#
 		# Applies demands and coefficients from the biomass objective function from the M-model.
 
+		# set values from configuration as properties of the ME-model
 		for key in [ 'gam', 'ngam', 'unmodeled_protein_fraction' ]:
 			if key in me.global_info:
 				setattr(me, key, me.global_info[key])
 
 		biomass_constituents = me.global_info.get('flux_of_biomass_constituents', {})
+		# replace IDs. New metabolites x types are created during the processing of the m_model
+		# old ID (M-model) : new ID (ME-model)
+		dct = df_mets[df_mets['type'].str.contains('REPLACE')].to_dict()['me_id']
+		for key in list(biomass_constituents.keys()):
+			if key in dct:
+				biomass_constituents[dct[key]] = biomass_constituents.pop(key)
+				logging.warning('Metabolite \'{:s}\' was replaced with \'{:s}\' in MetabolicReaction \'{:s}\'.'.format(key, dct[key], 'biomass_constituent_demand'))
+
 		# remove metabolites not in the model or without molecular weight
 		biomass_constituents = { k:v for k,v in biomass_constituents.items() if me.metabolites.has_id(k) and me.metabolites.get_by_id(k).formula_weight }
 
 		problems = list(set(me.global_info.get('flux_of_biomass_constituents', {})).difference(biomass_constituents))
 		if problems:
 			logging.warning('The following biomass constituents are not in the ME-model or have no formula: {:s}.'.format(', '.join(problems)))
+			logging.warning('A second attempt to add biomass constituents will be perform after update of formulas.')
 
 		rxn = coralme.core.reaction.SummaryVariable('biomass_constituent_demand')
 		me.add_reactions([rxn])
