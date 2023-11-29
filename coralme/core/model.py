@@ -1055,16 +1055,35 @@ class MEModel(cobra.core.model.Model):
 		else:
 			return NotImplemented
 
-	def query(self, x):
+	def query(self, queries, filter_out_blocked_reactions = False):
 		"""
-		Return the elements with a matching substring from model.reactions, model.metabolites, and model.process_data attributes.
+		Return the elements with a matching substring or substrings (AND logic) from
+		model.reactions, model.metabolites, and model.process_data attributes.
+
+		For OR logic, use pipe symbol ('|'), e.g. 'ACP|ac'
+
+		Parenthesis and square brackets are allowed without escape symbol.
 		"""
 		res = []
-		x = x.replace('(', '\(').replace(')', '\)')
+		if isinstance(queries, list):
+			pass
+		else:
+			queries = [queries]
+
+		x = queries[0].replace('(', '\(').replace(')', '\)').replace('[', '\[').replace(']', '\]')
 		res.append(self.metabolites.query(x))
-		res.append(self.reactions.query(x))
+		if filter_out_blocked_reactions:
+			res.append([ x for x in self.reactions.query(x) if x.bounds != (0, 0) ])
+		else:
+			res.append(self.reactions.query(x))
 		res.append(self.process_data.query(x))
 		res = [ x for y in res for x in y ]
+
+		if len(queries) > 1:
+			# remove from output (AND logic)
+			for query in queries[1:]:
+				res = [ x for x in res if query in x.id ]
+
 		return res
 
 	def construct_lp_problem(self, lambdify = False):
