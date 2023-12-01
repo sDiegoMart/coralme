@@ -931,7 +931,14 @@ def get_df_input_from_excel(df, df_rxns):
 		'RNA stability' : 'False'
 		})
 
-	df_rxns = pandas.concat([get_df_rxns(df), df_rxns]).fillna('False')
+	tmp = get_df_rxns(df)
+	for idx, x in df_rxns[df_rxns.index.isin(tmp.index)].iterrows():
+		logging.warning('The reaction \'{:s}\' appears in the M-model and in the \'df_metadata_orphan_rxns\' input (default value)'.format(idx))
+		logging.warning('If you want to use the M-model information, delete the ID from \'df_metadata_orphan_rxns\'. Otherwise, add the ID to \'defer_to_rxn_matrix\'.')
+
+	# remove entries that are in df_rxns (user input overrides m-model info)
+	tmp = tmp[~tmp.index.isin(df_rxns.index)]
+	df_rxns = pandas.concat([tmp, df_rxns]).fillna('False')
 	df_cplxs = get_df_cplxs(df)
 	df_ptms = get_df_ptms(df)
 	df_enz2rxn = get_df_enz2rxn(df)
