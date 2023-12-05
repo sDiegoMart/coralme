@@ -27,9 +27,9 @@ coralME was tested with the following package versions:
 - COBRApy version 0.26.3
 - GUROBIpy version 9.5.2 (license is required)
 - Ubuntu 22.04 is recommended (libgfortran.so.5 is required to execute MINOS and quad MINOS)
-- Windows and MacOS users require to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_
+- Windows and MacOS users need to install `Gurobi`_ or `IBM CPLEX Optimizer <cplex_>`_. Alternatively, Windows users can install `WSL <wsl_>`_ and Ubuntu. Windows and MacOS users can use as well Docker Desktop to install it. We recommend the installation of Jupyter in the guest and its access through a browser from the host.
 
-Compiled MINOS and quad MINOS are provided here in ``*.so`` files under ``coralme/solver``, and have been compiled using:
+Compiled MINOS and quad MINOS are provided here as ``*.so`` files under ``coralme/solver``, and have been compiled using:
 
 - Python3, versions 3.7.17, 3.8.17, 3.9.17, and 3.10.12
 - wheel 0.38.4
@@ -50,3 +50,4 @@ You can find the documentation as a combined PDF called coralME_Documentation.pd
 .. _readthedocs: https://coralme.readthedocs.io/
 .. _Gurobi: https://www.gurobi.com/
 .. _cplex: https://www.ibm.com/products/ilog-cplex-optimization-studio/cplex-optimizer
+.. _wsl: https://learn.microsoft.com/en-us/windows/wsl/install
