@@ -207,6 +207,8 @@ def process_m_model(
 
 		rxn.lower_bound = -1000.0 if reversible.lower() == 'true' else 0.0
 		logging.warning('The MetabolicReaction \'{:s}\' was created into the M-model (using \'reaction_matrix.txt\').'.format(rxn_id))
+		logging.warning('MetabolicReaction \'{:s}\' reversibility is set to \'{:s}\' (using \'reaction_matrix.txt\').'.format(rxn_id, reversible))
+		logging.warning('MetabolicReaction \'{:s}\' subsystem is set to \'{:s}\' (using \'reaction_matrix.txt\').'.format(rxn_id, subsystem))
 		rxn.subsystem = subsystem
 
 	# m_to_me_map DataFrame
