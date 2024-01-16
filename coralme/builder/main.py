@@ -1542,7 +1542,7 @@ class MEBuilder(object):
 	def build_me_model(self, update = True, prune = True, overwrite = False, skip = None):
 		coralme.builder.main.MEReconstruction(self).build_me_model(update = update, prune = prune, overwrite = overwrite, skip = skip)
 
-	def troubleshoot(self, growth_key_and_value = None, skip = set(), guesses = set(), platform = None, solver = 'gurobi', savefile = None):
+	def troubleshoot(self, growth_key_and_value = None, skip = set(), guesses = set(), platform = None, solver = 'gurobi', savefile = None, gapfill_cofactors=False):
 		"""
 		growth_key_and_value:
 			dictionary of Sympy.Symbol and value to replace
@@ -1563,7 +1563,7 @@ class MEBuilder(object):
 			file path (absolute or relative) to save the ME-model as a pickle file
 		"""
 
-		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip, guesses = guesses, platform = platform, solver = solver, savefile = savefile)
+		coralme.builder.main.METroubleshooter(self).troubleshoot(growth_key_and_value, skip = skip, guesses = guesses, platform = platform, solver = solver, savefile = savefile,gapfill_cofactors=gapfill_cofactors)
 		coralme.builder.helper_functions.save_curation_notes(
 				self.curation_notes,
 				self.configuration['out_directory'] + '/curation_notes.json'
@@ -2859,7 +2859,8 @@ class METroubleshooter(object):
 		self.curation_notes = builder.curation_notes
 
 	def troubleshoot(self, growth_key_and_value = None, skip = set(),
-		guesses = [], met_types = [], platform = None, solver = 'gurobi', savefile = None):
+		guesses = [], met_types = [], platform = None, solver = 'gurobi', savefile = None,
+		gapfill_cofactors = False):
 		"""Performs the Gap-finding step of the reconstruction.
 
 		This function will iterate through different parts of the M-
@@ -2946,6 +2947,14 @@ class METroubleshooter(object):
 
 		logging.warning('~ '*1 + 'Troubleshooting started...')
 
+		if gapfill_cofactors:
+			# Ensure cofactors can be produced
+			logging.warning('  '*1 + 'Ensuring the ME-model can produce all cofactors')
+			cofactors = coralme.builder.helper_functions.get_cofactors_in_me_model(self.me_model)
+			ts_cofactors = coralme.builder.helper_functions.add_exchange_reactions(self.me_model, cofactors, prefix = 'COFACTOR_TS_')
+			for ts in ts_cofactors:
+				ts.bounds = (1e-6,1000)
+
 		# Step 1. Test if current ME-model is feasible
 		logging.warning('  '*1 + 'Checking if the ME-model can simulate growth without gapfilling reactions...')
 		if self.me_model.check_feasibility(keys = growth_key_and_value):
@@ -2984,6 +2993,7 @@ class METroubleshooter(object):
 					break
 
 		if works: # Meaning it can grow in any case
+			# Save warnings
 			if isinstance(e_gaps, list) and e_gaps:
 				self.curation_notes['troubleshoot'].append({
 					'msg':'Some metabolites are necessary for growth',
@@ -3002,6 +3012,11 @@ class METroubleshooter(object):
 				logging.warning('~ '*1 + 'Troubleshooter added the following sinks: {:s}.'.format(', '.join(sinks)))
 			logging.warning('~ '*1 + 'Final step. Fully optimizing with precision 1e-6 and save solution into the ME-model...')
 
+			# Delete demand reactions for cofactor gapfilling
+			if gapfill_cofactors:
+				rxns = self.me_model.reactions.query('^COFACTOR_TS_')
+				self.me_model.remove_reactions(rxns)
+
 			# final optimization
 			if self.me_model.get_solution(max_mu = 3.0, precision = 1e-6, verbose = False):
 				logging.warning('  '*1 + 'Gapfilled ME-model is feasible with growth rate {:f} (M-model: {:f}).'.format(self.me_model.solution.objective_value, self.me_model.gem.optimize().objective_value))
@@ -3014,10 +3029,10 @@ class METroubleshooter(object):
 				message = 'ME-model was saved in the {:s} directory as MEModel-step3-{:s}-TS.pkl'.format(out_directory, self.me_model.id)
 			else:
 				message = 'ME-model was saved to {:s}.'.format(savefile)
+			self.me_model.troubleshooted = True
 			with open(savefile, 'wb') as outfile:
 				pickle.dump(self.me_model, outfile)
 			logging.warning(message)
-			self.me_model.troubleshooted = True
 		else:
 			logging.warning('~ '*1 + 'METroubleshooter failed to determine a set of problematic metabolites.')
 			self.me_model.troubleshooted = False

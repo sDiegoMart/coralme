@@ -956,6 +956,18 @@ def get_cofactors_in_me_model(me):
 				cofactors.add(k)
 	return list(cofactors)
 
+def is_producible(me,met,growth_key_and_value):
+	if met not in me.metabolites:
+		return False
+	r = add_exchange_reactions(me, [met], prefix = 'DM_')[0]
+	r.bounds = (1e-16,1e-16)
+	if me.check_feasibility(keys = growth_key_and_value):
+		r.remove_from_model()
+		return True
+	else:
+		r.remove_from_model()
+		return False
+
 
 def get_transport_reactions(model,met_id,comps=['e','c']):
     from_met = re.sub('_[a-z]$','_'+comps[0],met_id)
