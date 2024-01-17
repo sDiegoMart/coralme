@@ -2923,7 +2923,7 @@ class METroubleshooter(object):
 		log_directory = config.get('log_directory', '.')
 
 		# clean restart if troubleshooter is killed
-		if self.me_model.troubleshooted:
+		if not hasattr(self.me_model, "troubleshooted") or self.me_model.troubleshooted:
 			pass # do not remove TS reactions
 		else:
 			rxns = self.me_model.reactions.query('^TS_')
