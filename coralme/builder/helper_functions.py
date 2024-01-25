@@ -520,8 +520,11 @@ def flux_based_reactions(model,
 		if coeff is None:
 			print('Could not convert expression to float in {}'.format(rxn.id))
 			continue
-		result_dict[rxn.id]['lb'] = rxn.lower_bound if isinstance(rxn.lower_bound, sympy.Symbol) else float(rxn.lower_bound)
-		result_dict[rxn.id]['ub'] = rxn.upper_bound if isinstance(rxn.upper_bound, sympy.Symbol) else float(rxn.upper_bound)
+		try:
+			result_dict[rxn.id]['lb'] = rxn.lower_bound if isinstance(rxn.lower_bound, sympy.Symbol) else float(rxn.lower_bound)
+			result_dict[rxn.id]['ub'] = rxn.upper_bound if isinstance(rxn.upper_bound, sympy.Symbol) else float(rxn.upper_bound)
+		except:
+			print('Could not convert bounds to float in {}'.format(rxn.id))
 		result_dict[rxn.id]['rxn_flux'] = f
 		result_dict[rxn.id]['met_flux'] = f*coeff
 		result_dict[rxn.id]['reaction'] = rxn.reaction
