@@ -1572,10 +1572,13 @@ class MEModel(cobra.core.model.Model):
 				reduced_costs = z_dict,
 				shadow_prices = y_dict,
 				)
+			self.basis = basis
 			return True
 		else:
 			if hasattr(self, 'solution'):
 				del self.solution
+			if hasattr(self, 'basis'):
+				self.basis = None
 			return False
 
 	def map_feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 1. }, tolerance = 1e-6, precision = 'quad'):
