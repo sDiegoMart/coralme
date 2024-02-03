@@ -391,7 +391,7 @@ class ME_NLP:
         return x, pi, rc, inform, hs
 
     def bisectmu(
-        self, mumin = 0.0, mumax = 2.0, maxIter = 100,
+        self, mumin = 0.0, mumax = 2.0, maxIter = 100, basis = None,
         tolerance = 1e-6, precision = 'quad', verbose = False
         ):
         """
@@ -405,7 +405,7 @@ class ME_NLP:
         """
 
         # basis (hs) intent(inout). Will generate first basis from Cold-start if hs=None
-        basis = None
+        #basis = None
 
         if verbose:
             #print('Iteration\t       Growth Rate\t Solution to check\tSolver Status')
