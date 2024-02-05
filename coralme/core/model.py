@@ -1522,7 +1522,7 @@ class MEModel(cobra.core.model.Model):
 				del self.solution
 			return False
 
-	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 0.001 }, tolerance = 1e-6, precision = 'quad', **kwargs):
+	def feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 0.001 }, tolerance = 1e-6, precision = 'quad', basis = None, **kwargs):
 		# check options
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
 		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
@@ -1549,6 +1549,7 @@ class MEModel(cobra.core.model.Model):
 				mumax = 1., # mu was already replaced and maxIter is one, so a value here doesn't matter
 				mumin = 0.,
 				maxIter = 1,
+				basis = basis,
 				tolerance = tolerance,
 				precision = precision,
 				verbose = False)
@@ -1571,10 +1572,13 @@ class MEModel(cobra.core.model.Model):
 				reduced_costs = z_dict,
 				shadow_prices = y_dict,
 				)
+			self.basis = basis
 			return True
 		else:
 			if hasattr(self, 'solution'):
 				del self.solution
+			if hasattr(self, 'basis'):
+				self.basis = None
 			return False
 
 	def map_feasibility(self, keys = { sympy.Symbol('mu', positive = True) : 1. }, tolerance = 1e-6, precision = 'quad'):
