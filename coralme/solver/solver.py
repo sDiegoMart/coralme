@@ -415,9 +415,17 @@ class ME_NLP:
 
         # test mumax
         x_new, y_new, z_new, stat_new, hs_new = self.solvelp(mumax, basis, precision)
+
+        def get_stat_msg(stat):
+            if stat == "optimal":
+                return "Optimal"
+            if stat == 1:
+                return "Not feasible"
+            return str(stat)
+
         if stat_new == 'optimal' and verbose:
             print('{:s}\t{:.16f}\t{:s}'.format(
-                        str(0).rjust(9), mumax, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
+                        str(0).rjust(9), mumax, get_stat_msg(stat_new)))
             return mumax, x_new, y_new, z_new, basis, stat_new
 
         else:
@@ -439,7 +447,7 @@ class ME_NLP:
                 if verbose:
                     #print('{:s}\t{:.16f}\t{:.16f}\t{:s}'.format(
                     print('{:s}\t{:.16f}\t{:s}'.format(
-                        str(idx).rjust(9), muf, 'Not feasible' if stat_new == 1 else stat_new.capitalize()))
+                        str(idx).rjust(9), muf, get_stat_msg(stat_new)))
 
                 if abs(mumax - mumin) <= tolerance:# and stat_new == 'optimal':
                     valid_solutions = [ x for x in res if x[-1] == 'optimal' ]
