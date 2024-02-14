@@ -1261,7 +1261,7 @@ class Organism(object):
                                 complexes_df):
         return self._get_slice_from_regex(
             complexes_df,
-            "[-]{,2}tRNA (?:synthetase|ligase)")
+            "[-]{,2}tRNA (?:synthetase|ligase)(?!.*subunit.*)")
 
     def _get_ligases_subunits_from_regex(self,
                                 complexes_df):
