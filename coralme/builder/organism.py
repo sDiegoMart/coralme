@@ -730,6 +730,20 @@ class Organism(object):
                      row,
                      contigs,
                      gene_sequences)
+
+        # Ensure translation is in qualifiers
+        warn_translation = []
+        for record in self.contigs:
+            for feature in record.features:
+                if self.locus_tag not in feature.qualifiers:
+                    continue
+                if feature.type != "CDS":
+                    continue
+                if "translation" in feature.qualifiers:
+                    continue
+                warn_translation.append(feature.qualifiers[self.locus_tag][0])
+                seq = feature.extract(record).seq
+                feature.qualifiers["translation"] = [seq.translate(self.transl_table)]
         with open(self.directory + 'genome_modified.gb', 'w') as outfile:
             for contig in self.contigs:
                 Bio.SeqIO.write(contig, outfile, 'genbank')
@@ -761,6 +775,13 @@ class Organism(object):
                                 'triggered_by':warn_sequence,
                                 'importance':'medium',
                                 'to_do':'Add gene sequence in sequences.fasta. Check whether you downloaded the database files from the same BioCyc version.'
+            })
+        if warn_translation:
+            self.curation_notes['org.update_genbank_from_files'].append({
+                                'msg':'Some feature in genbank are CDS but have no translation qualifier. Translated sequences from Biopython were filled in instead',
+                                'triggered_by':warn_translation,
+                                'importance':'high',
+                                'to_do':'Check whether the genbank was downloaded or constructed correctly.'
             })
 
     def _create_complexes_entry(self,
@@ -1240,7 +1261,7 @@ class Organism(object):
                                 complexes_df):
         return self._get_slice_from_regex(
             complexes_df,
-            "[-]{,2}tRNA (?:synthetase|ligase)")
+            "[-]{,2}tRNA (?:synthetase|ligase)(?!.*subunit.*)")
 
     def _get_ligases_subunits_from_regex(self,
                                 complexes_df):
