@@ -452,7 +452,7 @@ def build_reactions_from_genbank(
 
 			# Optionally add pseudo genes into the ME-model
 			if not me_model.global_info['include_pseudo_genes'] and 'pseudo' in feature.qualifiers:
-				logging.warning('The feature {:s} is a pseudogene. Use \'include_pseudo_genes : True\' to add the feature into the model.'.format(bnum))
+				logging.warning('The feature \'{:s}\' is a pseudogene. Use \'"include_pseudo_genes" : True\' to add the feature into the model.'.format(bnum))
 				continue
 
 			# Add only features based on their type
@@ -485,6 +485,7 @@ def build_reactions_from_genbank(
 			if filter1:
 				pass
 			elif filter2 or filter3:
+				logging.warning('The genomic feature \'{:s}\' is in the knockouts list.'.format(bnum))
 				continue
 
 			if feature.type in [ 'ncRNA', 'tmRNA', 'misc_RNA', 'RNA' ]:
@@ -506,7 +507,7 @@ def build_reactions_from_genbank(
 			#seq = feature.extract(contig).seq.ungap() # using Biopython is better
 			seq = feature.extract(contig).seq.replace('-', '')
 			if len(seq) == 0:
-				logging.warning('The genomic modification deleted \'{:s}\' from the ME-model is not present in the knockouts list.'.format(bnum))
+				logging.warning('The genomic feature \'{:s}\' sequence is null. Please check GenBank file coordinates and sequence.'.format(bnum))
 				continue
 
 			# old code uses a dictionary setting the frameshifts.
