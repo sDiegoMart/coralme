@@ -9,6 +9,7 @@ log = logging.getLogger(__name__)
 import tqdm
 bar_format = '{desc:<75}: {percentage:.1f}%|{bar}| {n_fmt:>5}/{total_fmt:>5} [{elapsed}<{remaining}]'
 import numpy
+import pandas
 import scipy
 import sympy
 import cobra
@@ -1132,7 +1133,7 @@ class MEModel(cobra.core.model.Model):
 		return numpy.linalg.matrix_rank(Sp.todense())
 
 	def fva(self,
-		reaction_list, fraction_of_optimum, mu_fixed = None,
+		reaction_list, fraction_of_optimum, mu_fixed = None, objective = 'biomass_dilution',
 		max_mu = 2.8100561374051836, min_mu = 0., maxIter = 100, lambdify = True,
 		tolerance = 1e-6, precision = 'quad', verbose = True):
 
@@ -1179,20 +1180,34 @@ class MEModel(cobra.core.model.Model):
 		tolerance = tolerance if tolerance >= 1e-15 else 1e-6
 		precision = precision if precision in [ 'quad', 'double', 'dq', 'dqq' ] else 'quad'
 		fraction_of_optimum = fraction_of_optimum if fraction_of_optimum <= 1.0 and fraction_of_optimum >= 0.0 else 1.0
+		if isinstance(reaction_list, str):
+			reaction_list = [reaction_list]
 
-		# check if the ME-model has a solution
-		if mu_fixed is not None and not hasattr(self, 'solution'):
-			self.optimize(max_mu = max_mu, min_mu = min_mu, maxIter = maxIter, lambdify = lambdify,
-				tolerance = tolerance, precision = precision, verbose = verbose)
+		# populate with stoichiometry, no replacement of mu's
+		if hasattr(self, 'construct_lp_problem'):
+			# check if the ME-model has a solution
+			if mu_fixed is not None and not hasattr(self, 'solution'):
+				self.optimize(max_mu = max_mu, min_mu = min_mu, maxIter = maxIter, lambdify = lambdify,
+					tolerance = tolerance, precision = precision, verbose = verbose)
 
-		# set mu_fixed for replacement in a ME-model.
-		mu_fixed = self.solution.fluxes.get('biomass_dilution', mu_fixed) * fraction_of_optimum
+			# set mu_fixed for replacement in a ME-model.
+			mu_fixed = self.solution.fluxes.get(objective, mu_fixed) * fraction_of_optimum
+
+			# get mathematical representation
+			Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
+		else:
+			# not a ME-model, and objective bounds usually are (0, 1000)
+			if self.reactions.has_id(objective):
+				self.reactions.get_by_id(objective).lower_bound = mu_fixed * fraction_of_optimum
+				self.reactions.get_by_id(objective).upper_bound = mu_fixed * fraction_of_optimum
+			else:
+				raise ValueError('Objective reaction \'{:s}\' not in the M-model.'.format(objective))
+
+			# get mathematical representation
+			Sf, Se, lb, ub, b, c, cs, atoms, lambdas = coralme.core.model.MEModel.construct_lp_problem(self)
 
 		if verbose:
 			print('Running FVA for {:d} reactions. Maximum growth rate fixed to {:g}'.format(len(reaction_list), mu_fixed))
-
-		# populate with stoichiometry, no replacement of mu's
-		Sf, Se, lb, ub, b, c, cs, atoms, lambdas = self.construct_lp_problem(lambdify = lambdify)
 
 		from coralme.solver.solver import ME_NLP
 		me_nlp = ME_NLP(Sf, Se, b, c, lb, ub, cs, atoms, lambdas)
