@@ -495,7 +495,7 @@ def me_model_from_dict(obj):
 		Full COBRAme ME-model
 	"""
 
-	model = coralme.core.model.MEModel()
+	model = coralme.core.model.MEModel(mu = obj['global_info']['growth_key'])
 
 	for k, v in obj.items():
 		if k in {'id', 'name', 'global_info'}:
