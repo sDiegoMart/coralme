@@ -23,7 +23,7 @@ import cobra
 from cobra.util.context import get_context, resettable
 
 import coralme
-# use this because recursive import leads to a parcial import and an error
+# use this because recursive import leads to a partial import and an error
 from coralme.core.component import Metabolite as Metabolite
 
 from collections import defaultdict, Counter
