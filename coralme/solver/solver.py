@@ -312,7 +312,7 @@ class ME_NLP:
 
         return m, n, ha, ka, ad, bld, bud, hs, obj_inds
 
-    def solvelp(self, muf, basis, precision):
+    def solvelp(self, muf, basis, precision, probname = 'me_lp'):
         """
         x, status, hs = solvelp(self, muf, basis = None, precision = 'quad')
 
@@ -340,7 +340,6 @@ class ME_NLP:
             warm = True
 
         inform = numpy.array(0)
-        probname = 'me_lp'
         precision = precision.lower()
 
         if precision == 'quad':
