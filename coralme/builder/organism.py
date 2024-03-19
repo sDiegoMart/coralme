@@ -2149,8 +2149,6 @@ class Organism(object):
                     rxn = m_model.reactions.get_by_id(rxn_id)
                 if info["reaction"]:
                     rxn.build_reaction_from_string(info["reaction"])
-                    rxn.name = info["name"]
-                    rxn.gene_reaction_rule = info["gene_reaction_rule"]
                 if info["gene_reaction_rule"]:
                     if info["gene_reaction_rule"] == "no_gene":
                         rxn.gene_reaction_rule = ""
@@ -2158,6 +2156,31 @@ class Organism(object):
                         rxn.gene_reaction_rule = info["gene_reaction_rule"]
                 if info["name"]:
                     rxn.name = info["name"]
+
+    def modify_metabolites(self):
+        """ Modifies metabolites from manual input
+        """
+        if self.is_reference:
+            return
+        m_model = self.m_model
+        new_metabolites_dict = self.metabolite_corrections
+
+        for met_id, info in tqdm.tqdm(new_metabolites_dict.items(),
+                            'Modifying metabolites with manual curation...',
+                            bar_format = bar_format,
+                            total=len(new_metabolites_dict)):
+            if info["name"] == "eliminate":
+                m_model.metabolites.get_by_id(met_id).remove_from_model()
+            else:
+                if met_id not in m_model.metabolites:
+                    met = cobra.Metabolite(met_id)
+                    m_model.add_metabolites([met])
+                else:
+                    met = m_model.metabolites.get_by_id(met_id)
+                if info["name"]:
+                    met.name = info["name"]
+                if info["formula"]:
+                    met.formula = info["formula"]
 
     def add_manual_complexes(self):
         """ Modifies complexes from manual input

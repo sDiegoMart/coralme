@@ -190,6 +190,53 @@ class ReactionCorrections(CurationInfo):
     def _modify_from_load(self):
         return self.data.T.to_dict()
 
+
+class MetaboliteCorrections(CurationInfo):
+    """Reads manual input to modify metabolites in the M-model.
+
+    This class creates the property "metabolite_corrections" from
+    the manual inputs in metabolite_corrections.txt in an
+    instance of Organism.
+
+    Input here will modify metabolites at the M-model stage
+    before ME-model building.
+
+    Parameters
+    ----------
+    org : coralme.builder.organism.Organism
+        Organism object.
+
+    Examples
+    --------
+    metabolite_corrections.txt :
+        metabolite_id,name,formula,notes
+        glc__D_e,Glucose,C6H12O6,"Added from database"
+        ...
+    """
+    def __init__(self,
+                 org,
+                 id = "metabolite_corrections",
+                 config={},
+                 file="metabolite_corrections.txt",
+                 name="Metabolite corrections"):
+        if not file:
+            file = id + ".txt"
+        self.file = file
+        create_file = pandas.DataFrame(columns = self.columns).set_index(self.columns[0])
+        if not config:
+            config = {
+                     "create_file" : create_file,
+                     "sep" : ',',
+                     "pathtype" : 'relative'
+                }
+        super().__init__(id,
+                        org,
+                        config = config,
+                        file = file,
+                        name = name)
+    def _modify_from_load(self):
+        return self.data.T.to_dict()
+
 class ProteinLocation(CurationInfo):
     """Reads manual input to add protein locations.
 
@@ -1928,6 +1975,7 @@ class MEManualCuration(object):
     def load_manual_curation(self):
         self.org.manual_curation = coralme.builder.curation.CurationList()
         self.org.manual_curation.append(ReactionCorrections(self.org))
+        #self.org.manual_curation.append(MetaboliteCorrections(self.org))
         self.org.manual_curation.append(ProteinLocation(self.org))
         self.org.manual_curation.append(TranslocationMultipliers(self.org))
         self.org.manual_curation.append(LipoproteinPrecursors(self.org))

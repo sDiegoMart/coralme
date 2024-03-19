@@ -155,6 +155,12 @@
         "reaction",
         "notes"
     ],
+    "metabolite_corrections.txt": [
+        "metabolite_id",
+        "name",
+        "formula",
+        "notes"
+    ],
     "TUs_from_biocyc.txt": [
         "TU_id",
         "replicon",
