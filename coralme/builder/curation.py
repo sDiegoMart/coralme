@@ -1975,7 +1975,7 @@ class MEManualCuration(object):
     def load_manual_curation(self):
         self.org.manual_curation = coralme.builder.curation.CurationList()
         self.org.manual_curation.append(ReactionCorrections(self.org))
-        #self.org.manual_curation.append(MetaboliteCorrections(self.org))
+        self.org.manual_curation.append(MetaboliteCorrections(self.org))
         self.org.manual_curation.append(ProteinLocation(self.org))
         self.org.manual_curation.append(TranslocationMultipliers(self.org))
         self.org.manual_curation.append(LipoproteinPrecursors(self.org))
