@@ -212,8 +212,12 @@ class Organism(object):
         logging.warning("Loading manual curation")
         self.load_manual_curation()
 
+        logging.warning("Integrating manual metabolites")
+        self.modify_metabolites()
+        
         logging.warning("Integrating manual metabolic reactions")
         self.modify_metabolic_reactions()
+
         logging.warning("Integrating manual complexes")
         self.add_manual_complexes()
 
