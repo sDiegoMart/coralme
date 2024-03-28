@@ -5,6 +5,20 @@ import coralme
 def add_iron_sulfur_modifications(me_model):
 	#generic_fes_transfer_complexes = me_model.global_info['complex_cofactors']['generic_fes_transfer_complexes']
 	fes_transfers = me_model.global_info['complex_cofactors']['fes_transfers']
+
+	#identify if the user added MetabolicReactions to create FeS transfers
+	for fes in ['2fe2s', '4fe4s']:
+		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers) if x != '' ]
+		for component in components:
+			query = me_model.metabolites.get_by_id(component).reactions
+			query = [ x for x in query if x.metabolites[me_model.metabolites.get_by_id(component)] > 0 ]
+			rtypes = [ type(x) for x in query ]
+			# two type of reactions if user added the correct formation reaction in reaction_matrix.txt
+			if coralme.core.reaction.MetabolicReaction in rtypes and coralme.core.reaction.ComplexFormation in rtypes:
+				# we need to remove subreactions from process_data
+				to_modify = [ x for x in query if isinstance(x, coralme.core.reaction.ComplexFormation)][0]
+				me_model.process_data.get_by_id(to_modify.id.replace('formation_', '')).subreactions.pop('mod_{:s}_c'.format(fes))
+
 	for fes in ['2fe2s', '4fe4s']:
 		name = 'generic_{:s}_transfer_complex'.format(fes)
 		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers) if x != '' ]
