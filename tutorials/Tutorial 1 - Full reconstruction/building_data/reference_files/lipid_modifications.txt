@@ -1,3 +1,0 @@
-lipid_mod	enzymes
-other_lipids	
-pg_pe_160	BSU34990-MONOMER,BSU15450-MONOMER

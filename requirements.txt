@@ -2,7 +2,6 @@ cobra==0.26.3
 python-libsbml
 Biopython==1.80
 anyconfig
-pyranges
 xlsxwriter
 openpyxl
 numpy==1.23.5
