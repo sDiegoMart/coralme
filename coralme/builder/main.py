@@ -99,6 +99,11 @@ class MEBuilder(object):
 
 		self.location_interpreter = pandas.read_csv(io.StringIO(data), index_col = 0)
 
+		# update config filepaths to include the directory of the config file
+		config_dir = os.path.dirname(args[0])  # Assuming args[0] is the path to the config file
+		for key in ['m-model-path', 'genbank-path', 'df_TranscriptionalUnits', 'df_matrix_stoichiometry', 'df_matrix_subrxn_stoich', 'df_metadata_orphan_rxns', 'df_metadata_metabolites', 'df_reaction_keff_consts', 'biocyc.genes', 'biocyc.prots', 'biocyc.TUs', 'biocyc.RNAs', 'biocyc.seqs', 'df_gene_cplxs_mods_rxns', 'out_directory', 'log_directory']:
+			if config.get(key, None) is not None:
+				config[key] = os.path.join(config_dir, config[key])  # Append config directory to the path
 		# check user options
 		exists = []
 		for filename in [
@@ -1783,7 +1788,7 @@ class MEReconstruction(MEBuilder):
 		# step2a: generics, dnap stoichiometry, ribosome stoichiometry, degradosome stoichiometry, tRNA ligases, RNA modifications
 		# step2b: folding pathways (DnaK, GroEL), N-terminal Methionine Processing, translocation pathways
 		filename = config.get('df_gene_cplxs_mods_rxns', '')
-		if overwrite:
+		if overwrite and filename != '':
 			try:
 				pathlib.Path(filename).unlink(missing_ok = True) # python>=3.8
 			except:

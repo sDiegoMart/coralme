@@ -41,7 +41,7 @@ defer_to_rxn_matrix:
 - ATPM
 dev_reference: false
 df_TranscriptionalUnits: ../../Zymomonas_mobilis/./outputs/building_data/TUs_from_biocyc.txt
-df_gene_cplxs_mods_rxns: ../../Zymomonas_mobilis/./building_data/automated-org-with-refs.xlsx
+df_gene_cplxs_mods_rxns: ../../Zymomonas_mobilis/./outputs/building_data/automated-org-with-refs.xlsx
 e_value_cutoff: 1.0e-10
 flux_of_biomass_constituents: {}
 flux_of_lipid_constituents: {}

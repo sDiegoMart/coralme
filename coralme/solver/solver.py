@@ -74,8 +74,8 @@ def makeME_LP(S, b, c, xl, xu, csense):
     sl[m - 1] = -bigbnd
     su[m - 1] = +bigbnd
 
-    bl = scipy.vstack([ numpy.matrix(xl).transpose(), numpy.matrix(sl).transpose() ])
-    bu = scipy.vstack([ numpy.matrix(xu).transpose(), numpy.matrix(su).transpose() ])
+    bl = scipy.sparse.vstack([ numpy.matrix(xl).transpose(), numpy.matrix(sl).transpose() ])
+    bu = scipy.sparse.vstack([ numpy.matrix(xu).transpose(), numpy.matrix(su).transpose() ])
 
     return J, ne, P, I, V, bl, bu
 

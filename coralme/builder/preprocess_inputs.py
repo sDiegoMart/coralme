@@ -79,7 +79,7 @@ def generate_organism_specific_matrix(genbank, locus_tag, model):
 		'Translocation Pathway',
 		#'Translocation Multiplier'
 	])
-
+	
 	def get_reaction(x):
 		if x is None:
 			return []
@@ -559,7 +559,6 @@ def complete_organism_specific_matrix(builder, data, model, output = False):
 	# final sorting
 	data = data.sort_values(['M-model Reaction ID', 'Gene Locus ID'])
 	data = data.drop_duplicates()
-
 	if output:
 		try:
 			# Save file as excel or tsv depending on the size

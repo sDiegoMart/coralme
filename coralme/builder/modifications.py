@@ -10,6 +10,8 @@ def add_iron_sulfur_modifications(me_model):
 	for fes in ['2fe2s', '4fe4s']:
 		components = [ '{:s}_mod_{:s}(1)'.format(x, fes) for x in set(fes_transfers) if x != '' ]
 		for component in components:
+			if not me_model.metabolites.has_id(component): # Chris Dalldorf added this line, not all components were in the model which errored
+				continue # Chris Dalldorf added this line
 			query = me_model.metabolites.get_by_id(component).reactions
 			query = [ x for x in query if x.metabolites[me_model.metabolites.get_by_id(component)] > 0 ]
 			rtypes = [ type(x) for x in query ]

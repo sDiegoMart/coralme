@@ -6,7 +6,7 @@
   "biocyc.TUs": "./inputs/TUs.txt",
   "biocyc.RNAs": "./inputs/RNAs.txt",
   "biocyc.seqs": "./inputs/sequences.fasta",
-  "df_gene_cplxs_mods_rxns": ".outputs/building_data/automated-org-with-refs.xlsx",
+  "df_gene_cplxs_mods_rxns": "./outputs/building_data/automated-org-with-refs.xlsx",
   "out_directory": "./outputs",
   "log_directory": "./outputs",
   "run_bbh_blast": true,

@@ -988,8 +988,8 @@ class Organism(object):
         elif not transl_table:
             transl_table = ['11']
         self.transl_table = list(transl_table)[0]
-
         genbank_genes = set(all_genes_in_gb)
+
 
         # Overlaps
         file_overlap = int((len(file_genes & m_model_genes) / len(m_model_genes))*100)
