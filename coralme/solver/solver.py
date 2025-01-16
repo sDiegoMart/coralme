@@ -76,7 +76,7 @@ def makeME_LP(S, b, c, xl, xu, csense):
 
     bl = scipy.sparse.vstack([ numpy.matrix(xl).transpose(), numpy.matrix(sl).transpose() ])
     bu = scipy.sparse.vstack([ numpy.matrix(xu).transpose(), numpy.matrix(su).transpose() ])
-
+    
     return J, ne, P, I, V, bl, bu
 
 # Modified from solvemepy.me2
@@ -305,11 +305,14 @@ class ME_NLP:
         ha = I
         ka = P
         ad = V
-        bld = [ bi for bi in bl.flat ]
-        bud = [ bi for bi in bu.flat ]
+   
+        # Convert sparse matrices to dense arrays and flatten
+        bld = bl.toarray().flatten()
+        bud = bu.toarray().flatten()
+        
         nb = m + n
         hs = numpy.zeros(nb, numpy.dtype('i4'))
-
+        
         return m, n, ha, ka, ad, bld, bud, hs, obj_inds
 
     def solvelp(self, muf, basis, precision, probname = 'me_lp'):
