@@ -1,3 +1,0 @@
-lipid_mod	enzymes
-other_lipids	EWS79_RS01170-MONOMER
-pg_pe_160	ZMO0291-MONOMER,ZMO0324-MONOMER

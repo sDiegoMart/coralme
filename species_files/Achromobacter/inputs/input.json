@@ -1,0 +1,18 @@
+{
+  "m-model-path": "./i_ZM4_481.json",
+  "genbank-path": "./inputs/genome.gb",
+  "biocyc.genes": "./inputs/genes.txt",
+  "biocyc.prots": "./inputs/proteins.txt",
+  "biocyc.TUs": "./inputs/TUs.txt",
+  "biocyc.RNAs": "./inputs/RNAs.txt",
+  "biocyc.seqs": "./inputs/sequences.fasta",
+  "df_gene_cplxs_mods_rxns": "",
+  "df_TranscriptionalUnits": "",
+  "out_directory": "./",
+  "log_directory": "./",
+  "run_bbh_blast": true,
+  "e_value_cutoff": 1e-10,
+  "dev_reference": true,
+  "include_pseudo_genes": true,
+  "locus_tag" : "old_locus_tag"
+}

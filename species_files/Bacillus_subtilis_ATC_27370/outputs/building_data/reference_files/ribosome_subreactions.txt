@@ -1,0 +1,4 @@
+subreaction	enzyme
+gtp_bound_30S_assembly_factor_phase1	ZMO1384-MONOMER
+RbfA_mono_assembly_factor_phase1	ZMO0553-MONOMER
+RimM_mono_assembly_factor_phase1	CPLX_dummy

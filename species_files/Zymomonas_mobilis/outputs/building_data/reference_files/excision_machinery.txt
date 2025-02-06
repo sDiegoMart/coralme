@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	ZMO0193-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	ZMO0193-MONOMER_mod_zn2(2),generic_RNase,ZMO1375-MONOMER
+rRNA_containing	ZMO0193-MONOMER_mod_zn2(2),generic_RNase,ZMO1375-MONOMER_mod_mg2(2)

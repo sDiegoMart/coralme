@@ -1,1 +1,0 @@
-Proteins	Genes of polypeptide, complex, or RNA	Common-Name	Locations

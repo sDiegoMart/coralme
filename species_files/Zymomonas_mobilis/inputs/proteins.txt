@@ -1,0 +1,1746 @@
+Proteins	Genes of polypeptide, complex, or RNA	Common-Name	Locations
+EWS79_RS06265-MONOMER	EWS79_RS06265	(2Fe-2S)-binding protein	
+EWS79_RS08050-MONOMER	EWS79_RS08050	(d)CMP kinase	
+EWS79_RS00110-MONOMER	EWS79_RS00110	(Fe-S)-binding protein	
+EWS79_RS06695-MONOMER	EWS79_RS06695	1-(5-phosphoribosyl)-5-((5- phosphoribosylamino)methylideneamino)imidazole-4- carboxamide isomerase	
+EWS79_RS01785-MONOMER	EWS79_RS01785	1-acyl-sn-glycerol-3-phosphate acyltransferase	
+EWS79_RS05135-MONOMER	EWS79_RS05135	1-deoxy-D-xylulose-5-phosphate reductoisomerase	
+EWS79_RS07125-MONOMER	EWS79_RS07125	1-deoxy-D-xylulose-5-phosphate synthase	CCI-CYTOSOL-GN
+EWS79_RS05530-MONOMER	EWS79_RS05530	1-deoxy-D-xylulose-5-phosphate synthase	CCI-CYTOSOL-GN
+EWS79_RS05855-MONOMER	EWS79_RS05855	16S rRNA (adenine(1518)-N(6)/adenine(1519)-N(6))- dimethyltransferase RsmA	CCI-CYTOSOL-GN
+EWS79_RS07890-MONOMER	EWS79_RS07890	16S rRNA (cytidine(1402)-2'-O)-methyltransferase	
+EWS79_RS03640-MONOMER	EWS79_RS03640	16S rRNA (cytosine(1402)-N(4))-methyltransferase RsmH	
+EWS79_RS09000-MONOMER	EWS79_RS09000	16S rRNA (guanine(527)-N(7))-methyltransferase RsmG	
+EWS79_RS02545-MONOMER	EWS79_RS02545	16S rRNA (guanine(966)-N(2))-methyltransferase RsmD	
+EWS79_RS06920-MONOMER	EWS79_RS06920	16S rRNA (uracil(1498)-N(3))-methyltransferase	
+EWS79_RS01840-MONOMER	EWS79_RS01840	2,3,4,5-tetrahydropyridine-2,6-dicarboxylate N-succinyltransferase	
+EWS79_RS05550-MONOMER	EWS79_RS05550	2,3-diphosphoglycerate-dependent phosphoglycerate mutase	CCI-CYTOSOL-GN
+EWS79_RS07360-MONOMER	EWS79_RS07360	2-amino-4-hydroxy-6- hydroxymethyldihydropteridine diphosphokinase	CCI-CYTOSOL-GN
+EWS79_RS01330-MONOMER	EWS79_RS01330	2-amino-thiazoline-4-carboxylic acid hydrolase	
+EWS79_RS05545-MONOMER	EWS79_RS05545	2-hydroxyacid dehydrogenase	
+EWS79_RS00650-MONOMER	EWS79_RS00650	2-hydroxyacid dehydrogenase	
+EWS79_RS04000-MONOMER	EWS79_RS04000	2-isopropylmalate synthase	
+EWS79_RS07865-MONOMER	EWS79_RS07865	2-keto-3-deoxygluconate permease	
+EWS79_RS07385-MONOMER	EWS79_RS07385	2-nitropropane dioxygenase	
+EWS79_RS05320-MONOMER	EWS79_RS05320	2-polyprenylphenol 6-hydroxylase	
+EWS79_RS04605-MONOMER	EWS79_RS04605	23S rRNA (adenine(2503)-C(2))-methyltransferase RlmN	
+EWS79_RS00995-MONOMER	EWS79_RS00995	23S rRNA (guanosine(2251)-2'-O)-methyltransferase RlmB	CCI-CYTOSOL-GN
+EWS79_RS07445-MONOMER	EWS79_RS07445	23S rRNA (pseudouridine(1915)-N(3))-methyltransferase RlmH	
+EWS79_RS01945-MONOMER	EWS79_RS01945	2Fe-2S iron-sulfur cluster binding domain-containing protein	
+EWS79_RS03805-MONOMER	EWS79_RS03805	2Fe-2S iron-sulfur cluster binding domain-containing protein	
+EWS79_RS03250-MONOMER	EWS79_RS03250	3'(2'),5'-bisphosphate nucleotidase	CCI-CYTOSOL-GN
+EWS79_RS02015-MONOMER	EWS79_RS02015	3,4-dihydroxy-2-butanone-4-phosphate synthase	
+EWS79_RS02620-MONOMER	EWS79_RS02620	3-dehydroquinate synthase	
+EWS79_RS00790-MONOMER	EWS79_RS00790	3-deoxy-7-phosphoheptulonate synthase	CCI-CYTOSOL-GN
+EWS79_RS06630-MONOMER	EWS79_RS06630	3-deoxy-8-phosphooctulonate synthase	CCI-CYTOSOL-GN
+EWS79_RS06635-MONOMER	EWS79_RS06635	3-deoxy-manno-octulosonate cytidylyltransferase	
+EWS79_RS05115-MONOMER	EWS79_RS05115	3-hydroxyacyl-ACP dehydratase FabZ	CCI-CYTOSOL-GN
+CPLX1W2W-15	EWS79_RS00430 // EWS79_RS00425	3-isopropylmalate dehydratase	
+EWS79_RS00425-MONOMER	EWS79_RS00425	3-isopropylmalate dehydratase large subunit	CCI-CYTOSOL-GN
+EWS79_RS00430-MONOMER	EWS79_RS00430	3-isopropylmalate dehydratase small subunit	
+EWS79_RS02990-MONOMER	EWS79_RS02990	3-isopropylmalate dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS08875-MONOMER	EWS79_RS08875	3-methyl-2-oxobutanoate hydroxymethyltransferase	
+EWS79_RS08955-MONOMER	EWS79_RS08955	3-methyl-2-oxobutanoate hydroxymethyltransferase	
+EWS79_RS05475-MONOMER	EWS79_RS05475	3-oxoacyl-ACP reductase FabG	
+EWS79_RS08045-MONOMER	EWS79_RS08045	3-phosphoshikimate 1-carboxyvinyltransferase	
+EWS79_RS08055-MONOMER	EWS79_RS08055	30S ribosomal protein S1	CCI-CYTOSOL-GN
+EWS79_RS02235-MONOMER	EWS79_RS02235	30S ribosomal protein S10	CCI-CYTOSOL-GN
+EWS79_RS02355-MONOMER	EWS79_RS02355	30S ribosomal protein S11	CCI-CYTOSOL-GN
+EWS79_RS02215-MONOMER	EWS79_RS02215	30S ribosomal protein S12	CCI-CYTOSOL-GN
+EWS79_RS03570-MONOMER	EWS79_RS03570	30S ribosomal protein S12 methylthiotransferase RimO	
+EWS79_RS02350-MONOMER	EWS79_RS02350	30S ribosomal protein S13	CCI-CYTOSOL-GN
+EWS79_RS02305-MONOMER	EWS79_RS02305	30S ribosomal protein S14	CCI-CYTOSOL-GN
+EWS79_RS02415-MONOMER	EWS79_RS02415	30S ribosomal protein S15	CCI-CYTOSOL-GN
+EWS79_RS04795-MONOMER	EWS79_RS04795	30S ribosomal protein S16	CCI-CYTOSOL-GN
+EWS79_RS02285-MONOMER	EWS79_RS02285	30S ribosomal protein S17	CCI-CYTOSOL-GN
+EWS79_RS05490-MONOMER	EWS79_RS05490	30S ribosomal protein S18	CCI-CYTOSOL-GN
+EWS79_RS02260-MONOMER	EWS79_RS02260	30S ribosomal protein S19	CCI-CYTOSOL-GN
+EWS79_RS05165-MONOMER	EWS79_RS05165	30S ribosomal protein S2	CCI-CYTOSOL-GN
+EWS79_RS06040-MONOMER	EWS79_RS06040	30S ribosomal protein S20	CCI-CYTOSOL-GN
+EWS79_RS07675-MONOMER	EWS79_RS07675	30S ribosomal protein S21	
+EWS79_RS02270-MONOMER	EWS79_RS02270	30S ribosomal protein S3	CCI-CYTOSOL-GN
+EWS79_RS06070-MONOMER	EWS79_RS06070	30S ribosomal protein S4	CCI-CYTOSOL-GN
+EWS79_RS02325-MONOMER	EWS79_RS02325	30S ribosomal protein S5	CCI-CYTOSOL-GN
+EWS79_RS05485-MONOMER	EWS79_RS05485	30S ribosomal protein S6	CCI-CYTOSOL-GN
+EWS79_RS02220-MONOMER	EWS79_RS02220	30S ribosomal protein S7	CCI-CYTOSOL-GN
+EWS79_RS02310-MONOMER	EWS79_RS02310	30S ribosomal protein S8	CCI-CYTOSOL-GN
+EWS79_RS03915-MONOMER	EWS79_RS03915	30S ribosomal protein S9	CCI-CYTOSOL-GN
+EWS79_RS02430-MONOMER	EWS79_RS02430	30S ribosome-binding factor RbfA	
+EWS79_RS05280-MONOMER	EWS79_RS05280	4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol kinase	
+EWS79_RS03885-MONOMER	EWS79_RS03885	4-hydroxy-3-methylbut-2-enyl diphosphate reductase	CCI-CYTOSOL-GN
+EWS79_RS03120-MONOMER	EWS79_RS03120	4-hydroxy-tetrahydrodipicolinate reductase	CCI-CYTOSOL-GN
+EWS79_RS03180-MONOMER	EWS79_RS03180	4-hydroxy-tetrahydrodipicolinate synthase	
+EWS79_RS06310-MONOMER	EWS79_RS06310	4-hydroxybenzoate octaprenyltransferase	
+EWS79_RS05850-MONOMER	EWS79_RS05850	4-hydroxythreonine-4-phosphate dehydrogenase	
+EWS79_RS04395-MONOMER	EWS79_RS04395	5'-nucleotidase SurE	
+EWS79_RS06315-MONOMER	EWS79_RS06315	5-(carboxyamino)imidazole ribonucleotide mutase	
+EWS79_RS06320-MONOMER	EWS79_RS06320	5-(carboxyamino)imidazole ribonucleotide synthase	CCI-PM-BAC-NEG-GN
+EWS79_RS05365-MONOMER	EWS79_RS05365	5-aminolevulinate synthase	
+EWS79_RS00920-MONOMER	EWS79_RS00920	5-formyltetrahydrofolate cyclo-ligase	
+EWS79_RS07815-MONOMER	EWS79_RS07815	5-methyltetrahydrofolate--homocysteine methyltransferase	CCI-CYTOSOL-GN
+EWS79_RS04455-MONOMER	EWS79_RS04455	5-methyltetrahydropteroyltriglutamate-- homocysteine S-methyltransferase	
+EWS79_RS03215-MONOMER	EWS79_RS03215	50S ribosomal protein L1	CCI-CYTOSOL-GN
+EWS79_RS03220-MONOMER	EWS79_RS03220	50S ribosomal protein L10	CCI-CYTOSOL-GN
+EWS79_RS03210-MONOMER	EWS79_RS03210	50S ribosomal protein L11	CCI-CYTOSOL-GN
+EWS79_RS02515-MONOMER	EWS79_RS02515	50S ribosomal protein L11 methyltransferase	
+EWS79_RS03920-MONOMER	EWS79_RS03920	50S ribosomal protein L13	CCI-CYTOSOL-GN
+EWS79_RS02290-MONOMER	EWS79_RS02290	50S ribosomal protein L14	CCI-CYTOSOL-GN
+EWS79_RS02335-MONOMER	EWS79_RS02335	50S ribosomal protein L15	CCI-CYTOSOL-GN
+EWS79_RS02275-MONOMER	EWS79_RS02275	50S ribosomal protein L16	CCI-CYTOSOL-GN
+EWS79_RS02365-MONOMER	EWS79_RS02365	50S ribosomal protein L17	CCI-CYTOSOL-GN
+EWS79_RS02320-MONOMER	EWS79_RS02320	50S ribosomal protein L18	CCI-CYTOSOL-GN
+EWS79_RS04810-MONOMER	EWS79_RS04810	50S ribosomal protein L19	CCI-CYTOSOL-GN
+EWS79_RS02255-MONOMER	EWS79_RS02255	50S ribosomal protein L2	CCI-CYTOSOL-GN
+EWS79_RS06760-MONOMER	EWS79_RS06760	50S ribosomal protein L20	CCI-CYTOSOL-GN
+EWS79_RS00905-MONOMER	EWS79_RS00905	50S ribosomal protein L21	CCI-CYTOSOL-GN
+EWS79_RS02265-MONOMER	EWS79_RS02265	50S ribosomal protein L22	CCI-CYTOSOL-GN
+EWS79_RS02250-MONOMER	EWS79_RS02250	50S ribosomal protein L23	CCI-CYTOSOL-GN
+EWS79_RS02295-MONOMER	EWS79_RS02295	50S ribosomal protein L24	
+EWS79_RS08635-MONOMER	EWS79_RS08635	50S ribosomal protein L25	CCI-CYTOSOL-GN
+EWS79_RS00900-MONOMER	EWS79_RS00900	50S ribosomal protein L27	CCI-CYTOSOL-GN
+EWS79_RS01255-MONOMER	EWS79_RS01255	50S ribosomal protein L28	CCI-CYTOSOL-GN
+EWS79_RS02280-MONOMER	EWS79_RS02280	50S ribosomal protein L29	CCI-CYTOSOL-GN
+EWS79_RS02240-MONOMER	EWS79_RS02240	50S ribosomal protein L3	CCI-CYTOSOL-GN
+EWS79_RS02330-MONOMER	EWS79_RS02330	50S ribosomal protein L30	CCI-CYTOSOL-GN
+EWS79_RS05110-MONOMER	EWS79_RS05110	50S ribosomal protein L31	CCI-CYTOSOL-GN
+EWS79_RS08585-MONOMER	EWS79_RS08585	50S ribosomal protein L32	
+EWS79_RS01065-MONOMER	EWS79_RS01065	50S ribosomal protein L33	CCI-CYTOSOL-GN
+EWS79_RS07240-MONOMER	EWS79_RS07240	50S ribosomal protein L34	
+EWS79_RS06765-MONOMER	EWS79_RS06765	50S ribosomal protein L35	
+EWS79_RS05565-MONOMER	EWS79_RS05565	50S ribosomal protein L36	
+EWS79_RS02245-MONOMER	EWS79_RS02245	50S ribosomal protein L4	CCI-CYTOSOL-GN
+EWS79_RS02300-MONOMER	EWS79_RS02300	50S ribosomal protein L5	CCI-CYTOSOL-GN
+EWS79_RS02315-MONOMER	EWS79_RS02315	50S ribosomal protein L6	CCI-CYTOSOL-GN
+EWS79_RS03225-MONOMER	EWS79_RS03225	50S ribosomal protein L7/L12	
+EWS79_RS05495-MONOMER	EWS79_RS05495	50S ribosomal protein L9	CCI-CYTOSOL-GN
+EWS79_RS02010-MONOMER	EWS79_RS02010	6,7-dimethyl-8-ribityllumazine synthase	CCI-CYTOSOL-GN
+EWS79_RS03615-MONOMER	EWS79_RS03615	6-carboxytetrahydropterin synthase QueD	CCI-CYTOSOL-GN
+EWS79_RS06580-MONOMER	EWS79_RS06580	6-phosphogluconolactonase	
+EWS79_RS05755-MONOMER	EWS79_RS05755	7-carboxy-7-deazaguanine synthase	
+EWS79_RS04575-MONOMER	EWS79_RS04575	7-cyano-7-deazaguanine synthase QueC	
+EWS79_RS08670-MONOMER	EWS79_RS08670	8-amino-7-oxononanoate synthase	
+EWS79_RS07500-MONOMER	EWS79_RS07500	A/G-specific adenine glycosylase	
+EWS79_RS06540-MONOMER	EWS79_RS06540	ABC transporter	
+EWS79_RS08270-MONOMER	EWS79_RS08270	ABC transporter ATP-binding protein	
+EWS79_RS06030-MONOMER	EWS79_RS06030	ABC transporter ATP-binding protein	
+EWS79_RS01955-MONOMER	EWS79_RS01955	ABC transporter ATP-binding protein	
+EWS79_RS00985-MONOMER	EWS79_RS00985	ABC transporter ATP-binding protein	
+EWS79_RS04035-MONOMER	EWS79_RS04035	ABC transporter ATP-binding protein	
+EWS79_RS00590-MONOMER	EWS79_RS00590	ABC transporter ATP-binding protein	CCI-CYTOSOL-GN
+EWS79_RS04375-MONOMER	EWS79_RS04375	ABC transporter ATP-binding protein	
+EWS79_RS04595-MONOMER	EWS79_RS04595	ABC transporter ATP-binding protein	
+EWS79_RS03540-MONOMER	EWS79_RS03540	ABC transporter ATP-binding protein/permease	
+EWS79_RS06745-MONOMER	EWS79_RS06745	ABC transporter ATP-binding protein/permease	
+EWS79_RS04600-MONOMER	EWS79_RS04600	ABC transporter permease	
+EWS79_RS04380-MONOMER	EWS79_RS04380	ABC transporter permease	
+EWS79_RS07105-MONOMER	EWS79_RS07105	ABC transporter permease	CCI-PM-BAC-NEG-GN
+EWS79_RS03535-MONOMER	EWS79_RS03535	ABC transporter permease	CCI-PM-BAC-NEG-GN
+EWS79_RS04385-MONOMER	EWS79_RS04385	ABC transporter permease subunit	
+EWS79_RS05630-MONOMER	EWS79_RS05630	ABC transporter permease subunit	
+EWS79_RS02525-MONOMER	EWS79_RS02525	ABC transporter permease subunit	
+EWS79_RS04360-MONOMER	EWS79_RS04360	ABC transporter substrate-binding protein	
+EWS79_RS08280-MONOMER	EWS79_RS08280	ABC transporter substrate-binding protein	
+EWS79_RS07195-MONOMER	EWS79_RS07195	ABC transporter substrate-binding protein	
+EWS79_RS06515-MONOMER	EWS79_RS06515	ABC transporter substrate-binding protein	
+EWS79_RS05625-MONOMER	EWS79_RS05625	ABC transporter substrate-binding protein	
+EWS79_RS08495-MONOMER	EWS79_RS08495	AbrB family transcriptional regulator	CCI-PM-BAC-NEG-GN
+EWS79_RS08515-MONOMER	EWS79_RS08515	AbrB family transcriptional regulator	
+EWS79_RS05815-MONOMER	EWS79_RS05815	accessory factor UbiK family protein	
+EWS79_RS03035-MONOMER	EWS79_RS03035	acetolactate synthase large subunit	CCI-CYTOSOL-GN
+EWS79_RS05085-MONOMER	EWS79_RS05085	acetolactate synthase small subunit	CCI-CYTOSOL-GN
+EWS79_RS03260-MONOMER	EWS79_RS03260	acetyl-CoA carboxylase biotin carboxyl carrier protein	
+EWS79_RS03255-MONOMER	EWS79_RS03255	acetyl-CoA carboxylase biotin carboxylase subunit	CCI-CYTOSOL-GN
+EWS79_RS02640-MONOMER	EWS79_RS02640	acetyl-CoA carboxylase carboxyltransferase subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS02570-MONOMER	EWS79_RS02570	acetyl-CoA carboxylase carboxyltransferase subunit beta	CCI-CYTOSOL-GN
+EWS79_RS06660-MONOMER	EWS79_RS06660	acetylglutamate kinase	
+EWS79_RS03245-MONOMER	EWS79_RS03245	acetyltransferase	
+EWS79_RS00535-MONOMER	EWS79_RS00535	acid phosphatase	
+EWS79_RS02375-MONOMER	EWS79_RS02375	aconitate hydratase	
+EWS79_RS05480-MONOMER	EWS79_RS05480	ACP S-malonyltransferase	
+EWS79_RS06810-MONOMER	EWS79_RS06810	acriflavin resistance protein	CCI-PM-BAC-NEG-GN
+EWS79_RS05705-MONOMER	EWS79_RS05705	acyl carrier protein	CCI-CYTOSOL-GN
+EWS79_RS05660-MONOMER	EWS79_RS05660	acyl carrier protein	
+EG50003-MONOMER		acyl carrier protein	
+EWS79_RS02070-MONOMER	EWS79_RS02070	acyl-CoA dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS02200-MONOMER	EWS79_RS02200	acyl-CoA thioesterase	
+EWS79_RS02880-MONOMER	EWS79_RS02880	adenosine deaminase	
+EWS79_RS04325-MONOMER	EWS79_RS04325	adenosine deaminase	
+EWS79_RS08550-MONOMER	EWS79_RS08550	adenosine kinase	
+EWS79_RS03880-MONOMER	EWS79_RS03880	adenosyl-hopene transferase HpnH	CCI-CYTOSOL-GN
+EWS79_RS00770-MONOMER	EWS79_RS00770	adenosylhomocysteinase	
+EWS79_RS08675-MONOMER	EWS79_RS08675	adenosylmethionine--8-amino-7-oxononanoate transaminase	
+EWS79_RS02345-MONOMER	EWS79_RS02345	adenylate kinase	CCI-CYTOSOL-GN
+EWS79_RS02915-MONOMER	EWS79_RS02915	adenylosuccinate lyase	
+EWS79_RS07550-MONOMER	EWS79_RS07550	adenylosuccinate synthase	
+EWS79_RS00015-MONOMER	EWS79_RS00015	adenylyl-sulfate kinase	
+EWS79_RS06595-MONOMER	EWS79_RS06595	ADP-forming succinate--CoA ligase subunit beta	
+EWS79_RS06075-MONOMER	EWS79_RS06075	agmatine deiminase family protein	
+EWS79_RS07665-MONOMER	EWS79_RS07665	AI-2E family transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS02870-MONOMER	EWS79_RS02870	AI-2E family transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS07110-MONOMER	EWS79_RS07110	alanine racemase	
+EWS79_RS03740-MONOMER	EWS79_RS03740	alanine--tRNA ligase	
+EWS79_RS05540-MONOMER	EWS79_RS05540	alcohol dehydrogenase AdhP	CCI-CYTOSOL-GN
+EWS79_RS05980-MONOMER	EWS79_RS05980	aldo/keto reductase	
+EWS79_RS07485-MONOMER	EWS79_RS07485	aldo/keto reductase	
+EWS79_RS09015-MONOMER	EWS79_RS09015	aldo/keto reductase	
+EWS79_RS07945-MONOMER	EWS79_RS07945	aldo/keto reductase	
+EWS79_RS04355-MONOMER	EWS79_RS04355	aldo/keto reductase	
+EWS79_RS00260-MONOMER	EWS79_RS00260	aldo/keto reductase	
+EWS79_RS04205-MONOMER	EWS79_RS04205	aldose 1-epimerase family protein	
+EWS79_RS07155-MONOMER	EWS79_RS07155	alkaline phosphatase family protein	
+EWS79_RS04170-MONOMER	EWS79_RS04170	alkaline phosphatase family protein	
+EWS79_RS08510-MONOMER	EWS79_RS08510	alkene reductase	
+EWS79_RS08265-MONOMER	EWS79_RS08265	alkylphosphonate utilization protein	
+EWS79_RS06245-MONOMER	EWS79_RS06245	alpha/beta fold hydrolase	
+EWS79_RS07025-MONOMER	EWS79_RS07025	alpha/beta hydrolase	
+EWS79_RS00220-MONOMER	EWS79_RS00220	alpha/beta hydrolase	
+EWS79_RS03380-MONOMER	EWS79_RS03380	alpha/beta hydrolase	
+EWS79_RS06535-MONOMER	EWS79_RS06535	alpha/beta hydrolase	
+EWS79_RS04565-MONOMER	EWS79_RS04565	alpha/beta hydrolase	
+EWS79_RS05680-MONOMER	EWS79_RS05680	amidohydrolase	
+EWS79_RS01325-MONOMER	EWS79_RS01325	amidohydrolase	
+EWS79_RS06930-MONOMER	EWS79_RS06930	amidophosphoribosyltransferase	
+EWS79_RS06675-MONOMER	EWS79_RS06675	amino acid permease	
+EWS79_RS08070-MONOMER	EWS79_RS08070	amino acid permease	CCI-PM-BAC-NEG-GN
+EWS79_RS08965-MONOMER	EWS79_RS08965	amino acid transporter	
+EWS79_RS02175-MONOMER	EWS79_RS02175	aminoacyl-tRNA hydrolase	
+EWS79_RS08640-MONOMER	EWS79_RS08640	aminoacyl-tRNA hydrolase	
+EWS79_RS00465-MONOMER	EWS79_RS00465	aminodeoxychorismate synthase component I	
+CPLX1W2W-14	EWS79_RS00470 // EWS79_RS00465	aminodeoxychorismate/anthranilate synthase	
+EWS79_RS00860-MONOMER	EWS79_RS00860	aminodeoxychorismate/anthranilate synthase component II	
+EWS79_RS00470-MONOMER	EWS79_RS00470	aminodeoxychorismate/anthranilate synthase component II	CCI-CYTOSOL-GN
+EWS79_RS00575-MONOMER	EWS79_RS00575	aminoglycoside phosphotransferase	
+EWS79_RS06510-MONOMER	EWS79_RS06510	aminoglycoside phosphotransferase	
+EWS79_RS06965-MONOMER	EWS79_RS06965	aminoglycoside phosphotransferase	
+EWS79_RS05985-MONOMER	EWS79_RS05985	aminopeptidase N	
+EWS79_RS02105-MONOMER	EWS79_RS02105	aminopeptidase P family protein	
+EWS79_RS00475-MONOMER	EWS79_RS00475	aminotransferase	
+EWS79_RS01440-MONOMER	EWS79_RS01440	aminotransferase	
+EWS79_RS00010-MONOMER	EWS79_RS00010	aminotransferase class I/II-fold pyridoxal phosphate-dependent enzyme	
+EWS79_RS05665-MONOMER	EWS79_RS05665	aminotransferase class I/II-fold pyridoxal phosphate-dependent enzyme	CCI-CYTOSOL-GN
+EWS79_RS04570-MONOMER	EWS79_RS04570	aminotransferase class V-fold PLP-dependent enzyme	
+EWS79_RS02985-MONOMER	EWS79_RS02985	aminotransferase class V-fold PLP-dependent enzyme	CCI-CYTOSOL-GN
+EWS79_RS01455-MONOMER	EWS79_RS01455	ammonium transporter	
+EWS79_RS04590-MONOMER	EWS79_RS04590	anaerobic ribonucleoside-triphosphate reductase activating protein	
+EWS79_RS07335-MONOMER	EWS79_RS07335	anhydro-N-acetylmuramic acid kinase	
+EWS79_RS00160-MONOMER	EWS79_RS00160	ankyrin repeat domain-containing protein	
+EWS79_RS00855-MONOMER	EWS79_RS00855	anthranilate phosphoribosyltransferase	CCI-CYTOSOL-GN
+EWS79_RS01990-MONOMER	EWS79_RS01990	anthranilate synthase component I	
+EWS79_RS07060-MONOMER	EWS79_RS07060	antibiotic biosynthesis monooxygenase	
+EWS79_RS07975-MONOMER	EWS79_RS07975	antibiotic biosynthesis monooxygenase	
+EWS79_RS05225-MONOMER	EWS79_RS05225	antibiotic biosynthesis monooxygenase	
+EWS79_RS01170-MONOMER	EWS79_RS01170	apolipoprotein N-acyltransferase	
+EWS79_RS06125-MONOMER	EWS79_RS06125	AraC family transcriptional regulator	
+EWS79_RS01845-MONOMER	EWS79_RS01845	arginase family protein	
+EWS79_RS02890-MONOMER	EWS79_RS02890	arginine N-succinyltransferase	
+EWS79_RS03730-MONOMER	EWS79_RS03730	arginine--tRNA ligase	CCI-CYTOSOL-GN
+EWS79_RS07930-MONOMER	EWS79_RS07930	argininosuccinate lyase	
+EWS79_RS04620-MONOMER	EWS79_RS04620	argininosuccinate synthase	CCI-CYTOSOL-GN
+EWS79_RS08970-MONOMER	EWS79_RS08970	ArgP/LysG family DNA-binding transcriptional regulator	
+EWS79_RS01290-MONOMER	EWS79_RS01290	aryl-sulfate sulfotransferase	
+EWS79_RS04095-MONOMER	EWS79_RS04095	ASCH domain-containing protein	
+CPLX1W2W-1	EWS79_RS03465 // EWS79_RS03460 // EWS79_RS03455	Asp-tRNA(Asn)/Glu-tRNA(Gln) amidotransferase	
+EWS79_RS03460-MONOMER	EWS79_RS03460	Asp-tRNA(Asn)/Glu-tRNA(Gln) amidotransferase subunit GatA	CCI-CYTOSOL-GN
+EWS79_RS03455-MONOMER	EWS79_RS03455	Asp-tRNA(Asn)/Glu-tRNA(Gln) amidotransferase subunit GatB	CCI-CYTOSOL-GN
+EWS79_RS03465-MONOMER	EWS79_RS03465	Asp-tRNA(Asn)/Glu-tRNA(Gln) amidotransferase subunit GatC	CCI-CYTOSOL-GN
+EWS79_RS07530-MONOMER	EWS79_RS07530	asparaginase	
+EWS79_RS06135-MONOMER	EWS79_RS06135	aspartate aminotransferase family protein	
+EWS79_RS01735-MONOMER	EWS79_RS01735	aspartate aminotransferase family protein	CCI-CYTOSOL-GN
+EWS79_RS03500-MONOMER	EWS79_RS03500	aspartate carbamoyltransferase	CCI-CYTOSOL-GN
+EWS79_RS07390-MONOMER	EWS79_RS07390	aspartate kinase	
+EWS79_RS03160-MONOMER	EWS79_RS03160	aspartate--tRNA ligase	
+EWS79_RS06250-MONOMER	EWS79_RS06250	aspartate-semialdehyde dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS01565-MONOMER	EWS79_RS01565	aspartate/glutamate racemase family protein	
+EWS79_RS05175-MONOMER	EWS79_RS05175	aspartate/glutamate racemase family protein	
+EWS79_RS04165-MONOMER	EWS79_RS04165	aspartate/tyrosine/aromatic aminotransferase	
+EWS79_RS00040-MONOMER	EWS79_RS00040	assimilatory sulfite reductase (NADPH) hemoprotein subunit	
+EWS79_RS06900-MONOMER	EWS79_RS06900	ATP phosphoribosyltransferase	CCI-CYTOSOL-GN
+EWS79_RS07545-MONOMER	EWS79_RS07545	ATP phosphoribosyltransferase regulatory subunit	
+EWS79_RS01040-MONOMER	EWS79_RS01040	ATP synthase F1 subunit epsilon	
+EWS79_RS04545-MONOMER	EWS79_RS04545	ATP-binding cassette domain-containing protein	
+EWS79_RS07100-MONOMER	EWS79_RS07100	ATP-binding cassette domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS05635-MONOMER	EWS79_RS05635	ATP-binding cassette domain-containing protein	
+EWS79_RS08020-MONOMER	EWS79_RS08020	ATP-binding cassette domain-containing protein	
+EWS79_RS00455-MONOMER	EWS79_RS00455	ATP-binding cassette domain-containing protein	
+EWS79_RS01015-MONOMER	EWS79_RS01015	ATP-binding protein	
+EWS79_RS07235-MONOMER	EWS79_RS07235	ATP-binding protein	
+EWS79_RS02460-MONOMER	EWS79_RS02460	ATP-binding protein	
+EWS79_RS00510-MONOMER	EWS79_RS00510	ATP-binding protein	
+EWS79_RS06335-MONOMER	EWS79_RS06335	ATP-dependent chaperone ClpB	CCI-CYTOSOL-GN
+EWS79_RS07740-MONOMER	EWS79_RS07740	ATP-dependent Clp protease adapter ClpS	CCI-CYTOSOL-GN
+EWS79_RS01720-MONOMER	EWS79_RS01720	ATP-dependent Clp protease ATP-binding subunit ClpA	CCI-CYTOSOL-GN
+EWS79_RS04230-MONOMER	EWS79_RS04230	ATP-dependent Clp protease ATP-binding subunit ClpX	CCI-CYTOSOL-GN
+EWS79_RS04225-MONOMER	EWS79_RS04225	ATP-dependent Clp protease proteolytic subunit	CCI-CYTOSOL-GN
+EWS79_RS03950-MONOMER	EWS79_RS03950	ATP-dependent DNA helicase	
+EWS79_RS07345-MONOMER	EWS79_RS07345	ATP-dependent DNA helicase RecG	
+EWS79_RS02490-MONOMER	EWS79_RS02490	ATP-dependent helicase HrpB	
+EWS79_RS07420-MONOMER	EWS79_RS07420	ATP-dependent metallopeptidase FtsH/Yme1/Tma family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS01060-MONOMER	EWS79_RS01060	ATP-dependent protease ATPase subunit HslU	
+EWS79_RS01055-MONOMER	EWS79_RS01055	ATP-dependent protease subunit HslV	CCI-CYTOSOL-GN
+EWS79_RS05220-MONOMER	EWS79_RS05220	ATPase	
+EWS79_RS01880-MONOMER	EWS79_RS01880	ATPase	
+EWS79_RS02955-MONOMER	EWS79_RS02955	ATPase	
+EWS79_RS01415-MONOMER	EWS79_RS01415	ATPase	CCI-CYTOSOL-GN
+EWS79_RS02960-MONOMER	EWS79_RS02960	ATPase	
+EWS79_RS03905-MONOMER	EWS79_RS03905	ATPase	
+EWS79_RS02405-MONOMER	EWS79_RS02405	ATPase	
+EWS79_RS00910-MONOMER	EWS79_RS00910	autotransporter domain-containing protein	
+EWS79_RS06600-MONOMER	EWS79_RS06600	autotransporter domain-containing protein	
+EWS79_RS06270-MONOMER	EWS79_RS06270	bacterioferritin	CCI-CYTOSOL-GN
+EWS79_RS07080-MONOMER	EWS79_RS07080	bacterioferritin	CCI-CYTOSOL-GN
+EWS79_RS01080-MONOMER	EWS79_RS01080	BapA prefix-like domain-containing protein	
+EWS79_RS06015-MONOMER	EWS79_RS06015	Bax inhibitor-1/YccA family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS02120-MONOMER	EWS79_RS02120	Bcr/CflA family efflux MFS transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS04005-MONOMER	EWS79_RS04005	beta-galactosidase	
+EWS79_RS05700-MONOMER	EWS79_RS05700	beta-ketoacyl-[acyl-carrier-protein] synthase II	CCI-CYTOSOL-GN
+EWS79_RS05230-MONOMER	EWS79_RS05230	beta-N-acetylhexosaminidase	
+EWS79_RS00355-MONOMER	EWS79_RS00355	bifunctional (p)ppGpp synthetase/guanosine-3',5'-bis(diphosphate) 3'-pyrophosphohydrolase	CCI-CYTOSOL-GN
+EWS79_RS05025-MONOMER	EWS79_RS05025	bifunctional 2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase/2-C-methyl-D-erythritol 2,4-cyclodiphosphate synthase	CCI-CYTOSOL-GN
+EWS79_RS07395-MONOMER	EWS79_RS07395	bifunctional 2-polyprenyl-6-hydroxyphenol methylase/3-demethylubiquinol 3-O-methyltransferase UbiG	CCI-CYTOSOL-GN
+EWS79_RS05270-MONOMER	EWS79_RS05270	bifunctional ADP-dependent NAD(P)H-hydrate dehydratase/NAD(P)H-hydrate epimerase	
+EWS79_RS07525-MONOMER	EWS79_RS07525	bifunctional aspartate transaminase/aspartate 4-decarboxylase	CCI-CYTOSOL-GN
+EWS79_RS05315-MONOMER	EWS79_RS05315	bifunctional demethylmenaquinone methyltransferase/2-methoxy-6-polyprenyl-1,4-benzoquinol methylase UbiE	
+EWS79_RS02025-MONOMER	EWS79_RS02025	bifunctional diaminohydroxyphosphoribosylaminopyrimidine deaminase/5-amino-6-(5-phosphoribosylamino)uracil reductase RibD	
+EWS79_RS04700-MONOMER	EWS79_RS04700	bifunctional diguanylate cyclase/phosphodiesterase	
+EWS79_RS05305-MONOMER	EWS79_RS05305	bifunctional DNA-formamidopyrimidine glycosylase/DNA-(apurinic or apyrimidinic site) lyase	CCI-CYTOSOL-GN
+EWS79_RS02565-MONOMER	EWS79_RS02565	bifunctional folylpolyglutamate synthase/dihydrofolate synthase	
+EWS79_RS04100-MONOMER	EWS79_RS04100	bifunctional glutamate N-acetyltransferase/amino-acid acetyltransferase ArgJ	
+EWS79_RS04470-MONOMER	EWS79_RS04470	bifunctional hydroxymethylpyrimidine kinase/phosphomethylpyrimidine kinase	
+EWS79_RS04055-MONOMER	EWS79_RS04055	bifunctional methylenetetrahydrofolate dehydrogenase/methenyltetrahydrofolate cyclohydrolase FolD	
+EWS79_RS05325-MONOMER	EWS79_RS05325	bifunctional phosphopantothenoylcysteine decarboxylase/phosphopantothenate--cysteine ligase CoaBC	
+EWS79_RS00130-MONOMER	EWS79_RS00130	bifunctional phosphoribosylaminoimidazolecarboxamide formyltransferase/IMP cyclohydrolase	
+EWS79_RS01365-MONOMER	EWS79_RS01365	bifunctional riboflavin kinase/FAD synthetase	CCI-CYTOSOL-GN
+EWS79_RS02140-MONOMER	EWS79_RS02140	bifunctional UDP-N-acetylglucosamine diphosphorylase/glucosamine-1-phosphate N-acetyltransferase GlmU	
+EWS79_RS00665-MONOMER	EWS79_RS00665	biopolymer transporter ExbB	CCI-PM-BAC-NEG-GN
+EWS79_RS07685-MONOMER	EWS79_RS07685	biopolymer transporter ExbD	CCI-PM-BAC-NEG-GN
+EWS79_RS07680-MONOMER	EWS79_RS07680	biopolymer transporter ExbD	CCI-PM-BAC-NEG-GN
+CPLX1W2W-9	EWS79_RS05085 // EWS79_RS05080	biosynthetic-type acetolactate synthase	
+EWS79_RS05080-MONOMER	EWS79_RS05080	biosynthetic-type acetolactate synthase large subunit	CCI-CYTOSOL-GN
+EWS79_RS00385-MONOMER	EWS79_RS00385	biotin synthase	
+EWS79_RS07805-MONOMER	EWS79_RS07805	biotin transporter BioY	
+EWS79_RS08425-MONOMER	EWS79_RS08425	biotin--[acetyl-CoA-carboxylase] ligase	
+EWS79_RS08455-MONOMER	EWS79_RS08455	BolA family transcriptional regulator	
+EWS79_RS06895-MONOMER	EWS79_RS06895	BolA family transcriptional regulator	
+EWS79_RS04050-MONOMER	EWS79_RS04050	branched-chain amino acid aminotransferase	
+EWS79_RS05715-MONOMER	EWS79_RS05715	c-type cytochrome	
+EWS79_RS05065-MONOMER	EWS79_RS05065	c-type cytochrome	
+EWS79_RS04615-MONOMER	EWS79_RS04615	calcium-binding protein	
+EWS79_RS08695-MONOMER	EWS79_RS08695	capsular biosynthesis protein	
+EWS79_RS01310-MONOMER	EWS79_RS01310	capsular polysaccharide biosynthesis protein	
+EWS79_RS05785-MONOMER	EWS79_RS05785	capsular polysaccharide biosynthesis protein	
+EWS79_RS05780-MONOMER	EWS79_RS05780	capsule biosynthesis phosphatase	
+EWS79_RS07215-MONOMER	EWS79_RS07215	carbamoyl-phosphate synthase small subunit	CCI-CYTOSOL-GN
+EWS79_RS00265-MONOMER	EWS79_RS00265	carbohydrate porin	
+EWS79_RS08355-MONOMER	EWS79_RS08355	carbohydrate porin	
+EWS79_RS03750-MONOMER	EWS79_RS03750	carbohydrate porin	
+EWS79_RS05400-MONOMER	EWS79_RS05400	carbon-nitrogen hydrolase family protein	
+EWS79_RS05050-MONOMER	EWS79_RS05050	carbonic anhydrase	CCI-CYTOSOL-GN
+EWS79_RS08435-MONOMER	EWS79_RS08435	carboxylating nicotinate-nucleotide diphosphorylase	
+EWS79_RS00940-MONOMER	EWS79_RS00940	CarD family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS01335-MONOMER	EWS79_RS01335	cardiolipin synthase	CCI-PM-BAC-NEG-GN
+EWS79_RS05100-MONOMER	EWS79_RS05100	CatA-like O-acetyltransferase	
+EWS79_RS04075-MONOMER	EWS79_RS04075	catalase	
+EWS79_RS00875-MONOMER	EWS79_RS00875	cation transporter	
+EWS79_RS03840-MONOMER	EWS79_RS03840	cation transporter	
+EWS79_RS04705-MONOMER	EWS79_RS04705	CCA tRNA nucleotidyltransferase	
+EWS79_RS00395-MONOMER	EWS79_RS00395	CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase	CCI-PM-BAC-NEG-GN
+EWS79_RS05180-MONOMER	EWS79_RS05180	CDP-diacylglycerol--serine O-phosphatidyltransferase	CCI-PM-BAC-NEG-GN
+EWS79_RS01770-MONOMER	EWS79_RS01770	cell division ATP-binding protein FtsE	CCI-PM-BAC-NEG-GN
+EWS79_RS01775-MONOMER	EWS79_RS01775	cell division protein	
+EWS79_RS03705-MONOMER	EWS79_RS03705	cell division protein FtsA	
+EWS79_RS03700-MONOMER	EWS79_RS03700	cell division protein FtsQ	CCI-CYTOSOL-GN
+EWS79_RS03710-MONOMER	EWS79_RS03710	cell division protein FtsZ	
+EWS79_RS00725-MONOMER	EWS79_RS00725	cell division protein ZapA	
+EWS79_RS01915-MONOMER	EWS79_RS01915	cell wall hydrolase	
+EWS79_RS04830-MONOMER	EWS79_RS04830	cellulose biosynthesis cyclic di-GMP-binding regulatory protein BcsB	
+EWS79_RS01085-MONOMER	EWS79_RS01085	channel protein TolC	
+EWS79_RS08725-MONOMER	EWS79_RS08725	chaperonin GroEL	
+EWS79_RS02045-MONOMER	EWS79_RS02045	CHASE2 domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04340-MONOMER	EWS79_RS04340	ChbG/HpnK family deacetylase	CCI-CYTOSOL-GN
+EWS79_RS00340-MONOMER	EWS79_RS00340	chemotaxis protein CheA	
+EWS79_RS00325-MONOMER	EWS79_RS00325	chemotaxis protein CheD	
+EWS79_RS00315-MONOMER	EWS79_RS00315	chemotaxis protein CheW	
+EWS79_RS00330-MONOMER	EWS79_RS00330	chemotaxis response regulator protein-glutamate methylesterase	CCI-CYTOSOL-GN
+EWS79_RS03900-MONOMER	EWS79_RS03900	chemotaxis-specific protein-glutamate methyltransferase CheB	CCI-CYTOSOL-GN
+EWS79_RS03720-MONOMER	EWS79_RS03720	chloride channel protein	
+EWS79_RS02480-MONOMER	EWS79_RS02480	chorismate mutase	
+EWS79_RS07580-MONOMER	EWS79_RS07580	chorismate synthase	
+EWS79_RS03140-MONOMER	EWS79_RS03140	chromosomal replication initiator protein DnaA	
+EWS79_RS06035-MONOMER	EWS79_RS06035	chromosomal replication initiator protein DnaA	CCI-CYTOSOL-GN
+EWS79_RS01475-MONOMER	EWS79_RS01475	chromosome partitioning protein ParB	
+EWS79_RS05035-MONOMER	EWS79_RS05035	CinA family protein	
+EWS79_RS08925-MONOMER	EWS79_RS08925	citrate synthase	CCI-CYTOSOL-GN
+EWS79_RS08945-MONOMER	EWS79_RS08945	class A beta-lactamase	
+EWS79_RS00760-MONOMER	EWS79_RS00760	class I fructose-bisphosphate aldolase	CCI-CYTOSOL-GN
+EWS79_RS04610-MONOMER	EWS79_RS04610	class I SAM-dependent methyltransferase	
+EWS79_RS02055-MONOMER	EWS79_RS02055	class II fructose-bisphosphatase	
+EWS79_RS08720-MONOMER	EWS79_RS08720	co-chaperone GroES	CCI-CYTOSOL-GN
+EWS79_RS02080-MONOMER	EWS79_RS02080	CoA ester lyase	CCI-CYTOSOL-GN
+EWS79_RS06665-MONOMER	EWS79_RS06665	cob(I)yrinic acid a,c-diamide adenosyltransferase	
+CPLX1W2W-6	EWS79_RS06875 // EWS79_RS06870	cobaltochelatase	
+EWS79_RS06875-MONOMER	EWS79_RS06875	cobaltochelatase subunit CobS	
+EWS79_RS06870-MONOMER	EWS79_RS06870	cobaltochelatase subunit CobT	
+EWS79_RS05215-MONOMER	EWS79_RS05215	CocE/NonD family hydrolase	
+EWS79_RS04110-MONOMER	EWS79_RS04110	cold shock domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS01205-MONOMER	EWS79_RS01205	cold-shock protein	CCI-CYTOSOL-GN
+EWS79_RS08935-MONOMER	EWS79_RS08935	ComEC/Rec2 family competence protein	
+EWS79_RS05205-MONOMER	EWS79_RS05205	ComF family protein	
+EWS79_RS05765-MONOMER	EWS79_RS05765	ComF family protein	
+EWS79_RS06005-MONOMER	EWS79_RS06005	competence/damage-inducible protein A	CCI-CYTOSOL-GN
+EWS79_RS09050-MONOMER	EWS79_RS09050	CopD family protein	
+EWS79_RS04060-MONOMER	EWS79_RS04060	copper-translocating P-type ATPase	
+EWS79_RS00060-MONOMER	EWS79_RS00060	coproporphyrinogen III oxidase	
+EWS79_RS02005-MONOMER	EWS79_RS02005	COQ9 family protein	
+EWS79_RS00635-MONOMER	EWS79_RS00635	crossover junction endodeoxyribonuclease RuvC	CCI-CYTOSOL-GN
+EWS79_RS03280-MONOMER	EWS79_RS03280	CsbD family protein	
+EWS79_RS01970-MONOMER	EWS79_RS01970	CTP synthase	
+EWS79_RS02605-MONOMER	EWS79_RS02605	CvpA family protein	
+EWS79_RS00515-MONOMER	EWS79_RS00515	Cys-tRNA(Pro) deacylase	
+EWS79_RS01390-MONOMER	EWS79_RS01390	cystathionine beta-lyase	
+EWS79_RS03800-MONOMER	EWS79_RS03800	cysteine desulfurase	
+EWS79_RS01820-MONOMER	EWS79_RS01820	cysteine desulfurase	
+EWS79_RS08220-MONOMER	EWS79_RS08220	cysteine desulfurase NifS	
+EWS79_RS03360-MONOMER	EWS79_RS03360	cysteine hydrolase	
+EWS79_RS08245-MONOMER	EWS79_RS08245	cysteine hydrolase	
+EWS79_RS03630-MONOMER	EWS79_RS03630	cysteine synthase A	CCI-CYTOSOL-GN
+EWS79_RS03315-MONOMER	EWS79_RS03315	cysteine synthase A	
+EWS79_RS00785-MONOMER	EWS79_RS00785	cysteine--tRNA ligase	
+EWS79_RS03830-MONOMER	EWS79_RS03830	cytidine deaminase	
+EWS79_RS04275-MONOMER	EWS79_RS04275	cytochrome c	
+EWS79_RS03485-MONOMER	EWS79_RS03485	cytochrome c	
+EWS79_RS06165-MONOMER	EWS79_RS06165	cytochrome c biogenesis protein	
+EWS79_RS01120-MONOMER	EWS79_RS01120	cytochrome C biogenesis protein CcmB	
+EWS79_RS05590-MONOMER	EWS79_RS05590	cytochrome c biosynthesis protein	CCI-PM-BAC-NEG-GN
+EWS79_RS05610-MONOMER	EWS79_RS05610	cytochrome c maturation protein CcmE	
+EWS79_RS05595-MONOMER	EWS79_RS05595	cytochrome c-type biogenesis protein CcmH	
+EWS79_RS04265-MONOMER	EWS79_RS04265	cytochrome c1	
+CPLX1W2W-8	EWS79_RS06990 // EWS79_RS06985	cytochrome d ubiquinol oxidase	
+EWS79_RS06990-MONOMER	EWS79_RS06990	cytochrome d ubiquinol oxidase subunit II	
+EWS79_RS06985-MONOMER	EWS79_RS06985	cytochrome ubiquinol oxidase subunit I	CCI-PM-BAC-NEG-GN
+EWS79_RS03695-MONOMER	EWS79_RS03695	D-alanine--D-alanine ligase	
+EWS79_RS04855-MONOMER	EWS79_RS04855	D-alanyl-D-alanine carboxypeptidase	
+EWS79_RS01100-MONOMER	EWS79_RS01100	D-lactate dehydrogenase	
+EWS79_RS01300-MONOMER	EWS79_RS01300	Dabb family protein	
+EWS79_RS03825-MONOMER	EWS79_RS03825	dCTP deaminase	
+EWS79_RS05435-MONOMER	EWS79_RS05435	DEAD/DEAH box helicase	
+EWS79_RS06300-MONOMER	EWS79_RS06300	DEAD/DEAH box helicase	CCI-CYTOSOL-GN
+EWS79_RS06405-MONOMER	EWS79_RS06405	deaminated glutathione amidase	CCI-CYTOSOL-GN
+EWS79_RS06655-MONOMER	EWS79_RS06655	DedA family protein	
+EWS79_RS08975-MONOMER	EWS79_RS08975	delta(1)-pyrroline-2-carboxylate reductase family protein	
+EWS79_RS08870-MONOMER	EWS79_RS08870	demethylmenaquinone methyltransferase	
+EWS79_RS03725-MONOMER	EWS79_RS03725	deoxyguanosinetriphosphate triphosphohydrolase	
+EWS79_RS04555-MONOMER	EWS79_RS04555	deoxyhypusine synthase	CCI-CYTOSOL-GN
+EWS79_RS06465-MONOMER	EWS79_RS06465	deoxyribodipyrimidine photo-lyase	
+EWS79_RS00185-MONOMER	EWS79_RS00185	dephospho-CoA kinase	
+EWS79_RS08660-MONOMER	EWS79_RS08660	dethiobiotin synthase	
+EWS79_RS04300-MONOMER	EWS79_RS04300	DHA2 family efflux MFS transporter permease subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS06175-MONOMER	EWS79_RS06175	diacylglycerol kinase	CCI-CYTOSOL-GN
+EWS79_RS06350-MONOMER	EWS79_RS06350	diacylglycerol kinase family lipid kinase	
+EWS79_RS07920-MONOMER	EWS79_RS07920	diaminopimelate decarboxylase	
+EWS79_RS04785-MONOMER	EWS79_RS04785	diaminopimelate epimerase	
+EWS79_RS02555-MONOMER	EWS79_RS02555	dicarboxylate/amino acid:cation symporter	CCI-PM-BAC-NEG-GN
+EWS79_RS09035-MONOMER	EWS79_RS09035	dienelactone hydrolase family protein	
+EWS79_RS06010-MONOMER	EWS79_RS06010	dienelactone hydrolase family protein	
+EWS79_RS08300-MONOMER	EWS79_RS08300	dihydrodipicolinate synthase family protein	
+EWS79_RS01360-MONOMER	EWS79_RS01360	dihydrofolate reductase	
+EWS79_RS02205-MONOMER	EWS79_RS02205	dihydrolipoyl dehydrogenase	
+EWS79_RS04715-MONOMER	EWS79_RS04715	dihydroneopterin aldolase	CCI-CYTOSOL-GN
+EWS79_RS03505-MONOMER	EWS79_RS03505	dihydroorotase	
+EWS79_RS07560-MONOMER	EWS79_RS07560	dihydroorotase	
+EWS79_RS00495-MONOMER	EWS79_RS00495	dihydroorotate oxidase	
+EWS79_RS04485-MONOMER	EWS79_RS04485	dihydropteroate synthase	
+EWS79_RS08025-MONOMER	EWS79_RS08025	dihydroxy-acid dehydratase	
+EWS79_RS05500-MONOMER	EWS79_RS05500	dipeptide epimerase	CCI-CYTOSOL-GN
+EWS79_RS07460-MONOMER	EWS79_RS07460	disulfide bond formation protein B	CCI-PM-BAC-NEG-GN
+EWS79_RS00120-MONOMER	EWS79_RS00120	DMT family transporter	
+EWS79_RS05990-MONOMER	EWS79_RS05990	DMT family transporter	
+EWS79_RS04160-MONOMER	EWS79_RS04160	DMT family transporter	
+EWS79_RS06795-MONOMER	EWS79_RS06795	DMT family transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS04515-MONOMER	EWS79_RS04515	DNA gyrase inhibitor YacG	
+EWS79_RS03055-MONOMER	EWS79_RS03055	DNA gyrase subunit A	
+EWS79_RS02540-MONOMER	EWS79_RS02540	DNA helicase II	
+EWS79_RS01540-MONOMER	EWS79_RS01540	DNA ligase (NAD(+)) LigA	
+EWS79_RS01495-MONOMER	EWS79_RS01495	DNA mismatch repair endonuclease MutL	CCI-CYTOSOL-GN
+EWS79_RS08620-MONOMER	EWS79_RS08620	DNA mismatch repair protein MutS	
+EWS79_RS07295-MONOMER	EWS79_RS07295	DNA mismatch repair protein MutS	CCI-CYTOSOL-GN
+EWS79_RS00970-MONOMER	EWS79_RS00970	DNA polymerase I	
+EWS79_RS06850-MONOMER	EWS79_RS06850	DNA polymerase III subunit alpha	
+EWS79_RS04370-MONOMER	EWS79_RS04370	DNA polymerase III subunit beta	
+EWS79_RS05830-MONOMER	EWS79_RS05830	DNA polymerase III subunit chi	
+EWS79_RS06375-MONOMER	EWS79_RS06375	DNA polymerase III subunit delta	
+EWS79_RS04865-MONOMER	EWS79_RS04865	DNA polymerase III subunit delta'	CCI-CYTOSOL-GN
+EWS79_RS00180-MONOMER	EWS79_RS00180	DNA polymerase III subunit epsilon	
+EWS79_RS03815-MONOMER	EWS79_RS03815	DNA polymerase III subunit gamma/tau	
+EWS79_RS07225-MONOMER	EWS79_RS07225	DNA primase	
+EWS79_RS03600-MONOMER	EWS79_RS03600	DNA recombination protein RmuC	
+EWS79_RS02600-MONOMER	EWS79_RS02600	DNA repair protein RadA	
+EWS79_RS08745-MONOMER	EWS79_RS08745	DNA repair protein RadC	
+EWS79_RS02920-MONOMER	EWS79_RS02920	DNA repair protein RadC	CCI-CYTOSOL-GN
+EWS79_RS06345-MONOMER	EWS79_RS06345	DNA repair protein RadC	CCI-CYTOSOL-GN
+EWS79_RS08890-MONOMER	EWS79_RS08890	DNA repair protein RecN	
+EWS79_RS02970-MONOMER	EWS79_RS02970	DNA repair protein RecO	
+EWS79_RS07075-MONOMER	EWS79_RS07075	DNA replication/repair protein RecF	
+EWS79_RS07070-MONOMER	EWS79_RS07070	DNA topoisomerase (ATP-hydrolyzing) subunit B	
+EWS79_RS05340-MONOMER	EWS79_RS05340	DNA topoisomerase 1	
+EWS79_RS04695-MONOMER	EWS79_RS04695	DNA topoisomerase IV subunit A	
+EWS79_RS01750-MONOMER	EWS79_RS01750	DNA topoisomerase IV subunit B	
+EWS79_RS07625-MONOMER	EWS79_RS07625	DNA translocase FtsK	
+EWS79_RS01600-MONOMER	EWS79_RS01600	DNA-3-methyladenine glycosylase 2 family protein	
+EWS79_RS08780-MONOMER	EWS79_RS08780	DNA-binding protein	
+EWS79_RS07065-MONOMER	EWS79_RS07065	DNA-deoxyinosine glycosylase	
+CPLX1W2W-13	EWS79_RS03240 // EWS79_RS03235	DNA-directed RNA polymerase	
+EWS79_RS02360-MONOMER	EWS79_RS02360	DNA-directed RNA polymerase subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS03235-MONOMER	EWS79_RS03235	DNA-directed RNA polymerase subunit beta	
+EWS79_RS03240-MONOMER	EWS79_RS03240	DNA-directed RNA polymerase subunit beta'	CCI-CYTOSOL-GN
+EWS79_RS07710-MONOMER	EWS79_RS07710	DNA-directed RNA polymerase subunit omega	
+EWS79_RS05345-MONOMER	EWS79_RS05345	DNA-protecting protein DprA	
+EWS79_RS06615-MONOMER	EWS79_RS06615	dNTP triphosphohydrolase	
+EWS79_RS01010-MONOMER	EWS79_RS01010	Do family serine endopeptidase	CCI-PERI-BAC-GN
+EWS79_RS04900-MONOMER	EWS79_RS04900	double-strand break repair helicase AddA	
+EWS79_RS04905-MONOMER	EWS79_RS04905	double-strand break repair protein AddB	
+EWS79_RS00815-MONOMER	EWS79_RS00815	DsbA family protein	
+EWS79_RS05600-MONOMER	EWS79_RS05600	DsbE family thiol:disulfide interchange protein	
+EWS79_RS04860-MONOMER	EWS79_RS04860	dTMP kinase	
+EWS79_RS03795-MONOMER	EWS79_RS03795	DUF1013 domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS08735-MONOMER	EWS79_RS08735	DUF1016 domain-containing protein	
+EWS79_RS02595-MONOMER	EWS79_RS02595	DUF1049 domain-containing protein	
+EWS79_RS02935-MONOMER	EWS79_RS02935	DUF1318 domain-containing protein	
+EWS79_RS00945-MONOMER	EWS79_RS00945	DUF1330 domain-containing protein	
+EWS79_RS08460-MONOMER	EWS79_RS08460	DUF1476 domain-containing protein	
+EWS79_RS00165-MONOMER	EWS79_RS00165	DUF1491 family protein	
+EWS79_RS06365-MONOMER	EWS79_RS06365	DUF1656 domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS03575-MONOMER	EWS79_RS03575	DUF167 domain-containing protein	
+EWS79_RS08630-MONOMER	EWS79_RS08630	DUF177 domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS05645-MONOMER	EWS79_RS05645	DUF1847 domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS03930-MONOMER	EWS79_RS03930	DUF192 domain-containing protein	
+EWS79_RS08290-MONOMER	EWS79_RS08290	DUF2023 family protein	
+EWS79_RS06780-MONOMER	EWS79_RS06780	DUF2093 domain-containing protein	
+EWS79_RS00605-MONOMER	EWS79_RS00605	DUF2141 domain-containing protein	
+EWS79_RS06180-MONOMER	EWS79_RS06180	DUF2141 domain-containing protein	
+EWS79_RS08775-MONOMER	EWS79_RS08775	DUF2285 domain-containing protein	
+EWS79_RS08915-MONOMER	EWS79_RS08915	DUF2336 domain-containing protein	
+EWS79_RS06995-MONOMER	EWS79_RS06995	DUF2474 family protein	
+EWS79_RS08465-MONOMER	EWS79_RS08465	DUF2497 domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS07755-MONOMER	EWS79_RS07755	DUF2794 domain-containing protein	
+EWS79_RS00950-MONOMER	EWS79_RS00950	DUF2807 domain-containing protein	
+EWS79_RS08770-MONOMER	EWS79_RS08770	DUF2958 domain-containing protein	
+EWS79_RS01380-MONOMER	EWS79_RS01380	DUF3035 domain-containing protein	CCI-PERI-BAC-GN
+EWS79_RS07795-MONOMER	EWS79_RS07795	DUF3297 family protein	
+EWS79_RS08820-MONOMER	EWS79_RS08820	DUF3363 domain-containing protein	
+EWS79_RS06390-MONOMER	EWS79_RS06390	DUF3576 domain-containing protein	
+EWS79_RS05575-MONOMER	EWS79_RS05575	DUF3617 domain-containing protein	
+EWS79_RS05580-MONOMER	EWS79_RS05580	DUF3617 family protein	
+EWS79_RS05585-MONOMER	EWS79_RS05585	DUF3617 family protein	
+EWS79_RS01480-MONOMER	EWS79_RS01480	DUF4011 domain-containing protein	
+EWS79_RS08940-MONOMER	EWS79_RS08940	DUF4062 domain-containing protein	
+EWS79_RS08730-MONOMER	EWS79_RS08730	DUF4102 domain-containing protein	
+EWS79_RS05560-MONOMER	EWS79_RS05560	DUF4136 domain-containing protein	
+EWS79_RS07330-MONOMER	EWS79_RS07330	DUF4136 domain-containing protein	
+EWS79_RS06740-MONOMER	EWS79_RS06740	DUF4167 domain-containing protein	
+EWS79_RS04505-MONOMER	EWS79_RS04505	DUF4186 domain-containing protein	
+EWS79_RS02615-MONOMER	EWS79_RS02615	DUF423 domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS08445-MONOMER	EWS79_RS08445	DUF4230 domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS01240-MONOMER	EWS79_RS01240	DUF445 domain-containing protein	
+EWS79_RS02440-MONOMER	EWS79_RS02440	DUF448 domain-containing protein	
+EWS79_RS01895-MONOMER	EWS79_RS01895	DUF459 domain-containing protein	
+EWS79_RS04415-MONOMER	EWS79_RS04415	DUF465 domain-containing protein	
+EWS79_RS04410-MONOMER	EWS79_RS04410	DUF465 domain-containing protein	
+EWS79_RS07970-MONOMER	EWS79_RS07970	DUF475 domain-containing protein	
+EWS79_RS06945-MONOMER	EWS79_RS06945	DUF481 domain-containing protein	
+EWS79_RS02125-MONOMER	EWS79_RS02125	DUF490 domain-containing protein	
+EWS79_RS01230-MONOMER	EWS79_RS01230	DUF541 domain-containing protein	
+EWS79_RS07495-MONOMER	EWS79_RS07495	DUF721 domain-containing protein	
+EWS79_RS01405-MONOMER	EWS79_RS01405	DUF882 domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS04045-MONOMER	EWS79_RS04045	DUF885 domain-containing protein	
+EWS79_RS05330-MONOMER	EWS79_RS05330	dUTP diphosphatase	
+EWS79_RS07000-MONOMER	EWS79_RS07000	Dyp-type peroxidase	
+EWS79_RS01700-MONOMER	EWS79_RS01700	EAL domain-containing protein	
+EWS79_RS06625-MONOMER	EWS79_RS06625	EAL domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS01215-MONOMER	EWS79_RS01215	efflux RND transporter periplasmic adaptor subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS06815-MONOMER	EWS79_RS06815	efflux RND transporter periplasmic adaptor subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS01235-MONOMER	EWS79_RS01235	efflux RND transporter periplasmic adaptor subunit	
+EWS79_RS03440-MONOMER	EWS79_RS03440	efflux RND transporter periplasmic adaptor subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS03435-MONOMER	EWS79_RS03435	efflux RND transporter permease subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS04290-MONOMER	EWS79_RS04290	efflux transporter outer membrane subunit	CCI-OUTER-MEM-GN
+EWS79_RS01225-MONOMER	EWS79_RS01225	efflux transporter outer membrane subunit	CCI-OUTER-MEM-GN
+EWS79_RS03445-MONOMER	EWS79_RS03445	efflux transporter outer membrane subunit	
+EWS79_RS06800-MONOMER	EWS79_RS06800	efflux transporter outer membrane subunit	
+EWS79_RS06585-MONOMER	EWS79_RS06585	electron transfer flavoprotein subunit alpha	
+EWS79_RS06590-MONOMER	EWS79_RS06590	electron transfer flavoprotein subunit beta/FixA family protein	
+EWS79_RS05290-MONOMER	EWS79_RS05290	electron transfer flavoprotein-ubiquinone oxidoreductase	
+EWS79_RS08095-MONOMER	EWS79_RS08095	electron transport complex subunit E	
+EWS79_RS08120-MONOMER	EWS79_RS08120	electron transport complex subunit RsxA	CCI-PM-BAC-NEG-GN
+EWS79_RS08110-MONOMER	EWS79_RS08110	electron transport complex subunit RsxC	
+EWS79_RS08100-MONOMER	EWS79_RS08100	electron transport complex subunit RsxG	CCI-CYTOSOL-GN
+EWS79_RS07800-MONOMER	EWS79_RS07800	elongation factor 4	
+EWS79_RS02225-MONOMER	EWS79_RS02225	elongation factor G	
+EWS79_RS01395-MONOMER	EWS79_RS01395	elongation factor P	CCI-CYTOSOL-GN
+EWS79_RS05160-MONOMER	EWS79_RS05160	elongation factor Ts	
+EWS79_RS02230-MONOMER	EWS79_RS02230	elongation factor Tu	CCI-CYTOSOL-GN
+EWS79_RS05695-MONOMER	EWS79_RS05695	endolytic transglycosylase MltG	CCI-PM-BAC-NEG-GN
+EWS79_RS01450-MONOMER	EWS79_RS01450	endonuclease	
+EWS79_RS03115-MONOMER	EWS79_RS03115	endonuclease III	
+EWS79_RS01595-MONOMER	EWS79_RS01595	endopeptidase La	
+EWS79_RS07695-MONOMER	EWS79_RS07695	energy transducer TonB	
+EWS79_RS00775-MONOMER	EWS79_RS00775	energy-dependent translational throttle protein EttA	CCI-CYTOSOL-GN
+EWS79_RS07575-MONOMER	EWS79_RS07575	enoyl-[acyl-carrier-protein] reductase FabI	CCI-PM-BAC-NEG-GN
+EWS79_RS05450-MONOMER	EWS79_RS05450	entericidin A/B family lipoprotein	
+EWS79_RS04740-MONOMER	EWS79_RS04740	envelope stress response membrane protein PspB	
+EWS79_RS04745-MONOMER	EWS79_RS04745	envelope stress response membrane protein PspC	
+EWS79_RS08505-MONOMER	EWS79_RS08505	epoxyqueuosine reductase QueH	
+EWS79_RS03955-MONOMER	EWS79_RS03955	esterase	
+EWS79_RS06120-MONOMER	EWS79_RS06120	ethanolamine permease	
+EWS79_RS00670-MONOMER	EWS79_RS00670	ExbD/TolR family protein	
+EWS79_RS07090-MONOMER	EWS79_RS07090	excinuclease ABC subunit UvrA	
+EWS79_RS01530-MONOMER	EWS79_RS01530	excinuclease ABC subunit UvrB	CCI-CYTOSOL-GN
+EWS79_RS02965-MONOMER	EWS79_RS02965	excinuclease ABC subunit UvrC	
+EWS79_RS07610-MONOMER	EWS79_RS07610	exodeoxyribonuclease III	CCI-CYTOSOL-GN
+EWS79_RS06220-MONOMER	EWS79_RS06220	exodeoxyribonuclease III	
+EWS79_RS01280-MONOMER	EWS79_RS01280	exodeoxyribonuclease VII large subunit	
+EWS79_RS03790-MONOMER	EWS79_RS03790	exodeoxyribonuclease VII small subunit	CCI-CYTOSOL-GN
+EWS79_RS07515-MONOMER	EWS79_RS07515	extensin family protein	
+CPLX1W2W-11	EWS79_RS02950 // EWS79_RS02945	F0F1 ATP synthase	
+CPLX1W2W-10	EWS79_RS01040 // EWS79_RS01035 // EWS79_RS01030 // EWS79_RS01025 // EWS79_RS01020	F0F1 ATP synthase	
+EWS79_RS02945-MONOMER	EWS79_RS02945	F0F1 ATP synthase subunit A	CCI-PM-BAC-NEG-GN
+EWS79_RS01025-MONOMER	EWS79_RS01025	F0F1 ATP synthase subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS01035-MONOMER	EWS79_RS01035	F0F1 ATP synthase subunit beta	CCI-PM-BAC-NEG-GN
+EWS79_RS02950-MONOMER	EWS79_RS02950	F0F1 ATP synthase subunit C	CCI-PM-BAC-NEG-GN
+EWS79_RS01020-MONOMER	EWS79_RS01020	F0F1 ATP synthase subunit delta	CCI-CYTOSOL-GN
+EWS79_RS01030-MONOMER	EWS79_RS01030	F0F1 ATP synthase subunit gamma	
+EWS79_RS04495-MONOMER	EWS79_RS04495	FAD-binding oxidoreductase	
+EWS79_RS06415-MONOMER	EWS79_RS06415	FAD-binding oxidoreductase	
+EWS79_RS08255-MONOMER	EWS79_RS08255	FAD:protein FMN transferase	
+EWS79_RS06210-MONOMER	EWS79_RS06210	fatty acid hydroxylase family protein	
+EWS79_RS03105-MONOMER	EWS79_RS03105	fatty acyl-AMP ligase	
+EWS79_RS01810-MONOMER	EWS79_RS01810	Fe-S cluster assembly ATPase SufC	
+EWS79_RS01805-MONOMER	EWS79_RS01805	Fe-S cluster assembly protein SufB	CCI-CYTOSOL-GN
+EWS79_RS08140-MONOMER	EWS79_RS08140	ferredoxin	
+EWS79_RS00935-MONOMER	EWS79_RS00935	ferredoxin family protein	CCI-CYTOSOL-GN
+EWS79_RS08200-MONOMER	EWS79_RS08200	ferredoxin III, nif-specific	
+EWS79_RS07850-MONOMER	EWS79_RS07850	ferredoxin--NADP reductase	CCI-CYTOSOL-GN
+EWS79_RS01295-MONOMER	EWS79_RS01295	ferrochelatase	CCI-CYTOSOL-GN
+EWS79_RS06855-MONOMER	EWS79_RS06855	ferrous iron transport protein A	
+EWS79_RS06860-MONOMER	EWS79_RS06860	ferrous iron transport protein B	
+EWS79_RS05015-MONOMER	EWS79_RS05015	Fis family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS07670-MONOMER	EWS79_RS07670	FKBP-type peptidyl-prolyl cis-trans isomerase	
+EWS79_RS02685-MONOMER	EWS79_RS02685	flagellar basal body L-ring protein FlgH	
+EWS79_RS02730-MONOMER	EWS79_RS02730	flagellar basal body P-ring formation protein FlgA	
+EWS79_RS02680-MONOMER	EWS79_RS02680	flagellar basal body P-ring protein FlgI	CCI-PERI-BAC-GN
+EWS79_RS02715-MONOMER	EWS79_RS02715	flagellar basal body rod protein FlgB	CCI-PERI-BAC-GN
+EWS79_RS02710-MONOMER	EWS79_RS02710	flagellar basal body rod protein FlgC	CCI-PERI-BAC-GN
+EWS79_RS02820-MONOMER	EWS79_RS02820	flagellar basal body-associated FliL family protein	
+EWS79_RS02695-MONOMER	EWS79_RS02695	flagellar basal-body rod protein FlgF	CCI-PERI-BAC-GN
+EWS79_RS02690-MONOMER	EWS79_RS02690	flagellar basal-body rod protein FlgG	CCI-EXTRACELLULAR-GN
+EWS79_RS02735-MONOMER	EWS79_RS02735	flagellar biosynthesis anti-sigma factor FlgM	
+EWS79_RS02745-MONOMER	EWS79_RS02745	flagellar biosynthesis protein FlhA	CCI-PM-BAC-NEG-GN
+EWS79_RS02855-MONOMER	EWS79_RS02855	flagellar biosynthesis protein FlhB	
+EWS79_RS02835-MONOMER	EWS79_RS02835	flagellar biosynthetic protein FliO	
+EWS79_RS02845-MONOMER	EWS79_RS02845	flagellar biosynthetic protein FliQ	CCI-PM-BAC-NEG-GN
+EWS79_RS02850-MONOMER	EWS79_RS02850	flagellar biosynthetic protein FliR	
+EWS79_RS02705-MONOMER	EWS79_RS02705	flagellar hook capping protein	CCI-EXTRACELLULAR-GN
+EWS79_RS02860-MONOMER	EWS79_RS02860	flagellar hook protein FliD	
+EWS79_RS02670-MONOMER	EWS79_RS02670	flagellar hook-associated protein FlgK	
+EWS79_RS02700-MONOMER	EWS79_RS02700	flagellar hook-basal body complex protein	
+EWS79_RS02780-MONOMER	EWS79_RS02780	flagellar hook-basal body complex protein FliE	
+EWS79_RS02815-MONOMER	EWS79_RS02815	flagellar hook-length control protein FliK	
+EWS79_RS02785-MONOMER	EWS79_RS02785	flagellar M-ring protein FliF	
+EWS79_RS02720-MONOMER	EWS79_RS02720	flagellar motor protein MotA	
+EWS79_RS02655-MONOMER	EWS79_RS02655	flagellar motor protein MotB	CCI-PM-BAC-NEG-GN
+EWS79_RS02660-MONOMER	EWS79_RS02660	flagellar motor stator protein MotA	CCI-PM-BAC-NEG-GN
+EWS79_RS02790-MONOMER	EWS79_RS02790	flagellar motor switch protein FliG	CCI-CYTOSOL-GN
+EWS79_RS02825-MONOMER	EWS79_RS02825	flagellar motor switch protein FliM	CCI-CYTOSOL-GN
+EWS79_RS02830-MONOMER	EWS79_RS02830	flagellar motor switch protein FliN	CCI-PM-BAC-NEG-GN
+EWS79_RS02675-MONOMER	EWS79_RS02675	flagellar protein FlgJ	
+EWS79_RS02865-MONOMER	EWS79_RS02865	flagellar protein FliS	CCI-CYTOSOL-GN
+EWS79_RS02840-MONOMER	EWS79_RS02840	flagellar type III secretion system pore protein FliP	
+EWS79_RS02770-MONOMER	EWS79_RS02770	flagellin	
+EWS79_RS02665-MONOMER	EWS79_RS02665	flagellin	
+EWS79_RS08850-MONOMER	EWS79_RS08850	flavodoxin family protein	
+EWS79_RS08295-MONOMER	EWS79_RS08295	flavodoxin FldA	
+EWS79_RS00765-MONOMER	EWS79_RS00765	flavodoxin-dependent (E)-4-hydroxy-3-methylbut-2-enyl-diphosphate synthase	
+EWS79_RS02755-MONOMER	EWS79_RS02755	FliA/WhiG family RNA polymerase sigma factor	CCI-CYTOSOL-GN
+EWS79_RS02800-MONOMER	EWS79_RS02800	FliI/YscN family ATPase	CCI-CYTOSOL-GN
+EWS79_RS07555-MONOMER	EWS79_RS07555	folate-binding protein	CCI-CYTOSOL-GN
+EWS79_RS06980-MONOMER	EWS79_RS06980	formate C-acetyltransferase	
+EWS79_RS01940-MONOMER	EWS79_RS01940	formate--tetrahydrofolate ligase	
+EWS79_RS07705-MONOMER	EWS79_RS07705	fructokinase	CCI-CYTOSOL-GN
+EWS79_RS05825-MONOMER	EWS79_RS05825	fumarate hydratase	
+EWS79_RS06370-MONOMER	EWS79_RS06370	FUSC family protein	
+EWS79_RS02180-MONOMER	EWS79_RS02180	GAF domain-containing protein	
+EWS79_RS03940-MONOMER	EWS79_RS03940	galactose mutarotase	
+EWS79_RS06160-MONOMER	EWS79_RS06160	gamma-glutamyltransferase	
+EWS79_RS07220-MONOMER	EWS79_RS07220	GatB/YqeY domain-containing protein	
+EWS79_RS01730-MONOMER	EWS79_RS01730	GcrA cell cycle regulator	
+EWS79_RS06065-MONOMER	EWS79_RS06065	GGDEF domain-containing protein	
+EWS79_RS04080-MONOMER	EWS79_RS04080	GGDEF domain-containing protein	
+EWS79_RS01110-MONOMER	EWS79_RS01110	GHKL domain-containing protein	
+EWS79_RS03910-MONOMER	EWS79_RS03910	globin-coupled sensor protein	
+EWS79_RS05740-MONOMER	EWS79_RS05740	GlsB/YeaQ/YmgE family stress response membrane protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04010-MONOMER	EWS79_RS04010	glucan biosynthesis protein D	
+EWS79_RS04015-MONOMER	EWS79_RS04015	glucans biosynthesis glucosyltransferase MdoH	
+EWS79_RS01560-MONOMER	EWS79_RS01560	glucokinase	
+EWS79_RS07870-MONOMER	EWS79_RS07870	gluconokinase	CCI-CYTOSOL-GN
+EWS79_RS07020-MONOMER	EWS79_RS07020	glucose 1-dehydrogenase	
+EWS79_RS01550-MONOMER	EWS79_RS01550	glucose-6-phosphate dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS05425-MONOMER	EWS79_RS05425	glucose-6-phosphate isomerase	CCI-CYTOSOL-GN
+EWS79_RS03045-MONOMER	EWS79_RS03045	glucose-fructose oxidoreductase	
+EWS79_RS00885-MONOMER	EWS79_RS00885	glutamate 5-kinase	
+EWS79_RS05360-MONOMER	EWS79_RS05360	glutamate racemase	
+EWS79_RS04980-MONOMER	EWS79_RS04980	glutamate synthase large subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS06925-MONOMER	EWS79_RS06925	glutamate--cysteine ligase	
+EWS79_RS03985-MONOMER	EWS79_RS03985	glutamate--tRNA ligase	
+EWS79_RS08930-MONOMER	EWS79_RS08930	glutamate--tRNA ligase	
+EWS79_RS07430-MONOMER	EWS79_RS07430	glutamate-5-semialdehyde dehydrogenase	
+EWS79_RS00235-MONOMER	EWS79_RS00235	glutamine--fructose-6-phosphate transaminase (isomerizing)	
+EWS79_RS05650-MONOMER	EWS79_RS05650	glutamine-hydrolyzing GMP synthase	CCI-CYTOSOL-GN
+EWS79_RS08470-MONOMER	EWS79_RS08470	glutaminyl-peptide cyclotransferase	
+EWS79_RS00285-MONOMER	EWS79_RS00285	glutaredoxin 2	
+EWS79_RS03340-MONOMER	EWS79_RS03340	glutaredoxin 3	
+EWS79_RS02535-MONOMER	EWS79_RS02535	glutaredoxin, GrxB family	CCI-CYTOSOL-GN
+EWS79_RS04155-MONOMER	EWS79_RS04155	glutathione S-transferase	
+EWS79_RS04985-MONOMER	EWS79_RS04985	glutathione S-transferase family protein	
+EWS79_RS08650-MONOMER	EWS79_RS08650	glutathione synthase	
+EWS79_RS05420-MONOMER	EWS79_RS05420	glutathione-disulfide reductase	
+EWS79_RS00245-MONOMER	EWS79_RS00245	glycerate kinase	
+EWS79_RS05350-MONOMER	EWS79_RS05350	glycerol-3-phosphate 1-O-acyltransferase	CCI-PM-BAC-NEG-GN
+EWS79_RS01855-MONOMER	EWS79_RS01855	glycine zipper 2TM domain-containing protein	
+CPLX1W2W-3	EWS79_RS06435 // EWS79_RS06430	glycine--tRNA ligase	
+EWS79_RS06435-MONOMER	EWS79_RS06435	glycine--tRNA ligase subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS06430-MONOMER	EWS79_RS06430	glycine--tRNA ligase subunit beta	
+EWS79_RS01585-MONOMER	EWS79_RS01585	glycoside hydrolase family 68 protein	CCI-EXTRACELLULAR-GN
+EWS79_RS01580-MONOMER	EWS79_RS01580	glycoside hydrolase family 68 protein	CCI-EXTRACELLULAR-GN
+EWS79_RS04840-MONOMER	EWS79_RS04840	glycosyl hydrolase family 5	
+EWS79_RS02765-MONOMER	EWS79_RS02765	glycosyl transferase family 2	
+EWS79_RS04330-MONOMER	EWS79_RS04330	glycosyltransferase	CCI-PM-BAC-NEG-GN
+EWS79_RS02875-MONOMER	EWS79_RS02875	glycosyltransferase	
+EWS79_RS07780-MONOMER	EWS79_RS07780	glycosyltransferase	
+EWS79_RS00450-MONOMER	EWS79_RS00450	glycosyltransferase	
+EWS79_RS05730-MONOMER	EWS79_RS05730	glycosyltransferase	
+EWS79_RS03850-MONOMER	EWS79_RS03850	glycosyltransferase	CCI-PM-BAC-NEG-GN
+EWS79_RS04220-MONOMER	EWS79_RS04220	glycosyltransferase	
+EWS79_RS01305-MONOMER	EWS79_RS01305	glycosyltransferase family 1 protein	CCI-CYTOSOL-GN
+EWS79_RS05520-MONOMER	EWS79_RS05520	glycosyltransferase family 1 protein	
+EWS79_RS08895-MONOMER	EWS79_RS08895	glycosyltransferase family 1 protein	CCI-CYTOSOL-GN
+EWS79_RS04030-MONOMER	EWS79_RS04030	glycosyltransferase family 1 protein	
+EWS79_RS02165-MONOMER	EWS79_RS02165	glycosyltransferase family 2 protein	
+EWS79_RS08500-MONOMER	EWS79_RS08500	glyoxylate/hydroxypyruvate reductase A	
+EWS79_RS03480-MONOMER	EWS79_RS03480	GMC family oxidoreductase	
+EWS79_RS05720-MONOMER	EWS79_RS05720	GMC family oxidoreductase	
+EWS79_RS02185-MONOMER	EWS79_RS02185	GNAT family N-acetyltransferase	
+EWS79_RS00615-MONOMER	EWS79_RS00615	GNAT family N-acetyltransferase	
+EWS79_RS04235-MONOMER	EWS79_RS04235	GNAT family N-acetyltransferase	
+EWS79_RS08450-MONOMER	EWS79_RS08450	Grx4 family monothiol glutaredoxin	
+EWS79_RS05505-MONOMER	EWS79_RS05505	GTP cyclohydrolase I FolE	CCI-CYTOSOL-GN
+EWS79_RS07605-MONOMER	EWS79_RS07605	GTP cyclohydrolase II	
+EWS79_RS06140-MONOMER	EWS79_RS06140	GTPase Era	CCI-PM-BAC-NEG-GN
+EWS79_RS01465-MONOMER	EWS79_RS01465	GTPase HflX	
+EWS79_RS00890-MONOMER	EWS79_RS00890	GTPase ObgE	
+EWS79_RS02155-MONOMER	EWS79_RS02155	GtrA family protein	
+EWS79_RS04175-MONOMER	EWS79_RS04175	guanine deaminase	
+EWS79_RS01850-MONOMER	EWS79_RS01850	guanylate kinase	CCI-CYTOSOL-GN
+EWS79_RS08075-MONOMER	EWS79_RS08075	HAD family hydrolase	
+EWS79_RS08370-MONOMER	EWS79_RS08370	HAD family hydrolase	
+EWS79_RS01885-MONOMER	EWS79_RS01885	HAD family phosphatase	
+EWS79_RS08375-MONOMER	EWS79_RS08375	HAD family phosphatase	
+EWS79_RS02900-MONOMER	EWS79_RS02900	HAD-IB family hydrolase	CCI-CYTOSOL-GN
+EWS79_RS08920-MONOMER	EWS79_RS08920	HAMP domain-containing histidine kinase	
+EWS79_RS04930-MONOMER	EWS79_RS04930	HAMP domain-containing histidine kinase	
+EWS79_RS05900-MONOMER	EWS79_RS05900	HAMP domain-containing histidine kinase	
+EWS79_RS05010-MONOMER	EWS79_RS05010	HAMP domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS05250-MONOMER	EWS79_RS05250	HAMP domain-containing protein	
+EWS79_RS00075-MONOMER	EWS79_RS00075	heat-inducible transcriptional repressor HrcA	CCI-CYTOSOL-GN
+EWS79_RS04065-MONOMER	EWS79_RS04065	heavy-metal-associated domain-containing protein	CCI-CYTOSOL-GN
+EWS79_RS00930-MONOMER	EWS79_RS00930	helicase	
+EWS79_RS06610-MONOMER	EWS79_RS06610	helicase UvrD	
+EWS79_RS07405-MONOMER	EWS79_RS07405	helix-turn-helix domain-containing protein	
+EWS79_RS01605-MONOMER	EWS79_RS01605	helix-turn-helix domain-containing protein	
+EWS79_RS01115-MONOMER	EWS79_RS01115	heme ABC exporter ATP-binding protein CcmA	
+EWS79_RS05605-MONOMER	EWS79_RS05605	heme lyase CcmF/NrfE family subunit	
+EWS79_RS06020-MONOMER	EWS79_RS06020	heme-degrading domain-containing protein	
+EWS79_RS00095-MONOMER	EWS79_RS00095	heparinase	
+EWS79_RS05335-MONOMER	EWS79_RS05335	HesA/MoeB/ThiF family protein	
+EWS79_RS03030-MONOMER	EWS79_RS03030	histidine kinase	
+EWS79_RS03335-MONOMER	EWS79_RS03335	histidine phosphotransferase	CCI-CYTOSOL-GN
+EWS79_RS06680-MONOMER	EWS79_RS06680	histidine triad nucleotide-binding protein	CCI-CYTOSOL-GN
+EWS79_RS06725-MONOMER	EWS79_RS06725	histidine--tRNA ligase	CCI-CYTOSOL-GN
+EWS79_RS00255-MONOMER	EWS79_RS00255	histidine-type phosphatase	
+EWS79_RS06905-MONOMER	EWS79_RS06905	histidinol dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS01795-MONOMER	EWS79_RS01795	histidinol-phosphate transaminase	CCI-CYTOSOL-GN
+EWS79_RS01265-MONOMER	EWS79_RS01265	HlyC/CorC family transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS00295-MONOMER	EWS79_RS00295	HlyC/CorC family transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS01095-MONOMER	EWS79_RS01095	HlyD family efflux transporter periplasmic adaptor subunit	
+EWS79_RS04295-MONOMER	EWS79_RS04295	HlyD family efflux transporter periplasmic adaptor subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS03545-MONOMER	EWS79_RS03545	HlyD family efflux transporter periplasmic adaptor subunit	
+EWS79_RS06360-MONOMER	EWS79_RS06360	HlyD family secretion protein	CCI-PM-BAC-NEG-GN
+EWS79_RS07880-MONOMER	EWS79_RS07880	HNH endonuclease	
+EWS79_RS00655-MONOMER	EWS79_RS00655	Holliday junction branch migration DNA helicase RuvB	
+EWS79_RS00640-MONOMER	EWS79_RS00640	Holliday junction branch migration protein RuvA	CCI-CYTOSOL-GN
+EWS79_RS03470-MONOMER	EWS79_RS03470	Holliday junction resolvase RuvX	
+EWS79_RS07655-MONOMER	EWS79_RS07655	holo-ACP synthase	
+EWS79_RS08225-MONOMER	EWS79_RS08225	homocitrate synthase	
+EWS79_RS02060-MONOMER	EWS79_RS02060	homoserine dehydrogenase	
+EWS79_RS07135-MONOMER	EWS79_RS07135	homoserine kinase	
+EWS79_RS06130-MONOMER	EWS79_RS06130	homoserine kinase	
+EWS79_RS00960-MONOMER	EWS79_RS00960	homoserine O-acetyltransferase	CCI-CYTOSOL-GN
+EWS79_RS03890-MONOMER	EWS79_RS03890	hopanoid biosynthesis associated membrane protein HpnM	
+EWS79_RS04335-MONOMER	EWS79_RS04335	hopanoid biosynthesis associated radical SAM protein HpnJ	
+EWS79_RS07130-MONOMER	EWS79_RS07130	hopanoid biosynthesis-associated RND transporter HpnN	CCI-PM-BAC-NEG-GN
+EWS79_RS04345-MONOMER	EWS79_RS04345	HpnL family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS05920-MONOMER	EWS79_RS05920	HPr family phosphocarrier protein	CCI-CYTOSOL-GN
+EWS79_RS04420-MONOMER	EWS79_RS04420	Hsp20 family protein	CCI-CYTOSOL-GN
+EWS79_RS01745-MONOMER	EWS79_RS01745	Hsp33 family molecular chaperone HslO	
+EWS79_RS01050-MONOMER	EWS79_RS01050	HU family DNA-binding protein	CCI-CYTOSOL-GN
+EWS79_RS08520-MONOMER	EWS79_RS08520	hydrolase	
+EWS79_RS02895-MONOMER	EWS79_RS02895	hydrolase	
+EWS79_RS03365-MONOMER	EWS79_RS03365	hydroxyacylglutathione hydrolase	CCI-CYTOSOL-GN
+EWS79_RS00485-MONOMER	EWS79_RS00485	hydroxylamine reductase	CCI-CYTOSOL-GN
+EWS79_RS08600-MONOMER	EWS79_RS08600	hydroxymethylbilane synthase	CCI-CYTOSOL-GN
+EWS79_RS07955-MONOMER	EWS79_RS07955	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS00055-MONOMER	EWS79_RS00055	hypothetical protein	
+EWS79_RS08905-MONOMER	EWS79_RS08905	hypothetical protein	
+EWS79_RS01140-MONOMER	EWS79_RS01140	hypothetical protein	
+EWS79_RS07275-MONOMER	EWS79_RS07275	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS03165-MONOMER	EWS79_RS03165	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS04145-MONOMER	EWS79_RS04145	hypothetical protein	
+EWS79_RS07270-MONOMER	EWS79_RS07270	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04520-MONOMER	EWS79_RS04520	hypothetical protein	
+EWS79_RS04260-MONOMER	EWS79_RS04260	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS01655-MONOMER	EWS79_RS01655	hypothetical protein	
+EWS79_RS05860-MONOMER	EWS79_RS05860	hypothetical protein	
+EWS79_RS00735-MONOMER	EWS79_RS00735	hypothetical protein	
+EWS79_RS06495-MONOMER	EWS79_RS06495	hypothetical protein	
+EWS79_RS03075-MONOMER	EWS79_RS03075	hypothetical protein	
+EWS79_RS01575-MONOMER	EWS79_RS01575	hypothetical protein	
+EWS79_RS05055-MONOMER	EWS79_RS05055	hypothetical protein	
+EWS79_RS01670-MONOMER	EWS79_RS01670	hypothetical protein	
+EWS79_RS08750-MONOMER	EWS79_RS08750	hypothetical protein	
+EWS79_RS06150-MONOMER	EWS79_RS06150	hypothetical protein	
+EWS79_RS06845-MONOMER	EWS79_RS06845	hypothetical protein	
+EWS79_RS07965-MONOMER	EWS79_RS07965	hypothetical protein	
+EWS79_RS05870-MONOMER	EWS79_RS05870	hypothetical protein	
+EWS79_RS06215-MONOMER	EWS79_RS06215	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS04815-MONOMER	EWS79_RS04815	hypothetical protein	
+EWS79_RS07185-MONOMER	EWS79_RS07185	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS03305-MONOMER	EWS79_RS03305	hypothetical protein	
+EWS79_RS03395-MONOMER	EWS79_RS03395	hypothetical protein	
+EWS79_RS02630-MONOMER	EWS79_RS02630	hypothetical protein	
+EWS79_RS00780-MONOMER	EWS79_RS00780	hypothetical protein	
+EWS79_RS00645-MONOMER	EWS79_RS00645	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS04090-MONOMER	EWS79_RS04090	hypothetical protein	
+EWS79_RS01620-MONOMER	EWS79_RS01620	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS02810-MONOMER	EWS79_RS02810	hypothetical protein	
+EWS79_RS06380-MONOMER	EWS79_RS06380	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS01145-MONOMER	EWS79_RS01145	hypothetical protein	
+EWS79_RS05430-MONOMER	EWS79_RS05430	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS06050-MONOMER	EWS79_RS06050	hypothetical protein	
+EWS79_RS03230-MONOMER	EWS79_RS03230	hypothetical protein	
+EWS79_RS05880-MONOMER	EWS79_RS05880	hypothetical protein	
+EWS79_RS08910-MONOMER	EWS79_RS08910	hypothetical protein	
+EWS79_RS01130-MONOMER	EWS79_RS01130	hypothetical protein	
+EWS79_RS02505-MONOMER	EWS79_RS02505	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS01155-MONOMER	EWS79_RS01155	hypothetical protein	
+EWS79_RS07730-MONOMER	EWS79_RS07730	hypothetical protein	
+EWS79_RS08545-MONOMER	EWS79_RS08545	hypothetical protein	
+EWS79_RS01125-MONOMER	EWS79_RS01125	hypothetical protein	
+EWS79_RS01485-MONOMER	EWS79_RS01485	hypothetical protein	
+EWS79_RS01270-MONOMER	EWS79_RS01270	hypothetical protein	
+EWS79_RS06710-MONOMER	EWS79_RS06710	hypothetical protein	
+EWS79_RS04940-MONOMER	EWS79_RS04940	hypothetical protein	
+EWS79_RS07475-MONOMER	EWS79_RS07475	hypothetical protein	
+EWS79_RS06560-MONOMER	EWS79_RS06560	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS06570-MONOMER	EWS79_RS06570	hypothetical protein	
+EWS79_RS04140-MONOMER	EWS79_RS04140	hypothetical protein	
+EWS79_RS08900-MONOMER	EWS79_RS08900	hypothetical protein	
+EWS79_RS07290-MONOMER	EWS79_RS07290	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS08755-MONOMER	EWS79_RS08755	hypothetical protein	
+EWS79_RS00290-MONOMER	EWS79_RS00290	hypothetical protein	
+EWS79_RS07900-MONOMER	EWS79_RS07900	hypothetical protein	
+EWS79_RS07180-MONOMER	EWS79_RS07180	hypothetical protein	
+EWS79_RS04760-MONOMER	EWS79_RS04760	hypothetical protein	
+EWS79_RS03990-MONOMER	EWS79_RS03990	hypothetical protein	
+EWS79_RS02085-MONOMER	EWS79_RS02085	hypothetical protein	
+EWS79_RS08685-MONOMER	EWS79_RS08685	hypothetical protein	
+EWS79_RS08790-MONOMER	EWS79_RS08790	hypothetical protein	
+EWS79_RS03965-MONOMER	EWS79_RS03965	hypothetical protein	
+EWS79_RS06605-MONOMER	EWS79_RS06605	hypothetical protein	
+EWS79_RS05440-MONOMER	EWS79_RS05440	hypothetical protein	
+EWS79_RS05690-MONOMER	EWS79_RS05690	hypothetical protein	
+EWS79_RS00460-MONOMER	EWS79_RS00460	hypothetical protein	
+EWS79_RS03095-MONOMER	EWS79_RS03095	hypothetical protein	
+EWS79_RS01135-MONOMER	EWS79_RS01135	hypothetical protein	
+EWS79_RS07425-MONOMER	EWS79_RS07425	hypothetical protein	
+EWS79_RS07190-MONOMER	EWS79_RS07190	hypothetical protein	
+EWS79_RS03975-MONOMER	EWS79_RS03975	hypothetical protein	
+EWS79_RS01995-MONOMER	EWS79_RS01995	hypothetical protein	
+EWS79_RS01630-MONOMER	EWS79_RS01630	hypothetical protein	
+EWS79_RS08010-MONOMER	EWS79_RS08010	hypothetical protein	
+EWS79_RS03605-MONOMER	EWS79_RS03605	hypothetical protein	
+EWS79_RS00435-MONOMER	EWS79_RS00435	hypothetical protein	
+EWS79_RS01685-MONOMER	EWS79_RS01685	hypothetical protein	
+EWS79_RS01765-MONOMER	EWS79_RS01765	hypothetical protein	CCI-EXTRACELLULAR-GN
+EWS79_RS01640-MONOMER	EWS79_RS01640	hypothetical protein	
+EWS79_RS02050-MONOMER	EWS79_RS02050	hypothetical protein	
+EWS79_RS06575-MONOMER	EWS79_RS06575	hypothetical protein	
+EWS79_RS03135-MONOMER	EWS79_RS03135	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS08380-MONOMER	EWS79_RS08380	hypothetical protein	
+EWS79_RS01875-MONOMER	EWS79_RS01875	hypothetical protein	
+EWS79_RS04820-MONOMER	EWS79_RS04820	hypothetical protein	
+EWS79_RS07750-MONOMER	EWS79_RS07750	hypothetical protein	
+EWS79_RS06650-MONOMER	EWS79_RS06650	hypothetical protein	
+EWS79_RS08665-MONOMER	EWS79_RS08665	hypothetical protein	
+EWS79_RS01615-MONOMER	EWS79_RS01615	hypothetical protein	
+EWS79_RS06525-MONOMER	EWS79_RS06525	hypothetical protein	
+EWS79_RS03895-MONOMER	EWS79_RS03895	hypothetical protein	
+EWS79_RS02095-MONOMER	EWS79_RS02095	hypothetical protein	
+EWS79_RS01005-MONOMER	EWS79_RS01005	hypothetical protein	
+EWS79_RS01045-MONOMER	EWS79_RS01045	hypothetical protein	
+EWS79_RS04150-MONOMER	EWS79_RS04150	hypothetical protein	
+EWS79_RS00270-MONOMER	EWS79_RS00270	hypothetical protein	
+EWS79_RS05655-MONOMER	EWS79_RS05655	hypothetical protein	
+EWS79_RS05795-MONOMER	EWS79_RS05795	hypothetical protein	
+EWS79_RS02030-MONOMER	EWS79_RS02030	hypothetical protein	
+EWS79_RS02975-MONOMER	EWS79_RS02975	hypothetical protein	
+EWS79_RS07995-MONOMER	EWS79_RS07995	hypothetical protein	
+EWS79_RS06095-MONOMER	EWS79_RS06095	hypothetical protein	
+EWS79_RS08015-MONOMER	EWS79_RS08015	hypothetical protein	
+EWS79_RS05770-MONOMER	EWS79_RS05770	hypothetical protein	
+EWS79_RS05790-MONOMER	EWS79_RS05790	hypothetical protein	
+EWS79_RS05170-MONOMER	EWS79_RS05170	hypothetical protein	
+EWS79_RS04310-MONOMER	EWS79_RS04310	hypothetical protein	
+EWS79_RS05760-MONOMER	EWS79_RS05760	hypothetical protein	
+EWS79_RS03310-MONOMER	EWS79_RS03310	hypothetical protein	
+EWS79_RS00445-MONOMER	EWS79_RS00445	hypothetical protein	
+EWS79_RS03635-MONOMER	EWS79_RS03635	hypothetical protein	
+EWS79_RS01675-MONOMER	EWS79_RS01675	hypothetical protein	CCI-EXTRACELLULAR-GN
+EWS79_RS07470-MONOMER	EWS79_RS07470	hypothetical protein	
+EWS79_RS01160-MONOMER	EWS79_RS01160	hypothetical protein	
+EWS79_RS02740-MONOMER	EWS79_RS02740	hypothetical protein	
+EWS79_RS05555-MONOMER	EWS79_RS05555	hypothetical protein	
+EWS79_RS02760-MONOMER	EWS79_RS02760	hypothetical protein	
+EWS79_RS01665-MONOMER	EWS79_RS01665	hypothetical protein	
+EWS79_RS07775-MONOMER	EWS79_RS07775	hypothetical protein	
+EWS79_RS06835-MONOMER	EWS79_RS06835	hypothetical protein	
+EWS79_RS03400-MONOMER	EWS79_RS03400	hypothetical protein	
+EWS79_RS07615-MONOMER	EWS79_RS07615	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS00275-MONOMER	EWS79_RS00275	hypothetical protein	
+EWS79_RS08865-MONOMER	EWS79_RS08865	hypothetical protein	
+EWS79_RS03510-MONOMER	EWS79_RS03510	hypothetical protein	
+EWS79_RS08740-MONOMER	EWS79_RS08740	hypothetical protein	
+EWS79_RS03495-MONOMER	EWS79_RS03495	hypothetical protein	
+EWS79_RS04135-MONOMER	EWS79_RS04135	hypothetical protein	
+EWS79_RS04490-MONOMER	EWS79_RS04490	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS06715-MONOMER	EWS79_RS06715	hypothetical protein	
+EWS79_RS02075-MONOMER	EWS79_RS02075	hypothetical protein	
+EWS79_RS02940-MONOMER	EWS79_RS02940	hypothetical protein	
+EWS79_RS01910-MONOMER	EWS79_RS01910	hypothetical protein	
+EWS79_RS03475-MONOMER	EWS79_RS03475	hypothetical protein	
+EWS79_RS06170-MONOMER	EWS79_RS06170	hypothetical protein	
+EWS79_RS07085-MONOMER	EWS79_RS07085	hypothetical protein	
+EWS79_RS08310-MONOMER	EWS79_RS08310	hypothetical protein	
+EWS79_RS08800-MONOMER	EWS79_RS08800	hypothetical protein	
+EWS79_RS07925-MONOMER	EWS79_RS07925	hypothetical protein	
+EWS79_RS07845-MONOMER	EWS79_RS07845	hypothetical protein	
+EWS79_RS02190-MONOMER	EWS79_RS02190	hypothetical protein	
+EWS79_RS01150-MONOMER	EWS79_RS01150	hypothetical protein	
+EWS79_RS03645-MONOMER	EWS79_RS03645	hypothetical protein	
+EWS79_RS06455-MONOMER	EWS79_RS06455	hypothetical protein	
+EWS79_RS06545-MONOMER	EWS79_RS06545	hypothetical protein	
+EWS79_RS02725-MONOMER	EWS79_RS02725	hypothetical protein	
+EWS79_RS00505-MONOMER	EWS79_RS00505	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS04960-MONOMER	EWS79_RS04960	hypothetical protein	
+EWS79_RS06450-MONOMER	EWS79_RS06450	hypothetical protein	
+EWS79_RS01660-MONOMER	EWS79_RS01660	hypothetical protein	
+EWS79_RS02160-MONOMER	EWS79_RS02160	hypothetical protein	
+EWS79_RS03865-MONOMER	EWS79_RS03865	hypothetical protein	
+EWS79_RS04085-MONOMER	EWS79_RS04085	hypothetical protein	
+EWS79_RS02925-MONOMER	EWS79_RS02925	hypothetical protein	
+EWS79_RS07700-MONOMER	EWS79_RS07700	hypothetical protein	
+EWS79_RS04585-MONOMER	EWS79_RS04585	hypothetical protein	
+EWS79_RS05470-MONOMER	EWS79_RS05470	hypothetical protein	
+EWS79_RS07305-MONOMER	EWS79_RS07305	hypothetical protein	
+EWS79_RS06205-MONOMER	EWS79_RS06205	hypothetical protein	
+EWS79_RS05810-MONOMER	EWS79_RS05810	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS00675-MONOMER	EWS79_RS00675	hypothetical protein	
+EWS79_RS01510-MONOMER	EWS79_RS01510	hypothetical protein	
+EWS79_RS08040-MONOMER	EWS79_RS08040	hypothetical protein	
+EWS79_RS04535-MONOMER	EWS79_RS04535	hypothetical protein	
+EWS79_RS01695-MONOMER	EWS79_RS01695	hypothetical protein	
+EWS79_RS00240-MONOMER	EWS79_RS00240	hypothetical protein	
+EWS79_RS05030-MONOMER	EWS79_RS05030	hypothetical protein	
+EWS79_RS00570-MONOMER	EWS79_RS00570	hypothetical protein	
+EWS79_RS03610-MONOMER	EWS79_RS03610	hypothetical protein	
+EWS79_RS01865-MONOMER	EWS79_RS01865	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS05390-MONOMER	EWS79_RS05390	hypothetical protein	
+EWS79_RS06785-MONOMER	EWS79_RS06785	hypothetical protein	
+EWS79_RS08590-MONOMER	EWS79_RS08590	hypothetical protein	
+EWS79_RS00100-MONOMER	EWS79_RS00100	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS00415-MONOMER	EWS79_RS00415	hypothetical protein	
+EWS79_RS00390-MONOMER	EWS79_RS00390	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS07590-MONOMER	EWS79_RS07590	hypothetical protein	
+EWS79_RS02795-MONOMER	EWS79_RS02795	hypothetical protein	
+EWS79_RS06200-MONOMER	EWS79_RS06200	hypothetical protein	CCI-PM-BAC-NEG-GN
+EWS79_RS07840-MONOMER	EWS79_RS07840	hypothetical protein	
+EWS79_RS00380-MONOMER	EWS79_RS00380	hypothetical protein	
+EWS79_RS00370-MONOMER	EWS79_RS00370	hypothetical protein	
+EWS79_RS01645-MONOMER	EWS79_RS01645	hypothetical protein	
+EWS79_RS06420-MONOMER	EWS79_RS06420	hypothetical protein	
+EWS79_RS01625-MONOMER	EWS79_RS01625	hypothetical protein	
+EWS79_RS06055-MONOMER	EWS79_RS06055	hypothetical protein	
+EWS79_RS08980-MONOMER	EWS79_RS08980	hypothetical protein	
+EWS79_RS00360-MONOMER	EWS79_RS00360	hypothetical protein	
+EWS79_RS06115-MONOMER	EWS79_RS06115	hypothetical protein	
+EWS79_RS01340-MONOMER	EWS79_RS01340	hypothetical protein	
+EWS79_RS02150-MONOMER	EWS79_RS02150	hypothetical protein	
+EWS79_RS00365-MONOMER	EWS79_RS00365	hypothetical protein	
+EWS79_RS01525-MONOMER	EWS79_RS01525	hypothetical protein	
+EWS79_RS08005-MONOMER	EWS79_RS08005	hypothetical protein	
+EWS79_RS01635-MONOMER	EWS79_RS01635	hypothetical protein	
+EWS79_RS00990-MONOMER	EWS79_RS00990	hypothetical protein	
+EWS79_RS00250-MONOMER	EWS79_RS00250	hypothetical protein	
+EWS79_RS04430-MONOMER	EWS79_RS04430	hypothetical protein	
+EWS79_RS08285-MONOMER	EWS79_RS08285	hypothetical protein	
+EWS79_RS08485-MONOMER	EWS79_RS08485	hypothetical protein	
+EWS79_RS07480-MONOMER	EWS79_RS07480	hypothetical protein	
+EWS79_RS02805-MONOMER	EWS79_RS02805	hypothetical protein	CCI-CYTOSOL-GN
+EWS79_RS00830-MONOMER	EWS79_RS00830	hypothetical protein	
+EWS79_RS01680-MONOMER	EWS79_RS01680	hypothetical protein	
+EWS79_RS01650-MONOMER	EWS79_RS01650	hypothetical protein	
+CPLX1W2W-2	EWS79_RS06700 // EWS79_RS06690	imidazole glycerol phosphate synthase	
+EWS79_RS06690-MONOMER	EWS79_RS06690	imidazole glycerol phosphate synthase subunit HisF	
+EWS79_RS06700-MONOMER	EWS79_RS06700	imidazole glycerol phosphate synthase subunit HisH	
+EWS79_RS06705-MONOMER	EWS79_RS06705	imidazoleglycerol-phosphate dehydratase HisB	
+EWS79_RS05890-MONOMER	EWS79_RS05890	IMP dehydrogenase	
+EWS79_RS02385-MONOMER	EWS79_RS02385	indole-3-glycerol phosphate synthase TrpC	
+EWS79_RS06720-MONOMER	EWS79_RS06720	inorganic diphosphatase	CCI-CYTOSOL-GN
+EWS79_RS06260-MONOMER	EWS79_RS06260	inositol monophosphatase	CCI-PERI-BAC-GN
+EWS79_RS01400-MONOMER	EWS79_RS01400	inositol monophosphatase	CCI-CYTOSOL-GN
+EWS79_RS06770-MONOMER	EWS79_RS06770	inositol monophosphatase family protein	
+EWS79_RS08535-MONOMER	EWS79_RS08535	insulinase family protein	
+EWS79_RS06330-MONOMER	EWS79_RS06330	insulinase family protein	
+EWS79_RS06325-MONOMER	EWS79_RS06325	insulinase family protein	
+EWS79_RS04995-MONOMER	EWS79_RS04995	integration host factor subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS08065-MONOMER	EWS79_RS08065	integration host factor subunit beta	CCI-CYTOSOL-GN
+EWS79_RS00980-MONOMER	EWS79_RS00980	iron ABC transporter permease	
+EWS79_RS08275-MONOMER	EWS79_RS08275	iron ABC transporter permease	
+EWS79_RS07935-MONOMER	EWS79_RS07935	iron-containing alcohol dehydrogenase	
+EWS79_RS06225-MONOMER	EWS79_RS06225	iron-sulfur cluster assembly accessory protein	
+EWS79_RS01830-MONOMER	EWS79_RS01830	iron-sulfur cluster assembly accessory protein	CCI-CYTOSOL-GN
+EWS79_RS08210-MONOMER	EWS79_RS08210	iron-sulfur cluster assembly accessory protein	
+EWS79_RS02610-MONOMER	EWS79_RS02610	iron-sulfur cluster assembly scaffold protein	
+EWS79_RS01370-MONOMER	EWS79_RS01370	isoleucine--tRNA ligase	
+EWS79_RS05145-MONOMER	EWS79_RS05145	isoprenyl transferase	
+EWS79_RS04765-MONOMER	EWS79_RS04765	J domain-containing protein	
+EWS79_RS06880-MONOMER	EWS79_RS06880	J domain-containing protein	
+EWS79_RS08575-MONOMER	EWS79_RS08575	ketoacyl-ACP synthase III	CCI-CYTOSOL-GN
+EWS79_RS05090-MONOMER	EWS79_RS05090	ketol-acid reductoisomerase	CCI-CYTOSOL-GN
+EWS79_RS04440-MONOMER	EWS79_RS04440	KHG/KDPG aldolase	CCI-CYTOSOL-GN
+EWS79_RS06820-MONOMER	EWS79_RS06820	KpsF/GutQ family sugar-phosphate isomerase	CCI-CYTOSOL-GN
+EWS79_RS00595-MONOMER	EWS79_RS00595	L-aspartate oxidase	
+EWS79_RS00805-MONOMER	EWS79_RS00805	L-serine ammonia-lyase	
+EWS79_RS07120-MONOMER	EWS79_RS07120	L-threonine dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS05710-MONOMER	EWS79_RS05710	LacI family DNA-binding transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS00105-MONOMER	EWS79_RS00105	lactate utilization protein	
+EWS79_RS03370-MONOMER	EWS79_RS03370	lactoylglutathione lyase	CCI-CYTOSOL-GN
+EWS79_RS04660-MONOMER	EWS79_RS04660	large conductance mechanosensitive channel protein MscL	CCI-PM-BAC-NEG-GN
+EWS79_RS04655-MONOMER	EWS79_RS04655	LemA family protein	
+EWS79_RS06385-MONOMER	EWS79_RS06385	leucine--tRNA ligase	
+EWS79_RS05835-MONOMER	EWS79_RS05835	leucyl aminopeptidase	
+EWS79_RS03565-MONOMER	EWS79_RS03565	leucyl aminopeptidase family protein	
+EWS79_RS04125-MONOMER	EWS79_RS04125	leucyl/phenylalanyl-tRNA--protein transferase	
+EWS79_RS00975-MONOMER	EWS79_RS00975	lipopolysaccharide biosynthesis protein	
+EWS79_RS05865-MONOMER	EWS79_RS05865	lipopolysaccharide biosynthesis protein	
+EWS79_RS01960-MONOMER	EWS79_RS01960	lipoprotein-releasing ABC transporter permease subunit	
+EWS79_RS05045-MONOMER	EWS79_RS05045	lipoyl synthase	
+EWS79_RS05800-MONOMER	EWS79_RS05800	lipoyl(octanoyl) transferase LipB	
+EWS79_RS07745-MONOMER	EWS79_RS07745	LL-diaminopimelate aminotransferase	CCI-CYTOSOL-GN
+EWS79_RS07510-MONOMER	EWS79_RS07510	LOG family protein	
+EWS79_RS00580-MONOMER	EWS79_RS00580	low molecular weight phosphotyrosine protein phosphatase	CCI-CYTOSOL-GN
+EWS79_RS05995-MONOMER	EWS79_RS05995	low specificity L-threonine aldolase	CCI-CYTOSOL-GN
+EWS79_RS04025-MONOMER	EWS79_RS04025	LPS biosynthesis protein	
+EWS79_RS01185-MONOMER	EWS79_RS01185	LPS export ABC transporter ATP-binding protein	CCI-CYTOSOL-GN
+EWS79_RS01195-MONOMER	EWS79_RS01195	LPS export ABC transporter periplasmic protein LptC	
+EWS79_RS06185-MONOMER	EWS79_RS06185	LPS export ABC transporter permease LptF	
+EWS79_RS06190-MONOMER	EWS79_RS06190	LPS export ABC transporter permease LptG	CCI-PM-BAC-NEG-GN
+EWS79_RS05840-MONOMER	EWS79_RS05840	LPS-assembly protein LptD	
+EWS79_RS04935-MONOMER	EWS79_RS04935	Lrp/AsnC family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS00115-MONOMER	EWS79_RS00115	Lrp/AsnC family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS01950-MONOMER	EWS79_RS01950	Lrp/AsnC family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS01570-MONOMER	EWS79_RS01570	Lrp/AsnC family transcriptional regulator	
+EWS79_RS06400-MONOMER	EWS79_RS06400	Lrp/AsnC family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS08700-MONOMER	EWS79_RS08700	LTA synthase family protein	
+EWS79_RS05960-MONOMER	EWS79_RS05960	LysE family translocator	
+EWS79_RS00205-MONOMER	EWS79_RS00205	LysE family translocator	
+EWS79_RS06395-MONOMER	EWS79_RS06395	LysE family translocator	CCI-PM-BAC-NEG-GN
+EWS79_RS06485-MONOMER	EWS79_RS06485	LysE family translocator	
+EWS79_RS03945-MONOMER	EWS79_RS03945	lysine--tRNA ligase	
+EWS79_RS02040-MONOMER	EWS79_RS02040	LysM peptidoglycan-binding domain-containing protein	
+EWS79_RS08320-MONOMER	EWS79_RS08320	LysR family transcriptional regulator	
+EWS79_RS02000-MONOMER	EWS79_RS02000	LysR family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS07005-MONOMER	EWS79_RS07005	LysR family transcriptional regulator	
+EWS79_RS07770-MONOMER	EWS79_RS07770	LysR family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS05950-MONOMER	EWS79_RS05950	LysR family transcriptional regulator	
+EWS79_RS05395-MONOMER	EWS79_RS05395	LysR family transcriptional regulator	
+EWS79_RS00210-MONOMER	EWS79_RS00210	LysR family transcriptional regulator	
+EWS79_RS03450-MONOMER	EWS79_RS03450	LysR family transcriptional regulator	
+EWS79_RS08030-MONOMER	EWS79_RS08030	LysR family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS02980-MONOMER	EWS79_RS02980	LysR family transcriptional regulator	
+EWS79_RS03420-MONOMER	EWS79_RS03420	LysR family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS04845-MONOMER	EWS79_RS04845	lytic murein transglycosylase	
+EWS79_RS06550-MONOMER	EWS79_RS06550	lytic transglycosylase	
+EWS79_RS03175-MONOMER	EWS79_RS03175	lytic transglycosylase domain-containing protein	
+EWS79_RS05300-MONOMER	EWS79_RS05300	lytic transglycosylase domain-containing protein	
+EWS79_RS07960-MONOMER	EWS79_RS07960	M1 family peptidase	
+EWS79_RS03190-MONOMER	EWS79_RS03190	M13 family peptidase	
+EWS79_RS00600-MONOMER	EWS79_RS00600	M20/M25/M40 family metallo-hydrolase	
+EWS79_RS04390-MONOMER	EWS79_RS04390	M23 family metallopeptidase	
+EWS79_RS00925-MONOMER	EWS79_RS00925	M23 family metallopeptidase	
+EWS79_RS06230-MONOMER	EWS79_RS06230	M23 family metallopeptidase	
+EWS79_RS00050-MONOMER	EWS79_RS00050	M48 family peptidase	
+EWS79_RS07115-MONOMER	EWS79_RS07115	M61 family peptidase	
+EWS79_RS03330-MONOMER	EWS79_RS03330	M67 family peptidase	
+EWS79_RS03410-MONOMER	EWS79_RS03410	magnesium transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS05640-MONOMER	EWS79_RS05640	mandelate racemase/muconate lactonizing enzyme family protein	CCI-CYTOSOL-GN
+EWS79_RS06460-MONOMER	EWS79_RS06460	mannitol dehydrogenase family protein	CCI-CYTOSOL-GN
+EWS79_RS05525-MONOMER	EWS79_RS05525	mannose-1-phosphate guanylyltransferase/mannose-6-phosphate isomerase	
+EWS79_RS03755-MONOMER	EWS79_RS03755	mannosyltransferase	
+EWS79_RS01755-MONOMER	EWS79_RS01755	MarC family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04180-MONOMER	EWS79_RS04180	MarR family transcriptional regulator	
+EWS79_RS00225-MONOMER	EWS79_RS00225	MarR family transcriptional regulator	
+EWS79_RS00915-MONOMER	EWS79_RS00915	MATE family efflux transporter	
+EWS79_RS04880-MONOMER	EWS79_RS04880	MBL fold metallo-hydrolase	
+EWS79_RS03430-MONOMER	EWS79_RS03430	MBL fold metallo-hydrolase	CCI-CYTOSOL-GN
+EWS79_RS01905-MONOMER	EWS79_RS01905	MBOAT family protein	
+EWS79_RS04540-MONOMER	EWS79_RS04540	MCE family protein	
+EWS79_RS05935-MONOMER	EWS79_RS05935	mechanosensitive ion channel	
+EWS79_RS04435-MONOMER	EWS79_RS04435	mechanosensitive ion channel family protein	
+EWS79_RS07985-MONOMER	EWS79_RS07985	mechanosensitive ion channel family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS06530-MONOMER	EWS79_RS06530	membrane protein	CCI-PM-BAC-NEG-GN
+EWS79_RS06640-MONOMER	EWS79_RS06640	membrane protein	
+EWS79_RS01860-MONOMER	EWS79_RS01860	membrane protein	CCI-PM-BAC-NEG-GN
+EWS79_RS07255-MONOMER	EWS79_RS07255	membrane protein insertase YidC	
+EWS79_RS07250-MONOMER	EWS79_RS07250	membrane protein insertion efficiency factor YidD	
+EWS79_RS03925-MONOMER	EWS79_RS03925	MerC domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04990-MONOMER	EWS79_RS04990	MerR family transcriptional regulator	
+EWS79_RS00870-MONOMER	EWS79_RS00870	MerR family transcriptional regulator	
+EWS79_RS00540-MONOMER	EWS79_RS00540	metallophosphoesterase	
+EWS79_RS01445-MONOMER	EWS79_RS01445	metalloprotease TldD	
+EWS79_RS07825-MONOMER	EWS79_RS07825	metalloregulator ArsR/SmtB family transcription factor	CCI-CYTOSOL-GN
+EWS79_RS01175-MONOMER	EWS79_RS01175	methionine adenosyltransferase	CCI-CYTOSOL-GN
+EWS79_RS00955-MONOMER	EWS79_RS00955	methionine biosynthesis protein MetW	
+EWS79_RS07810-MONOMER	EWS79_RS07810	methionine synthase	
+EWS79_RS04870-MONOMER	EWS79_RS04870	methionine--tRNA ligase	
+EWS79_RS03585-MONOMER	EWS79_RS03585	methionyl-tRNA formyltransferase	
+EWS79_RS00865-MONOMER	EWS79_RS00865	methyl-accepting chemotaxis protein	
+EWS79_RS00350-MONOMER	EWS79_RS00350	methyl-accepting chemotaxis protein	CCI-PM-BAC-NEG-GN
+EWS79_RS09030-MONOMER	EWS79_RS09030	methylated-DNA--[protein]-cysteine S-methyltransferase	
+EWS79_RS07820-MONOMER	EWS79_RS07820	methylenetetrahydrofolate reductase [NAD(P)H]	CCI-CYTOSOL-GN
+EWS79_RS03050-MONOMER	EWS79_RS03050	methylenetetrahydrofolate--tRNA-(uracil(54)- C(5))-methyltransferase (FADH(2)-oxidizing) TrmFO	
+EWS79_RS00085-MONOMER	EWS79_RS00085	methyltransferase domain-containing protein	
+EWS79_RS03425-MONOMER	EWS79_RS03425	methyltransferase type 12	
+EWS79_RS06475-MONOMER	EWS79_RS06475	MFS transporter	
+EWS79_RS02495-MONOMER	EWS79_RS02495	MFS transporter	
+EWS79_RS00215-MONOMER	EWS79_RS00215	MFS transporter	
+EWS79_RS02560-MONOMER	EWS79_RS02560	MFS transporter	
+EWS79_RS04460-MONOMER	EWS79_RS04460	MFS transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS04945-MONOMER	EWS79_RS04945	MFS transporter	
+EWS79_RS08985-MONOMER	EWS79_RS08985	MFS transporter	
+EWS79_RS05965-MONOMER	EWS79_RS05965	MFS transporter	
+EWS79_RS05355-MONOMER	EWS79_RS05355	MFS transporter	
+EWS79_RS05735-MONOMER	EWS79_RS05735	MFS transporter	
+EWS79_RS06490-MONOMER	EWS79_RS06490	MFS transporter	
+EWS79_RS01545-MONOMER	EWS79_RS01545	MFS transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS00400-MONOMER	EWS79_RS00400	MFS transporter	
+EWS79_RS08315-MONOMER	EWS79_RS08315	MFS transporter	
+EWS79_RS07015-MONOMER	EWS79_RS07015	MFS transporter	
+EWS79_RS02065-MONOMER	EWS79_RS02065	MgtC/SapB family protein	
+EWS79_RS02750-MONOMER	EWS79_RS02750	MinD/ParA family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04550-MONOMER	EWS79_RS04550	MlaE family lipid ABC transporter permease subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS08235-MONOMER	EWS79_RS08235	ModD protein	
+EWS79_RS02910-MONOMER	EWS79_RS02910	molecular chaperone DnaJ	CCI-CYTOSOL-GN
+EWS79_RS07565-MONOMER	EWS79_RS07565	molecular chaperone DnaJ	
+EWS79_RS01420-MONOMER	EWS79_RS01420	molecular chaperone DnaJ	
+EWS79_RS02905-MONOMER	EWS79_RS02905	molecular chaperone DnaK	
+EWS79_RS04270-MONOMER	EWS79_RS04270	monofunctional biosynthetic peptidoglycan transglycosylase	
+EWS79_RS07980-MONOMER	EWS79_RS07980	monooxygenase	
+EWS79_RS03275-MONOMER	EWS79_RS03275	monooxygenase	
+EWS79_RS07690-MONOMER	EWS79_RS07690	MotA/TolQ/ExbB proton channel family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS06280-MONOMER	EWS79_RS06280	MucR family transcriptional regulator	
+EWS79_RS01725-MONOMER	EWS79_RS01725	multidrug ABC transporter permease	
+EWS79_RS01220-MONOMER	EWS79_RS01220	multidrug efflux RND transporter permease subunit	CCI-PM-BAC-NEG-GN
+EWS79_RS00440-MONOMER	EWS79_RS00440	multidrug efflux SMR transporter	
+EWS79_RS03085-MONOMER	EWS79_RS03085	multidrug efflux SMR transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS04500-MONOMER	EWS79_RS04500	multidrug transporter	
+EWS79_RS07320-MONOMER	EWS79_RS07320	murein biosynthesis integral membrane protein MurJ	CCI-PM-BAC-NEG-GN
+EWS79_RS00810-MONOMER	EWS79_RS00810	MurR/RpiR family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS03555-MONOMER	EWS79_RS03555	N-acetyl-gamma-glutamyl-phosphate reductase	
+EWS79_RS04280-MONOMER	EWS79_RS04280	N-acetylglucosamine-6-phosphate deacetylase	
+EWS79_RS05750-MONOMER	EWS79_RS05750	N-acetylmuramic acid 6-phosphate etherase	
+EWS79_RS00835-MONOMER	EWS79_RS00835	N-acetylmuramoyl-L-alanine amidase	
+EWS79_RS04710-MONOMER	EWS79_RS04710	N-acetyltransferase	
+EWS79_RS00895-MONOMER	EWS79_RS00895	N-acetyltransferase	
+EWS79_RS06080-MONOMER	EWS79_RS06080	N-carbamoylputrescine amidase	
+EWS79_RS05275-MONOMER	EWS79_RS05275	N-formylglutamate amidohydrolase	CCI-CYTOSOL-GN
+EWS79_RS06195-MONOMER	EWS79_RS06195	N-formylglutamate amidohydrolase	
+EWS79_RS05235-MONOMER	EWS79_RS05235	N-succinylarginine dihydrolase	CCI-CYTOSOL-GN
+EWS79_RS00490-MONOMER	EWS79_RS00490	Na+/H+ antiporter NhaA	
+EWS79_RS05930-MONOMER	EWS79_RS05930	NAD(+) kinase	CCI-CYTOSOL-GN
+EWS79_RS08610-MONOMER	EWS79_RS08610	NAD(P)-dependent glycerol-3-phosphate dehydrogenase	
+EWS79_RS06100-MONOMER	EWS79_RS06100	NAD(P)-dependent oxidoreductase	
+EWS79_RS00880-MONOMER	EWS79_RS00880	NAD(P)-dependent oxidoreductase	CCI-CYTOSOL-GN
+EWS79_RS04975-MONOMER	EWS79_RS04975	NAD(P)-dependent oxidoreductase	CCI-CYTOSOL-GN
+EWS79_RS04955-MONOMER	EWS79_RS04955	NAD(P)/FAD-dependent oxidoreductase	CCI-PM-BAC-NEG-GN
+EWS79_RS07940-MONOMER	EWS79_RS07940	NAD(P)H quinone oxidoreductase	
+EWS79_RS05945-MONOMER	EWS79_RS05945	NAD(P)H:quinone oxidoreductase	
+EWS79_RS03980-MONOMER	EWS79_RS03980	NAD+ synthase	
+EWS79_RS03845-MONOMER	EWS79_RS03845	NAD-dependent epimerase/dehydratase family protein	
+EWS79_RS04185-MONOMER	EWS79_RS04185	NAD-dependent epimerase/dehydratase family protein	
+EWS79_RS08885-MONOMER	EWS79_RS08885	NAD-dependent malic enzyme	
+EWS79_RS07855-MONOMER	EWS79_RS07855	NAD-dependent succinate-semialdehyde dehydrogenase	
+EWS79_RS02380-MONOMER	EWS79_RS02380	NADP-dependent isocitrate dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS01385-MONOMER	EWS79_RS01385	NADPH-dependent 7-cyano-7-deazaguanine reductase QueF	CCI-CYTOSOL-GN
+EWS79_RS00045-MONOMER	EWS79_RS00045	NADPH-dependent assimilatory sulfite reductase flavoprotein subunit	
+EWS79_RS04315-MONOMER	EWS79_RS04315	NCS2 family permease	
+EWS79_RS03960-MONOMER	EWS79_RS03960	NERD domain-containing protein	
+EWS79_RS06500-MONOMER	EWS79_RS06500	nicotinamide riboside transporter PnuC	
+EWS79_RS06955-MONOMER	EWS79_RS06955	nicotinamide riboside transporter PnuC	
+EWS79_RS07435-MONOMER	EWS79_RS07435	nicotinate-nucleotide adenylyltransferase	
+EWS79_RS08130-MONOMER	EWS79_RS08130	nif-specific transcriptional activator NifA	
+EWS79_RS08215-MONOMER	EWS79_RS08215	NifU family protein	
+EWS79_RS06295-MONOMER	EWS79_RS06295	NifU family protein	
+EWS79_RS08195-MONOMER	EWS79_RS08195	NifX-associated nitrogen fixation protein	
+EWS79_RS02530-MONOMER	EWS79_RS02530	nitrate/sulfonate/bicarbonate ABC transporter ATP-binding protein	
+EWS79_RS08205-MONOMER	EWS79_RS08205	nitrogen fixation protein NifQ	
+EWS79_RS08190-MONOMER	EWS79_RS08190	nitrogen fixation protein NifX	
+EWS79_RS08145-MONOMER	EWS79_RS08145	nitrogen fixation protein NifZ	CCI-CYTOSOL-GN
+EWS79_RS00170-MONOMER	EWS79_RS00170	nitrogen regulatory protein	CCI-CYTOSOL-GN
+EWS79_RS08135-MONOMER	EWS79_RS08135	nitrogenase cofactor biosynthesis protein NifB	
+EWS79_RS08165-MONOMER	EWS79_RS08165	nitrogenase iron protein	CCI-CYTOSOL-GN
+EWS79_RS08180-MONOMER	EWS79_RS08180	nitrogenase iron-molybdenum cofactor biosynthesis protein NifE	
+EWS79_RS08185-MONOMER	EWS79_RS08185	nitrogenase iron-molybdenum cofactor biosynthesis protein NifN	
+EWS79_RS08170-MONOMER	EWS79_RS08170	nitrogenase molybdenum-iron protein alpha chain	CCI-CYTOSOL-GN
+EWS79_RS08175-MONOMER	EWS79_RS08175	nitrogenase molybdenum-iron protein subunit beta	
+EWS79_RS08230-MONOMER	EWS79_RS08230	nitrogenase-stabilizing/protective protein NifW	
+EWS79_RS08365-MONOMER	EWS79_RS08365	nitronate monooxygenase	
+EWS79_RS04070-MONOMER	EWS79_RS04070	nitronate monooxygenase	CCI-CYTOSOL-GN
+EWS79_RS02995-MONOMER	EWS79_RS02995	nitroreductase	
+EWS79_RS06805-MONOMER	EWS79_RS06805	nodulation protein	
+EWS79_RS00730-MONOMER	EWS79_RS00730	nuclear transport factor 2 family protein	
+EWS79_RS03295-MONOMER	EWS79_RS03295	nuclear transport factor 2 family protein	
+EWS79_RS01260-MONOMER	EWS79_RS01260	nucleoside deaminase	CCI-CYTOSOL-GN
+EWS79_RS04305-MONOMER	EWS79_RS04305	nucleoside transporter	
+EWS79_RS05875-MONOMER	EWS79_RS05875	nucleoside triphosphate hydrolase	
+EWS79_RS04885-MONOMER	EWS79_RS04885	nucleoside triphosphate pyrophosphohydrolase	
+EWS79_RS00080-MONOMER	EWS79_RS00080	nucleotide exchange factor GrpE	CCI-CYTOSOL-GN
+EWS79_RS04910-MONOMER	EWS79_RS04910	nucleotidyltransferase family protein	CCI-CYTOSOL-GN
+EWS79_RS04645-MONOMER	EWS79_RS04645	NUDIX hydrolase	
+EWS79_RS06025-MONOMER	EWS79_RS06025	OmpA family protein	
+EWS79_RS05120-MONOMER	EWS79_RS05120	OmpH family outer membrane protein	
+EWS79_RS03060-MONOMER	EWS79_RS03060	organic hydroperoxide resistance protein	CCI-CYTOSOL-GN
+EWS79_RS01190-MONOMER	EWS79_RS01190	organic solvent tolerance protein OstA	
+EWS79_RS01740-MONOMER	EWS79_RS01740	ornithine carbamoyltransferase	
+EWS79_RS07645-MONOMER	EWS79_RS07645	orotate phosphoribosyltransferase	CCI-CYTOSOL-GN
+EWS79_RS02590-MONOMER	EWS79_RS02590	orotidine-5'-phosphate decarboxylase	
+EWS79_RS04115-MONOMER	EWS79_RS04115	outer membrane lipid asymmetry maintenance protein MlaD	
+EWS79_RS07620-MONOMER	EWS79_RS07620	outer membrane lipoprotein carrier protein LolA	
+EWS79_RS02130-MONOMER	EWS79_RS02130	outer membrane protein assembly factor	
+EWS79_RS05245-MONOMER	EWS79_RS05245	outer membrane protein assembly factor	
+EWS79_RS05125-MONOMER	EWS79_RS05125	outer membrane protein assembly factor BamA	
+EWS79_RS07875-MONOMER	EWS79_RS07875	outer membrane protein assembly factor BamD	
+EWS79_RS07410-MONOMER	EWS79_RS07410	outer membrane protein assembly factor BamD	
+EWS79_RS08625-MONOMER	EWS79_RS08625	outer membrane protein assembly factor BamE	
+EWS79_RS08260-MONOMER	EWS79_RS08260	oxidoreductase	CCI-CYTOSOL-GN
+EWS79_RS04240-MONOMER	EWS79_RS04240	oxygen-dependent coproporphyrinogen oxidase	
+EWS79_RS06060-MONOMER	EWS79_RS06060	oxygen-independent coproporphyrinogen III oxidase	
+EWS79_RS02110-MONOMER	EWS79_RS02110	P-II family nitrogen regulator	CCI-PM-BAC-NEG-GN
+EWS79_RS08860-MONOMER	EWS79_RS08860	PaaI family thioesterase	
+EWS79_RS03780-MONOMER	EWS79_RS03780	pantetheine-phosphate adenylyltransferase	
+EWS79_RS08960-MONOMER	EWS79_RS08960	pantoate--beta-alanine ligase	
+EWS79_RS08880-MONOMER	EWS79_RS08880	pantoate--beta-alanine ligase	
+EWS79_RS08995-MONOMER	EWS79_RS08995	ParA family protein	
+EWS79_RS08990-MONOMER	EWS79_RS08990	ParB/RepB/Spo0J family partition protein	
+EWS79_RS04920-MONOMER	EWS79_RS04920	PAS domain-containing sensor histidine kinase	
+EWS79_RS00840-MONOMER	EWS79_RS00840	PBP1A family penicillin-binding protein	
+EWS79_RS02145-MONOMER	EWS79_RS02145	PBP1A family penicillin-binding protein	
+EWS79_RS01610-MONOMER	EWS79_RS01610	PBSX family phage terminase large subunit	
+EWS79_RS03650-MONOMER	EWS79_RS03650	penicillin-binding protein 2	CCI-PM-BAC-NEG-GN
+EWS79_RS01515-MONOMER	EWS79_RS01515	penicillin-binding protein 2	
+EWS79_RS07885-MONOMER	EWS79_RS07885	penicillin-binding protein activator	
+EWS79_RS07265-MONOMER	EWS79_RS07265	PepSY domain-containing protein	
+EWS79_RS07145-MONOMER	EWS79_RS07145	peptidase	
+EWS79_RS01285-MONOMER	EWS79_RS01285	peptidase	
+EWS79_RS07450-MONOMER	EWS79_RS07450	peptidase M23	
+EWS79_RS00820-MONOMER	EWS79_RS00820	peptidase M48	
+EWS79_RS05745-MONOMER	EWS79_RS05745	peptidase S10	
+EWS79_RS04425-MONOMER	EWS79_RS04425	peptidase S10	
+EWS79_RS07635-MONOMER	EWS79_RS07635	peptidase S16	CCI-CYTOSOL-GN
+EWS79_RS04130-MONOMER	EWS79_RS04130	peptidase S58 family protein	
+EWS79_RS08710-MONOMER	EWS79_RS08710	peptidase U32	
+EWS79_RS06730-MONOMER	EWS79_RS06730	peptide chain release factor 1	CCI-CYTOSOL-GN
+EWS79_RS00845-MONOMER	EWS79_RS00845	peptide chain release factor 2	CCI-CYTOSOL-GN
+EWS79_RS03285-MONOMER	EWS79_RS03285	peptide chain release factor 3	
+EWS79_RS06735-MONOMER	EWS79_RS06735	peptide chain release factor N(5)-glutamine methyltransferase	
+EWS79_RS03595-MONOMER	EWS79_RS03595	peptide deformylase	CCI-CYTOSOL-GN
+EWS79_RS04445-MONOMER	EWS79_RS04445	peptide-methionine (S)-S-oxide reductase	
+EWS79_RS07725-MONOMER	EWS79_RS07725	peptidoglycan editing factor PgeF	
+EWS79_RS03560-MONOMER	EWS79_RS03560	peptidoglycan endopeptidase	
+EWS79_RS00685-MONOMER	EWS79_RS00685	peptidoglycan-associated lipoprotein Pal	CCI-OUTER-MEM-GN
+EWS79_RS07905-MONOMER	EWS79_RS07905	peptidoglycan-binding protein	
+EWS79_RS01985-MONOMER	EWS79_RS01985	peptidyl-prolyl cis-trans isomerase	
+EWS79_RS05845-MONOMER	EWS79_RS05845	peptidyl-prolyl cis-trans isomerase	CCI-PERI-BAC-GN
+EWS79_RS03775-MONOMER	EWS79_RS03775	peptidylprolyl isomerase	CCI-PERI-BAC-GN
+EWS79_RS03415-MONOMER	EWS79_RS03415	peptidylprolyl isomerase	
+EWS79_RS07765-MONOMER	EWS79_RS07765	peroxiredoxin	CCI-CYTOSOL-GN
+EWS79_RS04725-MONOMER	EWS79_RS04725	phage shock protein operon transcriptional activator	
+EWS79_RS04735-MONOMER	EWS79_RS04735	phage shock protein PspA	
+CPLX1W2W-4	EWS79_RS06755 // EWS79_RS06750	phenylalanine--tRNA ligase	
+EWS79_RS06755-MONOMER	EWS79_RS06755	phenylalanine--tRNA ligase subunit alpha	
+EWS79_RS06750-MONOMER	EWS79_RS06750	phenylalanine--tRNA ligase subunit beta	
+EWS79_RS00305-MONOMER	EWS79_RS00305	PhoH family protein	CCI-CYTOSOL-GN
+EWS79_RS02210-MONOMER	EWS79_RS02210	phosphatase PAP2 family protein	
+EWS79_RS04685-MONOMER	EWS79_RS04685	phosphate ABC transporter ATP-binding protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04680-MONOMER	EWS79_RS04680	phosphate ABC transporter permease PstA	CCI-PM-BAC-NEG-GN
+EWS79_RS04675-MONOMER	EWS79_RS04675	phosphate ABC transporter permease subunit PstC	CCI-PM-BAC-NEG-GN
+EWS79_RS04670-MONOMER	EWS79_RS04670	phosphate ABC transporter substrate-binding protein PstS	
+EWS79_RS08580-MONOMER	EWS79_RS08580	phosphate acyltransferase PlsX	
+EWS79_RS05200-MONOMER	EWS79_RS05200	phosphate regulon transcriptional regulatory protein PhoB	
+EWS79_RS05195-MONOMER	EWS79_RS05195	phosphate signaling complex protein PhoU	CCI-CYTOSOL-GN
+EWS79_RS05140-MONOMER	EWS79_RS05140	phosphatidate cytidylyltransferase	
+EWS79_RS05185-MONOMER	EWS79_RS05185	phosphatidylserine decarboxylase	
+EWS79_RS03665-MONOMER	EWS79_RS03665	phospho-N-acetylmuramoyl-pentapeptide- transferase	CCI-PM-BAC-NEG-GN
+EWS79_RS00035-MONOMER	EWS79_RS00035	phosphoadenylyl-sulfate reductase	CCI-CYTOSOL-GN
+EWS79_RS06670-MONOMER	EWS79_RS06670	phosphoenolpyruvate carboxylase	
+EWS79_RS07380-MONOMER	EWS79_RS07380	phosphoenolpyruvate--protein phosphotransferase	
+EWS79_RS01555-MONOMER	EWS79_RS01555	phosphogluconate dehydratase	CCI-CYTOSOL-GN
+EWS79_RS04465-MONOMER	EWS79_RS04465	phosphoglucosamine mutase	
+EWS79_RS07540-MONOMER	EWS79_RS07540	phosphoglycerate dehydrogenase	
+EWS79_RS00750-MONOMER	EWS79_RS00750	phosphoglycerate kinase	CCI-CYTOSOL-GN
+EWS79_RS02135-MONOMER	EWS79_RS02135	phosphoglycolate phosphatase	CCI-CYTOSOL-GN
+EWS79_RS01425-MONOMER	EWS79_RS01425	phosphomannomutase/phosphoglucomutase	
+EWS79_RS00720-MONOMER	EWS79_RS00720	phosphomethylpyrimidine synthase ThiC	
+EWS79_RS07175-MONOMER	EWS79_RS07175	phosphopyruvate hydratase	CCI-CYTOSOL-GN
+EWS79_RS05260-MONOMER	EWS79_RS05260	phosphoribosyl-AMP cyclohydrolase	
+EWS79_RS06685-MONOMER	EWS79_RS06685	phosphoribosyl-ATP diphosphatase	
+EWS79_RS01275-MONOMER	EWS79_RS01275	phosphoribosylamine--glycine ligase	CCI-CYTOSOL-GN
+EWS79_RS04690-MONOMER	EWS79_RS04690	phosphoribosylaminoimidazolesuccinocarboxamide synthase	CCI-CYTOSOL-GN
+EWS79_RS02585-MONOMER	EWS79_RS02585	phosphoribosylanthranilate isomerase	
+EWS79_RS03130-MONOMER	EWS79_RS03130	phosphoribosylformylglycinamidine cyclo-ligase	
+CPLX1W2W-5	EWS79_RS06830 // EWS79_RS06825	phosphoribosylformylglycinamidine synthase	
+EWS79_RS03625-MONOMER	EWS79_RS03625	phosphoribosylformylglycinamidine synthase subunit PurL	
+EWS79_RS06830-MONOMER	EWS79_RS06830	phosphoribosylformylglycinamidine synthase subunit PurQ	CCI-CYTOSOL-GN
+EWS79_RS06825-MONOMER	EWS79_RS06825	phosphoribosylformylglycinamidine synthase subunit PurS	
+EWS79_RS03125-MONOMER	EWS79_RS03125	phosphoribosylglycinamide formyltransferase	
+EWS79_RS02885-MONOMER	EWS79_RS02885	phosphoribosyltransferase	CCI-CYTOSOL-GN
+EWS79_RS03875-MONOMER	EWS79_RS03875	phosphorylase	
+EWS79_RS05070-MONOMER	EWS79_RS05070	phosphoserine phosphatase SerB	
+EWS79_RS07535-MONOMER	EWS79_RS07535	phosphoserine transaminase	
+EWS79_RS05905-MONOMER	EWS79_RS05905	phosphotransferase	
+EWS79_RS08830-MONOMER	EWS79_RS08830	PhzF family phenazine biosynthesis protein	
+EWS79_RS08060-MONOMER	EWS79_RS08060	PhzF family phenazine biosynthesis protein	
+EWS79_RS05955-MONOMER	EWS79_RS05955	pirin family protein	
+EWS79_RS08825-MONOMER	EWS79_RS08825	PLP-dependent aminotransferase family protein	
+EWS79_RS08305-MONOMER	EWS79_RS08305	PLP-dependent aminotransferase family protein	
+EWS79_RS05940-MONOMER	EWS79_RS05940	polyisoprenoid-binding protein	
+EWS79_RS03785-MONOMER	EWS79_RS03785	polyprenyl synthetase family protein	CCI-CYTOSOL-GN
+EWS79_RS02485-MONOMER	EWS79_RS02485	polyprenyl synthetase family protein	
+EWS79_RS02410-MONOMER	EWS79_RS02410	polyribonucleotide nucleotidyltransferase	
+EWS79_RS06425-MONOMER	EWS79_RS06425	polysaccharide biosynthesis protein	
+EWS79_RS06410-MONOMER	EWS79_RS06410	porin	
+EWS79_RS04665-MONOMER	EWS79_RS04665	porin	
+EWS79_RS06645-MONOMER	EWS79_RS06645	porin family protein	
+EWS79_RS08480-MONOMER	EWS79_RS08480	porphobilinogen synthase	
+EWS79_RS05410-MONOMER	EWS79_RS05410	potassium transporter Kup	CCI-PM-BAC-NEG-GN
+EWS79_RS03150-MONOMER	EWS79_RS03150	Ppx/GppA family phosphatase	
+EWS79_RS01710-MONOMER	EWS79_RS01710	Ppx/GppA family phosphatase	
+EWS79_RS02455-MONOMER	EWS79_RS02455	PQQ-dependent sugar dehydrogenase	
+CPLX1W2W-17	EWS79_RS06185 // EWS79_RS06190	predicted ABC efflux transporter of a lipopolysaccharide	
+CPLX1W2W-18	EWS79_RS01195 // EWS79_RS01185	predicted ABC efflux transporter of a lipopolysaccharide	
+CPLX1W2W-19	EWS79_RS04685 // EWS79_RS04680 // EWS79_RS04675 // EWS79_RS04670	predicted ABC transporter of phosphate	
+EWS79_RS07505-MONOMER	EWS79_RS07505	prephenate dehydratase	
+EWS79_RS01790-MONOMER	EWS79_RS01790	prephenate dehydrogenase/arogenate dehydrogenase family protein	
+EWS79_RS04105-MONOMER	EWS79_RS04105	preprotein translocase subunit SecA	
+EWS79_RS03200-MONOMER	EWS79_RS03200	preprotein translocase subunit SecE	CCI-PM-BAC-NEG-GN
+EWS79_RS01975-MONOMER	EWS79_RS01975	preprotein translocase subunit SecG	
+EWS79_RS02340-MONOMER	EWS79_RS02340	preprotein translocase subunit SecY	CCI-PM-BAC-NEG-GN
+EWS79_RS08565-MONOMER	EWS79_RS08565	preprotein translocase subunit YajC	CCI-PM-BAC-NEG-GN
+EWS79_RS03860-MONOMER	EWS79_RS03860	presqualene diphosphate synthase HpnD	
+EWS79_RS08690-MONOMER	EWS79_RS08690	primosomal protein N'	
+EWS79_RS01965-MONOMER	EWS79_RS01965	proline--tRNA ligase	
+EWS79_RS01245-MONOMER	EWS79_RS01245	prolipoprotein diacylglyceryl transferase	
+EWS79_RS07490-MONOMER	EWS79_RS07490	protein disulfide-isomerase	
+EWS79_RS08560-MONOMER	EWS79_RS08560	protein translocase subunit SecD	
+EWS79_RS08555-MONOMER	EWS79_RS08555	protein translocase subunit SecF	CCI-PM-BAC-NEG-GN
+EWS79_RS07315-MONOMER	EWS79_RS07315	protein-export chaperone SecB	CCI-CYTOSOL-GN
+EWS79_RS00335-MONOMER	EWS79_RS00335	protein-glutamate O-methyltransferase CheR	CCI-CYTOSOL-GN
+EWS79_RS07835-MONOMER	EWS79_RS07835	proteinase IV	
+EWS79_RS02550-MONOMER	EWS79_RS02550	pseudouridine synthase	
+EWS79_RS05915-MONOMER	EWS79_RS05915	PTS sugar transporter subunit IIA	CCI-CYTOSOL-GN
+EWS79_RS04320-MONOMER	EWS79_RS04320	purine nucleoside permease	
+EWS79_RS06470-MONOMER	EWS79_RS06470	purine nucleoside permease	
+EWS79_RS03675-MONOMER	EWS79_RS03675	putative lipid II flippase FtsW	
+EWS79_RS08150-MONOMER	EWS79_RS08150	putative nitrogen fixation protein NifT	
+EWS79_RS01435-MONOMER	EWS79_RS01435	pyridoxal phosphate-dependent aminotransferase	CCI-CYTOSOL-GN
+EWS79_RS02465-MONOMER	EWS79_RS02465	pyridoxal phosphate-dependent aminotransferase	
+EWS79_RS08855-MONOMER	EWS79_RS08855	pyridoxal phosphate-dependent aminotransferase	
+EWS79_RS02475-MONOMER	EWS79_RS02475	pyridoxal phosphate-dependent aminotransferase	
+EWS79_RS03765-MONOMER	EWS79_RS03765	pyridoxamine 5'-phosphate oxidase	CCI-PERI-BAC-GN
+EWS79_RS07650-MONOMER	EWS79_RS07650	pyridoxine 5'-phosphate synthase	
+EWS79_RS01835-MONOMER	EWS79_RS01835	pyrimidine 5'-nucleotidase	CCI-CYTOSOL-GN
+EWS79_RS05805-MONOMER	EWS79_RS05805	pyrroline-5-carboxylate reductase	
+EWS79_RS01320-MONOMER	EWS79_RS01320	pyrroline-5-carboxylate reductase	
+EWS79_RS01930-MONOMER	EWS79_RS01930	pyrrolo-quinoline quinone	CCI-OUTER-MEM-GN
+EWS79_RS06045-MONOMER	EWS79_RS06045	pyruvate decarboxylase	
+CPLX1W2W-7	EWS79_RS07165 // EWS79_RS07160	pyruvate dehydrogenase	
+EWS79_RS07165-MONOMER	EWS79_RS07165	pyruvate dehydrogenase (acetyl-transferring) E1 component subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS02195-MONOMER	EWS79_RS02195	pyruvate dehydrogenase complex dihydrolipoamide acetyltransferase	
+EWS79_RS07160-MONOMER	EWS79_RS07160	pyruvate dehydrogenase complex E1 component subunit beta	CCI-CYTOSOL-GN
+EWS79_RS06975-MONOMER	EWS79_RS06975	pyruvate formate lyase-activating protein	CCI-CYTOSOL-GN
+EWS79_RS00620-MONOMER	EWS79_RS00620	pyruvate kinase	CCI-CYTOSOL-GN
+EWS79_RS08440-MONOMER	EWS79_RS08440	quinolinate synthase NadA	
+EWS79_RS09040-MONOMER	EWS79_RS09040	quinone oxidoreductase	
+EWS79_RS00065-MONOMER	EWS79_RS00065	RdgB/HAM1 family non-canonical purine NTP pyrophosphatase	CCI-CYTOSOL-GN
+EWS79_RS06480-MONOMER	EWS79_RS06480	recombinase family protein	
+EWS79_RS03935-MONOMER	EWS79_RS03935	recombinase family protein	
+EWS79_RS05210-MONOMER	EWS79_RS05210	recombinase RecA	CCI-CYTOSOL-GN
+EWS79_RS03110-MONOMER	EWS79_RS03110	recombinase RecX	CCI-CYTOSOL-GN
+EWS79_RS03590-MONOMER	EWS79_RS03590	recombination protein RecR	CCI-CYTOSOL-GN
+EWS79_RS08645-MONOMER	EWS79_RS08645	redox-regulated ATPase YchF	
+EWS79_RS00705-MONOMER	EWS79_RS00705	redox-sensitive transcriptional activator SoxR	
+EWS79_RS07400-MONOMER	EWS79_RS07400	redoxin domain-containing protein	CCI-PM-BAC-NEG-GN
+EWS79_RS08785-MONOMER	EWS79_RS08785	RepA replication protein	
+EWS79_RS00500-MONOMER	EWS79_RS00500	replication-associated recombination protein A	
+EWS79_RS03835-MONOMER	EWS79_RS03835	replicative DNA helicase	CCI-CYTOSOL-GN
+EWS79_RS01070-MONOMER	EWS79_RS01070	response regulator	
+EWS79_RS06240-MONOMER	EWS79_RS06240	response regulator	
+EWS79_RS07785-MONOMER	EWS79_RS07785	response regulator	CCI-CYTOSOL-GN
+EWS79_RS00320-MONOMER	EWS79_RS00320	response regulator	CCI-CYTOSOL-GN
+EWS79_RS02645-MONOMER	EWS79_RS02645	response regulator	
+EWS79_RS05895-MONOMER	EWS79_RS05895	response regulator transcription factor	
+EWS79_RS01105-MONOMER	EWS79_RS01105	response regulator transcription factor	CCI-CYTOSOL-GN
+EWS79_RS02035-MONOMER	EWS79_RS02035	response regulator transcription factor	CCI-CYTOSOL-GN
+EWS79_RS05255-MONOMER	EWS79_RS05255	response regulator transcription factor	CCI-CYTOSOL-GN
+EWS79_RS06155-MONOMER	EWS79_RS06155	response regulator transcription factor	CCI-CYTOSOL-GN
+EWS79_RS00135-MONOMER	EWS79_RS00135	restriction endonuclease	
+EWS79_RS07200-MONOMER	EWS79_RS07200	rhomboid family intramembrane serine protease	
+EWS79_RS02020-MONOMER	EWS79_RS02020	riboflavin synthase	
+EWS79_RS01200-MONOMER	EWS79_RS01200	ribonuclease D	CCI-CYTOSOL-GN
+EWS79_RS03155-MONOMER	EWS79_RS03155	ribonuclease D	
+EWS79_RS00825-MONOMER	EWS79_RS00825	ribonuclease E/G	CCI-CYTOSOL-GN
+EWS79_RS07140-MONOMER	EWS79_RS07140	ribonuclease HI	
+EWS79_RS04475-MONOMER	EWS79_RS04475	ribonuclease HII	
+EWS79_RS08430-MONOMER	EWS79_RS08430	ribonuclease I	
+EWS79_RS06105-MONOMER	EWS79_RS06105	ribonuclease III	CCI-CYTOSOL-GN
+EWS79_RS08415-MONOMER	EWS79_RS08415	ribonuclease J	CCI-CYTOSOL-GN
+EWS79_RS00070-MONOMER	EWS79_RS00070	ribonuclease PH	CCI-CYTOSOL-GN
+EWS79_RS04890-MONOMER	EWS79_RS04890	ribonuclease R	
+EWS79_RS04580-MONOMER	EWS79_RS04580	ribonucleoside triphosphate reductase	CCI-CYTOSOL-GN
+EWS79_RS04630-MONOMER	EWS79_RS04630	ribonucleoside-diphosphate reductase subunit alpha	
+EWS79_RS01890-MONOMER	EWS79_RS01890	ribonucleotide-diphosphate reductase subunit beta	CCI-CYTOSOL-GN
+EWS79_RS05370-MONOMER	EWS79_RS05370	ribose 5-phosphate isomerase B	
+EWS79_RS06775-MONOMER	EWS79_RS06775	ribose-phosphate pyrophosphokinase	CCI-CYTOSOL-GN
+EWS79_RS06285-MONOMER	EWS79_RS06285	ribosomal-protein-alanine N-acetyltransferase	
+EWS79_RS01935-MONOMER	EWS79_RS01935	ribosome biogenesis GTPase Der	CCI-CYTOSOL-GN
+EWS79_RS04800-MONOMER	EWS79_RS04800	ribosome maturation factor RimM	CCI-CYTOSOL-GN
+EWS79_RS02450-MONOMER	EWS79_RS02450	ribosome maturation factor RimP	CCI-CYTOSOL-GN
+EWS79_RS05150-MONOMER	EWS79_RS05150	ribosome recycling factor	CCI-CYTOSOL-GN
+EWS79_RS07440-MONOMER	EWS79_RS07440	ribosome silencing factor	
+EWS79_RS00175-MONOMER	EWS79_RS00175	ribosome-associated translation inhibitor RaiA	
+EWS79_RS00090-MONOMER	EWS79_RS00090	ribulose-phosphate 3-epimerase	
+EWS79_RS01075-MONOMER	EWS79_RS01075	RidA family protein	
+EWS79_RS08840-MONOMER	EWS79_RS08840	RidA family protein	
+EWS79_RS05130-MONOMER	EWS79_RS05130	RIP metalloprotease RseP	CCI-PM-BAC-NEG-GN
+EWS79_RS01705-MONOMER	EWS79_RS01705	RlmE family RNA methyltransferase	CCI-CYTOSOL-GN
+EWS79_RS03325-MONOMER	EWS79_RS03325	RluA family pseudouridine synthase	
+EWS79_RS01870-MONOMER	EWS79_RS01870	RluA family pseudouridine synthase	
+EWS79_RS01460-MONOMER	EWS79_RS01460	RNA chaperone Hfq	CCI-CYTOSOL-GN
+EWS79_RS03145-MONOMER	EWS79_RS03145	RNA degradosome polyphosphate kinase	
+EWS79_RS05265-MONOMER	EWS79_RS05265	RNA methyltransferase	
+EWS79_RS05925-MONOMER	EWS79_RS05925	RNA methyltransferase	
+EWS79_RS05385-MONOMER	EWS79_RS05385	RNA methyltransferase	
+EWS79_RS07230-MONOMER	EWS79_RS07230	RNA polymerase sigma factor RpoD	CCI-CYTOSOL-GN
+EWS79_RS03320-MONOMER	EWS79_RS03320	RNA polymerase sigma factor RpoH	
+EWS79_RS01180-MONOMER	EWS79_RS01180	RNA polymerase sigma-54 factor	
+EWS79_RS04405-MONOMER	EWS79_RS04405	RNA polymerase-binding protein DksA	CCI-CYTOSOL-GN
+EWS79_RS02170-MONOMER	EWS79_RS02170	RNA pseudouridine synthase	
+EWS79_RS06940-MONOMER	EWS79_RS06940	RNA pyrophosphohydrolase	CCI-CYTOSOL-GN
+EWS79_RS05910-MONOMER	EWS79_RS05910	RNase adapter RapZ	CCI-CYTOSOL-GN
+EWS79_RS08115-MONOMER	EWS79_RS08115	RnfABCDGE type electron transport complex subunit B	
+EWS79_RS08105-MONOMER	EWS79_RS08105	RnfABCDGE type electron transport complex subunit D	CCI-PM-BAC-NEG-GN
+EWS79_RS08090-MONOMER	EWS79_RS08090	RnfH family protein	
+EWS79_RS01500-MONOMER	EWS79_RS01500	rod shape-determining protein	CCI-CYTOSOL-GN
+EWS79_RS01505-MONOMER	EWS79_RS01505	rod shape-determining protein MreC	
+EWS79_RS01520-MONOMER	EWS79_RS01520	rod shape-determining protein RodA	CCI-PM-BAC-NEG-GN
+EWS79_RS00480-MONOMER	EWS79_RS00480	Rrf2 family transcriptional regulator	
+EWS79_RS00300-MONOMER	EWS79_RS00300	rRNA maturation RNase YbeY	CCI-CYTOSOL-GN
+EWS79_RS05885-MONOMER	EWS79_RS05885	RsmB/NOP family class I SAM-dependent RNA methyltransferase	
+EWS79_RS07720-MONOMER	EWS79_RS07720	S-(hydroxymethyl)glutathione dehydrogenase/class III alcohol dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS00525-MONOMER	EWS79_RS00525	S1/P1 Nuclease	
+EWS79_RS07455-MONOMER	EWS79_RS07455	S41 family peptidase	
+EWS79_RS06255-MONOMER	EWS79_RS06255	S9 family peptidase	
+EWS79_RS02100-MONOMER	EWS79_RS02100	S9 family peptidase	
+EWS79_RS03100-MONOMER	EWS79_RS03100	S9 family peptidase	
+EWS79_RS03515-MONOMER	EWS79_RS03515	S9 family peptidase	
+EWS79_RS08530-MONOMER	EWS79_RS08530	SAM-dependent methyltransferase	CCI-CYTOSOL-GN
+EWS79_RS03345-MONOMER	EWS79_RS03345	SCP2 sterol-binding domain-containing protein	
+EWS79_RS00965-MONOMER	EWS79_RS00965	SDR family NAD(P)-dependent oxidoreductase	
+EWS79_RS01490-MONOMER	EWS79_RS01490	SDR family NAD(P)-dependent oxidoreductase	
+EWS79_RS08835-MONOMER	EWS79_RS08835	SDR family oxidoreductase	
+EWS79_RS06090-MONOMER	EWS79_RS06090	SDR family oxidoreductase	
+EWS79_RS01315-MONOMER	EWS79_RS01315	SDR family oxidoreductase	
+EWS79_RS00375-MONOMER	EWS79_RS00375	SDR family oxidoreductase	
+EWS79_RS00410-MONOMER	EWS79_RS00410	SDR family oxidoreductase	
+EWS79_RS06935-MONOMER	EWS79_RS06935	SDR family oxidoreductase	
+EWS79_RS07010-MONOMER	EWS79_RS07010	SDR family oxidoreductase	
+EWS79_RS01345-MONOMER	EWS79_RS01345	SDR family oxidoreductase	
+EWS79_RS01430-MONOMER	EWS79_RS01430	SDR family oxidoreductase	
+EWS79_RS00700-MONOMER	EWS79_RS00700	SDR family oxidoreductase	
+EWS79_RS03525-MONOMER	EWS79_RS03525	SDR family oxidoreductase	
+EWS79_RS00125-MONOMER	EWS79_RS00125	sel1 repeat family protein	
+EWS79_RS08950-MONOMER	EWS79_RS08950	sel1 repeat family protein	
+EWS79_RS00550-MONOMER	EWS79_RS00550	sel1 repeat family protein	
+EWS79_RS00140-MONOMER	EWS79_RS00140	sel1 repeat family protein	
+EWS79_RS00565-MONOMER	EWS79_RS00565	sel1 repeat family protein	
+EWS79_RS00560-MONOMER	EWS79_RS00560	sel1 repeat family protein	
+EWS79_RS00545-MONOMER	EWS79_RS00545	sel1 repeat family protein	
+EWS79_RS00555-MONOMER	EWS79_RS00555	sel1 repeat family protein	
+EWS79_RS00200-MONOMER	EWS79_RS00200	sel1 repeat family protein	
+EWS79_RS05445-MONOMER	EWS79_RS05445	sensor histidine kinase	
+EWS79_RS07790-MONOMER	EWS79_RS07790	sensor histidine kinase	CCI-PM-BAC-NEG-GN
+EWS79_RS04850-MONOMER	EWS79_RS04850	septal ring lytic transglycosylase RlpA family protein	
+EWS79_RS04950-MONOMER	EWS79_RS04950	septation protein IspZ	CCI-PM-BAC-NEG-GN
+EWS79_RS07170-MONOMER	EWS79_RS07170	septation ring formation regulator EzrA	
+EWS79_RS00195-MONOMER	EWS79_RS00195	septum formation protein Maf	
+EWS79_RS04525-MONOMER	EWS79_RS04525	septum formation protein Maf	
+EWS79_RS07760-MONOMER	EWS79_RS07760	serine acetyltransferase	
+EWS79_RS00420-MONOMER	EWS79_RS00420	serine hydrolase	
+EWS79_RS07375-MONOMER	EWS79_RS07375	serine hydrolase	
+EWS79_RS05375-MONOMER	EWS79_RS05375	serine hydroxymethyltransferase	CCI-CYTOSOL-GN
+EWS79_RS04400-MONOMER	EWS79_RS04400	serine--tRNA ligase	
+EWS79_RS01900-MONOMER	EWS79_RS01900	SGNH/GDSL hydrolase family protein	
+EWS79_RS00190-MONOMER	EWS79_RS00190	shikimate dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS02625-MONOMER	EWS79_RS02625	shikimate kinase	CCI-CYTOSOL-GN
+EWS79_RS08250-MONOMER	EWS79_RS08250	sigma E positive regulator RseC/MucC	CCI-PM-BAC-NEG-GN
+EWS79_RS03760-MONOMER	EWS79_RS03760	sigma-54-dependent Fis family transcriptional regulator	
+EWS79_RS02775-MONOMER	EWS79_RS02775	sigma-54-dependent Fis family transcriptional regulator	
+EWS79_RS05005-MONOMER	EWS79_RS05005	sigma-54-dependent Fis family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS06235-MONOMER	EWS79_RS06235	sigma-70 family RNA polymerase sigma factor	CCI-CYTOSOL-GN
+EWS79_RS07660-MONOMER	EWS79_RS07660	signal peptidase I	CCI-PM-BAC-NEG-GN
+EWS79_RS01375-MONOMER	EWS79_RS01375	signal peptidase II	CCI-PM-BAC-NEG-GN
+EWS79_RS08715-MONOMER	EWS79_RS08715	signal peptide peptidase SppA	
+EWS79_RS04790-MONOMER	EWS79_RS04790	signal recognition particle protein	CCI-PM-BAC-NEG-GN
+EWS79_RS04775-MONOMER	EWS79_RS04775	signal recognition particle-docking protein FtsY	CCI-CYTOSOL-GN
+EWS79_RS06865-MONOMER	EWS79_RS06865	single-stranded DNA-binding protein	CCI-CYTOSOL-GN
+EWS79_RS05510-MONOMER	EWS79_RS05510	single-stranded-DNA-specific exonuclease RecJ	
+EWS79_RS08155-MONOMER	EWS79_RS08155	SIR2 family protein	
+EWS79_RS04480-MONOMER	EWS79_RS04480	site-specific DNA-methyltransferase	CCI-CYTOSOL-GN
+EWS79_RS09010-MONOMER	EWS79_RS09010	SMP-30/gluconolactonase/LRE family protein	CCI-CYTOSOL-GN
+EWS79_RS07370-MONOMER	EWS79_RS07370	SMP-30/gluconolactonase/LRE family protein	
+EWS79_RS03745-MONOMER	EWS79_RS03745	sodium/hydrogen exchanger	CCI-PM-BAC-NEG-GN
+EWS79_RS05725-MONOMER	EWS79_RS05725	sorbitol dehydrogenase	
+EWS79_RS03715-MONOMER	EWS79_RS03715	SPOR domain-containing protein	
+EWS79_RS03735-MONOMER	EWS79_RS03735	SPOR domain-containing protein	
+EWS79_RS03550-MONOMER	EWS79_RS03550	sporulation protein	
+EWS79_RS03855-MONOMER	EWS79_RS03855	squalene synthase HpnC	
+EWS79_RS06890-MONOMER	EWS79_RS06890	squalene--hopene cyclase	
+EWS79_RS03870-MONOMER	EWS79_RS03870	squalene--hopene cyclase	
+EWS79_RS03185-MONOMER	EWS79_RS03185	SsrA-binding protein SmpB	
+EWS79_RS00345-MONOMER	EWS79_RS00345	STAS domain-containing protein	
+EWS79_RS02510-MONOMER	EWS79_RS02510	succinate dehydrogenase cytochrome b subunit	
+EWS79_RS02500-MONOMER	EWS79_RS02500	succinate--CoA ligase subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS07285-MONOMER	EWS79_RS07285	succinyl-diaminopimelate desuccinylase	
+EWS79_RS05675-MONOMER	EWS79_RS05675	succinylglutamate-semialdehyde dehydrogenase	
+EWS79_RS04195-MONOMER	EWS79_RS04195	sucrose-6-phosphate hydrolase	
+EWS79_RS01825-MONOMER	EWS79_RS01825	SUF system Fe-S cluster assembly protein	
+EWS79_RS01800-MONOMER	EWS79_RS01800	SUF system Fe-S cluster assembly regulator	
+EWS79_RS01815-MONOMER	EWS79_RS01815	SufD family Fe-S cluster assembly protein	
+EWS79_RS04755-MONOMER	EWS79_RS04755	SufE family protein	
+EWS79_RS08080-MONOMER	EWS79_RS08080	sugar O-acetyltransferase	CCI-CYTOSOL-GN
+EWS79_RS01250-MONOMER	EWS79_RS01250	sugar porter family MFS transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS04040-MONOMER	EWS79_RS04040	sugar transporter	
+CPLX1W2W-16	EWS79_RS00025 // EWS79_RS00020	sulfate adenylyltransferase	
+EWS79_RS00025-MONOMER	EWS79_RS00025	sulfate adenylyltransferase subunit CysD	CCI-CYTOSOL-GN
+EWS79_RS00020-MONOMER	EWS79_RS00020	sulfate adenylyltransferase subunit CysN	
+EWS79_RS00230-MONOMER	EWS79_RS00230	sulfite exporter TauE/SafE family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS03270-MONOMER	EWS79_RS03270	sulfur carrier protein ThiS	
+EWS79_RS06505-MONOMER	EWS79_RS06505	sulfurtransferase	
+EWS79_RS02390-MONOMER	EWS79_RS02390	SulP family inorganic anion transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS04720-MONOMER	EWS79_RS04720	superoxide dismutase	CCI-PERI-BAC-GN
+EWS79_RS01690-MONOMER	EWS79_RS01690	tail fiber domain-containing protein	
+EWS79_RS00280-MONOMER	EWS79_RS00280	tail tube protein	
+EWS79_RS04875-MONOMER	EWS79_RS04875	TatD family deoxyribonuclease	
+EWS79_RS05105-MONOMER	EWS79_RS05105	teicoplanin resistance protein VanZ	CCI-PM-BAC-NEG-GN
+EWS79_RS06885-MONOMER	EWS79_RS06885	TetR/AcrR family transcriptional regulator	
+EWS79_RS04285-MONOMER	EWS79_RS04285	TetR/AcrR family transcriptional regulator	
+EWS79_RS01210-MONOMER	EWS79_RS01210	TetR/AcrR family transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS03350-MONOMER	EWS79_RS03350	tetratricopeptide repeat protein	
+EWS79_RS03375-MONOMER	EWS79_RS03375	tetratricopeptide repeat protein	
+EWS79_RS03355-MONOMER	EWS79_RS03355	tetratricopeptide repeat protein	
+EWS79_RS04835-MONOMER	EWS79_RS04835	tetratricopeptide repeat protein	
+EWS79_RS05285-MONOMER	EWS79_RS05285	tetratricopeptide repeat protein	
+EWS79_RS01925-MONOMER	EWS79_RS01925	tetratricopeptide repeat protein	
+EWS79_RS07640-MONOMER	EWS79_RS07640	tetratricopeptide repeat protein	
+EWS79_RS01410-MONOMER	EWS79_RS01410	thiamine phosphate synthase	CCI-CYTOSOL-GN
+EWS79_RS06340-MONOMER	EWS79_RS06340	thiamine phosphate synthase	
+EWS79_RS06915-MONOMER	EWS79_RS06915	thiamine-phosphate kinase	
+EWS79_RS04895-MONOMER	EWS79_RS04895	thioredoxin	CCI-CYTOSOL-GN
+EWS79_RS08680-MONOMER	EWS79_RS08680	thioredoxin family protein	
+EWS79_RS05095-MONOMER	EWS79_RS05095	thioredoxin-disulfide reductase	CCI-CYTOSOL-GN
+EWS79_RS05685-MONOMER	EWS79_RS05685	threonine ammonia-lyase	CCI-CYTOSOL-GN
+EWS79_RS08540-MONOMER	EWS79_RS08540	threonine synthase	CCI-CYTOSOL-GN
+EWS79_RS03385-MONOMER	EWS79_RS03385	threonine--tRNA ligase	CCI-CYTOSOL-GN
+EWS79_RS04450-MONOMER	EWS79_RS04450	threonylcarbamoyl-AMP synthase	
+EWS79_RS02425-MONOMER	EWS79_RS02425	thymidine kinase	
+EWS79_RS07860-MONOMER	EWS79_RS07860	thymidylate synthase	
+EWS79_RS07150-MONOMER	EWS79_RS07150	TIGR01244 family phosphatase	
+EWS79_RS07310-MONOMER	EWS79_RS07310	Tim44 domain-containing protein	
+EWS79_RS05060-MONOMER	EWS79_RS05060	TldD/PmbA family protein	
+EWS79_RS05820-MONOMER	EWS79_RS05820	TlyA family RNA methyltransferase	
+EWS79_RS00680-MONOMER	EWS79_RS00680	Tol-Pal system protein TolB	CCI-PERI-BAC-GN
+EWS79_RS06355-MONOMER	EWS79_RS06355	TolC family protein	CCI-OUTER-MEM-GN
+EWS79_RS03530-MONOMER	EWS79_RS03530	TolC family protein	CCI-OUTER-MEM-GN
+EWS79_RS07095-MONOMER	EWS79_RS07095	toll/interleukin-1 receptor domain-containing protein	
+EWS79_RS04730-MONOMER	EWS79_RS04730	TonB family protein	
+EWS79_RS00005-MONOMER	EWS79_RS00005	TonB-dependent receptor	
+EWS79_RS06520-MONOMER	EWS79_RS06520	TonB-dependent receptor	
+EWS79_RS04365-MONOMER	EWS79_RS04365	TonB-dependent receptor	
+EWS79_RS06790-MONOMER	EWS79_RS06790	TonB-dependent receptor	
+EWS79_RS05620-MONOMER	EWS79_RS05620	TonB-dependent receptor	
+EWS79_RS00150-MONOMER	EWS79_RS00150	TonB-dependent receptor	
+EWS79_RS08085-MONOMER	EWS79_RS08085	TonB-dependent receptor	
+EWS79_RS03995-MONOMER	EWS79_RS03995	TonB-dependent receptor	
+EWS79_RS04635-MONOMER	EWS79_RS04635	TonB-dependent receptor	
+EWS79_RS07585-MONOMER	EWS79_RS07585	TonB-dependent receptor	
+EWS79_RS03520-MONOMER	EWS79_RS03520	TonB-dependent receptor	
+EWS79_RS00530-MONOMER	EWS79_RS00530	TonB-dependent receptor	
+EWS79_RS02470-MONOMER	EWS79_RS02470	TonB-dependent receptor	
+EWS79_RS09020-MONOMER	EWS79_RS09020	TonB-dependent receptor	
+EWS79_RS06970-MONOMER	EWS79_RS06970	TonB-dependent receptor	
+EWS79_RS05775-MONOMER	EWS79_RS05775	TonB-dependent receptor	
+EWS79_RS08125-MONOMER	EWS79_RS08125	TonB-dependent receptor	
+EWS79_RS03490-MONOMER	EWS79_RS03490	TonB-dependent receptor	
+EWS79_RS06565-MONOMER	EWS79_RS06565	TonB-dependent receptor	
+EWS79_RS00800-MONOMER	EWS79_RS00800	TonB-dependent siderophore receptor	
+EWS79_RS07280-MONOMER	EWS79_RS07280	TonB-dependent siderophore receptor	
+EWS79_RS08160-MONOMER	EWS79_RS08160	TonB-dependent siderophore receptor	
+EWS79_RS06145-MONOMER	EWS79_RS06145	toxic anion resistance protein	
+EWS79_RS04650-MONOMER	EWS79_RS04650	TPM domain-containing protein	
+EWS79_RS06440-MONOMER	EWS79_RS06440	TraB/GumN family protein	
+EWS79_RS06910-MONOMER	EWS79_RS06910	transcription antitermination factor NusB	
+EWS79_RS07205-MONOMER	EWS79_RS07205	transcription elongation factor GreA	CCI-CYTOSOL-GN
+EWS79_RS03170-MONOMER	EWS79_RS03170	transcription elongation factor GreB	
+EWS79_RS09045-MONOMER	EWS79_RS09045	transcription termination factor Rho	CCI-CYTOSOL-GN
+EWS79_RS03205-MONOMER	EWS79_RS03205	transcription termination/antitermination factor NusG	CCI-CYTOSOL-GN
+EWS79_RS02445-MONOMER	EWS79_RS02445	transcription termination/antitermination protein NusA	CCI-CYTOSOL-GN
+EWS79_RS07350-MONOMER	EWS79_RS07350	transcription-repair coupling factor	
+EWS79_RS03090-MONOMER	EWS79_RS03090	transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS07600-MONOMER	EWS79_RS07600	transcriptional regulator	CCI-CYTOSOL-GN
+EWS79_RS00405-MONOMER	EWS79_RS00405	transcriptional regulator	
+EWS79_RS05615-MONOMER	EWS79_RS05615	transcriptional regulator	CCI-PM-BAC-NEG-GN
+EWS79_RS05535-MONOMER	EWS79_RS05535	transcriptional repressor	CCI-CYTOSOL-GN
+EWS79_RS06275-MONOMER	EWS79_RS06275	transcriptional repressor	CCI-CYTOSOL-GN
+EWS79_RS00850-MONOMER	EWS79_RS00850	transcriptional repressor LexA	
+EWS79_RS05380-MONOMER	EWS79_RS05380	transcriptional repressor NrdR	CCI-CYTOSOL-GN
+EWS79_RS07300-MONOMER	EWS79_RS07300	transglycosylase	
+EWS79_RS00740-MONOMER	EWS79_RS00740	transketolase	CCI-CYTOSOL-GN
+EWS79_RS04530-MONOMER	EWS79_RS04530	translation initiation factor IF-1	CCI-CYTOSOL-GN
+EWS79_RS02435-MONOMER	EWS79_RS02435	translation initiation factor IF-2	
+EWS79_RS08615-MONOMER	EWS79_RS08615	translation initiation factor IF-3	CCI-CYTOSOL-GN
+EWS79_RS06555-MONOMER	EWS79_RS06555	translational GTPase TypA	CCI-CYTOSOL-GN
+EWS79_RS05240-MONOMER	EWS79_RS05240	translocation/assembly module TamB	
+EWS79_RS07520-MONOMER	EWS79_RS07520	transporter	CCI-PM-BAC-NEG-GN
+EWS79_RS08240-MONOMER	EWS79_RS08240	transporter	
+EWS79_RS03040-MONOMER	EWS79_RS03040	transporter	
+EWS79_RS03290-MONOMER	EWS79_RS03290	transporter	
+EWS79_RS04215-MONOMER	EWS79_RS04215	trigger factor	
+EWS79_RS01980-MONOMER	EWS79_RS01980	triose-phosphate isomerase	CCI-CYTOSOL-GN
+EWS79_RS05075-MONOMER	EWS79_RS05075	tRNA (adenosine(37)-N6)-dimethylallyltransferase MiaA	
+EWS79_RS04915-MONOMER	EWS79_RS04915	tRNA (adenosine(37)-N6)-threonylcarbamoyltransferase complex ATPase subunit type 1 TsaE	
+EWS79_RS06290-MONOMER	EWS79_RS06290	tRNA (adenosine(37)-N6)-threonylcarbamoyltransferase complex dimerization subunit type 1 TsaB	
+EWS79_RS08605-MONOMER	EWS79_RS08605	tRNA (adenosine(37)-N6)-threonylcarbamoyltransferase complex transferase subunit TsaD	CCI-EXTRACELLULAR-GN
+EWS79_RS04245-MONOMER	EWS79_RS04245	tRNA (cytidine(34)-2'-O)-methyltransferase	
+EWS79_RS04805-MONOMER	EWS79_RS04805	tRNA (guanosine(37)-N1)-methyltransferase TrmD	
+EWS79_RS00610-MONOMER	EWS79_RS00610	tRNA (guanosine(46)-N7)-methyltransferase TrmB	
+EWS79_RS04780-MONOMER	EWS79_RS04780	tRNA (N(6)-L-threonylcarbamoyladenosine(37)-C(2))- methylthiotransferase MtaB	
+EWS79_RS00310-MONOMER	EWS79_RS00310	tRNA (N6-isopentenyl adenosine(37)-C2)-methylthiotransferase MiaB	CCI-CYTOSOL-GN
+EWS79_RS03405-MONOMER	EWS79_RS03405	tRNA 2-thiouridine(34) synthase MnmA	
+EWS79_RS05020-MONOMER	EWS79_RS05020	tRNA dihydrouridine synthase DusB	
+EWS79_RS01535-MONOMER	EWS79_RS01535	tRNA guanosine(34) transglycosylase Tgt	
+EWS79_RS07415-MONOMER	EWS79_RS07415	tRNA lysidine(34) synthetase TilS	
+EWS79_RS03770-MONOMER	EWS79_RS03770	tRNA preQ1(34) S-adenosylmethionine ribosyltransferase-isomerase QueA	
+EWS79_RS03580-MONOMER	EWS79_RS03580	tRNA pseudouridine(38-40) synthase TruA	
+EWS79_RS02420-MONOMER	EWS79_RS02420	tRNA pseudouridine(55) synthase TruB	
+EWS79_RS09005-MONOMER	EWS79_RS09005	tRNA uridine-5-carboxymethylaminomethyl(34) synthesis enzyme MnmG	
+EWS79_RS09025-MONOMER	EWS79_RS09025	tRNA uridine-5-carboxymethylaminomethyl(34) synthesis GTPase MnmE	
+CPLX1W2W-12	EWS79_RS02580 // EWS79_RS02575	tryptophan synthase	
+EWS79_RS02575-MONOMER	EWS79_RS02575	tryptophan synthase subunit alpha	CCI-CYTOSOL-GN
+EWS79_RS02580-MONOMER	EWS79_RS02580	tryptophan synthase subunit beta	CCI-CYTOSOL-GN
+EWS79_RS07325-MONOMER	EWS79_RS07325	tryptophan--tRNA ligase	
+EWS79_RS05460-MONOMER	EWS79_RS05460	twin-arginine translocase subunit TatB	
+EWS79_RS05455-MONOMER	EWS79_RS05455	twin-arginine translocase subunit TatC	
+EWS79_RS05465-MONOMER	EWS79_RS05465	twin-arginine translocase TatA/TatE family subunit	
+EWS79_RS05190-MONOMER	EWS79_RS05190	two-component sensor histidine kinase	
+EWS79_RS02115-MONOMER	EWS79_RS02115	type I glutamate--ammonia ligase	CCI-CYTOSOL-GN
+EWS79_RS00745-MONOMER	EWS79_RS00745	type I glyceraldehyde-3-phosphate dehydrogenase	CCI-CYTOSOL-GN
+EWS79_RS06000-MONOMER	EWS79_RS06000	type I methionyl aminopeptidase	CCI-CYTOSOL-GN
+EWS79_RS08760-MONOMER	EWS79_RS08760	type I restriction-modification protein subunit M	
+EWS79_RS01090-MONOMER	EWS79_RS01090	type I secretion system permease/ATPase	
+EWS79_RS03000-MONOMER	EWS79_RS03000	type I-F CRISPR-associated endonuclease Cas1	
+EWS79_RS03025-MONOMER	EWS79_RS03025	type I-F CRISPR-associated endoribonuclease Cas6/Csy4	
+EWS79_RS03005-MONOMER	EWS79_RS03005	type I-F CRISPR-associated helicase Cas3	
+EWS79_RS03010-MONOMER	EWS79_RS03010	type I-F CRISPR-associated protein Csy1	
+EWS79_RS03015-MONOMER	EWS79_RS03015	type I-F CRISPR-associated protein Csy2	
+EWS79_RS03020-MONOMER	EWS79_RS03020	type I-F CRISPR-associated protein Csy3	
+EWS79_RS03265-MONOMER	EWS79_RS03265	type II 3-dehydroquinate dehydratase	CCI-CYTOSOL-GN
+EWS79_RS05040-MONOMER	EWS79_RS05040	type II toxin-antitoxin system RatA family toxin	CCI-CYTOSOL-GN
+EWS79_RS08420-MONOMER	EWS79_RS08420	type III pantothenate kinase	
+EWS79_RS04560-MONOMER	EWS79_RS04560	type III PLP-dependent enzyme	
+EWS79_RS08655-MONOMER	EWS79_RS08655	tyrosine recombinase XerC	
+EWS79_RS02635-MONOMER	EWS79_RS02635	tyrosine recombinase XerD	
+EWS79_RS07340-MONOMER	EWS79_RS07340	tyrosine--tRNA ligase	
+EWS79_RS08705-MONOMER	EWS79_RS08705	U32 family peptidase	
+EWS79_RS04255-MONOMER	EWS79_RS04255	ubiquinol-cytochrome c reductase iron-sulfur subunit	
+EWS79_RS07465-MONOMER	EWS79_RS07465	ubiquinone biosynthesis protein UbiB	CCI-CYTOSOL-GN
+EWS79_RS07630-MONOMER	EWS79_RS07630	ubiquinone biosynthesis protein UbiH	
+EWS79_RS03620-MONOMER	EWS79_RS03620	UDP-glucose/GDP-mannose dehydrogenase family protein	
+EWS79_RS03690-MONOMER	EWS79_RS03690	UDP-N-acetylenolpyruvoylglucosamine reductase	
+EWS79_RS07735-MONOMER	EWS79_RS07735	UDP-N-acetylglucosamine 1-carboxyvinyltransferase	CCI-CYTOSOL-GN
+EWS79_RS03685-MONOMER	EWS79_RS03685	UDP-N-acetylmuramate--L-alanine ligase	
+EWS79_RS03670-MONOMER	EWS79_RS03670	UDP-N-acetylmuramoyl-L-alanine--D-glutamate ligase	
+EWS79_RS03655-MONOMER	EWS79_RS03655	UDP-N-acetylmuramoyl-L-alanyl-D-glutamate--2, 6-diaminopimelate ligase	
+EWS79_RS03660-MONOMER	EWS79_RS03660	UDP-N-acetylmuramoyl-tripeptide--D-alanyl-D- alanine ligase	
+EWS79_RS05155-MONOMER	EWS79_RS05155	UMP kinase	CCI-CYTOSOL-GN
+EWS79_RS04970-MONOMER	EWS79_RS04970	undecaprenyl-diphosphate phosphatase	
+EWS79_RS03680-MONOMER	EWS79_RS03680	undecaprenyldiphospho-muramoylpentapeptide beta-N-acetylglucosaminyltransferase	
+EWS79_RS07365-MONOMER	EWS79_RS07365	uracil-DNA glycosylase	
+EWS79_RS05295-MONOMER	EWS79_RS05295	uracil-DNA glycosylase	
+EWS79_RS09055-MONOMER	EWS79_RS09055	uroporphyrinogen decarboxylase	
+EWS79_RS05670-MONOMER	EWS79_RS05670	uroporphyrinogen-III C-methyltransferase	
+EWS79_RS00030-MONOMER	EWS79_RS00030	uroporphyrinogen-III C-methyltransferase	
+EWS79_RS08595-MONOMER	EWS79_RS08595	uroporphyrinogen-III synthase	
+EWS79_RS07915-MONOMER	EWS79_RS07915	UTP--glucose-1-phosphate uridylyltransferase GalU	
+EWS79_RS07830-MONOMER	EWS79_RS07830	VacJ family lipoprotein	
+EWS79_RS08475-MONOMER	EWS79_RS08475	valine--tRNA ligase	
+EWS79_RS00145-MONOMER	EWS79_RS00145	virulence protein	
+EWS79_RS08360-MONOMER	EWS79_RS08360	VIT family protein	
+EWS79_RS07715-MONOMER	EWS79_RS07715	VOC family protein	
+EWS79_RS02400-MONOMER	EWS79_RS02400	voltage-gated chloride channel protein	
+EWS79_RS01350-MONOMER	EWS79_RS01350	WGR domain-containing protein	
+EWS79_RS08765-MONOMER	EWS79_RS08765	XRE family transcriptional regulator	
+EWS79_RS03820-MONOMER	EWS79_RS03820	YbaB/EbfC family nucleoid-associated protein	
+EWS79_RS08845-MONOMER	EWS79_RS08845	YbaK/EbsC family protein	
+EWS79_RS00660-MONOMER	EWS79_RS00660	YbgC/FadM family acyl-CoA thioesterase	
+EWS79_RS00155-MONOMER	EWS79_RS00155	YcgN family cysteine cluster protein	CCI-CYTOSOL-GN
+EWS79_RS01780-MONOMER	EWS79_RS01780	YdcF family protein	
+EWS79_RS00630-MONOMER	EWS79_RS00630	YebC/PmpR family DNA-binding transcriptional regulator	
+EWS79_RS03065-MONOMER	EWS79_RS03065	YfdX family protein	
+EWS79_RS00585-MONOMER	EWS79_RS00585	YggS family pyridoxal phosphate-dependent enzyme	
+EWS79_RS01760-MONOMER	EWS79_RS01760	YggT family protein	CCI-PM-BAC-NEG-GN
+EWS79_RS07260-MONOMER	EWS79_RS07260	YihA family ribosome biogenesis GTP-binding protein	
+EWS79_RS07570-MONOMER	EWS79_RS07570	YihY/virulence factor BrkB family protein	
+EWS79_RS02930-MONOMER	EWS79_RS02930	YnbE family lipoprotein	
+EWS79_RS06960-MONOMER	EWS79_RS06960	YnfA family protein	
+EWS79_RS01470-MONOMER	EWS79_RS01470	YqgE/AlgH family protein	
+EWS79_RS07895-MONOMER	EWS79_RS07895	YraN family protein	
+EWS79_RS05970-MONOMER	EWS79_RS05970	zinc metalloprotease	
+EWS79_RS07910-MONOMER	EWS79_RS07910	zinc transporter ZntB	
+EWS79_RS07595-MONOMER	EWS79_RS07595	zinc-binding alcohol dehydrogenase family protein	
+EWS79_RS03390-MONOMER	EWS79_RS03390	[protein-PII] uridylyltransferase	
