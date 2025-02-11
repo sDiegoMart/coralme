@@ -1,0 +1,5 @@
+rna_degradosome
+222.273.peg.1462-MONOMER_mod_mg2(4)
+222.273.peg.1225-MONOMER
+222.273.peg.1385-MONOMER_mod_zn2(2)
+222.273.peg.1600-MONOMER_mod_mg2(2)

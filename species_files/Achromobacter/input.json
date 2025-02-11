@@ -1,11 +1,6 @@
 {
   "m-model-path": "./inputs/converted_model.json",
   "genbank-path": "./inputs/genome.gb",
-  "biocyc.genes": "./inputs/genes.txt",
-  "biocyc.prots": "./inputs/proteins.txt",
-  "biocyc.TUs": "./inputs/TUs.txt",
-  "biocyc.RNAs": "./inputs/RNAs.txt",
-  "biocyc.seqs": "./inputs/sequences.fasta",
   "df_gene_cplxs_mods_rxns": "./outputs/building_data/automated-org-with-refs.xlsx",
   "out_directory": "./outputs",
   "log_directory": "./outputs",

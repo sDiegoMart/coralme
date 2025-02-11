@@ -1,0 +1,9 @@
+name,gene
+AcrA,222.273.peg.2543
+BamB,222.273.peg.2103
+BamD,222.273.peg.1512
+CusC,222.273.peg.1304
+LolB,222.273.peg.5326
+MetQ,222.273.peg.921
+MltA,222.273.peg.407
+MltB,222.273.peg.1576

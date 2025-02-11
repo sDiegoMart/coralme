@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	222.273.peg.1385-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	222.273.peg.1385-MONOMER_mod_zn2(2),generic_RNase,222.273.peg.1409-MONOMER,222.273.peg.2025-MONOMER
+rRNA_containing	222.273.peg.1385-MONOMER_mod_zn2(2),generic_RNase,222.273.peg.1409-MONOMER_mod_mg2(2),222.273.peg.2025-MONOMER

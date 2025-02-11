@@ -1,0 +1,11 @@
+pathway	enzyme
+sec	222.273.peg.5692-MONOMER
+sec	222.273.peg.896-MONOMER
+tat	222.273.peg.211-MONOMER
+tat_alt	CPLX_dummy
+bam	222.273.peg.951-MONOMER
+lol	222.273.peg.5326-MONOMER
+yidC	222.273.peg.6085-MONOMER
+secA	222.273.peg.896-MONOMER
+srp_yidC	222.273.peg.6085-MONOMER
+srp	222.273.peg.5306-MONOMER

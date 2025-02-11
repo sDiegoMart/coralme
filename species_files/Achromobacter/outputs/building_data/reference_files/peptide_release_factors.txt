@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	222.273.peg.5644-MONOMER
+UGA	222.273.peg.3842-MONOMER
+UAA	generic_RF

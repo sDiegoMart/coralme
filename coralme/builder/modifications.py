@@ -207,16 +207,17 @@ def add_lipoyl_modifications(me_model):
 	return None
 
 def add_bmocogdp_chaperones(me_model):
-	bmocogdp_chaperones = me_model.global_info['complex_cofactors']['bmocogdp_chaperones']
-	for chaperone in set(bmocogdp_chaperones.values()):
-		new_mod = coralme.core.processdata.SubreactionData('mod_bmocogdp_c_' + chaperone, me_model)
-		new_mod.enzyme = chaperone
-		new_mod.stoichiometry = {'bmocogdp_c': -1}
+	if 'bmocogdp_chaperones' in me_model.global_info['complex_cofactors']:
+		bmocogdp_chaperones = me_model.global_info['complex_cofactors']['bmocogdp_chaperones']
+		for chaperone in set(bmocogdp_chaperones.values()):
+			new_mod = coralme.core.processdata.SubreactionData('mod_bmocogdp_c_' + chaperone, me_model)
+			new_mod.enzyme = chaperone
+			new_mod.stoichiometry = {'bmocogdp_c': -1}
 
-	for cplx_data in me_model.process_data.get_by_id('mod_bmocogdp_c').get_complex_data():
-		cplx_id = cplx_data.id.split('_mod')[0]
-		if cplx_id in bmocogdp_chaperones:
-			cplx_data.subreactions['mod_bmocogdp_c_' + bmocogdp_chaperones[cplx_id]] = cplx_data.subreactions.pop('mod_bmocogdp_c')
+		for cplx_data in me_model.process_data.get_by_id('mod_bmocogdp_c').get_complex_data():
+			cplx_id = cplx_data.id.split('_mod')[0]
+			if cplx_id in bmocogdp_chaperones:
+				cplx_data.subreactions['mod_bmocogdp_c_' + bmocogdp_chaperones[cplx_id]] = cplx_data.subreactions.pop('mod_bmocogdp_c')
 
 	return None
 

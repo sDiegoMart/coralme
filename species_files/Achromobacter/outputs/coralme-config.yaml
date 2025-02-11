@@ -1,0 +1,164 @@
+ME-Model-ID: achromobacter
+amino_acid_trna_synthetase:
+  ala__L_c: 222.273.peg.2084-MONOMER
+  arg__L_c: 222.273.peg.140-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: 222.273.peg.5937-MONOMER
+  cys__L_c: 222.273.peg.4427-MONOMER
+  gln__L_c: 222.273.peg.1083-MONOMER
+  glu__L_c: 222.273.peg.690-MONOMER
+  gly_c: generic_gly_c_ligase
+  his__L_c: 222.273.peg.2101-MONOMER
+  ile__L_c: 222.273.peg.3931-MONOMER
+  leu__L_c: 222.273.peg.4693-MONOMER
+  lys__L_c: 222.273.peg.3844-MONOMER
+  met__L_c: 222.273.peg.5400-MONOMER
+  phe__L_c: generic_phe_ligase
+  pro__L_c: 222.273.peg.847-MONOMER
+  ser__L_c: generic_ser_ligase
+  thr__L_c: 222.273.peg.2193-MONOMER
+  trp__L_c: 222.273.peg.1508-MONOMER
+  tyr__L_c: 222.273.peg.712-MONOMER
+  val__L_c: 222.273.peg.2096-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - 222.273.peg.709-MONOMER
+  - 222.273.peg.3864-MONOMER
+default_sigma_factor: 222.273.peg.90-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_Ec_iML1515_core_75p37M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: ../../species_files/Achromobacter/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: ../../species_files/Achromobacter/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 75.37723
+genbank-path: ../../species_files/Achromobacter/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg141_p
+- pg160_p
+- pg140_p
+- pg181_p
+- pg120_p
+- pg180_p
+- pg161_p
+lipoprotein_precursors:
+  AcrA: 222.273.peg.2543
+  BamB: 222.273.peg.2103
+  BamD: 222.273.peg.1512
+  CusC: 222.273.peg.1304
+  LolB: 222.273.peg.5326
+  MetQ: 222.273.peg.921
+  MltA: 222.273.peg.407
+  MltB: 222.273.peg.1576
+locus_tag: locus_tag
+log_directory: ../../species_files/Achromobacter/./outputs
+m-model-path: ../../species_files/Achromobacter/./outputs/building_data/m_model_modified.json
+ngam: 6.86
+other_lipids:
+- 222.273.peg.4954-MONOMER
+out_directory: ../../species_files/Achromobacter/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: 222.273.peg.5644-MONOMER
+  UGA: 222.273.peg.3842-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- 222.273.peg.866-MONOMER
+- 222.273.peg.3932-MONOMER
+rna_polymerases:
+  RNAP_222273peg1402MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.1402-MONOMER
+  RNAP_222273peg1502MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.1502-MONOMER
+  RNAP_222273peg154MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.154-MONOMER
+  RNAP_222273peg2117MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.2117-MONOMER
+  RNAP_222273peg2494MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.2494-MONOMER
+  RNAP_222273peg251MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.251-MONOMER
+  RNAP_222273peg2564MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.2564-MONOMER
+  RNAP_222273peg2854MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.2854-MONOMER
+  RNAP_222273peg3099MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.3099-MONOMER
+  RNAP_222273peg3100MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.3100-MONOMER
+  RNAP_222273peg3437MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.3437-MONOMER
+  RNAP_222273peg4177MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.4177-MONOMER
+  RNAP_222273peg4183MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.4183-MONOMER
+  RNAP_222273peg4749MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.4749-MONOMER
+  RNAP_222273peg476MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.476-MONOMER
+  RNAP_222273peg477MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.477-MONOMER
+  RNAP_222273peg5008MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.5008-MONOMER
+  RNAP_222273peg5538MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.5538-MONOMER
+  RNAP_222273peg781MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.781-MONOMER
+  RNAP_222273peg90MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: 222.273.peg.90-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  222.273.peg.211-MONOMER:
+    222.273.peg.1005: 22.0
+    222.273.peg.2387: 13.5
+    222.273.peg.2389: 20.0
+    222.273.peg.375: 15.5
+    222.273.peg.377: 15.5
+    222.273.peg.523: 23.0
+  222.273.peg.6085-MONOMER:
+    222.273.peg.434: 2.0

@@ -1,0 +1,21 @@
+sigma,complex,genes,name
+222.273.peg.90-MONOMER,RNAP_222273peg90MONOMER,222.273.peg.90(),RNA polymerase sigma factor RpoD
+222.273.peg.154-MONOMER,RNAP_222273peg154MONOMER,222.273.peg.154(),RNA polymerase sigma-54 factor RpoN
+222.273.peg.251-MONOMER,RNAP_222273peg251MONOMER,222.273.peg.251(),RNA polymerase sigma factor RpoH
+222.273.peg.476-MONOMER,RNAP_222273peg476MONOMER,222.273.peg.476(),RNA polymerase ECF-type sigma factor
+222.273.peg.477-MONOMER,RNAP_222273peg477MONOMER,222.273.peg.477(),RNA polymerase ECF-type sigma factor
+222.273.peg.781-MONOMER,RNAP_222273peg781MONOMER,222.273.peg.781(),putative RNA polymerase sigma factor
+222.273.peg.1402-MONOMER,RNAP_222273peg1402MONOMER,222.273.peg.1402(),RNA polymerase sigma factor RpoE
+222.273.peg.1502-MONOMER,RNAP_222273peg1502MONOMER,222.273.peg.1502(),RNA polymerase ECF-type sigma factor
+222.273.peg.2117-MONOMER,RNAP_222273peg2117MONOMER,222.273.peg.2117(),RNA polymerase sigma factor RpoD
+222.273.peg.2494-MONOMER,RNAP_222273peg2494MONOMER,222.273.peg.2494(),"RNA polymerase sigma-70 factor, ECF subfamily"
+222.273.peg.2564-MONOMER,RNAP_222273peg2564MONOMER,222.273.peg.2564(),RNA polymerase sigma factor for flagellar operon
+222.273.peg.2854-MONOMER,RNAP_222273peg2854MONOMER,222.273.peg.2854(),RNA polymerase ECF-type sigma factor
+222.273.peg.3099-MONOMER,RNAP_222273peg3099MONOMER,222.273.peg.3099(),RNA polymerase sigma-54 factor RpoN
+222.273.peg.3100-MONOMER,RNAP_222273peg3100MONOMER,222.273.peg.3100(),RNA polymerase sigma-54 factor RpoN
+222.273.peg.3437-MONOMER,RNAP_222273peg3437MONOMER,222.273.peg.3437(),RNA polymerase ECF-type sigma factor
+222.273.peg.4177-MONOMER,RNAP_222273peg4177MONOMER,222.273.peg.4177(),RNA polymerase ECF-type sigma factor
+222.273.peg.4183-MONOMER,RNAP_222273peg4183MONOMER,222.273.peg.4183(),RNA polymerase ECF-type sigma factor
+222.273.peg.4749-MONOMER,RNAP_222273peg4749MONOMER,222.273.peg.4749(),RNA polymerase ECF-type sigma factor
+222.273.peg.5008-MONOMER,RNAP_222273peg5008MONOMER,222.273.peg.5008(),RNA polymerase ECF-type sigma factor
+222.273.peg.5538-MONOMER,RNAP_222273peg5538MONOMER,222.273.peg.5538(),RNA polymerase sigma factor RpoE

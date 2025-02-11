@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	222.273.peg.4954-MONOMER
+pg_pe_160	222.273.peg.866-MONOMER,222.273.peg.3932-MONOMER
