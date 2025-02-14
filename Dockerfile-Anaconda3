@@ -8,7 +8,6 @@ RUN export SHELL=/bin/bash
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update
 RUN apt-get install -y dialog apt-utils
-RUN apt-get upgrade -y
 RUN apt-get install -y htop git gcc nano
 RUN apt-get install -y libgfortran5
 RUN apt-get install -y libglpk-dev
@@ -19,18 +18,22 @@ RUN apt-get install -y ncbi-blast+
 # RUN python -m pip install pip -U
 RUN python -m pip install wheel
 RUN python -m pip install cython
-RUN python -m pip install cpython
+#RUN python -m pip install cpython
 
 # data manipulation
-RUN python -m pip install numpy==1.23.0
+RUN python -m pip install numpy
+#==1.23.0
 RUN python -m pip install scipy
 RUN python -m pip install sympy
-RUN python -m pip install pandas==1.5.1
+RUN python -m pip install pandas
+#==1.5.1
 
 # coralme
-RUN python -m pip install cobra==0.26.3
+RUN python -m pip install cobra
+#==0.26.3
 RUN python -m pip install python-libsbml
-RUN python -m pip install Biopython==1.80
+RUN python -m pip install Biopython
+#==1.80
 RUN python -m pip install anyconfig
 RUN python -m pip install pyranges
 RUN python -m pip install xlsxwriter
