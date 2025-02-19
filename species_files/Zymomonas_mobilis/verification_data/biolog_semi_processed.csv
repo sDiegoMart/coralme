@@ -1,0 +1,380 @@
+,PM_ID,Substrate name,Growth in experiment,ID in iZM516,iZM516 prediction,ID in iZM4_478,iZM4_478 prediction,best_coralme_guess
+0,PM1_A02,L-Arabinose,+,cpd00224,-,arab__L,-,-
+1,PM1_A03,N-Acetyl-D-Glucosamine,-,cpd00122,-,acgam,-,['acgam_c']
+2,PM1_A04,D-Saccharic Acid,-,cpd00571,-,glcr,-,-
+3,PM1_A05,Succinic Acid,-,cpd00036,-,succ,-,['succ_p']
+4,PM1_A06,D-Galactose,-,cpd00108,-,gal,-,"['gal_c', 'gal__bD_p']"
+5,PM1_A07,L-Aspartic Acid,-,cpd00041,-,asp__L,-,"['asp__L_p', 'asp__D_c']"
+6,PM1_A08,L-Proline,-,cpd00129,-,pro__L,-,['pro__L_c']
+7,PM1_A09,D-Alanine,-,cpd00117,-,ala__D,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+8,PM1_A10,D-Trehalose,-,cpd00794,-,tre,-,-
+9,PM1_A11,D-Mannose,-,cpd00138,-,man,-,['man_c']
+10,PM1_A12,Dulcitol,-,cpd01171,-,galt,-,-
+11,PM1_B01,D-Serine,-,cpd00550,-,ser__D,-,['ser__L_p']
+12,PM1_B02,D-Sorbitol,-,cpd00588,-,sbt__D,-,"['sbt__D_p', 'sbt__D_c']"
+13,PM1_B03,Glycerol,-,cpd00100,-,glyc,-,"['glyc_p', 'glyc__R_c']"
+14,PM1_B04,L-Fucose,-,cpd00751,-,fuc__L,-,-
+15,PM1_B05,D-Glucuronic Acid,-,cpd01735,-,glcurn,-,-
+16,PM1_B06,D-Gluconic Acid,-,cpd00222,+,glcn,+,['glcn_p']
+17,PM1_B07,"D,L-a-Glycerol- Phosphate",-,cpd00080,-,glyc3p,-,['glyc3p_p']
+18,PM1_B08,D-Xylose,+,cpd00154,-,xyl__D,-,['xyl__D_p']
+19,PM1_B09,L-Lactic Acid,-,cpd00159,-,lac__L,-,['lac__D_p']
+20,PM1_B10,Formic Acid,-,cpd00047,-,for,-,['for_c']
+21,PM1_B11,D-Mannitol,-,cpd00314,-,mnl,-,['mnl_c']
+22,PM1_B12,L-Glutamic Acid,-,cpd00023,-,glu__L,-,"['glu__L_p', 'glu__D_c']"
+23,PM1_C01,D-Glucose-6-Phosphate,-,cpd00079,-,g6p,-,['g6p_c']
+24,PM1_C02,D-Galactonic Acid-g-Lactone,-,cpd02143,-,-,-,-
+25,PM1_C03,"D,L-Malic Acid",-,cpd00386,-,mal__D,-,['mal__L_c']
+26,PM1_C04,D-Ribose,+,cpd00105,-,rib__D,-,-
+27,PM1_C05,Tween 20,-,cpd13391,-,-,-,-
+28,PM1_C06,L-Rhamnose,-,cpd00396,-,rmn,-,-
+29,PM1_C07,D-Fructose,+,cpd00082,+,fru,+,['fru_p']
+30,PM1_C08,Acetic Acid,-,cpd00029,-,ac,-,['ac_c']
+31,PM1_C09,a-D-Glucose,+,cpd00027,+,glc__D,+,['glc__D_c']
+32,PM1_C10,Maltose,-,cpd00179,-,malt,-,['malt_c']
+33,PM1_C11,D-Melibiose,-,cpd03198,-,6dg,-,-
+34,PM1_C12,Thymidine,-,cpd00184,-,thymd,-,['thymd_c']
+35,PM1_D01,L-Asparagine,-,cpd00132,-,asn__L,-,['asn__L_c']
+36,PM1_D02,D-Aspartic Acid,-,cpd00320,-,asp__D,-,"['asp__L_p', 'asp__D_c']"
+37,PM1_D03,D-Glucosaminic Acid,-,cpd02351,-,-,-,-
+38,PM1_D04,"1,2-Propanediol",-,cpd00453,-,-,-,-
+39,PM1_D05,Tween 40,-,cpd24417,-,-,-,-
+40,PM1_D06,a-Keto-Glutaric Acid,-,cpd00024,-,akg,-,['akg_c']
+41,PM1_D07,a-Keto-Butyric Acid,-,cpd00094,-,2obut,-,['2obut_c']
+42,PM1_D08,a-Methyl-D-Galactoside,-,cpd24416,-,-,-,-
+43,PM1_D09,a-D-Lactose,-,cpd00208,-,lcts,-,['lcts_c']
+44,PM1_D10,Lactulose,-,cpd04349,-,-,-,-
+45,PM1_D11,Sucrose,-,cpd00076,+,sucr,+,['sucr_e']
+46,PM1_D12,Uridine,-,cpd00249,-,uri,-,['uri_c']
+47,PM1_E01,L-Glutamine,-,cpd00053,-,gln__L,-,['gln__L_p']
+48,PM1_E02,m-Tartaric Acid,-,cpd00432,-,tartr__M,-,-
+49,PM1_E03,D-Glucose-1-Phosphate,-,cpd00089,-,g1p,-,['g1p_c']
+50,PM1_E04,D-Fructose-6-Phosphate,-,cpd00072,-,f6p,-,['f6p_c']
+51,PM1_E05,Tween 80,-,cpd13392,-,-,-,-
+52,PM1_E06,a-Hydroxy Glutaric Acid-g-Lactone,-,cpd23862,-,-,-,-
+53,PM1_E07,a-Hydroxy-Butyric Acid,-,cpd03561,-,2hb,-,-
+54,PM1_E08,b-Methyl-D-Glucoside,-,cpd11603,-,-,-,-
+55,PM1_E09,Adonitol,-,cpd00366,-,rbt,-,-
+56,PM1_E10,Maltotriose,-,cpd01262,-,malttr,-,-
+57,PM1_E11,2`-Deoxy-Adenosine,-,cpd00438,-,dad_2,-,"['dad__5_c', 'dad__2_c']"
+58,PM1_E12,Adenosine,-,cpd00182,-,adn,-,['adn_c']
+59,PM1_F01,Glycyl-L-Aspartic Acid,-,cpd11589,-,-,-,-
+60,PM1_F02,Citric Acid,-,cpd00137,-,cit,-,['cit_c']
+61,PM1_F03,m-Inositol,-,cpd00121,-,inost,-,['inost_c']
+62,PM1_F04,D-Threonine,-,cpd00611,-,-,-,-
+63,PM1_F05,Fumaric Acid,-,cpd00106,-,fum,-,"['fum_c', 'fum_p']"
+64,PM1_F06,Bromo-Succinic Acid,-,cpd23859,-,-,-,-
+65,PM1_F07,Propionic Acid,-,cpd00141,-,ppa,-,-
+66,PM1_F08,Mucic Acid,-,cpd00652,-,galct__D,-,-
+67,PM1_F09,Glycolic Acid,-,cpd00139,-,glyclt,-,['glyclt_c']
+68,PM1_F10,Glyoxylic Acid,-,cpd00040,-,glx,-,['glx_c']
+69,PM1_F11,D-Cellobiose,-,cpd00158,-,cellb,-,-
+70,PM1_F12,Inosine,-,cpd00246,-,ins,-,['ins_c']
+71,PM1_G01,Glycyl-L-Glutamic Acid,-,cpd24418,-,-,-,-
+72,PM1_G02,Tricarballylic Acid,-,cpd16654,-,tcb,-,-
+73,PM1_G03,L-Serine,-,cpd00054,-,ser__L,-,['ser__L_p']
+74,PM1_G04,L-Threonine,-,cpd00161,-,thr__L,-,['thr__L_c']
+75,PM1_G05,L-Alanine,-,cpd00035,-,ala__L,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+76,PM1_G06,L-Alanyl-Glycine,-,cpd11585,-,L_alagly,-,-
+77,PM1_G07,Acetoacetic Acid,-,cpd00142,-,acac,-,-
+78,PM1_G08,N-Acetyl-b-D-Mannosamine,-,cpd27563,-,acmana,-,-
+79,PM1_G09,Mono Methyl Succinate,-,cpd24419,-,-,-,-
+80,PM1_G10,Methyl Pyruvate,-,cpd24420,-,-,-,-
+81,PM1_G11,D-Malic Acid,-,cpd00386,-,mal__D,-,['mal__L_c']
+82,PM1_G12,L-Malic Acid,-,cpd00130,-,mal__L,-,['mal__L_c']
+83,PM1_H01,Glycyl-L-Proline,-,cpd22832,-,glypro,-,-
+84,PM1_H02,p-Hydroxy-Phenylacetic Acid,-,cpd00489,-,4hoxpac,-,-
+85,PM1_H03,m-Hydroxy-Phenylacetic Acid,-,cpd03320,-,3hoxpac,-,-
+86,PM1_H04,Tyramine,-,cpd00374,-,tym,-,-
+87,PM1_H05,D-Psicose,-,cpd03884,-,-,-,-
+88,PM1_H06,L-Lyxose,+,cpd01067,-,lyx__L,-,-
+89,PM1_H07,Glucuronamide,-,cpd26269,-,-,-,-
+90,PM1_H08,Pyruvic Acid,-,cpd00020,-,pyr,-,['pyr_c']
+91,PM1_H09,L-Galactonic Acid-g-Lactone,-,cpd00820,-,-,-,-
+92,PM1_H10,D-Galacturonic Acid,-,cpd00280,-,galur,-,-
+93,PM1_H11,b-Phenylethylamine,-,cpd03161,-,peamn,-,-
+94,PM1_H12,Ethanolamine,-,cpd00162,-,etha,-,['etha_c']
+95,PM2A_A02,Chondroitin Sulfate C,-,cpd11717,-,-,-,-
+96,PM2A_A03,a-Cyclodextrin,-,cpd24451,-,-,-,-
+97,PM2A_A04,b-Cyclodextrin,-,cpd09394,-,-,-,-
+98,PM2A_A05,g-Cyclodextrin,-,cpd24452,-,-,-,-
+99,PM2A_A06,Dextrin,-,cpd11594,-,dextrin,-,-
+100,PM2A_A07,Gelatin,-,cpd11879,-,-,-,-
+101,PM2A_A08,Glycogen,-,cpd00155,-,glycogen,-,"['glycogen_e', 'glycogen_c']"
+102,PM2A_A09,Inulin,-,cpd11602,-,-,-,-
+103,PM2A_A10,Laminarin,-,cpd11748,-,-,-,-
+104,PM2A_A11,Mannan,-,cpd11685,-,mannan,-,-
+105,PM2A_A12,Pectin,+,cpd11601,-,pectin,-,-
+106,PM2A_B01,N-Acetyl-D-Galactosamine,-,cpd00832 ,-,acgal,-,-
+107,PM2A_B02,N-Acetyl-Neuraminic Acid,-,cpd00232,-,acnam,-,-
+108,PM2A_B03,b-D-Allose,-,cpd01055,-,all__D,-,-
+109,PM2A_B04,Amygdalin,-,cpd01356,-,-,-,-
+110,PM2A_B05,D-Arabinose,+,cpd00185,-,arab__D,-,-
+111,PM2A_B06,D-Arabitol,-,cpd01307,-,abt__D,-,-
+112,PM2A_B07,L-Arabitol,-,cpd00417,-,abt,-,-
+113,PM2A_B08,Arbutin,-,cpd03696,-,arbt,-,-
+114,PM2A_B09,2-Deoxy-D-Ribose,+,cpd01242,-,drib,-,-
+115,PM2A_B10,i-Erythritol,-,cpd00392,-,-,-,-
+116,PM2A_B11,D-Fucose,-,cpd00750,-,-,-,-
+117,PM2A_B12,3-0-b-D-Galactopyranosyl-D-Arabinose,-,cpd24453,-,-,-,-
+118,PM2A_C01,Gentiobiose,-,cpd05158,-,-,-,-
+119,PM2A_C02,L-Glucose,-,-,-,-,-,-
+120,PM2A_C03,D-Lactitol,-,-,-,-,-,-
+121,PM2A_C04,D-Melezitose,-,cpd05161,-,-,-,-
+122,PM2A_C05,Maltitol,-,cpd37280,-,-,-,-
+123,PM2A_C06,a-Methyl-D-Glucoside,-,cpd15584,-,madg,-,-
+124,PM2A_C07,b-Methyl-D-Galactoside,-,cpd02274,-,-,-,-
+125,PM2A_C08,3-O-Methyl-Glucose,-,cpd26351,-,-,-,-
+126,PM2A_C09,b-Methyl-D-Glucuronic Acid,-,cpd24423,-,-,-,-
+127,PM2A_C10,a-Methyl-D-Mannoside,-,cpd24424,-,-,-,-
+128,PM2A_C11,b-Methyl-D-Xyloside,-,cpd24425,-,-,-,-
+129,PM2A_C12,Palatinose,-,cpd01200,-,pala,-,-
+130,PM2A_D01,D-Raffinose,-,cpd00382,-,raffin,-,-
+131,PM2A_D02,Salicin,-,cpd01030,-,salcn,-,-
+132,PM2A_D03,Sedoheptulosan,-,cpd24426,-,-,-,-
+133,PM2A_D04,L-Sorbose,-,cpd00212,-,srb__L,-,['srb__L_c']
+134,PM2A_D05,Stachyose,-,cpd01133,-,stys,-,-
+135,PM2A_D06,D-Tagatose,-,cpd00589,-,tag__D,-,-
+136,PM2A_D07,Turanose,-,cpd20885,-,-,-,-
+137,PM2A_D08,Xylitol,-,cpd00306,-,xylt,-,['xylt_c']
+138,PM2A_D09,N-Acetyl-D-Glucosaminitol,-,cpd24427,-,-,-,-
+139,PM2A_D10,g-Amino-Butyric Acid,-,cpd00281,-,4abut,-,-
+140,PM2A_D11,d-Amino-Valeric Acid,-,cpd00339,-,5aptn,-,-
+141,PM2A_D12,Butyric Acid,-,cpd00211,-,but,-,-
+142,PM2A_E01,Capric Acid,-,cpd01107,-,dca,-,-
+143,PM2A_E02,Caproic Acid,-,cpd01113,-,hxa,-,-
+144,PM2A_E03,Citraconic Acid,-,cpd01502,-,citac,-,-
+145,PM2A_E04,"D,L-Citramalic Acid",-,cpd00607,-,citm,-,-
+146,PM2A_E05,D-Glucosamine,+,cpd00276,-,gam,-,-
+147,PM2A_E06,2-Hydroxy-Benzoic Acid,-,cpd00599,-,salc,-,-
+148,PM2A_E07,4-Hydroxy-Benzoic Acid,-,cpd00136,-,4hbz,-,['4hbz_c']
+149,PM2A_E08,b-Hydroxy-Butyric Acid,-,cpd00797,-,bhb,-,-
+150,PM2A_E09,g-Hydroxy-Butyric Acid,-,cpd00728,-,ghb,-,-
+151,PM2A_E10,a-Keto-Valeric Acid,-,cpd03737,-,-,-,-
+152,PM2A_E11,Itaconic Acid,-,cpd00380,-,itacon,-,-
+153,PM2A_E12,5-Keto-D-Gluconic Acid,+,cpd00781,-,5dglcn,-,-
+154,PM2A_F01,D-Lactic Acid Methyl Ester,-,cpd24428,-,-,-,-
+155,PM2A_F02,Malonic Acid,-,cpd00308,-,malon,-,-
+156,PM2A_F03,Melibionic Acid,-,cpd24454,-,-,-,-
+157,PM2A_F04,Oxalic Acid,-,cpd00180,-,oxa,-,-
+158,PM2A_F05,Oxalomalic Acid,-,cpd01363,-,-,-,-
+159,PM2A_F06,Quinic Acid,-,cpd00248,-,quin,-,-
+160,PM2A_F07,"D-Ribono-1,4-Lactone",-,cpd23861 ,-,-,-,-
+161,PM2A_F08,Sebacic Acid,-,cpd05192,-,-,-,-
+162,PM2A_F09,Sorbic Acid,+,cpd16648,-,-,-,-
+163,PM2A_F10,Succinamic Acid,-,cpd25518,-,-,-,-
+164,PM2A_F11,D-Tartaric Acid,-,cpd19018,-,tartr__D,-,-
+165,PM2A_F12,L-Tartaric Acid,-,cpd00666,-,tartr__L,-,-
+166,PM2A_G01,Acetamide,-,cpd03734,-,ad,-,-
+167,PM2A_G02,L-Alaninamide,-,cpd23030,-,-,-,-
+168,PM2A_G03,N-Acetyl-L-Glutamic Acid,-,cpd00477,-,acglu,-,['acglu_c']
+169,PM2A_G04,L-Arginine,-,cpd00051,-,arg__L,-,['arg__L_p']
+170,PM2A_G05,Glycine,-,cpd00033,-,gly,-,['gly_c']
+171,PM2A_G06,L-Histidine,-,cpd00119,-,his__L,-,['his__L_c']
+172,PM2A_G07,L-Homoserine,-,cpd00227,-,hom__L,-,['hom__L_c']
+173,PM2A_G08,4-Hydroxy-L-Proline (trans),-,cpd00747,-,-,-,-
+174,PM2A_G09,L-Isoleucine,-,cpd00322,-,ile__L,-,['ile__L_c']
+175,PM2A_G10,L-Leucine,-,cpd00107,-,leu__L,-,['leu__L_c']
+176,PM2A_G11,L-Lysine,-,cpd00039,-,lys__L,-,['lys__L_p']
+177,PM2A_G12,L-Methionine,-,cpd00060,-,met__L,-,['met__L_c']
+178,PM2A_H01,L-Ornithine,-,cpd00064,-,orn,-,['orn_c']
+179,PM2A_H02,L-Phenylalanine,-,cpd00066,-,phe__L,-,['phe__L_c']
+180,PM2A_H03,L-Pyroglutamic Acid,-,cpd01293,-,5oxpro,-,-
+181,PM2A_H04,L-Valine,-,cpd00156,-,val__L,-,['val__L_c']
+182,PM2A_H05,"D,L-Carnitine",-,cpd19003,-,crn,-,-
+183,PM2A_H06,Butylamine (sec),-,cpd24429,-,-,-,-
+184,PM2A_H07,"D,L-Octopamine",-,cpd02599,-,-,-,-
+185,PM2A_H08,Putrescine,-,cpd00118,-,ptrc,-,['ptrc_c']
+186,PM2A_H09,Dihydroxy-Acetone,+,cpd00157,-,dha,-,-
+187,PM2A_H10,"2,3-Butanediol",-,cpd01947,-,btd_RR,-,-
+188,PM2A_H11,"2,3-Butanone",-,cpd00551,-,diact,-,-
+189,PM2A_H12,3-Hydroxy-2-Butanone,-,cpd00361,-,-,-,-
+190,PM3B_A02,Ammonia,+,cpd00013,+,nh4,+,['nh4_p']
+191,PM3B_A03,Nitrite,-,cpd00075,-,no2,-,-
+192,PM3B_A04,Nitrate,-,cpd00209,-,no3,-,-
+193,PM3B_A05,Urea,-,cpd00073,-,urea,-,['urea_c']
+194,PM3B_A06,Biuret,-,cpd03963,-,-,-,-
+195,PM3B_A07,L-Alanine,-,cpd00035,-,ala__L,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+196,PM3B_A08,L-Arginine,-,cpd00051,-,arg__L,-,['arg__L_p']
+197,PM3B_A09,L-Asparagine,+,cpd00132,+,asn__L,+,['asn__L_c']
+198,PM3B_A10,L-Aspartic Acid,+,cpd00041,-,asp__L,-,"['asp__L_p', 'asp__D_c']"
+199,PM3B_A11,L-Cysteine,+,cpd00084,+,cys__L,-,['cys__L_c']
+200,PM3B_A12,L-Glutamic Acid,+,cpd00023,+,glu__L,-,"['glu__L_p', 'glu__D_c']"
+201,PM3B_B01,L-Glutamine,-,cpd00053,+,gln__L,+,['gln__L_p']
+202,PM3B_B02,Glycine,-,cpd00033,-,gly,-,['gly_c']
+203,PM3B_B03,L-Histidine,-,cpd00119,-,his__L,-,['his__L_c']
+204,PM3B_B04,L-Isoleucine,-,cpd00322,-,ile__L,-,['ile__L_c']
+205,PM3B_B05,L-Leucine,-,cpd00107,-,leu__L,-,['leu__L_c']
+206,PM3B_B06,L-Lysine,-,cpd00039,-,lys__L,-,['lys__L_p']
+207,PM3B_B07,L-Methionine,-,cpd00060,-,met__L,-,['met__L_c']
+208,PM3B_B08,L-Phenylalanine,+,cpd00066,-,phe__L,-,['phe__L_c']
+209,PM3B_B09,L-Proline,-,cpd00129,-,pro__L,-,['pro__L_c']
+210,PM3B_B10,L-Serine,+,cpd00054,+,ser__L,-,['ser__L_p']
+211,PM3B_B11,L-Threonine,+,cpd00161,-,thr__L,-,['thr__L_c']
+212,PM3B_B12,L-Tryptophan,+,cpd00065,-,trp__L,-,['trp__L_c']
+213,PM3B_C01,L-Tyrosine,+,cpd00069,-,tyr__L,-,['tyr__L_c']
+214,PM3B_C02,L-Valine,-,cpd00156,-,val__L,-,['val__L_c']
+215,PM3B_C03,D-Alanine,-,cpd00117,-,ala__D,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+216,PM3B_C04,D-Asparagine,-,cpd01308,-,-,-,-
+217,PM3B_C05,D-Aspartic Acid,-,cpd00320,-,asp__D,-,"['asp__L_p', 'asp__D_c']"
+218,PM3B_C06,D-Glutamic Acid,-,cpd00186,-,glu__D,-,"['glu__L_p', 'glu__D_c']"
+219,PM3B_C07,D-Lysine,-,cpd00549,-,lys__D,-,['lys__L_p']
+220,PM3B_C08,D-Serine,-,cpd00550,-,ser__D,-,['ser__L_p']
+221,PM3B_C09,D-Valine,-,cpd03840,-,-,-,-
+222,PM3B_C10,L-Citrulline,-,cpd00274,-,citr__L,-,['citr__L_c']
+223,PM3B_C11,L-Homoserine,-,cpd00227,-,hom__L,-,['hom__L_c']
+224,PM3B_C12,L-Ornithine,-,cpd00064,-,orn,-,['orn_c']
+225,PM3B_D01,"N-Acetyl-D,L-Glutamic Acid",-,cpd00477,-,acglu,-,['acglu_c']
+226,PM3B_D02,N-Phthaloyl-L-Glutamic Acid,-,cpd24431,-,-,-,-
+227,PM3B_D03,L-Pyroglutamic Acid,-,cpd01293,-,5oxpro,-,-
+228,PM3B_D04,Hydroxylamine,-,cpd00165,-,ham,-,-
+229,PM3B_D05,Methylamine,-,cpd00187,-,mma,-,-
+230,PM3B_D06,N-Amylamine,-,cpd24432,-,-,-,-
+231,PM3B_D07,N-Butylamine,-,cpd19969,-,-,-,-
+232,PM3B_D08,Ethylamine,-,cpd00591,-,-,-,-
+233,PM3B_D09,Ethanolamine,+,cpd00162,+,etha,-,['etha_c']
+234,PM3B_D10,Ethylenediamine,-,cpd24433,-,-,-,-
+235,PM3B_D11,Putrescine,-,cpd00118,-,ptrc,-,['ptrc_c']
+236,PM3B_D12,Agmatine,-,cpd00152,-,agm,-,['agm_c']
+237,PM3B_E01,Histamine,-,cpd00312,-,hista,-,-
+238,PM3B_E02,b-Phenylethylamine,-,cpd03161,-,peamn,-,-
+239,PM3B_E03,Tyramine,-,cpd00374,-,tym,-,-
+240,PM3B_E04,Acetamide,-,cpd03734,-,ad,-,-
+241,PM3B_E05,Formamide,-,cpd00378,-,frmd,-,-
+242,PM3B_E06,Glucuronamide,-,cpd26269,-,-,-,-
+243,PM3B_E07,"D,L-Lactamide",-,cpd23860,-,-,-,-
+244,PM3B_E08,D-Glucosamine,-,cpd00276,-,gam,-,-
+245,PM3B_E09,D-Galactosamine,-,cpd01524,-,-,-,-
+246,PM3B_E10,D-Mannosamine,-,cpd02241,-,-,-,-
+247,PM3B_E11,N-Acetyl-D-Glucosamine,-,cpd12230,-,-,-,-
+248,PM3B_E12,N-Acetyl-D-Galactosamine,-,cpd11809,-,-,-,-
+249,PM3B_F01,N-Acetyl-D-Mannosamine,-,cpd00492,-,acmana,-,-
+250,PM3B_F02,Adenine,-,cpd00128,-,ade,-,['ade_c']
+251,PM3B_F03,Adenosine,+,cpd00182,+,adn,-,['adn_c']
+252,PM3B_F04,Cytidine,-,cpd00367,+,cytd,-,['cytd_c']
+253,PM3B_F05,Cytosine,-,cpd00307,-,csn,-,-
+254,PM3B_F06,Guanine,-,cpd00207,-,gua,-,['gua_c']
+255,PM3B_F07,Guanosine,-,cpd00311,-,gsn,-,['gsn_c']
+256,PM3B_F08,Thymine,-,cpd00151,-,thym,-,-
+257,PM3B_F09,Thymidine,-,cpd00184,-,thymd,-,['thymd_c']
+258,PM3B_F10,Uracil,-,cpd00092,-,ura,-,-
+259,PM3B_F11,Uridine,-,cpd00249,-,uri,-,['uri_c']
+260,PM3B_F12,Inosine,-,cpd00246,-,ins,-,['ins_c']
+261,PM3B_G01,Xanthine,-,cpd00309,-,xan,-,['xan_c']
+262,PM3B_G02,Xanthosine,-,cpd01217,-,xtsn,-,['xtsn_c']
+263,PM3B_G03,Uric Acid,-,cpd00300,-,urate,-,-
+264,PM3B_G04,Alloxan,-,cpd04763,-,-,-,-
+265,PM3B_G05,Allantoin,-,cpd01092,-,alltn,-,-
+266,PM3B_G06,Parabanic Acid,+,cpd24435,-,-,-,-
+267,PM3B_G07,"D,L-a-Amino-N-Butyric Acid",-,cpd01523,-,-,-,-
+268,PM3B_G08,g-Amino-N-Butyric Acid,-,cpd00281,-,4abut,-,-
+269,PM3B_G09,e-Amino-N-Caproic Acid,-,cpd01588,-,6ax,-,-
+270,PM3B_G10,"D,L-a-Amino-Caprylic Acid",-,cpd24436,-,-,-,-
+271,PM3B_G11,d-Amino-N-Valeric Acid,-,cpd00339,-,5aptn,-,-
+272,PM3B_G12,a-Amino-N-Valeric Acid,-,cpd01258,-,-,-,-
+273,PM3B_H01,Ala-Asp,+,cpd11593,-,ala_L_asp__L,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+274,PM3B_H02,Ala-Gln,+,cpd11587,+,ala_L_gln__L,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+275,PM3B_H03,Ala-Glu,-,cpd15388,-,LalaLglu,-,['LalaLglu_p']
+276,PM3B_H04,Ala-Gly,-,cpd11585,-,L_alagly,-,-
+277,PM3B_H05,Ala-His,-,cpd11584,-,-,-,-
+278,PM3B_H06,Ala-Leu,-,cpd11583,-,ala_L_leu__L,-,"['ala__D_c', 'ala__L_c', 'ala__B_c']"
+279,PM3B_H07,Ala-Thr,+,cpd23857,-,-,-,-
+280,PM3B_H08,Gly-Asn,+,cpd23855,-,-,-,-
+281,PM3B_H09,Gly-Gln,+,cpd11580,-,gly_gln__L,-,['gly_c']
+282,PM3B_H10,Gly-Glu,+,cpd24418,-,-,-,-
+283,PM3B_H11,Gly-Met,-,cpd11591,-,gly_met__L,-,['gly_c']
+284,PM3B_H12,Met-Ala,-,cpd23854,-,-,-,-
+285,PM4A_A02,Phosphate,+,cpd00009,+,pi,+,['pi_p']
+286,PM4A_A03,Pyrophosphate,-,cpd00012,-,ppi,-,['ppi_e']
+287,PM4A_A04,Trimetaphosphate,-,cpd01622,-,tmp,-,-
+288,PM4A_A05,Tripolyphosphate,-,cpd00421,-,pppi,-,['pppi_c']
+289,PM4A_A06,Triethyl Phosphate,-,cpd24437,-,-,-,-
+290,PM4A_A07,Hypophosphite,-,cpd03166,-,-,-,-
+291,PM4A_A08,Adenosine- 2'Monophosphate,+,cpd00700,-,amp2p,-,-
+292,PM4A_A09,Adenosine- 3'Monophosphate,+,cpd00988,-,3amp,-,-
+293,PM4A_A10,Adenosine- 5'Monophosphate,+,cpd00018,-,amp,-,['amp_c']
+294,PM4A_A11,Adenosine- 2'3'Cyclic Monophosphate,+,cpd01570,-,23camp,-,-
+295,PM4A_A12,Adenosine- 3'5'Cyclic Monophosphate,+,cpd00446,-,camp,-,-
+296,PM4A_B01,Thiophosphate,+,cpd24444,-,-,-,-
+297,PM4A_B02,Dithiophosphate,+,cpd24445,-,-,-,-
+298,PM4A_B03,"D,L-a-Glycerol Phosphate",+,cpd00080,-,glyc3p,-,['glyc3p_p']
+299,PM4A_B04,b-Glycerol Phosphate,+,cpd01908,-,glyc2p,-,['glyc2p_c']
+300,PM4A_B05,Carbamyl Phosphate,+,cpd00146,-,cbp,-,['cbp_c']
+301,PM4A_B06,D-2-Phospho-Glyceric Acid,+,cpd00482,-,2pg,-,['2pg_c']
+302,PM4A_B07,D-3-Phospho-Glyceric Acid,+,cpd00169,-,3pg,-,['3pg_c']
+303,PM4A_B08,Guanosine- 2'Monophosphate,+,-,-,-,-,-
+304,PM4A_B09,Guanosine- 3'Monophosphate,+,cpd03701,-,3gmp,-,-
+305,PM4A_B10,Guanosine- 5'Monophosphate,+,cpd00126,-,gmp,-,['gmp_c']
+306,PM4A_B11,Guanosine- 2'3'Cyclic Monophosphate,+,cpd03702,-,23cgmp,-,-
+307,PM4A_B12,Guanosine- 3'5'Cyclic Monophosphate,+,cpd00697,-,35cgmp,-,-
+308,PM4A_C01,Phosphoenol Pyruvate,+,cpd00061,-,pep,-,['pep_c']
+309,PM4A_C02,Phospho-Glycolic Acid,+,cpd00727,-,2pglyc,-,['2pglyc_c']
+310,PM4A_C03,D-Glucose-1-Phosphate,+,cpd00089,-,g1p,-,['g1p_c']
+311,PM4A_C04,D-Glucose-6-Phosphate,+,cpd00079,-,g6p,-,['g6p_c']
+312,PM4A_C05,2-Deoxy-D-Glucose 6-Phosphate,-,cpd03805,-,2doxg6p,-,-
+313,PM4A_C06,D-Glucosamine-6-Phosphate,+,cpd00288,-,gam6p,-,['gam6p_c']
+314,PM4A_C07,6-Phospho-Gluconic Acid,+,cpd00284,-,6pgc,-,['6pgc_c']
+315,PM4A_C08,Cytidine- 2' Monophosphate,-,cpd01991,-,-,-,-
+316,PM4A_C09,Cytidine- 3' Monophosphate,-,cpd03454,-,3cmp,-,-
+317,PM4A_C10,Cytidine- 5' Monophosphate,-,cpd00046,-,cmp,-,['cmp_c']
+318,PM4A_C11,Cytidine- 2'3'Cyclic Monophosphate,-,cpd01571,-,23ccmp,-,-
+319,PM4A_C12,Cytidine- 3'5'Cyclic Monophosphate,+,cpd00696,-,35ccmp,-,-
+320,PM4A_D01,D-Mannose-1-Phosphate,+,cpd00485,-,man1p,-,['man1p_c']
+321,PM4A_D02,D-Mannose-6-Phosphate,+,cpd00235,-,man6p,-,['man6p_c']
+322,PM4A_D03,Cysteamine-S-Phosphate,+,cpd24438,-,-,-,-
+323,PM4A_D04,Phospho-L-Arginine,+,cpd03535,-,argp,-,-
+324,PM4A_D05,O-Phospho-D-Serine,+,cpd01665,-,pser__D,-,['pser__L_c']
+325,PM4A_D06,O-Phospho-L-Serine,+,cpd00738,-,pser__L,-,['pser__L_c']
+326,PM4A_D07,O-Phospho-L-Threonine,+,cpd08928,-,thrp,-,-
+327,PM4A_D08,Uridine- 2' Monophosphate,+,cpd01939,-,-,-,-
+328,PM4A_D09,Uridine- 3' Monophosphate,-,cpd00989,-,3ump,-,-
+329,PM4A_D10,Uridine- 5' Monophosphate,-,cpd00091,-,ump,-,['ump_c']
+330,PM4A_D11,Uridine- 2'3' Cyclic Monophosphate,+,cpd01572,-,23cump,-,-
+331,PM4A_D12,Uridine- 3'5' Cyclic Monophosphate,+,-,-,-,-,-
+332,PM4A_E01,O-Phospho-D-Tyrosine,+,cpd24440,-,-,-,-
+333,PM4A_E02,O-Phospho-L-Tyrosine,+,cpd03912,-,tyrp,-,-
+334,PM4A_E03,Phosphocreatine,+,cpd01550,-,pcreat,-,-
+335,PM4A_E04,Phosphoryl Choline,+,cpd00457,-,cholp,-,-
+336,PM4A_E05,O-Phosphoryl-Ethanolamine,+,cpd00285,-,ethamp,-,-
+337,PM4A_E06,Phosphono Acetic Acid,-,cpd03385,-,-,-,-
+338,PM4A_E07,2-Aminoethyl Phosphonic Acid,-,cpd02233,-,2ameph,-,-
+339,PM4A_E08,Methylene Diphosphonic Acid,-,-,-,-,-,-
+340,PM4A_E09,Thymidine- 3'Monophosphate,+,-,-,-,-,-
+341,PM4A_E10,Thymidine- 5'Monophosphate,+,cpd00298,-,dtmp,-,['dtmp_c']
+342,PM4A_E11,Inositol Hexaphosphate,-,cpd00885,-,minohp,+,['minohp_p']
+343,PM4A_E12,Thymidine 3'5' Cyclic Monophosphate,+,-,-,-,-,-
+344,PM4A_F02,Sulfate,+,cpd00048,+,so4,+,['so4_p']
+345,PM4A_F03,Thiosulfate,+,cpd00268,+,tsul,-,-
+346,PM4A_F04,Tetrathionate,+,cpd01414,-,tet,-,-
+347,PM4A_F05,Thiophosphate,+,cpd24444,-,-,-,-
+348,PM4A_F06,Dithiophosphate,+,cpd24445,-,-,-,-
+349,PM4A_F07,L-Cysteine,+,cpd00084,+,cys__L,-,['cys__L_c']
+350,PM4A_F08,D-Cysteine,-,cpd00587,-,cys__D,-,['cys__L_c']
+351,PM4A_F09,L-Cysteinyl-Glycine,+,cpd01017,+,cgly,-,['cgly_p']
+352,PM4A_F10,L-Cysteic Acid,-,cpd00395,-,Lcyst,-,-
+353,PM4A_F11,Cysteamine,-,cpd01160,-,cysam,-,-
+354,PM4A_F12,L-Cysteine Sulfinic Acid,+,cpd00467,-,3sala,-,-
+355,PM4A_G01,N-Acetyl-L-Cysteine,-,cpd04181,-,CE1310,-,-
+356,PM4A_G02,S-Methyl-L-Cysteine,+,cpd28135,-,-,-,-
+357,PM4A_G03,Cystathionine,-,cpd00424,-,-,-,-
+358,PM4A_G04,Lanthionine,-,cpd11577,-,lanth,-,-
+359,PM4A_G05,Glutathione,+,cpd00042,+,gthrd,-,['gthrd_p']
+360,PM4A_G06,"D,L-Ethionine",-,cpd08093,-,-,-,-
+361,PM4A_G07,L-Methionine,+,cpd00060,+,met__L,-,['met__L_c']
+362,PM4A_G08,D-Methionine,-,cpd00637,-,met__D,-,['met__L_c']
+363,PM4A_G09,Glycyl-L-Methionine,-,cpd11591,-,gly_met__L,-,['gly_c']
+364,PM4A_G10,"N-Acetyl-D,L-Methionine",-,cpd01756,-,C02712,-,-
+365,PM4A_G11,L-Methionine Sulfoxide,-,cpd01914,-,metsox_S__L,-,"['metsox__S__L_c', 'metsox__R__L_c']"
+366,PM4A_G12,L-Methionine Sulfone,-,cpd24447,-,-,-,-
+367,PM4A_H01,L-Djenkolic Acid,-,cpd05190,-,djenk,-,-
+368,PM4A_H02,Thiourea,+,cpd10114,-,-,-,-
+369,PM4A_H03,1-Thio-b-D-Glucose,-,cpd24448,-,-,-,-
+370,PM4A_H04,"D,L-Lipoamide",-,cpd00213,-,lpam,-,-
+371,PM4A_H05,Taurocholic Acid,+,cpd03047,-,tchola,-,-
+372,PM4A_H06,Taurine,-,cpd00210,-,taur,-,-
+373,PM4A_H07,Hypotaurine,+,cpd00406,-,hyptaur,-,-
+374,PM4A_H08,p-Amino Benzene Sulfonic Acid,-,cpd03776,-,-,-,-
+375,PM4A_H09,Butane Sulfonic Acid,-,-,-,-,-,-
+376,PM4A_H10,2-Hydroxyethane Sulfonic Acid,-,cpd03048,-,isetac,-,['isetac_c']
+377,PM4A_H11,Methane Sulfonic Acid,+,cpd08023,-,mso3,-,['mso3_c']
+378,PM4A_H12,Tetramethylene Sulfone,+,cpd24449,-,-,-,-
