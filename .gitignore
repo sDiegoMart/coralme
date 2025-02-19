@@ -138,3 +138,6 @@ dmypy.json
 
 # Zip files
 *.zip
+
+# custom
+*.DS_Store
