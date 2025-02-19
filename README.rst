@@ -14,8 +14,8 @@ For more information on coralME's inputs, architecture and usage, see coralME's 
 Installation
 ------------
 
-1. ``pip install -r requirements.txt``
-2. ``python3 setup.py clean build install``
+1. ``conda create --name coralme --file requirements.txt``
+2. Optional: You can use ``python3 setup.py clean build install`` to compile code, but I have modified most of the code to work by compiling coralme in each jupyter notebook to allow for quicker editing of coralme.
 
 
 Requirements
