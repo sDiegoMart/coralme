@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	AO353_01410-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	AO353_01410-MONOMER_mod_zn2(2),generic_RNase,AO353_04510-MONOMER,AO353_05230-MONOMER,AO353_04120-MONOMER_mod_mg2(4)
+rRNA_containing	AO353_01410-MONOMER_mod_zn2(2),generic_RNase,AO353_04510-MONOMER_mod_mg2(2),AO353_05230-MONOMER,AO353_04120-MONOMER_mod_mg2(4)

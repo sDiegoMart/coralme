@@ -1,0 +1,182 @@
+ME-Model-ID: Pseudomonas_sp._OST1909
+amino_acid_trna_synthetase:
+  ala__L_c: IH404_21610-MONOMER
+  arg__L_c: IH404_02890-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: IH404_22530-MONOMER
+  cys__L_c: IH404_17630-MONOMER
+  gln__L_c: IH404_17635-MONOMER
+  glu__L_c: IH404_19110-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: IH404_23225-MONOMER
+  ile__L_c: IH404_04725-MONOMER
+  leu__L_c: IH404_24900-MONOMER
+  lys__L_c: IH404_07490-MONOMER
+  met__L_c: IH404_07110-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: IH404_22890-MONOMER
+  ser__L_c: IH404_17310-MONOMER
+  thr__L_c: IH404_18805-MONOMER
+  trp__L_c: IH404_05560-MONOMER
+  tyr__L_c: IH404_25665-MONOMER
+  val__L_c: IH404_06605-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - IH404_25680-MONOMER
+  - IH404_23275-MONOMER
+default_sigma_factor: IH404_25880-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP063780/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP063780/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP063780/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: IH404_08355
+  BamB: IH404_23215
+  BamD: IH404_04780
+  BamE: IH404_24185
+  CusC: IH404_18370
+  LolB: IH404_04555
+  MetQ: IH404_02080
+  MltA: IH404_26520
+  MltB: IH404_24955
+locus_tag: locus_tag
+log_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP063780/./outputs
+m-model-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP063780/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- IH404_24890-MONOMER
+out_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP063780/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: IH404_04570-MONOMER
+  UGA: IH404_07485-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- IH404_27045-MONOMER
+- IH404_04730-MONOMER
+rna_polymerases:
+  RNAP_IH40401575MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_01575-MONOMER
+  RNAP_IH40401750MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_01750-MONOMER
+  RNAP_IH40401865MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_01865-MONOMER
+  RNAP_IH40404415MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_04415-MONOMER
+  RNAP_IH40405780MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_05780-MONOMER
+  RNAP_IH40406550MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_06550-MONOMER
+  RNAP_IH40406570MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_06570-MONOMER
+  RNAP_IH40407835MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_07835-MONOMER
+  RNAP_IH40408475MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_08475-MONOMER
+  RNAP_IH40408690MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_08690-MONOMER
+  RNAP_IH40410900MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_10900-MONOMER
+  RNAP_IH40410940MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_10940-MONOMER
+  RNAP_IH40412160MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_12160-MONOMER
+  RNAP_IH40413460MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_13460-MONOMER
+  RNAP_IH40415105MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_15105-MONOMER
+  RNAP_IH40417785MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_17785-MONOMER
+  RNAP_IH40419860MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_19860-MONOMER
+  RNAP_IH40419995MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_19995-MONOMER
+  RNAP_IH40420600MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_20600-MONOMER
+  RNAP_IH40420950MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_20950-MONOMER
+  RNAP_IH40421860MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_21860-MONOMER
+  RNAP_IH40421945MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_21945-MONOMER
+  RNAP_IH40422770MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_22770-MONOMER
+  RNAP_IH40424605MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_24605-MONOMER
+  RNAP_IH40425880MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_25880-MONOMER
+  RNAP_IH40426055MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_26055-MONOMER
+  RNAP_IH40426835MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_26835-MONOMER
+  RNAP_IH40426945MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: IH404_26945-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  IH404_00860-MONOMER:
+    IH404_00790: 2.0

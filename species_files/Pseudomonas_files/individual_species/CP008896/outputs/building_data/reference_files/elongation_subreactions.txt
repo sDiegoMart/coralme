@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	HZ99_14450-MONOMER
+Tuf_gtp_regeneration	HZ99_24150-MONOMER

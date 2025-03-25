@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	BVH74_02175-MONOMER,BVH74_02170-MONOMER_mod_zn2(4),BVH74_02180-MONOMER
+GroEL_dependent_folding	BVH74_18325-MONOMER,BVH74_18330-MONOMER
+N_terminal_methionine_cleavage	BVH74_00245-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	BVH74_01620-MONOMER
+PrfB_mono_mediated_termination	BVH74_00495-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	BVH74_07800-MONOMER
+peptide_deformylase_processing	BVH74_04615-MONOMER_mod_fe2(1)
+ribosome_recycler	BVH74_00225-MONOMER

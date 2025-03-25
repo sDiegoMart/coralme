@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	MT1_0962-MONOMER
+pg_pe_160	MT1_4420-MONOMER,MT1_4000-MONOMER

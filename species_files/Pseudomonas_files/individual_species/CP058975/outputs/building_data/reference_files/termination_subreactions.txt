@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	HXW90_26885-MONOMER,HXW90_26880-MONOMER_mod_zn2(4),HXW90_26890-MONOMER
+GroEL_dependent_folding	HXW90_25370-MONOMER,HXW90_25375-MONOMER
+N_terminal_methionine_cleavage	HXW90_07055-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	HXW90_03810-MONOMER
+PrfB_mono_mediated_termination	HXW90_06840-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	HXW90_04700-MONOMER
+peptide_deformylase_processing	HXW90_00125-MONOMER_mod_fe2(1)
+ribosome_recycler	HXW90_07075-MONOMER

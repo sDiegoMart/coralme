@@ -1,0 +1,146 @@
+ME-Model-ID: Pseudomonas_aeruginosa_PAO1H2O
+amino_acid_trna_synthetase:
+  ala__L_c: generic_ala_ligase
+  arg__L_c: OU9_05158-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: OU9_00979-MONOMER
+  cys__L_c: OU9_01807-MONOMER
+  gln__L_c: OU9_01806-MONOMER
+  glu__L_c: OU9_03197-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: OU9_03846-MONOMER
+  ile__L_c: generic_ile_ligase
+  leu__L_c: generic_leu_ligase
+  lys__L_c: OU9_03742-MONOMER
+  met__L_c: OU9_03543-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: generic_pro_ligase
+  ser__L_c: OU9_02644-MONOMER
+  thr__L_c: OU9_02771-MONOMER
+  trp__L_c: OU9_04512-MONOMER
+  tyr__L_c: generic_tyr_ligase
+  val__L_c: OU9_03879-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - OU9_00675-MONOMER
+  - OU9_03856-MONOMER
+default_sigma_factor: OU9_00588-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: ../species_files/Pseudomonas_files//individual_species/CP008749.1/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: ../species_files/Pseudomonas_files//individual_species/CP008749.1/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: ../species_files/Pseudomonas_files//individual_species/CP008749.1/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: OU9_00435
+  BamB: OU9_03844
+  BamD: OU9_04621
+  BamE: OU9_04864
+  CusC: OU9_00437
+  LolB: OU9_04752
+  MetQ: OU9_05626
+  MltA: OU9_01224
+  MltB: OU9_04517
+locus_tag: locus_tag
+log_directory: ../species_files/Pseudomonas_files//individual_species/CP008749.1/./outputs
+m-model-path: ../species_files/Pseudomonas_files//individual_species/CP008749.1/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- OU9_04037-MONOMER
+out_directory: ../species_files/Pseudomonas_files//individual_species/CP008749.1/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: OU9_04749-MONOMER
+  UGA: OU9_03743-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- OU9_00349-MONOMER
+- OU9_04636-MONOMER
+rna_polymerases:
+  RNAP_OU900152MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_00152-MONOMER
+  RNAP_OU900385MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_00385-MONOMER
+  RNAP_OU900483MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_00483-MONOMER
+  RNAP_OU900588MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_00588-MONOMER
+  RNAP_OU900775MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_00775-MONOMER
+  RNAP_OU901359MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_01359-MONOMER
+  RNAP_OU901787MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_01787-MONOMER
+  RNAP_OU902075MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_02075-MONOMER
+  RNAP_OU902117MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_02117-MONOMER
+  RNAP_OU902403MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_02403-MONOMER
+  RNAP_OU902943MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_02943-MONOMER
+  RNAP_OU903662MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_03662-MONOMER
+  RNAP_OU903948MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_03948-MONOMER
+  RNAP_OU904537MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_04537-MONOMER
+  RNAP_OU905001MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_05001-MONOMER
+  RNAP_OU905367MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: OU9_05367-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  OU9_05689-MONOMER:
+    OU9_05674: 2.0

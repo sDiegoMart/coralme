@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	HNE05_14830-MONOMER
+pg_pe_160	HNE05_19195-MONOMER,HNE05_14465-MONOMER

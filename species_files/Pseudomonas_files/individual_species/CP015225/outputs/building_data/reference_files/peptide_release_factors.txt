@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	TK06_26075-MONOMER
+UGA	CPLX_dummy
+UAA	generic_RF

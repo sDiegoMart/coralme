@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	CHR29_04210-MONOMER
+UGA	CPLX_dummy
+UAA	generic_RF

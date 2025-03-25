@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	H7683_04600-MONOMER,H7683_04595-MONOMER_mod_zn2(4),H7683_04605-MONOMER
+GroEL_dependent_folding	H7683_04915-MONOMER,H7683_04910-MONOMER
+N_terminal_methionine_cleavage	H7683_01425-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	H7683_15510-MONOMER
+PrfB_mono_mediated_termination	H7683_03350-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	H7683_14520-MONOMER
+peptide_deformylase_processing	H7683_10195-MONOMER_mod_fe2(1)
+ribosome_recycler	H7683_01405-MONOMER

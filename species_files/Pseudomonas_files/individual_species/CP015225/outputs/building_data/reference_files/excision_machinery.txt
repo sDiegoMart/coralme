@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	TK06_29600-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	TK06_29600-MONOMER_mod_zn2(2),generic_RNase,TK06_27075-MONOMER,TK06_16395-MONOMER,TK06_27835-MONOMER_mod_mg2(4)
+rRNA_containing	TK06_29600-MONOMER_mod_zn2(2),generic_RNase,TK06_27075-MONOMER_mod_mg2(2),TK06_16395-MONOMER,TK06_27835-MONOMER_mod_mg2(4)

@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	FQ342_01900-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	FQ342_01900-MONOMER_mod_zn2(2),generic_RNase,FQ342_05505-MONOMER,FQ342_06360-MONOMER,FQ342_17945-MONOMER_mod_mg2(4)
+rRNA_containing	FQ342_01900-MONOMER_mod_zn2(2),generic_RNase,FQ342_05505-MONOMER_mod_mg2(2),FQ342_06360-MONOMER,FQ342_17945-MONOMER_mod_mg2(4)

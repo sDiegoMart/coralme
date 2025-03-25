@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	ICJ54_23965-MONOMER,ICJ54_23960-MONOMER_mod_zn2(4),ICJ54_23970-MONOMER
+GroEL_dependent_folding	ICJ54_22720-MONOMER,ICJ54_22725-MONOMER
+N_terminal_methionine_cleavage	ICJ54_07770-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	ICJ54_05870-MONOMER
+PrfB_mono_mediated_termination	ICJ54_07540-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	ICJ54_06570-MONOMER
+peptide_deformylase_processing	ICJ54_02065-MONOMER_mod_fe2(1)
+ribosome_recycler	ICJ54_07790-MONOMER

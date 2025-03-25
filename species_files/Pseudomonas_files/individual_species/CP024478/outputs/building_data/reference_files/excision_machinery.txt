@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	CS390_17495-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	CS390_17495-MONOMER_mod_zn2(2),generic_RNase,CS390_19305-MONOMER,CS390_04870-MONOMER,CS390_19105-MONOMER_mod_mg2(4)
+rRNA_containing	CS390_17495-MONOMER_mod_zn2(2),generic_RNase,CS390_19305-MONOMER_mod_mg2(2),CS390_04870-MONOMER,CS390_19105-MONOMER_mod_mg2(4)

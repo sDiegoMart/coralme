@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	C3F42_14005-MONOMER
+pg_pe_160	C3F42_19140-MONOMER,C3F42_21780-MONOMER

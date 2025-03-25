@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	KCX70_17520-MONOMER,KCX70_17515-MONOMER_mod_zn2(4),KCX70_17525-MONOMER
+GroEL_dependent_folding	KCX70_05535-MONOMER,KCX70_05530-MONOMER
+N_terminal_methionine_cleavage	KCX70_15625-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	KCX70_05345-MONOMER
+PrfB_mono_mediated_termination	KCX70_07295-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	KCX70_04490-MONOMER
+peptide_deformylase_processing	KCX70_00160-MONOMER_mod_fe2(1)
+ribosome_recycler	KCX70_15605-MONOMER

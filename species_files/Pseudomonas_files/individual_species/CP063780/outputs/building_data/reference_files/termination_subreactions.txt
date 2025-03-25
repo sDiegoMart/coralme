@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	IH404_24165-MONOMER,IH404_24160-MONOMER_mod_zn2(4),IH404_24170-MONOMER
+GroEL_dependent_folding	IH404_22855-MONOMER,IH404_22860-MONOMER
+N_terminal_methionine_cleavage	IH404_07670-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	IH404_04570-MONOMER
+PrfB_mono_mediated_termination	IH404_07485-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	IH404_05455-MONOMER
+peptide_deformylase_processing	IH404_00960-MONOMER_mod_fe2(1)
+ribosome_recycler	IH404_07690-MONOMER

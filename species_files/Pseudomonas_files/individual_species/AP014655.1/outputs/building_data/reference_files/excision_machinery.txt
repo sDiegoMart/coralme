@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	MT1_3243-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	MT1_3243-MONOMER_mod_zn2(2),generic_RNase,MT1_3516-MONOMER,MT1_1241-MONOMER,MT1_3545-MONOMER_mod_mg2(4)
+rRNA_containing	MT1_3243-MONOMER_mod_zn2(2),generic_RNase,MT1_3516-MONOMER_mod_mg2(2),MT1_1241-MONOMER,MT1_3545-MONOMER_mod_mg2(4)

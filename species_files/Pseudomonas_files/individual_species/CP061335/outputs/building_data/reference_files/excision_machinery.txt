@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,ICJ54_22140-MONOMER,ICJ54_06710-MONOMER,ICJ54_21915-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,ICJ54_22140-MONOMER_mod_mg2(2),ICJ54_06710-MONOMER,ICJ54_21915-MONOMER_mod_mg2(4)

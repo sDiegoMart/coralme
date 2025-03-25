@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	I9X27_10135-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	I9X27_10135-MONOMER_mod_zn2(2),generic_RNase,I9X27_22500-MONOMER,I9X27_24070-MONOMER,I9X27_07305-MONOMER_mod_mg2(4)
+rRNA_containing	I9X27_10135-MONOMER_mod_zn2(2),generic_RNase,I9X27_22500-MONOMER_mod_mg2(2),I9X27_24070-MONOMER,I9X27_07305-MONOMER_mod_mg2(4)

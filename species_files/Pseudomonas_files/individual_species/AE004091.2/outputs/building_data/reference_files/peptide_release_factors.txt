@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	PA4665-MONOMER
+UGA	PA3701-MONOMER
+UAA	generic_RF

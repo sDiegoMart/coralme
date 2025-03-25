@@ -1,0 +1,5 @@
+rna_degradosome
+Pput_4165-MONOMER_mod_mg2(4)
+Pput_4573-MONOMER
+Pput_4430-MONOMER
+Pput_4778-MONOMER_mod_mg2(2)

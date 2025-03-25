@@ -1,0 +1,180 @@
+ME-Model-ID: Pseudomonas_monteilii_B5
+amino_acid_trna_synthetase:
+  ala__L_c: CHR29_19925-MONOMER
+  arg__L_c: CHR29_26005-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: CHR29_21130-MONOMER
+  cys__L_c: CHR29_13085-MONOMER
+  gln__L_c: CHR29_13080-MONOMER
+  glu__L_c: CHR29_08325-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: CHR29_04825-MONOMER
+  ile__L_c: CHR29_03505-MONOMER
+  leu__L_c: CHR29_24550-MONOMER
+  lys__L_c: CHR29_05850-MONOMER
+  met__L_c: generic_met_ligase
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: CHR29_21170-MONOMER
+  ser__L_c: CHR29_17970-MONOMER
+  thr__L_c: CHR29_16915-MONOMER
+  trp__L_c: CHR29_22900-MONOMER
+  tyr__L_c: CHR29_02550-MONOMER
+  val__L_c: CHR29_05260-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - CHR29_02535-MONOMER
+  - CHR29_04775-MONOMER
+default_sigma_factor: CHR29_02310-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: ../species_files/Pseudomonas_files//individual_species/CP022562/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: ../species_files/Pseudomonas_files//individual_species/CP022562/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: ../species_files/Pseudomonas_files//individual_species/CP022562/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: CHR29_22320
+  BamB: CHR29_04835
+  BamD: CHR29_03600
+  BamE: CHR29_23935
+  CusC: CHR29_22330
+  LolB: CHR29_04190
+  MetQ: CHR29_00325
+  MltA: CHR29_25420
+  MltB: CHR29_24605
+locus_tag: locus_tag
+log_directory: ../species_files/Pseudomonas_files//individual_species/CP022562/./outputs
+m-model-path: ../species_files/Pseudomonas_files//individual_species/CP022562/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- CHR29_24535-MONOMER
+out_directory: ../species_files/Pseudomonas_files//individual_species/CP022562/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: CHR29_04210-MONOMER
+  UGA: CPLX_dummy
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- CHR29_26280-MONOMER
+- CHR29_07945-MONOMER
+rna_polymerases:
+  RNAP_CHR2900630MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_00630-MONOMER
+  RNAP_CHR2902110MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_02110-MONOMER
+  RNAP_CHR2902310MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_02310-MONOMER
+  RNAP_CHR2904075MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_04075-MONOMER
+  RNAP_CHR2904880MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_04880-MONOMER
+  RNAP_CHR2905140MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_05140-MONOMER
+  RNAP_CHR2905395MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_05395-MONOMER
+  RNAP_CHR2906205MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_06205-MONOMER
+  RNAP_CHR2908710MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_08710-MONOMER
+  RNAP_CHR2908770MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_08770-MONOMER
+  RNAP_CHR2909375MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_09375-MONOMER
+  RNAP_CHR2912375MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_12375-MONOMER
+  RNAP_CHR2913005MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_13005-MONOMER
+  RNAP_CHR2914150MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_14150-MONOMER
+  RNAP_CHR2914155MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_14155-MONOMER
+  RNAP_CHR2915535MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_15535-MONOMER
+  RNAP_CHR2918250MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_18250-MONOMER
+  RNAP_CHR2918920MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_18920-MONOMER
+  RNAP_CHR2919040MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_19040-MONOMER
+  RNAP_CHR2919510MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_19510-MONOMER
+  RNAP_CHR2922035MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_22035-MONOMER
+  RNAP_CHR2922040MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_22040-MONOMER
+  RNAP_CHR2922045MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_22045-MONOMER
+  RNAP_CHR2923170MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_23170-MONOMER
+  RNAP_CHR2926100MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHR29_26100-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  CHR29_05565-MONOMER:
+    CHR29_02895: 15.5
+    CHR29_02900: 15.5
+    CHR29_03145: 23.0
+    CHR29_03295: 6.25
+    CHR29_07590: 26.0
+    CHR29_25050: 22.0
+  CHR29_27765-MONOMER:
+    CHR29_27695: 2.0

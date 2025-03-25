@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	FIU84_17040-MONOMER,FIU84_17035-MONOMER_mod_zn2(4),FIU84_17045-MONOMER
+GroEL_dependent_folding	FIU84_16155-MONOMER,FIU84_16160-MONOMER
+N_terminal_methionine_cleavage	FIU84_07340-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	FIU84_16340-MONOMER
+PrfB_mono_mediated_termination	FIU84_14060-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	FIU84_04655-MONOMER
+peptide_deformylase_processing	FIU84_00110-MONOMER_mod_fe2(1)
+ribosome_recycler	FIU84_07365-MONOMER

@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	JHW37_25600-MONOMER,JHW37_25595-MONOMER_mod_zn2(4),JHW37_25605-MONOMER
+GroEL_dependent_folding	JHW37_23480-MONOMER,JHW37_23485-MONOMER
+N_terminal_methionine_cleavage	JHW37_06575-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	JHW37_24970-MONOMER
+PrfB_mono_mediated_termination	JHW37_06355-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	JHW37_05085-MONOMER
+peptide_deformylase_processing	JHW37_00095-MONOMER_mod_fe2(1)
+ribosome_recycler	JHW37_06595-MONOMER

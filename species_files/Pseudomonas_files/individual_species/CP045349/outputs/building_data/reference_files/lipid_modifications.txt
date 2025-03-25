@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	FIV02_20185-MONOMER
+pg_pe_160	FIV02_22450-MONOMER,FIV02_20535-MONOMER

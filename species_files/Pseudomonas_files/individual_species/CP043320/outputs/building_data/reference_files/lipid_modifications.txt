@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	FXF61_01710-MONOMER
+pg_pe_160	FXF61_00200-MONOMER,FXF61_02295-MONOMER

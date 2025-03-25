@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	KCX70_15135-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	KCX70_15135-MONOMER_mod_zn2(2),generic_RNase,KCX70_16540-MONOMER,KCX70_04605-MONOMER,KCX70_16710-MONOMER_mod_mg2(4)
+rRNA_containing	KCX70_15135-MONOMER_mod_zn2(2),generic_RNase,KCX70_16540-MONOMER_mod_mg2(2),KCX70_04605-MONOMER,KCX70_16710-MONOMER_mod_mg2(4)

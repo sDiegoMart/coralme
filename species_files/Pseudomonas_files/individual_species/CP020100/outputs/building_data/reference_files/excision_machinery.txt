@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	BVH74_13085-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	BVH74_13085-MONOMER_mod_zn2(2),generic_RNase,BVH74_00405-MONOMER,BVH74_01425-MONOMER,BVH74_15630-MONOMER_mod_mg2(4)
+rRNA_containing	BVH74_13085-MONOMER_mod_zn2(2),generic_RNase,BVH74_00405-MONOMER_mod_mg2(2),BVH74_01425-MONOMER,BVH74_15630-MONOMER_mod_mg2(4)

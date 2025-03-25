@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	DCC84_04025-MONOMER,DCC84_04030-MONOMER_mod_zn2(4),DCC84_04020-MONOMER
+GroEL_dependent_folding	DCC84_27325-MONOMER,DCC84_27330-MONOMER
+N_terminal_methionine_cleavage	DCC84_06235-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	DCC84_04645-MONOMER
+PrfB_mono_mediated_termination	DCC84_06020-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	DCC84_29135-MONOMER
+peptide_deformylase_processing	DCC84_00100-MONOMER_mod_fe2(1)
+ribosome_recycler	DCC84_06255-MONOMER

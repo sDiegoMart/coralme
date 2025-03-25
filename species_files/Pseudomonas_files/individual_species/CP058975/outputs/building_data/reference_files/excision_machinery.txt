@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	HXW90_24070-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	HXW90_24070-MONOMER_mod_zn2(2),generic_RNase,HXW90_06035-MONOMER,HXW90_04965-MONOMER,HXW90_06465-MONOMER_mod_mg2(4)
+rRNA_containing	HXW90_24070-MONOMER_mod_zn2(2),generic_RNase,HXW90_06035-MONOMER_mod_mg2(2),HXW90_04965-MONOMER,HXW90_06465-MONOMER_mod_mg2(4)

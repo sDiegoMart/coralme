@@ -1,0 +1,6 @@
+rna_degradosome
+PproGo58_11720-MONOMER_mod_mg2(4)
+PproGo58_08230-MONOMER
+PproGo58_17510-MONOMER_mod_zn2(2)
+PproGo58_10190-MONOMER
+PproGo58_05560-MONOMER_mod_mg2(2)

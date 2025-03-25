@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	Pput_0761-MONOMER
+UGA	Pput_4227-MONOMER
+UAA	generic_RF

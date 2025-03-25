@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	NCTC13359_03796-MONOMER
+Tuf_gtp_regeneration	NCTC13359_01827-MONOMER

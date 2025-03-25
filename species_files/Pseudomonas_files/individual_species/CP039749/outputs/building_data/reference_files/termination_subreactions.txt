@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	FA030_24995-MONOMER,FA030_24990-MONOMER_mod_zn2(4),FA030_25000-MONOMER
+GroEL_dependent_folding	FA030_22220-MONOMER,FA030_22225-MONOMER
+N_terminal_methionine_cleavage	FA030_03855-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	FA030_24355-MONOMER
+PrfB_mono_mediated_termination	FA030_03330-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	FA030_02240-MONOMER
+peptide_deformylase_processing	FA030_29465-MONOMER_mod_fe2(1)
+ribosome_recycler	FA030_03875-MONOMER

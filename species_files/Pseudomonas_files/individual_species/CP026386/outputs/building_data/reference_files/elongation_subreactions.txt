@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	C3F42_27580-MONOMER
+Tuf_gtp_regeneration	C3F42_23520-MONOMER

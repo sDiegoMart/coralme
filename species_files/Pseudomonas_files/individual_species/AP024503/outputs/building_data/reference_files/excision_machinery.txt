@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	PproGo58_17510-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	PproGo58_17510-MONOMER_mod_zn2(2),generic_RNase,PproGo58_10440-MONOMER,PproGo58_08790-MONOMER,PproGo58_46020-MONOMER_mod_mg2(4)
+rRNA_containing	PproGo58_17510-MONOMER_mod_zn2(2),generic_RNase,PproGo58_10440-MONOMER_mod_mg2(2),PproGo58_08790-MONOMER,PproGo58_46020-MONOMER_mod_mg2(4)

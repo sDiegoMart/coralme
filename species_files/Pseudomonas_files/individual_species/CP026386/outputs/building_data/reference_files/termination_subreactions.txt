@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	C3F42_21060-MONOMER,C3F42_21065-MONOMER_mod_zn2(4),C3F42_21055-MONOMER
+GroEL_dependent_folding	C3F42_11835-MONOMER,C3F42_11840-MONOMER
+N_terminal_methionine_cleavage	C3F42_23510-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	C3F42_12845-MONOMER
+PrfB_mono_mediated_termination	C3F42_23735-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	C3F42_22685-MONOMER
+peptide_deformylase_processing	C3F42_17040-MONOMER_mod_fe2(1)
+ribosome_recycler	C3F42_23530-MONOMER

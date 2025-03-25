@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	PPTS312_48260-MONOMER,PPTS312_48250-MONOMER_mod_zn2(4),PPTS312_48270-MONOMER
+GroEL_dependent_folding	PPTS312_45850-MONOMER,PPTS312_45860-MONOMER
+N_terminal_methionine_cleavage	PPTS312_16260-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	PPTS312_12530-MONOMER
+PrfB_mono_mediated_termination	PPTS312_15740-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	PPTS312_13910-MONOMER
+peptide_deformylase_processing	PPTS312_05340-MONOMER_mod_fe2(1)
+ribosome_recycler	PPTS312_16300-MONOMER

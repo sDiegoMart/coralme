@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	HXW90_27675-MONOMER
+pg_pe_160	HXW90_29715-MONOMER,HXW90_03965-MONOMER

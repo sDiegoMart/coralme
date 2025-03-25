@@ -1,0 +1,4 @@
+subreaction	enzyme
+gtp_bound_30S_assembly_factor_phase1	HAV28_20180-MONOMER
+RbfA_mono_assembly_factor_phase1	HAV28_21820-MONOMER
+RimM_mono_assembly_factor_phase1	HAV28_05640-MONOMER

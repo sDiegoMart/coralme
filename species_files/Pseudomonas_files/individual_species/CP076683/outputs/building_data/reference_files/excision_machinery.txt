@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	KQ248_19265-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	KQ248_19265-MONOMER_mod_zn2(2),generic_RNase,KQ248_20635-MONOMER,KQ248_09590-MONOMER,KQ248_20775-MONOMER_mod_mg2(4)
+rRNA_containing	KQ248_19265-MONOMER_mod_zn2(2),generic_RNase,KQ248_20635-MONOMER_mod_mg2(2),KQ248_09590-MONOMER,KQ248_20775-MONOMER_mod_mg2(4)

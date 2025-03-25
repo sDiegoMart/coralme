@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	PproGo58_08030-MONOMER,PproGo58_08040-MONOMER_mod_zn2(4),PproGo58_08020-MONOMER
+GroEL_dependent_folding	PproGo58_45840-MONOMER,PproGo58_45850-MONOMER
+N_terminal_methionine_cleavage	PproGo58_11500-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	PproGo58_48740-MONOMER
+PrfB_mono_mediated_termination	PproGo58_11080-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	PproGo58_08500-MONOMER
+peptide_deformylase_processing	PproGo58_00230-MONOMER_mod_fe2(1)
+ribosome_recycler	PproGo58_11540-MONOMER

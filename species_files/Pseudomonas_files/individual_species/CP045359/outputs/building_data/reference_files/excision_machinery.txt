@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,FIU98_07380-MONOMER,FIU98_04390-MONOMER,FIU98_06985-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,FIU98_07380-MONOMER_mod_mg2(2),FIU98_04390-MONOMER,FIU98_06985-MONOMER_mod_mg2(4)

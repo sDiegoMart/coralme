@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,NCTC13359_05255-MONOMER,NCTC13359_05578-MONOMER,NCTC13359_01961-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,NCTC13359_05255-MONOMER_mod_mg2(2),NCTC13359_05578-MONOMER,NCTC13359_01961-MONOMER_mod_mg2(4)

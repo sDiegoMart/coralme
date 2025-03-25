@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	CHN49_24570-MONOMER
+pg_pe_160	CHN49_26395-MONOMER,CHN49_03165-MONOMER

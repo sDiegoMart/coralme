@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	CS390_21360-MONOMER
+pg_pe_160	CS390_01405-MONOMER,CS390_20650-MONOMER

@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	HAV28_21915-MONOMER,HAV28_21910-MONOMER_mod_zn2(4),HAV28_21920-MONOMER
+GroEL_dependent_folding	HAV28_20730-MONOMER,HAV28_20735-MONOMER
+N_terminal_methionine_cleavage	HAV28_06025-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	HAV28_03845-MONOMER
+PrfB_mono_mediated_termination	HAV28_05825-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	HAV28_04920-MONOMER
+peptide_deformylase_processing	HAV28_00110-MONOMER_mod_fe2(1)
+ribosome_recycler	HAV28_06045-MONOMER

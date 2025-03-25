@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	FXF61_09800-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	FXF61_09800-MONOMER_mod_zn2(2),generic_RNase,FXF61_07265-MONOMER,FXF61_10330-MONOMER,FXF61_05370-MONOMER_mod_mg2(4)
+rRNA_containing	FXF61_09800-MONOMER_mod_zn2(2),generic_RNase,FXF61_07265-MONOMER_mod_mg2(2),FXF61_10330-MONOMER,FXF61_05370-MONOMER_mod_mg2(4)

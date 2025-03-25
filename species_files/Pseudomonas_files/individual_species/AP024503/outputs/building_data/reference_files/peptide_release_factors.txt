@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	PproGo58_48740-MONOMER
+UGA	PproGo58_11080-MONOMER
+UAA	generic_RF

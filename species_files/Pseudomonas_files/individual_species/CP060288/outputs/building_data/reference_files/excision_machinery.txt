@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	H7683_18280-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	H7683_18280-MONOMER_mod_zn2(2),generic_RNase,H7683_17550-MONOMER,H7683_14720-MONOMER,H7683_17115-MONOMER_mod_mg2(4)
+rRNA_containing	H7683_18280-MONOMER_mod_zn2(2),generic_RNase,H7683_17550-MONOMER_mod_mg2(2),H7683_14720-MONOMER,H7683_17115-MONOMER_mod_mg2(4)

@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	A0T30_18105-MONOMER
+Translation_initiation_factor_InfA	A0T30_13200-MONOMER
+Translation_initiation_factor_InfC	A0T30_13655-MONOMER
+fmet_addition_at_START	A0T30_18105-MONOMER,A0T30_02110-MONOMER_mod_mg2(1)_mod_k(1)

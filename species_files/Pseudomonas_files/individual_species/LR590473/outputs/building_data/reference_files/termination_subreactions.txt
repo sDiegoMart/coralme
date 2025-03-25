@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	NCTC13359_06028-MONOMER,NCTC13359_06027-MONOMER_mod_zn2(4),NCTC13359_06029-MONOMER
+GroEL_dependent_folding	NCTC13359_05479-MONOMER,NCTC13359_05480-MONOMER
+N_terminal_methionine_cleavage	NCTC13359_01824-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	NCTC13359_05902-MONOMER
+PrfB_mono_mediated_termination	NCTC13359_01726-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	NCTC13359_01509-MONOMER
+peptide_deformylase_processing	NCTC13359_00386-MONOMER_mod_fe2(1)
+ribosome_recycler	NCTC13359_01829-MONOMER

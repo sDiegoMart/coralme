@@ -1,0 +1,4 @@
+subreaction	enzyme
+gtp_bound_30S_assembly_factor_phase1	FIU24_08475-MONOMER
+RbfA_mono_assembly_factor_phase1	FIU24_04690-MONOMER
+RimM_mono_assembly_factor_phase1	FIU24_26485-MONOMER

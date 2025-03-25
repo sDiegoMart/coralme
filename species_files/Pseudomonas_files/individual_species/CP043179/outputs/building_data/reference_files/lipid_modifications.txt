@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	FQ342_15025-MONOMER
+pg_pe_160	FQ342_12690-MONOMER,FQ342_15585-MONOMER

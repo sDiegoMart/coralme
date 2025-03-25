@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	OU9_04860-MONOMER,OU9_04859-MONOMER_mod_zn2(4),OU9_04861-MONOMER
+GroEL_dependent_folding	OU9_04456-MONOMER,OU9_04457-MONOMER
+N_terminal_methionine_cleavage	OU9_03699-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	OU9_04749-MONOMER
+PrfB_mono_mediated_termination	OU9_03743-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	OU9_03952-MONOMER
+peptide_deformylase_processing	OU9_00019-MONOMER_mod_fe2(1)
+ribosome_recycler	OU9_03694-MONOMER

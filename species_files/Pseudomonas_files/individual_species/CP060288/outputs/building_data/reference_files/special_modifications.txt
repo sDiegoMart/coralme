@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	H7683_01060-MONOMER
+fes_chaperones	CPLX_dummy
+fes_transfer	H7683_06400-MONOMER,H7683_03725-MONOMER
+generic_2fe2s_transfer_complex	H7683_06400-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	H7683_06400-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

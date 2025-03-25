@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	DCC84_29900-MONOMER
+pg_pe_160	DCC84_32145-MONOMER,DCC84_29400-MONOMER

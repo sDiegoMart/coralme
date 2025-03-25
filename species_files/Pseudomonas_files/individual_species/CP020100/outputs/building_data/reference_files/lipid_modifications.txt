@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	BVH74_09240-MONOMER
+pg_pe_160	BVH74_07525-MONOMER,BVH74_08480-MONOMER

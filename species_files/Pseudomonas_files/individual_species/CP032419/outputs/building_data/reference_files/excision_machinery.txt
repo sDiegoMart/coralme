@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,D3880_16795-MONOMER,D3880_18600-MONOMER,D3880_16490-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,D3880_16795-MONOMER_mod_mg2(2),D3880_18600-MONOMER,D3880_16490-MONOMER_mod_mg2(4)

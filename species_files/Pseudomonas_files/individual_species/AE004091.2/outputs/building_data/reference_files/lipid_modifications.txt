@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	PA3984-MONOMER
+pg_pe_160	PA0341-MONOMER,PA4559-MONOMER

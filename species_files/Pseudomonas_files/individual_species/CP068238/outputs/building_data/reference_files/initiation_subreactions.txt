@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	JHW37_25505-MONOMER
+Translation_initiation_factor_InfA	JHW37_12260-MONOMER
+Translation_initiation_factor_InfC	JHW37_11695-MONOMER
+fmet_addition_at_START	JHW37_25505-MONOMER,JHW37_00090-MONOMER_mod_mg2(1)_mod_k(1)

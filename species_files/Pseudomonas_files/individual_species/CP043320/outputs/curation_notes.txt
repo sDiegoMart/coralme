@@ -1,0 +1,2620 @@
+
+#################### critical@org.check_m_model ####################
+********** Some metabolites have a problematic formula. If these metabolites are used in protein modifications, or other subreactions, it will cause an error.
+The following items triggered the warning:
+3hdecACP_c
+ACP_c
+3hddecACP_c
+3hcddec5eACP_c
+3hmrsACP_c
+3hcmrs7eACP_c
+3hhexACP_c
+3hoctACP_c
+tdec2eACP_c
+tddec2eACP_c
+t3c5ddeceACP_c
+tmrs2eACP_c
+t3c7mrseACP_c
+3hpalmACP_c
+tpalm2eACP_c
+3hcpalm9eACP_c
+t3c9palmeACP_c
+3hoctaACP_c
+toctd2eACP_c
+3hcvac11eACP_c
+t3c11vaceACP_c
+3haACP_c
+but2eACP_c
+thex2eACP_c
+toct2eACP_c
+3odecACP_c
+3oddecACP_c
+3ocddec5eACP_c
+3omrsACP_c
+3ocmrs7eACP_c
+3opalmACP_c
+3ocpalm9eACP_c
+3ooctdACP_c
+3ocvac11eACP_c
+actACP_c
+3ohexACP_c
+3ooctACP_c
+malACP_c
+ocACP_c
+dcaACP_c
+cdec3eACP_c
+ddcaACP_c
+cddec5eACP_c
+myrsACP_c
+tdeACP_c
+palmACP_c
+hdeACP_c
+butACP_c
+hexACP_c
+octeACP_c
+ocdcaACP_c
+acACP_c
+trdox_c
+trdrd_c
+flxr_c
+flxso_c
+glutrna_c
+trnaglu_c
+grxox_c
+grxrd_c
+moadamp_c
+moadcosh_c
+moadcoo_c
+2hddACP_c
+iscu_4fe4s_c
+iscu_c
+iscu_2fe2s_c
+sufse_c
+sufsesh_c
+iscs_c
+iscssh_c
+iscu_2fe2s2_c
+pc_EC_c
+pa_EC_c
+cdpdag_BS_c
+histrna_c
+trnahis_c
+mettrna_c
+trnamet_c
+trnatrp_c
+trptrna_c
+leutrna_c
+trnaleu_c
+trnatyr_c
+tyrtrna_c
+argtrna_c
+trnaarg_c
+thrtrna_c
+trnathr_c
+fdxo_22_c
+fdxr_22_c
+trnaasp_c
+trnaasp_preq34_c
+trnatyr_preq34_c
+trnahis_preq34_c
+trnatyrqo_c
+trnatyrq_c
+trnaaspqo_c
+trnaaspq_c
+trnahisqo_c
+trnahisq_c
+apoACP_c
+
+**********Solution:
+Correct the formulas of the listed metabolites. Some metabolite formulas are critical for the completion of this pipeline. If homology is ON, this pipeline will try to fill in the formulas from the reference.
+
+#################### high@org.check_m_model ####################
+********** Some reactions are missing their subsystem
+The following items triggered the warning:
+3HAD100
+3HAD120
+3HAD121
+3HAD140
+3HAD141
+3HAD160
+3HAD161
+3HAD180
+3HAD181
+3HAD40
+3HAD60
+3HAD80
+3HBCOAHL
+3MBt2pp
+3MBtex
+3OAR100
+3OAR120
+3OAR121
+3OAR140
+3OAR141
+3OAR160
+3OAR161
+3OAR180
+3OAR181
+3OAR40
+3OAR60
+3OAR80
+3OAS100
+3OAS120
+3OAS121
+3OAS140
+3OAS141
+3OAS160
+3OAS161
+3OAS180
+3OAS181
+3OAS60
+3OAS80
+3OXOADPt_ex
+3PEPTabcpp
+4CMLCL_kt
+4HTHRS
+4PEPTabcpp
+5DOAN
+A5PISO
+AACPS1
+AACPS2
+AACPS3
+AACPS4
+AACPS5
+AACPS6
+AACPS7
+AACPS8
+AACPS9
+AADSACYCL
+ABUTtex
+ACACT1r
+ACACT2r
+ACACT3r
+ACACT4r
+ACACT7r
+ACACT8r
+ACCOAC
+ACGK
+ACGS
+ACHBS
+ACKr
+ACLS
+ACOAD7f
+ACOAD8f
+ACOATA
+ACODA
+ACONTa
+ACONTb
+ACOTA
+ACt4pp
+ACtex
+ADA
+ADCL
+ADEt2rpp
+ADEtex
+ADK1irr
+ADMDC
+ADNCYC
+ADPT
+ADSK
+ADSL1r
+ADSL2r
+ADSS
+AGM3PA
+AGM3PApp
+AGM3PH
+AGM3Pt2pp
+AGM4PA
+AGM4PApp
+AGM4PH
+AGM4Pt2pp
+AGMH
+AGMHE
+AGMt2pp
+AGPAT120
+AGPAT140
+AGPAT141
+AGPAT160
+AGPAT161
+AGPAT180
+AGPAT181
+AGPR
+AHCi
+AHSERL2
+AICART
+AIRCr
+AKGtex
+ALAabcpp
+ALAALAr
+ALAR
+ALAt4pp
+ALATA_L
+ALAtex
+ALCD19
+ALDD2x
+ALLTNtex
+AM3PA
+AM4PA
+AMPTASECG
+AMPTASEPG
+ANPRT
+ANS
+AOXHEXCYCL
+AP4AH
+APG3PAT120
+APG3PAT140
+APG3PAT141
+APG3PAT160
+APG3PAT161
+APG3PAT180
+APG3PAT181
+APRAUR
+APSR
+ARBtex
+ARGSL
+ARGSS
+ASNS1
+ASP1DC
+ASPCT
+ASPK
+ASPO1
+ASPO6
+ASPT
+ASPTA
+ASPtex
+ATPHs
+ATPPRT
+BMOCOS
+BPNT
+BUTCT
+BZtex
+CA2tex
+CBMD
+CD2tex
+CD2tpp
+CDGUNPD
+CDPMEK
+CHLt2pp
+CHOLS_ex
+CHORM
+CHORS
+CHRPL
+CLPNH120pp
+CLPNH140pp
+CLPNH141pp
+CLPNH160pp
+CLPNH161pp
+CLPNH180pp
+CLPNH181pp
+CLPNS120pp
+CLPNS140pp
+CLPNS141pp
+CLPNS160pp
+CLPNS161pp
+CLPNS180pp
+CLPNS181pp
+CLtex
+CMtex
+CMtpp
+CO2tex
+CO2tpp
+COBALT2tex
+COBALT2tpp
+CPMPS
+CPPPGO
+CREStex
+CRNtex
+CRO4abcpp
+CS
+CSNtex
+CTECOAI6
+CTECOAI7
+CTECOAI8
+CTPS1
+CTPS2
+CU2tex
+CU2tpp
+CUtex
+CYO1_KT
+CYSS
+CYTK1
+CYTK2
+DAAD
+DADA
+DADK
+DAGK120
+DAGK140
+DAGK141
+DAGK160
+DAGK161
+DAGK180
+DAGK181
+DALAt2pp
+DAPDC
+DAPE
+DASYN120
+DASYN140
+DASYN141
+DASYN160
+DASYN161
+DASYN180
+DASYN181
+DB4PS
+DCTPD
+DCTPD2
+DDPA
+DGK1
+DHAD1
+DHAD2
+DHBS
+DHDPRy
+DHDPS
+DHFR
+DHFS
+DHNPA_1
+DHORTS
+DHPPDA
+DHQS
+DHQTi
+DKMPPD2_PA
+D_LACtex
+DMATT
+DMPPS
+DPCOAK
+DPR
+DRIBtpp
+DTMPK
+DURIPP
+DUTPDP
+DXPRIi
+DXPS
+E4PD
+EAR100x
+EAR120x
+EAR121x
+EAR140x
+EAR141x
+EAR160x
+EAR161x
+EAR180x
+EAR181x
+EAR40x
+EAR60x
+EAR80x
+ECOAH1
+ECOAH2
+ECOAH3
+ECOAH4
+ECOAH5
+ECOAH6
+ECOAH7
+ECOAH8
+EDA
+EDD
+ENO
+ETHAtex
+ETOHtex
+ETOHtrpp
+FACOAE100
+FACOAE120
+FACOAE140
+FACOAE141
+FACOAE160
+FACOAE161
+FACOAE180
+FACOAE181
+FACOAE60
+FACOAE80
+FACOAL100t2pp
+FACOAL120t2pp
+FACOAL140
+FACOAL140t2pp
+FACOAL141t2pp
+FACOAL160
+FACOAL160t2pp
+FACOAL161
+FACOAL161t2pp
+FACOAL180t2pp
+FACOAL181
+FACOAL181t2pp
+FACOAL60t2pp
+FACOAL80t2pp
+FALDH2
+FALGTHLs
+FBA
+FBP
+FCLT
+FE2tex
+FE2tpp
+FE3abcpp
+FE3DHBZR
+FEENTER2tpp
+FEENTERtex
+FEROpp
+FMNAT
+FOLD3
+FORtex
+FTHFD
+FUM
+FUMtex
+G1PACT
+G1SAT
+G2PP
+G3PAT120
+G3PAT140
+G3PAT141
+G3PAT160
+G3PAT161
+G3PAT180
+G3PAT181
+G3PCabcpp
+G3PCtex
+G3PD2i
+G3PEabcpp
+G3PGabcpp
+G3PIabcpp
+G3PItex
+G3PSabcpp
+G3PStex
+G5SADs
+G5SD
+G6PBDH
+G6PDH2rirr
+G6PI
+GALabcpp
+GALCTNtex
+GALCTtex
+GALUi
+GALURt2rpp
+GALURtex
+GAPD
+GARFT
+GART
+GCALDD
+GDPDPK
+GF6PTA
+GHMT2r
+GK1
+GLCDpp
+GLCNt2rpp
+GLCOAS
+GLCOASYNT
+GLCRtex
+GLCS1
+GLCtex
+GLCURt2rpp
+GLCURtex
+GLGC
+GLNS
+GLU5K
+GLUCYS
+GLUDyirr
+GLUPRT
+GLUR
+GLUSx
+GLUSy
+GLUTRR
+GLUTRS
+GLYALDDr
+GLYALDtex
+GLYBt2pp
+GLYBtex
+GLYC2Ptex
+GLYCLTt4pprev
+GLYCtex
+GLYK
+GMHEPAT
+GMHEPK
+GMHEPPA
+GMPS2
+GNK
+GPDDA1
+GPDDA2
+GPDDA3
+GPDDA4
+GPDDA5
+GRTT
+GRXR
+GTHOr
+GTHPi
+GTHRDabc2pp
+GTHRDabcpp
+GTHS
+GTPCI
+GTPCII
+GTPDPDP
+GTPDPK
+GTPHs
+GUAPRT
+H2Otex
+H2Otpp
+H2tex
+H2tpp
+HACD8i
+HACD9
+HBZOPT
+HCO3E
+HG2tex
+HISTD
+HISTP
+HMBS
+HMPK1
+HOMtex
+HPAtex
+HPPK
+HSERTA
+HSK
+HSTPT
+Htex
+HXPRT
+HYXNtex
+ICDHyr
+ICL
+IG3PS
+IGPDH
+IGPS
+ILEabcpp
+ILEt2rpp
+ILETA
+ILEtex
+IMPC
+IMPD
+INSTtex
+IPDPS
+IPMD
+IPPMIa
+IPPMIb
+IPPS
+KARA1
+KARA2
+KAS13
+KAS14
+KAS15
+Kt3pp
+Ktex
+LCADi
+LEUabcpp
+LEUt2rpp
+LEUTAi
+LEUtex
+LGTHL
+L_LACtex
+LPADSS
+LYSabcpp
+LYSt3pp
+MALS
+MALtex
+MALTHXtexi
+MCITL2
+MCITS
+MCOATA
+MCTP1App
+MCTP1Bpp
+MCTP2App
+MDDCP1pp
+MDDCP2pp
+MDDCP3pp
+MDDCP4pp
+MDDCP5pp
+MDDEP1pp
+MDDEP2pp
+MDDEP3pp
+MDDEP4pp
+MDRPD
+MECDPDH2
+MECDPS
+MELIBt2pp
+MEOHtex
+MEOHtrpp
+MEPCT
+METAT
+METOX1s
+METOX2s
+METS
+METSOXR1
+METSOXR2
+MG2tex
+MG2tpp
+MI1PP
+MICITDr
+MLDCP1App
+MLDCP3App
+MLTGY1pp
+MLTGY2pp
+MLTGY3pp
+MLTGY4pp
+MNtex
+MOBDtex
+MOCOS
+MOHMT
+MPTAT
+MPTSS
+MTAP
+MTHFC
+MTHFR3
+MTRI
+NADDP
+NADK
+NADTRHD
+NAtex
+NDPK1
+NDPK2
+NDPK3
+NDPK4
+NDPK5
+NDPK6
+NDPK7
+NDPK8
+NH4t4pp
+NH4tex
+NH4tpp
+NI2tex
+NI2uabcpp
+NMNHYD
+NNATr
+NNDPR
+NO2tex
+NOtex
+NOtpp
+NTD1
+NTD10
+NTD11
+NTD2
+NTD3
+NTD4
+NTD5
+NTD6
+NTD7
+NTD8
+NTD9
+NTP1
+NTPP11
+NTPP9
+NTPTP1
+O2tpp
+OAAtex
+OCBT
+OCDCAt2pp
+OCDCEAt2pp
+OCOAT1
+OCTDPS
+OMCDC
+OMPDC
+OPHBDC
+OPHHX
+ORNabcpp
+ORNDC
+ORNTAC
+OROTtex
+ORPT
+OXOADLR
+OXPTNDH
+P5CR
+PA120abcpp
+PA140abcpp
+PA141abcpp
+PA160abcpp
+PA161abcpp
+PA180abcpp
+PA181abcpp
+PANTS
+PAPPT3
+PAPSR
+PAPSR2
+PDE4
+PDHbr
+PDHcr
+PDX5POi
+PDX5PS
+PE120abcpp
+PE160abcpp
+PE161abcpp
+PE180abcpp
+PE181abcpp
+PERD
+PG160abcpp
+PG161abcpp
+PG180abcpp
+PG181abcpp
+PGAMT
+PGCD
+PGI
+PGK
+PGM
+PGMT
+PGP120abcpp
+PGP140abcpp
+PGP141abcpp
+PGP160abcpp
+PGP161abcpp
+PGP180abcpp
+PGP181abcpp
+PGPP120
+PGPP120pp
+PGPP140pp
+PGPP141pp
+PGPP160
+PGPP160pp
+PGPP161
+PGPP161pp
+PGPP180
+PGPP180pp
+PGPP181
+PGPP181pp
+PGSA120
+PGSA140
+PGSA141
+PGSA160
+PGSA161
+PGSA180
+PGSA181
+PHEMEabcpp
+PHEMEtiex
+PHETA1
+PHEtex
+PIt2rpp
+PItex
+PLIPA2E160pp
+PLIPA2E180pp
+PLIPA2G160pp
+PMANM
+PMDPHT
+PMPK
+PNTK
+POAACR
+PPA
+PPAKrirr
+PPAtex
+PPBNGS
+PPC
+PPCDC
+PPCK
+PPGPPDP
+PPK2r
+PPKr
+PPNCL
+PPND
+PPNDH
+PPPNt2rpp
+PPPNtex
+PPS
+PPTtex
+PRAGSr
+PRAIi
+PRAIS
+PRAMPC
+PRASCSi
+PRATPP
+PRFGS
+PRMICI
+PROt4pp
+PRPPSirr
+PSCVT
+PSD120
+PSD160
+PSD161
+PSD180
+PSD181
+PSP_L
+PSSA120
+PSSA160
+PSSA161
+PSSA180
+PSSA181
+PTA2
+PTPATi
+PTRCabcpp
+PYAM5PO
+PYDXNO
+PYDXO
+PYK
+PYRtex
+QULNS
+RBFK
+RBFSa
+RBFSb
+RHACOAR100
+RHACOAR120
+RHACOAR140
+RHACOAR60
+RHACOAR80
+RIBtex
+RPE
+RPI
+S7PI
+SADT
+SALCHS4abcpp
+SALCHS4FER3
+SALCHS4tex
+SCYSSL
+SDPDS
+SDPTA
+SERAT
+SFGTHi
+SHCHD2
+SHCHF
+SHK3Dr
+SHKK
+SHSL1
+SHSL4r
+SLCYSS
+SO3abcpp
+SO3tex
+SO4tex
+SPMDabcpp
+SPMS
+SSALy
+SUCCtex
+SULabcpp
+SULR
+T2DECAI
+TALA
+TARTRDtex
+TDP
+TDSK_PA
+THD2pp
+THDPS
+THIORDXi
+THRabcpp
+THRD_L
+THRS
+TKT1
+TKT2
+TMDS
+TMPK
+TMPPP_PA
+TOLtex
+TPI
+TRDR
+TRPS1
+TRPS2
+TRPtex
+TSULabcpp
+TSULtex
+TTRCYCtex
+TTRCYCtpp
+TYRTA
+U23GAAT
+UAAGDS
+UAGCVT
+UAGDP
+UAGPT3
+UAMAGS
+UAMAS
+UAPGR
+UDCPDP
+UDCPPtppi
+UDPG4E
+UGMDDS
+UHGADA
+UM3PL
+UM4PL
+UMPK
+UPP3MT
+UPP3S
+UPPDC1
+UREAtex
+URIt2pp
+USHD
+VALabcpp
+VALt2rpp
+VALTA
+VALtex
+XANt2pp
+XANtex
+XPPT
+XYLK
+Zn2tex
+ZNabcpp
+EX_glc__D_e
+EX_h2o_e
+EX_h_e
+EX_2pglyc_e
+EX_34dhbz_e
+EX_leu__L_e
+EX_3hoxpac_e
+EX_3mb_e
+EX_3oxoadp_e
+EX_4hba_e
+EX_4hbz_e
+EX_ala__L_e
+EX_cl_e
+EX_arab__L_e
+EX_4abut_e
+EX_acac_e
+EX_acald_e
+EX_acgam_e
+EX_ac_e
+EX_chol_e
+EX_acon_C_e
+EX_pi_e
+EX_actn__R_e
+EX_adn_e
+EX_ins_e
+EX_nh4_e
+EX_ade_e
+EX_ad_e
+EX_akg_e
+EX_mal__L_e
+EX_ala__D_e
+EX_gln__L_e
+EX_gly_e
+EX_ser__L_e
+EX_thr__L_e
+EX_arg__L_e
+EX_alltn_e
+EX_cgly_e
+EX_malt_e
+EX_malttr_e
+EX_fe3_e
+EX_lys__L_e
+EX_orn_e
+EX_asp__L_e
+EX_phe__L_e
+EX_k_e
+EX_pro__L_e
+EX_ala_B_e
+EX_cellb_e
+EX_meoh_e
+EX_buts_e
+EX_butso3_e
+EX_but_e
+EX_bz_e
+EX_ca2_e
+EX_15dap_e
+EX_chols_e
+EX_cit_e
+EX_mg2_e
+EX_mn2_e
+EX_cobalt2_e
+EX_zn2_e
+EX_succ_e
+EX_for_e
+EX_co2_e
+EX_4crsol_e
+EX_crn_e
+EX_csn_e
+EX_cu2_e
+EX_cu_e
+EX_cynt_e
+EX_o2_e
+EX_glu__L_e
+EX_dad_2_e
+EX_dca_e
+EX_ddca_e
+EX_2ddglcn_e
+EX_lac__D_e
+EX_dms_e
+EX_dmso_e
+EX_drib_e
+EX_ser__D_e
+EX_galur_e
+EX_hdca_e
+EX_hdcea_e
+EX_ocdca_e
+EX_ocdcea_e
+EX_ttdca_e
+EX_etha_e
+EX_ethso3_e
+EX_etoh_e
+EX_h2_e
+EX_fe2_e
+EX_fe3dcit_e
+EX_fe3dhbzs_e
+EX_enter_e
+EX_feenter_e
+EX_fru_e
+EX_fum_e
+EX_g3pc_e
+EX_g3pi_e
+EX_g3ps_e
+EX_gal_e
+EX_galctn__D_e
+EX_galct__D_e
+EX_gam_e
+EX_glcr_e
+EX_glcur_e
+EX_glyc3p_e
+EX_glyald_e
+EX_glyb_e
+EX_glyc2p_e
+EX_glyclt_e
+EX_glyc_e
+EX_gsn_e
+EX_gua_e
+EX_h2s_e
+EX_pheme_e
+EX_hexs_e
+EX_his__L_e
+EX_hom__L_e
+EX_4hphac_e
+EX_hxan_e
+EX_hxa_e
+EX_taur_e
+EX_icit_e
+EX_ile__L_e
+EX_indole_e
+EX_inost_e
+EX_isetac_e
+EX_lcts_e
+EX_Lcyst_e
+EX_lac__L_e
+EX_malthp_e
+EX_malthx_e
+EX_maltpt_e
+EX_maltttr_e
+EX_man1p_e
+EX_man_e
+EX_met__L_e
+EX_mobd_e
+EX_mso3_e
+EX_nmn_e
+EX_no2_e
+EX_rnam_e
+EX_no3_e
+EX_no_e
+EX_uri_e
+EX_oaa_e
+EX_octa_e
+EX_orot_e
+EX_pac_e
+EX_pdima_e
+EX_ppa_e
+EX_ppoh_e
+EX_pppn_e
+EX_ppt_e
+EX_progly_e
+EX_ptrc_e
+EX_pyr_e
+EX_so4_e
+EX_urate_e
+EX_trp__L_e
+EX_tyr__L_e
+EX_val__L_e
+EX_spmd_e
+EX_urea_e
+EX_rib__D_e
+EX_salchs4fe_e
+EX_salchs4_e
+EX_sbt__D_e
+EX_skm_e
+EX_so3_e
+EX_sulfac_e
+EX_tartr__D_e
+EX_tol_e
+EX_tre_e
+EX_tsul_e
+EX_ttdcea_e
+EX_ura_e
+EX_vanln_e
+EX_vanlt_e
+EX_xan_e
+EX_xtsn_e
+EX_xyl__D_e
+ATPM
+EX_na1_e
+EX_cd2_e
+EX_ni2_e
+PYRt2rpp
+RHA40tex
+ASNtex
+EX_cys__L_e
+EX_dcyt_e
+EX_hg2_e
+EX_tungs_e
+EX_slnt_e
+EX_sel_e
+EX_pnto__R_e
+EX_cbl1_e
+EX_thymd_e
+EX_nac_e
+EX_4abzglu_e
+ADCS
+EX_thm_e
+EX_dad_5_e
+PPM
+R1PK
+DHORDfum
+DHORD2
+OMMBLHX
+DMQMT
+OMBZLM
+OMPHHX
+GLYCL
+ECOAH9ir
+ASAD
+SPODMpp
+R05219
+CYRDAAT
+ADCYRS
+CBIAT
+ME1
+ME2
+CAT
+DBTS
+ACGAMT
+AMAOTr
+EX_pqs_e
+APPLDHr
+AOBUTDs
+rxn13107
+rxn12880
+rxn12892
+rxn05003
+rxn13044
+rxn05028
+rxn12879
+rxn13108
+rxn05034
+rPY00162
+rPY00163
+rPY00164
+rPY00165
+rPY00166
+rPY00167
+rPY00168
+rPY00169
+rPY00170
+rPY00171
+rPY00172
+rPY00173
+rPY00174
+rPY00175
+rPY00176
+rPY00177
+rPY00184
+rPY00180
+rPY00183
+rPY00182
+rxn10199
+rxn03395
+rxn12562
+rxn01734
+rJB00258
+rJB00271
+rJB00259i
+rxn00177
+rxn13924
+rxn05092
+rxn05091
+rxn13890
+rxn10062
+UPPRT
+PSERTr
+OHPBAT
+SUCOASr
+EX_acolipa_e
+EX_colipa_e
+EX_gm1lipa_e
+I4FE4ST
+I2FE2ST
+LIPOS
+BTS5
+ICYSDS
+I2FE2SR
+THZPSN3_PA
+I2FE2SS2
+AMPMS2
+CBPS
+ACACT5r
+LIPOCT
+KDOPS
+KDOPP
+KDOCT2
+K2L4Aabcpp
+EX_kdo2lipid4_e
+PTAr
+TDPGDH
+G1PTT
+TDPDRE
+TDPDRR
+UDCPDPS
+EX_enlipa_e
+EX_lipa_cold_e
+EX_lipa_e
+EX_aso4_e
+ASO3tex
+EX_aso3_e
+MINCYCtpp
+RFAMPtpp
+NOVBCNtpp
+DOXRBCNtpp
+FUSAtpp
+RFAMPtex
+NOVBCNtex
+ECOAH12
+FDHr
+FDH4pp
+TRPS3
+PGLYCP
+GLNtex
+rxn13909
+rxn02569
+rxn04093
+rJB00285
+rxn13873
+rJB00237
+HISTRS
+METTRS
+TRPTRS
+LEUTRS
+PPItex_1
+TYRTRS
+ARGTRS
+THRTRS
+EX_ppi_e
+2DHGLCNtex
+EX_mal__D_e
+MALDtex
+DINStex
+EX_din_e
+DURItex
+EX_duri_e
+CYTDtex
+EX_cytd_e
+THMtex
+DGSNtex
+EX_dgsn_e
+DCYTtex
+ASCBtex
+AOXSr
+THMPPi
+ACLS_a
+ACLS_d
+rPY00221
+rPY00222
+rxn13866
+rxn13867
+rxn13868
+rxn13869
+rxn13870
+rxn13871
+rxn13876
+SUCD4i
+THMMPtex
+THMPPtex
+SUCD4i_q9
+RNTR1_for
+RNTR2_for
+RNTR3_for
+RNTR4_for
+BTDDtex
+BTDDtpp
+AKGDa
+AKGDb
+rxn13878
+rxn13879
+BTDD_SStex
+BTDDtpp_SS
+BTDD_mesotex
+BTDDtpp_meso
+I2FE2SS2fdx
+I2FE2SSfdx
+FRDO4r
+FRDO7r
+I4FE4SRfdx
+SOTA
+rxn00779
+NMNATr
+NMNDA
+MACCOAT
+HACD5i
+HACD1i
+HACD2i
+HACD3i
+HACD4i
+HACD6i
+HACD7i
+MTHFD
+GLCNtex
+PYNP2r
+AKP1_2
+GLYCOX1_PA
+GLYCOX2_PA
+TENI
+UACGAMDH2
+rxn00689
+rxn00611
+PUNP1
+SUCDi
+SUCDi_q9
+CDGR
+TGTASE3
+TGTASE2
+TGTASE1
+QUEA2
+QOR2
+QUEA3
+QOR3
+QUEA1
+QOR1
+OHCUDC2
+UNK3
+ACACT6r
+DAPAT
+PPRDNDH
+UAGAAT2_1
+HSDy
+rxn08229
+rxn08230
+rxn08231
+rxn08232
+H2St1pp
+H2Stex
+METtex
+METabcpp
+FEENTERexs
+PAPA181
+PAPA161
+URAt2pp
+URAtex
+SKMt2pp
+SKMtex
+METDtex
+SO4t4pp_1
+ALCD1_ros
+DODECtpp
+DODECtex
+TETDECtpp
+TETDECtex
+HEXDECtpp
+HEXDECtex
+O2tex
+ADNt2pp
+SERtex
+ORNtex
+BUTtex
+DALAtex
+ACGLUtex
+ACGLUtpp
+DHMPTR
+DHNPTE
+3OADPCOAT
+PPAt4pp
+GLYBCOAT
+AGODH
+OXACT
+OXAtpp
+OXFOtex
+EX_oxa_e
+NO3R1pp_q8
+NO3R1pp_q9
+NO3t2pp
+NO3tex
+NTRIR2x
+NODOx
+NODOy
+NODOx2
+NODOy2
+NADNAQ_q8
+NADNAQ_q9
+ASPO3
+ASPO5
+MTHFR2
+GLYCLTtex
+DHBSH
+PSD140
+PSD141
+PSSA140
+PSSA141
+PLIPA2E120pp
+PLIPA2E161pp
+RHACOAR101
+RHACOAR142
+RHACOARP70
+RHACOAR70
+RHACOARP80
+RHACOAR121d5
+RHACOARP90
+RHACOARP60
+RHACOAR121d6
+RHACOAR90
+RHACOART60
+RHACOAR141d5
+RHACOAR141d7
+RHACOARP40
+RHACOARP50
+RHACOARP100
+rxn12880_pphn
+rxn13107_pphn
+rxn13108_pphn
+GLCDpp_q9
+FDH4pp_q9
+ASPO3_q9
+PYOH2tex
+PYOtex
+SPODMex
+NADHPYO
+H2O2tex
+EX_pyoh2
+EX_5mepca
+EX_pcah2
+PCAtex
+PCAH2tex
+TYMtex
+TYRDH
+4HALDD
+FE3DCITCH
+FE3DCITR2
+FE3DCITR3
+TYMtpp
+CYTCBB4pp_1
+CYTCBB4pp_2
+CYTCBB4pp_3
+rxn13796
+NADPHPYO
+rxn13912
+rxn13926
+rxn13833
+rJB00277
+rxn00295
+ACACtex
+BALAtex
+FRUtex
+PTRCtex
+SPMDtex
+EX_n2_e
+EX_glx_e
+EX_f6p_e
+EX_g6p_e
+EX_g1p_e
+EX_2obut_e
+EX_asn__L_e
+EX_glycogen_e
+EX_glcn_e
+EX_damp_e
+EX_malon_e
+EX_mnl_e
+EX_itacon_e
+EX_acglu_e
+EX_salc_e
+EX_bhb_e
+EX_4hpro_LT_e
+EX_citac_e
+EX_L_alagly_e
+EX_gly_pro__L_e
+EX_gly_glu__L_e
+BIOMASS_PA14_v27M
+BIOMASS_PA14_v27M_ANA
+PYOO2exNET
+AHGDx
+23DHBSpp
+SUCRtex
+SUCptspp
+FFSD
+EX_sucr_e
+NITR_NO
+TOLtpp
+XMO
+BZALDH
+BZDH
+N2tex
+N2OR
+
+**********Solution:
+Make sure the subsystems of these reactions are correct
+
+#################### critical@org.check_m_model ####################
+********** Some metabolites have no reactions associated
+The following items triggered the warning:
+glc__D_c
+Lpipecol_c
+2agpe140_c
+2agpe140_p
+2agpe141_c
+2agpe141_p
+2agpe160_c
+2agpe180_c
+2agpg140_c
+2agpg140_p
+2agpg141_c
+2agpg141_p
+pg140_c
+pg141_c
+Lcyst_c
+L2aadp_c
+2dhglcn_c
+6p2dhglcn_c
+2hh24dd_c
+24dhhed_c
+2ins_c
+ichor_c
+34dhpha_c
+34dhbz_c
+34dhbz_p
+5cmhmsa_c
+hgentis_c
+msa_c
+3hoxpac_p
+3hoxpac_c
+4abut_c
+4abutn_c
+5cmhm_c
+4hbzcoa_c
+benzcoa_c
+4hbz_p
+4izp_c
+5cohe_c
+malthx_c
+arab__L_c
+tre_c
+actn__R_c
+acgam_p
+acgam6p_c
+acmum6p_c
+lac__D_c
+2mbcoa_c
+ibcoa_c
+acon_C_p
+acetol_c
+rib__D_c
+crn_c
+ad_c
+agm_c
+Ncbmpts_c
+agm_p
+urea_c
+pacald_c
+btal_c
+pac_c
+aacald_c
+glcr_c
+alltt_c
+urdglyc_c
+alltn_c
+malt_c
+malttr_c
+maltttr_c
+maltpt_c
+malthp_c
+4gudbutn_c
+arab__D_c
+arg__L_p
+5g2oxpt_c
+sucarg_c
+athr__L_c
+gdpmann_c
+dmgly_c
+bmoco1gdp_c
+bmocogdp_c
+cala_c
+butso3_c
+butso3_p
+bz12diol_c
+catechol_c
+ivcoa_c
+ccmuac_c
+flxr_c
+flxso_c
+cgly_p
+chols_c
+mn2_c
+cit_p
+csn_c
+ctbt_c
+ctbt_p
+cynt_c
+cynt_p
+cys__L_p
+arab__D_p
+23dhacoa_c
+3hadpcoa_c
+23ddhb_c
+56dura_c
+2amsa_c
+ser__D_c
+feenter_c
+ethso3_c
+ethso3_p
+f1p_c
+forcoa_c
+vanln_c
+isetac_c
+mso3_c
+taur_c
+sulfac_c
+fe3dcit_p
+fe3dhbzs_p
+feenter_p
+forglu_c
+frmd_c
+Nforglu_c
+4fumacac_c
+galct__D_c
+galctn__D_c
+gdbtal_c
+gg4abut_c
+ggbutal_c
+ggptrc_c
+glu__L_p
+gly_p
+glyc3p_p
+gua_p
+h2co3_c
+hemeO_c
+hg2_c
+4mlacac_c
+2ohed_c
+mmtsa_c
+his__L_p
+urcan_c
+hmgcoa_c
+icit_p
+indole_p
+ins_p
+isetac_p
+lcts_c
+lcts_p
+Lcyst_p
+1ddecg3p_p
+1tdecg3p_p
+1tdec7eg3p_p
+1hdecg3p_p
+1hdec9eg3p_p
+1odecg3p_p
+1odec11eg3p_p
+1agpg120_p
+moadcosh_c
+malttre_c
+malttrtre_c
+maltttrtre_c
+maltpttre_c
+mso3_p
+mucl_c
+CCbuttc_c
+nac_c
+ncam_c
+rdxo_c
+rdxr_c
+2oxpaccoa_c
+rephaccoa_c
+pac_p
+pe140_p
+pe141_p
+progly_p
+uracp_c
+urate_c
+salchs4fe_p
+sucglu_c
+sulfac_p
+taur_p
+tyr__L_p
+vanlt_c
+vanlt_p
+vanln_p
+dhcrn_c
+bhb_c
+gly_glu__L_c
+gly_pro__L_c
+o2s_c
+gdpddman_c
+hgbyr_c
+pre8_c
+pre6b_c
+pre4_c
+pre3b_c
+pre3a_c
+hgbam_c
+co2dam_c
+cyan_c
+tcynt_c
+24dab_c
+fbac_kt_c
+n5horn_c
+fbac_kt_p
+pvdiq_p
+pyovd_kt_p
+pyovd_kt_e
+fe3pyovd_kt_p
+fe3pyovd_kt_e
+gdpmanur_c
+5prdmbz_c
+dmbzid_c
+3mgcoa_c
+5mpca_c
+3mb2coa_c
+rdmbzi_c
+adocbl_c
+agdpcbi_c
+acap_c
+cbi_p
+cbi_e
+doxopa_c
+malon_c
+mnl_c
+4hpro_LT_c
+L_alagly_c
+sbt__D_c
+2hddACP_c
+dhha_c
+hhq_c
+udpglcur_c
+a4dic_c
+salc_c
+pchln_c
+2dglcn_c
+3ddgc_c
+13dampp_c
+2mop_c
+1hphe_c
+Lfmkynr_c
+Lkynr_c
+tre_p
+sufse_c
+sufsesh_c
+2h3oppan_c
+hpyr_c
+aso4_p
+aso4_c
+aso3_c
+btoh_c
+n3oxddhsl_c
+algn_c
+algne_c
+fmet_c
+ppt_c
+mops_e
+mops_c
+algna_c
+algna_e
+g15lac_e
+uacman2nac3naca_c
+gdpdrhmn_c
+rha1glcnacppund_c
+rha3glcnacppund_c
+prenoN_acid_c
+gtcac_c
+tcac__ala_c
+gtcac__ala_c
+prenoN_ated_c
+gtcac__glu_c
+pc_EC_c
+pa_EC_c
+lrhh_c
+nbhsl_c
+metox__R_e
+metox__R_c
+udcppfm_c
+udcppfmm_c
+cdpdag_BS_c
+llrhh_c
+n5fn5horn_c
+ccmuac_e
+hsl_c
+3oxdd_c
+pencil_c
+pencilca_c
+prealginate__M_p
+Pald_c
+2ameph_c
+PA_LPS_B_c
+6a5och_c
+hexhp16dc_c
+actn__S_c
+adprib_c
+fbac_pa_c
+cdg_c
+cph4_c
+5hiu_c
+btamp_c
+diact_c
+dodecoh_c
+tetdecoh_c
+hexdecoh_c
+cellb_c
+1acpc_c
+apoACP_c
+
+**********Solution:
+Make sure these metabolites are removed or connected properly
+
+#################### critical@org.check_m_model ####################
+********** Some genes have no reactions associated
+The following items triggered the warning:
+FXF61_10905
+FXF61_13640
+FXF61_13495
+FXF61_13510
+FXF61_13500
+FXF61_13505
+FXF61_13485
+FXF61_13480
+FXF61_09360
+FXF61_06635
+FXF61_06610
+FXF61_06625
+FXF61_01340
+FXF61_06315
+FXF61_06630
+FXF61_07790
+FXF61_07780
+FXF61_07775
+FXF61_08535
+FXF61_08545
+FXF61_08560
+FXF61_08540
+FXF61_04300
+FXF61_10875
+FXF61_10880
+FXF61_04295
+FXF61_00030
+FXF61_10785
+FXF61_04895
+FXF61_13095
+FXF61_13755
+FXF61_13760
+FXF61_11660
+FXF61_11675
+FXF61_13100
+
+**********Solution:
+Make sure these genes are removed or associated properly
+
+
+
+
+#################### high@org.read_optional_file ####################
+********** No genes file was found. Initializing an empty one.
+
+**********Solution:
+Download genes from BioCyc if available
+
+#################### high@org.read_optional_file ####################
+********** No proteins file was found. Initializing an empty one.
+
+**********Solution:
+Download proteins from BioCyc if available
+
+#################### high@org.read_optional_file ####################
+********** No RNAs file was found. Initializing an empty one.
+
+**********Solution:
+Download RNAs from BioCyc if available
+
+#################### high@org.read_optional_file ####################
+********** No TUs file was found. Initializing an empty one.
+
+**********Solution:
+Download TUs from BioCyc if available
+
+
+
+
+#################### critical@org.check_gene_overlap ####################
+********** M-model has a 0 gene overlap with optional files (BioCyc)
+
+**********Solution:
+Check whether optional files where downloaded correctly.
+
+
+
+
+#################### critical@org.prune_genbank ####################
+********** Some features contain a sequence that is not divisible by 3.
+The following items triggered the warning:
+
+{"locus_tag": ["FXF61_00005"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_013395001.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["cytochrome-c peroxidase"], "location": "[115:1119](+)"}
+
+{"locus_tag": ["FXF61_00010"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_003437919.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["YheV family putative metal-binding protein"], "location": "[1172:1462](-)"}
+
+{"gene": ["prlC"], "locus_tag": ["FXF61_00015"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_020301416.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["oligopeptidase A"], "location": "[1476:3530](-)"}
+
+{"locus_tag": ["FXF61_00020"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_017363435.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["gamma carbonic anhydrase family protein"], "location": "[3629:4165](+)"}
+
+{"gene": ["trkA"], "locus_tag": ["FXF61_00030"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:NP_248706.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["Trk system potassium transporter TrkA"], "location": "[5701:7074](-)"}
+
+{"locus_tag": ["FXF61_00910"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_013714018.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["DUF1631 domain-containing protein"], "location": "[190542:192926](-)"}
+
+{"locus_tag": ["FXF61_01080"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_013258617.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["TetR/AcrR family transcriptional regulator"], "location": "[222329:222934](-)"}
+
+{"locus_tag": ["FXF61_01145"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_005176615.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["sodium:proline symporter"], "location": "[235029:236662](+)"}
+
+{"gene": ["rsxB"], "locus_tag": ["FXF61_01890"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_014851829.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["electron transport complex subunit RsxB"], "location": "[398543:399118](-)"}
+
+{"locus_tag": ["FXF61_02075"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_004407154.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["DASH family cryptochrome"], "location": "[432756:434096](-)"}
+
+{"locus_tag": ["FXF61_02510"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_003287568.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["pilus assembly protein PilZ"], "location": "[529364:529720](+)"}
+
+{"locus_tag": ["FXF61_02775"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_076612005.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["IS3 family transposase"], "location": "[585110:586263](+)"}
+
+{"locus_tag": ["FXF61_03455"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_008984995.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["methyltransferase domain-containing protein"], "location": "[737623:739908](+)"}
+
+{"gene": ["tsaA"], "locus_tag": ["FXF61_03625"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_003297034.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["tRNA (N6-threonylcarbamoyladenosine(37)-N6)-methyltransferase TrmO"], "location": "[774944:775636](-)"}
+
+{"gene": ["cysE"], "locus_tag": ["FXF61_03865"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_015478508.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["serine O-acetyltransferase"], "location": "[833670:834482](+)"}
+
+{"gene": ["fdx"], "locus_tag": ["FXF61_03900"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_018624720.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["ISC system 2Fe-2S type ferredoxin"], "location": "[839530:839868](+)"}
+
+{"locus_tag": ["FXF61_04215"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_017939944.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["O-acetyl-ADP-ribose deacetylase"], "location": "[904999:905508](+)"}
+
+{"locus_tag": ["FXF61_06135"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_017939196.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["cysteine--tRNA ligase"], "location": "[1337076:1338464](-)"}
+
+{"gene": ["yaaA"], "locus_tag": ["FXF61_06200"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_012312824.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["peroxide stress protein YaaA"], "location": "[1355075:1355854](+)"}
+
+{"locus_tag": ["FXF61_06815"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_013263126.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["PAS domain-containing protein"], "location": "[1491685:1492746](-)"}
+
+{"locus_tag": ["FXF61_07370"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:NP_252303.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["xylulose 5-phosphate 3-epimerase"], "location": "[1628941:1631349](-)"}
+
+{"gene": ["dinB"], "locus_tag": ["FXF61_07970"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_002554670.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["DNA polymerase IV"], "location": "[1759238:1760302](+)"}
+
+{"gene": ["phaC"], "locus_tag": ["FXF61_08660"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_008146859.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["class I poly(R)-hydroxyalkanoic acid synthase"], "location": "[1910393:1912102](+)"}
+
+{"locus_tag": ["FXF61_08810"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_010225797.1"], "note": ["frameshifted; incomplete; partial on complete genome; missing N-terminus; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["MBL fold metallo-hydrolase"], "location": "[1938837:1938955](+)"}
+
+{"locus_tag": ["FXF61_08960"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_016391202.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["ABC transporter ATP-binding protein"], "location": "[1965213:1966997](-)"}
+
+{"locus_tag": ["FXF61_10070"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_013981746.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["ABC transporter substrate-binding protein"], "location": "[2207097:2207903](-)"}
+
+{"locus_tag": ["FXF61_10245"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_019406376.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["triose-phosphate isomerase"], "location": "[2241415:2242170](-)"}
+
+{"locus_tag": ["FXF61_10520"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_009552112.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["ATP-binding cassette domain-containing protein"], "location": "[2310603:2311373](-)"}
+
+{"locus_tag": ["FXF61_12130"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_020305837.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["LrgB family protein"], "location": "[2641490:2642206](-)"}
+
+{"locus_tag": ["FXF61_12445"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_011784102.1"], "note": ["frameshifted; internal stop; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["ATPase"], "location": "[2701984:2703656](-)"}
+
+{"locus_tag": ["FXF61_13155"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_014819413.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["sodium:proton exchanger"], "location": "[2859522:2861077](+)"}
+
+{"locus_tag": ["FXF61_13890"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_014290834.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["Fic/DOC family protein"], "location": "[3018894:3019661](+)"}
+
+{"locus_tag": ["FXF61_14190"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_013694519.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["ribosome-associated ATPase/putative transporter RbbA"], "location": "[3075529:3078249](+)"}
+
+{"gene": ["ltrA"], "locus_tag": ["FXF61_14320"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_003299509.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["group II intron reverse transcriptase/maturase"], "location": "[3110919:3112667](+)"}
+
+{"locus_tag": ["FXF61_14410"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_023994230.1"], "note": ["frameshifted; incomplete; partial on complete genome; missing C-terminus; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["recombinase XerD"], "location": "[3130870:3131007](-)"}
+
+{"gene": ["ilvD"], "locus_tag": ["FXF61_14810"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_012699019.1"], "note": ["frameshifted; internal stop; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["dihydroxy-acid dehydratase"], "location": "[3212943:3214810](-)"}
+
+{"locus_tag": ["FXF61_14815"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:YP_237829.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["class I SAM-dependent rRNA methyltransferase"], "location": "[3214998:3216193](-)"}
+
+{"locus_tag": ["FXF61_14820"], "inference": ["COORDINATES: similar to AA sequence:RefSeq:WP_017363169.1"], "note": ["frameshifted; Derived by automated computational analysis using gene prediction method: Protein Homology."], "pseudo": [""], "codon_start": ["1"], "transl_table": ["11"], "product": ["SdiA-regulated domain-containing protein"], "location": "[3216347:3217261](+)"}
+
+**********Solution:
+Check whether any of these genes are translated in your final ME-model. If so, fix the positions of the gene in genome_modified.gb
+
+
+
+
+#################### high@org.update_genbank_from_files ####################
+********** Some feature in genbank are CDS but have no translation qualifier. Translated sequences from Biopython were filled in instead
+The following items triggered the warning:
+FXF61_00005
+FXF61_00010
+FXF61_00015
+FXF61_00020
+FXF61_00030
+FXF61_00745
+FXF61_00910
+FXF61_01080
+FXF61_01145
+FXF61_01890
+FXF61_02075
+FXF61_02510
+FXF61_02695
+FXF61_02775
+FXF61_03325
+FXF61_03455
+FXF61_03625
+FXF61_03865
+FXF61_03900
+FXF61_04215
+FXF61_04245
+FXF61_06135
+FXF61_06200
+FXF61_06815
+FXF61_07370
+FXF61_07445
+FXF61_07865
+FXF61_07870
+FXF61_07970
+FXF61_08530
+FXF61_08660
+FXF61_08810
+FXF61_08960
+FXF61_10070
+FXF61_10245
+FXF61_10520
+FXF61_10585
+FXF61_11460
+FXF61_12130
+FXF61_12315
+FXF61_12340
+FXF61_12355
+FXF61_12445
+FXF61_12495
+FXF61_12500
+FXF61_13155
+FXF61_13890
+FXF61_13940
+FXF61_14030
+FXF61_14035
+FXF61_14050
+FXF61_14100
+FXF61_14120
+FXF61_14190
+FXF61_14320
+FXF61_14410
+FXF61_14800
+FXF61_14805
+FXF61_14810
+FXF61_14815
+FXF61_14820
+
+**********Solution:
+Check whether the genbank was downloaded or constructed correctly.
+
+
+
+
+#################### low@org._get_manual_curation ####################
+********** No reaction_corrections file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/reaction_corrections.txt
+
+#################### low@org._get_manual_curation ####################
+********** No metabolite_corrections file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/metabolite_corrections.txt
+
+#################### low@org._get_manual_curation ####################
+********** No protein_location file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/peptide_compartment_and_pathways.txt
+
+#################### low@org._get_manual_curation ####################
+********** No translocation_multipliers file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/translocation_multipliers.txt
+
+#################### low@org._get_manual_curation ####################
+********** No lipoprotein_precursors file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/lipoprotein_precursors.txt
+
+#################### low@org._get_manual_curation ####################
+********** No cleaved_methionine file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/cleaved_methionine.txt
+
+#################### low@org._get_manual_curation ####################
+********** No manual_complexes file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/protein_corrections.txt
+
+#################### low@org._get_manual_curation ####################
+********** No sigmas file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/sigma_factors.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rho_independent file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/rho_independent.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rna_degradosome file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/rna_degradosome.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rna_modification_df file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/rna_modification.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rna_modification_targets file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/post_transcriptional_modification_of_RNA.txt
+
+#################### low@org._get_manual_curation ####################
+********** No enz_rxn_assoc_df file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/enzyme_reaction_association.txt
+
+#################### low@org._get_manual_curation ####################
+********** No me_mets file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/me_metabolites.txt
+
+#################### low@org._get_manual_curation ####################
+********** No subreaction_matrix file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/subreaction_matrix.txt
+
+#################### low@org._get_manual_curation ####################
+********** No reaction_matrix file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/reaction_matrix.txt
+
+#################### low@org._get_manual_curation ####################
+********** No orphan_and_spont_reactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/orphan_and_spont_reactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No subsystem_classification file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/subsystem_classification.txt
+
+#################### low@org._get_manual_curation ####################
+********** No translocation_pathways file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/translocation_pathways.txt
+
+#################### low@org._get_manual_curation ####################
+********** No lipid_modifications file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/lipid_modifications.txt
+
+#################### low@org._get_manual_curation ####################
+********** No ribosome_stoich file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/ribosomal_proteins.txt
+
+#################### low@org._get_manual_curation ####################
+********** No ribosome_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/ribosome_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No generic_dict file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/generic_dict.txt
+
+#################### low@org._get_manual_curation ####################
+********** No amino_acid_trna_synthetase file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/amino_acid_trna_synthetase.txt
+
+#################### low@org._get_manual_curation ####################
+********** No peptide_release_factors file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/peptide_release_factors.txt
+
+#################### low@org._get_manual_curation ####################
+********** No initiation_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/initiation_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No elongation_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/elongation_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No termination_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/termination_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No transcription_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/transcription_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No special_trna_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/special_trna_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No special_modifications file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/special_modifications.txt
+
+#################### low@org._get_manual_curation ####################
+********** No excision_machinery file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/excision_machinery.txt
+
+#################### low@org._get_manual_curation ####################
+********** No folding_dict file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP043320/./outputs/building_data/folding_dict.txt
+
+
+
+
+#################### high@org.get_rpod ####################
+********** FXF61_01265-MONOMER was identified as RpoD. If this is not true, define RpoD!
+
+**********Solution:
+Check whether you need to correct RpoD by running me_builder.org.rpod = correct_rpod
+
+
+
+
+#################### medium@org.get_rna_polymerase ####################
+********** RNAP was identified with subunits FXF61_11725, FXF61_11880, FXF61_11885, FXF61_12555
+
+**********Solution:
+Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)
+
+
+
+
+#################### high@org.get_trna_synthetase ####################
+********** No tRNA ligases were found for some amino acids. Assigned CPLX_dummy.
+The following items triggered the warning:
+asn__L_c
+
+**********Solution:
+Check whether your organism should have a ligase for these amino acids, or if you need to add a reaction to get it (e.g. tRNA amidotransferases)
+
+
+
+
+#################### high@org.purge_genes_in_model ####################
+********** Some genes in M-model were not found in genes.txt or genome.gb. These genes will be skipped in reconstruction.
+The following items triggered the warning:
+PA14_22350
+PA14_25710
+PA14_20890
+PA14_70720
+PA14_71220
+PA14_60270
+PA14_69690
+PA14_04580
+PA14_22910
+PA14_34970
+PA14_34630
+PA14_36570
+PA14_23030
+PA14_05750
+PA14_34640
+PA14_69795
+PA14_18610
+PA14_05150
+PA14_41820
+PA14_70270
+PA14_08630
+PA14_51240
+PA14_49380
+PA14_17030
+PA14_16950
+PA14_11460
+PA14_62830
+PA14_25550
+PA14_11260
+PA14_57390
+PA14_68850
+PA14_00640
+PA_s0001
+PA14_21620
+PA14_52870
+PA14_52910
+PA14_52850
+PA14_68210
+PA14_63550
+PA14_44140
+PA14_13330
+PA14_45190
+PA14_25900
+PA14_69300
+PA14_13810
+PA14_13750
+PA14_41540
+PA14_41530
+PA14_29640
+pWW0_129
+pWW0_130
+pWW0_128
+pWW0_131
+PA14_06740
+PA14_20200
+PA14_20150
+PA14_20190
+PA14_20180
+PA14_20170
+
+**********Solution:
+Confirm the gene is correct in the m_model. If so, add it to genes.txt
+
+
+
+
+#################### medium@org.get_complex_homology ####################
+********** Some complexes were partial hits in the BLAST
+The following items triggered the warning:
+
+{"complex": "FXF61_00235-MONOMER", "reference_complex": "Gly_RS_tetra"}
+
+{"complex": "FXF61_00805-MONOMER", "reference_complex": "PYRNUTRANSHYDROGEN-CPLX"}
+
+{"complex": "FXF61_00850-MONOMER", "reference_complex": "CPLX0-7717_G6561-MONOMER"}
+
+{"complex": "FXF61_00965-MONOMER", "reference_complex": "UBIX-MONOMER_DHHB-METHYLTRANSFER-MONOMER"}
+
+{"complex": "FXF61_01030-MONOMER", "reference_complex": "PABASYN-CPLX"}
+
+{"complex": "FXF61_01435-MONOMER", "reference_complex": "ABC-25-CPLX"}
+
+{"complex": "FXF61_01570-MONOMER", "reference_complex": "PYRUVATEDEH-CPLX"}
+
+{"complex": "FXF61_01600-MONOMER", "reference_complex": "TRANS-CPLX-201"}
+
+{"complex": "FXF61_01620-MONOMER", "reference_complex": "CPLX0-3951_G6561-MONOMER"}
+
+{"complex": "FXF61_01640-MONOMER", "reference_complex": "ACETOLACTSYNIII-CPLX"}
+
+{"complex": "FXF61_02330-MONOMER", "reference_complex": "ACETYL-COA-CARBOXYLMULTI-CPLX"}
+
+{"complex": "FXF61_03385-MONOMER", "reference_complex": "G6176-MONOMER_G6177-MONOMER_G6178-MONOMER"}
+
+{"complex": "FXF61_03840-MONOMER", "reference_complex": "Sec-CPLX"}
+
+{"complex": "FXF61_03840-MONOMER", "reference_complex": "SecYE-CPLX"}
+
+{"complex": "FXF61_03890-MONOMER", "reference_complex": "EG12130-MONOMER_EG12131-MONOMER"}
+
+{"complex": "FXF61_04145-MONOMER", "reference_complex": "SUCC-DEHASE"}
+
+{"complex": "FXF61_04165-MONOMER", "reference_complex": "2OXOGLUTARATEDEH-CPLX"}
+
+{"complex": "FXF61_04180-MONOMER", "reference_complex": "SUCCCOASYN"}
+
+{"complex": "FXF61_04955-MONOMER", "reference_complex": "Phe_RS_tetra"}
+
+{"complex": "FXF61_05335-MONOMER", "reference_complex": "ABC-26-CPLX"}
+
+{"complex": "FXF61_06080-MONOMER", "reference_complex": "RIBONUCLEOSIDE-DIP-REDUCTI-CPLX"}
+
+{"complex": "FXF61_06255-MONOMER", "reference_complex": "ABC-70-CPLX"}
+
+{"complex": "FXF61_06305-MONOMER", "reference_complex": "EG11595-MONOMER_EG11666-MONOMER"}
+
+{"complex": "FXF61_06375-MONOMER", "reference_complex": "NITRATREDUCTA-CPLX"}
+
+{"complex": "FXF61_06560-MONOMER", "reference_complex": "3-ISOPROPYLMALISOM-CPLX"}
+
+{"complex": "FXF61_06800-MONOMER", "reference_complex": "GLUTAMATESYN-CPLX"}
+
+{"complex": "FXF61_07170-MONOMER", "reference_complex": "ABC-304-CPLX"}
+
+{"complex": "FXF61_08390-MONOMER", "reference_complex": "YDGEF-CPLX"}
+
+{"complex": "FXF61_08590-MONOMER", "reference_complex": "ACETOACETYL-COA-TRANSFER-CPLX"}
+
+{"complex": "FXF61_09115-MONOMER", "reference_complex": "BamAD-CPLX"}
+
+{"complex": "FXF61_09975-MONOMER", "reference_complex": "CPLX0-7428"}
+
+{"complex": "FXF61_10285-MONOMER", "reference_complex": "CARBPSYN-CPLX"}
+
+{"complex": "FXF61_11625-MONOMER", "reference_complex": "TatBC_octa"}
+
+{"complex": "FXF61_11725-MONOMER", "reference_complex": "hRNAP"}
+
+{"complex": "FXF61_12775-MONOMER", "reference_complex": "FORMATEDEHYDROGO-CPLX"}
+
+{"complex": "FXF61_12975-MONOMER", "reference_complex": "GLUTAMIDOTRANS-CPLX"}
+
+{"complex": "FXF61_13340-MONOMER", "reference_complex": "TRYPSYN"}
+
+{"complex": "FXF61_13415-MONOMER", "reference_complex": "MnmEG_cplx"}
+
+{"complex": "FXF61_13475-MONOMER", "reference_complex": "ATPSYN-CPLX"}
+
+{"complex": "FXF61_13710-MONOMER", "reference_complex": "ABC-63-CPLX"}
+
+{"complex": "FXF61_13740-MONOMER", "reference_complex": "METNIQ-METHIONINE-ABC-CPLX"}
+
+{"complex": "RNAP-CPLX", "reference_complex": "RpoZ_mono"}
+
+{"complex": "CPLX_ACOATA-0", "reference_complex": "EG50003-MONOMER"}
+
+{"complex": "CPLX_ACOATA-0", "reference_complex": "FABB-CPLX"}
+
+{"complex": "CPLX_AIRCr-0", "reference_complex": "PURK-CPLX"}
+
+{"complex": "CPLX_AIRCr-0", "reference_complex": "PURE-CPLX"}
+
+{"complex": "CPLX_APSR-0", "reference_complex": "PAPSSULFOTRANS-CPLX"}
+
+{"complex": "CPLX_APSR-0", "reference_complex": "RED-THIOREDOXIN-MONOMER"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "MALONYL-COA-ACP-TRANSACYL-MONOMER"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "3-OXOACYL-ACP-SYNTHII-CPLX"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "3-OXOACYL-ACP-REDUCT-MONOMER"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "FABZ-CPLX"}
+
+{"complex": "CPLX_METSOXR1-0", "reference_complex": "EG11433-MONOMER"}
+
+{"complex": "CPLX_OPHBDC-0", "reference_complex": "CPLX0-301"}
+
+{"complex": "CPLX_PAPSR2-0", "reference_complex": "GRXC-MONOMER"}
+
+{"complex": "CPLX_PDX5PS-0", "reference_complex": "CPLX0-7847"}
+
+{"complex": "CPLX_PDX5PS-0", "reference_complex": "CPLX0-321"}
+
+{"complex": "CPLX_THIORDXi-0", "reference_complex": "EG10108-MONOMER"}
+
+{"complex": "CPLX_TRDR-0", "reference_complex": "THIOREDOXIN-REDUCT-NADPH-CPLX"}
+
+{"complex": "CPLX_I4FE4ST-0", "reference_complex": "IscA_tetra"}
+
+{"complex": "CPLX_I4FE4ST-0", "reference_complex": "IscU"}
+
+{"complex": "CPLX_I2FE2SR-0", "reference_complex": "IscS"}
+
+{"complex": "CPLX_THZPSN3_PA-0", "reference_complex": "ThiI_mono"}
+
+{"complex": "CPLX_THZPSN3_PA-0", "reference_complex": "THIG-MONOMER"}
+
+{"complex": "CPLX_RFAMPtpp-0", "reference_complex": "EG11009-MONOMER"}
+
+{"complex": "CPLX_FRDO4r-0", "reference_complex": "FLAVONADPREDUCT-MONOMER"}
+
+{"complex": "CPLX_UAGAAT2_1-0", "reference_complex": "UDPNACETYLGLUCOSAMACYLTRANS-CPLX"}
+
+**********Solution:
+Curate these manually in protein_corrections.txt
+
+
+
+
+#################### medium@update_me_mets ####################
+********** Some metabolites in me_metabolites.txt are not in m_model, so they were skipped.
+The following items triggered the warning:
+sufbcd_2fe2s_c
+sufbcd_2fe2s2_c
+sufbcd_4fe4s_c
+
+**********Solution:
+Confirm these metabolites are correctly defined in me_metabolites.txt
+
+#################### medium@update_me_mets ####################
+********** Some metabolites in me_metabolites.txt were found in reference m_model after replacing __ with _
+The following items triggered the warning:
+iscu_2fe2s_c
+iscu_2fe2s2_c
+iscu_4fe4s_c
+
+**********Solution:
+Confirm these metabolites are correctly defined in me_metabolites.txt
+
+
+
+
+#################### medium@update_ribosome_subreactions_from_homology ####################
+********** Some enzymes defined in me_builder.org.ribosome_subreactions are different from the ones inferred from homology
+The following items triggered the warning:
+
+{"subreaction": "gtp_bound_30S_assembly_factor_phase1", "defined_complex": "", "inferred_complex": "FXF61_07260-MONOMER"}
+
+{"subreaction": "RbfA_mono_assembly_factor_phase1", "defined_complex": "", "inferred_complex": "FXF61_10215-MONOMER"}
+
+{"subreaction": "RimM_mono_assembly_factor_phase1", "defined_complex": "", "inferred_complex": "FXF61_03265-MONOMER"}
+
+**********Solution:
+Confirm whether the definitions or homology calls are correct in me_builder.org.ribosome_subreactions. Curate the inputs in ribosome_subreactions.txt accordingly.
+
+
+
+
+#################### medium@update_peptide_release_factors_from_homology ####################
+********** Some enzymes defined in me_builder.org.peptide_release_factors are different from the ones inferred from homology
+The following items triggered the warning:
+
+{"subreaction": "UAG", "defined_complex": "", "inferred_complex": "FXF61_03035-MONOMER"}
+
+{"subreaction": "UGA", "defined_complex": "", "inferred_complex": "FXF61_12035-MONOMER"}
+
+**********Solution:
+Confirm whether the definitions or homology calls are correct in me_builder.org.peptide_release_factors. Curate the inputs in peptide_release_factors.txt accordingly.
+
+
+
+
+#################### high@update_subreaction_matrix ####################
+********** Some metabolites in subreaction_matrix were added from reference but are not in M-model
+The following items triggered the warning:
+lipoate_c
+dad__5_c
+dad__5_c
+2tpr3dpcoa
+dad__2_c
+2agpg160_p
+2agpe160_p
+nh3_c
+5fthf_c
+5fthf_c
+dad__5_c
+
+**********Solution:
+Map these metabolites or replace the subreaction
+
+
+
+
+#################### medium@check ####################
+********** Some metabolites in me_metabolites.txt need curation
+The following items triggered the warning:
+2hddACP_c
+trnaasp_preq34_c
+trnatyr_preq34_c
+trnahis_preq34_c
+trnatyrqo_c
+trnatyrq_c
+trnaaspqo_c
+trnaaspq_c
+trnahisqo_c
+trnahisq_c
+LI_c
+sufbcd_c
+sufse_c
+sufsesh_c
+dsbaox_p
+lpp_p
+alpp_p
+3hcpalm9eACP_c
+3ocpalm9eACP_c
+flxr_c
+fldrd_c
+flxso_c
+fldox_c
+grxrd_c
+grxox_c
+iscssh_c
+iscu_2fe2s_c
+iscu_2fe2s2_c
+iscu_4fe4s_c
+
+**********Solution:
+Map or remove these metabolites in me_metabolites.txt
+
+
+
+
+#################### critical@troubleshoot ####################
+********** Some metabolites are necessary for growth
+The following items triggered the warning:
+TS_selnp_c
+TS_k_c
+TS_fe2_c
+TS_nad_c
+TS_mn2_c
+TS_4fe4s_c
+TS_bmocogdp_c
+
+**********Solution:
+Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!
+
+
+

@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	AO356_07500-MONOMER,AO356_07495-MONOMER_mod_zn2(4),AO356_07505-MONOMER
+GroEL_dependent_folding	AO356_18405-MONOMER,AO356_18400-MONOMER
+N_terminal_methionine_cleavage	AO356_06045-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	AO356_16495-MONOMER
+PrfB_mono_mediated_termination	AO356_06240-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	AO356_07285-MONOMER
+peptide_deformylase_processing	AO356_11285-MONOMER_mod_fe2(1)
+ribosome_recycler	AO356_06025-MONOMER

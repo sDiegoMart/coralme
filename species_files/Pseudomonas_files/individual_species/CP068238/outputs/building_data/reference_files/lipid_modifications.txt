@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	JHW37_04710-MONOMER
+pg_pe_160	JHW37_01595-MONOMER,JHW37_24450-MONOMER

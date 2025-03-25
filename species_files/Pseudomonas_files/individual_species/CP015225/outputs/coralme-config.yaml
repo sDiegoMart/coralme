@@ -1,0 +1,179 @@
+ME-Model-ID: Pseudomonas_fluorescens_FW300-N2E2
+amino_acid_trna_synthetase:
+  ala__L_c: TK06_28250-MONOMER
+  arg__L_c: TK06_18830-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: TK06_27570-MONOMER
+  cys__L_c: generic_cys_ligase
+  gln__L_c: TK06_00800-MONOMER
+  glu__L_c: TK06_00260-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: TK06_15880-MONOMER
+  ile__L_c: TK06_25480-MONOMER
+  leu__L_c: TK06_25010-MONOMER
+  lys__L_c: TK06_15575-MONOMER
+  met__L_c: TK06_27900-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: TK06_14885-MONOMER
+  ser__L_c: TK06_01530-MONOMER
+  thr__L_c: TK06_00900-MONOMER
+  trp__L_c: TK06_26600-MONOMER
+  tyr__L_c: TK06_24145-MONOMER
+  val__L_c: TK06_27035-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - TK06_24130-MONOMER
+  - TK06_15930-MONOMER
+default_sigma_factor: TK06_23900-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: ../species_files/Pseudomonas_files//individual_species/CP015225/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: ../species_files/Pseudomonas_files//individual_species/CP015225/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: ../species_files/Pseudomonas_files//individual_species/CP015225/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: TK06_14180
+  BamB: TK06_15870
+  BamD: TK06_25565
+  BamE: TK06_16855
+  CusC: TK06_09770
+  LolB: TK06_26060
+  MetQ: TK06_20890
+  MltA: TK06_23245
+  MltB: TK06_24955
+locus_tag: locus_tag
+log_directory: ../species_files/Pseudomonas_files//individual_species/CP015225/./outputs
+m-model-path: ../species_files/Pseudomonas_files//individual_species/CP015225/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- TK06_25025-MONOMER
+out_directory: ../species_files/Pseudomonas_files//individual_species/CP015225/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: TK06_26075-MONOMER
+  UGA: CPLX_dummy
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- TK06_19735-MONOMER
+- TK06_25485-MONOMER
+rna_polymerases:
+  RNAP_TK0600100MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_00100-MONOMER
+  RNAP_TK0600140MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_00140-MONOMER
+  RNAP_TK0602000MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_02000-MONOMER
+  RNAP_TK0603175MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_03175-MONOMER
+  RNAP_TK0605690MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_05690-MONOMER
+  RNAP_TK0608445MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_08445-MONOMER
+  RNAP_TK0610605MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_10605-MONOMER
+  RNAP_TK0611100MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_11100-MONOMER
+  RNAP_TK0612040MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_12040-MONOMER
+  RNAP_TK0612140MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_12140-MONOMER
+  RNAP_TK0612950MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_12950-MONOMER
+  RNAP_TK0613530MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_13530-MONOMER
+  RNAP_TK0613855MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_13855-MONOMER
+  RNAP_TK0613860MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_13860-MONOMER
+  RNAP_TK0613865MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_13865-MONOMER
+  RNAP_TK0614330MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_14330-MONOMER
+  RNAP_TK0614545MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_14545-MONOMER
+  RNAP_TK0615200MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_15200-MONOMER
+  RNAP_TK0616320MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_16320-MONOMER
+  RNAP_TK0617090MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_17090-MONOMER
+  RNAP_TK0619970MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_19970-MONOMER
+  RNAP_TK0620105MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_20105-MONOMER
+  RNAP_TK0622665MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_22665-MONOMER
+  RNAP_TK0622950MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_22950-MONOMER
+  RNAP_TK0623690MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_23690-MONOMER
+  RNAP_TK0623900MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_23900-MONOMER
+  RNAP_TK0626485MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: TK06_26485-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  TK06_21050-MONOMER:
+    TK06_21120: 2.0

@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	Pput_4666-MONOMER
+pg_pe_160	Pput_5049-MONOMER,Pput_0645-MONOMER

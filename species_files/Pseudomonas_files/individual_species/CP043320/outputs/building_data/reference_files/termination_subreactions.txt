@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	FXF61_10310-MONOMER,FXF61_10305-MONOMER_mod_zn2(4),FXF61_10315-MONOMER
+GroEL_dependent_folding	FXF61_09235-MONOMER,FXF61_09240-MONOMER
+N_terminal_methionine_cleavage	FXF61_03310-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	FXF61_03035-MONOMER
+PrfB_mono_mediated_termination	FXF61_12035-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	FXF61_01475-MONOMER
+peptide_deformylase_processing	FXF61_14735-MONOMER_mod_fe2(1)
+ribosome_recycler	FXF61_09140-MONOMER

@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	FA030_07565-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	FA030_07565-MONOMER_mod_zn2(2),generic_RNase,FA030_21115-MONOMER,FA030_22690-MONOMER,FA030_04535-MONOMER_mod_mg2(4)
+rRNA_containing	FA030_07565-MONOMER_mod_zn2(2),generic_RNase,FA030_21115-MONOMER_mod_mg2(2),FA030_22690-MONOMER,FA030_04535-MONOMER_mod_mg2(4)

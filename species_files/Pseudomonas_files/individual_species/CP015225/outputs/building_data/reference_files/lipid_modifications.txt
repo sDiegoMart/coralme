@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	TK06_25025-MONOMER
+pg_pe_160	TK06_19735-MONOMER,TK06_25485-MONOMER

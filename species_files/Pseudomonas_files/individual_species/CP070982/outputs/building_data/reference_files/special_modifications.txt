@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	CPLX_dummy
+fes_chaperones	JYG34_13395-MONOMER
+fes_transfer	JYG34_02130-MONOMER,JYG34_04755-MONOMER
+generic_2fe2s_transfer_complex	JYG34_02130-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	JYG34_02130-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

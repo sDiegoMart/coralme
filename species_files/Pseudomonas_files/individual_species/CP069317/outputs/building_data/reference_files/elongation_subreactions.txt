@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	JQN61_07620-MONOMER
+Tuf_gtp_regeneration	JQN61_15600-MONOMER

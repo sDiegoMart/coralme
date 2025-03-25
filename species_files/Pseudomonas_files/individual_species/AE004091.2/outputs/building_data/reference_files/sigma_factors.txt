@@ -1,0 +1,2 @@
+sigma,complex,genes,name
+PA4462-MONOMER,RNAP_PA4462MONOMER,PA4462(),RNA polymerase sigma-54 factor

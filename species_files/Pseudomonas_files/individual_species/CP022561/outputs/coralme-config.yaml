@@ -1,0 +1,188 @@
+ME-Model-ID: Pseudomonas_putida_B4
+amino_acid_trna_synthetase:
+  ala__L_c: CHN49_07485-MONOMER
+  arg__L_c: CHN49_26130-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: CHN49_06305-MONOMER
+  cys__L_c: CHN49_15610-MONOMER
+  gln__L_c: CHN49_15615-MONOMER
+  glu__L_c: CHN49_19920-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: CHN49_04480-MONOMER
+  ile__L_c: CHN49_03160-MONOMER
+  leu__L_c: CHN49_24590-MONOMER
+  lys__L_c: CHN49_22275-MONOMER
+  met__L_c: CHN49_05715-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: CHN49_06260-MONOMER
+  ser__L_c: CHN49_09580-MONOMER
+  thr__L_c: CHN49_17125-MONOMER
+  trp__L_c: CHN49_23240-MONOMER
+  tyr__L_c: CHN49_02195-MONOMER
+  val__L_c: CHN49_05110-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - CHN49_02180-MONOMER
+  - CHN49_04430-MONOMER
+default_sigma_factor: CHN49_01955-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP022561/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP022561/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP022561/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: CHN49_22835
+  BamB: CHN49_04490
+  BamD: CHN49_03260
+  BamE: CHN49_24215
+  CusC: CHN49_22845
+  LolB: CHN49_03800
+  MetQ: CHN49_00350
+  MltA: CHN49_25525
+  MltB: CHN49_24645
+locus_tag: locus_tag
+log_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP022561/./outputs
+m-model-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP022561/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- CHN49_24570-MONOMER
+out_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP022561/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: CHN49_03825-MONOMER
+  UGA: CPLX_dummy
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- CHN49_26395-MONOMER
+- CHN49_03165-MONOMER
+rna_polymerases:
+  RNAP_CHN4900675MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_00675-MONOMER
+  RNAP_CHN4901760MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_01760-MONOMER
+  RNAP_CHN4901955MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_01955-MONOMER
+  RNAP_CHN4903475MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_03475-MONOMER
+  RNAP_CHN4903675MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_03675-MONOMER
+  RNAP_CHN4904270MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_04270-MONOMER
+  RNAP_CHN4904540MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_04540-MONOMER
+  RNAP_CHN4904990MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_04990-MONOMER
+  RNAP_CHN4905195MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_05195-MONOMER
+  RNAP_CHN4905265MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_05265-MONOMER
+  RNAP_CHN4907055MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_07055-MONOMER
+  RNAP_CHN4907910MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_07910-MONOMER
+  RNAP_CHN4908405MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_08405-MONOMER
+  RNAP_CHN4908520MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_08520-MONOMER
+  RNAP_CHN4909260MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_09260-MONOMER
+  RNAP_CHN4915135MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_15135-MONOMER
+  RNAP_CHN4915140MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_15140-MONOMER
+  RNAP_CHN4915690MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_15690-MONOMER
+  RNAP_CHN4916330MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_16330-MONOMER
+  RNAP_CHN4918425MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_18425-MONOMER
+  RNAP_CHN4919285MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_19285-MONOMER
+  RNAP_CHN4919345MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_19345-MONOMER
+  RNAP_CHN4921915MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_21915-MONOMER
+  RNAP_CHN4922615MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_22615-MONOMER
+  RNAP_CHN4922620MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_22620-MONOMER
+  RNAP_CHN4922625MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_22625-MONOMER
+  RNAP_CHN4923515MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_23515-MONOMER
+  RNAP_CHN4926225MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: CHN49_26225-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  CHN49_05430-MONOMER:
+    CHN49_02510: 15.5
+    CHN49_02515: 15.5
+    CHN49_02775: 23.0
+    CHN49_02930: 6.25
+    CHN49_25130: 22.0
+  CHN49_27670-MONOMER:
+    CHN49_27600: 2.0

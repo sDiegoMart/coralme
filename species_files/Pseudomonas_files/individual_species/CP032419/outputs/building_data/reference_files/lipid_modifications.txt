@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	D3880_19460-MONOMER
+pg_pe_160	D3880_01170-MONOMER,D3880_19065-MONOMER

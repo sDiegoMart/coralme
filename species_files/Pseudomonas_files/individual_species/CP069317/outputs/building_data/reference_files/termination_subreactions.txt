@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	JQN61_17720-MONOMER,JQN61_17715-MONOMER_mod_zn2(4),JQN61_17725-MONOMER
+GroEL_dependent_folding	JQN61_16490-MONOMER,JQN61_16495-MONOMER
+N_terminal_methionine_cleavage	JQN61_15610-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	JQN61_12725-MONOMER
+PrfB_mono_mediated_termination	JQN61_15800-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	JQN61_12035-MONOMER
+peptide_deformylase_processing	JQN61_00115-MONOMER_mod_fe2(1)
+ribosome_recycler	JQN61_15590-MONOMER

@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	IH404_21420-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	IH404_21420-MONOMER_mod_zn2(2),generic_RNase,IH404_06645-MONOMER,IH404_05705-MONOMER,IH404_07070-MONOMER_mod_mg2(4)
+rRNA_containing	IH404_21420-MONOMER_mod_zn2(2),generic_RNase,IH404_06645-MONOMER_mod_mg2(2),IH404_05705-MONOMER,IH404_07070-MONOMER_mod_mg2(4)

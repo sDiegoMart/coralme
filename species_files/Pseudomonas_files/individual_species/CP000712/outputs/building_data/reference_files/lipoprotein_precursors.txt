@@ -1,0 +1,10 @@
+name,gene
+AcrA,Pput_4337
+BamB,Pput_0886
+BamD,Pput_0662
+BamE,Pput_4597
+CusC,Pput_4339
+LolB,Pput_0758
+MetQ,Pput_0129
+MltA,Pput_4844
+MltB,Pput_4680

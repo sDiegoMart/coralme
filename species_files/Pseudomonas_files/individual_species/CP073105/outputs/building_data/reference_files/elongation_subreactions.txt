@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	KCX70_03035-MONOMER
+Tuf_gtp_regeneration	KCX70_15615-MONOMER

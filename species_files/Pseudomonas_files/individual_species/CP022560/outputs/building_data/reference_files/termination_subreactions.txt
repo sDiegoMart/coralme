@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	CHR26_11625-MONOMER,CHR26_11630-MONOMER_mod_zn2(4),CHR26_11620-MONOMER
+GroEL_dependent_folding	CHR26_12945-MONOMER,CHR26_12940-MONOMER
+N_terminal_methionine_cleavage	CHR26_01770-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	CHR26_03655-MONOMER
+PrfB_mono_mediated_termination	CPLX_dummy
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	CHR26_02880-MONOMER
+peptide_deformylase_processing	CHR26_07400-MONOMER_mod_fe2(1)
+ribosome_recycler	CHR26_01750-MONOMER

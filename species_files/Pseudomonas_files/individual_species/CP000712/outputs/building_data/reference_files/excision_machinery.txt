@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,Pput_4288-MONOMER,Pput_0977-MONOMER,Pput_1126-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,Pput_4288-MONOMER_mod_mg2(2),Pput_0977-MONOMER,Pput_1126-MONOMER_mod_mg2(4)

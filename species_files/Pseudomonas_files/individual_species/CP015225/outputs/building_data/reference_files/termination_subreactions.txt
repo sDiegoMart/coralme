@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	TK06_16835-MONOMER,TK06_16830-MONOMER_mod_zn2(4),TK06_16840-MONOMER
+GroEL_dependent_folding	TK06_27930-MONOMER,TK06_27925-MONOMER
+N_terminal_methionine_cleavage	TK06_15355-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	TK06_26075-MONOMER
+PrfB_mono_mediated_termination	CPLX_dummy
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	TK06_16615-MONOMER
+peptide_deformylase_processing	TK06_20655-MONOMER_mod_fe2(1)
+ribosome_recycler	TK06_15335-MONOMER

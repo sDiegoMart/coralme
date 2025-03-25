@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	FXF61_11865-MONOMER
+Tuf_gtp_regeneration	FXF61_09150-MONOMER

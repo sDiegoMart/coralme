@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	CHR29_23825-MONOMER
+Translation_initiation_factor_InfA	CHR29_18005-MONOMER
+Translation_initiation_factor_InfC	CHR29_16910-MONOMER
+fmet_addition_at_START	CHR29_23825-MONOMER,CHR29_00110-MONOMER_mod_mg2(1)_mod_k(1)

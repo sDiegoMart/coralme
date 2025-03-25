@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	HZ99_09180-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	HZ99_09180-MONOMER_mod_zn2(2),generic_RNase,HZ99_11710-MONOMER,HZ99_12475-MONOMER,HZ99_11340-MONOMER_mod_mg2(4)
+rRNA_containing	HZ99_09180-MONOMER_mod_zn2(2),generic_RNase,HZ99_11710-MONOMER_mod_mg2(2),HZ99_12475-MONOMER,HZ99_11340-MONOMER_mod_mg2(4)

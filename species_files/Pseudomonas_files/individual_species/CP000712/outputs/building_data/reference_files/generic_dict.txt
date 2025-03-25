@@ -1,0 +1,15 @@
+generic_component	enzymes
+generic_16Sm4Cm1402	Pput_4395-MONOMER,Pput_4398-MONOMER
+generic_16s_rRNAs	RNA_Pput_R0001,RNA_Pput_R0009,RNA_Pput_R0018,RNA_Pput_R0031,RNA_Pput_R0064,RNA_Pput_R0093
+generic_23s_rRNAs	RNA_Pput_R0002,RNA_Pput_R0012,RNA_Pput_R0019,RNA_Pput_R0034,RNA_Pput_R0061,RNA_Pput_R0090
+generic_5s_rRNAs	RNA_Pput_R0003,RNA_Pput_R0004,RNA_Pput_R0013,RNA_Pput_R0020,RNA_Pput_R0035,RNA_Pput_R0060,RNA_Pput_R0089
+generic_Dus	Pput_3573-MONOMER,Pput_4695-MONOMER,Pput_3779-MONOMER
+generic_LYSINEaaRS	Pput_4226-MONOMER
+generic_RF	Pput_0761-MONOMER,Pput_4227-MONOMER
+generic_RNase	Pput_1126-MONOMER_mod_mg2(4),Pput_1805-MONOMER_mod_zn2(2),Pput_1297-MONOMER_mod_mg2(5),Pput_5202-MONOMER_mod_mg2(1)
+generic_Tuf	Pput_0485-MONOMER
+generic_fes_transfers_complex	Pput_0466-MONOMER,Pput_0874-MONOMER
+generic_glu_ligase	Pput_4558-MONOMER,Pput_3783-MONOMER
+generic_gly_c_ligase	Pput_0076-MONOMER,Pput_0077-MONOMER
+generic_pro_ligase	Pput_1234-MONOMER,Pput_0222-MONOMER
+generic_ser_ligase	Pput_3225-MONOMER,Pput_1833-MONOMER

@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	DCC84_25635-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	DCC84_25635-MONOMER_mod_zn2(2),generic_RNase,DCC84_05165-MONOMER,DCC84_28890-MONOMER,DCC84_27645-MONOMER_mod_mg2(4)
+rRNA_containing	DCC84_25635-MONOMER_mod_zn2(2),generic_RNase,DCC84_05165-MONOMER_mod_mg2(2),DCC84_28890-MONOMER,DCC84_27645-MONOMER_mod_mg2(4)

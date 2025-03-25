@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	C3F42_07505-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	C3F42_07505-MONOMER_mod_zn2(2),generic_RNase,C3F42_10435-MONOMER,C3F42_11750-MONOMER,C3F42_23930-MONOMER_mod_mg2(4)
+rRNA_containing	C3F42_07505-MONOMER_mod_zn2(2),generic_RNase,C3F42_10435-MONOMER_mod_mg2(2),C3F42_11750-MONOMER,C3F42_23930-MONOMER_mod_mg2(4)

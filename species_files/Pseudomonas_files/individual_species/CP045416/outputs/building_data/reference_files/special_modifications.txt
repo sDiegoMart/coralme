@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	FIU84_04225-MONOMER,FIU84_06165-MONOMER
+fes_chaperones	CPLX_dummy
+fes_transfer	FIU84_03455-MONOMER,FIU84_15645-MONOMER
+generic_2fe2s_transfer_complex	FIU84_03455-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	FIU84_03455-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

@@ -1,0 +1,1289 @@
+Reaction	Complexes
+1PPDCRc	PproGo58_14010-MONOMER
+2AGPE140tipp	PproGo58_42620-MONOMER
+2AGPE141tipp	PproGo58_42620-MONOMER
+2AGPG140tipp	PproGo58_42620-MONOMER
+2AGPG141tipp	PproGo58_42620-MONOMER
+2HH24DDH1	PproGo58_32630-MONOMER
+2MAHMP	PproGo58_37720-MONOMER
+3HAD100	PproGo58_11620-MONOMER
+3HAD120	PproGo58_11620-MONOMER
+3HAD121	PproGo58_11620-MONOMER
+3HAD140	PproGo58_11620-MONOMER
+3HAD141	PproGo58_11620-MONOMER
+3HAD160	PproGo58_11620-MONOMER
+3HAD161	PproGo58_11620-MONOMER
+3HAD180	PproGo58_11620-MONOMER
+3HAD181	PproGo58_11620-MONOMER
+3HAD40	PproGo58_11620-MONOMER
+3HAD60	PproGo58_11620-MONOMER
+3HAD80	PproGo58_11620-MONOMER
+3HOXPACt2pp	PproGo58_32620-MONOMER
+3OADPCOAT	CPLX_BUTCT-0
+3OAR100	PproGo58_17600-MONOMER
+3OAR120	PproGo58_17600-MONOMER
+3OAR121	PproGo58_17600-MONOMER
+3OAR140	PproGo58_17600-MONOMER
+3OAR141	PproGo58_17600-MONOMER
+3OAR160	PproGo58_17600-MONOMER
+3OAR161	PproGo58_17600-MONOMER
+3OAR180	PproGo58_17600-MONOMER
+3OAR181	PproGo58_17600-MONOMER
+3OAR40	PproGo58_17600-MONOMER
+3OAR60	PproGo58_17600-MONOMER
+3OAR80	PproGo58_17600-MONOMER
+3OAS100	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER OR PproGo58_33300-MONOMER
+3OAS120	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER OR PproGo58_33300-MONOMER
+3OAS121	PproGo58_17070-MONOMER
+3OAS140	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER OR PproGo58_33300-MONOMER
+3OAS141	PproGo58_17070-MONOMER
+3OAS160	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER OR PproGo58_33300-MONOMER
+3OAS161	PproGo58_17070-MONOMER
+3OAS180	PproGo58_17070-MONOMER
+3OAS181	PproGo58_17070-MONOMER
+3OAS60	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER OR PproGo58_33300-MONOMER
+3OAS80	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER OR PproGo58_33300-MONOMER
+3OXCOAT	PproGo58_13100-MONOMER
+3OXOADPt_pp	PproGo58_13130-MONOMER
+3PEPTabcpp	PproGo58_26950-MONOMER OR PproGo58_26940-MONOMER OR PproGo58_26930-MONOMER OR PproGo58_26920-MONOMER
+3_4DHBZ1t_pp	PproGo58_13070-MONOMER
+3_4DHBZt2	PproGo58_01890-MONOMER
+4CMLCL_kt	PproGo58_13160-MONOMER OR PproGo58_08690-MONOMER
+4HBHYOX	PproGo58_48840-MONOMER
+4HBZtex	PproGo58_13170-MONOMER
+4HTHRS	PproGo58_10760-MONOMER_mod_pydx5p(1)
+4PEPTabcpp	PproGo58_26950-MONOMER OR PproGo58_26940-MONOMER OR PproGo58_26930-MONOMER OR PproGo58_26920-MONOMER
+5HPUDICDC_c	PproGo58_42240-MONOMER
+A5PISO	PproGo58_08990-MONOMER
+AACPS1	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS2	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS3	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS4	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS5	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS6	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS7	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS8	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS9	PproGo58_17610-MONOMER_mod_pan4p(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ac(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_mal(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_act(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_but(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ha(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_egme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ogme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_gme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hgme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pim(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_epme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_opme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_pme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hpme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_oc(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3odec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_dca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ddca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_myrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_hde(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_palm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_octe(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR PproGo58_17610-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AASAD3	PproGo58_05900-MONOMER
+ABTA	PproGo58_01790-MONOMER_mod_pydx5p(1)
+ABUTD	PproGo58_57350-MONOMER
+ABUTt2pp	PproGo58_03350-MONOMER
+ACACT1r	PproGo58_07000-MONOMER OR PproGo58_41860-MONOMER OR PproGo58_22160-MONOMER OR PproGo58_17960-MONOMER OR PproGo58_29720-MONOMER
+ACACT2r	PproGo58_07000-MONOMER OR PproGo58_41860-MONOMER OR PproGo58_19110-MONOMER OR PproGo58_17960-MONOMER OR PproGo58_29720-MONOMER
+ACACT3r	PproGo58_19110-MONOMER
+ACACT4r	PproGo58_19110-MONOMER
+ACACT5r	PproGo58_19110-MONOMER
+ACACT6r	PproGo58_19110-MONOMER
+ACACT7r	PproGo58_19110-MONOMER
+ACACT8r	PproGo58_19110-MONOMER
+ACACt2pp	PproGo58_49430-MONOMER
+ACBIPGT_2	PproGo58_42770-MONOMER
+ACCOAC	CPLX_ACCOAC-0_mod_btn(1)
+ACCOAL	PproGo58_43680-MONOMER
+ACGAMT	PproGo58_41510-MONOMER
+ACGAptspp	CPLX_ACGAptspp-0
+ACGK	PproGo58_57440-MONOMER
+ACGS	PproGo58_56180-MONOMER OR PproGo58_45240-MONOMER
+ACHBS	CPLX_ACHBS-0
+ACLS	CPLX_ACHBS-0
+ACLS_a	PproGo58_05070-MONOMER
+ACLS_d	PproGo58_05070-MONOMER
+ACOAD1f	PproGo58_17330-MONOMER OR PproGo58_29710-MONOMER OR PproGo58_04920-MONOMER
+ACOAD2f	PproGo58_29710-MONOMER OR PproGo58_17330-MONOMER OR PproGo58_04920-MONOMER
+ACOAD3f	PproGo58_17330-MONOMER
+ACOAD4f	PproGo58_17330-MONOMER OR PproGo58_38100-MONOMER
+ACOAD5f	PproGo58_17330-MONOMER OR PproGo58_38100-MONOMER
+ACOAD6f	PproGo58_17330-MONOMER OR PproGo58_38100-MONOMER
+ACOAD7f	PproGo58_17330-MONOMER OR PproGo58_53650-MONOMER
+ACOAD8f	PproGo58_17330-MONOMER OR PproGo58_53650-MONOMER
+ACOADH2	PproGo58_29710-MONOMER
+ACOATA	CPLX_ACOATA-0
+ACODA	PproGo58_56190-MONOMER_mod_zn2(1) OR PproGo58_45240-MONOMER
+ACONCtex	PproGo58_14200-MONOMER
+ACONCtupp	CPLX_ACONCtupp-0
+ACONTa	PproGo58_25720-MONOMER_mod_4fe4s(1) OR PproGo58_18980-MONOMER_mod_4fe4s(1)
+ACONTb	PproGo58_25720-MONOMER_mod_4fe4s(1) OR PproGo58_18980-MONOMER_mod_4fe4s(1)
+ACOTA	PproGo58_43610-MONOMER_mod_pydx5p(1)
+ACPPAT120	CPLX_ACPPAT120-0
+ACPPAT140	CPLX_ACPPAT120-0
+ACPPAT141	CPLX_ACPPAT120-0
+ACPPAT160	CPLX_ACPPAT120-0
+ACPPAT161	CPLX_ACPPAT120-0
+ACPPAT180	CPLX_ACPPAT120-0
+ACPPAT181	CPLX_ACPPAT120-0
+ACPpds	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+ACS	PproGo58_43680-MONOMER OR PproGo58_49890-MONOMER OR PproGo58_35190-MONOMER OR PproGo58_29740-MONOMER
+ACTD2	CPLX_ACTD2-0
+ACTD2_SS	CPLX_ACTD2-0
+ACTD_1	PproGo58_20670-MONOMER OR PproGo58_32510-MONOMER
+ACt4pp	PproGo58_16820-MONOMER
+ADA	PproGo58_07130-MONOMER
+ADCL	PproGo58_17630-MONOMER_mod_pydx5p(1)
+ADCPS1	CPLX_ADCPS1-0
+ADCS	PproGo58_18140-MONOMER
+ADCYRS	PproGo58_42780-MONOMER
+ADEt2rpp	PproGo58_50780-MONOMER
+ADK1irr	PproGo58_11190-MONOMER_mod_mg2(1)
+ADNUC	PproGo58_20110-MONOMER
+ADNtex	PproGo58_42290-MONOMER
+ADOCBLS	PproGo58_42740-MONOMER
+ADPT	PproGo58_18780-MONOMER_mod_mg2(1) OR PproGo58_18780-MONOMER_mod_mn2(1)
+ADSK	CPLX_ADSK-0
+ADSL1r	PproGo58_37750-MONOMER
+ADSL2r	PproGo58_37750-MONOMER
+ADSS	PproGo58_05690-MONOMER_mod_mg2(1)
+AEPPYRTA	PproGo58_38440-MONOMER
+AGDC	PproGo58_10540-MONOMER_mod_zn2(1)
+AGM3PA	PproGo58_08280-MONOMER
+AGM3PApp	PproGo58_05610-MONOMER
+AGM3PH	PproGo58_19220-MONOMER
+AGM4PA	PproGo58_08280-MONOMER
+AGM4PApp	PproGo58_05610-MONOMER
+AGM4PH	PproGo58_19220-MONOMER
+AGMDA	PproGo58_03050-MONOMER
+AGMH	PproGo58_19220-MONOMER
+AGMPTRCtpp	PproGo58_07520-MONOMER
+AGPAT120	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPAT140	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPAT141	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPAT160	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPAT161	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPAT180	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPAT181	PproGo58_00120-MONOMER OR PproGo58_13310-MONOMER
+AGPR	PproGo58_53020-MONOMER
+AHCi	PproGo58_54790-MONOMER
+AHGDx	PproGo58_55890-MONOMER
+AHSERL2	PproGo58_04960-MONOMER OR PproGo58_19890-MONOMER
+AICART	PproGo58_06590-MONOMER
+AIRCr	CPLX_AIRCr-0
+AKGDa	PproGo58_16880-MONOMER
+AKGDb	PproGo58_16890-MONOMER
+AKGt2rpp	PproGo58_45490-MONOMER
+AKP1_2	PproGo58_08400-MONOMER
+ALAALAabcpp	CPLX_ALAALAabcpp-0 OR CPLX_ALAALAabcpp-1
+ALAALAr	PproGo58_47900-MONOMER
+ALAR	PproGo58_57250-MONOMER_mod_pydx5p(1)
+ALATA_L	PproGo58_40930-MONOMER OR PproGo58_44200-MONOMER
+ALAabcpp	PproGo58_52530-MONOMER OR CPLX_ALAabcpp-0
+ALAt4pp	PproGo58_58490-MONOMER
+ALCD19	PproGo58_51750-MONOMER_mod_mg2(1) OR PproGo58_11760-MONOMER_mod_zn2(1)
+ALCD1_ros	PproGo58_52550-MONOMER OR PproGo58_00750-MONOMER_mod_hemed(6) OR PproGo58_50650-MONOMER
+ALCD4	PproGo58_21160-MONOMER
+ALDD1	PproGo58_54030-MONOMER
+ALDD19xr	PproGo58_27850-MONOMER
+ALDD2x	PproGo58_51750-MONOMER_mod_mg2(1) OR PproGo58_51750-MONOMER_mod_mg2(1)
+ALLTAHr	PproGo58_42250-MONOMER
+ALLTN	PproGo58_42230-MONOMER
+ALLTNt2rpp	PproGo58_18110-MONOMER
+ALR2	PproGo58_28090-MONOMER
+AM3PA	PproGo58_08280-MONOMER
+AM4PA	PproGo58_08280-MONOMER
+AMAOTr	PproGo58_54850-MONOMER_mod_pydx5p(1)
+AMPMS2	PproGo58_05360-MONOMER
+AMPN	PproGo58_51300-MONOMER
+AMPTASECG	PproGo58_27150-MONOMER OR PproGo58_10390-MONOMER_mod_zn2(1)
+AMPTASEPG	PproGo58_10390-MONOMER_mod_zn2(1) OR PproGo58_27150-MONOMER
+ANHMK	PproGo58_53000-MONOMER_mod_mg2(1)
+ANPRT	PproGo58_53130-MONOMER
+ANS	CPLX_ANS-0
+AOXSr	PproGo58_53700-MONOMER
+AP4AH	PproGo58_53340-MONOMER
+APATr	PproGo58_07270-MONOMER
+APG3PAT120	PproGo58_53420-MONOMER
+APG3PAT140	PproGo58_53420-MONOMER
+APG3PAT141	PproGo58_53420-MONOMER
+APG3PAT160	PproGo58_53420-MONOMER
+APG3PAT161	PproGo58_53420-MONOMER
+APG3PAT180	PproGo58_53420-MONOMER
+APG3PAT181	PproGo58_53420-MONOMER
+APRAUR	PproGo58_52230-MONOMER
+APSR	CPLX_APSR-0
+APTNAT	PproGo58_01790-MONOMER_mod_pydx5p(1)
+ARBt3ipp	PproGo58_34490-MONOMER
+ARGDC	PproGo58_06720-MONOMER_mod_mg2(1)_mod_pydx5p(4) OR PproGo58_27030-MONOMER_mod_pydx5p(1)
+ARGDr	PproGo58_44750-MONOMER
+ARGORNt7pp	PproGo58_44740-MONOMER
+ARGSL	PproGo58_56940-MONOMER
+ARGSS	PproGo58_45990-MONOMER_mod_mg2(1)
+ARGTRS	PproGo58_04350-MONOMER_mod_mg2(1)
+ARGabcpp	CPLX_ARGabcpp-0
+ARGt3pp	PproGo58_26320-MONOMER
+ARUH	PproGo58_26370-MONOMER
+ASAD	PproGo58_19780-MONOMER
+ASNNpp	PproGo58_20030-MONOMER
+ASNS1	PproGo58_41890-MONOMER_mod_mg2(1)
+ASO3t2pp	PproGo58_27080-MONOMER
+ASO4rt2rpp	PproGo58_13040-MONOMER OR PproGo58_43920-MONOMER
+ASPCT	PproGo58_55140-MONOMER
+ASPK	PproGo58_43510-MONOMER
+ASPO1	PproGo58_14270-MONOMER_mod_fad(1)
+ASPO3	PproGo58_14270-MONOMER_mod_fad(1)
+ASPO3_q9	PproGo58_14270-MONOMER_mod_fad(1)
+ASPO5	PproGo58_14270-MONOMER_mod_fad(1)
+ASPO6	PproGo58_14270-MONOMER_mod_fad(1)
+ASPT	PproGo58_58210-MONOMER_mod_mg2(1) OR PproGo58_58210-MONOMER_mod_mn2(1) OR PproGo58_58210-MONOMER_mod_cobalt2(1)
+ASPTA	PproGo58_26370-MONOMER OR PproGo58_19640-MONOMER_mod_pydx5p(1) OR PproGo58_49780-MONOMER
+ASPabcpp	CPLX_ASPabcpp-0
+ASR	PproGo58_43080-MONOMER OR PproGo58_22830-MONOMER
+AST	CPLX_AST-0
+ATPPRT	CPLX_ATPPRT-0
+ATPS4rpp	CPLX_ATPS4rpp-0
+BALAt2pp	PproGo58_03350-MONOMER
+BETALDHx	PproGo58_54480-MONOMER
+BETALDHy	PproGo58_54480-MONOMER
+BHBtpp	PproGo58_35170-MONOMER
+BKACEr	PproGo58_54340-MONOMER
+BLUB	PproGo58_42810-MONOMER
+BMOCOS	PproGo58_40680-MONOMER
+BMOGDS1	PproGo58_36440-MONOMER_mod_mg2(1) OR PproGo58_36440-MONOMER_mod_mn2(1)
+BMOGDS2	PproGo58_36440-MONOMER_mod_mg2(1) OR PproGo58_36440-MONOMER_mod_mn2(1)
+BPNT	PproGo58_02950-MONOMER_mod_mg2(1)
+BTDD_RR	PproGo58_20670-MONOMER OR PproGo58_32510-MONOMER
+BTDD_SS_cyt	PproGo58_21060-MONOMER
+BTDD_meso	PproGo58_20670-MONOMER OR PproGo58_32510-MONOMER
+BTS5	PproGo58_53710-MONOMER_mod_4fe4s(1)_mod_2fe2s(1)
+BUTCT	CPLX_BUTCT-0
+BUTSO3abcpp	CPLX_BUTSO3abcpp-0
+BUTSO3tex	PproGo58_56170-MONOMER
+BUTt2rpp	PproGo58_49430-MONOMER
+BZ12DOX	CPLX_BZ12DOX-0
+BZDIOLDH	PproGo58_37370-MONOMER
+CAT	PproGo58_52550-MONOMER OR PproGo58_50650-MONOMER OR PproGo58_00750-MONOMER_mod_hemed(6)
+CATDOX	PproGo58_37420-MONOMER
+CBIAT	PproGo58_42830-MONOMER
+CBMKr	PproGo58_44770-MONOMER
+CBPAH	PproGo58_23380-MONOMER OR PproGo58_03040-MONOMER
+CBPS	CPLX_CBPS-0_mod_mg2(1) OR CPLX_CBPS-0_mod_mn2(1) OR CPLX_CBPS-0_mod_cobalt2(1) OR CPLX_CBPS-0_mod_cd2(1) OR CPLX_CBPS-0_mod_zn2(1)
+CCGS	PproGo58_44970-MONOMER
+CD2abcpp	PproGo58_55700-MONOMER
+CDGR	PproGo58_19380-MONOMER
+CDGS	PproGo58_44980-MONOMER
+CDGUNPD	PproGo58_45720-MONOMER
+CDPMEK	PproGo58_48780-MONOMER_mod_mg2(1)
+CGLYabcpp	CPLX_ALAALAabcpp-0 OR CPLX_ALAALAabcpp-1
+CHLabcpp	CPLX_CHLabcpp-0
+CHLt2pp	PproGo58_02510-MONOMER OR PproGo58_54460-MONOMER
+CHOLSH	PproGo58_00310-MONOMER
+CHOLSabc	CPLX_CHOLSabc-0
+CHORM	PproGo58_41670-MONOMER
+CHORS	PproGo58_42080-MONOMER_mod_fmnh2(1) OR PproGo58_42080-MONOMER_mod_fadh2(1)
+CHRPL	PproGo58_57980-MONOMER
+CIO3pp_q8	CPLX_CIO3pp_q8-0
+CIO3pp_q9	CPLX_CIO3pp_q8-0
+CITt_kt	PproGo58_19270-MONOMER OR PproGo58_01070-MONOMER
+CITtex	PproGo58_14200-MONOMER
+CLPNS120pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CLPNS140pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CLPNS141pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CLPNS160pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CLPNS161pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CLPNS180pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CLPNS181pp	PproGo58_58980-MONOMER OR PproGo58_57330-MONOMER
+CMCMSAD	PproGo58_32590-MONOMER
+CMHMI	PproGo58_32610-MONOMER
+CMtpp	CPLX_CMtpp-0 OR CPLX_CMtpp-1
+COBALT2abcpp	PproGo58_55700-MONOMER
+COBALT2tpp	PproGo58_51410-MONOMER
+COBK1	PproGo58_42770-MONOMER
+COBK2	PproGo58_42770-MONOMER
+COCHL	PproGo58_35710-MONOMER
+CPH4S	PproGo58_38890-MONOMER
+CPMPS	CPLX_CPMPS-0
+CPPPGO	PproGo58_00270-MONOMER_mod_mn2(1)
+CPPPGO2	PproGo58_18810-MONOMER_mod_4fe4s(1)
+CRNDH	CPLX_CRNDH-0
+CRNt2rpp	PproGo58_13370-MONOMER
+CRO4abcpp	CPLX_CRO4abcpp-0 OR CPLX_CRO4abcpp-1
+CRO4t3pp	PproGo58_20260-MONOMER
+CS	PproGo58_16830-MONOMER
+CSNt2pp	PproGo58_03980-MONOMER
+CTBTabcpp	CPLX_CTBTabcpp-0
+CTBTt2rpp	PproGo58_13370-MONOMER
+CTECOAI6	PproGo58_19100-MONOMER
+CTECOAI7	PproGo58_19100-MONOMER
+CTECOAI8	PproGo58_19100-MONOMER
+CTPS1	PproGo58_11700-MONOMER_mod_mg2(1)
+CTPS2	PproGo58_11700-MONOMER_mod_mg2(1)
+CU1Opp	CPLX_CU1Opp-0
+CU2abcpp	PproGo58_07040-MONOMER
+CYANST	PproGo58_53350-MONOMER OR PproGo58_05510-MONOMER OR PproGo58_55440-MONOMER
+CYNTAH	PproGo58_14650-MONOMER
+CYNTt2pp	PproGo58_14630-MONOMER
+CYO1_KT	CPLX_CYO1_KT-0
+CYRDAAT	PproGo58_42830-MONOMER
+CYRDAR	PproGo58_42810-MONOMER
+CYSS	PproGo58_14950-MONOMER_mod_pydx5p(2) OR PproGo58_43000-MONOMER_mod_pydx5p(1) OR PproGo58_12780-MONOMER
+CYTCAA6pp	CPLX_CYTCAA6pp-0
+CYTCBB4pp_1	CPLX_CYTCBB4pp_1-0
+CYTCBB4pp_2	CPLX_CYTCBB4pp_2-0
+CYTK1	PproGo58_41640-MONOMER_mod_mg2(1)
+CYTK2	PproGo58_41640-MONOMER_mod_mg2(1)
+DAAD	PproGo58_54890-MONOMER OR PproGo58_57270-MONOMER
+DABAAT	PproGo58_40370-MONOMER
+DADA	PproGo58_07130-MONOMER
+DADK	PproGo58_11190-MONOMER_mod_mg2(1)
+DAGK120	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK140	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK141	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK160	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK161	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK180	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK181	PproGo58_12340-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAPDC	PproGo58_57020-MONOMER
+DAPE	PproGo58_57030-MONOMER
+DARBt3ipp	PproGo58_34490-MONOMER
+DASYN120	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN140	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN141	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN160	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN161	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN180	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN181	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1)
+DB4PS	PproGo58_52210-MONOMER_mod_mg2(1)
+DBTS	PproGo58_53670-MONOMER_mod_mg2(1)
+DCTPD	PproGo58_12530-MONOMER
+DCTPD2	PproGo58_12530-MONOMER
+DDCAtexi	PproGo58_28290-MONOMER
+DDPA	PproGo58_35100-MONOMER OR PproGo58_41180-MONOMER_mod_fe2(2) OR PproGo58_41000-MONOMER
+DGK1	PproGo58_57500-MONOMER_mod_mg2(1)
+DGUNC	PproGo58_11070-MONOMER OR PproGo58_31430-MONOMER OR PproGo58_07330-MONOMER OR PproGo58_45450-MONOMER
+DHAD1	PproGo58_55550-MONOMER_mod_4fe4s(1)
+DHAD2	PproGo58_55550-MONOMER_mod_4fe4s(1)
+DHDPRy	PproGo58_08050-MONOMER
+DHDPS	PproGo58_14370-MONOMER
+DHEDAA	PproGo58_32640-MONOMER
+DHFR	PproGo58_55610-MONOMER
+DHFS	PproGo58_19850-MONOMER
+DHMPTR	PproGo58_09290-MONOMER
+DHNPA_1	PproGo58_53410-MONOMER
+DHNPTE	PproGo58_53410-MONOMER
+DHORD2	PproGo58_18430-MONOMER_mod_fmn(1)
+DHORDfum	PproGo58_18430-MONOMER_mod_fmn(1)
+DHORTS	PproGo58_55150-MONOMER OR PproGo58_46010-MONOMER_mod_zn2(2) OR PproGo58_58950-MONOMER
+DHPM1	PproGo58_24860-MONOMER
+DHPPDA	PproGo58_52230-MONOMER
+DHQS	PproGo58_04470-MONOMER_mod_cobalt2(1)_mod_nad(1)
+DHQTi	PproGo58_50890-MONOMER OR PproGo58_06660-MONOMER
+DHSKDH	PproGo58_50930-MONOMER
+DMATT	PproGo58_52100-MONOMER_mod_mg2(1) OR PproGo58_52100-MONOMER_mod_mn2(1)
+DMGDH2	CPLX_DMGDH2-0
+DMPPS	PproGo58_50260-MONOMER_mod_nadph(1)_mod_nadh(1)_mod_fad(1)_mod_cobalt2(1)
+DMQMT	PproGo58_41720-MONOMER_mod_zn2(1)
+DOXRBCNtpp	CPLX_CMtpp-0 OR CPLX_MINCYCtpp-0
+DPCOAK	PproGo58_49980-MONOMER
+DPR	PproGo58_41150-MONOMER OR PproGo58_45190-MONOMER
+DTMPK	PproGo58_17650-MONOMER_mod_mg2(1)
+DURAD	CPLX_DURAD-0
+DURIPP	PproGo58_40590-MONOMER
+DUTPDP	PproGo58_57420-MONOMER_mod_zn2(1)
+DXPRIi	PproGo58_11570-MONOMER_mod_mn2(1) OR PproGo58_11570-MONOMER_mod_cobalt2(1) OR PproGo58_11570-MONOMER_mod_mg2(1)
+DXPS	PproGo58_52110-MONOMER_mod_thmpp(1)
+D_LACt2pp	PproGo58_07930-MONOMER
+E4PD	PproGo58_54660-MONOMER
+EAR100x	PproGo58_26910-MONOMER
+EAR120x	PproGo58_26910-MONOMER
+EAR121x	PproGo58_26590-MONOMER
+EAR140x	PproGo58_26910-MONOMER
+EAR141x	PproGo58_26910-MONOMER
+EAR160x	PproGo58_26910-MONOMER
+EAR161x	PproGo58_26910-MONOMER
+EAR180x	PproGo58_26910-MONOMER
+EAR181x	PproGo58_26910-MONOMER
+EAR40x	PproGo58_26910-MONOMER
+EAR60x	PproGo58_26910-MONOMER
+EAR80x	PproGo58_26910-MONOMER
+ECOAH1	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH2	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH3	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH4	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH5	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH6	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH7	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+ECOAH8	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER OR PproGo58_18010-MONOMER OR PproGo58_45430-MONOMER
+EDD	PproGo58_44630-MONOMER
+ENO	PproGo58_11720-MONOMER_mod_mg2(4)
+ENTERES2pp	PproGo58_25890-MONOMER
+ENTERESpp	PproGo58_25890-MONOMER
+ETHAAL	CPLX_ETHAAL-0_mod_adocbl(1)
+ETHAt2pp	PproGo58_05010-MONOMER
+ETHSO3abcpp	CPLX_BUTSO3abcpp-0
+ETHSO3tex	PproGo58_56170-MONOMER
+FA100ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA120ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA140ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA141ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA160ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA161ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA80ACPHi	PproGo58_13300-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FACOAE100	PproGo58_51060-MONOMER
+FACOAE120	PproGo58_51060-MONOMER
+FACOAE140	PproGo58_51060-MONOMER
+FACOAE141	PproGo58_51060-MONOMER
+FACOAE160	PproGo58_51060-MONOMER
+FACOAE161	PproGo58_51060-MONOMER
+FACOAE180	PproGo58_51060-MONOMER
+FACOAE181	PproGo58_51060-MONOMER
+FACOAE60	PproGo58_51060-MONOMER
+FACOAE80	PproGo58_51060-MONOMER
+FACOAL100t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL120t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL140	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL140t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL141t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL160	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL160t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL161	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL161t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL180t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL181	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL181t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL60t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FACOAL80t2pp	PproGo58_44390-MONOMER_mod_mg2(1) OR PproGo58_44400-MONOMER OR PproGo58_38140-MONOMER OR PproGo58_48320-MONOMER OR PproGo58_17150-MONOMER
+FALDH2	PproGo58_11760-MONOMER_mod_zn2(1)
+FBA	PproGo58_54620-MONOMER
+FBACabcpp	PproGo58_39550-MONOMER
+FBP	PproGo58_03890-MONOMER_mod_mg2(1)
+FCLT	PproGo58_48550-MONOMER
+FDMO	PproGo58_56130-MONOMER OR PproGo58_27350-MONOMER
+FDMO2	PproGo58_56130-MONOMER OR PproGo58_40180-MONOMER
+FDMO3	PproGo58_56130-MONOMER OR PproGo58_40180-MONOMER
+FDMO4	PproGo58_56130-MONOMER OR PproGo58_40180-MONOMER
+FDMO6	PproGo58_56130-MONOMER OR PproGo58_40180-MONOMER
+FDMOtau	PproGo58_56130-MONOMER
+FE2t3pp	PproGo58_51250-MONOMER
+FE2tpp	PproGo58_56740-MONOMER
+FE3DCIT2abcpp	CPLX_FE3DCITabcpp-0
+FE3DCITR2	CPLX_FRDO4r-0
+FE3DCITR3	PproGo58_12360-MONOMER OR PproGo58_50670-MONOMER_mod_fad(1)
+FE3DCITabcpp	CPLX_FE3DCITabcpp-0
+FE3DCITtonex	PproGo58_09630-MONOMER
+FE3abcpp	CPLX_FE3abcpp-0 OR CPLX_FE3abcpp-1
+FEENTERtex	PproGo58_05350-MONOMER
+FEENTERtonex	PproGo58_25900-MONOMER OR PproGo58_25900-MONOMER
+FEENTERtpp	PproGo58_50720-MONOMER
+FEROpp	PproGo58_46050-MONOMER
+FGLU	PproGo58_03400-MONOMER
+FLDR2	CPLX_FLDR2-0
+FMNAT	PproGo58_50300-MONOMER
+FMNRx2	PproGo58_56150-MONOMER OR PproGo58_40170-MONOMER
+FOLD3	PproGo58_08130-MONOMER_mod_mg2(1)
+FORCT	PproGo58_10820-MONOMER
+FORGLUIH2	PproGo58_03940-MONOMER
+FRDO4r	CPLX_FRDO4r-0
+FRDO7r	CPLX_FRDO4r-0
+FRUK	PproGo58_08340-MONOMER_mod_mg2(1)
+FRUptspp	CPLX_FRUptspp-0
+FRUtex	PproGo58_44540-MONOMER OR PproGo58_44540-MONOMER
+FTHFD	PproGo58_45310-MONOMER OR PproGo58_54040-MONOMER
+FUM	PproGo58_41830-MONOMER OR PproGo58_45460-MONOMER_mod_4fe4s(1) OR PproGo58_08860-MONOMER
+FUMAC	PproGo58_09470-MONOMER
+FUMt2_2pp	PproGo58_50550-MONOMER OR PproGo58_43190-MONOMER
+FUSAtpp	CPLX_MINCYCtpp-0 OR CPLX_RFAMPtpp-0
+G1PACT	PproGo58_59190-MONOMER_mod_mg2(1)
+G1PTT	PproGo58_03010-MONOMER
+G1SAT	PproGo58_27810-MONOMER OR PproGo58_51350-MONOMER_mod_pydx5p(1)
+G2PP	PproGo58_47090-MONOMER_mod_mg2(1)
+G3PAT120	PproGo58_11320-MONOMER
+G3PAT140	PproGo58_11320-MONOMER
+G3PAT141	PproGo58_11320-MONOMER
+G3PAT160	PproGo58_11320-MONOMER
+G3PAT161	PproGo58_11320-MONOMER
+G3PAT180	PproGo58_11320-MONOMER
+G3PAT181	PproGo58_11320-MONOMER
+G3PD	PproGo58_32330-MONOMER OR PproGo58_46150-MONOMER_mod_fad(1)
+G3PD2i	PproGo58_17120-MONOMER
+G3PD5	PproGo58_32330-MONOMER OR PproGo58_46150-MONOMER_mod_fad(1) OR PproGo58_04990-MONOMER
+G5SD	PproGo58_51620-MONOMER
+G6PBDH	PproGo58_44510-MONOMER
+G6PDH2rirr	PproGo58_44510-MONOMER
+G6PI	PproGo58_49880-MONOMER
+GALUi	PproGo58_32880-MONOMER
+GAPD	PproGo58_44640-MONOMER OR PproGo58_19260-MONOMER
+GARFT	PproGo58_42930-MONOMER OR PproGo58_10610-MONOMER_mod_mg2(1)
+GART	PproGo58_10610-MONOMER_mod_mg2(1)
+GCALDD	PproGo58_51750-MONOMER_mod_mg2(1) OR PproGo58_51750-MONOMER_mod_mg2(1)
+GDBTALDH	PproGo58_57350-MONOMER
+GDPDPK	PproGo58_57520-MONOMER_mod_mn2(1)
+GDPMANNDH	PproGo58_10050-MONOMER
+GF6PTA	PproGo58_59170-MONOMER
+GGGABADr	PproGo58_34660-MONOMER
+GGGABAH	PproGo58_22390-MONOMER
+GGPTRCO	PproGo58_19910-MONOMER OR PproGo58_23820-MONOMER OR PproGo58_57300-MONOMER
+GGPTRCS	PproGo58_43390-MONOMER OR PproGo58_23830-MONOMER OR PproGo58_56050-MONOMER OR PproGo58_56070-MONOMER
+GHMT2r	PproGo58_54090-MONOMER OR PproGo58_54090-MONOMER OR PproGo58_50540-MONOMER
+GK1	PproGo58_57500-MONOMER_mod_mg2(1)
+GLBOX	CPLX_GLBOX-0
+GLCDpp	PproGo58_46560-MONOMER_mod_pqq(1)
+GLCDpp_q9	PproGo58_46560-MONOMER_mod_pqq(1)
+GLCNt2rpp	PproGo58_44210-MONOMER
+GLCOASYNT	PproGo58_16880-MONOMER
+GLCP	PproGo58_03860-MONOMER_mod_pydx5p(1)
+GLCS1	PproGo58_31190-MONOMER
+GLCabcpp	CPLX_GLCabcpp-0
+GLCtex	PproGo58_44540-MONOMER
+GLNS	PproGo58_03820-MONOMER_mod_mn2(1)
+GLNabcpp	CPLX_ASPabcpp-0 OR CPLX_GLNabcpp-0
+GLU5K	PproGo58_50340-MONOMER_mod_mg2(1)
+GLUCYS	PproGo58_02700-MONOMER_mod_mg2(1)
+GLUDC	PproGo58_06720-MONOMER_mod_mg2(1)_mod_pydx5p(4)
+GLUDyirr	PproGo58_50510-MONOMER
+GLUN	PproGo58_30960-MONOMER OR PproGo58_20030-MONOMER
+GLUNpp	PproGo58_20030-MONOMER
+GLUPRT	PproGo58_19880-MONOMER_mod_mg2(1)
+GLUR	PproGo58_48710-MONOMER
+GLUSx	PproGo58_24850-MONOMER OR CPLX_GLUSx-0_mod_fe2(1)_mod_fad(1)
+GLUSy	PproGo58_24850-MONOMER OR CPLX_GLUSx-0_mod_fe2(1)_mod_fad(1)
+GLUTCOADHc	PproGo58_01190-MONOMER
+GLUTRR	PproGo58_48750-MONOMER
+GLUTRS	PproGo58_19660-MONOMER_mod_mg2(1)_mod_zn2(1)
+GLUabcpp	CPLX_ASPabcpp-0
+GLUt2rppirr	PproGo58_00970-MONOMER
+GLUt4pp	PproGo58_03410-MONOMER
+GLXCL	PproGo58_16720-MONOMER_mod_mg2(1)_mod_thmpp(1)_mod_fad(1)
+GLYALDDr	PproGo58_51750-MONOMER_mod_mg2(1) OR PproGo58_34050-MONOMER
+GLYALDtpp	PproGo58_46120-MONOMER
+GLYBCOAT	CPLX_BUTCT-0
+GLYBabcpp	CPLX_CHLabcpp-0 OR CPLX_GLYBabcpp-0
+GLYC2Pabcpp	PproGo58_29780-MONOMER
+GLYC3Pabcpp	PproGo58_29780-MONOMER
+GLYCK	PproGo58_32400-MONOMER
+GLYCL	CPLX_GLYCL-0 OR CPLX_GLYCL-1
+GLYCLTDx	PproGo58_48340-MONOMER
+GLYCLTDy	PproGo58_16690-MONOMER
+GLYCLTt4pprev	PproGo58_16820-MONOMER
+GLYCOX1_PA	PproGo58_50190-MONOMER
+GLYCOX2_PA	PproGo58_50190-MONOMER
+GLYCTO1	CPLX_GLYCTO1-0
+GLYCtex	PproGo58_44540-MONOMER
+GLYCtpp	PproGo58_46120-MONOMER
+GLYK	PproGo58_46130-MONOMER_mod_mg2(1) OR PproGo58_46130-MONOMER_mod_mn2(1) OR PproGo58_04970-MONOMER
+GLYOX	PproGo58_26980-MONOMER_mod_zn2(1)
+GLYabcpp	PproGo58_10210-MONOMER
+GLYt2pp	PproGo58_46460-MONOMER
+GLYt4pp	PproGo58_58490-MONOMER
+GMHEPAT	PproGo58_05280-MONOMER
+GMHEPK	PproGo58_05280-MONOMER
+GMHEPPA	PproGo58_00130-MONOMER_mod_mg2(1)
+GMPS2	PproGo58_46790-MONOMER_mod_mg2(1)
+GNK	PproGo58_44220-MONOMER_mod_mg2(1)
+GNNUC	PproGo58_20110-MONOMER
+GPDDA1	PproGo58_19300-MONOMER_mod_mg2(1) OR PproGo58_43850-MONOMER_mod_ca2(1)
+GPDDA2	PproGo58_19300-MONOMER_mod_mg2(1)
+GPDDA3	PproGo58_19300-MONOMER_mod_mg2(1) OR PproGo58_43850-MONOMER_mod_ca2(1)
+GPDDA4	PproGo58_19300-MONOMER_mod_mg2(1) OR PproGo58_43850-MONOMER_mod_ca2(1)
+GPDDA5	PproGo58_19300-MONOMER_mod_mg2(1) OR PproGo58_43850-MONOMER_mod_ca2(1)
+GRTT	PproGo58_52100-MONOMER_mod_mg2(1) OR PproGo58_52100-MONOMER_mod_mn2(1)
+GRXR	PproGo58_03690-MONOMER
+GTHOr	PproGo58_32870-MONOMER_mod_fad(1)
+GTHPi	PproGo58_40910-MONOMER OR PproGo58_42710-MONOMER OR PproGo58_09200-MONOMER
+GTHRDHpp	PproGo58_07630-MONOMER
+GTHS	PproGo58_55090-MONOMER_mod_mg2(1)
+GTPCI	PproGo58_09280-MONOMER_mod_zn2(1) OR PproGo58_42150-MONOMER OR PproGo58_58890-MONOMER
+GTPCII	PproGo58_52150-MONOMER_mod_mg2(1)
+GTPDPDP	PproGo58_56680-MONOMER_mod_mg2(1)
+GTPDPK	PproGo58_42980-MONOMER
+GUACYC	PproGo58_01240-MONOMER OR PproGo58_31430-MONOMER OR PproGo58_11070-MONOMER OR PproGo58_07330-MONOMER
+GUAD	PproGo58_18530-MONOMER_mod_zn2(1)
+GUAPRT	PproGo58_48520-MONOMER
+GUAt2pp	PproGo58_42280-MONOMER OR PproGo58_42200-MONOMER
+GUAtex	PproGo58_42290-MONOMER
+GUDBUTNAH	PproGo58_15400-MONOMER_mod_mn2(2)
+H2CO3D	PproGo58_00590-MONOMER
+H2Otpp	PproGo58_15210-MONOMER
+HACD1i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD2i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD3i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD4i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD5i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD6i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD7i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HACD8i	PproGo58_19100-MONOMER OR PproGo58_17970-MONOMER
+HBZOPT	PproGo58_57990-MONOMER_mod_mg2(1)
+HCO3E	PproGo58_00590-MONOMER OR PproGo58_14660-MONOMER_mod_zn2(1) OR PproGo58_49490-MONOMER_mod_zn2(1) OR PproGo58_58940-MONOMER
+HDCAtexi	PproGo58_28290-MONOMER
+HDCEAtexi	PproGo58_28290-MONOMER
+HEMEOS	PproGo58_47650-MONOMER_mod_mg2(1) OR PproGo58_47650-MONOMER_mod_ca2(1) OR PproGo58_00700-MONOMER
+HEX7	PproGo58_29820-MONOMER
+HEXt2rpp	PproGo58_49430-MONOMER
+HG2abcpp	PproGo58_55700-MONOMER
+HG2t3pp	PproGo58_51250-MONOMER
+HGNTOR	PproGo58_09460-MONOMER
+HHDDI	PproGo58_32580-MONOMER
+HISDr	PproGo58_04020-MONOMER OR PproGo58_04030-MONOMER
+HISTD	PproGo58_09080-MONOMER_mod_mn2(1)
+HISTP	PproGo58_00130-MONOMER_mod_mg2(1) OR PproGo58_55790-MONOMER
+HISTRS	PproGo58_46930-MONOMER_mod_mg2(4)
+HISt2rpp	PproGo58_04040-MONOMER OR PproGo58_07520-MONOMER
+HIStex	PproGo58_47840-MONOMER
+HIUH_c	PproGo58_42220-MONOMER
+HMBS	PproGo58_56910-MONOMER_mod_dpm(1)
+HMGL	PproGo58_38130-MONOMER
+HMPK1	PproGo58_51330-MONOMER
+HOMt2pp	PproGo58_40080-MONOMER OR PproGo58_56800-MONOMER
+HPPK	PproGo58_49850-MONOMER_mod_mg2(1) OR PproGo58_53400-MONOMER
+HPYRI	PproGo58_16710-MONOMER
+HPYRRx	PproGo58_48340-MONOMER
+HSDy	PproGo58_10750-MONOMER
+HSERTA	CPLX_HSERTA-0
+HSK	PproGo58_00810-MONOMER OR PproGo58_18130-MONOMER
+HSTPT	PproGo58_41660-MONOMER_mod_pydx5p(1) OR PproGo58_09090-MONOMER
+HXAND	CPLX_HXAND-0
+HXPRT	PproGo58_48520-MONOMER
+HYGBDIAS	PproGo58_42820-MONOMER
+I2FE2SR	CPLX_I2FE2SR-0 OR CPLX_I2FE2SR-1
+I2FE2SS2	CPLX_I2FE2SR-0
+I2FE2SS2fdx	CPLX_I2FE2SS2fdx-0 OR CPLX_I2FE2SS2fdx-1
+I2FE2SSfdx	CPLX_I2FE2SS2fdx-0 OR CPLX_I2FE2SS2fdx-1
+I2FE2ST	CPLX_I4FE4ST-0
+I4FE4SRfdx	CPLX_I4FE4SRfdx-0
+I4FE4ST	CPLX_I4FE4ST-0
+ICDHyr	PproGo58_37710-MONOMER OR PproGo58_37690-MONOMER_mod_mn2(1) OR PproGo58_37690-MONOMER_mod_mg2(1)
+ICITt_kt	PproGo58_13370-MONOMER OR PproGo58_01070-MONOMER
+ICITtex	PproGo58_14200-MONOMER
+ICYSDS	PproGo58_47050-MONOMER_mod_pydx5p(2) OR PproGo58_40140-MONOMER
+IG3PS	CPLX_IG3PS-0
+IGPDH	PproGo58_03560-MONOMER_mod_mg2(1) OR PproGo58_03560-MONOMER_mod_mn2(1)
+IGPS	PproGo58_53120-MONOMER
+ILEabcpp	CPLX_ILEabcpp-0 OR CPLX_ILEabcpp-1 OR PproGo58_10210-MONOMER
+ILEt2rpp	PproGo58_16940-MONOMER
+IMPC	PproGo58_06590-MONOMER
+IMPD	PproGo58_46800-MONOMER
+INS2D	PproGo58_50980-MONOMER
+INSH	PproGo58_20110-MONOMER
+INStex	PproGo58_42290-MONOMER
+IPDDI	PproGo58_06700-MONOMER
+IPDPS	PproGo58_50260-MONOMER_mod_nadph(1)_mod_nadh(1)_mod_fad(1)_mod_cobalt2(1)
+IPMD	PproGo58_19770-MONOMER_mod_mg2(1)_mod_mn2(1)
+IPPMIa	CPLX_IPPMIa-0
+IPPMIb	CPLX_IPPMIa-0
+IPPS	PproGo58_46860-MONOMER
+ISETACabcpp	CPLX_BUTSO3abcpp-0
+ISETACtex	PproGo58_56170-MONOMER
+IZPN	PproGo58_04050-MONOMER
+K2L4Aabcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+K2L4Aabctex	CPLX_K2L4Aabctex-0
+KARA1	PproGo58_49620-MONOMER_mod_mg2(1)
+KARA2	PproGo58_49620-MONOMER_mod_mg2(1)
+KAS13	CPLX_KAS13-0
+KAS14	PproGo58_17620-MONOMER OR PproGo58_17070-MONOMER
+KAS15	PproGo58_15020-MONOMER
+KDOCT2	PproGo58_17440-MONOMER_mod_mg2(1)
+KDOPP	PproGo58_08980-MONOMER_mod_mg2(1)
+KDOPS	PproGo58_11710-MONOMER
+Kt2pp	PproGo58_12420-MONOMER OR CPLX_Kt2pp-0 OR CPLX_Kt2pp-1 OR PproGo58_42410-MONOMER
+Kt3pp	PproGo58_24400-MONOMER OR PproGo58_04860-MONOMER OR PproGo58_58770-MONOMER
+LCADi	PproGo58_51750-MONOMER_mod_mg2(1) OR PproGo58_11760-MONOMER_mod_zn2(1) OR PproGo58_34050-MONOMER
+LCTSt3ipp	PproGo58_34490-MONOMER
+LCYSTabcpp	CPLX_LCYSTabcpp-0
+LDGUNPD	PproGo58_50530-MONOMER
+LDH_D	PproGo58_43040-MONOMER
+LEUTRS	PproGo58_51450-MONOMER
+LEUabcpp	CPLX_ILEabcpp-0 OR PproGo58_10210-MONOMER OR CPLX_ILEabcpp-1
+LEUt2rpp	PproGo58_16940-MONOMER
+LGTHL	PproGo58_32820-MONOMER_mod_ni2(1)
+LIPOCT	PproGo58_51520-MONOMER
+LIPOS	PproGo58_51510-MONOMER_mod_4fe4s(2)
+LLEUDrirr	PproGo58_09530-MONOMER
+LPADSS	PproGo58_11640-MONOMER
+LPCOXc	PproGo58_05910-MONOMER
+LPLIPAL1A120pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1A140pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1A141pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1A160pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1A161pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1A180pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1A181pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1E120pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1E160pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1E161pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1E180pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1G120pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL1G160pp	PproGo58_41230-MONOMER_mod_ca2(1)
+LPLIPAL2E160	PproGo58_44410-MONOMER
+LPLIPAL2E180	PproGo58_44410-MONOMER
+LSERDHr	PproGo58_05970-MONOMER
+LYSDC	PproGo58_27030-MONOMER_mod_pydx5p(1)
+LYSabcpp	CPLX_ARGabcpp-0 OR CPLX_LYSabcpp-0
+LYSt3pp	PproGo58_45700-MONOMER
+L_LACt2rpp	PproGo58_07930-MONOMER
+MACACI	PproGo58_09480-MONOMER
+MALS	PproGo58_53780-MONOMER_mod_mg2(1)
+MALTHXabcpp	PproGo58_29790-MONOMER
+MALt2_2pp	PproGo58_50550-MONOMER OR PproGo58_43190-MONOMER
+MAN1PT	PproGo58_09940-MONOMER
+MAN1PT2	PproGo58_09940-MONOMER
+MBCOAi	PproGo58_38150-MONOMER
+MCCC	CPLX_MCCC-0
+MCITD	PproGo58_18230-MONOMER
+MCITL2	PproGo58_18190-MONOMER_mod_mg2(1)
+MCITS	PproGo58_18200-MONOMER
+MCOATA	CPLX_MCOATA-0
+MCTP1App	PproGo58_51580-MONOMER OR PproGo58_47980-MONOMER OR PproGo58_49670-MONOMER OR PproGo58_04400-MONOMER
+MCTP1Bpp	PproGo58_49670-MONOMER OR PproGo58_04400-MONOMER
+MCTP2App	PproGo58_47980-MONOMER OR PproGo58_04400-MONOMER OR PproGo58_49670-MONOMER
+MDDCP1pp	PproGo58_51540-MONOMER OR PproGo58_18470-MONOMER
+MDDCP2pp	PproGo58_51540-MONOMER OR PproGo58_18470-MONOMER
+MDDCP3pp	PproGo58_51540-MONOMER OR PproGo58_18470-MONOMER
+MDDCP4pp	PproGo58_51540-MONOMER OR PproGo58_18470-MONOMER
+MDDCP5pp	PproGo58_51540-MONOMER OR PproGo58_18470-MONOMER
+MDDEP1pp	PproGo58_18470-MONOMER OR PproGo58_38630-MONOMER
+MDDEP2pp	PproGo58_18470-MONOMER OR PproGo58_38630-MONOMER
+MDDEP3pp	PproGo58_18470-MONOMER OR PproGo58_38630-MONOMER
+MDDEP4pp	PproGo58_18470-MONOMER OR PproGo58_38630-MONOMER
+MDH2	PproGo58_23300-MONOMER_mod_fad(1) OR PproGo58_48480-MONOMER
+ME1	PproGo58_04390-MONOMER_mod_mn2(1) OR PproGo58_04390-MONOMER_mod_mg2(1)
+ME2	PproGo58_04390-MONOMER_mod_mn2(1) OR PproGo58_04390-MONOMER_mod_mg2(1)
+MECDPDH2	PproGo58_46940-MONOMER_mod_mn2(1)
+MECDPS	PproGo58_11780-MONOMER_mod_mn2(1)
+MELIBt3ipp	PproGo58_34490-MONOMER
+MEPCT	PproGo58_11740-MONOMER_mod_mg2(1) OR PproGo58_11740-MONOMER_mod_mn2(1) OR PproGo58_11740-MONOMER_mod_cobalt2(1)
+METAT	PproGo58_54690-MONOMER_mod_k(4)_mod_mg2(1) OR PproGo58_54690-MONOMER_mod_k(4)_mod_mn2(1) OR PproGo58_54690-MONOMER_mod_k(4)_mod_cobalt2(1) OR PproGo58_54690-MONOMER_mod_k(4)_mod_zn2(1) OR PproGo58_54690-MONOMER_mod_k(4)_mod_cd2(1) OR PproGo58_54690-MONOMER_mod_k(4)_mod_ni2(1) OR PproGo58_54690-MONOMER_mod_k(4)_mod_ca2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_mg2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_mn2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_cobalt2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_zn2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_cd2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_ni2(1) OR PproGo58_54690-MONOMER_mod_nh4(4)_mod_ca2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_mg2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_mn2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_cobalt2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_zn2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_cd2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_ni2(1) OR PproGo58_54690-MONOMER_mod_tl(4)_mod_ca2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_mg2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_mn2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_cobalt2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_zn2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_cd2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_ni2(1) OR PproGo58_54690-MONOMER_mod_cs(4)_mod_ca2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_mg2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_mn2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_cobalt2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_zn2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_cd2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_ni2(1) OR PproGo58_54690-MONOMER_mod_LI(4)_mod_ca2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_mg2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_mn2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_cobalt2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_zn2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_cd2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_ni2(1) OR PproGo58_54690-MONOMER_mod_na1(4)_mod_ca2(1)
+METS	PproGo58_35800-MONOMER_mod_zn2(1)_mod_cbl1(1) OR PproGo58_46340-MONOMER_mod_zn2(1)
+METSOXR1	CPLX_METSOXR1-0 OR CPLX_METSOXR1-1 OR CPLX_METSOXR1-2 OR CPLX_METSOXR1-3
+METSOXR2	CPLX_METSOXR1-0 OR CPLX_METSOXR1-1 OR CPLX_METSOXR1-2 OR CPLX_METSOXR1-3
+METTRS	PproGo58_45900-MONOMER_mod_zn2(2)
+METabcpp	CPLX_METabcpp-0 OR CPLX_rxn05614-0
+MG2tpp	PproGo58_43490-MONOMER OR PproGo58_51410-MONOMER
+MG2uabcpp	PproGo58_26430-MONOMER
+MGCH	PproGo58_38170-MONOMER
+MI1PP	PproGo58_47090-MONOMER_mod_mg2(1)
+MICITDr	PproGo58_18210-MONOMER
+MINCYCtpp	CPLX_CMtpp-0 OR CPLX_MINCYCtpp-0
+MLTGY1pp	PproGo58_51560-MONOMER OR PproGo58_10480-MONOMER OR PproGo58_19050-MONOMER OR PproGo58_54730-MONOMER
+MLTGY2pp	PproGo58_51560-MONOMER OR PproGo58_10480-MONOMER OR PproGo58_19050-MONOMER OR PproGo58_54730-MONOMER
+MLTGY3pp	PproGo58_51560-MONOMER OR PproGo58_10480-MONOMER OR PproGo58_19050-MONOMER OR PproGo58_54730-MONOMER
+MLTGY4pp	PproGo58_51560-MONOMER OR PproGo58_10480-MONOMER OR PproGo58_19050-MONOMER OR PproGo58_54730-MONOMER
+MMSAD3	PproGo58_07280-MONOMER
+MMTSAO	PproGo58_07280-MONOMER OR PproGo58_07360-MONOMER
+MN2t3pp	PproGo58_51250-MONOMER
+MNabc_1	CPLX_MNabc_1-0
+MNt2pp	PproGo58_21570-MONOMER
+MOADSUx	CPLX_MOADSUx-0 OR CPLX_MOADSUx-1
+MOBDabcpp	CPLX_MOBDabcpp-0
+MOCOS	PproGo58_40680-MONOMER
+MOHMT	PproGo58_49860-MONOMER_mod_mg2(1)
+MOTH1	PproGo58_31200-MONOMER
+MOTH2	PproGo58_31200-MONOMER
+MOTH3	PproGo58_31200-MONOMER
+MOTH4	PproGo58_31200-MONOMER
+MPTAT	PproGo58_40690-MONOMER
+MPTG	CPLX_MPTG-0 OR CPLX_MPTG-1 OR CPLX_MPTG-2
+MPTG2	CPLX_MPTG-0 OR CPLX_MPTG-1 OR CPLX_MPTG-2
+MPTS	CPLX_MPTS-0
+MPTSS	PproGo58_48720-MONOMER
+MSO3abcpp	CPLX_BUTSO3abcpp-0
+MSO3tex	PproGo58_56170-MONOMER
+MTHFC	PproGo58_38620-MONOMER
+MTHFD	PproGo58_38620-MONOMER
+MTHFR2	PproGo58_54800-MONOMER_mod_fad(1)
+MTHFR3	PproGo58_54800-MONOMER_mod_fad(1)
+MTI	PproGo58_31330-MONOMER
+MTRI	PproGo58_41700-MONOMER
+MUCCYCI	PproGo58_37440-MONOMER
+MUCCY_kt	PproGo58_13140-MONOMER
+MUCLI	PproGo58_37430-MONOMER
+NACODA	PproGo58_56190-MONOMER_mod_zn2(1) OR PproGo58_34670-MONOMER
+NADDP	PproGo58_27320-MONOMER
+NADH16pp	CPLX_NADH16pp-0_mod_2fe2s(1)_mod_4fe4s(1)_mod_fmn(1)
+NADH16pp_q9	CPLX_NADH16pp-0_mod_2fe2s(1)_mod_4fe4s(1)_mod_fmn(1)
+NADH5	PproGo58_50050-MONOMER_mod_mg2(1)_mod_cu(1)_mod_fad(1) OR PproGo58_26380-MONOMER
+NADK	PproGo58_27100-MONOMER_mod_mg2(1)
+NADN	PproGo58_23610-MONOMER
+NADPHQR2	PproGo58_00260-MONOMER OR PproGo58_26380-MONOMER
+NADS2	PproGo58_05870-MONOMER
+NADTRHD	PproGo58_19290-MONOMER_mod_fad(1)
+NAMNPP	PproGo58_05880-MONOMER OR PproGo58_05880-MONOMER
+NAR_syn	PproGo58_18360-MONOMER
+NAt3_1p5pp	PproGo58_30790-MONOMER
+NAt3pp	PproGo58_54760-MONOMER OR PproGo58_10720-MONOMER OR PproGo58_11430-MONOMER
+NDPK1	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK2	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK3	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK4	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK5	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK6	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK7	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NDPK8	PproGo58_46980-MONOMER_mod_mg2(1) OR PproGo58_46980-MONOMER_mod_mn2(1) OR PproGo58_46980-MONOMER_mod_ca2(1)
+NFORGLUAH2	PproGo58_04060-MONOMER
+NH4t4pp	PproGo58_57090-MONOMER OR PproGo58_40760-MONOMER
+NH4tpp	PproGo58_57090-MONOMER OR PproGo58_40760-MONOMER
+NI2t3pp	PproGo58_51250-MONOMER
+NMNATr	PproGo58_51610-MONOMER_mod_mg2(1)
+NMNDA	PproGo58_12250-MONOMER
+NMNHYD	PproGo58_11800-MONOMER_mod_cobalt2(1) OR PproGo58_02930-MONOMER
+NNAM	PproGo58_23740-MONOMER
+NNATr	PproGo58_51610-MONOMER_mod_mg2(1)
+NNDMBRT	PproGo58_42760-MONOMER
+NNDPR	PproGo58_08260-MONOMER_mod_mg2(1)
+NO2t2rpp	PproGo58_54770-MONOMER OR PproGo58_18400-MONOMER
+NO3abcpp	CPLX_NO3abcpp-0
+NODOx	PproGo58_47710-MONOMER_mod_fad(1)_mod_pheme(1)
+NODOx2	PproGo58_47710-MONOMER_mod_fad(1)_mod_pheme(1)
+NODOy	PproGo58_47710-MONOMER_mod_fad(1)_mod_pheme(1)
+NODOy2	PproGo58_47710-MONOMER_mod_fad(1)_mod_pheme(1)
+NOVBCNtpp	CPLX_CMtpp-0
+NTD1	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD10	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD11	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD2	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD3	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD4	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD5	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD6	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD7	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD8	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTD9	PproGo58_11800-MONOMER_mod_cobalt2(1)
+NTP1	PproGo58_05550-MONOMER
+NTPP1	PproGo58_42970-MONOMER_mod_mg2(1)
+NTPP11	PproGo58_55260-MONOMER_mod_mg2(1)
+NTPP2	PproGo58_42970-MONOMER_mod_mg2(1)
+NTPP4	PproGo58_42970-MONOMER_mod_mg2(1)
+NTPP6	PproGo58_42970-MONOMER_mod_mg2(1)
+NTPP8	PproGo58_42970-MONOMER_mod_mg2(1) OR PproGo58_08780-MONOMER
+NTPP9	PproGo58_55260-MONOMER_mod_mg2(1)
+NTPTP1	PproGo58_40810-MONOMER_mod_mg2(1)
+NTRARz	PproGo58_46030-MONOMER
+NTRIR2x	CPLX_NTRIR2x-0
+OAADC	PproGo58_23630-MONOMER
+OAAt2_2pp	PproGo58_43190-MONOMER OR PproGo58_50550-MONOMER
+OARGDC	PproGo58_26360-MONOMER
+OCBT	CPLX_OCBT-0
+OCDCAt2pp	PproGo58_19410-MONOMER
+OCDCAtexi	PproGo58_28290-MONOMER
+OCDCEAt2pp	PproGo58_19410-MONOMER
+OCDCEAtexi	PproGo58_28290-MONOMER
+OCOAT1	CPLX_BUTCT-0
+OCTDPS	PproGo58_50380-MONOMER_mod_mg2(1)
+OHEDH	PproGo58_32630-MONOMER
+OHPBAT	PproGo58_41680-MONOMER_mod_pydx5p(1)
+OIVD1r	CPLX_OIVD1r-0
+OIVD2	CPLX_OIVD1r-0
+OIVD3	CPLX_OIVD1r-0
+OMBZLM	PproGo58_04230-MONOMER
+OMMBLHX	PproGo58_53080-MONOMER OR PproGo58_56430-MONOMER
+OMPDC	PproGo58_17240-MONOMER
+OMPHHX	PproGo58_56450-MONOMER
+OPETDC	PproGo58_32580-MONOMER
+OPHBDC	CPLX_OPHBDC-0
+OPHHX	PproGo58_04210-MONOMER
+OPTCCL	PproGo58_32570-MONOMER
+ORN5O	PproGo58_39430-MONOMER
+ORNCD	PproGo58_10180-MONOMER
+ORNDC	PproGo58_08450-MONOMER
+ORNTAC	PproGo58_45240-MONOMER
+ORNabcpp	CPLX_ARGabcpp-0 OR CPLX_LYSabcpp-0
+OROTt2_2pp	PproGo58_50550-MONOMER OR PproGo58_43190-MONOMER
+ORPT	PproGo58_57450-MONOMER_mod_mg2(1)
+OXOADLR	PproGo58_16890-MONOMER
+OXOAEL	PproGo58_13150-MONOMER
+OXPTNDH	PproGo58_01780-MONOMER
+P5CR	PproGo58_55200-MONOMER
+PA120abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PA140abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PA141abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PA160abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PA161abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PA180abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PA181abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PACt3	PproGo58_16820-MONOMER
+PALDH	PproGo58_38450-MONOMER
+PANTS	PproGo58_49870-MONOMER_mod_mg2(1)_mod_k(1) OR PproGo58_49870-MONOMER_mod_mg2(1)_mod_nh4(1) OR PproGo58_49870-MONOMER_mod_mn2(1)_mod_k(1) OR PproGo58_49870-MONOMER_mod_mn2(1)_mod_nh4(1)
+PAPPT3	PproGo58_47950-MONOMER
+PAPSR	CPLX_PAPSR-0 OR CPLX_APSR-0
+PAPSR2	CPLX_PAPSR2-0
+PC	CPLX_PC-0
+PC11M	PproGo58_35770-MONOMER
+PC17M	PproGo58_06520-MONOMER
+PC20M	PproGo58_06510-MONOMER
+PC6AR	PproGo58_06460-MONOMER
+PC6YM	PproGo58_06480-MONOMER
+PC8XM	PproGo58_06500-MONOMER
+PCADYOX	CPLX_PCADYOX-0
+PDE1	PproGo58_05410-MONOMER
+PDE4	PproGo58_41770-MONOMER OR PproGo58_45720-MONOMER
+PDHbr	PproGo58_05060-MONOMER
+PDHcr	PproGo58_16900-MONOMER
+PDX5POi	PproGo58_12740-MONOMER_mod_fmn(1)
+PDX5PS	CPLX_PDX5PS-0
+PDXPP	PproGo58_58810-MONOMER
+PE120abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PE140abcpp	PproGo58_15220-MONOMER OR PproGo58_19040-MONOMER
+PE141abcpp	PproGo58_15220-MONOMER OR PproGo58_19040-MONOMER
+PE160abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PE161abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PE180abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PE181abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PERD	PproGo58_19020-MONOMER
+PG120abcpp	PproGo58_15220-MONOMER OR PproGo58_19040-MONOMER
+PG140abcpp	PproGo58_15220-MONOMER OR PproGo58_19040-MONOMER
+PG141abcpp	PproGo58_15220-MONOMER OR PproGo58_19040-MONOMER
+PG160abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PG161abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PG180abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PG181abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGAMT	PproGo58_08140-MONOMER
+PGCD	PproGo58_55890-MONOMER
+PGI	PproGo58_49880-MONOMER
+PGK	PproGo58_54650-MONOMER
+PGL	PproGo58_44500-MONOMER
+PGLYCP	PproGo58_53160-MONOMER_mod_mg2(1)_mod_cl(1) OR PproGo58_41730-MONOMER OR PproGo58_51050-MONOMER
+PGM	PproGo58_03670-MONOMER_mod_mn2(1)
+PGMT	PproGo58_57430-MONOMER
+PGP120abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGP140abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGP141abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGP160abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGP161abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGP180abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGP181abcpp	PproGo58_05250-MONOMER_mod_mg2(1)
+PGPP120	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP120pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP140pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP141pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP160	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP160pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP161	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP161pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP180	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP180pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP181	PproGo58_52170-MONOMER_mod_mg2(1)
+PGPP181pp	PproGo58_52170-MONOMER_mod_mg2(1)
+PGSA120	PproGo58_35050-MONOMER_mod_mg2(1)
+PGSA140	PproGo58_35050-MONOMER_mod_mg2(1)
+PGSA141	PproGo58_35050-MONOMER_mod_mg2(1)
+PGSA160	PproGo58_35050-MONOMER_mod_mg2(1)
+PGSA161	PproGo58_35050-MONOMER_mod_mg2(1)
+PGSA180	PproGo58_35050-MONOMER_mod_mg2(1)
+PGSA181	PproGo58_35050-MONOMER_mod_mg2(1)
+PHEMEabcpp	CPLX_PHEMEabcpp-0
+PHETA1	PproGo58_19640-MONOMER_mod_pydx5p(1) OR PproGo58_15790-MONOMER_mod_pydx5p(1)
+PHETHPTOX3	CPLX_PHETHPTOX3-0
+PHEt2rpp	PproGo58_15740-MONOMER OR PproGo58_15740-MONOMER
+PIt2rpp	PproGo58_13040-MONOMER OR PproGo58_43920-MONOMER
+PIt7ipp	PproGo58_01050-MONOMER
+PItex	PproGo58_15050-MONOMER
+PIuabcpp	CPLX_PIuabcpp-0
+PMANM	PproGo58_57430-MONOMER
+PMPK	PproGo58_51330-MONOMER
+PNP_1	PproGo58_20110-MONOMER
+POAACR	PproGo58_57530-MONOMER
+PPA	PproGo58_51840-MONOMER_mod_mg2(1)
+PPBNGS	PproGo58_56700-MONOMER
+PPC	PproGo58_11180-MONOMER_mod_mg2(1)
+PPCDC	PproGo58_57410-MONOMER_mod_fmn(1) OR PproGo58_57410-MONOMER_mod_mg2(1)
+PPCK	PproGo58_02810-MONOMER_mod_mg2(1) OR PproGo58_02810-MONOMER_mod_ca2(1) OR PproGo58_02810-MONOMER_mod_mn2(1)
+PPGPPDP	PproGo58_57520-MONOMER_mod_mn2(1)
+PPItex_1	PproGo58_15050-MONOMER
+PPK2r	PproGo58_41870-MONOMER OR PproGo58_56690-MONOMER
+PPKr	PproGo58_56690-MONOMER
+PPM	PproGo58_57430-MONOMER
+PPNCL	PproGo58_57410-MONOMER_mod_fmn(1) OR PproGo58_57410-MONOMER_mod_mg2(1)
+PPND	PproGo58_41650-MONOMER
+PPNDH	PproGo58_41670-MONOMER
+PPPNt2rpp	PproGo58_42070-MONOMER
+PPS	PproGo58_18270-MONOMER_mod_mg2(1)
+PRAGSr	PproGo58_06580-MONOMER_mod_mg2(1)
+PRAIS	PproGo58_42920-MONOMER_mod_k(1)_mod_mg2(1)
+PRAIi	PproGo58_19830-MONOMER
+PRAMPC	PproGo58_04200-MONOMER
+PRASCSi	PproGo58_14400-MONOMER
+PRATPP	PproGo58_04190-MONOMER
+PRFGS	PproGo58_10490-MONOMER_mod_mg2(1)
+PRMICI	PproGo58_03590-MONOMER
+PROGLYabcpp	CPLX_ALAALAabcpp-0 OR CPLX_ALAALAabcpp-1
+PROabcpp	CPLX_PROabcpp-0 OR CPLX_PROabcpp-1 OR CPLX_PROabcpp-2
+PROt4pp	PproGo58_15390-MONOMER OR PproGo58_04940-MONOMER
+PRPPSirr	PproGo58_48790-MONOMER_mod_mg2(1)_mod_pi(1) OR PproGo58_48790-MONOMER_mod_mn2(1)_mod_pi(1)
+PSCVT	PproGo58_41650-MONOMER
+PSD120	PproGo58_05500-MONOMER
+PSD140	PproGo58_05500-MONOMER
+PSD141	PproGo58_05500-MONOMER
+PSD160	PproGo58_05500-MONOMER
+PSD161	PproGo58_05500-MONOMER
+PSD180	PproGo58_05500-MONOMER
+PSD181	PproGo58_05500-MONOMER
+PSERTr	PproGo58_41680-MONOMER_mod_pydx5p(1)
+PSP_L	PproGo58_05490-MONOMER_mod_mg2(1)
+PSSA120	PproGo58_49610-MONOMER
+PSSA140	PproGo58_49610-MONOMER
+PSSA141	PproGo58_49610-MONOMER
+PSSA160	PproGo58_49610-MONOMER
+PSSA161	PproGo58_49610-MONOMER
+PSSA180	PproGo58_49610-MONOMER
+PSSA181	PproGo58_49610-MONOMER
+PTA2	PproGo58_09170-MONOMER
+PTAr	PproGo58_09170-MONOMER
+PTPATi	PproGo58_55490-MONOMER_mod_mg2(1)
+PTRCTA	PproGo58_56040-MONOMER
+PTRCabcpp	CPLX_PTRCabcpp-0 OR CPLX_PTRCabcpp-1 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-3 OR CPLX_PTRCabcpp-4
+PTRCt2pp	PproGo58_27900-MONOMER
+PUNP1	PproGo58_40590-MONOMER
+PYAM5PO	PproGo58_12740-MONOMER_mod_fmn(1)
+PYDXK	PproGo58_58810-MONOMER
+PYDXNO	PproGo58_12740-MONOMER_mod_fmn(1)
+PYDXO	PproGo58_12740-MONOMER_mod_fmn(1)
+PYDXPP	PproGo58_58810-MONOMER
+PYK	PproGo58_16680-MONOMER_mod_mg2(1)_mod_k(1) OR PproGo58_16680-MONOMER_mod_mn2(1)_mod_k(1) OR PproGo58_45420-MONOMER_mod_mg2(1)_mod_k(1) OR PproGo58_45420-MONOMER_mod_mn2(1)_mod_k(1)
+PYNP2r	PproGo58_40590-MONOMER
+PYOVD2tex	CPLX_PYOVD2tex-0
+PYOVDM1	CPLX_PYOVDM1-0
+PYOVDM2	PproGo58_39510-MONOMER
+QOR1	PproGo58_05580-MONOMER_mod_adocbl(1) OR PproGo58_05580-MONOMER_mod_4fe4s(2)
+QOR2	PproGo58_05580-MONOMER_mod_adocbl(1) OR PproGo58_05580-MONOMER_mod_4fe4s(2)
+QOR3	PproGo58_05580-MONOMER_mod_adocbl(1) OR PproGo58_05580-MONOMER_mod_4fe4s(2)
+QUEA1	PproGo58_47150-MONOMER
+QUEA2	PproGo58_47150-MONOMER
+QUEA3	PproGo58_47150-MONOMER
+QULNS	PproGo58_44870-MONOMER_mod_4fe4s(1)
+R15BPK	PproGo58_43470-MONOMER
+RBFK	PproGo58_50300-MONOMER
+RBFSa	PproGo58_52200-MONOMER
+RBFSb	PproGo58_52220-MONOMER
+RBK	PproGo58_20090-MONOMER_mod_k(1)_mod_mg2(1)
+RDXRx	CPLX_RDXRx-0 OR CPLX_RDXRx-0
+RDXRy	CPLX_RDXRx-0 OR CPLX_RDXRx-0
+REPHACCOAI	PproGo58_26330-MONOMER
+RFAMPtpp	CPLX_MINCYCtpp-0 OR CPLX_RFAMPtpp-0
+RHACOAR100	PproGo58_17600-MONOMER
+RHACOAR101	PproGo58_17600-MONOMER
+RHACOAR120	PproGo58_17600-MONOMER
+RHACOAR121d5	PproGo58_17600-MONOMER
+RHACOAR121d6	PproGo58_17600-MONOMER
+RHACOAR140	PproGo58_17600-MONOMER
+RHACOAR141d5	PproGo58_17600-MONOMER
+RHACOAR141d7	PproGo58_17600-MONOMER
+RHACOAR142	PproGo58_17600-MONOMER
+RHACOAR60	PproGo58_17600-MONOMER
+RHACOAR70	PproGo58_17600-MONOMER
+RHACOAR80	PproGo58_17600-MONOMER
+RHACOAR90	PproGo58_17600-MONOMER
+RHACOARP100	PproGo58_17600-MONOMER
+RHACOARP40	PproGo58_17600-MONOMER
+RHACOARP50	PproGo58_17600-MONOMER
+RHACOARP60	PproGo58_17600-MONOMER
+RHACOARP70	PproGo58_17600-MONOMER
+RHACOARP80	PproGo58_17600-MONOMER
+RHACOARP90	PproGo58_17600-MONOMER
+RHACOART60	PproGo58_17600-MONOMER
+RIBabcpp	CPLX_RIBabcpp-0
+RNDR1	CPLX_RNDR1-0
+RNDR2	CPLX_RNDR1-0
+RNDR3	CPLX_RNDR1-0
+RNDR4	CPLX_RNDR1-0
+RPE	PproGo58_53170-MONOMER
+RPI	PproGo58_55840-MONOMER
+RZ5PP	PproGo58_42750-MONOMER
+S7PI	PproGo58_48060-MONOMER
+SADH	PproGo58_43570-MONOMER
+SADT	CPLX_ADSK-0
+SARCOX	CPLX_SARCOX-0
+SCYSDS	CPLX_SCYSDS-0
+SDPDS	PproGo58_11360-MONOMER_mod_zn2(1)_mod_cobalt2(1)
+SDPTA	PproGo58_11480-MONOMER OR PproGo58_53590-MONOMER
+SERAT	PproGo58_47070-MONOMER
+SERD_L	PproGo58_54420-MONOMER OR PproGo58_44830-MONOMER_mod_4fe4s(1)
+SERt4pp	PproGo58_38700-MONOMER
+SFGTHi	PproGo58_11770-MONOMER
+SGDS	PproGo58_43550-MONOMER
+SGSAD	PproGo58_43580-MONOMER
+SHCHD2	PproGo58_37560-MONOMER
+SHCHF	PproGo58_37560-MONOMER
+SHK3Dr	PproGo58_00280-MONOMER OR PproGo58_50900-MONOMER
+SHKK	PproGo58_04460-MONOMER_mod_mg2(1) OR PproGo58_04460-MONOMER_mod_mn2(1) OR PproGo58_04460-MONOMER_mod_cobalt2(1) OR PproGo58_04460-MONOMER_mod_fe2(1) OR PproGo58_04460-MONOMER_mod_ca2(1) OR PproGo58_04460-MONOMER_mod_k(1)
+SHSL1	PproGo58_19890-MONOMER
+SHSL4r	PproGo58_19890-MONOMER
+SLCYSS	PproGo58_43000-MONOMER_mod_pydx5p(1)
+SO3abcpp	CPLX_CRO4abcpp-1 OR CPLX_CRO4abcpp-0
+SOTA	PproGo58_43610-MONOMER_mod_pydx5p(1)
+SPMDabcpp	CPLX_PTRCabcpp-0 OR CPLX_PTRCabcpp-1 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-3 OR CPLX_PTRCabcpp-4
+SPODMpp	PproGo58_45710-MONOMER_mod_fe3(1) OR PproGo58_08880-MONOMER_mod_mn2(1)
+SSALy	PproGo58_01780-MONOMER
+SUCCt2_2pp	PproGo58_50550-MONOMER OR PproGo58_43190-MONOMER
+SUCD4i	CPLX_SUCD4i-0
+SUCD4i_q9	CPLX_SUCD4i-0
+SUCDi	CPLX_SUCDi-0_mod_3fe4s(1)_mod_fad(1)_mod_2fe2s(1)_mod_4fe4s(1)
+SUCDi_q9	CPLX_SUCDi-0_mod_3fe4s(1)_mod_fad(1)_mod_2fe2s(1)_mod_4fe4s(1)
+SUCOASr	CPLX_SUCOASr-0
+SULFACabcpp	CPLX_BUTSO3abcpp-0
+SULFACtex	PproGo58_56170-MONOMER
+SULR	PproGo58_31550-MONOMER OR PproGo58_35830-MONOMER OR PproGo58_08410-MONOMER
+SULabcpp	CPLX_CRO4abcpp-0 OR CPLX_CRO4abcpp-1
+T2DECAI	PproGo58_17080-MONOMER
+TALA	PproGo58_19450-MONOMER
+TAUDO	PproGo58_02660-MONOMER_mod_fe2(1) OR PproGo58_01310-MONOMER
+TAURabcpp	CPLX_BUTSO3abcpp-0
+TAURtex	PproGo58_56170-MONOMER
+TDP	PproGo58_05550-MONOMER
+TDPDRE	PproGo58_03000-MONOMER
+TDPDRR	PproGo58_52350-MONOMER
+TDPGDH	PproGo58_03020-MONOMER_mod_nad(1)
+TDSK_PA	PproGo58_17420-MONOMER_mod_mg2(1)
+TGTASE1	PproGo58_47140-MONOMER_mod_zn2(6)
+TGTASE2	PproGo58_47140-MONOMER_mod_zn2(6)
+TGTASE3	PproGo58_47140-MONOMER_mod_zn2(6)
+THD2pp	CPLX_THD2pp-0
+THDPS	PproGo58_11410-MONOMER
+THIORDXi	CPLX_THIORDXi-0 OR CPLX_THIORDXi-1 OR CPLX_THIORDXi-2 OR CPLX_THIORDXi-3 OR CPLX_THIORDXi-4 OR CPLX_THIORDXi-5 OR CPLX_THIORDXi-2 OR CPLX_THIORDXi-3 OR CPLX_THIORDXi-6 OR CPLX_THIORDXi-7
+THMPPi	PproGo58_05550-MONOMER
+THMtpp	PproGo58_24870-MONOMER OR PproGo58_18110-MONOMER
+THRAi	PproGo58_43530-MONOMER_mod_pydx5p(1) OR PproGo58_54110-MONOMER
+THRD_L	PproGo58_55830-MONOMER_mod_pydx5p(1) OR PproGo58_55830-MONOMER_mod_pydx5p(1)
+THRS	PproGo58_10760-MONOMER_mod_pydx5p(1)
+THRTRS	PproGo58_20170-MONOMER_mod_zn2(1)
+THRabcpp	CPLX_ILEabcpp-0
+THRt2pp	PproGo58_44240-MONOMER OR PproGo58_40080-MONOMER
+THRt4pp	PproGo58_38700-MONOMER
+THZPSN3_PA	CPLX_THZPSN3_PA-0
+TKT1	PproGo58_54670-MONOMER_mod_thmpp(1)_mod_mn2(1)_mod_mg2(1)
+TKT2	PproGo58_54670-MONOMER_mod_thmpp(1)_mod_mn2(1)_mod_mg2(1)
+TMPK	PproGo58_52180-MONOMER_mod_mg2(1)
+TMPPP_PA	PproGo58_51340-MONOMER_mod_mg2(1)
+TPI	PproGo58_08150-MONOMER
+TRDR	CPLX_TRDR-0 OR CPLX_TRDR-1
+TRPS1	CPLX_TRPS1-0_mod_pydx5p(1)
+TRPS2	CPLX_TRPS1-0_mod_pydx5p(1)
+TRPS3	CPLX_TRPS1-0_mod_pydx5p(1)
+TRPTRS	PproGo58_48190-MONOMER_mod_mg2(1)
+TRSARrirr	PproGo58_16700-MONOMER
+TSULabcpp	CPLX_CRO4abcpp-0 OR CPLX_CRO4abcpp-1
+TTDCAtexi	PproGo58_28290-MONOMER
+TTDCEAtexi	PproGo58_28290-MONOMER
+TTRCYCtpp	CPLX_CMtpp-0 OR CPLX_CMtpp-1
+TYRTA	PproGo58_19640-MONOMER_mod_pydx5p(1)
+TYRTRS	PproGo58_52980-MONOMER
+TYRt2rpp	PproGo58_15760-MONOMER OR PproGo58_15740-MONOMER OR PproGo58_15740-MONOMER
+TYRtex	PproGo58_49330-MONOMER
+U23GAAT	PproGo58_11610-MONOMER
+UAAGDS	PproGo58_47970-MONOMER
+UACGAMDH2	PproGo58_41500-MONOMER
+UAGAAT2_1	CPLX_UAGAAT2_1-0
+UAGCVT	PproGo58_09060-MONOMER
+UAGDP	PproGo58_59190-MONOMER_mod_mg2(1)
+UAGPT3	PproGo58_47920-MONOMER
+UAMAGS	PproGo58_47940-MONOMER_mod_k(1)_mod_mg2(1)
+UAMAS	PproGo58_47910-MONOMER_mod_mg2(1)
+UAPGR	PproGo58_17460-MONOMER_mod_fad(1)
+UDCPDP	PproGo58_30530-MONOMER
+UDCPDPS	PproGo58_11550-MONOMER_mod_mg2(1)
+UDPG4E	PproGo58_52340-MONOMER
+UDPGD	PproGo58_29600-MONOMER
+UGLYCH	PproGo58_42260-MONOMER
+UGMDDS	PproGo58_47960-MONOMER
+UHBZ1t_pp	PproGo58_13070-MONOMER
+UHGADA	PproGo58_47860-MONOMER
+UM3PL	PproGo58_51730-MONOMER_mod_mg2(1)
+UM4PL	PproGo58_51730-MONOMER_mod_mg2(1)
+UMPK	PproGo58_11530-MONOMER
+UNK3	PproGo58_46890-MONOMER
+UPP3MT	PproGo58_37560-MONOMER OR PproGo58_37560-MONOMER OR PproGo58_18350-MONOMER
+UPP3S	PproGo58_56900-MONOMER
+UPPDC1	PproGo58_04510-MONOMER
+UPPN	PproGo58_24880-MONOMER
+UPPRT	PproGo58_48530-MONOMER OR PproGo58_55130-MONOMER
+URACPAH	PproGo58_21360-MONOMER
+URAt2pp	PproGo58_48540-MONOMER OR PproGo58_42280-MONOMER OR PproGo58_19590-MONOMER
+URCN	PproGo58_03970-MONOMER
+UREA	CPLX_UREA-0
+UREAabcpp	CPLX_UREAabcpp-0
+URItex	PproGo58_42290-MONOMER
+USHD	PproGo58_37990-MONOMER
+VALDHrirr	PproGo58_09530-MONOMER
+VALabcpp	CPLX_ILEabcpp-0 OR CPLX_ILEabcpp-1
+VALt2rpp	PproGo58_16940-MONOMER
+VANKpp	PproGo58_34100-MONOMER
+VANLNtex	PproGo58_34040-MONOMER
+VANLTtex	PproGo58_34040-MONOMER OR PproGo58_13170-MONOMER
+VNLNpp	PproGo58_34100-MONOMER
+XAND	CPLX_HXAND-0
+XANt2pp	PproGo58_48540-MONOMER OR PproGo58_42280-MONOMER OR PproGo58_19590-MONOMER
+XPPT	PproGo58_48520-MONOMER OR PproGo58_57210-MONOMER
+XTSNH	PproGo58_20110-MONOMER
+XYLK	PproGo58_32320-MONOMER OR PproGo58_29810-MONOMER_mod_mg2(1)
+ZN2abcpp	PproGo58_55700-MONOMER
+ZN2tpp	PproGo58_08890-MONOMER
+ZNabcpp	CPLX_ZNabcpp-0 OR CPLX_MNabc_1-0
+rJB00222	CPLX_rxn13853-0
+rJB00232	CPLX_PROabcpp-0
+rJB00259i	PproGo58_18430-MONOMER_mod_fmn(1)
+rJB00260	PproGo58_32330-MONOMER OR PproGo58_46150-MONOMER_mod_fad(1) OR PproGo58_04990-MONOMER
+rJB00262	PproGo58_23300-MONOMER_mod_fad(1) OR PproGo58_48480-MONOMER
+rJB00263	PproGo58_50050-MONOMER_mod_mg2(1)_mod_cu(1)_mod_fad(1) OR PproGo58_26380-MONOMER
+rJB00265	PproGo58_00260-MONOMER OR PproGo58_26380-MONOMER
+rJB00271	CPLX_CYO1_KT-0
+rJB00279_new	PproGo58_09810-MONOMER
+rPY00162	PproGo58_00120-MONOMER OR PproGo58_59070-MONOMER
+rPY00163	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1) OR PproGo58_59080-MONOMER
+rPY00164	PproGo58_49610-MONOMER
+rPY00165	PproGo58_05500-MONOMER
+rPY00167	PproGo58_00120-MONOMER OR PproGo58_59070-MONOMER
+rPY00168	PproGo58_11560-MONOMER_mod_mg2(1)_mod_k(1) OR PproGo58_59080-MONOMER
+rPY00169	PproGo58_49610-MONOMER
+rPY00170	PproGo58_05500-MONOMER
+rPY00172	PproGo58_59030-MONOMER OR PproGo58_35050-MONOMER_mod_mg2(1)
+rPY00173	PproGo58_52170-MONOMER_mod_mg2(1)
+rPY00175	PproGo58_59030-MONOMER OR PproGo58_35050-MONOMER_mod_mg2(1)
+rPY00176	PproGo58_52170-MONOMER_mod_mg2(1)
+rPY00183	PproGo58_58980-MONOMER
+rPY00184	PproGo58_58980-MONOMER
+rPY00214	PproGo58_39140-MONOMER
+rPY00221	PproGo58_05090-MONOMER
+rPY00222	PproGo58_05100-MONOMER
+rxn00222	PproGo58_13430-MONOMER
+rxn00295	PproGo58_41500-MONOMER
+rxn00394	PproGo58_15400-MONOMER_mod_mn2(2) OR PproGo58_03400-MONOMER
+rxn00455	PproGo58_44350-MONOMER
+rxn00478	PproGo58_07420-MONOMER
+rxn00559	PproGo58_09940-MONOMER
+rxn00611	PproGo58_17120-MONOMER
+rxn00629	PproGo58_29800-MONOMER
+rxn00671	PproGo58_07280-MONOMER OR PproGo58_07360-MONOMER
+rxn00689	PproGo58_19850-MONOMER
+rxn00728	PproGo58_07510-MONOMER
+rxn00738	PproGo58_38470-MONOMER
+rxn00779	PproGo58_36400-MONOMER OR PproGo58_19260-MONOMER
+rxn00992	PproGo58_35180-MONOMER
+rxn01437	PproGo58_07410-MONOMER
+rxn02569	PproGo58_21680-MONOMER_mod_mg2(1)
+rxn03395	PproGo58_41720-MONOMER_mod_zn2(1)
+rxn04093	PproGo58_05910-MONOMER OR PproGo58_04990-MONOMER OR PproGo58_10170-MONOMER OR PproGo58_50190-MONOMER OR PproGo58_23820-MONOMER OR PproGo58_27770-MONOMER OR PproGo58_19910-MONOMER OR PproGo58_13960-MONOMER OR PproGo58_38400-MONOMER OR PproGo58_41880-MONOMER_mod_fad(1) OR PproGo58_57300-MONOMER OR PproGo58_25200-MONOMER
+rxn04454	PproGo58_34340-MONOMER
+rxn05003	PproGo58_41720-MONOMER_mod_zn2(1)
+rxn05028	PproGo58_50380-MONOMER_mod_mg2(1)
+rxn05034	PproGo58_57990-MONOMER_mod_mg2(1)
+rxn05091	PproGo58_42060-MONOMER
+rxn05092	PproGo58_42060-MONOMER
+rxn05214tppirr	PproGo58_01070-MONOMER
+rxn05508	PproGo58_58800-MONOMER
+rxn05534	CPLX_rxn05542-0
+rxn05538	CPLX_rxn05542-0
+rxn05542	CPLX_rxn05542-0
+rxn05614	CPLX_rxn05614-0
+rxn05620	CPLX_rxn05620-0 OR CPLX_rxn05620-1 OR CPLX_rxn05620-2
+rxn08229	PproGo58_58980-MONOMER
+rxn08230	PproGo58_58980-MONOMER
+rxn08231	PproGo58_58980-MONOMER
+rxn08232	PproGo58_58980-MONOMER
+rxn10062	PproGo58_54490-MONOMER OR PproGo58_55480-MONOMER OR PproGo58_24250-MONOMER OR PproGo58_32530-MONOMER
+rxn10199	PproGo58_51580-MONOMER OR PproGo58_47980-MONOMER OR PproGo58_49670-MONOMER
+rxn11546	CPLX_rxn11546-0
+rxn12206	CPLX_rxn12206-0
+rxn12432	CPLX_rxn12432-0
+rxn12879	PproGo58_04230-MONOMER
+rxn12880	PproGo58_53080-MONOMER OR PproGo58_56430-MONOMER
+rxn12892	PproGo58_41720-MONOMER_mod_zn2(1)
+rxn13044	CPLX_OPHBDC-0
+rxn13107	PproGo58_04210-MONOMER
+rxn13108	PproGo58_56450-MONOMER
+rxn13792	PproGo58_30120-MONOMER OR PproGo58_14960-MONOMER
+rxn13804cyt	CPLX_rxn13804cyt-0
+rxn13833	PproGo58_41510-MONOMER
+rxn13853	CPLX_rxn13853-0
+rxn13866	PproGo58_05110-MONOMER
+rxn13867	PproGo58_05110-MONOMER
+rxn13869	PproGo58_05110-MONOMER
+rxn13870	CPLX_rxn13870-0
+rxn13873	PproGo58_00170-MONOMER OR PproGo58_42340-MONOMER
+rxn13878	PproGo58_05340-MONOMER
+rxn13879	PproGo58_05340-MONOMER
+rxn13888	PproGo58_04300-MONOMER OR PproGo58_04280-MONOMER
+rxn13909	PproGo58_38480-MONOMER

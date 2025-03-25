@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	IE322_24665-MONOMER
+pg_pe_160	IE322_22860-MONOMER,IE322_18220-MONOMER

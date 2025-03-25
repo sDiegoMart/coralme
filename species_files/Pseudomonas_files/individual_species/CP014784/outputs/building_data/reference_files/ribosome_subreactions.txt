@@ -1,0 +1,4 @@
+subreaction	enzyme
+gtp_bound_30S_assembly_factor_phase1	A0T30_08240-MONOMER
+RbfA_mono_assembly_factor_phase1	A0T30_18100-MONOMER
+RimM_mono_assembly_factor_phase1	A0T30_17515-MONOMER

@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	CHR29_24535-MONOMER
+pg_pe_160	CHR29_26280-MONOMER,CHR29_07945-MONOMER

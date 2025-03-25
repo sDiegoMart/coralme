@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	FIU84_18890-MONOMER
+pg_pe_160	FIU84_02030-MONOMER,FIU84_04515-MONOMER

@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	FIU24_22030-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	FIU24_22030-MONOMER_mod_zn2(2),generic_RNase,FIU24_08470-MONOMER,FIU24_06895-MONOMER,FIU24_25060-MONOMER_mod_mg2(4)
+rRNA_containing	FIU24_22030-MONOMER_mod_zn2(2),generic_RNase,FIU24_08470-MONOMER_mod_mg2(2),FIU24_06895-MONOMER,FIU24_25060-MONOMER_mod_mg2(4)

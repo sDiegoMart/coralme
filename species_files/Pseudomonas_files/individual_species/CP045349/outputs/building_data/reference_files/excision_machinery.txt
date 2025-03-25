@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	FIV02_08145-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	FIV02_08145-MONOMER_mod_zn2(2),generic_RNase,FIV02_07395-MONOMER,FIV02_04400-MONOMER,FIV02_07000-MONOMER_mod_mg2(4)
+rRNA_containing	FIV02_08145-MONOMER_mod_zn2(2),generic_RNase,FIV02_07395-MONOMER_mod_mg2(2),FIV02_04400-MONOMER,FIV02_07000-MONOMER_mod_mg2(4)

@@ -1,0 +1,167 @@
+ME-Model-ID: Pseudomonas_sp._THAF42
+amino_acid_trna_synthetase:
+  ala__L_c: generic_ala_ligase
+  arg__L_c: FIU98_02655-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: FIU98_06355-MONOMER
+  cys__L_c: FIU98_10475-MONOMER
+  gln__L_c: FIU98_10470-MONOMER
+  glu__L_c: FIU98_09720-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: FIU98_18245-MONOMER
+  ile__L_c: FIU98_04910-MONOMER
+  leu__L_c: FIU98_20185-MONOMER
+  lys__L_c: FIU98_17870-MONOMER
+  met__L_c: FIU98_07055-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: generic_pro_ligase
+  ser__L_c: FIU98_11555-MONOMER
+  thr__L_c: FIU98_14405-MONOMER
+  trp__L_c: generic_trp_ligase
+  tyr__L_c: FIU98_21200-MONOMER
+  val__L_c: FIU98_18530-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - FIU98_21215-MONOMER
+  - FIU98_18295-MONOMER
+default_sigma_factor: FIU98_21480-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045359/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045359/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045359/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: FIU98_19810
+  BamB: FIU98_18235
+  BamD: FIU98_04980
+  BamE: FIU98_19275
+  CusC: FIU98_19820
+  LolB: FIU98_05280
+  MetQ: FIU98_24060
+  MltB: FIU98_20235
+locus_tag: locus_tag
+log_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045359/./outputs
+m-model-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045359/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- FIU98_20170-MONOMER
+out_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045359/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: FIU98_05295-MONOMER
+  UGA: FIU98_17875-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- FIU98_22430-MONOMER
+- FIU98_20520-MONOMER
+rna_polymerases:
+  RNAP_FIU9800315MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_00315-MONOMER
+  RNAP_FIU9800330MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_00330-MONOMER
+  RNAP_FIU9800910MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_00910-MONOMER
+  RNAP_FIU9804465MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_04465-MONOMER
+  RNAP_FIU9807340MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_07340-MONOMER
+  RNAP_FIU9807425MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_07425-MONOMER
+  RNAP_FIU9807830MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_07830-MONOMER
+  RNAP_FIU9809130MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_09130-MONOMER
+  RNAP_FIU9809920MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_09920-MONOMER
+  RNAP_FIU9810050MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_10050-MONOMER
+  RNAP_FIU9811030MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_11030-MONOMER
+  RNAP_FIU9812425MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_12425-MONOMER
+  RNAP_FIU9813550MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_13550-MONOMER
+  RNAP_FIU9813685MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_13685-MONOMER
+  RNAP_FIU9815140MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_15140-MONOMER
+  RNAP_FIU9815500MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_15500-MONOMER
+  RNAP_FIU9815560MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_15560-MONOMER
+  RNAP_FIU9816260MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_16260-MONOMER
+  RNAP_FIU9821480MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_21480-MONOMER
+  RNAP_FIU9822185MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_22185-MONOMER
+  RNAP_FIU9824105MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU98_24105-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  FIU98_02570-MONOMER:
+    FIU98_03125: 22.0
+    FIU98_03595: 6.25
+    FIU98_03675: 15.5
+    FIU98_03680: 15.5
+    FIU98_20095: 21.0
+    FIU98_20555: 23.0
+  FIU98_24640-MONOMER:
+    FIU98_24570: 2.0

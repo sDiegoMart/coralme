@@ -159,6 +159,10 @@ def add_lipoyl_modifications(me_model):
 	# Two different reactions can add a lipoate modification.
 	# We create a separate SubreactionData for each one
 	#for key, mod in lipoate_modifications):
+	if 'lipoate_subreactions' not in me_model.global_info['complex_cofactors']:
+		logging.warning('No lipoate modifications found in the configuration file.')
+		return None
+
 	lipoate_modifications = me_model.global_info['complex_cofactors']['lipoate_subreactions']
 	for mod in list(lipoate_modifications.values())[0]:
 		if mod in me_model.process_data:

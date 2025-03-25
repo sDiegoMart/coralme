@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	JYG34_22695-MONOMER
+pg_pe_160	JYG34_24690-MONOMER,JYG34_22190-MONOMER

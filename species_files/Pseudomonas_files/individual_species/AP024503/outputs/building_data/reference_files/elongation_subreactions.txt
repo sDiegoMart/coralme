@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	PproGo58_52840-MONOMER
+Tuf_gtp_regeneration	PproGo58_11520-MONOMER

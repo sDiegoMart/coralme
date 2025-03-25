@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	HZ99_22810-MONOMER
+UGA	HZ99_23940-MONOMER
+UAA	generic_RF

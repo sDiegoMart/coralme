@@ -1,0 +1,176 @@
+ME-Model-ID: Pseudomonas_aeruginosa_PRD-10
+amino_acid_trna_synthetase:
+  ala__L_c: FA030_20415-MONOMER
+  arg__L_c: FA030_26580-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: FA030_20075-MONOMER
+  cys__L_c: FA030_15735-MONOMER
+  gln__L_c: FA030_15740-MONOMER
+  glu__L_c: FA030_06485-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: FA030_02800-MONOMER
+  ile__L_c: FA030_23795-MONOMER
+  leu__L_c: FA030_01800-MONOMER
+  lys__L_c: FA030_03335-MONOMER
+  met__L_c: FA030_04660-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: generic_pro_ligase
+  ser__L_c: FA030_09585-MONOMER
+  thr__L_c: FA030_08890-MONOMER
+  trp__L_c: FA030_22500-MONOMER
+  tyr__L_c: generic_tyr_ligase
+  val__L_c: FA030_02635-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - FA030_32815-MONOMER
+  - FA030_02750-MONOMER
+default_sigma_factor: FA030_32435-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: ../species_files/Pseudomonas_files//individual_species/CP039749/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: ../species_files/Pseudomonas_files//individual_species/CP039749/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: ../species_files/Pseudomonas_files//individual_species/CP039749/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: FA030_31590
+  BamB: FA030_02810
+  BamD: FA030_23715
+  BamE: FA030_25020
+  CusC: FA030_31600
+  LolB: FA030_24370
+  MetQ: FA030_29035
+  MltA: FA030_18705
+  MltB: FA030_22525
+locus_tag: locus_tag
+log_directory: ../species_files/Pseudomonas_files//individual_species/CP039749/./outputs
+m-model-path: ../species_files/Pseudomonas_files//individual_species/CP039749/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- FA030_01815-MONOMER
+out_directory: ../species_files/Pseudomonas_files//individual_species/CP039749/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: FA030_24355-MONOMER
+  UGA: FA030_03330-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- FA030_31155-MONOMER
+- FA030_23790-MONOMER
+rna_polymerases:
+  RNAP_FA03002260MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_02260-MONOMER
+  RNAP_FA03004030MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_04030-MONOMER
+  RNAP_FA03005040MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_05040-MONOMER
+  RNAP_FA03005695MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_05695-MONOMER
+  RNAP_FA03007985MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_07985-MONOMER
+  RNAP_FA03008430MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_08430-MONOMER
+  RNAP_FA03011285MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_11285-MONOMER
+  RNAP_FA03011545MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_11545-MONOMER
+  RNAP_FA03011775MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_11775-MONOMER
+  RNAP_FA03013680MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_13680-MONOMER
+  RNAP_FA03013925MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_13925-MONOMER
+  RNAP_FA03015090MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_15090-MONOMER
+  RNAP_FA03015835MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_15835-MONOMER
+  RNAP_FA03017520MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_17520-MONOMER
+  RNAP_FA03017920MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_17920-MONOMER
+  RNAP_FA03017980MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_17980-MONOMER
+  RNAP_FA03018250MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_18250-MONOMER
+  RNAP_FA03021150MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_21150-MONOMER
+  RNAP_FA03021155MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_21155-MONOMER
+  RNAP_FA03021615MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_21615-MONOMER
+  RNAP_FA03022615MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_22615-MONOMER
+  RNAP_FA03025765MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_25765-MONOMER
+  RNAP_FA03030160MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_30160-MONOMER
+  RNAP_FA03031335MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_31335-MONOMER
+  RNAP_FA03031850MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_31850-MONOMER
+  RNAP_FA03032435MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FA030_32435-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  FA030_29360-MONOMER:
+    FA030_29275: 2.0

@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	HAV28_22310-MONOMER
+pg_pe_160	HAV28_01180-MONOMER,HAV28_03230-MONOMER

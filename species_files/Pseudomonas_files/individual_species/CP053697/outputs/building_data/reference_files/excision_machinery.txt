@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	HNE05_05765-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	HNE05_05765-MONOMER_mod_zn2(2),generic_RNase,HNE05_11485-MONOMER,HNE05_01705-MONOMER,HNE05_09855-MONOMER_mod_mg2(4)
+rRNA_containing	HNE05_05765-MONOMER_mod_zn2(2),generic_RNase,HNE05_11485-MONOMER_mod_mg2(2),HNE05_01705-MONOMER,HNE05_09855-MONOMER_mod_mg2(4)

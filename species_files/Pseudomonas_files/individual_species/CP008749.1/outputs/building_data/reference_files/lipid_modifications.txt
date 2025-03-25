@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	OU9_04037-MONOMER
+pg_pe_160	OU9_00349-MONOMER,OU9_04636-MONOMER

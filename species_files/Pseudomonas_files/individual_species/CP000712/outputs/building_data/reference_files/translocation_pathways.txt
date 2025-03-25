@@ -1,0 +1,12 @@
+pathway	enzyme
+sec	Pput_4926-MONOMER
+sec	Pput_4379-MONOMER
+tat	Pput_1082-MONOMER
+tat_alt	CPLX_dummy
+bam	Pput_0437-MONOMER
+lol	Pput_1830-MONOMER
+lol	Pput_0758-MONOMER
+yidC	Pput_5309-MONOMER
+secA	Pput_4379-MONOMER
+srp_yidC	Pput_5309-MONOMER
+srp	Pput_4984-MONOMER

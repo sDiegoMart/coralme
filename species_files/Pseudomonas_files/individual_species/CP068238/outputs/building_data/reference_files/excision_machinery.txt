@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	JHW37_09935-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	JHW37_09935-MONOMER_mod_zn2(2),generic_RNase,JHW37_22530-MONOMER,JHW37_23945-MONOMER,JHW37_07235-MONOMER_mod_mg2(4)
+rRNA_containing	JHW37_09935-MONOMER_mod_zn2(2),generic_RNase,JHW37_22530-MONOMER_mod_mg2(2),JHW37_23945-MONOMER,JHW37_07235-MONOMER_mod_mg2(4)

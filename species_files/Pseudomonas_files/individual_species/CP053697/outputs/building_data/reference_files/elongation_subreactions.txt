@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	HNE05_00115-MONOMER
+Tuf_gtp_regeneration	HNE05_03240-MONOMER

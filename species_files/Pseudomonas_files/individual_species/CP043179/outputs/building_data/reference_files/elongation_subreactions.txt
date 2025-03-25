@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	FQ342_14265-MONOMER
+Tuf_gtp_regeneration	FQ342_04975-MONOMER

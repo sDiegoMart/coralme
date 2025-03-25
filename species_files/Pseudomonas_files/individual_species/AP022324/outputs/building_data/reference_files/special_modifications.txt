@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	CPLX_dummy
+fes_chaperones	PPTS312_30120-MONOMER
+fes_transfer	PPTS312_09240-MONOMER,PPTS312_13620-MONOMER
+generic_2fe2s_transfer_complex	PPTS312_09240-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	PPTS312_09240-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	HNE05_14315-MONOMER,HNE05_14310-MONOMER_mod_zn2(4),HNE05_14320-MONOMER
+GroEL_dependent_folding	HNE05_13770-MONOMER,HNE05_13775-MONOMER
+N_terminal_methionine_cleavage	HNE05_03230-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	HNE05_02600-MONOMER
+PrfB_mono_mediated_termination	HNE05_03010-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	HNE05_01530-MONOMER
+peptide_deformylase_processing	HNE05_17805-MONOMER_mod_fe2(1)
+ribosome_recycler	HNE05_03250-MONOMER

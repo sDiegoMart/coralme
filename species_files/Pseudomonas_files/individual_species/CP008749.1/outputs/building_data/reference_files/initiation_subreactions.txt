@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	OU9_04841-MONOMER
+Translation_initiation_factor_InfA	OU9_02651-MONOMER
+Translation_initiation_factor_InfC	OU9_02770-MONOMER
+fmet_addition_at_START	OU9_04841-MONOMER,OU9_00018-MONOMER_mod_mg2(1)_mod_k(1)

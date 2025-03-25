@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	NCTC13359_01543-MONOMER,NCTC13359_04822-MONOMER
+fes_chaperones	CPLX_dummy
+fes_transfer	NCTC13359_01047-MONOMER,NCTC13359_01609-MONOMER
+generic_2fe2s_transfer_complex	NCTC13359_01047-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	NCTC13359_01047-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

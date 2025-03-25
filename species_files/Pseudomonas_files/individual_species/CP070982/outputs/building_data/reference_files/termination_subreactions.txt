@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	JYG34_03615-MONOMER,JYG34_03620-MONOMER_mod_zn2(4),JYG34_03610-MONOMER
+GroEL_dependent_folding	JYG34_21185-MONOMER,JYG34_21190-MONOMER
+N_terminal_methionine_cleavage	JYG34_20045-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	JYG34_04060-MONOMER
+PrfB_mono_mediated_termination	JYG34_05860-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	JYG34_04910-MONOMER
+peptide_deformylase_processing	JYG34_00110-MONOMER_mod_fe2(1)
+ribosome_recycler	JYG34_20025-MONOMER

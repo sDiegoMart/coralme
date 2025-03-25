@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	CPLX_dummy
+fes_chaperones	IE322_09260-MONOMER
+fes_transfer	IE322_19165-MONOMER,IE322_17055-MONOMER
+generic_2fe2s_transfer_complex	IE322_19165-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	IE322_19165-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

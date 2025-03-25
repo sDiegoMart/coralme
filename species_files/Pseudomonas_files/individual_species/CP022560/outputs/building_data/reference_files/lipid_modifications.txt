@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	CHR26_10855-MONOMER
+pg_pe_160	CHR26_09110-MONOMER,CHR26_04180-MONOMER

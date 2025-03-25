@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	OU9_04749-MONOMER
+UGA	OU9_03743-MONOMER
+UAA	generic_RF

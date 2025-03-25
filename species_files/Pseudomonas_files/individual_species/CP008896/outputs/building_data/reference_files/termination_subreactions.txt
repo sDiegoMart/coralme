@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	HZ99_22165-MONOMER,HZ99_22170-MONOMER_mod_zn2(4),HZ99_22160-MONOMER
+GroEL_dependent_folding	HZ99_11010-MONOMER,HZ99_11015-MONOMER
+N_terminal_methionine_cleavage	HZ99_24140-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	HZ99_22810-MONOMER
+PrfB_mono_mediated_termination	HZ99_23940-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	HZ99_12685-MONOMER
+peptide_deformylase_processing	HZ99_17930-MONOMER_mod_fe2(1)
+ribosome_recycler	HZ99_24160-MONOMER

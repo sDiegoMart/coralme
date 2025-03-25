@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	KCX70_19210-MONOMER
+pg_pe_160	KCX70_01765-MONOMER,KCX70_03750-MONOMER

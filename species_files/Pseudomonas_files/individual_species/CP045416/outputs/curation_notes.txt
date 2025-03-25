@@ -1,0 +1,2569 @@
+
+#################### critical@org.check_m_model ####################
+********** Some metabolites have a problematic formula. If these metabolites are used in protein modifications, or other subreactions, it will cause an error.
+The following items triggered the warning:
+3hdecACP_c
+ACP_c
+3hddecACP_c
+3hcddec5eACP_c
+3hmrsACP_c
+3hcmrs7eACP_c
+3hhexACP_c
+3hoctACP_c
+tdec2eACP_c
+tddec2eACP_c
+t3c5ddeceACP_c
+tmrs2eACP_c
+t3c7mrseACP_c
+3hpalmACP_c
+tpalm2eACP_c
+3hcpalm9eACP_c
+t3c9palmeACP_c
+3hoctaACP_c
+toctd2eACP_c
+3hcvac11eACP_c
+t3c11vaceACP_c
+3haACP_c
+but2eACP_c
+thex2eACP_c
+toct2eACP_c
+3odecACP_c
+3oddecACP_c
+3ocddec5eACP_c
+3omrsACP_c
+3ocmrs7eACP_c
+3opalmACP_c
+3ocpalm9eACP_c
+3ooctdACP_c
+3ocvac11eACP_c
+actACP_c
+3ohexACP_c
+3ooctACP_c
+malACP_c
+ocACP_c
+dcaACP_c
+cdec3eACP_c
+ddcaACP_c
+cddec5eACP_c
+myrsACP_c
+tdeACP_c
+palmACP_c
+hdeACP_c
+butACP_c
+hexACP_c
+octeACP_c
+ocdcaACP_c
+acACP_c
+trdox_c
+trdrd_c
+flxr_c
+flxso_c
+glutrna_c
+trnaglu_c
+grxox_c
+grxrd_c
+moadamp_c
+moadcosh_c
+moadcoo_c
+2hddACP_c
+iscu_4fe4s_c
+iscu_c
+iscu_2fe2s_c
+sufse_c
+sufsesh_c
+iscs_c
+iscssh_c
+iscu_2fe2s2_c
+pc_EC_c
+pa_EC_c
+cdpdag_BS_c
+histrna_c
+trnahis_c
+mettrna_c
+trnamet_c
+trnatrp_c
+trptrna_c
+leutrna_c
+trnaleu_c
+trnatyr_c
+tyrtrna_c
+argtrna_c
+trnaarg_c
+thrtrna_c
+trnathr_c
+fdxo_22_c
+fdxr_22_c
+trnaasp_c
+trnaasp_preq34_c
+trnatyr_preq34_c
+trnahis_preq34_c
+trnatyrqo_c
+trnatyrq_c
+trnaaspqo_c
+trnaaspq_c
+trnahisqo_c
+trnahisq_c
+apoACP_c
+
+**********Solution:
+Correct the formulas of the listed metabolites. Some metabolite formulas are critical for the completion of this pipeline. If homology is ON, this pipeline will try to fill in the formulas from the reference.
+
+#################### high@org.check_m_model ####################
+********** Some reactions are missing their subsystem
+The following items triggered the warning:
+2AGPE140tipp
+2AGPE141tipp
+2AGPG140tipp
+2AGPG141tipp
+2MAHMP
+3_4DHBZt2
+34HPPOR
+3HAD100
+3HAD120
+3HAD121
+3HAD140
+3HAD141
+3HAD160
+3HAD161
+3HAD180
+3HAD181
+3HAD40
+3HAD60
+3HAD80
+3HBCOAHL
+3MBt2pp
+3MBtex
+3OAR100
+3OAR120
+3OAR121
+3OAR140
+3OAR141
+3OAR160
+3OAR161
+3OAR180
+3OAR181
+3OAR40
+3OAR60
+3OAR80
+3OAS100
+3OAS120
+3OAS121
+3OAS140
+3OAS141
+3OAS160
+3OAS161
+3OAS180
+3OAS181
+3OAS60
+3OAS80
+3OXOADPt_ex
+3PEPTabcpp
+4HTHRS
+4PEPTabcpp
+5DOAN
+A5PISO
+AACPS1
+AACPS2
+AACPS3
+AACPS4
+AACPS5
+AACPS6
+AACPS7
+AACPS8
+AACPS9
+AADSACYCL
+ABTA
+ABUTD
+ABUTtex
+ACACT1r
+ACACT2r
+ACACT3r
+ACACT4r
+ACACT7r
+ACACT8r
+ACCOAC
+ACCOAL
+ACGK
+ACGS
+ACHBS
+ACKr
+ACLS
+ACOAD2f
+ACOAD3f
+ACOAD4f
+ACOAD5f
+ACOAD6f
+ACOAD7f
+ACOAD8f
+ACOADH2
+ACOATA
+ACODA
+ACONTa
+ACONTb
+ACOTA
+ACPPAT120
+ACPPAT140
+ACPPAT141
+ACPPAT160
+ACPPAT161
+ACPPAT180
+ACPPAT181
+ACS
+ACt4pp
+ACtex
+ADA
+ADCL
+ADEt2rpp
+ADEtex
+ADK1irr
+ADNCYC
+ADPT
+ADSK
+ADSL1r
+ADSL2r
+ADSS
+AGM3PA
+AGM3PApp
+AGM3PH
+AGM3Pt2pp
+AGM4PA
+AGM4PApp
+AGM4PH
+AGM4Pt2pp
+AGMDA
+AGMH
+AGMHE
+AGMt2pp
+AGPAT120
+AGPAT140
+AGPAT141
+AGPAT160
+AGPAT161
+AGPAT180
+AGPAT181
+AGPR
+AHCi
+AHSERL2
+AICART
+AIRCr
+AKGtex
+ALAabcpp
+ALAALAr
+ALAR
+ALAt4pp
+ALATA_L
+ALAtex
+ALCD19
+ALCD2ir
+ALDD2x
+ALLTAHr
+ALLTN
+ALLTNtex
+AM3PA
+AM4PA
+AMID4
+AMPN
+AMPTASECG
+AMPTASEPG
+ANHMK
+ANPRT
+ANS
+AOXHEXCYCL
+AP4AH
+APG3PAT120
+APG3PAT140
+APG3PAT141
+APG3PAT160
+APG3PAT161
+APG3PAT180
+APG3PAT181
+APRAUR
+APSR
+APTNAT
+ARBtex
+ARGDC
+ARGDr
+ARGORNt7pp
+ARGSL
+ARGSS
+ASNN
+ASNS1
+ASP1DC
+ASPCT
+ASPK
+ASPO1
+ASPO6
+ASPT
+ASPTA
+ASPtex
+ATPHs
+ATPPRT
+BETALDHx
+BETALDHy
+BMOGDS1
+BMOGDS2
+BPNT
+BTDD_RR
+BUTCT
+BZ12DOX
+BZDIOLDH
+BZtex
+CA2tex
+CATDOX
+CBMD
+CBMKr
+CBPAH
+CD2t3pp
+CD2tex
+CD2tpp
+CDGUNPD
+CDPMEK
+CHLt2pp
+CHOLS_ex
+CHORM
+CHORS
+CHRPL
+CLPNH120pp
+CLPNH140pp
+CLPNH141pp
+CLPNH160pp
+CLPNH161pp
+CLPNH180pp
+CLPNH181pp
+CLPNS120pp
+CLPNS140pp
+CLPNS141pp
+CLPNS160pp
+CLPNS161pp
+CLPNS180pp
+CLPNS181pp
+CLtex
+CMtex
+CMtpp
+CO2tex
+CO2tpp
+COBALT2t3pp
+COBALT2tex
+COBALT2tpp
+CPMPS
+CPPPGO
+CPPPGO2
+CREStex
+CRNtex
+CRO4abcpp
+CRO4t3pp
+CS
+CSNtex
+CTECOAI6
+CTECOAI7
+CTECOAI8
+CTPS1
+CTPS2
+CU1Opp
+CU2abcpp
+CU2tex
+CU2tpp
+CUtex
+CYO1_KT
+CYSS
+CYTK1
+CYTK2
+DAAD
+DADA
+DADK
+DAGK120
+DAGK140
+DAGK141
+DAGK160
+DAGK161
+DAGK180
+DAGK181
+DALAt2pp
+DAPDC
+DAPE
+DASYN120
+DASYN140
+DASYN141
+DASYN160
+DASYN161
+DASYN180
+DASYN181
+DB4PS
+DCTPD
+DCTPD2
+DDPA
+DGK1
+DGUNC
+DHACOAH
+DHAD1
+DHAD2
+DHBS
+DHDPRy
+DHDPS
+DHFR
+DHFS
+DHNPA_1
+DHORTS
+DHPPDA
+DHQS
+DHQTi
+DHSKDH
+D_LACtex
+DMATT
+DMPPS
+DPCOAK
+DPR
+DRIBtpp
+DTMPK
+DURIPP
+DUTPDP
+DXPRIi
+DXPS
+E4PD
+EAR100x
+EAR120x
+EAR140x
+EAR141x
+EAR160x
+EAR161x
+EAR180x
+EAR181x
+EAR40x
+EAR60x
+EAR80x
+ECOAH1
+ECOAH2
+ECOAH3
+ECOAH4
+ECOAH5
+ECOAH6
+ECOAH7
+ECOAH8
+EDA
+EDD
+ENO
+ETHAAL
+ETHAtex
+ETOHtex
+ETOHtrpp
+FA100ACPHi
+FA120ACPHi
+FA140ACPHi
+FA141ACPHi
+FA160ACPHi
+FA161ACPHi
+FA80ACPHi
+FACOAE100
+FACOAE120
+FACOAE140
+FACOAE141
+FACOAE160
+FACOAE161
+FACOAE180
+FACOAE181
+FACOAE60
+FACOAE80
+FACOAL100t2pp
+FACOAL120t2pp
+FACOAL140
+FACOAL140t2pp
+FACOAL141t2pp
+FACOAL160
+FACOAL160t2pp
+FACOAL161
+FACOAL161t2pp
+FACOAL180t2pp
+FACOAL181
+FACOAL181t2pp
+FACOAL60t2pp
+FACOAL80t2pp
+FALDH2
+FALGTHLs
+FBA
+FBP
+FCLT
+FE2tex
+FE2tpp
+FE3abcpp
+FE3DHBZR
+FEENTER2tpp
+FEENTERtex
+FEROpp
+FLDR2
+FMNAT
+FOLD3
+FORtex
+FRUK
+FTHFD
+FUM
+FUMtex
+G1PACT
+G1SAT
+G2PP
+G3PAT120
+G3PAT140
+G3PAT141
+G3PAT160
+G3PAT161
+G3PAT180
+G3PAT181
+G3PCabcpp
+G3PCtex
+G3PD
+G3PD2i
+G3PD5
+G3PEabcpp
+G3PGabcpp
+G3PIabcpp
+G3PItex
+G3PSabcpp
+G3PStex
+G5SADs
+G5SD
+G6PBDH
+G6PDH2rirr
+G6PI
+GALabcpp
+GALCTNtex
+GALCTtex
+GALUi
+GALURt2rpp
+GALURtex
+GAPD
+GARFT
+GART
+GCALDD
+GDBTALDH
+GDPDPK
+GF6PTA
+GGGABAH
+GGPTRCO
+GGPTRCS
+GHMT2r
+GK1
+GLCabcpp
+GLCOAS
+GLCOASYNT
+GLCP
+GLCRtex
+GLCS1
+GLCtex
+GLCURt2rpp
+GLCURtex
+GLGC
+GLNS
+GLU5K
+GLUCYS
+GLUDC
+GLUDxi
+GLUDyirr
+GLUN
+GLUPRT
+GLUR
+GLUSx
+GLUSy
+GLUTCOADHc
+GLUTRR
+GLUTRS
+GLYabcpp
+GLYALDDr
+GLYALDtex
+GLYALDtpp
+GLYBt2pp
+GLYBtex
+GLYC2Pabcpp
+GLYC2Ptex
+GLYC3Pabcpp
+GLYCLTt4pprev
+GLYCtex
+GLYCtpp
+GLYK
+GLYt4pp
+GMHEPAT
+GMHEPK
+GMHEPPA
+GMPS2
+GPDDA1
+GPDDA1pp
+GPDDA2
+GPDDA2pp
+GPDDA3
+GPDDA3pp
+GPDDA4
+GPDDA4pp
+GPDDA5
+GPDDA5pp
+GRTT
+GRXR
+GTHOr
+GTHPi
+GTHRDabc2pp
+GTHRDabcpp
+GTHS
+GTPCI
+GTPCII
+GTPDPDP
+GTPDPK
+GTPHs
+GUAD
+GUAPRT
+GUAt2pp
+H2CO3D
+H2Otex
+H2Otpp
+H2tex
+H2tpp
+HACD8i
+HACD9
+HADPCOADH3
+HBZOPT
+HCO3E
+HEMEOS
+HEX1
+HG2tex
+HISTD
+HISTP
+HMBS
+HMGL
+HMPK1
+HOMt2pp
+HOMtex
+HPAtex
+HPPK
+HSERTA
+HSK
+HSTPT
+Htex
+HXAND
+HXPRT
+HYXNtex
+ICDHyr
+ICHORT
+ICL
+IG3PS
+IGPDH
+IGPS
+ILEabcpp
+ILEt2rpp
+ILETA
+ILEtex
+IMPC
+IMPD
+INSTtex
+IPDPS
+IPMD
+IPPMIa
+IPPMIb
+IPPS
+KARA1
+KARA2
+KAS13
+KAS14
+KAS15
+Kt3pp
+Ktex
+LCADi
+LDH_D
+LEUabcpp
+LEUt2rpp
+LEUTAi
+LEUtex
+LGTHL
+L_LACtex
+LPADSS
+LPLIPAL1A120pp
+LPLIPAL1A140pp
+LPLIPAL1A141pp
+LPLIPAL1A160pp
+LPLIPAL1A161pp
+LPLIPAL1A180pp
+LPLIPAL1A181pp
+LPLIPAL1E120pp
+LPLIPAL1E160pp
+LPLIPAL1E180pp
+LPLIPAL1G120pp
+LPLIPAL1G160pp
+LSERDHr
+LYSabcpp
+LYSDC
+LYSt3pp
+MALS
+MALtex
+MALTHXtexi
+MAN1PT
+MAN1PT2
+MCITL2
+MCITS
+MCOATA
+MCTP1App
+MCTP1Bpp
+MCTP2App
+MDDCP1pp
+MDDCP2pp
+MDDCP3pp
+MDDCP4pp
+MDDCP5pp
+MDDEP1pp
+MDDEP2pp
+MDDEP3pp
+MDDEP4pp
+MDH2
+MECDPDH2
+MECDPS
+MELIBt2pp
+MEOHtex
+MEOHtrpp
+MEPCT
+METAT
+METOX1s
+METOX2s
+METS
+METSOXR1
+METSOXR2
+MG2tex
+MG2tpp
+MI1PP
+MICITDr
+MLDCP1App
+MLDCP3App
+MLTGY1pp
+MLTGY2pp
+MLTGY3pp
+MLTGY4pp
+MMTSAO
+MNtex
+MOBDtex
+MOHMT
+MPTAT
+MPTS
+MPTSS
+MTAP
+MTHFC
+MTHFR3
+MTI
+MTRI
+MUCCYCI
+MUCLI
+NACODA
+NADDP
+NADH5
+NADK
+NADPHQR2
+NADS2
+NADTRHD
+NAMNPP
+NAt3pp
+NAtex
+NDPK1
+NDPK2
+NDPK3
+NDPK4
+NDPK5
+NDPK6
+NDPK7
+NDPK8
+NH4t4pp
+NH4tex
+NH4tpp
+NI2tex
+NI2uabcpp
+NMNHYD
+NNATr
+NNDPR
+NO2tex
+NOtex
+NOtpp
+NTD1
+NTD10
+NTD11
+NTD2
+NTD3
+NTD4
+NTD5
+NTD6
+NTD7
+NTD8
+NTD9
+NTP1
+NTPP11
+NTPP6
+NTPP9
+NTPTP1
+O2tpp
+OAADC
+OAAtex
+OCBT
+OCDCAt2pp
+OCDCEAt2pp
+OCOAT1
+OCTDPS
+OMCDC
+OMPDC
+OPHBDC
+OPHHX
+ORNabcpp
+ORNDC
+ORNTAC
+OROTtex
+ORPT
+OXOADLR
+OXOAEL
+OXPTNDH
+P5CD
+P5CR
+PA120abcpp
+PA140abcpp
+PA141abcpp
+PA160abcpp
+PA161abcpp
+PA180abcpp
+PA181abcpp
+PACt3
+PANTS
+PAPPT3
+PAPSR
+PAPSR2
+PC
+PDE1
+PDE4
+PDHbr
+PDHcr
+PDX5POi
+PDX5PS
+PE120abcpp
+PE140abcpp
+PE141abcpp
+PE160abcpp
+PE161abcpp
+PE180abcpp
+PE181abcpp
+PERD
+PG120abcpp
+PG140abcpp
+PG141abcpp
+PG160abcpp
+PG161abcpp
+PG180abcpp
+PG181abcpp
+PGAMT
+PGCD
+PGI
+PGK
+PGL
+PGM
+PGMT
+PGP120abcpp
+PGP140abcpp
+PGP141abcpp
+PGP160abcpp
+PGP161abcpp
+PGP180abcpp
+PGP181abcpp
+PGPP120
+PGPP120pp
+PGPP140pp
+PGPP141pp
+PGPP160
+PGPP160pp
+PGPP161
+PGPP161pp
+PGPP180
+PGPP180pp
+PGPP181
+PGPP181pp
+PGSA120
+PGSA140
+PGSA141
+PGSA160
+PGSA161
+PGSA180
+PGSA181
+PHEMEabcpp
+PHEMEtiex
+PHEt2rpp
+PHETA1
+PHEtex
+PIt2rpp
+PItex
+PIuabcpp
+PLIPA2E160pp
+PLIPA2E180pp
+PLIPA2G160pp
+PMANM
+PMDPHT
+PMPK
+PNTK
+POAACR
+PPA
+PPAKrirr
+PPAtex
+PPBNGS
+PPC
+PPCDC
+PPCK
+PPGPPDP
+PPK2r
+PPKr
+PPNCL
+PPND
+PPNDH
+PPPNt2rpp
+PPPNtex
+PPS
+PPTtex
+PRAGSr
+PRAIi
+PRAIS
+PRAMPC
+PRASCSi
+PRATPP
+PRFGS
+PRMICI
+PROD2
+PROt4pp
+PRPPSirr
+PSCVT
+PSD120
+PSD160
+PSD161
+PSD180
+PSD181
+PSP_L
+PSSA120
+PSSA160
+PSSA161
+PSSA180
+PSSA181
+PTA2
+PTPATi
+PTRCabcpp
+PTRCTA
+PYAM5PO
+PYDXNO
+PYDXO
+PYK
+PYRtex
+QULNS
+RBFK
+RBFSa
+RBFSb
+RHACOAR100
+RHACOAR120
+RHACOAR140
+RHACOAR60
+RHACOAR80
+RIBtex
+RNDR1
+RNDR2
+RNDR3
+RNDR4
+RPE
+RPI
+S7PI
+SADT
+SALCHS4abcpp
+SALCHS4FER3
+SALCHS4tex
+SCYSSL
+SDPDS
+SDPTA
+SERAT
+SERD_L
+SERt4pp
+SFGTHi
+SHCHD2
+SHCHF
+SHK3Dr
+SHKK
+SHSL1
+SHSL4r
+SLCYSS
+SO3abcpp
+SO3tex
+SO4tex
+SPMDabcpp
+SPMS
+SSALy
+SUCCtex
+SULabcpp
+SULR
+T2DECAI
+TALA
+TARTRDtex
+TDP
+TDSK_PA
+THD2pp
+THDPS
+THIORDXi
+THRabcpp
+THRAi
+THRD_L
+THRS
+THRt4pp
+TKT1
+TKT2
+TMDS
+TMPK
+TMPPP_PA
+TOLtex
+TPI
+TRDR
+TRPS1
+TRPS2
+TRPtex
+TSULabcpp
+TSULtex
+TTRCYCtex
+TTRCYCtpp
+TYRt2rpp
+TYRTA
+TYRtex
+U23GAAT
+UAAGDS
+UAGCVT
+UAGDP
+UAGPT3
+UAMAGS
+UAMAS
+UAPGR
+UDCPDP
+UDCPPtppi
+UDPG4E
+UGLYCH
+UGMDDS
+UHGADA
+UM3PL
+UM4PL
+UMPK
+UPP3MT
+UPP3S
+UPPDC1
+UREA
+UREAabcpp
+UREAtex
+URIt2pp
+USHD
+VALabcpp
+VALt2rpp
+VALTA
+VALtex
+XAND
+XANt2pp
+XANtex
+XPPT
+XYLK
+ZN2t3pp
+Zn2tex
+ZNabcpp
+EX_glc__D_e
+EX_h2o_e
+EX_h_e
+EX_2pglyc_e
+EX_34dhbz_e
+EX_leu__L_e
+EX_3hoxpac_e
+EX_3mb_e
+EX_3oxoadp_e
+EX_4hba_e
+EX_4hbz_e
+EX_ala__L_e
+EX_cl_e
+EX_arab__L_e
+EX_4abut_e
+EX_acac_e
+EX_acald_e
+EX_acgam_e
+EX_ac_e
+EX_chol_e
+EX_acon_C_e
+EX_pi_e
+EX_actn__R_e
+EX_adn_e
+EX_ins_e
+EX_nh4_e
+EX_ade_e
+EX_ad_e
+EX_akg_e
+EX_mal__L_e
+EX_ala__D_e
+EX_gln__L_e
+EX_gly_e
+EX_ser__L_e
+EX_thr__L_e
+EX_arg__L_e
+EX_alltn_e
+EX_cgly_e
+EX_malt_e
+EX_malttr_e
+EX_fe3_e
+EX_lys__L_e
+EX_orn_e
+EX_asp__L_e
+EX_phe__L_e
+EX_k_e
+EX_pro__L_e
+EX_ala_B_e
+EX_cellb_e
+EX_meoh_e
+EX_buts_e
+EX_butso3_e
+EX_but_e
+EX_bz_e
+EX_ca2_e
+EX_15dap_e
+EX_chols_e
+EX_cit_e
+EX_mg2_e
+EX_mn2_e
+EX_cobalt2_e
+EX_zn2_e
+EX_succ_e
+EX_for_e
+EX_co2_e
+EX_4crsol_e
+EX_crn_e
+EX_csn_e
+EX_cu2_e
+EX_cu_e
+EX_cynt_e
+EX_o2_e
+EX_glu__L_e
+EX_dad_2_e
+EX_dca_e
+EX_ddca_e
+EX_2ddglcn_e
+EX_lac__D_e
+EX_dms_e
+EX_dmso_e
+EX_drib_e
+EX_ser__D_e
+EX_galur_e
+EX_hdca_e
+EX_hdcea_e
+EX_ocdca_e
+EX_ocdcea_e
+EX_ttdca_e
+EX_etha_e
+EX_ethso3_e
+EX_etoh_e
+EX_h2_e
+EX_fe2_e
+EX_fe3dcit_e
+EX_fe3dhbzs_e
+EX_enter_e
+EX_feenter_e
+EX_fru_e
+EX_fum_e
+EX_g3pc_e
+EX_g3pi_e
+EX_g3ps_e
+EX_gal_e
+EX_galctn__D_e
+EX_galct__D_e
+EX_gam_e
+EX_glcr_e
+EX_glcur_e
+EX_glyc3p_e
+EX_glyald_e
+EX_glyb_e
+EX_glyc2p_e
+EX_glyclt_e
+EX_glyc_e
+EX_gsn_e
+EX_gua_e
+EX_h2s_e
+EX_pheme_e
+EX_hexs_e
+EX_his__L_e
+EX_hom__L_e
+EX_4hphac_e
+EX_hxan_e
+EX_hxa_e
+EX_taur_e
+EX_icit_e
+EX_ile__L_e
+EX_indole_e
+EX_inost_e
+EX_isetac_e
+EX_lcts_e
+EX_Lcyst_e
+EX_lac__L_e
+EX_malthp_e
+EX_malthx_e
+EX_maltpt_e
+EX_maltttr_e
+EX_man1p_e
+EX_man_e
+EX_met__L_e
+EX_mobd_e
+EX_mso3_e
+EX_nmn_e
+EX_no2_e
+EX_rnam_e
+EX_no3_e
+EX_no_e
+EX_uri_e
+EX_oaa_e
+EX_octa_e
+EX_orot_e
+EX_pac_e
+EX_pdima_e
+EX_ppa_e
+EX_ppoh_e
+EX_pppn_e
+EX_ppt_e
+EX_progly_e
+EX_ptrc_e
+EX_pyr_e
+EX_so4_e
+EX_urate_e
+EX_trp__L_e
+EX_tyr__L_e
+EX_val__L_e
+EX_spmd_e
+EX_urea_e
+EX_rib__D_e
+EX_salchs4fe_e
+EX_salchs4_e
+EX_sbt__D_e
+EX_skm_e
+EX_so3_e
+EX_sulfac_e
+EX_tartr__D_e
+EX_tol_e
+EX_tre_e
+EX_tsul_e
+EX_ttdcea_e
+EX_ura_e
+EX_vanln_e
+EX_vanlt_e
+EX_xan_e
+EX_xtsn_e
+EX_xyl__D_e
+ATPM
+EX_na1_e
+EX_cd2_e
+EX_ni2_e
+PYRt2rpp
+BHBtpp
+RHA40tex
+ASNtex
+EX_cys__L_e
+EX_dcyt_e
+EX_hg2_e
+EX_tungs_e
+EX_slnt_e
+EX_sel_e
+EX_pnto__R_e
+EX_cbl1_e
+EX_thymd_e
+EX_nac_e
+EX_4abzglu_e
+ADCS
+EX_thm_e
+EX_dad_5_e
+PPM
+R1PK
+R15BPK
+DHORDfum
+DHORD2
+OMMBLHX
+DMQMT
+OMBZLM
+OMPHHX
+GLYCL
+ECOAH9ir
+ASAD
+3OXCOAT
+SPODMpp
+R05219
+HYGBDIAS
+CYRDAR
+CYRDAAT
+ADCYRS
+ADCPS1
+CBIAT
+CYANST
+NNDMBRT
+MGCH
+ACOADH1
+ME1
+ME2
+CAT
+MCCC
+MMSAD3
+MBCOAi
+DBTS
+AMAOTr
+EX_pqs_e
+RZ5PP
+ADOCBLS
+ACBIPGT_2
+CBItonex
+BLUB
+APPLDHr
+AOBUTDs
+COBK1
+COBK2
+rxn13107
+rxn12880
+rxn12892
+rxn05003
+rxn13044
+rxn05028
+rxn12879
+rxn13108
+rxn05034
+rPY00162
+rPY00163
+rPY00164
+rPY00165
+rPY00166
+rPY00167
+rPY00168
+rPY00169
+rPY00170
+rPY00171
+rPY00172
+rPY00173
+rPY00174
+rPY00175
+rPY00176
+rPY00177
+rPY00184
+rPY00180
+rPY00183
+rPY00182
+rxn10199
+rxn03395
+rxn12432
+rxn12206
+rxn00629
+rxn00992
+rxn12562
+rxn01734
+rJB00258
+rJB00263
+rJB00265
+rJB00260
+rJB00262
+rJB00271
+rJB00259i
+rxn00177
+rxn13924
+rxn13823
+rxn05092
+rxn05091
+rxn13804cyt
+rxn00671
+rxn10062
+CCPpp
+UPPRT
+PSERTr
+OHPBAT
+SUCOASr
+GLYCLTDx
+GLYCLTDy
+GLYCTO1
+EX_acolipa_e
+EX_colipa_e
+EX_gm1lipa_e
+I4FE4ST
+I2FE2ST
+LIPOS
+BTS5
+SCYSDS
+ICYSDS
+I2FE2SR
+THZPSN3_PA
+MOADSUx
+I2FE2SS2
+AMPMS2
+CBPS
+ACACT5r
+LIPOCT
+KDOPS
+KDOPP
+KDOCT2
+K2L4Aabcpp
+K2L4Aabctex
+EX_kdo2lipid4_e
+PTAr
+TDPGDH
+G1PTT
+TDPDRE
+TDPDRR
+TRSARrirr
+GLXCL
+HPYRRx
+HPYRI
+UDCPDPS
+EX_enlipa_e
+EX_lipa_cold_e
+EX_lipa_e
+EX_aso4_e
+ASR
+ASO3tex
+EX_aso3_e
+MINCYCtpp
+RFAMPtpp
+NOVBCNtpp
+DOXRBCNtpp
+FUSAtpp
+RFAMPtex
+NOVBCNtex
+ECOAH12
+ALCD4
+Kt2pp
+FDHr
+FDH4pp
+TRPS3
+PGLYCP
+GLNtex
+rxn13892
+rxn13909
+rxn02569
+rxn04093
+rJB00285
+rxn13873
+rJB00237
+HISTRS
+METTRS
+TRPTRS
+LEUTRS
+PPItex_1
+TYRTRS
+ARGTRS
+THRTRS
+EX_ppi_e
+2DHGLCNtex
+EX_mal__D_e
+MALDtex
+DINStex
+EX_din_e
+DURItex
+EX_duri_e
+CYTDtex
+EX_cytd_e
+THMtex
+DGSNtex
+EX_dgsn_e
+DCYTtex
+ASCBtex
+AOXSr
+THMPPi
+ACLS_a
+ACLS_d
+rPY00221
+rPY00222
+rxn13866
+rxn13867
+rxn13868
+rxn13869
+rxn13870
+rxn13871
+rxn13876
+SUCD4i
+THMMPtex
+THMPPtex
+SUCD4i_q9
+RNTR1_for
+RNTR2_for
+RNTR3_for
+RNTR4_for
+BTDDtex
+BTDDtpp
+AKGDa
+AKGDb
+rxn13878
+rxn13879
+BTDD_SStex
+BTDDtpp_SS
+BTDD_mesotex
+BTDDtpp_meso
+BTDD_meso
+I2FE2SS2fdx
+I2FE2SSfdx
+FRDO4r
+FRDO7r
+I4FE4SRfdx
+SOTA
+rxn00779
+rxn00559
+NMNATr
+NMNDA
+NADN
+ACOAD1f
+MACCOAT
+HACD5i
+HACD1i
+HACD2i
+HACD3i
+HACD4i
+HACD6i
+HACD7i
+MTHFD
+GLCNtex
+PYNP2r
+AKP1_2
+GLYCOX1_PA
+GLYCOX2_PA
+TENI
+UACGAMDH2
+NO2t2rpp
+rxn00689
+rxn00611
+PUNP1
+SUCDi
+SUCDi_q9
+CDGR
+CCGS
+CDGS
+CPH4S
+TGTASE3
+TGTASE2
+TGTASE1
+QUEA2
+QOR2
+QUEA3
+QOR3
+QUEA1
+QOR1
+HIUH_c
+OHCUDC2
+5HPUDICDC_c
+UNK3
+ACACT6r
+DAPAT
+UAGAAT2_1
+HSDy
+ACTD_1
+BTDD_SS_cyt
+rxn08229
+rxn08230
+rxn08231
+rxn08232
+H2St1pp
+H2Stex
+METtex
+METabcpp
+PIt7ipp
+FEENTERexs
+PAPA181
+PAPA161
+URAt2pp
+URAtex
+SKMt2pp
+SKMtex
+METDtex
+SO4t4pp_1
+ALCD1_ros
+DODECtpp
+DODECtex
+TETDECtpp
+TETDECtex
+HEXDECtpp
+HEXDECtex
+O2tex
+ADNt2pp
+SERtex
+ORNtex
+BUTtex
+DALAtex
+ACGLUtex
+ACGLUtpp
+NTPP8
+NTPP4
+NTPP2
+NTPP1
+PHETHPTOX3
+DHMPTR
+DHNPTE
+3OADPCOAT
+PPAt4pp
+RDXRx
+RDXRy
+GLYBCOAT
+AGODH
+OXACT
+OXAtpp
+OXFOtex
+EX_oxa_e
+NO3tex
+NO3R1bpp_q8
+NO3R1bpp_q9
+NAR_syn
+NTRIR2x
+NIR1
+NORRDX1
+NODOx
+NODOy
+NODOx2
+NODOy2
+NADNAQ_q8
+NADNAQ_q9
+ASPO3
+ASPO5
+MTHFR2
+GLYCLTtex
+DHBSH
+PSD140
+PSD141
+PSSA140
+PSSA141
+LPLIPAL1E161pp
+PLIPA2E120pp
+PLIPA2E161pp
+RHACOAR101
+RHACOAR142
+RHACOARP70
+RHACOAR70
+RHACOARP80
+RHACOAR121d5
+RHACOARP90
+RHACOARP60
+RHACOAR121d6
+RHACOAR90
+RHACOART60
+RHACOAR141d5
+RHACOAR141d7
+RHACOARP40
+RHACOARP50
+RHACOARP100
+rxn12880_pphn
+rxn13107_pphn
+rxn13108_pphn
+FDH4pp_q9
+ASPO3_q9
+PYOH2tex
+PYOtex
+SPODMex
+NADHPYO
+H2O2tex
+EX_pyoh2
+EX_5mepca
+EX_pcah2
+PCAtex
+PCAH2tex
+TYMtex
+TYRDH
+4HALDD
+FE3DCITCH
+FE3DCITR2
+FE3DCITR3
+TYMtpp
+CYTCBB4pp_1
+CYTCBB4pp_2
+CYTCAA6pp
+CIO3pp_q8
+CIO3pp_q9
+rxn00222
+rxn13796
+rxn00738
+ALDD1
+NADPHPYO
+rxn13912
+rxn13926
+rxn00295
+ETHAt2pp
+ACACtex
+BALAtex
+FRUptspp
+FRUtex
+PTRCtex
+SPMDtex
+EX_n2_e
+EX_glx_e
+EX_f6p_e
+EX_g6p_e
+EX_g1p_e
+EX_2obut_e
+EX_asn__L_e
+EX_glycogen_e
+EX_glcn_e
+EX_damp_e
+EX_malon_e
+EX_mnl_e
+EX_itacon_e
+EX_acglu_e
+EX_salc_e
+EX_bhb_e
+EX_4hpro_LT_e
+EX_citac_e
+EX_L_alagly_e
+EX_gly_pro__L_e
+EX_gly_glu__L_e
+BIOMASS_PA14_v27M
+BIOMASS_PA14_v27M_ANA
+PYOO2exNET
+AHGDx
+23DHBSpp
+ACPpds
+SUCRtex
+SUCptspp
+FFSD
+EX_sucr_e
+NITR_NO
+TOLtpp
+XMO
+BZALDH
+BZDH
+N2tex
+N2OR
+
+**********Solution:
+Make sure the subsystems of these reactions are correct
+
+#################### critical@org.check_m_model ####################
+********** Some metabolites have no reactions associated
+The following items triggered the warning:
+Lpipecol_c
+dkmpp_c
+2agpe160_c
+2agpe180_c
+Lcyst_c
+L2aadp_c
+glcn_c
+2dhglcn_c
+6p2dhglcn_c
+2hh24dd_c
+24dhhed_c
+2ins_c
+34dhpha_c
+5cmhmsa_c
+3hoxpac_p
+3hoxpac_c
+5cmhm_c
+4cml_c
+4hbzcoa_c
+benzcoa_c
+4hbz_p
+4izp_c
+5cohe_c
+malthx_c
+arab__L_c
+acgam_p
+acgam6p_c
+acon_C_p
+acetol_c
+rib__D_c
+crn_c
+agm_p
+pacald_c
+aacald_c
+glcr_c
+malttr_c
+maltttr_c
+maltpt_c
+malthp_c
+arab__D_c
+5g2oxpt_c
+sucarg_c
+athr__L_c
+dmgly_c
+moco_c
+cala_c
+butso3_c
+butso3_p
+cgly_p
+chols_c
+mn2_c
+cit_p
+csn_c
+ctbt_c
+ctbt_p
+cynt_c
+cynt_p
+cys__L_p
+arab__D_p
+56dura_c
+ser__D_c
+feenter_c
+ethso3_c
+ethso3_p
+forcoa_c
+vanln_c
+isetac_c
+mso3_c
+taur_c
+sulfac_c
+fe3dcit_p
+fe3dhbzs_p
+feenter_p
+forglu_c
+frmd_c
+Nforglu_c
+4fumacac_c
+galct__D_c
+galctn__D_c
+glu__L_p
+hg2_c
+4mlacac_c
+2ohed_c
+his__L_p
+urcan_c
+icit_p
+indole_p
+ins_p
+isetac_p
+lcts_c
+lcts_p
+Lcyst_p
+mobd_c
+malttre_c
+malttrtre_c
+maltttrtre_c
+maltpttre_c
+mso3_p
+CCbuttc_c
+2oxpaccoa_c
+rephaccoa_c
+progly_p
+uracp_c
+salchs4fe_p
+sucglu_c
+sulfac_p
+taur_p
+vanlt_c
+vanlt_p
+vanln_p
+dhcrn_c
+gly_glu__L_c
+gly_pro__L_c
+o2s_c
+gdpddman_c
+pre8_c
+pre6b_c
+pre4_c
+pre3b_c
+pre3a_c
+24dab_c
+fbac_kt_c
+n5horn_c
+fbac_kt_p
+pvdiq_p
+pyovd_kt_p
+pyovd_kt_e
+fe3pyovd_kt_p
+fe3pyovd_kt_e
+gdpmanur_c
+5mpca_c
+unaga_c
+4hpro_LT_c
+L_alagly_c
+sbt__D_c
+2hddACP_c
+hhq_c
+udpglcur_c
+salc_c
+pchln_c
+2dglcn_c
+3ddgc_c
+13dampp_c
+phe1c_c
+1hphe_c
+Lfmkynr_c
+Lkynr_c
+tre_p
+aso4_p
+n3oxddhsl_c
+algn_c
+algne_c
+fmet_c
+mops_e
+mops_c
+algna_c
+algna_e
+g15lac_e
+uacman2nac3naca_c
+gdpdrhmn_c
+rha1glcnacppund_c
+rha3glcnacppund_c
+prenoN_acid_c
+gtcac_c
+tcac__ala_c
+gtcac__ala_c
+prenoN_ated_c
+gtcac__glu_c
+pc_EC_c
+pa_EC_c
+lrhh_c
+nbhsl_c
+metox__R_e
+metox__R_c
+udcppfm_c
+udcppfmm_c
+cdpdag_BS_c
+llrhh_c
+udcppf_c
+n5fn5horn_c
+ccmuac_e
+hsl_c
+3oxdd_c
+pencil_c
+pencilca_c
+prealginate__M_p
+Pald_c
+2ameph_c
+PA_LPS_B_c
+6a5och_c
+hexhp16dc_c
+fbac_pa_c
+btamp_c
+dodecoh_c
+tetdecoh_c
+hexdecoh_c
+uacfuc_c
+
+**********Solution:
+Make sure these metabolites are removed or connected properly
+
+#################### critical@org.check_m_model ####################
+********** Some genes have no reactions associated
+The following items triggered the warning:
+FIU84_04815
+FIU84_02015
+FIU84_21375
+FIU84_21360
+FIU84_21370
+FIU84_21365
+FIU84_21385
+FIU84_21390
+FIU84_14335
+FIU84_07305
+FIU84_07330
+FIU84_07315
+FIU84_07325
+FIU84_11210
+FIU84_06580
+FIU84_06575
+FIU84_20010
+FIU84_07310
+FIU84_16750
+FIU84_16745
+FIU84_11205
+FIU84_05125
+FIU84_20325
+FIU84_20315
+FIU84_04230
+FIU84_04220
+FIU84_04215
+FIU84_17945
+FIU84_17940
+FIU84_17935
+FIU84_17950
+FIU84_17905
+
+**********Solution:
+Make sure these genes are removed or associated properly
+
+
+
+
+#################### high@org.read_optional_file ####################
+********** No genes file was found. Initializing an empty one.
+
+**********Solution:
+Download genes from BioCyc if available
+
+#################### high@org.read_optional_file ####################
+********** No proteins file was found. Initializing an empty one.
+
+**********Solution:
+Download proteins from BioCyc if available
+
+#################### high@org.read_optional_file ####################
+********** No RNAs file was found. Initializing an empty one.
+
+**********Solution:
+Download RNAs from BioCyc if available
+
+#################### high@org.read_optional_file ####################
+********** No TUs file was found. Initializing an empty one.
+
+**********Solution:
+Download TUs from BioCyc if available
+
+
+
+
+#################### critical@org.check_gene_overlap ####################
+********** M-model has a 0 gene overlap with optional files (BioCyc)
+
+**********Solution:
+Check whether optional files where downloaded correctly.
+
+
+
+
+#################### low@org._get_manual_curation ####################
+********** No reaction_corrections file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/reaction_corrections.txt
+
+#################### low@org._get_manual_curation ####################
+********** No metabolite_corrections file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/metabolite_corrections.txt
+
+#################### low@org._get_manual_curation ####################
+********** No protein_location file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/peptide_compartment_and_pathways.txt
+
+#################### low@org._get_manual_curation ####################
+********** No translocation_multipliers file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/translocation_multipliers.txt
+
+#################### low@org._get_manual_curation ####################
+********** No lipoprotein_precursors file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/lipoprotein_precursors.txt
+
+#################### low@org._get_manual_curation ####################
+********** No cleaved_methionine file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/cleaved_methionine.txt
+
+#################### low@org._get_manual_curation ####################
+********** No manual_complexes file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/protein_corrections.txt
+
+#################### low@org._get_manual_curation ####################
+********** No sigmas file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/sigma_factors.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rho_independent file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/rho_independent.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rna_degradosome file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/rna_degradosome.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rna_modification_df file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/rna_modification.txt
+
+#################### low@org._get_manual_curation ####################
+********** No rna_modification_targets file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/post_transcriptional_modification_of_RNA.txt
+
+#################### low@org._get_manual_curation ####################
+********** No enz_rxn_assoc_df file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/enzyme_reaction_association.txt
+
+#################### low@org._get_manual_curation ####################
+********** No me_mets file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/me_metabolites.txt
+
+#################### low@org._get_manual_curation ####################
+********** No subreaction_matrix file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/subreaction_matrix.txt
+
+#################### low@org._get_manual_curation ####################
+********** No reaction_matrix file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/reaction_matrix.txt
+
+#################### low@org._get_manual_curation ####################
+********** No orphan_and_spont_reactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/orphan_and_spont_reactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No subsystem_classification file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/subsystem_classification.txt
+
+#################### low@org._get_manual_curation ####################
+********** No translocation_pathways file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/translocation_pathways.txt
+
+#################### low@org._get_manual_curation ####################
+********** No lipid_modifications file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/lipid_modifications.txt
+
+#################### low@org._get_manual_curation ####################
+********** No ribosome_stoich file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/ribosomal_proteins.txt
+
+#################### low@org._get_manual_curation ####################
+********** No ribosome_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/ribosome_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No generic_dict file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/generic_dict.txt
+
+#################### low@org._get_manual_curation ####################
+********** No amino_acid_trna_synthetase file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/amino_acid_trna_synthetase.txt
+
+#################### low@org._get_manual_curation ####################
+********** No peptide_release_factors file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/peptide_release_factors.txt
+
+#################### low@org._get_manual_curation ####################
+********** No initiation_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/initiation_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No elongation_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/elongation_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No termination_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/termination_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No transcription_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/transcription_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No special_trna_subreactions file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/special_trna_subreactions.txt
+
+#################### low@org._get_manual_curation ####################
+********** No special_modifications file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/special_modifications.txt
+
+#################### low@org._get_manual_curation ####################
+********** No excision_machinery file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/excision_machinery.txt
+
+#################### low@org._get_manual_curation ####################
+********** No folding_dict file found
+
+**********Solution:
+Fill in /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/folding_dict.txt
+
+
+
+
+#################### high@org.get_rpod ####################
+********** FIU84_03225-MONOMER was identified as RpoD. If this is not true, define RpoD!
+
+**********Solution:
+Check whether you need to correct RpoD by running me_builder.org.rpod = correct_rpod
+
+
+
+
+#################### medium@org.get_rna_polymerase ####################
+********** RNAP was identified with subunits FIU84_02235, FIU84_03580, FIU84_03585, FIU84_03740
+
+**********Solution:
+Check whether the correct proteins were called as subunits of RNAP. If not find correct RNAP complex and run me_builder.org.get_rna_polymerase(force_RNAP_as=correct_RNAP)
+
+
+
+
+#################### high@org.update_ribosome_stoich ####################
+********** Some ribosomal proteins do not contain subunit information (30S, 50S). Check whether they are ribosomal proteins!
+The following items triggered the warning:
+FIU84_01475-MONOMER
+FIU84_07470-MONOMER
+
+**********Solution:
+Curate them in ribosomal_proteins.txt
+
+
+
+
+#################### high@org.get_trna_synthetase ####################
+********** No tRNA ligases were found for some amino acids. Assigned CPLX_dummy.
+The following items triggered the warning:
+asn__L_c
+
+**********Solution:
+Check whether your organism should have a ligase for these amino acids, or if you need to add a reaction to get it (e.g. tRNA amidotransferases)
+
+
+
+
+#################### high@org.purge_genes_in_model ####################
+********** Some genes in M-model were not found in genes.txt or genome.gb. These genes will be skipped in reconstruction.
+The following items triggered the warning:
+PA14_20890
+PA14_71220
+PA14_11560
+PA14_23030
+PA14_22930
+PA14_68340
+PA14_08630
+PA14_51240
+PA14_39925
+PA_s0001
+PA14_21620
+PA14_69300
+PA14_49230
+PA14_49220
+PA14_49210
+pWW0_129
+pWW0_130
+pWW0_128
+pWW0_131
+PA14_06740
+PA14_20200
+PA14_20150
+PA14_20190
+PA14_20180
+PA14_20170
+
+**********Solution:
+Confirm the gene is correct in the m_model. If so, add it to genes.txt
+
+
+
+
+#################### medium@org.get_complex_homology ####################
+********** Some complexes were partial hits in the BLAST
+The following items triggered the warning:
+
+{"complex": "FIU84_00045-MONOMER", "reference_complex": "Gly_RS_tetra"}
+
+{"complex": "FIU84_00180-MONOMER", "reference_complex": "METNIQ-METHIONINE-ABC-CPLX"}
+
+{"complex": "FIU84_00205-MONOMER", "reference_complex": "ABC-63-CPLX"}
+
+{"complex": "FIU84_00335-MONOMER", "reference_complex": "ABC-25-CPLX"}
+
+{"complex": "FIU84_00775-MONOMER", "reference_complex": "PYRNUTRANSHYDROGEN-CPLX"}
+
+{"complex": "FIU84_01000-MONOMER", "reference_complex": "FORMATEDEHYDROGO-CPLX"}
+
+{"complex": "FIU84_01215-MONOMER", "reference_complex": "ABC-70-CPLX"}
+
+{"complex": "FIU84_02115-MONOMER", "reference_complex": "CPLX0-7458"}
+
+{"complex": "FIU84_02715-MONOMER", "reference_complex": "CPLX0-7717_G6561-MONOMER"}
+
+{"complex": "FIU84_02760-MONOMER", "reference_complex": "GLUTAMATESYN-CPLX"}
+
+{"complex": "FIU84_03400-MONOMER", "reference_complex": "PABASYN-CPLX"}
+
+{"complex": "FIU84_03540-MONOMER", "reference_complex": "SecYE-CPLX"}
+
+{"complex": "FIU84_03580-MONOMER", "reference_complex": "hRNAP"}
+
+{"complex": "FIU84_04215-MONOMER", "reference_complex": "NITRATREDUCTA-CPLX"}
+
+{"complex": "FIU84_04500-MONOMER", "reference_complex": "CPLX0-3951_G6561-MONOMER"}
+
+{"complex": "FIU84_04670-MONOMER", "reference_complex": "SULFITE-REDUCT-CPLX"}
+
+{"complex": "FIU84_04935-MONOMER", "reference_complex": "CPLX0-7428"}
+
+{"complex": "FIU84_05570-MONOMER", "reference_complex": "EG11595-MONOMER_EG11666-MONOMER"}
+
+{"complex": "FIU84_06150-MONOMER", "reference_complex": "NAPAB-CPLX_NAPC-MONOMER"}
+
+{"complex": "FIU84_06455-MONOMER", "reference_complex": "CYT-D-UBIOX-CPLX"}
+
+{"complex": "FIU84_07390-MONOMER", "reference_complex": "BamAD-CPLX"}
+
+{"complex": "FIU84_07430-MONOMER", "reference_complex": "ACETYL-COA-CARBOXYLMULTI-CPLX"}
+
+{"complex": "FIU84_07860-MONOMER", "reference_complex": "RIBONUCLEOSIDE-DIP-REDUCTI-CPLX"}
+
+{"complex": "FIU84_08560-MONOMER", "reference_complex": "3-ISOPROPYLMALISOM-CPLX"}
+
+{"complex": "FIU84_09120-MONOMER", "reference_complex": "SUCC-DEHASE"}
+
+{"complex": "FIU84_09140-MONOMER", "reference_complex": "2OXOGLUTARATEDEH-CPLX"}
+
+{"complex": "FIU84_09150-MONOMER", "reference_complex": "PYRUVATEDEH-CPLX"}
+
+{"complex": "FIU84_09150-MONOMER", "reference_complex": "GCVMULTI-CPLX"}
+
+{"complex": "FIU84_09155-MONOMER", "reference_complex": "SUCCCOASYN"}
+
+{"complex": "FIU84_09535-MONOMER", "reference_complex": "NITRITREDUCT-CPLX"}
+
+{"complex": "FIU84_10260-MONOMER", "reference_complex": "CPLX0-1721"}
+
+{"complex": "FIU84_11850-MONOMER", "reference_complex": "UBIX-MONOMER_DHHB-METHYLTRANSFER-MONOMER"}
+
+{"complex": "FIU84_11990-MONOMER", "reference_complex": "Phe_RS_tetra"}
+
+{"complex": "FIU84_14555-MONOMER", "reference_complex": "CPLX0-7838_CPLX0-7839"}
+
+{"complex": "FIU84_15290-MONOMER", "reference_complex": "ABC-304-CPLX"}
+
+{"complex": "FIU84_15635-MONOMER", "reference_complex": "EG12130-MONOMER_EG12131-MONOMER"}
+
+{"complex": "FIU84_16475-MONOMER", "reference_complex": "ACETOACETYL-COA-TRANSFER-CPLX"}
+
+{"complex": "FIU84_16685-MONOMER", "reference_complex": "ACETOLACTSYNIII-CPLX"}
+
+{"complex": "FIU84_17020-MONOMER", "reference_complex": "CARBPSYN-CPLX"}
+
+{"complex": "FIU84_17090-MONOMER", "reference_complex": "G6176-MONOMER_G6177-MONOMER_G6178-MONOMER"}
+
+{"complex": "FIU84_17560-MONOMER", "reference_complex": "ABC-16-CPLX"}
+
+{"complex": "FIU84_18535-MONOMER", "reference_complex": "ETHAMLY-CPLX"}
+
+{"complex": "FIU84_19155-MONOMER", "reference_complex": "TRANS-CPLX-201"}
+
+{"complex": "FIU84_20550-MONOMER", "reference_complex": "GLUTAMIDOTRANS-CPLX"}
+
+{"complex": "FIU84_21070-MONOMER", "reference_complex": "TRYPSYN"}
+
+{"complex": "FIU84_21360-MONOMER", "reference_complex": "ATPSYN-CPLX"}
+
+{"complex": "FIU84_21420-MONOMER", "reference_complex": "MnmEG_cplx"}
+
+{"complex": "RNAP-CPLX", "reference_complex": "RpoZ_mono"}
+
+{"complex": "CPLX_ACOATA-0", "reference_complex": "EG50003-MONOMER"}
+
+{"complex": "CPLX_ACOATA-0", "reference_complex": "FABB-CPLX"}
+
+{"complex": "CPLX_ACPPAT120-0", "reference_complex": "EG11437-MONOMER"}
+
+{"complex": "CPLX_AIRCr-0", "reference_complex": "PURK-CPLX"}
+
+{"complex": "CPLX_AIRCr-0", "reference_complex": "PURE-CPLX"}
+
+{"complex": "CPLX_APSR-0", "reference_complex": "PAPSSULFOTRANS-CPLX"}
+
+{"complex": "CPLX_APSR-0", "reference_complex": "RED-THIOREDOXIN-MONOMER"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "MALONYL-COA-ACP-TRANSACYL-MONOMER"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "3-OXOACYL-ACP-SYNTHII-CPLX"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "3-OXOACYL-ACP-REDUCT-MONOMER"}
+
+{"complex": "CPLX_KAS13-0", "reference_complex": "FABZ-CPLX"}
+
+{"complex": "CPLX_METSOXR1-0", "reference_complex": "EG11433-MONOMER"}
+
+{"complex": "CPLX_MPTS-0", "reference_complex": "EG11597-MONOMER"}
+
+{"complex": "CPLX_MPTS-0", "reference_complex": "EG11598-MONOMER"}
+
+{"complex": "CPLX_OPHBDC-0", "reference_complex": "CPLX0-301"}
+
+{"complex": "CPLX_PAPSR2-0", "reference_complex": "GRXC-MONOMER"}
+
+{"complex": "CPLX_PDX5PS-0", "reference_complex": "CPLX0-7847"}
+
+{"complex": "CPLX_PDX5PS-0", "reference_complex": "CPLX0-321"}
+
+{"complex": "CPLX_THIORDXi-0", "reference_complex": "EG10108-MONOMER"}
+
+{"complex": "CPLX_TRDR-0", "reference_complex": "THIOREDOXIN-REDUCT-NADPH-CPLX"}
+
+{"complex": "CPLX_I4FE4ST-0", "reference_complex": "IscA_tetra"}
+
+{"complex": "CPLX_I4FE4ST-0", "reference_complex": "IscU"}
+
+{"complex": "CPLX_SCYSDS-0", "reference_complex": "CPLX0-7838"}
+
+{"complex": "CPLX_I2FE2SR-0", "reference_complex": "IscS"}
+
+{"complex": "CPLX_THZPSN3_PA-0", "reference_complex": "ThiI_mono"}
+
+{"complex": "CPLX_THZPSN3_PA-0", "reference_complex": "THIG-MONOMER"}
+
+{"complex": "CPLX_RFAMPtpp-0", "reference_complex": "EG11009-MONOMER"}
+
+{"complex": "CPLX_FRDO4r-0", "reference_complex": "FLAVONADPREDUCT-MONOMER"}
+
+{"complex": "CPLX_UAGAAT2_1-0", "reference_complex": "UDPNACETYLGLUCOSAMACYLTRANS-CPLX"}
+
+{"complex": "CPLX_RDXRx-0", "reference_complex": "EG12450-MONOMER"}
+
+{"complex": "CPLX_RDXRx-0", "reference_complex": "CPLX0-1"}
+
+{"complex": "CPLX_FRUptspp-0", "reference_complex": "PTSI-MONOMER"}
+
+**********Solution:
+Curate these manually in protein_corrections.txt
+
+
+
+
+#################### medium@update_me_mets ####################
+********** Some metabolites in me_metabolites.txt are not in m_model, so they were skipped.
+The following items triggered the warning:
+sufbcd_2fe2s_c
+sufbcd_2fe2s2_c
+sufbcd_4fe4s_c
+
+**********Solution:
+Confirm these metabolites are correctly defined in me_metabolites.txt
+
+#################### medium@update_me_mets ####################
+********** Some metabolites in me_metabolites.txt were found in reference m_model after replacing __ with _
+The following items triggered the warning:
+iscu_2fe2s_c
+iscu_2fe2s2_c
+iscu_4fe4s_c
+
+**********Solution:
+Confirm these metabolites are correctly defined in me_metabolites.txt
+
+
+
+
+#################### medium@update_ribosome_subreactions_from_homology ####################
+********** Some enzymes defined in me_builder.org.ribosome_subreactions are different from the ones inferred from homology
+The following items triggered the warning:
+
+{"subreaction": "gtp_bound_30S_assembly_factor_phase1", "defined_complex": "", "inferred_complex": "FIU84_06010-MONOMER"}
+
+{"subreaction": "RbfA_mono_assembly_factor_phase1", "defined_complex": "", "inferred_complex": "FIU84_16950-MONOMER"}
+
+{"subreaction": "RimM_mono_assembly_factor_phase1", "defined_complex": "", "inferred_complex": "FIU84_05805-MONOMER"}
+
+**********Solution:
+Confirm whether the definitions or homology calls are correct in me_builder.org.ribosome_subreactions. Curate the inputs in ribosome_subreactions.txt accordingly.
+
+
+
+
+#################### medium@update_peptide_release_factors_from_homology ####################
+********** Some enzymes defined in me_builder.org.peptide_release_factors are different from the ones inferred from homology
+The following items triggered the warning:
+
+{"subreaction": "UAG", "defined_complex": "", "inferred_complex": "FIU84_16340-MONOMER"}
+
+{"subreaction": "UGA", "defined_complex": "", "inferred_complex": "FIU84_14060-MONOMER"}
+
+**********Solution:
+Confirm whether the definitions or homology calls are correct in me_builder.org.peptide_release_factors. Curate the inputs in peptide_release_factors.txt accordingly.
+
+
+
+
+#################### high@update_subreaction_matrix ####################
+********** Some metabolites in subreaction_matrix were added from reference but are not in M-model
+The following items triggered the warning:
+lipoate_c
+dad__5_c
+dad__5_c
+2tpr3dpcoa
+dad__2_c
+2agpg160_p
+2agpe160_p
+nh3_c
+5fthf_c
+5fthf_c
+dad__5_c
+
+**********Solution:
+Map these metabolites or replace the subreaction
+
+
+
+
+#################### medium@check ####################
+********** Some metabolites in me_metabolites.txt need curation
+The following items triggered the warning:
+2hddACP_c
+trnaasp_preq34_c
+trnatyr_preq34_c
+trnahis_preq34_c
+trnatyrqo_c
+trnatyrq_c
+trnaaspqo_c
+trnaaspq_c
+trnahisqo_c
+trnahisq_c
+LI_c
+sufbcd_c
+sufse_c
+sufsesh_c
+dsbaox_p
+lpp_p
+alpp_p
+3hcpalm9eACP_c
+3ocpalm9eACP_c
+flxr_c
+fldrd_c
+flxso_c
+fldox_c
+grxrd_c
+grxox_c
+iscssh_c
+iscu_2fe2s_c
+iscu_2fe2s2_c
+iscu_4fe4s_c
+
+**********Solution:
+Map or remove these metabolites in me_metabolites.txt
+
+
+
+
+#################### critical@troubleshoot ####################
+********** Some metabolites are necessary for growth
+The following items triggered the warning:
+TS_mn2_c
+TS_4fe4s_c
+
+**********Solution:
+Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!
+
+
+

@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	AO356_25215-MONOMER
+fes_chaperones	CPLX_dummy
+fes_transfer	AO356_14495-MONOMER,AO356_06635-MONOMER
+generic_2fe2s_transfer_complex	AO356_14495-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	AO356_14495-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

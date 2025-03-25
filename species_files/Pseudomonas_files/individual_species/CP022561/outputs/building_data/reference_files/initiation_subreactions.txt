@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	CHN49_24105-MONOMER
+Translation_initiation_factor_InfA	CHN49_09545-MONOMER
+Translation_initiation_factor_InfC	CHN49_17120-MONOMER
+fmet_addition_at_START	CHN49_24105-MONOMER,CHN49_00110-MONOMER_mod_mg2(1)_mod_k(1)

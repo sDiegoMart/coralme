@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,HAV28_20185-MONOMER,HAV28_05060-MONOMER,HAV28_19940-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,HAV28_20185-MONOMER_mod_mg2(2),HAV28_05060-MONOMER,HAV28_19940-MONOMER_mod_mg2(4)

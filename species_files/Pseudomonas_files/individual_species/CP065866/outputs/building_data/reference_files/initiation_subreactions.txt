@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	I9X27_25520-MONOMER
+Translation_initiation_factor_InfA	I9X27_12105-MONOMER
+Translation_initiation_factor_InfC	I9X27_11440-MONOMER
+fmet_addition_at_START	I9X27_25520-MONOMER,I9X27_00090-MONOMER_mod_mg2(1)_mod_k(1)

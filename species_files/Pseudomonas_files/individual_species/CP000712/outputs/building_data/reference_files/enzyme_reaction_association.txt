@@ -1,0 +1,1226 @@
+Reaction	Complexes
+2AGPE140tipp	Pput_4020-MONOMER
+2AGPE141tipp	Pput_4020-MONOMER
+2AGPG140tipp	Pput_4020-MONOMER
+2AGPG141tipp	Pput_4020-MONOMER
+2DHGLCK	Pput_2380-MONOMER
+2DHGLCNkt_tpp	Pput_2381-MONOMER
+2MAHMP	Pput_1820-MONOMER
+3AMACHYD	Pput_3536-MONOMER
+3HAACOAT100	Pput_4315-MONOMER
+3HAACOAT120	Pput_4315-MONOMER
+3HAACOAT121	Pput_4315-MONOMER
+3HAACOAT140	Pput_4315-MONOMER
+3HAACOAT141	Pput_4315-MONOMER
+3HAACOAT60	Pput_4315-MONOMER
+3HAACOAT80	Pput_4315-MONOMER
+3HAD100	Pput_4175-MONOMER
+3HAD120	Pput_4175-MONOMER
+3HAD121	Pput_4175-MONOMER
+3HAD140	Pput_4175-MONOMER
+3HAD141	Pput_4175-MONOMER
+3HAD160	Pput_4175-MONOMER
+3HAD161	Pput_4175-MONOMER
+3HAD180	Pput_4175-MONOMER
+3HAD181	Pput_4175-MONOMER
+3HAD40	Pput_4175-MONOMER
+3HAD60	Pput_4175-MONOMER
+3HAD80	Pput_4175-MONOMER
+3OADPCOAT	CPLX_BUTCT-0
+3OAR100	Pput_3800-MONOMER
+3OAR120	Pput_3800-MONOMER
+3OAR121	Pput_3800-MONOMER
+3OAR140	Pput_3800-MONOMER
+3OAR141	Pput_3800-MONOMER
+3OAR160	Pput_3800-MONOMER
+3OAR161	Pput_3800-MONOMER
+3OAR180	Pput_3800-MONOMER
+3OAR181	Pput_3800-MONOMER
+3OAR40	Pput_3800-MONOMER
+3OAR60	Pput_3800-MONOMER
+3OAR80	Pput_3800-MONOMER
+3OAS100	Pput_3798-MONOMER OR Pput_1693-MONOMER OR Pput_2422-MONOMER
+3OAS120	Pput_3798-MONOMER OR Pput_1693-MONOMER OR Pput_2422-MONOMER
+3OAS121	Pput_1693-MONOMER
+3OAS140	Pput_3798-MONOMER OR Pput_1693-MONOMER OR Pput_2422-MONOMER
+3OAS141	Pput_1693-MONOMER
+3OAS160	Pput_3798-MONOMER OR Pput_1693-MONOMER OR Pput_2422-MONOMER
+3OAS161	Pput_1693-MONOMER
+3OAS180	Pput_1693-MONOMER
+3OAS181	Pput_1693-MONOMER
+3OAS60	Pput_3798-MONOMER OR Pput_1693-MONOMER OR Pput_2422-MONOMER
+3OAS80	Pput_3798-MONOMER OR Pput_1693-MONOMER OR Pput_2422-MONOMER
+3OXCOAT	Pput_4346-MONOMER
+3OXOADPt_pp	Pput_4345-MONOMER
+3PEPTabcpp	Pput_1718-MONOMER OR Pput_1717-MONOMER OR Pput_1716-MONOMER OR Pput_1715-MONOMER
+3_4DHBZ1t_pp	Pput_4347-MONOMER
+3_4DHBZt2	Pput_4341-MONOMER
+4CMLCL_kt	Pput_4342-MONOMER
+4HBHYOX	Pput_2237-MONOMER
+4HBZtex	Pput_4340-MONOMER
+4HTHRS	Pput_4250-MONOMER_mod_pydx5p(1)
+4PEPTabcpp	Pput_1718-MONOMER OR Pput_1717-MONOMER OR Pput_1716-MONOMER OR Pput_1715-MONOMER
+5HPUDICDC_c	Pput_1581-MONOMER
+A5PISO	Pput_0996-MONOMER
+AACPS1	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS2	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS3	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS4	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS5	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS6	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS7	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS8	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AACPS9	Pput_3799-MONOMER_mod_pan4p(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ac(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_mal(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_act(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_but(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ha(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_egme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ogme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_gme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hgme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_thex2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ohex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hhex(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pim(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_epme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_opme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_pme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hpme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toct2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_oc(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hoct(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tdec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cdec3e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3odec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_dca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hdec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c5ddece(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tddec2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_cddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3oddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ddca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hddec(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c7mrse(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tmrs2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3omrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_myrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hmrs(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c9palme(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_hde(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_tpalm2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3opalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcpalm9e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_palm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hpalm(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_t3c11vace(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ocvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_toctd2e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_octe(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3ooctd(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_ocdca(1) OR Pput_3799-MONOMER_mod_pan4p(1)_mod_3hocta(1)
+AASAD3	Pput_5168-MONOMER
+ABTA	Pput_0229-MONOMER_mod_pydx5p(1)
+ABUTD	Pput_5188-MONOMER OR Pput_4240-MONOMER
+ABUTt2pp	Pput_0302-MONOMER
+ACACT1r	Pput_0621-MONOMER OR Pput_4498-MONOMER OR Pput_3523-MONOMER
+ACACT2r	Pput_0621-MONOMER OR Pput_3605-MONOMER OR Pput_3523-MONOMER
+ACACT3r	Pput_3605-MONOMER
+ACACT4r	Pput_3605-MONOMER
+ACACT5r	Pput_3605-MONOMER
+ACACT6r	Pput_3605-MONOMER
+ACACT7r	Pput_3605-MONOMER
+ACACT8r	Pput_3605-MONOMER
+ACACt2pp	Pput_2592-MONOMER
+ACBIPGT_2	Pput_4041-MONOMER
+ACCOAC	CPLX_ACCOAC-0_mod_btn(1)
+ACCOAL	Pput_1428-MONOMER OR Pput_3345-MONOMER
+ACGAMT	Pput_3937-MONOMER
+ACGK	Pput_5198-MONOMER_mod_mg2(1)
+ACGS	Pput_5092-MONOMER OR Pput_4378-MONOMER
+ACHBS	Pput_1191-MONOMER OR CPLX_ACHBS-0
+ACLS	Pput_1191-MONOMER OR CPLX_ACHBS-0
+ACLS_a	Pput_0364-MONOMER
+ACLS_d	Pput_0364-MONOMER
+ACOAD1f	Pput_3822-MONOMER OR Pput_3522-MONOMER OR Pput_4821-MONOMER
+ACOAD2f	Pput_3522-MONOMER OR Pput_3822-MONOMER OR Pput_3693-MONOMER OR Pput_4821-MONOMER
+ACOAD3f	Pput_3822-MONOMER OR Pput_3693-MONOMER
+ACOAD4f	Pput_3822-MONOMER OR Pput_3693-MONOMER OR Pput_3258-MONOMER
+ACOAD5f	Pput_3822-MONOMER OR Pput_3693-MONOMER OR Pput_3258-MONOMER
+ACOAD6f	Pput_3822-MONOMER OR Pput_3693-MONOMER OR Pput_3258-MONOMER
+ACOAD7f	Pput_3822-MONOMER OR Pput_0394-MONOMER
+ACOAD8f	Pput_3822-MONOMER OR Pput_0394-MONOMER
+ACOADH2	Pput_3522-MONOMER
+ACOATA	CPLX_ACOATA-0
+ACODA	Pput_5093-MONOMER_mod_zn2(1) OR Pput_4378-MONOMER
+ACONCtex	Pput_4302-MONOMER
+ACONCtupp	CPLX_ACONCtupp-0
+ACONTa	Pput_3431-MONOMER_mod_4fe4s(1) OR Pput_3627-MONOMER_mod_4fe4s(1)
+ACONTb	Pput_3431-MONOMER_mod_4fe4s(1) OR Pput_3627-MONOMER_mod_4fe4s(1)
+ACOTA	Pput_1434-MONOMER_mod_pydx5p(1)
+ACPPAT120	CPLX_ACPPAT120-0
+ACPPAT140	CPLX_ACPPAT120-0
+ACPPAT141	CPLX_ACPPAT120-0
+ACPPAT160	CPLX_ACPPAT120-0
+ACPPAT161	CPLX_ACPPAT120-0
+ACPPAT180	CPLX_ACPPAT120-0
+ACPPAT181	CPLX_ACPPAT120-0
+ACPpds	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+ACS	Pput_1428-MONOMER OR Pput_4567-MONOMER OR Pput_2653-MONOMER OR Pput_3525-MONOMER
+ACS2	Pput_3345-MONOMER
+ACTD2	CPLX_ACTD2-0
+ACTD2_SS	CPLX_ACTD2-0
+ACTD_1	Pput_0591-MONOMER
+ACt4pp	Pput_3976-MONOMER
+ADA	Pput_0631-MONOMER
+ADCL	Pput_3797-MONOMER_mod_pydx5p(1)
+ADCPS1	CPLX_ADCPS1-0
+ADCS	Pput_3441-MONOMER
+ADCYRS	Pput_4042-MONOMER
+ADEt2rpp	Pput_4515-MONOMER
+ADK1irr	Pput_4216-MONOMER_mod_mg2(1)
+ADNUC	Pput_3230-MONOMER_mod_ca2(1)
+ADNtex	Pput_1576-MONOMER
+ADOCBLS	Pput_4038-MONOMER
+ADPT	Pput_1602-MONOMER_mod_mg2(1) OR Pput_1602-MONOMER_mod_mn2(1)
+ADSK	CPLX_ADSK-0
+ADSL1r	Pput_1817-MONOMER
+ADSL2r	Pput_1817-MONOMER
+ADSS	Pput_4765-MONOMER_mod_mg2(1)
+AEPPYRTA	Pput_3529-MONOMER
+AGM3PA	Pput_0812-MONOMER
+AGM3PApp	Pput_4773-MONOMER
+AGM3PH	Pput_3597-MONOMER
+AGM4PA	Pput_0812-MONOMER
+AGM4PApp	Pput_4773-MONOMER
+AGM4PH	Pput_3597-MONOMER
+AGMDA	Pput_0281-MONOMER
+AGMH	Pput_3597-MONOMER
+AGPAT120	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPAT140	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPAT141	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPAT160	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPAT161	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPAT180	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPAT181	Pput_0074-MONOMER OR Pput_0962-MONOMER
+AGPR	Pput_0465-MONOMER
+AHCi	Pput_4849-MONOMER
+AHGDx	Pput_5062-MONOMER
+AHSERL2	Pput_3191-MONOMER OR Pput_3760-MONOMER
+AICART	Pput_4697-MONOMER
+AIRCr	CPLX_AIRCr-0
+AKGDHPCA	CPLX_AKGDHPYO-0
+AKGDHPYO	CPLX_AKGDHPYO-0
+AKGDa	Pput_1665-MONOMER
+AKGDb	Pput_1666-MONOMER
+AKGt2rpp	Pput_4323-MONOMER
+ALAALAabcpp	CPLX_ALAALAabcpp-0 OR CPLX_ALAALAabcpp-1
+ALAALAr	Pput_4385-MONOMER
+ALAR	Pput_5179-MONOMER_mod_pydx5p(1)
+ALATA_L	Pput_3843-MONOMER OR Pput_0840-MONOMER
+ALAabcpp	Pput_0516-MONOMER OR CPLX_ALAabcpp-0
+ALAt4pp	Pput_0530-MONOMER
+ALCD19	Pput_0584-MONOMER_mod_mg2(1) OR Pput_4161-MONOMER_mod_zn2(1)
+ALCD1_ros	Pput_0514-MONOMER OR Pput_0132-MONOMER_mod_hemed(6)
+ALCD4	Pput_3080-MONOMER
+ALDD1	Pput_0350-MONOMER
+ALDD2x	Pput_0584-MONOMER_mod_mg2(1) OR Pput_0584-MONOMER_mod_mg2(1)
+ALLTN	Pput_1582-MONOMER
+ALLTNt2rpp	Pput_1558-MONOMER
+ALR2	Pput_3327-MONOMER OR Pput_2596-MONOMER
+AM3PA	Pput_0812-MONOMER
+AM4PA	Pput_0812-MONOMER
+AMAOTr	Pput_4858-MONOMER_mod_pydx5p(1)
+AMID4	Pput_2141-MONOMER
+AMPMS2	Pput_4798-MONOMER
+AMPN	Pput_4655-MONOMER
+AMPTASECG	Pput_3725-MONOMER OR Pput_1018-MONOMER_mod_zn2(1)
+AMPTASEPG	Pput_1018-MONOMER_mod_zn2(1) OR Pput_3725-MONOMER
+ANHMK	Pput_0467-MONOMER_mod_mg2(1)
+ANPRT	Pput_0454-MONOMER
+ANS	CPLX_ANS-0
+AOXSr	Pput_0389-MONOMER
+AP4AH	Pput_0433-MONOMER
+APATr	Pput_0636-MONOMER
+APG3PAT120	Pput_0425-MONOMER
+APG3PAT140	Pput_0425-MONOMER
+APG3PAT141	Pput_0425-MONOMER
+APG3PAT160	Pput_0425-MONOMER
+APG3PAT161	Pput_0425-MONOMER
+APG3PAT180	Pput_0425-MONOMER
+APG3PAT181	Pput_0425-MONOMER
+APRAUR	Pput_0549-MONOMER
+APSR	CPLX_APSR-0
+APTNAT	Pput_0229-MONOMER_mod_pydx5p(1)
+ARBt3ipp	Pput_3267-MONOMER
+ARGDC	Pput_0606-MONOMER_mod_mg2(1)_mod_pydx5p(4) OR Pput_1725-MONOMER_mod_pydx5p(1)
+ARGDr	Pput_1038-MONOMER
+ARGORNt7pp	Pput_1039-MONOMER
+ARGSL	Pput_0206-MONOMER
+ARGSS	Pput_1129-MONOMER_mod_mg2(1)
+ARGTRS	Pput_4962-MONOMER_mod_mg2(1)
+ARGabcpp	CPLX_ARGabcpp-0
+ARGt3pp	Pput_2036-MONOMER
+ARUH	Pput_2042-MONOMER
+ASAD	Pput_3770-MONOMER
+ASNN	Pput_0529-MONOMER
+ASNNpp	Pput_3237-MONOMER
+ASNS1	Pput_3964-MONOMER_mod_mg2(1)
+ASO3t2pp	Pput_3035-MONOMER
+ASO4rt2rpp	Pput_4350-MONOMER OR Pput_1761-MONOMER
+ASPCT	Pput_4872-MONOMER
+ASPK	Pput_1442-MONOMER
+ASPO1	Pput_4295-MONOMER_mod_fad(1)
+ASPO3	Pput_4295-MONOMER_mod_fad(1)
+ASPO3_q9	Pput_4295-MONOMER_mod_fad(1)
+ASPO5	Pput_4295-MONOMER_mod_fad(1)
+ASPO6	Pput_4295-MONOMER_mod_fad(1)
+ASPT	Pput_5247-MONOMER_mod_mg2(1) OR Pput_5247-MONOMER_mod_mn2(1) OR Pput_5247-MONOMER_mod_cobalt2(1)
+ASPTA	Pput_2042-MONOMER OR Pput_3787-MONOMER OR Pput_4556-MONOMER
+ASPabcpp	CPLX_ASPabcpp-0
+ASR	Pput_4072-MONOMER OR Pput_3036-MONOMER
+AST	CPLX_AST-0
+ATPPRT	CPLX_ATPPRT-0
+ATPS4rpp	CPLX_ATPS4rpp-0
+BACCL	Pput_0470-MONOMER
+BALAt2pp	Pput_0302-MONOMER
+BETALDHx	Pput_4936-MONOMER
+BETALDHy	Pput_4936-MONOMER
+BHBtpp	Pput_2650-MONOMER
+BKACEr	Pput_0323-MONOMER
+BLUB	Pput_4045-MONOMER
+BMOCOS	Pput_3618-MONOMER
+BPNT	Pput_0276-MONOMER_mod_mg2(1)
+BTDD_RR	Pput_0591-MONOMER
+BTDD_SS_cyt	Pput_3089-MONOMER
+BTDD_meso	Pput_0591-MONOMER
+BTS5	Pput_0388-MONOMER_mod_4fe4s(1)_mod_2fe2s(1)
+BUTCT	CPLX_BUTCT-0
+BUTSO3abcpp	CPLX_BUTSO3abcpp-0
+BUTt2rpp	Pput_2592-MONOMER
+BZ12DOX	CPLX_BZ12DOX-0
+BZDIOLDH	Pput_2551-MONOMER
+CAT	Pput_0514-MONOMER OR Pput_0132-MONOMER_mod_hemed(6)
+CATDOX	Pput_2055-MONOMER
+CBIAT	Pput_4047-MONOMER
+CBMKr	Pput_1036-MONOMER
+CBPS	CPLX_CBPS-0_mod_mg2(1) OR CPLX_CBPS-0_mod_mn2(1) OR CPLX_CBPS-0_mod_cobalt2(1) OR CPLX_CBPS-0_mod_cd2(1) OR CPLX_CBPS-0_mod_zn2(1)
+CCGS	Pput_1255-MONOMER
+CD2abcpp	Pput_5012-MONOMER
+CDGR	Pput_3582-MONOMER
+CDGS	Pput_1254-MONOMER
+CDGUNPD	Pput_0953-MONOMER
+CDPMEK	Pput_0757-MONOMER_mod_mg2(1)
+CGLYabcpp	CPLX_ALAALAabcpp-0 OR CPLX_ALAALAabcpp-1
+CHLabcpp	CPLX_CHLabcpp-0
+CHLt2pp	Pput_0244-MONOMER OR Pput_4934-MONOMER
+CHOLSH	Pput_0093-MONOMER
+CHORM	Pput_3945-MONOMER
+CHORS	Pput_3880-MONOMER_mod_fmnh2(1) OR Pput_3880-MONOMER_mod_fadh2(1)
+CHRPL	Pput_5225-MONOMER
+CIO3pp_q8	CPLX_CIO3pp_q8-0_mod_pheme(1)_mod_hemed(1)
+CIO3pp_q9	CPLX_CIO3pp_q8-0_mod_pheme(1)_mod_hemed(1)
+CITt_kt	Pput_0165-MONOMER
+CITtex	Pput_4302-MONOMER
+CLPNS120pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CLPNS140pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CLPNS141pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CLPNS160pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CLPNS161pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CLPNS180pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CLPNS181pp	Pput_5272-MONOMER OR Pput_2496-MONOMER OR Pput_5186-MONOMER
+CMtpp	CPLX_CMtpp-0 OR CPLX_CMtpp-1
+COBALT2abcpp	Pput_5012-MONOMER
+COBALT2tpp	Pput_4665-MONOMER
+COBK1	Pput_4041-MONOMER
+COBK2	Pput_4041-MONOMER
+COCHL	Pput_2269-MONOMER
+CPH4S	Pput_3428-MONOMER
+CPMPS	CPLX_CPMPS-0
+CPPPGO	Pput_0089-MONOMER_mod_mn2(1)
+CPPPGO2	Pput_1604-MONOMER_mod_4fe4s(1)
+CRNt2rpp	Pput_2610-MONOMER
+CRO4abcpp	CPLX_CRO4abcpp-0 OR CPLX_CRO4abcpp-1
+CS	Pput_1660-MONOMER
+CSNt2pp	Pput_0743-MONOMER
+CTBTt2rpp	Pput_2610-MONOMER
+CTECOAI6	Pput_3606-MONOMER
+CTECOAI7	Pput_3606-MONOMER
+CTECOAI8	Pput_3606-MONOMER
+CTPS1	Pput_4167-MONOMER_mod_mg2(1)
+CTPS2	Pput_4167-MONOMER_mod_mg2(1)
+CU1Opp	CPLX_CU1Opp-0
+CU2abcpp	Pput_0625-MONOMER
+CYANST	Pput_0432-MONOMER OR Pput_4783-MONOMER OR Pput_4992-MONOMER
+CYNTt2pp	Pput_2012-MONOMER
+CYO1_KT	CPLX_CYO1_KT-0
+CYRDAAT	Pput_4047-MONOMER
+CYRDAR	Pput_4045-MONOMER
+CYSS	Pput_1318-MONOMER_mod_pydx5p(2) OR Pput_4064-MONOMER_mod_pydx5p(1)
+CYTCAA6pp	CPLX_CYTCAA6pp-0
+CYTCBB4pp_1	CPLX_CYTCBB4pp_1-0
+CYTCBB4pp_2	CPLX_CYTCBB4pp_2-0
+CYTK1	Pput_3943-MONOMER_mod_mg2(1)
+CYTK2	Pput_3943-MONOMER_mod_mg2(1)
+DAAD	Pput_1556-MONOMER OR Pput_5180-MONOMER
+DABAAT	Pput_1640-MONOMER_mod_pydx5p(1)
+DADA	Pput_0631-MONOMER
+DADK	Pput_4216-MONOMER_mod_mg2(1)
+DAGK120	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK140	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK141	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK160	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK161	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK180	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAGK181	Pput_4081-MONOMER_mod_cd2(1)_mod_zn2(1)_mod_mg2(1)_mod_mn2(1)_mod_cobalt2(1)
+DAPDC	Pput_5136-MONOMER
+DAPE	Pput_5137-MONOMER
+DARBt3ipp	Pput_3267-MONOMER
+DASYN120	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN140	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN141	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN160	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN161	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN180	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DASYN181	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+DB4PS	Pput_0551-MONOMER
+DBTS	Pput_0392-MONOMER_mod_mg2(1)
+DCTPD	Pput_1140-MONOMER
+DCTPD2	Pput_1140-MONOMER
+DDPA	Pput_2644-MONOMER OR Pput_3446-MONOMER_mod_fe2(2) OR Pput_3849-MONOMER
+DGK1	Pput_5204-MONOMER_mod_mg2(1)
+DGUNC	Pput_4228-MONOMER OR Pput_2190-MONOMER OR Pput_4534-MONOMER
+DHAD1	Pput_5002-MONOMER_mod_4fe4s(1)
+DHAD2	Pput_5002-MONOMER_mod_4fe4s(1)
+DHDPRy	Pput_4591-MONOMER
+DHDPS	Pput_1267-MONOMER
+DHFR	Pput_5005-MONOMER
+DHFS	Pput_3764-MONOMER
+DHNPA_1	Pput_0426-MONOMER
+DHNPTE	Pput_0426-MONOMER
+DHORD2	Pput_3645-MONOMER_mod_fmn(1)
+DHORDfum	Pput_3645-MONOMER_mod_fmn(1)
+DHORTS	Pput_4873-MONOMER OR Pput_1127-MONOMER_mod_zn2(2)
+DHPM1	Pput_1802-MONOMER
+DHPPDA	Pput_0549-MONOMER
+DHQS	Pput_4951-MONOMER_mod_cobalt2(1)_mod_nad(1)
+DHQTi	Pput_3288-MONOMER OR Pput_0599-MONOMER
+DHSKDH	Pput_3161-MONOMER
+DMATT	Pput_0562-MONOMER_mod_mg2(1) OR Pput_0562-MONOMER_mod_mn2(1)
+DMGDH2	CPLX_DMGDH2-0
+DMPPS	Pput_0647-MONOMER_mod_nadph(1)_mod_nadh(1)_mod_fad(1)_mod_cobalt2(1)
+DMQMT	Pput_3949-MONOMER_mod_zn2(1)
+DOXRBCNtpp	CPLX_CMtpp-0 OR CPLX_MINCYCtpp-0
+DPCOAK	Pput_0672-MONOMER
+DPR	Pput_3445-MONOMER OR Pput_4373-MONOMER
+DTMPK	Pput_3795-MONOMER_mod_mg2(1)
+DURAD	CPLX_DURAD-0
+DURIPP	Pput_1620-MONOMER
+DUTPDP	Pput_5196-MONOMER_mod_zn2(1)
+DXPRIi	Pput_4180-MONOMER_mod_mn2(1) OR Pput_4180-MONOMER_mod_cobalt2(1) OR Pput_4180-MONOMER_mod_mg2(1)
+DXPS	Pput_0561-MONOMER_mod_thmpp(1)
+D_LACt2pp	Pput_4601-MONOMER
+E4PD	Pput_4837-MONOMER
+EAR121x	Pput_4497-MONOMER
+ECOAH1	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH2	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH3	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH4	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH5	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH6	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH7	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+ECOAH8	Pput_3606-MONOMER OR Pput_3694-MONOMER OR Pput_3865-MONOMER
+EDA	Pput_1062-MONOMER
+EDD	Pput_1048-MONOMER
+ENO	Pput_4165-MONOMER_mod_mg2(4)
+ENTERES2pp	Pput_0566-MONOMER
+ENTERESpp	Pput_0566-MONOMER
+ETHAAL	CPLX_ETHAAL-0_mod_adocbl(1)
+ETHAt2pp	Pput_0583-MONOMER
+ETHSO3abcpp	CPLX_BUTSO3abcpp-0
+FA100ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA120ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA140ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA141ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA160ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA161ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FA80ACPHi	Pput_0961-MONOMER_mod_zn2(1)_mod_fe2(1)_mod_cobalt2(1)_mod_mg2(1)_mod_mn2(1)
+FACOAE100	Pput_4636-MONOMER
+FACOAE120	Pput_4636-MONOMER
+FACOAE140	Pput_4636-MONOMER
+FACOAE141	Pput_4636-MONOMER
+FACOAE160	Pput_0452-MONOMER OR Pput_4636-MONOMER
+FACOAE161	Pput_4636-MONOMER
+FACOAE180	Pput_4636-MONOMER
+FACOAE181	Pput_4636-MONOMER
+FACOAE60	Pput_4636-MONOMER
+FACOAE80	Pput_4636-MONOMER
+FACOAL100t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL120t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL140	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL140t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL141t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL160	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL160t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL161	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL161t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL180t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL181	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL181t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL60t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FACOAL80t2pp	Pput_1340-MONOMER_mod_mg2(1) OR Pput_1339-MONOMER OR Pput_2311-MONOMER OR Pput_0791-MONOMER
+FALDH2	Pput_4161-MONOMER_mod_zn2(1)
+FBA	Pput_4833-MONOMER
+FBACabcpp	Pput_1681-MONOMER
+FBP	Pput_4914-MONOMER_mod_mg2(1)
+FCLT	Pput_0772-MONOMER
+FDH4pp	CPLX_FDHr-0_mod_bmocogdp(1)
+FDH4pp_q9	CPLX_FDHr-0_mod_bmocogdp(1)
+FDHr	CPLX_FDHr-0_mod_bmocogdp(1)
+FDMO	Pput_0253-MONOMER OR Pput_2989-MONOMER
+FDMO2	Pput_0253-MONOMER OR Pput_0253-MONOMER
+FDMO3	Pput_0253-MONOMER OR Pput_0253-MONOMER
+FDMO4	Pput_0253-MONOMER OR Pput_0253-MONOMER
+FDMO6	Pput_0253-MONOMER OR Pput_0253-MONOMER
+FDMOtau	Pput_0253-MONOMER
+FE2t3pp	Pput_4650-MONOMER
+FE2tpp	Pput_0202-MONOMER
+FE3DCITR2	Pput_4508-MONOMER_mod_fad(1)
+FE3DCITR3	Pput_4079-MONOMER OR Pput_4508-MONOMER_mod_fad(1)
+FE3DCITtonex	Pput_0897-MONOMER
+FE3abcpp	CPLX_FE3abcpp-0
+FEENTERtex	Pput_4799-MONOMER
+FEENTERtpp	Pput_5161-MONOMER OR Pput_4514-MONOMER
+FEROpp	Pput_1123-MONOMER
+FLDR2	CPLX_FLDR2-0
+FMNAT	Pput_0643-MONOMER
+FMNRx2	Pput_0251-MONOMER
+FOLD3	Pput_4583-MONOMER_mod_mg2(1)
+FORCT	Pput_4246-MONOMER
+FORGLUIH2	Pput_4910-MONOMER
+FRDO4r	Pput_4508-MONOMER_mod_fad(1)
+FRDO7r	Pput_4508-MONOMER_mod_fad(1)
+FRUK	Pput_0817-MONOMER_mod_mg2(1)
+FRUptspp	CPLX_FRUptspp-0
+FRUtex	Pput_1057-MONOMER OR Pput_1057-MONOMER
+FTHFD	Pput_4356-MONOMER OR Pput_0349-MONOMER
+FUM	Pput_3959-MONOMER OR Pput_0936-MONOMER_mod_4fe4s(1) OR Pput_0984-MONOMER
+FUMAC	Pput_4480-MONOMER
+FUMt2_2pp	Pput_3483-MONOMER OR Pput_1218-MONOMER
+FUSAtpp	CPLX_MINCYCtpp-0 OR CPLX_RFAMPtpp-0
+G1PACT	Pput_5293-MONOMER_mod_mg2(1)
+G1PTT	Pput_3933-MONOMER
+G1SAT	Pput_4660-MONOMER_mod_pydx5p(1)
+G2PP	Pput_0868-MONOMER_mod_mg2(1)
+G3PAT120	Pput_4203-MONOMER
+G3PAT140	Pput_4203-MONOMER
+G3PAT141	Pput_4203-MONOMER
+G3PAT160	Pput_4203-MONOMER
+G3PAT161	Pput_4203-MONOMER
+G3PAT180	Pput_4203-MONOMER
+G3PAT181	Pput_4203-MONOMER
+G3PD	Pput_1114-MONOMER_mod_fad(1)
+G3PD2i	Pput_1698-MONOMER
+G3PD5	Pput_1114-MONOMER_mod_fad(1)
+G5SD	Pput_4686-MONOMER
+G6PBDH	Pput_1060-MONOMER OR Pput_5259-MONOMER
+G6PDH2rirr	Pput_1060-MONOMER OR Pput_5259-MONOMER
+G6PI	Pput_4566-MONOMER
+GALUi	Pput_1949-MONOMER
+GAPD	Pput_1047-MONOMER OR Pput_3593-MONOMER
+GARFT	Pput_4054-MONOMER OR Pput_4264-MONOMER_mod_mg2(1)
+GART	Pput_4264-MONOMER_mod_mg2(1)
+GCALDD	Pput_0584-MONOMER_mod_mg2(1) OR Pput_0584-MONOMER_mod_mg2(1)
+GDBTALDH	Pput_5188-MONOMER
+GDPDPK	Pput_5211-MONOMER_mod_mn2(1)
+GDPMANNDH	Pput_4437-MONOMER
+GF6PTA	Pput_5291-MONOMER
+GGGABADr	Pput_3127-MONOMER
+GGGABAH	Pput_3558-MONOMER
+GGPTRCO	Pput_3245-MONOMER OR Pput_1341-MONOMER OR Pput_1813-MONOMER OR Pput_5183-MONOMER
+GGPTRCS	Pput_1455-MONOMER OR Pput_1342-MONOMER OR Pput_5090-MONOMER OR Pput_5091-MONOMER_mod_mg2(1)
+GHMT2r	Pput_0344-MONOMER OR Pput_0344-MONOMER OR Pput_0702-MONOMER
+GK1	Pput_5204-MONOMER_mod_mg2(1)
+GLBOX	CPLX_GLBOX-0
+GLCDpp	Pput_4277-MONOMER_mod_pqq(1)
+GLCDpp_q9	Pput_4277-MONOMER_mod_pqq(1)
+GLCNt2rpp	Pput_2345-MONOMER
+GLCOASYNT	Pput_1665-MONOMER
+GLCP	Pput_4915-MONOMER_mod_pydx5p(1)
+GLCS1	Pput_1793-MONOMER
+GLCabcpp	CPLX_GLCabcpp-0
+GLCtex	Pput_1057-MONOMER
+GLNS	Pput_4920-MONOMER_mod_mn2(1)
+GLNabcpp	CPLX_ASPabcpp-0 OR CPLX_GLNabcpp-0
+GLU5K	Pput_0723-MONOMER_mod_mg2(1)
+GLUCYS	Pput_0258-MONOMER_mod_mg2(1)
+GLUDC	Pput_0606-MONOMER_mod_mg2(1)_mod_pydx5p(4)
+GLUDxi	Pput_3660-MONOMER
+GLUDyirr	Pput_0706-MONOMER
+GLUN	Pput_3197-MONOMER OR Pput_3237-MONOMER
+GLUNpp	Pput_3237-MONOMER
+GLUPRT	Pput_3761-MONOMER_mod_mg2(1)
+GLUR	Pput_0764-MONOMER
+GLUSx	Pput_1801-MONOMER OR CPLX_GLUSx-0_mod_fe2(1)_mod_fad(1)
+GLUSy	Pput_1801-MONOMER OR CPLX_GLUSx-0_mod_fe2(1)_mod_fad(1)
+GLUTCOADHc	Pput_0177-MONOMER
+GLUTRR	Pput_0760-MONOMER
+GLUTRS	Pput_3783-MONOMER_mod_mg2(1)_mod_zn2(1)
+GLUabcpp	CPLX_ASPabcpp-0
+GLUt2rppirr	Pput_0155-MONOMER
+GLXCL	Pput_1572-MONOMER_mod_mg2(1)_mod_thmpp(1)_mod_fad(1)
+GLYALDDr	Pput_0584-MONOMER_mod_mg2(1)
+GLYALDtpp	Pput_1117-MONOMER
+GLYBCOAT	CPLX_BUTCT-0
+GLYBabcpp	CPLX_CHLabcpp-0 OR CPLX_GLYBabcpp-0
+GLYCK	Pput_2538-MONOMER
+GLYCL	CPLX_GLYCL-0_mod_lipoyl(1) OR CPLX_GLYCL-1
+GLYCLTDx	Pput_0790-MONOMER
+GLYCLTDy	Pput_1569-MONOMER
+GLYCLTt4pprev	Pput_3976-MONOMER
+GLYCOX1_PA	Pput_0652-MONOMER
+GLYCOX2_PA	Pput_0652-MONOMER
+GLYCTO1	CPLX_GLYCTO1-0
+GLYCtex	Pput_1057-MONOMER
+GLYCtpp	Pput_1117-MONOMER
+GLYK	Pput_1116-MONOMER_mod_mg2(1) OR Pput_1116-MONOMER_mod_mn2(1)
+GLYOX	Pput_1721-MONOMER_mod_zn2(1)
+GLYabcpp	Pput_4428-MONOMER
+GLYt2pp	Pput_1100-MONOMER
+GLYt4pp	Pput_0530-MONOMER
+GMHEPAT	Pput_4806-MONOMER
+GMHEPK	Pput_4806-MONOMER
+GMHEPPA	Pput_0075-MONOMER_mod_mg2(1)
+GMPS2	Pput_1072-MONOMER_mod_mg2(1)
+GNK	Pput_2346-MONOMER
+GNNUC	Pput_3230-MONOMER_mod_ca2(1)
+GPDDA1	Pput_3590-MONOMER_mod_mg2(1)
+GPDDA2	Pput_3590-MONOMER_mod_mg2(1)
+GPDDA3	Pput_3590-MONOMER_mod_mg2(1)
+GPDDA4	Pput_3590-MONOMER_mod_mg2(1)
+GPDDA5	Pput_3590-MONOMER_mod_mg2(1)
+GRTT	Pput_0562-MONOMER_mod_mg2(1) OR Pput_0562-MONOMER_mod_mn2(1)
+GRXR	Pput_4927-MONOMER
+GTHOr	Pput_1950-MONOMER_mod_fad(1)
+GTHPi	Pput_3841-MONOMER OR Pput_4033-MONOMER OR Pput_0802-MONOMER
+GTHRDHpp	Pput_4521-MONOMER
+GTHS	Pput_4867-MONOMER_mod_mg2(1)
+GTPCI	Pput_3207-MONOMER_mod_zn2(1) OR Pput_3888-MONOMER
+GTPCII	Pput_0557-MONOMER_mod_mg2(1)
+GTPDPDP	Pput_5125-MONOMER_mod_mg2(1)
+GTPDPK	Pput_4062-MONOMER
+GUACYC	Pput_0184-MONOMER OR Pput_2190-MONOMER OR Pput_4228-MONOMER OR Pput_4534-MONOMER
+GUAD	Pput_1587-MONOMER_mod_zn2(1)
+GUAPRT	Pput_0775-MONOMER
+GUAt2pp	Pput_1578-MONOMER OR Pput_1584-MONOMER OR Pput_1841-MONOMER
+GUAtex	Pput_1576-MONOMER
+GUDBUTNAH	Pput_1388-MONOMER
+H2CO3D	Pput_0115-MONOMER_mod_zn2(1)
+H2Otpp	Pput_1586-MONOMER
+HACD1i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD2i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD3i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD4i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD5i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD6i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD7i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HACD8i	Pput_3606-MONOMER OR Pput_3694-MONOMER
+HBZOPT	Pput_5226-MONOMER_mod_mg2(1)
+HCO3E	Pput_0115-MONOMER_mod_zn2(1)
+HEMEOS	Pput_0839-MONOMER_mod_mg2(1) OR Pput_0839-MONOMER_mod_ca2(1) OR Pput_0127-MONOMER
+HEXt2rpp	Pput_2592-MONOMER
+HG2abcpp	Pput_5012-MONOMER
+HG2t3pp	Pput_4650-MONOMER
+HGNTOR	Pput_4481-MONOMER
+HISDr	Pput_4906-MONOMER
+HISTD	Pput_1005-MONOMER_mod_mn2(1)
+HISTP	Pput_0075-MONOMER_mod_mg2(1) OR Pput_5054-MONOMER
+HISTRS	Pput_0884-MONOMER_mod_mg2(4)
+HISt2rpp	Pput_4905-MONOMER
+HIStex	Pput_0822-MONOMER
+HIUH_c	Pput_1583-MONOMER
+HMBS	Pput_0208-MONOMER_mod_dpm(1)
+HMGL	Pput_2234-MONOMER
+HMPK1	Pput_4658-MONOMER
+HOMt2pp	Pput_3499-MONOMER OR Pput_0219-MONOMER
+HPPK	Pput_4563-MONOMER_mod_mg2(1) OR Pput_0427-MONOMER
+HPYRI	Pput_1571-MONOMER
+HPYRRx	Pput_0790-MONOMER
+HSDy	Pput_4251-MONOMER
+HSERTA	CPLX_HSERTA-0
+HSK	Pput_0138-MONOMER
+HSTPT	Pput_1006-MONOMER_mod_pydx5p(1)
+HXAND	CPLX_HXAND-0
+HXPRT	Pput_0775-MONOMER
+HYGBDIAS	Pput_4046-MONOMER
+I2FE2SR	CPLX_I2FE2SR-0 OR CPLX_I2FE2SR-1
+I2FE2SS2	CPLX_I2FE2SR-0
+I2FE2SS2fdx	CPLX_I2FE2SS2fdx-0 OR CPLX_I2FE2SS2fdx-1
+I2FE2SSfdx	CPLX_I2FE2SS2fdx-0 OR CPLX_I2FE2SS2fdx-1
+I2FE2ST	CPLX_I4FE4ST-0
+I4FE4SRfdx	Pput_0873-MONOMER_mod_fe2(1) OR Pput_0873-MONOMER_mod_fe2(2)
+I4FE4ST	CPLX_I4FE4ST-0
+ICDHyr	Pput_1821-MONOMER OR Pput_1822-MONOMER_mod_mn2(1) OR Pput_1822-MONOMER_mod_mg2(1)
+ICITt_kt	Pput_2610-MONOMER OR Pput_0165-MONOMER
+ICITtex	Pput_4302-MONOMER
+ICYSDS	Pput_0872-MONOMER_mod_pydx5p(2) OR Pput_3260-MONOMER
+IG3PS	CPLX_IG3PS-0
+IGPDH	Pput_0309-MONOMER_mod_mg2(1) OR Pput_0309-MONOMER_mod_mn2(1)
+IGPS	Pput_0455-MONOMER
+ILEabcpp	CPLX_ILEabcpp-0 OR CPLX_ILEabcpp-1 OR Pput_4428-MONOMER
+ILEt2rpp	Pput_1670-MONOMER
+IMPC	Pput_4697-MONOMER
+IMPD	Pput_1071-MONOMER
+INS2D	Pput_3123-MONOMER
+INSH	Pput_3230-MONOMER_mod_ca2(1)
+INStex	Pput_1576-MONOMER
+IPDDI	Pput_0604-MONOMER
+IPDPS	Pput_0647-MONOMER_mod_nadph(1)_mod_nadh(1)_mod_fad(1)_mod_cobalt2(1)
+IPMD	Pput_3771-MONOMER_mod_mg2(1)_mod_mn2(1)
+IPPMIa	CPLX_IPPMIa-0
+IPPMIb	CPLX_IPPMIa-0
+IPPS	Pput_1065-MONOMER
+ISETACabcpp	CPLX_BUTSO3abcpp-0
+IZPN	Pput_4904-MONOMER
+K2L4Aabcpp	Pput_4807-MONOMER_mod_mg2(1)
+K2L4Aabctex	CPLX_K2L4Aabctex-0
+KARA1	Pput_4542-MONOMER_mod_mg2(1)
+KARA2	Pput_4542-MONOMER_mod_mg2(1)
+KAS13	CPLX_KAS13-0
+KAS14	Pput_3798-MONOMER OR Pput_1693-MONOMER
+KAS15	Pput_1345-MONOMER
+KDOCT2	Pput_3812-MONOMER_mod_mg2(1)
+KDOPP	Pput_0995-MONOMER_mod_mg2(1)
+KDOPS	Pput_4166-MONOMER
+Kt2pp	Pput_1229-MONOMER OR CPLX_Kt2pp-0 OR CPLX_Kt2pp-1 OR Pput_0740-MONOMER OR Pput_3991-MONOMER
+Kt3pp	Pput_5156-MONOMER OR Pput_4939-MONOMER OR Pput_5263-MONOMER
+LCADi	Pput_0584-MONOMER_mod_mg2(1) OR Pput_4161-MONOMER_mod_zn2(1)
+LCTSt3ipp	Pput_3267-MONOMER
+LDGUNPD	Pput_0703-MONOMER
+LDH_D	Pput_4068-MONOMER
+LEUTRS	Pput_4669-MONOMER
+LEUabcpp	CPLX_ILEabcpp-0 OR Pput_4428-MONOMER OR CPLX_ILEabcpp-1
+LEUt2rpp	Pput_1670-MONOMER
+LIPOCT	Pput_4676-MONOMER
+LIPOS	Pput_4675-MONOMER_mod_4fe4s(2)
+LLEUDrirr	Pput_4477-MONOMER
+LPADSS	Pput_4173-MONOMER
+LPCOXc	Pput_5167-MONOMER
+LPLIPAL1A120pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1A140pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1A141pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1A160pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1A161pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1A180pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1A181pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1E120pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1E160pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1E161pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1E180pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1G120pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL1G160pp	Pput_3451-MONOMER_mod_ca2(1)
+LPLIPAL2E160	Pput_1338-MONOMER
+LPLIPAL2E180	Pput_1338-MONOMER
+LSERDHr	Pput_4740-MONOMER
+LYSDC	Pput_1725-MONOMER_mod_pydx5p(1)
+LYSabcpp	CPLX_ARGabcpp-0 OR CPLX_LYSabcpp-0
+LYSt3pp	Pput_0955-MONOMER
+L_LACD2	Pput_4602-MONOMER_mod_fmn(1)
+L_LACt2rpp	Pput_4601-MONOMER
+MACACI	Pput_4479-MONOMER
+MALS	Pput_0382-MONOMER_mod_mg2(1)
+MALt2_2pp	Pput_3483-MONOMER OR Pput_1218-MONOMER
+MAN1PT	Pput_4448-MONOMER
+MAN1PT2	Pput_4448-MONOMER
+MBCOAi	Pput_1777-MONOMER
+MCCC	CPLX_MCCC-0
+MCITD	Pput_3432-MONOMER
+MCITL2	Pput_3436-MONOMER_mod_mg2(1)
+MCITS	Pput_3435-MONOMER
+MCOATA	CPLX_MCOATA-0
+MCTP1App	Pput_4682-MONOMER OR Pput_4393-MONOMER OR Pput_4547-MONOMER OR Pput_4957-MONOMER
+MCTP1Bpp	Pput_4547-MONOMER OR Pput_4957-MONOMER
+MCTP2App	Pput_4393-MONOMER OR Pput_4957-MONOMER OR Pput_4547-MONOMER
+MDDCP1pp	Pput_4678-MONOMER OR Pput_3641-MONOMER
+MDDCP2pp	Pput_4678-MONOMER OR Pput_3641-MONOMER
+MDDCP3pp	Pput_4678-MONOMER OR Pput_3641-MONOMER
+MDDCP4pp	Pput_4678-MONOMER OR Pput_3641-MONOMER
+MDDCP5pp	Pput_4678-MONOMER OR Pput_3641-MONOMER
+MDDEP1pp	Pput_3641-MONOMER OR Pput_1976-MONOMER
+MDDEP2pp	Pput_3641-MONOMER OR Pput_1976-MONOMER
+MDDEP3pp	Pput_3641-MONOMER OR Pput_1976-MONOMER
+MDDEP4pp	Pput_3641-MONOMER OR Pput_1976-MONOMER
+MDH2	Pput_1279-MONOMER_mod_fad(1) OR Pput_0779-MONOMER
+ME1	Pput_4958-MONOMER_mod_mn2(1) OR Pput_4958-MONOMER_mod_mg2(1)
+ME2	Pput_4958-MONOMER_mod_mn2(1) OR Pput_4958-MONOMER_mod_mg2(1)
+MECDPDH2	Pput_0883-MONOMER_mod_mn2(1)
+MECDPS	Pput_4159-MONOMER_mod_mn2(1)
+MELIBt3ipp	Pput_3267-MONOMER
+MEPCT	Pput_4163-MONOMER_mod_mg2(1) OR Pput_4163-MONOMER_mod_mn2(1) OR Pput_4163-MONOMER_mod_cobalt2(1)
+METAT	Pput_4840-MONOMER_mod_k(4)_mod_mg2(1) OR Pput_4840-MONOMER_mod_k(4)_mod_mn2(1) OR Pput_4840-MONOMER_mod_k(4)_mod_cobalt2(1) OR Pput_4840-MONOMER_mod_k(4)_mod_zn2(1) OR Pput_4840-MONOMER_mod_k(4)_mod_cd2(1) OR Pput_4840-MONOMER_mod_k(4)_mod_ni2(1) OR Pput_4840-MONOMER_mod_k(4)_mod_ca2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_mg2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_mn2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_cobalt2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_zn2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_cd2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_ni2(1) OR Pput_4840-MONOMER_mod_nh4(4)_mod_ca2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_mg2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_mn2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_cobalt2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_zn2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_cd2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_ni2(1) OR Pput_4840-MONOMER_mod_tl(4)_mod_ca2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_mg2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_mn2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_cobalt2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_zn2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_cd2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_ni2(1) OR Pput_4840-MONOMER_mod_cs(4)_mod_ca2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_mg2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_mn2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_cobalt2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_zn2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_cd2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_ni2(1) OR Pput_4840-MONOMER_mod_LI(4)_mod_ca2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_mg2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_mn2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_cobalt2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_zn2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_cd2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_ni2(1) OR Pput_4840-MONOMER_mod_na1(4)_mod_ca2(1)
+METS	Pput_3320-MONOMER_mod_zn2(1)_mod_cbl1(1) OR Pput_4499-MONOMER_mod_zn2(1)
+METSOXR1	CPLX_METSOXR1-0 OR CPLX_METSOXR1-1 OR CPLX_METSOXR1-2 OR CPLX_METSOXR1-3
+METSOXR2	CPLX_METSOXR1-0 OR CPLX_METSOXR1-1 OR CPLX_METSOXR1-2 OR CPLX_METSOXR1-3
+METTRS	Pput_1137-MONOMER_mod_zn2(2)
+METabcpp	CPLX_METabcpp-0 OR CPLX_rxn05614-0
+MG2tpp	Pput_1444-MONOMER OR Pput_4665-MONOMER
+MG2uabcpp	Pput_2150-MONOMER
+MGCH	Pput_1775-MONOMER
+MI1PP	Pput_0868-MONOMER_mod_mg2(1)
+MICITDr	Pput_3434-MONOMER
+MINCYCtpp	CPLX_CMtpp-0 OR CPLX_MINCYCtpp-0
+MLTGY1pp	Pput_4680-MONOMER OR Pput_1077-MONOMER OR Pput_3610-MONOMER OR Pput_4844-MONOMER
+MLTGY2pp	Pput_4680-MONOMER OR Pput_1077-MONOMER OR Pput_3610-MONOMER OR Pput_4844-MONOMER
+MLTGY3pp	Pput_4680-MONOMER OR Pput_1077-MONOMER OR Pput_3610-MONOMER OR Pput_4844-MONOMER
+MLTGY4pp	Pput_4680-MONOMER OR Pput_1077-MONOMER OR Pput_3610-MONOMER OR Pput_4844-MONOMER
+MMSAD3	Pput_0637-MONOMER
+MMTSAO	Pput_0637-MONOMER
+MN2t3pp	Pput_4650-MONOMER OR Pput_4528-MONOMER
+MNabc_1	CPLX_MNabc_1-0
+MOADSUx	CPLX_MOADSUx-0 OR CPLX_MOADSUx-1
+MOBDabcpp	CPLX_MOBDabcpp-0
+MOCOS	Pput_3618-MONOMER
+MOHMT	Pput_4564-MONOMER_mod_mg2(1)
+MPTAT	Pput_3619-MONOMER
+MPTG	CPLX_MPTG-0 OR CPLX_MPTG-1 OR CPLX_MPTG-2
+MPTG2	CPLX_MPTG-0 OR CPLX_MPTG-1 OR CPLX_MPTG-2
+MPTS	CPLX_MPTS-0
+MPTSS	Pput_0763-MONOMER
+MSO3abcpp	CPLX_BUTSO3abcpp-0
+MTHFC	Pput_3472-MONOMER
+MTHFD	Pput_3472-MONOMER
+MTHFR2	Pput_4850-MONOMER_mod_fad(1)
+MTHFR3	Pput_4850-MONOMER_mod_fad(1)
+MTI	Pput_1784-MONOMER
+MTRI	Pput_3948-MONOMER
+MUCCYCI	Pput_2053-MONOMER
+MUCCY_kt	Pput_4344-MONOMER
+MUCLI	Pput_2054-MONOMER
+NACODA	Pput_5093-MONOMER_mod_zn2(1) OR Pput_2203-MONOMER
+NADDP	Pput_1809-MONOMER
+NADH16pp	CPLX_NADH16pp-0_mod_2fe2s(1)_mod_4fe4s(1)_mod_fmn(1)
+NADH16pp_q9	CPLX_NADH16pp-0_mod_2fe2s(1)_mod_4fe4s(1)_mod_fmn(1)
+NADH5	Pput_0666-MONOMER_mod_mg2(1)_mod_cu(1)_mod_fad(1) OR Pput_2044-MONOMER
+NADK	Pput_3730-MONOMER_mod_mg2(1)
+NADPHQR2	Pput_0088-MONOMER OR Pput_2044-MONOMER
+NADS2	Pput_4747-MONOMER_mod_mg2(1) OR Pput_4747-MONOMER_mod_mn2(1)
+NADTRHD	Pput_3591-MONOMER_mod_fad(1)
+NAMNPP	Pput_4746-MONOMER OR Pput_4746-MONOMER
+NAt3_1p5pp	Pput_1807-MONOMER
+NAt3pp	Pput_4847-MONOMER OR Pput_4254-MONOMER OR Pput_4190-MONOMER
+NDPK1	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK2	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK3	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK4	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK5	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK6	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK7	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NDPK8	Pput_0879-MONOMER_mod_mg2(1) OR Pput_0879-MONOMER_mod_mn2(1) OR Pput_0879-MONOMER_mod_ca2(1)
+NFORGLUAH2	Pput_4903-MONOMER
+NH4t4pp	Pput_5142-MONOMER OR Pput_3633-MONOMER
+NH4tpp	Pput_5142-MONOMER OR Pput_3633-MONOMER
+NI2t3pp	Pput_4650-MONOMER OR Pput_4528-MONOMER
+NMNATr	Pput_4685-MONOMER_mod_mg2(1)
+NMNDA	Pput_4089-MONOMER
+NMNHYD	Pput_4157-MONOMER_mod_cobalt2(1) OR Pput_0274-MONOMER
+NNATr	Pput_4685-MONOMER_mod_mg2(1)
+NNDMBRT	Pput_4040-MONOMER
+NNDPR	Pput_0810-MONOMER_mod_mg2(1)
+NO2t2rpp	Pput_1190-MONOMER OR Pput_3648-MONOMER
+NO3abcpp	CPLX_NO3abcpp-0
+NODOx	Pput_0832-MONOMER_mod_fad(1)_mod_pheme(1)
+NODOx2	Pput_0832-MONOMER_mod_fad(1)_mod_pheme(1)
+NODOy	Pput_0832-MONOMER_mod_fad(1)_mod_pheme(1)
+NODOy2	Pput_0832-MONOMER_mod_fad(1)_mod_pheme(1)
+NOVBCNtpp	CPLX_CMtpp-0
+NTD1	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD10	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD11	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD2	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD3	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD4	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD5	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD6	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD7	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD8	Pput_4157-MONOMER_mod_cobalt2(1)
+NTD9	Pput_4157-MONOMER_mod_cobalt2(1)
+NTP1	Pput_4779-MONOMER
+NTPP1	Pput_4061-MONOMER_mod_mg2(1)
+NTPP11	Pput_4973-MONOMER_mod_mg2(1)
+NTPP2	Pput_4061-MONOMER_mod_mg2(1)
+NTPP4	Pput_4061-MONOMER_mod_mg2(1)
+NTPP6	Pput_4061-MONOMER_mod_mg2(1)
+NTPP8	Pput_4061-MONOMER_mod_mg2(1) OR Pput_0976-MONOMER
+NTPP9	Pput_4973-MONOMER_mod_mg2(1)
+NTPTP1	Pput_3637-MONOMER_mod_mg2(1)
+NTRARz	Pput_1125-MONOMER
+OAADC	Pput_4334-MONOMER
+OAAt2_2pp	Pput_1218-MONOMER OR Pput_3483-MONOMER
+OARGDC	Pput_2040-MONOMER
+OCBT	CPLX_OCBT-0
+OCDCAt2pp	Pput_3579-MONOMER
+OCDCEAt2pp	Pput_3579-MONOMER
+OCOAT1	CPLX_BUTCT-0
+OCTDPS	Pput_0718-MONOMER_mod_mg2(1)
+OHPBAT	Pput_3946-MONOMER_mod_pydx5p(1)
+OIVD1r	CPLX_OIVD1r-0
+OIVD2	CPLX_OIVD1r-0
+OIVD3	CPLX_OIVD1r-0
+OMBZLM	Pput_4885-MONOMER
+OMMBLHX	Pput_0460-MONOMER OR Pput_5104-MONOMER
+OMPDC	Pput_3896-MONOMER
+OMPHHX	Pput_5106-MONOMER
+OPHBDC	CPLX_OPHBDC-0
+OPHHX	Pput_4887-MONOMER
+ORN5O	Pput_1973-MONOMER
+ORNDC	Pput_0894-MONOMER
+ORNTAC	Pput_4378-MONOMER
+ORNabcpp	CPLX_ARGabcpp-0 OR CPLX_LYSabcpp-0
+OROTt2_2pp	Pput_3483-MONOMER OR Pput_1218-MONOMER
+ORPT	Pput_5199-MONOMER_mod_mg2(1)
+OXOADLR	Pput_1666-MONOMER
+OXOAEL	Pput_4343-MONOMER
+OXPTNDH	Pput_0228-MONOMER
+P5CR	Pput_4968-MONOMER
+PA120abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PA140abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PA141abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PA160abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PA161abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PA180abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PA181abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PALDH	Pput_3530-MONOMER
+PANTS	Pput_4565-MONOMER_mod_mg2(1)_mod_k(1) OR Pput_4565-MONOMER_mod_mg2(1)_mod_nh4(1) OR Pput_4565-MONOMER_mod_mn2(1)_mod_k(1) OR Pput_4565-MONOMER_mod_mn2(1)_mod_nh4(1)
+PAPPT3	Pput_4390-MONOMER
+PAPSR	CPLX_PAPSR-0 OR CPLX_APSR-0
+PAPSR2	CPLX_PAPSR2-0
+PC	CPLX_PC-0
+PC11M	Pput_2352-MONOMER
+PC17M	Pput_4704-MONOMER
+PC20M	Pput_4705-MONOMER
+PC6AR	Pput_4710-MONOMER
+PC6YM	Pput_4708-MONOMER
+PC8XM	Pput_4706-MONOMER
+PCADYOX	CPLX_PCADYOX-0
+PDE4	Pput_3953-MONOMER OR Pput_0953-MONOMER
+PDHbr	Pput_0363-MONOMER
+PDHcr	Pput_1667-MONOMER OR Pput_5274-MONOMER
+PDX5POi	Pput_1165-MONOMER_mod_fmn(1)
+PDX5PS	CPLX_PDX5PS-0
+PDXPP	Pput_5265-MONOMER
+PE120abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PE140abcpp	Pput_1348-MONOMER OR Pput_3622-MONOMER
+PE141abcpp	Pput_1348-MONOMER OR Pput_3622-MONOMER
+PE160abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PE161abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PE180abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PE181abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PERD	Pput_3624-MONOMER
+PG120abcpp	Pput_1348-MONOMER OR Pput_3622-MONOMER
+PG140abcpp	Pput_1348-MONOMER OR Pput_3622-MONOMER
+PG141abcpp	Pput_1348-MONOMER OR Pput_3622-MONOMER
+PG160abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PG161abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PG180abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PG181abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGAMT	Pput_4582-MONOMER
+PGCD	Pput_5062-MONOMER
+PGI	Pput_4566-MONOMER
+PGK	Pput_4836-MONOMER
+PGL	Pput_1061-MONOMER
+PGLCNDH	Pput_2382-MONOMER
+PGLYCP	Pput_0450-MONOMER_mod_mg2(1)_mod_cl(1) OR Pput_3950-MONOMER OR Pput_4635-MONOMER
+PGM	Pput_4929-MONOMER_mod_mn2(1)
+PGMT	Pput_5197-MONOMER
+PGP120abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGP140abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGP141abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGP160abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGP161abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGP180abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGP181abcpp	Pput_4807-MONOMER_mod_mg2(1)
+PGPP120	Pput_0555-MONOMER_mod_mg2(1)
+PGPP120pp	Pput_0555-MONOMER_mod_mg2(1)
+PGPP140pp	Pput_0555-MONOMER_mod_mg2(1)
+PGPP141pp	Pput_0555-MONOMER_mod_mg2(1)
+PGPP160	Pput_0555-MONOMER_mod_mg2(1)
+PGPP160pp	Pput_0555-MONOMER_mod_mg2(1)
+PGPP161	Pput_0555-MONOMER_mod_mg2(1)
+PGPP161pp	Pput_0555-MONOMER_mod_mg2(1)
+PGPP180	Pput_0555-MONOMER_mod_mg2(1)
+PGPP180pp	Pput_0555-MONOMER_mod_mg2(1)
+PGPP181	Pput_0555-MONOMER_mod_mg2(1)
+PGPP181pp	Pput_0555-MONOMER_mod_mg2(1)
+PGSA120	Pput_1767-MONOMER_mod_mg2(1)
+PGSA140	Pput_1767-MONOMER_mod_mg2(1)
+PGSA141	Pput_1767-MONOMER_mod_mg2(1)
+PGSA160	Pput_1767-MONOMER_mod_mg2(1)
+PGSA161	Pput_1767-MONOMER_mod_mg2(1)
+PGSA180	Pput_1767-MONOMER_mod_mg2(1)
+PGSA181	Pput_1767-MONOMER_mod_mg2(1)
+PHEMEabcpp	CPLX_PHEMEabcpp-0
+PHETA1	Pput_3787-MONOMER
+PHETHPTOX3	CPLX_PHETHPTOX3-0
+PHEt2rpp	Pput_1417-MONOMER OR Pput_1417-MONOMER
+PIt2rpp	Pput_4350-MONOMER OR Pput_1761-MONOMER
+PIt7ipp	Pput_0163-MONOMER
+PItex	Pput_0051-MONOMER
+PIuabcpp	CPLX_PIuabcpp-0
+PMANM	Pput_5197-MONOMER
+PMPK	Pput_4658-MONOMER
+PNP_1	Pput_3230-MONOMER_mod_ca2(1)
+PNTK	Pput_0471-MONOMER
+POAACR	Pput_5212-MONOMER
+POX	Pput_2436-MONOMER_mod_mg2(1)_mod_thmpp(1)_mod_fad(1)
+POX_q9	Pput_2436-MONOMER_mod_mg2(1)_mod_thmpp(1)_mod_fad(1)
+PPA	Pput_0577-MONOMER_mod_mg2(1)
+PPC	Pput_4217-MONOMER_mod_mg2(1)
+PPCDC	Pput_5195-MONOMER_mod_fmn(1) OR Pput_5195-MONOMER_mod_mg2(1)
+PPCK	Pput_0268-MONOMER_mod_mg2(1) OR Pput_0268-MONOMER_mod_ca2(1) OR Pput_0268-MONOMER_mod_mn2(1)
+PPGPPDP	Pput_5211-MONOMER_mod_mn2(1)
+PPItex_1	Pput_0051-MONOMER
+PPK2r	Pput_3962-MONOMER OR Pput_5126-MONOMER
+PPKr	Pput_5126-MONOMER
+PPM	Pput_5197-MONOMER
+PPNCL	Pput_5195-MONOMER_mod_fmn(1) OR Pput_5195-MONOMER_mod_mg2(1)
+PPND	Pput_3944-MONOMER
+PPNDH	Pput_3945-MONOMER
+PPPNt2rpp	Pput_3879-MONOMER
+PPS	Pput_3658-MONOMER_mod_mg2(1)
+PRAGSr	Pput_4698-MONOMER_mod_mg2(1)
+PRAIS	Pput_4053-MONOMER_mod_k(1)_mod_mg2(1)
+PRAIi	Pput_3766-MONOMER
+PRAMPC	Pput_4888-MONOMER
+PRASCSi	Pput_1270-MONOMER
+PRATPP	Pput_4889-MONOMER
+PRFGS	Pput_1078-MONOMER_mod_mg2(1)
+PRMICI	Pput_0312-MONOMER
+PROGLYabcpp	CPLX_ALAALAabcpp-0 OR CPLX_ALAALAabcpp-1
+PROabcpp	CPLX_PROabcpp-0 OR CPLX_PROabcpp-1
+PROt4pp	Pput_1387-MONOMER OR Pput_4818-MONOMER
+PROtex	Pput_5160-MONOMER
+PRPPSirr	Pput_0756-MONOMER_mod_mg2(1)_mod_pi(1) OR Pput_0756-MONOMER_mod_mn2(1)_mod_pi(1)
+PSCVT	Pput_3944-MONOMER
+PSD120	Pput_4784-MONOMER
+PSD140	Pput_4784-MONOMER
+PSD141	Pput_4784-MONOMER
+PSD160	Pput_4784-MONOMER
+PSD161	Pput_4784-MONOMER
+PSD180	Pput_4784-MONOMER
+PSD181	Pput_4784-MONOMER
+PSERTr	Pput_3946-MONOMER_mod_pydx5p(1)
+PSP_L	Pput_4785-MONOMER_mod_mg2(1)
+PSSA120	Pput_4541-MONOMER
+PSSA140	Pput_4541-MONOMER
+PSSA141	Pput_4541-MONOMER
+PSSA160	Pput_4541-MONOMER
+PSSA161	Pput_4541-MONOMER
+PSSA180	Pput_4541-MONOMER
+PSSA181	Pput_4541-MONOMER
+PTA2	Pput_0799-MONOMER
+PTAr	Pput_0799-MONOMER
+PTPATi	Pput_4997-MONOMER_mod_mg2(1)
+PTRCTA	Pput_5089-MONOMER
+PTRCabcpp	CPLX_PTRCabcpp-0 OR CPLX_PTRCabcpp-1 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-3 OR CPLX_PTRCabcpp-4
+PTRCt2pp	Pput_1258-MONOMER
+PUNP1	Pput_1620-MONOMER
+PYAM5PO	Pput_1165-MONOMER_mod_fmn(1)
+PYDXK	Pput_5265-MONOMER
+PYDXNO	Pput_1165-MONOMER_mod_fmn(1)
+PYDXO	Pput_1165-MONOMER_mod_fmn(1)
+PYDXPP	Pput_5265-MONOMER
+PYK	Pput_1568-MONOMER_mod_mg2(1)_mod_k(1) OR Pput_1568-MONOMER_mod_mn2(1)_mod_k(1) OR Pput_4362-MONOMER_mod_mg2(1)_mod_k(1) OR Pput_4362-MONOMER_mod_mn2(1)_mod_k(1)
+PYNP2r	Pput_1620-MONOMER
+PYOVDM1	CPLX_PYOVDM1-0
+PYOVDM2	Pput_1643-MONOMER
+QOR1	Pput_4776-MONOMER_mod_adocbl(1) OR Pput_4776-MONOMER_mod_4fe4s(2)
+QOR2	Pput_4776-MONOMER_mod_adocbl(1) OR Pput_4776-MONOMER_mod_4fe4s(2)
+QOR3	Pput_4776-MONOMER_mod_adocbl(1) OR Pput_4776-MONOMER_mod_4fe4s(2)
+QUEA1	Pput_0862-MONOMER
+QUEA2	Pput_0862-MONOMER
+QUEA3	Pput_0862-MONOMER
+QULNS	Pput_1260-MONOMER_mod_4fe4s(1)
+R15BPK	Pput_1446-MONOMER
+RBFK	Pput_0643-MONOMER
+RBFSa	Pput_0552-MONOMER
+RBFSb	Pput_0550-MONOMER
+RBK	Pput_3232-MONOMER_mod_k(1)_mod_mg2(1)
+RDXRx	CPLX_RDXRx-0 OR CPLX_RDXRx-0
+RDXRy	CPLX_RDXRx-0 OR CPLX_RDXRx-0
+REPHACCOAI	Pput_2037-MONOMER
+RFAMPtpp	CPLX_MINCYCtpp-0 OR CPLX_RFAMPtpp-0
+RHACOAR100	Pput_3800-MONOMER
+RHACOAR101	Pput_3800-MONOMER
+RHACOAR120	Pput_3800-MONOMER
+RHACOAR121d5	Pput_3800-MONOMER
+RHACOAR121d6	Pput_3800-MONOMER
+RHACOAR140	Pput_3800-MONOMER
+RHACOAR141d5	Pput_3800-MONOMER
+RHACOAR141d7	Pput_3800-MONOMER
+RHACOAR142	Pput_3800-MONOMER
+RHACOAR60	Pput_3800-MONOMER
+RHACOAR70	Pput_3800-MONOMER
+RHACOAR80	Pput_3800-MONOMER
+RHACOAR90	Pput_3800-MONOMER
+RHACOARP100	Pput_3800-MONOMER
+RHACOARP40	Pput_3800-MONOMER
+RHACOARP50	Pput_3800-MONOMER
+RHACOARP60	Pput_3800-MONOMER
+RHACOARP70	Pput_3800-MONOMER
+RHACOARP80	Pput_3800-MONOMER
+RHACOARP90	Pput_3800-MONOMER
+RHACOART60	Pput_3800-MONOMER
+RIBabcpp	CPLX_RIBabcpp-0
+RNDR1	CPLX_RNDR1-0
+RNDR2	CPLX_RNDR1-0
+RNDR3	CPLX_RNDR1-0
+RNDR4	CPLX_RNDR1-0
+RPE	Pput_0449-MONOMER
+RPI	Pput_5057-MONOMER
+RZ5PP	Pput_4039-MONOMER
+S7PI	Pput_4401-MONOMER
+SADH	Pput_1438-MONOMER
+SADT	CPLX_ADSK-0
+SARCOX	CPLX_SARCOX-0
+SCYSDS	CPLX_SCYSDS-0
+SDPDS	Pput_4199-MONOMER_mod_zn2(1)_mod_cobalt2(1)
+SDPTA	Pput_4189-MONOMER OR Pput_0398-MONOMER
+SERAT	Pput_0870-MONOMER
+SERD_D	Pput_3070-MONOMER_mod_pydx5p(1)
+SERD_L	Pput_0317-MONOMER OR Pput_1024-MONOMER_mod_4fe4s(1)
+SERt4pp	Pput_3251-MONOMER
+SFGTHi	Pput_4160-MONOMER
+SGDS	Pput_1440-MONOMER
+SGSAD	Pput_1437-MONOMER
+SHCHD2	Pput_1834-MONOMER
+SHCHF	Pput_1834-MONOMER
+SHK3Dr	Pput_0090-MONOMER OR Pput_3289-MONOMER
+SHKK	Pput_4952-MONOMER_mod_mg2(1) OR Pput_4952-MONOMER_mod_mn2(1) OR Pput_4952-MONOMER_mod_cobalt2(1) OR Pput_4952-MONOMER_mod_fe2(1) OR Pput_4952-MONOMER_mod_ca2(1) OR Pput_4952-MONOMER_mod_k(1)
+SHSL1	Pput_3760-MONOMER
+SHSL4r	Pput_3760-MONOMER
+SLCYSS	Pput_4064-MONOMER_mod_pydx5p(1)
+SO3abcpp	CPLX_CRO4abcpp-1 OR CPLX_CRO4abcpp-0
+SO4t4pp_1	Pput_1903-MONOMER
+SOTA	Pput_1434-MONOMER_mod_pydx5p(1)
+SPMDabcpp	CPLX_PTRCabcpp-0 OR CPLX_PTRCabcpp-1 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-2 OR CPLX_PTRCabcpp-3 OR CPLX_PTRCabcpp-4
+SPODMpp	Pput_0954-MONOMER_mod_fe3(1) OR Pput_0985-MONOMER_mod_mn2(1)
+SSALy	Pput_0228-MONOMER
+SUCCt2_2pp	Pput_3483-MONOMER OR Pput_1218-MONOMER
+SUCD4i	CPLX_SUCD4i-0
+SUCD4i_q9	CPLX_SUCD4i-0
+SUCDi	CPLX_SUCDi-0_mod_3fe4s(1)_mod_fad(1)_mod_2fe2s(1)_mod_4fe4s(1)
+SUCDi_q9	CPLX_SUCDi-0_mod_3fe4s(1)_mod_fad(1)_mod_2fe2s(1)_mod_4fe4s(1)
+SUCOASr	CPLX_SUCOASr-0
+SULFACabcpp	CPLX_BUTSO3abcpp-0
+SULR	Pput_3324-MONOMER OR Pput_3324-MONOMER OR Pput_0890-MONOMER
+SULabcpp	CPLX_CRO4abcpp-0 OR CPLX_CRO4abcpp-1
+T2DECAI	Pput_1694-MONOMER
+TALA	Pput_3574-MONOMER
+TAUDO	Pput_0245-MONOMER_mod_fe2(1) OR Pput_0190-MONOMER
+TAURabcpp	CPLX_BUTSO3abcpp-0
+TDP	Pput_4779-MONOMER
+TDPDRE	Pput_3923-MONOMER
+TDPDRR	Pput_0535-MONOMER
+TDSK_PA	Pput_3814-MONOMER_mod_mg2(1)
+TGTASE1	Pput_0863-MONOMER_mod_zn2(6)
+TGTASE2	Pput_0863-MONOMER_mod_zn2(6)
+TGTASE3	Pput_0863-MONOMER_mod_zn2(6)
+THD2pp	CPLX_THD2pp-0
+THDPS	Pput_4194-MONOMER
+THIORDXi	CPLX_THIORDXi-0 OR CPLX_THIORDXi-1 OR CPLX_THIORDXi-2 OR CPLX_THIORDXi-3 OR CPLX_THIORDXi-4 OR CPLX_THIORDXi-5 OR CPLX_THIORDXi-2 OR CPLX_THIORDXi-3 OR CPLX_THIORDXi-6 OR CPLX_THIORDXi-7
+THMPPi	Pput_4779-MONOMER
+THMtpp	Pput_1803-MONOMER OR Pput_1558-MONOMER
+THRAi	Pput_0343-MONOMER_mod_pydx5p(1)
+THRD_L	Pput_5056-MONOMER OR Pput_5056-MONOMER
+THRS	Pput_4250-MONOMER_mod_pydx5p(1)
+THRTRS	Pput_3225-MONOMER_mod_zn2(1)
+THRabcpp	CPLX_ILEabcpp-0
+THRt2pp	Pput_3499-MONOMER
+THRt4pp	Pput_3251-MONOMER
+THZPSN3_PA	CPLX_THZPSN3_PA-0
+TKT1	Pput_4838-MONOMER_mod_thmpp(1)_mod_mn2(1)_mod_mg2(1)
+TKT2	Pput_4838-MONOMER_mod_thmpp(1)_mod_mn2(1)_mod_mg2(1)
+TMPK	Pput_0554-MONOMER_mod_mg2(1)
+TMPPP_PA	Pput_4659-MONOMER_mod_mg2(1)
+TPI	Pput_4581-MONOMER
+TRDR	CPLX_TRDR-0 OR CPLX_TRDR-0
+TRPS1	CPLX_TRPS1-0_mod_pydx5p(1)
+TRPS2	CPLX_TRPS1-0_mod_pydx5p(1)
+TRPS3	CPLX_TRPS1-0_mod_pydx5p(1)
+TRPTRS	Pput_4413-MONOMER_mod_mg2(1)
+TRSARrirr	Pput_1570-MONOMER
+TSULabcpp	CPLX_CRO4abcpp-0 OR CPLX_CRO4abcpp-1
+TTRCYCtpp	CPLX_CMtpp-0 OR CPLX_CMtpp-1
+TYRTA	Pput_3787-MONOMER
+TYRTRS	Pput_0469-MONOMER
+TYRt2rpp	Pput_1420-MONOMER OR Pput_1417-MONOMER OR Pput_1417-MONOMER
+TYRtex	Pput_2103-MONOMER
+U23GAAT	Pput_4176-MONOMER
+UAAGDS	Pput_4392-MONOMER
+UACGAMDH2	Pput_3936-MONOMER
+UAGAAT2_1	CPLX_UAGAAT2_1-0
+UAGCVT	Pput_1003-MONOMER
+UAGDP	Pput_5293-MONOMER_mod_mg2(1)
+UAGPT3	Pput_4387-MONOMER
+UAMAGS	Pput_4389-MONOMER_mod_k(1)_mod_mg2(1)
+UAMAS	Pput_4386-MONOMER_mod_mg2(1)
+UAPGR	Pput_3810-MONOMER_mod_fad(1)
+UDCPDP	Pput_2827-MONOMER
+UDCPDPS	Pput_4182-MONOMER_mod_mg2(1)
+UDPG4E	Pput_0536-MONOMER
+UGLYCH	Pput_1580-MONOMER
+UGMDDS	Pput_4391-MONOMER
+UHBZ1t_pp	Pput_4347-MONOMER
+UHGADA	Pput_4381-MONOMER
+UM3PL	Pput_0586-MONOMER_mod_mg2(1)
+UM4PL	Pput_0586-MONOMER_mod_mg2(1)
+UMPK	Pput_4184-MONOMER
+UNK3	Pput_0888-MONOMER
+UPP3MT	Pput_1834-MONOMER OR Pput_1834-MONOMER OR Pput_3650-MONOMER
+UPP3S	Pput_0209-MONOMER
+UPPDC1	Pput_4947-MONOMER
+UPPN	Pput_1804-MONOMER_mod_mn2(1) OR Pput_1804-MONOMER_mod_2fe2s(1)_mod_mn2(1) OR Pput_1804-MONOMER_mod_4fe4s(1)_mod_mn2(1)
+UPPRT	Pput_0774-MONOMER OR Pput_4871-MONOMER
+URAt2pp	Pput_0773-MONOMER OR Pput_1578-MONOMER OR Pput_1841-MONOMER OR Pput_4505-MONOMER
+URCN	Pput_4907-MONOMER
+UREAabcpp	CPLX_UREAabcpp-0
+URItex	Pput_1576-MONOMER
+USHD	Pput_2789-MONOMER
+VALDHrirr	Pput_4477-MONOMER
+VALabcpp	CPLX_ILEabcpp-0 OR CPLX_ILEabcpp-1
+VALt2rpp	Pput_1670-MONOMER
+VANKpp	Pput_2023-MONOMER
+VANLNtex	Pput_2024-MONOMER
+VANLTtex	Pput_2024-MONOMER OR Pput_4340-MONOMER
+VNLNpp	Pput_2023-MONOMER
+XAND	CPLX_HXAND-0
+XANt2pp	Pput_1841-MONOMER OR Pput_0773-MONOMER OR Pput_1578-MONOMER OR Pput_4505-MONOMER
+XPPT	Pput_0775-MONOMER OR Pput_5175-MONOMER
+XTSNH	Pput_3230-MONOMER_mod_ca2(1)
+ZN2abcpp	Pput_5012-MONOMER
+ZN2tpp	Pput_0986-MONOMER
+ZNabcpp	CPLX_ZNabcpp-0 OR CPLX_MNabc_1-0
+rJB00259i	Pput_3645-MONOMER_mod_fmn(1)
+rJB00260	Pput_1114-MONOMER_mod_fad(1)
+rJB00261	Pput_4602-MONOMER_mod_fmn(1)
+rJB00262	Pput_1279-MONOMER_mod_fad(1) OR Pput_0779-MONOMER
+rJB00263	Pput_0666-MONOMER_mod_mg2(1)_mod_cu(1)_mod_fad(1) OR Pput_2044-MONOMER
+rJB00265	Pput_0088-MONOMER OR Pput_2044-MONOMER
+rJB00271	CPLX_CYO1_KT-0
+rJB00279_new	Pput_4462-MONOMER
+rPY00162	Pput_0074-MONOMER
+rPY00163	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+rPY00164	Pput_4541-MONOMER
+rPY00165	Pput_4784-MONOMER
+rPY00167	Pput_0074-MONOMER
+rPY00168	Pput_4181-MONOMER_mod_mg2(1)_mod_k(1)
+rPY00169	Pput_4541-MONOMER
+rPY00170	Pput_4784-MONOMER
+rPY00172	Pput_1767-MONOMER_mod_mg2(1)
+rPY00173	Pput_0555-MONOMER_mod_mg2(1)
+rPY00175	Pput_1767-MONOMER_mod_mg2(1)
+rPY00176	Pput_0555-MONOMER_mod_mg2(1)
+rPY00183	Pput_2496-MONOMER OR Pput_5272-MONOMER
+rPY00184	Pput_2496-MONOMER OR Pput_5272-MONOMER
+rPY00221	Pput_0366-MONOMER
+rPY00222	Pput_0367-MONOMER
+rxn00222	Pput_4320-MONOMER
+rxn00295	Pput_3936-MONOMER
+rxn00394	Pput_1388-MONOMER
+rxn00455	Pput_1330-MONOMER
+rxn00559	Pput_4448-MONOMER
+rxn00611	Pput_1698-MONOMER
+rxn00671	Pput_0637-MONOMER
+rxn00689	Pput_3764-MONOMER
+rxn00738	Pput_3733-MONOMER
+rxn00779	Pput_2321-MONOMER OR Pput_3593-MONOMER
+rxn00992	Pput_2651-MONOMER
+rxn02569	Pput_0850-MONOMER_mod_mg2(1)
+rxn03395	Pput_3949-MONOMER_mod_zn2(1)
+rxn04093	Pput_5167-MONOMER OR Pput_0652-MONOMER OR Pput_1341-MONOMER OR Pput_0905-MONOMER OR Pput_3245-MONOMER OR Pput_1813-MONOMER OR Pput_3166-MONOMER OR Pput_3963-MONOMER_mod_fad(1) OR Pput_5183-MONOMER
+rxn05003	Pput_3949-MONOMER_mod_zn2(1)
+rxn05028	Pput_0718-MONOMER_mod_mg2(1)
+rxn05034	Pput_5226-MONOMER_mod_mg2(1)
+rxn05214tppirr	Pput_0165-MONOMER
+rxn05534	CPLX_rxn05542-0
+rxn05538	CPLX_rxn05542-0
+rxn05542	CPLX_rxn05542-0
+rxn05614	CPLX_rxn05614-0
+rxn05620	CPLX_rxn05620-0 OR CPLX_rxn05620-1
+rxn08229	Pput_2496-MONOMER OR Pput_5272-MONOMER
+rxn08230	Pput_2496-MONOMER OR Pput_5272-MONOMER
+rxn08231	Pput_2496-MONOMER OR Pput_5272-MONOMER
+rxn08232	Pput_2496-MONOMER OR Pput_5272-MONOMER
+rxn10062	Pput_4937-MONOMER OR Pput_4996-MONOMER OR Pput_0072-MONOMER
+rxn10199	Pput_4682-MONOMER OR Pput_4393-MONOMER OR Pput_4547-MONOMER
+rxn12879	Pput_4885-MONOMER
+rxn12880	Pput_0460-MONOMER OR Pput_5104-MONOMER
+rxn12892	Pput_3949-MONOMER_mod_zn2(1)
+rxn13044	CPLX_OPHBDC-0
+rxn13107	Pput_4887-MONOMER
+rxn13108	Pput_5106-MONOMER
+rxn13792	Pput_3272-MONOMER OR Pput_1319-MONOMER
+rxn13804cyt	CPLX_rxn13804cyt-0
+rxn13833	Pput_3937-MONOMER
+rxn13866	Pput_0368-MONOMER
+rxn13867	Pput_0368-MONOMER
+rxn13869	Pput_0368-MONOMER
+rxn13870	CPLX_rxn13870-0
+rxn13873	Pput_0079-MONOMER OR Pput_3984-MONOMER
+rxn13878	Pput_4800-MONOMER
+rxn13879	Pput_4800-MONOMER
+rxn13888	Pput_4877-MONOMER OR Pput_4879-MONOMER
+rxn13909	Pput_3734-MONOMER OR Pput_3734-MONOMER
+rxn13920	Pput_4441-MONOMER

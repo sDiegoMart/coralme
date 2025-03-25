@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	FXF61_06385-MONOMER
+fes_chaperones	CPLX_dummy
+fes_transfer	FXF61_12000-MONOMER,FXF61_03885-MONOMER
+generic_2fe2s_transfer_complex	FXF61_12000-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	FXF61_12000-MONOMER_mod_4fe4s(1)
+lipoate_modifications	FXF61_02080-MONOMER

@@ -799,7 +799,6 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 	for reaction in tqdm.tqdm(m_model.reactions, 'Adding Reactions from M-model into the ME-model...', bar_format = bar_format):
 		if reaction.id.startswith('BIOMASS_'):
 			continue
-
 		if reaction.id.startswith(('EX_', 'DM_', 'SK_', 'sink_')):
 			new_reaction = coralme.core.reaction.MEReaction(reaction.id)
 			me_model.add_reactions([new_reaction])
@@ -813,7 +812,6 @@ def add_m_model_content(me_model, m_model, complex_metabolite_ids = []):
 			reaction_data.lower_bound = reaction.lower_bound
 			reaction_data.upper_bound = reaction.upper_bound
 			reaction_data._stoichiometry = { k.id:v for k,v in reaction.metabolites.items() }
-
 	return None
 
 def add_dummy_reactions(me_model, transl_table, update = True):
@@ -1095,6 +1093,8 @@ def add_reactions_from_stoichiometric_data(
 		spontaneous
 	"""
 	for reaction_data in tqdm.tqdm(list(me_model.stoichiometric_data), 'Processing StoichiometricData in ME-model...', bar_format = bar_format):
+		if 'ISOB' in reaction_data.id:
+			print(reaction_data.id)
 		#try:
 			#spontaneous_flag = rxn_info_frame.is_spontaneous[reaction_data.id]
 		#except KeyError:
@@ -1128,8 +1128,10 @@ def add_reactions_from_stoichiometric_data(
 			if reaction_data.upper_bound == 0 and reaction_data.lower_bound == 0:
 				#directionality_list.append('forward')
 				logging.warning('Reaction \'{:s}\' cannot carry flux. Please check if it is the correct behavior.'.format(reaction_data.id))
-
+			if 'ISOB' in reaction_data.id:
+				print(directionality)
 			for directionality in directionality_list:
+				
 				add_metabolic_reaction_to_model(
 					me_model,
 					reaction_data.id,

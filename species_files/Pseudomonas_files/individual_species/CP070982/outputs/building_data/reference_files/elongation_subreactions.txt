@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	JYG34_16630-MONOMER
+Tuf_gtp_regeneration	JYG34_20035-MONOMER

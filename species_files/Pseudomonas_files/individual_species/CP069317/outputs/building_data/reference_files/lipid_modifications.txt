@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	JQN61_18180-MONOMER
+pg_pe_160	JQN61_20010-MONOMER,JQN61_03255-MONOMER

@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	I9X27_04855-MONOMER
+pg_pe_160	I9X27_01740-MONOMER,I9X27_24510-MONOMER

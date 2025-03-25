@@ -1,0 +1,10 @@
+name,gene
+AcrA,PproGo58_13240
+BamB,PproGo58_46910
+BamD,PproGo58_50160
+BamE,PproGo58_07990
+CusC,PproGo58_13220
+LolB,PproGo58_48770
+MetQ,PproGo58_00720
+MltA,PproGo58_54730
+MltB,PproGo58_51560

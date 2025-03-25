@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	CHN49_09075-MONOMER
+Tuf_gtp_regeneration	CHN49_22065-MONOMER

@@ -1,0 +1,221 @@
+ME-Model-ID: Pseudomonas_sp._SXM-1
+amino_acid_trna_synthetase:
+  ala__L_c: DCC84_25930-MONOMER
+  arg__L_c: DCC84_02140-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: DCC84_26965-MONOMER
+  cys__L_c: DCC84_22440-MONOMER
+  gln__L_c: DCC84_22445-MONOMER
+  glu__L_c: DCC84_10595-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: DCC84_05600-MONOMER
+  ile__L_c: DCC84_29405-MONOMER
+  leu__L_c: DCC84_29915-MONOMER
+  lys__L_c: DCC84_06025-MONOMER
+  met__L_c: DCC84_27605-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: generic_pro_ligase
+  ser__L_c: DCC84_21470-MONOMER
+  thr__L_c: DCC84_11115-MONOMER
+  trp__L_c: DCC84_29035-MONOMER
+  tyr__L_c: DCC84_30725-MONOMER
+  val__L_c: generic_val_ligase
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - DCC84_30745-MONOMER
+  - DCC84_05550-MONOMER
+default_sigma_factor: DCC84_30980-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: DCC84_06850
+  BamB: DCC84_05610
+  BamD: DCC84_29350
+  BamE: DCC84_04005
+  CusC: DCC84_21975
+  LolB: DCC84_04630
+  MetQ: DCC84_01070
+  MltA: DCC84_31620
+  MltB: DCC84_29975
+locus_tag: locus_tag
+log_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs
+m-model-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- DCC84_29900-MONOMER
+out_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: DCC84_04645-MONOMER
+  UGA: DCC84_06020-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- DCC84_32145-MONOMER
+- DCC84_29400-MONOMER
+rna_polymerases:
+  RNAP_DCC8400650MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_00650-MONOMER
+  RNAP_DCC8400870MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_00870-MONOMER
+  RNAP_DCC8404555MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_04555-MONOMER
+  RNAP_DCC8404590MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_04590-MONOMER
+  RNAP_DCC8405065MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_05065-MONOMER
+  RNAP_DCC8405085MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_05085-MONOMER
+  RNAP_DCC8406395MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_06395-MONOMER
+  RNAP_DCC8406990MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_06990-MONOMER
+  RNAP_DCC8407315MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_07315-MONOMER
+  RNAP_DCC8407320MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_07320-MONOMER
+  RNAP_DCC8407325MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_07325-MONOMER
+  RNAP_DCC8407405MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_07405-MONOMER
+  RNAP_DCC8407800MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_07800-MONOMER
+  RNAP_DCC8408320MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_08320-MONOMER
+  RNAP_DCC8413600MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_13600-MONOMER
+  RNAP_DCC8413735MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_13735-MONOMER
+  RNAP_DCC8414755MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_14755-MONOMER
+  RNAP_DCC8415175MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_15175-MONOMER
+  RNAP_DCC8417020MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_17020-MONOMER
+  RNAP_DCC8417455MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_17455-MONOMER
+  RNAP_DCC8418585MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_18585-MONOMER
+  RNAP_DCC8418590MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_18590-MONOMER
+  RNAP_DCC8421110MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_21110-MONOMER
+  RNAP_DCC8421180MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_21180-MONOMER
+  RNAP_DCC8421845MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_21845-MONOMER
+  RNAP_DCC8422585MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_22585-MONOMER
+  RNAP_DCC8423120MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_23120-MONOMER
+  RNAP_DCC8423310MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_23310-MONOMER
+  RNAP_DCC8423715MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_23715-MONOMER
+  RNAP_DCC8423990MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_23990-MONOMER
+  RNAP_DCC8424755MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_24755-MONOMER
+  RNAP_DCC8426320MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_26320-MONOMER
+  RNAP_DCC8426450MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_26450-MONOMER
+  RNAP_DCC8427220MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_27220-MONOMER
+  RNAP_DCC8428805MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_28805-MONOMER
+  RNAP_DCC8429670MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_29670-MONOMER
+  RNAP_DCC8430980MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_30980-MONOMER
+  RNAP_DCC8431200MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_31200-MONOMER
+  RNAP_DCC8431260MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_31260-MONOMER
+  RNAP_DCC8431965MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_31965-MONOMER
+  RNAP_DCC8434245MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: DCC84_34245-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  DCC84_34265-MONOMER:
+    DCC84_34180: 2.0

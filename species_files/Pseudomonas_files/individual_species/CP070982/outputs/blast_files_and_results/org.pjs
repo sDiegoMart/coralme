@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "org",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../species_files/Pseudomonas_files//individual_species/CP070982/./outputs/blast_files_and_results//org.faa",
+  "number-of-letters": 1762975,
+  "number-of-sequences": 5142,
+  "last-updated": "2025-03-16T07:44:00",
+  "number-of-volumes": 1,
+  "bytes-total": 2314108,
+  "bytes-to-cache": 1809438,
+  "files": [
+    "org.pdb",
+    "org.phr",
+    "org.pin",
+    "org.pot",
+    "org.psq",
+    "org.ptf",
+    "org.pto"
+  ]
+}

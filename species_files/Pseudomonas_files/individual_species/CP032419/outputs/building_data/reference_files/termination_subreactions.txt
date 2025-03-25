@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	D3880_04185-MONOMER,D3880_04190-MONOMER_mod_zn2(4),D3880_04180-MONOMER
+GroEL_dependent_folding	D3880_18175-MONOMER,D3880_18180-MONOMER
+N_terminal_methionine_cleavage	D3880_06630-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	D3880_04690-MONOMER
+PrfB_mono_mediated_termination	D3880_06300-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	D3880_18795-MONOMER
+peptide_deformylase_processing	D3880_00080-MONOMER_mod_fe2(1)
+ribosome_recycler	D3880_06650-MONOMER

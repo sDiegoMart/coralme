@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	PA2976-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	PA2976-MONOMER_mod_zn2(2),generic_RNase,PA0770-MONOMER,PA4477-MONOMER,PA3528-MONOMER_mod_mg2(4)
+rRNA_containing	PA2976-MONOMER_mod_zn2(2),generic_RNase,PA0770-MONOMER_mod_mg2(2),PA4477-MONOMER,PA3528-MONOMER_mod_mg2(4)

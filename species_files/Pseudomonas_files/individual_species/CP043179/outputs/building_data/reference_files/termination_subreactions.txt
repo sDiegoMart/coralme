@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	FQ342_06740-MONOMER,FQ342_06735-MONOMER_mod_zn2(4),FQ342_06745-MONOMER
+GroEL_dependent_folding	FQ342_18035-MONOMER,FQ342_18030-MONOMER
+N_terminal_methionine_cleavage	FQ342_04985-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	FQ342_16390-MONOMER
+PrfB_mono_mediated_termination	FQ342_05175-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	FQ342_06505-MONOMER
+peptide_deformylase_processing	FQ342_10865-MONOMER_mod_fe2(1)
+ribosome_recycler	FQ342_04965-MONOMER

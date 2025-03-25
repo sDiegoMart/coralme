@@ -1,0 +1,3 @@
+subreaction	enzymes
+FusA_mono_elongation	HXW90_28315-MONOMER
+Tuf_gtp_regeneration	HXW90_07065-MONOMER

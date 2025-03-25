@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	FA030_01815-MONOMER
+pg_pe_160	FA030_31155-MONOMER,FA030_23790-MONOMER

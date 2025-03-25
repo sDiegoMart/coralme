@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	CHN49_03825-MONOMER
+UGA	CPLX_dummy
+UAA	generic_RF

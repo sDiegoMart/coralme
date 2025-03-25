@@ -1,0 +1,27 @@
+sigma,complex,genes,name
+PproGo58_01620-MONOMER,RNAP_PproGo5801620MONOMER,PproGo58_01620(),RNA polymerase sigma factor
+PproGo58_08940-MONOMER,RNAP_PproGo5808940MONOMER,PproGo58_08940(),RNA polymerase sigma-54 factor
+PproGo58_09650-MONOMER,RNAP_PproGo5809650MONOMER,PproGo58_09650(),RNA polymerase sigma factor
+PproGo58_09690-MONOMER,RNAP_PproGo5809690MONOMER,PproGo58_09690(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_11830-MONOMER,RNAP_PproGo5811830MONOMER,PproGo58_11830(),RNA polymerase sigma factor RpoS
+PproGo58_13560-MONOMER,RNAP_PproGo5813560MONOMER,PproGo58_13560(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_14280-MONOMER,RNAP_PproGo5814280MONOMER,PproGo58_14280(),RNA polymerase sigma factor
+PproGo58_15030-MONOMER,RNAP_PproGo5815030MONOMER,PproGo58_15030(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_16380-MONOMER,RNAP_PproGo5816380MONOMER,PproGo58_16380(),RNA polymerase sigma factor FliA
+PproGo58_18330-MONOMER,RNAP_PproGo5818330MONOMER,PproGo58_18330(),RNA polymerase sigma factor SigX
+PproGo58_23280-MONOMER,RNAP_PproGo5823280MONOMER,PproGo58_23280(),RNA polymerase sigma factor
+PproGo58_26030-MONOMER,RNAP_PproGo5826030MONOMER,PproGo58_26030(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_26720-MONOMER,RNAP_PproGo5826720MONOMER,PproGo58_26720(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_26730-MONOMER,RNAP_PproGo5826730MONOMER,PproGo58_26730(),RNA polymerase sigma factor
+PproGo58_34210-MONOMER,RNAP_PproGo5834210MONOMER,PproGo58_34210(),RNA polymerase sigma factor
+PproGo58_34290-MONOMER,RNAP_PproGo5834290MONOMER,PproGo58_34290(),RNA polymerase sigma factor
+PproGo58_38260-MONOMER,RNAP_PproGo5838260MONOMER,PproGo58_38260(),RNA polymerase sigma factor
+PproGo58_39440-MONOMER,RNAP_PproGo5839440MONOMER,PproGo58_39440(),RNA polymerase sigma factor
+PproGo58_40480-MONOMER,RNAP_PproGo5840480MONOMER,PproGo58_40480(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_44060-MONOMER,RNAP_PproGo5844060MONOMER,PproGo58_44060(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_44660-MONOMER,RNAP_PproGo5844660MONOMER,PproGo58_44660(),RNA polymerase subunit sigma-24
+PproGo58_50860-MONOMER,RNAP_PproGo5850860MONOMER,PproGo58_50860(),DNA-directed RNA polymerase sigma-70 factor
+PproGo58_53460-MONOMER,RNAP_PproGo5853460MONOMER,PproGo58_53460(),RNA polymerase sigma factor RpoD
+PproGo58_53820-MONOMER,RNAP_PproGo5853820MONOMER,PproGo58_53820(),RNA polymerase sigma factor
+PproGo58_53990-MONOMER,RNAP_PproGo5853990MONOMER,PproGo58_53990(),RNA polymerase sigma factor
+PproGo58_55350-MONOMER,RNAP_PproGo5855350MONOMER,PproGo58_55350(),RNA polymerase sigma factor RpoH

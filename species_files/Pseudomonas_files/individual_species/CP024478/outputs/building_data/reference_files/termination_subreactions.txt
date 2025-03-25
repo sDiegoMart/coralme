@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	CS390_20985-MONOMER,CS390_20980-MONOMER_mod_zn2(4),CS390_20990-MONOMER
+GroEL_dependent_folding	CS390_19895-MONOMER,CS390_19900-MONOMER
+N_terminal_methionine_cleavage	CS390_05690-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	CS390_03915-MONOMER
+PrfB_mono_mediated_termination	CS390_05520-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	CS390_04725-MONOMER
+peptide_deformylase_processing	CS390_00345-MONOMER_mod_fe2(1)
+ribosome_recycler	CS390_05710-MONOMER

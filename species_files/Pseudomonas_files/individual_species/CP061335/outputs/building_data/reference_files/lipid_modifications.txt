@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	ICJ54_24415-MONOMER
+pg_pe_160	ICJ54_00490-MONOMER,ICJ54_05055-MONOMER

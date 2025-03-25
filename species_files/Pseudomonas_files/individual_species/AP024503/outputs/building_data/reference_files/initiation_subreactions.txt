@@ -1,0 +1,5 @@
+subreaction	enzymes
+Translation_gtp_initiation_factor_InfB	PproGo58_08190-MONOMER
+Translation_initiation_factor_InfA	PproGo58_37650-MONOMER
+Translation_initiation_factor_InfC	PproGo58_20180-MONOMER
+fmet_addition_at_START	PproGo58_08190-MONOMER,PproGo58_00220-MONOMER_mod_mg2(1)_mod_k(1)

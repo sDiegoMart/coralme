@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	HZ99_13505-MONOMER
+pg_pe_160	HZ99_16150-MONOMER,HZ99_21915-MONOMER

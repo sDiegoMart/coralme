@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	KQ248_07780-MONOMER
+pg_pe_160	KQ248_02105-MONOMER,KQ248_00270-MONOMER

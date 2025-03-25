@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	A0T30_05190-MONOMER
+pg_pe_160	A0T30_00590-MONOMER,A0T30_18840-MONOMER

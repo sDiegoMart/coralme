@@ -1,0 +1,4 @@
+subreaction	enzyme
+gtp_bound_30S_assembly_factor_phase1	HXW90_06040-MONOMER
+RbfA_mono_assembly_factor_phase1	HXW90_26790-MONOMER
+RimM_mono_assembly_factor_phase1	HXW90_25520-MONOMER

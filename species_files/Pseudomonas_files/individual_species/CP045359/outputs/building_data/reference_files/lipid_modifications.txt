@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	FIU98_20170-MONOMER
+pg_pe_160	FIU98_22430-MONOMER,FIU98_20520-MONOMER

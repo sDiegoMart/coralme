@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	H7683_05440-MONOMER
+pg_pe_160	H7683_07685-MONOMER,H7683_15185-MONOMER

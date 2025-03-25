@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	PproGo58_51420-MONOMER
+pg_pe_160	PproGo58_55740-MONOMER,PproGo58_50280-MONOMER

@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,CHN49_22595-MONOMER,CHN49_04915-MONOMER,CHN49_05655-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,CHN49_22595-MONOMER_mod_mg2(2),CHN49_04915-MONOMER,CHN49_05655-MONOMER_mod_mg2(4)

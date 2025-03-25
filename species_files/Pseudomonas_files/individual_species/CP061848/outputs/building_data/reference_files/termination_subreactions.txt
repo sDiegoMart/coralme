@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	IE322_25005-MONOMER,IE322_25010-MONOMER_mod_zn2(4),IE322_25000-MONOMER
+GroEL_dependent_folding	IE322_00800-MONOMER,IE322_00795-MONOMER
+N_terminal_methionine_cleavage	IE322_15755-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	IE322_17610-MONOMER
+PrfB_mono_mediated_termination	IE322_15975-MONOMER
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	IE322_16910-MONOMER
+peptide_deformylase_processing	IE322_21170-MONOMER_mod_fe2(1)
+ribosome_recycler	IE322_15735-MONOMER

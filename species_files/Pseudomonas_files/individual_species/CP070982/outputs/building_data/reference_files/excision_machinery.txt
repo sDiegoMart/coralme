@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	JYG34_07665-MONOMER_mod_zn2(2),generic_RNase
+polycistronic_wout_rRNA	JYG34_07665-MONOMER_mod_zn2(2),generic_RNase,JYG34_20390-MONOMER,JYG34_05060-MONOMER,JYG34_05635-MONOMER_mod_mg2(4)
+rRNA_containing	JYG34_07665-MONOMER_mod_zn2(2),generic_RNase,JYG34_20390-MONOMER_mod_mg2(2),JYG34_05060-MONOMER,JYG34_05635-MONOMER_mod_mg2(4)

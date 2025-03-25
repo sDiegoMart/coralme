@@ -1,0 +1,137 @@
+ME-Model-ID: Pseudomonas_sp._THAF7b
+amino_acid_trna_synthetase:
+  ala__L_c: FIU84_06640-MONOMER
+  arg__L_c: FIU84_02685-MONOMER
+  asn__L_c: CPLX_dummy
+  asp__L_c: FIU84_14370-MONOMER
+  cys__L_c: FIU84_10055-MONOMER
+  gln__L_c: FIU84_10050-MONOMER
+  glu__L_c: FIU84_15440-MONOMER
+  gly_c: CPLX-tRNA-GLY-LIGASE
+  his__L_c: FIU84_15595-MONOMER
+  ile__L_c: FIU84_04510-MONOMER
+  leu__L_c: FIU84_18905-MONOMER
+  lys__L_c: FIU84_14055-MONOMER
+  met__L_c: FIU84_06130-MONOMER
+  phe__L_c: CPLX-tRNA-PHE-LIGASE
+  pro__L_c: FIU84_14440-MONOMER
+  ser__L_c: FIU84_11685-MONOMER
+  thr__L_c: FIU84_12015-MONOMER
+  trp__L_c: generic_trp_ligase
+  tyr__L_c: FIU84_03470-MONOMER
+  val__L_c: FIU84_15750-MONOMER
+braun's_lipoprotein: []
+braun's_lipoproteins: []
+braun's_lpp_flux: -0.0
+braun's_murein_flux: -0.0
+complex_cofactors:
+  fes_transfers:
+  - FIU84_03455-MONOMER
+  - FIU84_15645-MONOMER
+default_sigma_factor: FIU84_03225-MONOMER
+defer_to_rxn_matrix:
+- BIOMASS_PA14_v27M
+- FMETTRS
+- ATPM
+dev_reference: false
+df_TranscriptionalUnits: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/automated-org-with-refs.xlsx
+e_value_cutoff: 1.0e-10
+flux_of_biomass_constituents: {}
+flux_of_lipid_constituents: {}
+gam: 70.413945350228
+genbank-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/genome_modified.gb
+gr_data_doublings_per_hour:
+- 0
+- 0.6
+- 1.0
+- 1.5
+- 2.0
+- 2.5
+growth_key: mu1
+include_pseudo_genes: true
+lipid_modifications:
+- pg160_p
+- pg120_p
+- pg140_p
+- pg141_p
+- pg161_p
+- pg180_p
+- pg181_p
+lipoprotein_precursors:
+  AcrA: FIU84_19775
+  BamB: FIU84_15585
+  BamD: FIU84_18345
+  BamE: FIU84_17060
+  CusC: FIU84_19765
+  LolB: FIU84_16355
+  MetQ: FIU84_00180
+  MltB: FIU84_18960
+locus_tag: locus_tag
+log_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs
+m-model-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs/building_data/m_model_modified.json
+ngam: 8.39
+other_lipids:
+- FIU84_18890-MONOMER
+out_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP045416/./outputs
+peptide_release_factors:
+  UAA: generic_RF
+  UAG: FIU84_16340-MONOMER
+  UGA: FIU84_14060-MONOMER
+percent_dna_data:
+- 0.0592
+- 0.0512
+- 0.033
+- 0.0252
+- 0.0222
+- 0.0208
+pg_pe_160:
+- FIU84_02030-MONOMER
+- FIU84_04515-MONOMER
+rna_polymerases:
+  RNAP_FIU8400925MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_00925-MONOMER
+  RNAP_FIU8403225MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_03225-MONOMER
+  RNAP_FIU8404835MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_04835-MONOMER
+  RNAP_FIU8405960MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_05960-MONOMER
+  RNAP_FIU8407530MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_07530-MONOMER
+  RNAP_FIU8410010MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_10010-MONOMER
+  RNAP_FIU8413115MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_13115-MONOMER
+  RNAP_FIU8418585MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_18585-MONOMER
+  RNAP_FIU8420025MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_20025-MONOMER
+  RNAP_FIU8420820MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_20820-MONOMER
+  RNAP_FIU8421290MONOMER:
+    polymerase: RNAP-CPLX_mod_zn2(1)_mod_mg2(2)
+    sigma_factor: FIU84_21290-MONOMER
+run_bbh_blast: false
+selenocysteine_enzymes:
+- CPLX_dummy
+translocation_multipliers:
+  FIU84_17925-MONOMER:
+    FIU84_01000: 15.5
+    FIU84_01005: 15.5
+    FIU84_04575: 6.25
+    FIU84_06160: 27.0
+    FIU84_17445: 23.0
+    FIU84_18480: 22.0
+  FIU84_21430-MONOMER:
+    FIU84_21360: 2.0

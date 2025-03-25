@@ -1,0 +1,4 @@
+type	enzymes
+monocistronic	generic_RNase
+polycistronic_wout_rRNA	generic_RNase,CHR29_22015-MONOMER,CHR29_05065-MONOMER,CHR29_21780-MONOMER_mod_mg2(4)
+rRNA_containing	generic_RNase,CHR29_22015-MONOMER_mod_mg2(2),CHR29_05065-MONOMER,CHR29_21780-MONOMER_mod_mg2(4)

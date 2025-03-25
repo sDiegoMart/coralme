@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	IH404_24890-MONOMER
+pg_pe_160	IH404_27045-MONOMER,IH404_04730-MONOMER

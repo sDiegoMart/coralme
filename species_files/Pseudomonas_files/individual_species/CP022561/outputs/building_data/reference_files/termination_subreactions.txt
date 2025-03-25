@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	CHN49_24195-MONOMER,CHN49_24190-MONOMER_mod_zn2(4),CHN49_24200-MONOMER
+GroEL_dependent_folding	CHN49_22985-MONOMER,CHN49_22990-MONOMER
+N_terminal_methionine_cleavage	CHN49_22075-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	CHN49_03825-MONOMER
+PrfB_mono_mediated_termination	CPLX_dummy
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	CHN49_04575-MONOMER
+peptide_deformylase_processing	CHN49_00115-MONOMER_mod_fe2(1)
+ribosome_recycler	CHN49_22055-MONOMER

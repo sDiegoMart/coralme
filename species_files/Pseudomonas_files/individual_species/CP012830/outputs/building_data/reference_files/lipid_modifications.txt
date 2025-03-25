@@ -1,0 +1,3 @@
+lipid_mod	enzymes
+other_lipids	AO353_06395-MONOMER
+pg_pe_160	AO353_08450-MONOMER,AO353_14145-MONOMER

@@ -1,0 +1,7 @@
+modification	enzymes
+bmocogdp_chaperones	HAV28_10285-MONOMER
+fes_chaperones	HAV28_12315-MONOMER
+fes_transfer	HAV28_23050-MONOMER,HAV28_04450-MONOMER
+generic_2fe2s_transfer_complex	HAV28_23050-MONOMER_mod_2fe2s(1)
+generic_4fe4s_transfer_complex	HAV28_23050-MONOMER_mod_4fe4s(1)
+lipoate_modifications	CPLX_dummy

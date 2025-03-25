@@ -1,0 +1,12 @@
+pathway	enzyme
+sec	PproGo58_03700-MONOMER
+sec	PproGo58_45250-MONOMER
+tat	CPLX_dummy
+tat_alt	CPLX_dummy
+bam	PproGo58_53300-MONOMER
+lol	PproGo58_37600-MONOMER
+lol	PproGo58_48770-MONOMER
+yidC	PproGo58_59380-MONOMER
+secA	PproGo58_45250-MONOMER
+srp_yidC	PproGo58_59380-MONOMER
+srp	PproGo58_55380-MONOMER

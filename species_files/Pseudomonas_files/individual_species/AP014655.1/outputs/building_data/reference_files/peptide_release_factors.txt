@@ -1,0 +1,4 @@
+codon	enzyme
+UAG	MT1_1380-MONOMER
+UGA	MT1_1611-MONOMER
+UAA	generic_RF

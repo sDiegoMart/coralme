@@ -1,0 +1,4 @@
+subreaction	enzyme
+gtp_bound_30S_assembly_factor_phase1	PproGo58_10450-MONOMER
+RbfA_mono_assembly_factor_phase1	PproGo58_08200-MONOMER
+RimM_mono_assembly_factor_phase1	PproGo58_10670-MONOMER

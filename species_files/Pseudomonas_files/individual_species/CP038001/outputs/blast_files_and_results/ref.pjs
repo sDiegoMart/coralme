@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "ref",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "/home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP038001/./outputs/blast_files_and_results//ref.faa",
+  "number-of-letters": 1312506,
+  "number-of-sequences": 4145,
+  "last-updated": "2025-03-21T06:00:00",
+  "number-of-volumes": 1,
+  "bytes-total": 1739093,
+  "bytes-to-cache": 1350020,
+  "files": [
+    "ref.pdb",
+    "ref.phr",
+    "ref.pin",
+    "ref.pot",
+    "ref.psq",
+    "ref.ptf",
+    "ref.pto"
+  ]
+}

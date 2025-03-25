@@ -1,0 +1,10 @@
+subreaction	enzymes
+DnaK_dependent_folding	CHR29_23915-MONOMER,CHR29_23910-MONOMER_mod_zn2(4),CHR29_23920-MONOMER
+GroEL_dependent_folding	CHR29_22640-MONOMER,CHR29_22645-MONOMER
+N_terminal_methionine_cleavage	CHR29_06045-MONOMER_mod_fe2(2)
+PrfA_mono_mediated_termination	CHR29_04210-MONOMER
+PrfB_mono_mediated_termination	CPLX_dummy
+generic_RF_mediated_termination	generic_RF
+peptide_chain_release	CHR29_04915-MONOMER
+peptide_deformylase_processing	CHR29_00115-MONOMER_mod_fe2(1)
+ribosome_recycler	CHR29_06065-MONOMER
