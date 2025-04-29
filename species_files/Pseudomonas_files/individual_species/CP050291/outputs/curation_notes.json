@@ -4692,9 +4692,9 @@
         {
             "msg": "Some metabolites are necessary for growth",
             "triggered_by": [
-                "TS_2p4c2me_c",
-                "TS_h2mb4p_c",
                 "TS_selnp_c",
+                "TS_2p4c2me_c",
+                "TS_2mecdp_c",
                 "TS_4fe4s_c"
             ],
             "importance": "critical",

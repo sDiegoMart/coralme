@@ -3957,9 +3957,9 @@
         {
             "msg": "Some metabolites are necessary for growth",
             "triggered_by": [
+                "TS_pheme_c",
                 "TS_4fe4s_c",
-                "TS_thmpp_c",
-                "TS_pheme_c"
+                "TS_2fe2s_c"
             ],
             "importance": "critical",
             "to_do": "Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!"

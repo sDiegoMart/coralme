@@ -9,7 +9,6 @@ trnaaspqo_c					CURATE
 trnaaspq_c					CURATE
 trnahisqo_c					CURATE
 trnahisq_c					CURATE
-LI_c					CURATE
 alatrna_c					REMOVE
 argtrna_c					REMOVE
 asntrna_c					REMOVE
@@ -61,19 +60,12 @@ tyrtrna_c					REMOVE
 valtrna_c					REMOVE
 wco_c					REMOVE
 2fe1s_c					REMOVE
-sufbcd_c					CURATE
 sufse_c	CPLX_SCYSDS-0_mod_pydx5p(1)				REPLACE
-sufsesh_c					CURATE
 dsbard_p	H7683_10700-MONOMER				REPLACE
-dsbaox_p					CURATE
 dsbcrd_p	H7683_03445-MONOMER				REPLACE
 dsbcox_p	H7683_03445-MONOMER_mod_Oxidized(1)				REPLACE
 dsbdrd_c	H7683_13900-MONOMER				REPLACE
 dsbdox_c	H7683_13900-MONOMER_mod_Oxidized(1)				REPLACE
-dsbgrd_p					CURATE
-dsbgox_p					CURATE
-lpp_p					CURATE
-alpp_p					CURATE
 moadamp_c	H7683_15405-MONOMER_mod_amp(1)				REPLACE
 moadcoo_c	H7683_15405-MONOMER_mod_coo(1)				REPLACE
 moadcosh_c	H7683_15405-MONOMER_mod_cosh(1)				REPLACE
@@ -82,7 +74,6 @@ ACP_c	H7683_18330-MONOMER_mod_pan4p(1)				REPLACE
 3haACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3ha(1)				REPLACE
 3hcddec5eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3hcddec5e(1)				REPLACE
 3hcmrs7eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3hcmrs7e(1)				REPLACE
-3hcpalm9eACP_c					CURATE
 3hcvac11eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3hcvac11e(1)				REPLACE
 3hddecACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3hddec(1)				REPLACE
 3hdecACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3hdec(1)				REPLACE
@@ -101,7 +92,6 @@ ACP_c	H7683_18330-MONOMER_mod_pan4p(1)				REPLACE
 3ooctACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3ooct(1)				REPLACE
 3ooctdACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3ooctd(1)				REPLACE
 3opalmACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_3opalm(1)				REPLACE
-3ocpalm9eACP_c					CURATE
 acACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_ac(1)				REPLACE
 actACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_act(1)				REPLACE
 butACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_but(1)				REPLACE
@@ -139,17 +129,27 @@ tmrs2eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_tmrs2e(1)				REPLACE
 toct2eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_toct2e(1)				REPLACE
 toctd2eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_toctd2e(1)				REPLACE
 tpalm2eACP_c	H7683_18330-MONOMER_mod_pan4p(1)_mod_tpalm2e(1)				REPLACE
+iscs_c	H7683_03735-MONOMER_mod_pydx5p(2)				REPLACE
+iscu_c	H7683_03730-MONOMER				REPLACE
+trdrd_c	H7683_11735-MONOMER				REPLACE
+trdox_c	H7683_11735-MONOMER_mod_Oxidized(1)				REPLACE
+LI_c					CURATE
+sufbcd_c					CURATE
+sufsesh_c					CURATE
+dsbaox_p					CURATE
+dsbgrd_p					CURATE
+dsbgox_p					CURATE
+lpp_p					CURATE
+alpp_p					CURATE
+3hcpalm9eACP_c					CURATE
+3ocpalm9eACP_c					CURATE
 flxr_c					CURATE
 fldrd_c					CURATE
 flxso_c					CURATE
 fldox_c					CURATE
 grxrd_c					CURATE
 grxox_c					CURATE
-iscs_c	H7683_03735-MONOMER_mod_pydx5p(2)				REPLACE
 iscssh_c					CURATE
-iscu_c	H7683_03730-MONOMER				REPLACE
 iscu_2fe2s_c					CURATE
 iscu_2fe2s2_c					CURATE
 iscu_4fe4s_c					CURATE
-trdrd_c	H7683_11735-MONOMER				REPLACE
-trdox_c	H7683_11735-MONOMER_mod_Oxidized(1)				REPLACE

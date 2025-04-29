@@ -2552,26 +2552,6 @@
             "to_do": "Confirm whether the definitions or homology calls are correct in me_builder.org.peptide_release_factors. Curate the inputs in peptide_release_factors.txt accordingly."
         }
     ],
-    "update_subreaction_matrix": [
-        {
-            "msg": "Some metabolites in subreaction_matrix were added from reference but are not in M-model",
-            "triggered_by": [
-                "lipoate_c",
-                "dad__5_c",
-                "dad__5_c",
-                "2tpr3dpcoa",
-                "dad__2_c",
-                "2agpg160_p",
-                "2agpe160_p",
-                "nh3_c",
-                "5fthf_c",
-                "5fthf_c",
-                "dad__5_c"
-            ],
-            "importance": "high",
-            "to_do": "Map these metabolites or replace the subreaction"
-        }
-    ],
     "check": [
         {
             "msg": "Some metabolites in me_metabolites.txt need curation",
@@ -2615,14 +2595,11 @@
             "msg": "Some metabolites are necessary for growth",
             "triggered_by": [
                 "TS_pheme_c",
-                "TS_pe161_p",
-                "TS_2fe2s_c",
-                "TS_adocbl_c",
-                "TS_pg160_p",
+                "TS_nadh_c",
+                "TS_nad_c",
                 "TS_4fe4s_c",
-                "TS_pqq_c",
                 "TS_cbl1_c",
-                "TS_ca2_c"
+                "TS_pqq_c"
             ],
             "importance": "critical",
             "to_do": "Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!"

@@ -3174,5 +3174,24 @@
             "importance": "medium",
             "to_do": "Map or remove these metabolites in me_metabolites.txt"
         }
+    ],
+    "troubleshoot": [
+        {
+            "msg": "Some metabolites are necessary for growth",
+            "triggered_by": [
+                "TS_pheme_c",
+                "TS_fadh2_c",
+                "TS_pg160_p",
+                "TS_2fe2s_c",
+                "TS_4fe4s_c",
+                "TS_pg161_p",
+                "TS_fmnh2_c",
+                "TS_amp_c",
+                "TS_ca2_c",
+                "TS_pqq_c"
+            ],
+            "importance": "critical",
+            "to_do": "Fix the gaps by adding reactions or solving other warnings. If some items are from the E-matrix, fix these first!"
+        }
     ]
 }

@@ -34,13 +34,13 @@ defer_to_rxn_matrix:
 - FMETTRS
 - ATPM
 dev_reference: false
-df_TranscriptionalUnits: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/TUs_from_biocyc.txt
-df_gene_cplxs_mods_rxns: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/automated-org-with-refs.xlsx
+df_TranscriptionalUnits: ../species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/TUs_from_biocyc.txt
+df_gene_cplxs_mods_rxns: ../species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/automated-org-with-refs.xlsx
 e_value_cutoff: 1.0e-10
 flux_of_biomass_constituents: {}
 flux_of_lipid_constituents: {}
 gam: 70.413945350228
-genbank-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/genome_modified.gb
+genbank-path: ../species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/genome_modified.gb
 gr_data_doublings_per_hour:
 - 0
 - 0.6
@@ -69,12 +69,12 @@ lipoprotein_precursors:
   MltA: HXW90_29230
   MltB: HXW90_27745
 locus_tag: locus_tag
-log_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP058975/./outputs
-m-model-path: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/m_model_modified.json
+log_directory: ../species_files/Pseudomonas_files/individual_species/CP058975/./outputs
+m-model-path: ../species_files/Pseudomonas_files/individual_species/CP058975/./outputs/building_data/m_model_modified.json
 ngam: 8.39
 other_lipids:
 - HXW90_27675-MONOMER
-out_directory: /home/chris/zuniga/coralme/species_files/Pseudomonas_files/individual_species/CP058975/./outputs
+out_directory: ../species_files/Pseudomonas_files/individual_species/CP058975/./outputs
 peptide_release_factors:
   UAA: generic_RF
   UAG: HXW90_03810-MONOMER
