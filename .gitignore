@@ -136,4 +136,5 @@ dmypy.json
 *.zip
 
 # custom
+*:Zone.Identifier
 *.DS_Store
